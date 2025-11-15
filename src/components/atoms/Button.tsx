@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = "font-bold rounded-lg transition-all duration-300 hover:scale-105 inline-block text-center";
   
   const variantClasses = {
-    primary: "bg-[#6DE1E3] text-[#0B0B1F] hover:bg-[#5BC5C7]",
+    primary: "bg-[#6DE1E3] text-white hover:bg-[#5BC5C7]",
     secondary: "bg-white text-[#0B0B1F] hover:bg-gray-100",
     outline: "border-2 border-white text-white hover:bg-white hover:text-[#0B0B1F]",
   };
