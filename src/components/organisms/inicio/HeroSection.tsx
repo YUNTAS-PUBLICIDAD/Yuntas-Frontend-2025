@@ -1,8 +1,7 @@
 import Button from "@/components/atoms/Button";
-import DividerLine from "@/components/atoms/DividerLine";
 import Heading from "@/components/atoms/Heading";
 import Text from "@/components/atoms/Text";
-import heroBackground from "@/assets/Inicio/heroBackground.webp";
+import heroBackground from "@/assets/inicio/heroBackground.webp";
 
 const HeroSection = () => {
   return (
@@ -18,7 +17,7 @@ const HeroSection = () => {
               ESPECIALISTAS EN<br />
               DISEÑAR TU ESPACIO
             </Heading>
-            <Text variant="caption" className="mb-0 md:text-2xl text-xl sm:text-2xl">
+            <Text variant="caption" color="white" className="mb-0 md:text-2xl text-xl sm:text-2xl">
               ¡Somos <span className="text-[#6DE1E3] font-bold">YUNTAS</span> Publicidad!
             </Text>
           </div>
