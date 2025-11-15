@@ -3,14 +3,14 @@ import React from "react";
 interface TextProps {
   children: React.ReactNode;
   variant?: "body" | "subtitle" | "caption" | "small";
-  color?: string;
+  color?: "gray" | "white" | string;
   className?: string;
 }
 
 const Text: React.FC<TextProps> = ({
   children,
   variant = "body",
-  color = "text-white",
+  color = "gray",
   className = "",
 }) => {
   const variantClasses = {
@@ -20,7 +20,13 @@ const Text: React.FC<TextProps> = ({
     small: "text-sm md:text-base",
   };
   
-  const classes = `${variantClasses[variant]} ${color} ${className}`;
+  const colorClass =
+    color === "gray"
+      ? "text-gray-700"
+      : color === "white"
+      ? "text-white"
+      : color;
+  const classes = `${colorClass} ${className} ${variantClasses[variant]}`;
   
   return <p className={classes}>{children}</p>;
 };
