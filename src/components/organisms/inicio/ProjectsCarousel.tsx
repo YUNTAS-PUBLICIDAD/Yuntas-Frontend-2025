@@ -11,7 +11,7 @@ const ProjectsCarousel: React.FC = () => {
   const { activeIndex, goTo } = useCarousel({ total: slides.length, autoplay: true, interval: 4000 });
 
   return (
-    <section className="relative w-screen h-[500px] md:h-[650px] bg-gray-100 flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-[500px] md:h-[650px] bg-gray-100 flex items-center justify-center overflow-hidden">
       <div className="absolute top-0 right-0 z-30">
         <ProjectsTitleBox />
       </div>
