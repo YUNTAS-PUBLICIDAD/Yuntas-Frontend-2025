@@ -9,7 +9,7 @@ const AddressBlock = () => (
     <span><span className="font-bold">S:</span> 9 a.m - 2 p.m</span>
     <div className="flex flex-col items-start mt-4">
       <span className="font-bold">Libro de reclamaciones</span>
-      <a href="#" className="mt-1">
+      <a href="/reclamaciones" className="mt-1">
         <Icon size="xl" bgColor="bg-transparent">
           <img src="/footer/librodereclamaciones.svg" alt="Libro de reclamaciones" className="w-14 h-14" />
         </Icon>
