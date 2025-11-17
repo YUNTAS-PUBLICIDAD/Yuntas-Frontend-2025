@@ -1,40 +1,50 @@
 import React from 'react'
-import InputField from '@/components/molecules/inputsField/InputField'
 import Text from '@/components/atoms/Text'
-import SelectField from '@/components/molecules/inputsField/SelectField'
+import Banner from '@/components/atoms/Banner'
+import CircleNumber from '@/components/molecules/reclamaciones/CircleNumber'
+import Button from '@/components/atoms/Button'
+import DividerLine from '@/components/atoms/DividerLine'
+import DatosBlock from '@/components/molecules/reclamaciones/DatosBlock'
+import ReclamoBlock from '@/components/molecules/reclamaciones/ReclamoBlock'
 const DatosSection = () => {
+  const productos = ["Producto 1", "Producto 2"]
+
   return (
-    <div className='flex flex-col gap-10  items-center'>
-        <Text color='black' variant='subtitle'>Datos de la Persona que presenta el reclamo</Text>
-        <div className='flex flex-col gap-5'>
-            <InputField 
-                textLabel='Nombre' 
-                inputPlaceholder='ej: Juan' 
-                size='xxl'/>
-            <InputField 
-                textLabel='Apellido' 
-                inputPlaceholder='ej: Quispe' 
-                size='xxl'/>
-            <div className='flex gap-10 justify-between' >
-                <SelectField 
-                   textLabel='Tipo de Documento'
-                   options={["DNI","Pasaporte"]}
-                />
-                <InputField 
-                    textLabel='Numero de Documento' 
-                    inputPlaceholder='ej: 123456789' 
-                    size='xl'/>
-            </div>
-            <InputField 
-                textLabel='Correo Electronico' 
-                inputPlaceholder='ej: juan@quispe.gmail.com' 
-                size='xxl'/>
-            <InputField 
-                textLabel='Telefono' 
-                inputPlaceholder='ej: 987 654 321' 
-                size='xxl'/>
+    <section>
+      <DividerLine></DividerLine>
+      <Banner>
+        <Text variant='banner' color='white' className='font-bold text-xl'>
+          LIBRO DE RECLAMACIONES
+        </Text>
+      </Banner>
+
+      <form className='flex flex-col gap-12 px-6 md:px-16 py-10 max-w-4xl mx-auto'>
+
+        {/* seccion donde se pone los datos */}
+        <div className='flex items-center gap-4'>
+          <CircleNumber number="1" />
+          <Text color='black' variant='subtitle'>
+            Datos de la persona que presenta el reclamo
+          </Text>
         </div>
-    </div>
+        <DatosBlock/>
+        
+        {/*seccion donde se detalla el reclamo */}
+        <div className='flex items-center gap-4'>
+          <CircleNumber number="2" />
+          <Text color='black' variant='subtitle'>
+            Información de reclamo
+          </Text>
+        </div>
+        <ReclamoBlock/>
+        <Button 
+          size='md'
+          className='w-full md:w-[344px] rounded-3xl text-white mx-auto bg-[#23C1DE]'>
+          Enviar
+        </Button>
+
+      </form>
+    </section>
   )
 }
 
