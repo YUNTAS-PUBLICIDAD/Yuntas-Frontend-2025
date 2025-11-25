@@ -1,8 +1,15 @@
+import NegocioSection from "@/components/organisms/nosotros/NegociosSection";
+import NosotrosSection from "@/components/organisms/nosotros/NosotrosSection";
+import ValoresCorportativos from "@/components/organisms/nosotros/ValoresCorporativos";
+import VisionMision from "@/components/organisms/nosotros/VisionMision";
+
 export default function NosotrosPage() {
   return (
-    <main className="p-8">
-      <h2 className="text-2xl font-semibold mb-4">Nosotros</h2>
-      <p className="text-gray-700">Información corporativa sobre Yuntas.</p>
+    <main>
+      <NosotrosSection />
+      <NegocioSection />
+      <VisionMision />
+      <ValoresCorportativos />
     </main>
   );
 }
