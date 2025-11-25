@@ -37,7 +37,7 @@ const SearchBar = ({ setBlog }: SearchBarProps) => {
         placeholder='Buscar Articulos...'
       />
 
-      <Button rounded='full' className='bg-blue-950' size='sm'>
+      <Button  className='bg-blue-950' size='sm'>
         <Icon className='bg-inherit'>
           <FaSearch className='text-white' />
         </Icon>

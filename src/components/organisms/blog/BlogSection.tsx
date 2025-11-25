@@ -8,6 +8,7 @@ import { BlogData } from '@/data/blog/blogData'
 import { useState } from 'react'
 import Pagination from '@/components/molecules/Pagination'
 import { Blog } from '@/types/blog'
+import Link from 'next/link'
 const BlogSection = () => {
   const [listaBlog, setListaBlog] = useState<Blog[]>(BlogData);
   const [blogPaginado,setBlogPaginad]=useState<Blog[]>(BlogData)
@@ -21,7 +22,9 @@ const BlogSection = () => {
         <div className='flex flex-wrap justify-evenly  gap-y-10 py-10'>
             {
                 blogPaginado.map((e,index)=>(
-                    <BlogCard nombre={e.nombre} img={e.img} descripcion={e.descripcion}/>
+                    <Link href={`/blog/${e.id}`}>
+                        <BlogCard nombre={e.nombre} img={e.img} descripcion={e.descripcion}/>
+                    </Link>
                 ))
             }
         </div>

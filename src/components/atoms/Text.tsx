@@ -2,7 +2,7 @@ import React from "react";
 
 interface TextProps {
   children: React.ReactNode;
-  variant?: "banner"|"body" | "subtitle" | "caption" | "small";
+  variant?: "banner"|"body" | "subtitle" | "caption" | "small"|"h2";
   color?: "gray" | "white" | string;
   className?: string;
 }
@@ -14,6 +14,7 @@ const Text: React.FC<TextProps> = ({
   className = "",
 }) => {
   const variantClasses = {
+    h2: "text-2xl md:text-4xl",
     banner: "text-xl md:text-3xl",
     body: "text-base md:text-lg",
     subtitle: "text-lg md:text-xl",
