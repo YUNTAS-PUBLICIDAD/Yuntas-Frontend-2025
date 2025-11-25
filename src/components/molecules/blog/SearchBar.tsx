@@ -27,7 +27,7 @@ const SearchBar = ({ setBlog }: SearchBarProps) => {
   }
   return (
     <form 
-      className='flex relative z-40 bg-white rounded-full md:w-1/3'
+      className='flex relative z-30 bg-white rounded-full w-full md:w-1/3'
       onSubmit={onSubmit}
     >
       <InputSearch 
