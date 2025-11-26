@@ -20,14 +20,14 @@ const HeroPage = ({ url, text, position="medio" }: HeroPageProps) => {
   return (
     <section
       className={`relative w-full h-screen flex items-center ${posicionesText[position]} 
-      overflow-hidden pt-24 bg-cover bg-center bg-no-repeat 
+      overflow-hidden pt-24 bg-cover bg-center bg-no-repeat  px-8 md:px-0 text-center
        md:h-screen h-[80vh] md:pt-24 `}
       style={{ backgroundImage: `url(${bg})` }}
     >
       <Heading
         level="h1"
         size="2xl"
-        className="leading-tight md:text-7xl text-5xl sm:text-6xl"
+        className="leading-tight md:text-7xl text-5xl sm:text-6xl drop-shadow-[0_2px_2px_#28BEDA]"
       >
         {text}
       </Heading>
