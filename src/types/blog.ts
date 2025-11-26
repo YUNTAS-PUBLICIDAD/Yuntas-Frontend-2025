@@ -1,8 +1,22 @@
 import {StaticImageData} from 'next/image'
 
 export type Blog= {
+  id:string,
   img: StaticImageData;
   nombre: string;
   descripcion: string;
+  fondoPrincipal: StaticImageData,  
+  detalles:string,
+  beneficio_principal:string,
+  beneficios:string[],
+    testimonio: {
+      titulo:string
+      comentario: string
+      autor: string,
+      calificacion: number
+    },
+
+    videoUrl: string, 
+    galeria: StaticImageData[]
   //...
 }
