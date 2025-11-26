@@ -27,7 +27,7 @@ const HeroPage = ({ url, text, position="medio" }: HeroPageProps) => {
       <Heading
         level="h1"
         size="2xl"
-        className="leading-tight md:text-7xl text-5xl sm:text-6xl"
+        className="leading-tight md:text-7xl text-5xl sm:text-6xl drop-shadow-[0_2px_2px_#28BEDA]"
       >
         {text}
       </Heading>
