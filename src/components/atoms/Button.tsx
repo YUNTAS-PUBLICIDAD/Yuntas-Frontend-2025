@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   className = "",
 }) => {
-  const baseClasses = "font-bold rounded-lg md:rounded-3xl transition-all duration-300 hover:scale-105 inline-block text-center";
+  const baseClasses = "font-bold rounded-2xl md:rounded-3xl transition-all duration-300 hover:scale-105 inline-block text-center";
   
   const variantClasses = {
     primary: "bg-[#6DE1E3] text-white hover:bg-[#5BC5C7]",
