@@ -2,7 +2,7 @@ interface MenuItemProps {
   href: string;
   children: React.ReactNode;
   active?: boolean;
-  color?:string
+  color?:string,
 }
 
 export default function MenuItem({ href, children, active,color='text-gray-800' }: MenuItemProps) {
