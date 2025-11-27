@@ -3,11 +3,11 @@ import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
 const VideoSection = () => {
   return (
-    <section className='text-center p-20 flex flex-col gap-10'>
-        <Text variant='banner' className='font-bold'>Mira Nuestro Video</Text>
-        <Text>Descubre más detalles sobre nuestros productos y servicios</Text>
+    <section className='text-center p-4  md:p-20 flex flex-col gap-5'>
+        <Text variant='h2' className='font-bold'>Mira Nuestro Video</Text>
+        <Text variant='body'>Descubre más detalles sobre nuestros productos y servicios</Text>
         <iframe  
-            className="w-full h-[700px] rounded-2xl"
+            className="w-full h-[300px] md:h-[700px] rounded-2xl"
             src="https://www.youtube.com/embed/QIb2ZcuUtkQ "
             title="YouTube video"
             allowFullScreen>

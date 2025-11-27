@@ -15,7 +15,7 @@ const BlogSection = () => {
   console.log(listaBlog)
   return (
     <section className='py-10'>
-        <Banner className='flex flex-col gap-20 px-20 md:flex-row'>
+        <Banner className='flex flex-col  gap-5 md:gap-20 px-20 md:flex-row'>
             <Text variant='banner' color='white' className='font-bold'>Descubre mas sobre nuestros Productos</Text>
             <SearchBar setBlog={setListaBlog}/>
         </Banner>

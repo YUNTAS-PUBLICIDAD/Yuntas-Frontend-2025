@@ -10,23 +10,25 @@ interface OpinionCardProps {
   description: string;
   author: string;
   stars?: number;
+  className?:string
 }
 
 const OpinionCard: React.FC<OpinionCardProps> = ({
   quote,
+  className,
   description,
   author,
   stars = 5,
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 max-w-lg w-full relative">
+    <div className="bg-white rounded-2xl shadow-lg p-4 max-w-lg w-4/5 relative md:w-[400px] ">
       <Text className="font-bold text-lg mb-4 ">
         <FaQuoteLeft className="inline-block " />{quote}
       </Text>
-      <Text variant="body" className="text-gray-700 leading-relaxed mb-6">
+      <Text variant="body" className="text-gray-700 leading-relaxed  md:mb-3 ">
         {description} <FaQuoteRight className="inline-block "/>
       </Text>
-      <div className="flex gap-1 mb-2">
+      <div className="flex gap-1 md:mb-2">
         {Array.from({ length: stars }).map((_, i) => (
           <Icon
             key={i}
@@ -38,7 +40,7 @@ const OpinionCard: React.FC<OpinionCardProps> = ({
           </Icon>
         ))}
       </div>
-      <Text variant="small" className="text-right text-gray-600 font-medium mt-4">
+      <Text variant="small" className="text-right text-gray-600 font-medium md:mt-4">
         - {author}
       </Text>
     </div>
