@@ -4,7 +4,7 @@ import UserSection from "@/components/molecules/header/UserSection";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white flex items-center px-16 py-5 shadow h-24">
+    <header className="sticky top-0 z-50 bg-white flex items-center px-16 py-5 shadow h-24">
       <div className="flex flex-col items-center w-56">
         <Logo src="/logo.svg" size="xl" alt="Yuntas Publicidad" />
       </div>

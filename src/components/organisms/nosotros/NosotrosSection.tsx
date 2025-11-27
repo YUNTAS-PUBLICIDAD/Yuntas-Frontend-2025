@@ -5,7 +5,6 @@ const NosotrosSection = () => {
   return (
     <section
       className="
-        mt-[96px]
         relative w-full h-[80vh] md:h-screen 
         flex items-center justify-start 
         pt-24 md:pt-24 overflow-hidden 
