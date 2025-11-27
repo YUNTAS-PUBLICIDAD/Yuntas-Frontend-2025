@@ -1,8 +1,15 @@
+import ContactoMedios from "@/components/organisms/contacto/contactoMedios";
+import ContactoSection from "@/components/organisms/contacto/contactoSection";
+import SolicitudInfo from "@/components/organisms/contacto/solicitudInfo";
+import UbicacionContacto from "@/components/organisms/contacto/ubicacionContacto";
+
 export default function ContactoPage() {
   return (
-    <main className="p-8">
-      <h2 className="text-2xl font-semibold mb-4">Contacto</h2>
-      {/* Aquí irá el formulario de contacto */}
+    <main className="mt-[96px]">
+      <ContactoSection />
+      <ContactoMedios />
+      <SolicitudInfo />
+      <UbicacionContacto />
     </main>
   );
 }
