@@ -1,0 +1,16 @@
+import SidebarSection from "@/components/organisms/admin/SidebarSection";
+import Encabezado from "@/components/molecules/Encabezado";
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <div className="flex flex-col min-h-screen">
+            <Encabezado variant="azul">SECCIÓN PRINCIPAL</Encabezado>
+            <div className="flex flex-1 bg-white"> {/*Color para el modo ocuro:  bg-[#203565] */}
+                <SidebarSection />
+                <main className="flex-1 py-16 px-4">
+                    {children}
+                </main>
+            </div>
+        </div>
+    );
+}
