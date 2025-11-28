@@ -9,7 +9,7 @@ const ImgVariant={
 type ImgProps={
     src:StaticImageData,
     variant?:"blogCard"|"productoCard"|"normal",
-    classname:string
+    classname?:string
 }
 const Img = ({src, variant='normal',classname}:ImgProps) => {
   return (
