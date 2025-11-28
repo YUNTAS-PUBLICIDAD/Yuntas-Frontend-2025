@@ -1,20 +1,53 @@
 import { IoMdTrash } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 
 interface Column {
     key: string;
     label: string;
 }
 
+type ActionType = "delete" | "approve" | "edit";
+
+interface ActionConfig {
+    type: ActionType;
+    onClick?: (id: string | number) => void;
+}
+
 interface AdminTableProps {
     columns: Column[];
     data: Record<string, any>[];
     minRows?: number;
-    onDelete?: (id: string | number) => void;
-    onApprove?: (id: string | number) => void;
+    actions?: ActionConfig[];
 }
 
-export default function AdminTable({ columns, data, minRows = 10, onDelete, onApprove }: AdminTableProps) {
+const actionIcons: Record<ActionType, { icon: React.ReactNode; color: string; hoverColor: string; title: string }> = {
+    delete: {
+        icon: <IoMdTrash size={22} />,
+        color: "text-[#203565]",
+        hoverColor: "hover:text-[#0D1030]",
+        title: "Eliminar"
+    },
+    approve: {
+        icon: <FaCheckCircle size={20} />,
+        color: "text-[#23C1DE]",
+        hoverColor: "hover:text-[#1a9bb8]",
+        title: "Aprobar"
+    },
+    edit: {
+        icon: <FiEdit size={20} />,
+        color: "text-[#23C1DE]",
+        hoverColor: "hover:text-[#1a9bb8]",
+        title: "Editar"
+    }
+};
+
+export default function AdminTable({ 
+    columns, 
+    data, 
+    minRows = 10, 
+    actions = [{ type: "delete" }, { type: "approve" }]
+}: AdminTableProps) {
 
     // Se crean filas vacias
     const rows = [...data];
@@ -49,37 +82,33 @@ export default function AdminTable({ columns, data, minRows = 10, onDelete, onAp
                                 {columns.map((col) => (
                                     <td
                                         key={col.key}
-                                        className={`bg-[#F4F4F2] py-2 px-4 ${col.key == 'id' ? "font-medium text-black" : "font-normal text-[#0D1030]"} text-xl rounded-lg text-center h-12`}
+                                        className={`bg-[#F4F4F2] py-2 px-4 ${
+                                            col.key === 'id' ? "font-medium text-black" : "font-normal text-[#0D1030]"
+                                        } text-xl rounded-lg text-center h-12`}
                                     >
-                                        {col.key == 'id' ? (index + 1) : isEmpty ? "" : row[col.key]}
+                                        {col.key === 'id' ? (index + 1) : isEmpty ? "" : row[col.key]}
                                     </td>
                                 ))}
                                 <td className="bg-[#F4F4F2] py-2 px-4 rounded-lg text-center h-12">
                                     <div className="flex items-center justify-center gap-3">
-                                        <button
-                                            onClick={() => !isEmpty && onDelete?.(row.id)}
-                                            className={`transition-colors ${isEmpty
-                                                    ? "text-[#203565]/30 cursor-not-allowed"
-                                                    : "text-[#203565] hover:text-[#0D1030]"
-                                                }`}
-                                            title="Eliminar"
-                                            disabled={isEmpty}
-                                        >
-                                            <IoMdTrash size={22} />
-                                            
-                                        </button>
-                                        <button
-                                            onClick={() => onApprove?.(row.id)}
-                                            className={`transition-colors ${
-                                                isEmpty 
-                                                    ? "text-[#23C1DE]/30 cursor-not-allowed" 
-                                                    : "text-[#23C1DE] hover:text-[#1a9bb8]"
-                                            }`}
-                                            title="Aprobar"
-                                            disabled={isEmpty}
-                                        >
-                                            <FaCheckCircle size={20} />
-                                        </button>
+                                        {actions.map((action, actionIndex) => {
+                                            const config = actionIcons[action.type];
+                                            return (
+                                                <button
+                                                    key={actionIndex}
+                                                    onClick={() => !isEmpty && action.onClick?.(row.id)}
+                                                    className={`transition-colors ${
+                                                        isEmpty
+                                                            ? `${config.color}/30 cursor-not-allowed`
+                                                            : `${config.color} ${config.hoverColor}`
+                                                    }`}
+                                                    title={config.title}
+                                                    disabled={isEmpty}
+                                                >
+                                                    {config.icon}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </td>
                             </tr>
