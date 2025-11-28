@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Logo from "@/components/atoms/Logo";
 import NavMenu from "@/components/molecules/header/NavMenu";
 import UserSection from "@/components/molecules/header/UserSection";
@@ -13,7 +12,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`hidden md:flex fixed top-0 left-0 right-0 z-50 items-center px-16 py-5 h-24 
+        className={`hidden md:flex sticky top-0 z-50 items-center px-16 py-5 h-24 
           transition-all duration-300 bg-white shadow-md`}>
 
         <div className="flex flex-col items-center w-56">
@@ -25,8 +24,6 @@ export default function Header() {
           <UserSection size="lg"  />
         </div>
       </header>
-
-      
     </>
   );
 }
