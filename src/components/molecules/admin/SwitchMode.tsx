@@ -4,11 +4,16 @@ import { useState } from 'react'
 import Switch from "react-switch";
 import { FiMoon, FiSun } from "react-icons/fi";
 
-export default function SwitchMode() {
+interface SwitchModeProps {
+    onToggle?: (isDarkMode: boolean) => void;
+}
+  
+export default function SwitchMode({ onToggle }: SwitchModeProps) {
   const [checked, setChecked] = useState(false);
 
   const handleChange = (nextChecked: boolean) => {
     setChecked(nextChecked);
+    onToggle?.(nextChecked);
   };
 
   return (

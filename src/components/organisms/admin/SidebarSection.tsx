@@ -1,9 +1,6 @@
-"use client";
-
-import Link from "next/link";
 import SwitchMode from "@/components/molecules/admin/SwitchMode";
-import { usePathname } from "next/navigation";
 import Button from "@/components/atoms/Button";
+import NavList from "@/components/molecules/admin/NavList";
 import UserSection from "@/components/molecules/header/UserSection";
 interface NavItem {
     label: string;
@@ -19,30 +16,15 @@ const navItems: NavItem[] = [
 ];
 
 export default function SidebarSection() {
-    const pathname = usePathname();
 
     return (
         <aside className="sticky top-0 h-full min-h-fit w-72 flex flex-col border-r border-gray-300 ">
             <h2 className="text-center text-[#0D1030] font-semibold text-2xl py-8 px-6">Administración</h2>
             <nav className="flex-1 px-12 text-xl text-[#203565]">
-                <ul className="flex flex-col gap-2 border-l border-gray-300">
-                    {navItems.map((item) => {
-                        const isActive = pathname === item.href;
-                        return (
-                            <li key={item.href}>
-                                <Link
-                                    href={item.href}
-                                    className={`px-4 ${isActive
-                                        ? "font-extrabold"
-                                        : "hover:font-bold"
-                                        }`}
-                                >
-                                    {item.label}
-                                </Link>
-                            </li>
-                        );
-                    })}
-                </ul>
+                <NavList 
+                    items={navItems} 
+                    className="border-l border-gray-300" 
+                />
             </nav>
             <div className="flex justify-center my-8">
                 <Button size="sm">
