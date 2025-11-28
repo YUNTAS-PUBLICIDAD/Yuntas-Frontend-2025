@@ -8,7 +8,7 @@ type BeneficiosSectionProps={
 }
 const BeneficiosSection = ({data}:BeneficiosSectionProps) => {
   return (
-    <section className='flex flex-col gap-20'>
+    <section className='flex flex-col gap-20 px-5 pb-10'>
         <Text  variant='subtitle' className='text-center font-medium'>{data.beneficio_principal}</Text>
         <div className='grid grid-cols-1 md:grid-cols-2'>
             <Img src={data.galeria[1]} classname=''></Img>

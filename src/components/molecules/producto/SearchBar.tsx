@@ -31,7 +31,7 @@ const SearchBar = ({ setListaProductos }: SearchBarProps) => {
   }
 
   return (
-    <form onSubmit={onSubmit} className='relative z-40 flex border-2 border-[#23C1DE] w-full items-center px-2 rounded-3xl'>
+    <form onSubmit={onSubmit} className='relative z-30 flex border-2 border-[#23C1DE] w-full items-center px-2 rounded-3xl'>
       <Icon className='bg-white '>
         <FaSearch className='text-gray-500 ' />
       </Icon>
@@ -42,7 +42,7 @@ const SearchBar = ({ setListaProductos }: SearchBarProps) => {
         placeholder='Buscar Producto...'
       />
 
-      <Button size='sm' rounded='full' className='font-normal tracking-wider'>
+      <Button size='sm'  className='font-normal tracking-wider'>
         Buscar
       </Button>
 

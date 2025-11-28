@@ -10,7 +10,7 @@ type ProductoCardProps = {
 const ProductoCard = ({ img, nombre }: ProductoCardProps) => {
   return (
     <article className=" bg-white rounded-3xl shadow-xl cursor-pointer hover:scale-105 transition duration-300" >
-      <Img src={img}  variant='productoCard' />
+      <Img src={img} classname='' variant='productoCard' />
       <Text className='pt-3 pl-5 pb-8 font-bold'>{nombre}</Text>
     </article>
   )

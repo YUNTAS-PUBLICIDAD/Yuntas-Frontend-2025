@@ -1,18 +1,14 @@
-import Link from "next/link";  
-
 interface MenuItemProps {
   href: string;
   children: React.ReactNode;
   active?: boolean;
+  color?:string,
 }
 
-export default function MenuItem({ href, children, active }: MenuItemProps) {
+export default function MenuItem({ href, children, active,color='text-gray-800' }: MenuItemProps) {
   return (
-    <Link
-      href={href}
-      className={`px-4 py-2 font-medium hover:text-blue-700 transition ${active ? 'font-bold text-black' : 'text-gray-800'}`}
-    >
+    <a href={href} className={` px-4 py-2 font-medium transition ${active ? "text-blue-600 font-bold" : `${color} hover:text-blue-700`}`}>
       {children}
-    </Link>
+    </a>
   );
 }
