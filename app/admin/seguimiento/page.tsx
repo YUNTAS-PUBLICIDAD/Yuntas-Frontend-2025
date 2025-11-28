@@ -2,6 +2,7 @@
 
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
+import Pagination from '@/components/molecules/Pagination';
 import data from "@/data/admin/seguimientoData";
 
 const columns = [
@@ -62,6 +63,9 @@ export default function SeguimientoPage() {
                 buttons={[{ label: "Agregar Cliente", onClick: onAdd, variant: "tertiary" }]}
                 className="mt-4"
             />
+            <div className="col-span-full  flex justify-center order-3 my-6">
+                <Pagination pageSize={6} items={data} setProductosPaginados={() => { }} />
+            </div>
         </div>
     );
 }
