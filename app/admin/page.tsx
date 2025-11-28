@@ -1,7 +1,7 @@
 'use client'
 
 import AdminTable from "@/components/organisms/admin/AdminTable";
-import Button from "@/components/atoms/Button";
+import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 
 import data from "@/data/admin/inicioData";
 
@@ -14,7 +14,7 @@ const columns = [
     { key: "fecha", label: "FECHA" },
 ];
 
-export default function AdminPage() {
+export default function InicioPage() {
 
     const onAdd = () => {
         // se añade mas datos
@@ -33,12 +33,16 @@ export default function AdminPage() {
             <AdminTable
                 columns={columns}
                 data={data}
-                onDelete={onDelete}
-                onApprove={onApprove}
+                actions={[
+                    { type: "delete", onClick: onDelete },
+                    { type: "approve", onClick: onApprove }
+                ]}
             />
-            <Button size="sm" variant="tertiary" className="bg-[#0D1030] py-1 mt-4" onClick={onAdd}>
-                <p className="font-semibold text-xl">Añadir datos</p>
-            </Button>
+            
+            <ActionButtonGroup 
+                buttons={[{ label: "Añadir datos", onClick: onAdd, variant: "tertiary" }]} 
+                className="mt-4" 
+            />
         </div>
     );
 }
