@@ -28,12 +28,12 @@ export const BlogData = [
     descripcion: "Letras pintadas en MDF: Perfectos para resaltar tu marca",
     img: blog3,
   },
-  {
-    id:"4",
-    nombre: "MONITORES DE PUBLICIDAD DIGITAL",
-    descripcion: "Impacto en el movimiento",
-    img: blog4,
-  },
+  // {
+  //   id:"4",
+  //   nombre: "MONITORES DE PUBLICIDAD DIGITAL",
+  //   descripcion: "Impacto en el movimiento",
+  //   img: blog4,
+  // },
   {
     id:"5",
     nombre: "HOLOGRAMAS 3D",
