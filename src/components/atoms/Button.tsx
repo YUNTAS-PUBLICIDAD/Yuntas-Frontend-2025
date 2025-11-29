@@ -25,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
     tertiary: "bg-[#203565] text-white hover:bg-[#162E4D]",
     outline: "border-2 border-white text-white hover:bg-white hover:text-[#0B0B1F]",
     success: "bg-[#008236] text-white hover:bg-[#006622]",
-    danger: "bg-[#bb001b] text-white hover:bg-[#8b0000]",
+    danger: "bg-[#DC3545] text-white hover:bg-[#C82333]",
   };
   
   const sizeClasses = {

@@ -21,24 +21,33 @@ interface AdminTableProps {
     actions?: ActionConfig[];
 }
 
-const actionIcons: Record<ActionType, { icon: React.ReactNode; color: string; hoverColor: string; title: string }> = {
+const actionIcons: Record<ActionType, { 
+    icon: React.ReactNode; 
+    label: string;
+    bgColor: string; 
+    bgColorDisabled: string;
+    textColor: string;
+}> = {
     delete: {
-        icon: <IoMdTrash size={22} />,
-        color: "text-[#203565]",
-        hoverColor: "hover:text-[#0D1030]",
-        title: "Eliminar"
+        icon: <IoMdTrash size={18} />,
+        label: "Eliminar",
+        bgColor: "bg-[#DC3545] hover:bg-[#C82333]",
+        bgColorDisabled: "bg-[#DC3545]/30",
+        textColor: "text-white"
     },
     approve: {
-        icon: <FaCheckCircle size={20} />,
-        color: "text-[#23C1DE]",
-        hoverColor: "hover:text-[#1a9bb8]",
-        title: "Aprobar"
+        icon: <FaCheckCircle size={16} />,
+        label: "Aprobar",
+        bgColor: "bg-[#28A745] hover:bg-[#218838]",
+        bgColorDisabled: "bg-[#28A745]/30",
+        textColor: "text-white"
     },
     edit: {
-        icon: <FiEdit size={20} />,
-        color: "text-[#23C1DE]",
-        hoverColor: "hover:text-[#1a9bb8]",
-        title: "Editar"
+        icon: <FiEdit size={16} />,
+        label: "Editar",
+        bgColor: "bg-[#23C1DE] hover:bg-[#1a9bb8]",
+        bgColorDisabled: "bg-[#23C1DE]/30",
+        textColor: "text-white"
     }
 };
 
@@ -49,7 +58,6 @@ export default function AdminTable({
     actions = [{ type: "delete" }, { type: "approve" }]
 }: AdminTableProps) {
 
-    // Se crean filas vacias
     const rows = [...data];
     while (rows.length < minRows) {
         rows.push({ _empty: true });
@@ -68,7 +76,7 @@ export default function AdminTable({
                                 {col.label}
                             </th>
                         ))}
-                        <th className="bg-[#0D1030] text-white font-semibold text-xl py-2 px-4 rounded-lg text-center">
+                        <th className="bg-[#0D1030] text-white font-semibold text-xl py-2 px-3 rounded-lg text-center">
                             ACCIÓN
                         </th>
                     </tr>
@@ -82,30 +90,33 @@ export default function AdminTable({
                                 {columns.map((col) => (
                                     <td
                                         key={col.key}
-                                        className={`bg-[#F4F4F2] py-2 px-4 ${
+                                        className={`bg-[#F4F4F2] py-2 px-3 ${
                                             col.key === 'id' ? "font-medium text-black" : "font-normal text-[#0D1030]"
                                         } text-xl rounded-lg text-center h-12`}
                                     >
                                         {isEmpty ? "" : row[col.key]}
                                     </td>
                                 ))}
-                                <td className="bg-[#F4F4F2] py-2 px-4 rounded-lg text-center h-12">
-                                    <div className="flex items-center justify-center gap-3">
+                                <td className="bg-[#F4F4F2] py-2 px-3 rounded-lg text-center h-12">
+                                    <div className="flex items-center justify-center gap-2">
                                         {actions.map((action, actionIndex) => {
                                             const config = actionIcons[action.type];
                                             return (
                                                 <button
                                                     key={actionIndex}
                                                     onClick={() => !isEmpty && action.onClick?.(row.id)}
-                                                    className={`transition-colors ${
+                                                    className={`flex items-center gap-1 px-2 md:px-3 py-1 rounded-full transition-all ${config.textColor} ${
                                                         isEmpty
-                                                            ? `${config.color}/30 cursor-not-allowed`
-                                                            : `${config.color} ${config.hoverColor}`
+                                                            ? `${config.bgColorDisabled} cursor-not-allowed`
+                                                            : `${config.bgColor}`
                                                     }`}
-                                                    title={config.title}
+                                                    title={config.label}
                                                     disabled={isEmpty}
                                                 >
                                                     {config.icon}
+                                                    <span className="hidden md:inline text-sm font-medium">
+                                                        {config.label}
+                                                    </span>
                                                 </button>
                                             );
                                         })}
