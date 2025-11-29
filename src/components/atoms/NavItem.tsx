@@ -14,17 +14,21 @@ export default function NavItem({
     label,
     href,
     isActive,
-    activeClassName = "font-extrabold",
-    inactiveClassName = "hover:font-bold"
 }: NavItemProps) {
     return (
-        <li>
+        <li className="relative">
             <Link
                 href={href}
-                className={`px-4 ${isActive ? activeClassName : inactiveClassName}`}
+                className={`block px-4 transition-all ${isActive
+                        ? "font-semibold text-[#23C1DE]"
+                        : "hover:text-[#203565] hover:font-medium"
+                    }`}
             >
                 {label}
             </Link>
+            {isActive && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#23C1DE] rounded-r-full" />
+            )}
         </li>
     );
 }
