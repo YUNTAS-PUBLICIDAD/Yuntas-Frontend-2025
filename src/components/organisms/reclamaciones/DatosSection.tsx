@@ -7,7 +7,6 @@ import DividerLine from '@/components/atoms/DividerLine'
 import DatosBlock from '@/components/molecules/reclamaciones/DatosBlock'
 import ReclamoBlock from '@/components/molecules/reclamaciones/ReclamoBlock'
 const DatosSection = () => {
-  const productos = ["Producto 1", "Producto 2"]
 
   return (
     <section>

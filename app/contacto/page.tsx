@@ -5,7 +5,7 @@ import UbicacionContacto from "@/components/organisms/contacto/ubicacionContacto
 
 export default function ContactoPage() {
   return (
-    <main className="mt-[96px]">
+    <main className="">
       <ContactoSection />
       <ContactoMedios />
       <SolicitudInfo />
