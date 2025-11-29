@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
@@ -13,7 +14,8 @@ const columns = [
 ];
 
 export default function productosPage() {
-
+    const [productosPaginados, setProductosPaginados] = useState<typeof data>([]);
+    
     const onAddProduct = () => {
         // añadir un producto
     }
@@ -69,14 +71,15 @@ export default function productosPage() {
             <ActionButtonGroup buttons={exportButtons} className="mb-4 mt-4" />
             <AdminTable
                 columns={columns}
-                data={data}
+                data={productosPaginados}
+                minRows={10}
                 actions={[
                     { type: "delete", onClick: onDelete },
                     { type: "edit", onClick: onEdit }
                 ]}
             />
             <div className="col-span-full  flex justify-center order-3 my-6">
-                <Pagination pageSize={6} items={data} setProductosPaginados={() => { }} />
+                <Pagination pageSize={10} items={data} setProductosPaginados={setProductosPaginados} />
             </div>
 
         </div>
