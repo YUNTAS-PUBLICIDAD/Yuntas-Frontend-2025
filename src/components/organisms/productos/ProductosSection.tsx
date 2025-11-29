@@ -8,12 +8,14 @@ import { useCategorias } from '@/hooks/ui/productos/useCategorias'
 import Pagination from '@/components/molecules/Pagination'
 import { Producto } from '@/types/producto'
 import { useSelectCategorias } from '@/hooks/ui/productos/useSelectCategoria'
+import { FaChevronDown } from "react-icons/fa";
+
 type ProductoSection = {
   ListaBusqueda: Producto[];
   setListaProductos:React.Dispatch<React.SetStateAction<Producto[]>>
 };
 const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => {
-  console.log(ListaBusqueda)
+  const [openCategoria,setOpenCategoria]=useState(false);
   const {listaCategorias,handleSelectCategoria,categoriaActiva}=useCategorias(productosData)
   useSelectCategorias(categoriaActiva, setListaProductos);
 
@@ -22,16 +24,21 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
   <section className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-10 px-16 pt-10">
       
       <div className='flex flex-col '>
-        <Text variant='caption' className='font-bold uppercase' color='black'>Categorias</Text>
-        {listaCategorias.map((e, index) => (
-          <CategoriaSelect 
-            onClick={()=>handleSelectCategoria(e.nombre)}
-            key={`${e.nombre}${index}`} 
-            nombre={e.nombre} 
-            count={e.count}
-            active={categoriaActiva===e.nombre?true:false}
-          />
-        ))}
+        <div className=' cursor-pointer md:cursor-default items-center flex gap-2' onClick={() => setOpenCategoria(!openCategoria)}>
+          <Text variant='caption' className='font-bold uppercase' color='black'>Categorias </Text>
+          <FaChevronDown  className={`md:hidden text-xl transition-transform ${openCategoria ? 'rotate-180' : ''}`} /> 
+        </div>
+        <div className={`flex flex-col gap-1 ${openCategoria ? 'block' : 'hidden'} md:block`}>
+          {listaCategorias.map((e, index) => (
+            <CategoriaSelect 
+              onClick={()=>handleSelectCategoria(e.nombre)}
+              key={`${e.nombre}${index}`} 
+              nombre={e.nombre} 
+              count={e.count}
+              active={categoriaActiva===e.nombre?true:false}
+            />
+          ))}
+        </div>
       </div>
 
       <div className='flex flex-wrap justify-center gap-x-20 gap-y-5'>

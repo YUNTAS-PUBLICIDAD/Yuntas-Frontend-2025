@@ -9,7 +9,7 @@ const InputText: React.FC<InputTextProps> = ({ className = "", ...props }) => {
     <input
       {...props}
       className={`
-        w-full px-4 py-3 border border-white-400 rounded-md
+        w-full px-4 py-3 border border-white-400 
         focus:outline-none focus:border-blue-500
         text-gray-800 placeholder-gray-500 bg-white
         font-montserrat
