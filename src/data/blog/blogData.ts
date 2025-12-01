@@ -10,45 +10,13 @@ import galeria6 from '@/assets/blog/listaBlog/galeria6.png'
 import galeria62 from '@/assets/blog/listaBlog/galeria6.2.png'
 
 export const BlogData = [
-  // {
-  //   id:"1",
-  //   nombre: "LETREROS LUMINOSOS",
-  //   descripcion: "Letreros Luminosos: Brilla con tu marca ",
-  //   img: blog1,
-  // },
-  // {
-  //   id:"2",
-  //   nombre: "HOLOGRAMAS 3D",
-  //   descripcion: "Hologramas 3D: Proyecta el futuro de tu marca",
-  //   img: blog2,
-  // },
-  // {
-  //   id:"3",
-  //   nombre: "LETRAS PINTADAS EN MDF",
-  //   descripcion: "Letras pintadas en MDF: Perfectos para resaltar tu marca",
-  //   img: blog3,
-  // },
-  // // {
-  // //   id:"4",
-  // //   nombre: "MONITORES DE PUBLICIDAD DIGITAL",
-  // //   descripcion: "Impacto en el movimiento",
-  // //   img: blog4,
-  // // },
-  // {
-  //   id:"5",
-  //   nombre: "HOLOGRAMAS 3D",
-  //   descripcion: "Una forma de mostrar presencia y elegancia",
-  //   img: blog5,
-  // },
-
   {
-    id:"6",
-    nombre: "LETREROS ACRÍLICOS",
+    id:"1",
+    nombre: "LETREROS LUMINOSOS LED",
     descripcion: "Elegancia y profesionalismo en tu marca",
     img: blog6,
-    
     fondoPrincipal: hero6,  
-    fecha: "9/10/2023",
+    fecha: "15/01/2024",
     detalles: `
       Los letreros acrílicos son la opción preferida para marcas que buscan
       una presentación elegante y duradera. 
@@ -62,7 +30,6 @@ export const BlogData = [
       "Alta resistencia y durabilidad en diferentes ambientes.",
       "Refuerzan la identidad visual con un acabado profesional.",
     ],
-
     testimonio: {
       titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
       comentario: `
@@ -73,19 +40,16 @@ export const BlogData = [
       autor: "Valeria Ríos",
       calificacion: 5
     },
-
     videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
-
     galeria: [galeria6,galeria62]
   },
   {
-    id:"6",
-    nombre: "LETREROS ACRÍLICOS",
+    id:"2",
+    nombre: "SEÑALÉTICA CORPORATIVA",
     descripcion: "Elegancia y profesionalismo en tu marca",
     img: blog6,
-    
     fondoPrincipal: hero6,  
-    fecha: "9/10/2023",
+    fecha: "22/01/2024",
     detalles: `
       Los letreros acrílicos son la opción preferida para marcas que buscan
       una presentación elegante y duradera. 
@@ -99,7 +63,6 @@ export const BlogData = [
       "Alta resistencia y durabilidad en diferentes ambientes.",
       "Refuerzan la identidad visual con un acabado profesional.",
     ],
-
     testimonio: {
       titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
       comentario: `
@@ -110,19 +73,16 @@ export const BlogData = [
       autor: "Valeria Ríos",
       calificacion: 5
     },
-
     videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
-
     galeria: [galeria6,galeria62]
   },
   {
-    id:"6",
-    nombre: "LETREROS ACRÍLICOS",
+    id:"3",
+    nombre: "LETRAS EN ACERO INOXIDABLE",
     descripcion: "Elegancia y profesionalismo en tu marca",
     img: blog6,
-    
     fondoPrincipal: hero6,  
-    fecha: "9/10/2023",
+    fecha: "05/02/2024",
     detalles: `
       Los letreros acrílicos son la opción preferida para marcas que buscan
       una presentación elegante y duradera. 
@@ -136,7 +96,6 @@ export const BlogData = [
       "Alta resistencia y durabilidad en diferentes ambientes.",
       "Refuerzan la identidad visual con un acabado profesional.",
     ],
-
     testimonio: {
       titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
       comentario: `
@@ -147,46 +106,501 @@ export const BlogData = [
       autor: "Valeria Ríos",
       calificacion: 5
     },
-
     videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
-
-    galeria: [galeria6,galeria62]
-  },
-  {
-    id:"6",
-    nombre: "LETREROS ACRÍLICOS",
-    descripcion: "Elegancia y profesionalismo en tu marca",
-    img: blog6,
-    
-    fondoPrincipal: hero6,  
-    fecha: "9/10/2023",
-    detalles: `
-      Los letreros acrílicos son la opción preferida para marcas que buscan
-      una presentación elegante y duradera. 
-      Su acabado brillante y versátil
-      permite comunicar con impacto tanto en interiores como en exteriores,
-      reforzando la identidad visual de cualquier negocio.
-    `,
-    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
-    beneficios: [
-      "Diseño elegante y personalizable en formas y colores.",
-      "Alta resistencia y durabilidad en diferentes ambientes.",
-      "Refuerzan la identidad visual con un acabado profesional.",
-    ],
-
-    testimonio: {
-      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
-      comentario: `
-       Logramos una imagen elegante y llamativa. 
-       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
-       Es una inversión clave para destacar.
-      `,
-      autor: "Valeria Ríos",
-      calificacion: 5
-    },
-
-    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
-
     galeria: [galeria6,galeria62,galeria6,galeria62]
-  }
-]
+  },
+  {
+    id:"4",
+    nombre: "VINILOS DECORATIVOS",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "12/02/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"5",
+    nombre: "TÓTEMS PUBLICITARIOS",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "20/02/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"6",
+    nombre: "PANTALLAS DIGITALES",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "28/02/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"7",
+    nombre: "BANNERS ROLL UP",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "08/03/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"8",
+    nombre: "LETREROS NEÓN FLEX",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "16/03/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62]
+  },
+  {
+    id:"9",
+    nombre: "LETRAS CORPÓREAS PVC",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "25/03/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62]
+  },
+  {
+    id:"10",
+    nombre: "STANDS MODULARES",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "02/04/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"11",
+    nombre: "RÓTULOS LUMINOSOS",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "10/04/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62]
+  },
+  {
+    id:"12",
+    nombre: "BACKLIGHT TEXTIL",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "18/04/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"13",
+    nombre: "DISPLAYS PROMOCIONALES",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "26/04/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62]
+  },
+  {
+    id:"14",
+    nombre: "LETRAS MADERA 3D",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "05/05/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"15",
+    nombre: "CAJAS DE LUZ",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "13/05/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62]
+  },
+  {
+    id:"16",
+    nombre: "PANELES DECORATIVOS",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "21/05/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  },
+  {
+    id:"17",
+    nombre: "MOBILIARIO PUBLICITARIO",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "29/05/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62]
+  },
+  {
+    id:"18",
+    nombre: "PENDONES PUBLICITARIOS",
+    descripcion: "Elegancia y profesionalismo en tu marca",
+    img: blog6,
+    fondoPrincipal: hero6,  
+    fecha: "06/06/2024",
+    detalles: `
+      Los letreros acrílicos son la opción preferida para marcas que buscan
+      una presentación elegante y duradera. 
+      Su acabado brillante y versátil
+      permite comunicar con impacto tanto en interiores como en exteriores,
+      reforzando la identidad visual de cualquier negocio.
+    `,
+    beneficio_principal:"Ideales para logos, señalización y decoración,proyectan un estilo moderno y profesional que atrae miradas",
+    beneficios: [
+      "Diseño elegante y personalizable en formas y colores.",
+      "Alta resistencia y durabilidad en diferentes ambientes.",
+      "Refuerzan la identidad visual con un acabado profesional.",
+    ],
+    testimonio: {
+      titulo:"  Los letreros acrílicos nos dieron la calidad que buscábamos.",
+      comentario: `
+       Logramos una imagen elegante y llamativa. 
+       Ahora los clientes identifican la tienda al instante y la presentación recibe comentarios muy positivos. 
+       Es una inversión clave para destacar.
+      `,
+      autor: "Valeria Ríos",
+      calificacion: 5
+    },
+    videoUrl: "https://www.youtube.com/embed/Wl9Ik7dF690", 
+    galeria: [galeria6,galeria62,galeria6,galeria62]
+  }]

@@ -1,5 +1,5 @@
 'use client'
-
+import { useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
@@ -21,6 +21,7 @@ const columns = [
 
   ]
 export default function Page() {
+    const [blogPaginado, setBlogPaginado] = useState<typeof BlogData>([]);
 
     const onMensajes = () => {
         // para los mensajes
@@ -56,11 +57,12 @@ export default function Page() {
 
     return (
         <div>
-            <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
+            <ActionButtonGroup buttons={topButtons}  className="mb-4 mt-4" />
 
             <AdminTable
+                minRows={10}
                 columns={columns}
-                data={BlogData}
+                data={blogPaginado}
                 actions={[
                     { type: "delete", onClick: onDelete },
                     { type: "edit", onClick: onEdit }
@@ -72,7 +74,7 @@ export default function Page() {
                 className="mt-4"
             />
             <div className="col-span-full  flex justify-center order-3 my-6">
-                <Pagination pageSize={6} items={BlogData} setProductosPaginados={() => { }} />
+                <Pagination pageSize={2} items={BlogData} setProductosPaginados={setBlogPaginado} />
             </div>
         </div>
     );
