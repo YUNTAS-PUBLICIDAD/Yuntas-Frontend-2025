@@ -1,6 +1,7 @@
 'use client'
 import HeroSearchSection from "@/components/organisms/productos/HeroSearchSection";
 import HeroSection from "@/components/organisms/productos/HeroSection";
+import ProductoPopup from "@/components/organisms/productos/popupInicial/ProductoPopup";
 import ProductosSection from "@/components/organisms/productos/ProductosSection";
 import { Producto } from "@/types/producto";
 import { useState } from "react";
@@ -11,6 +12,7 @@ export default function ProductosPage() {
       <HeroSection/>
       <HeroSearchSection listaProductos={listaProductos} setListaProductos={setListaProductos}/>
       <ProductosSection ListaBusqueda={listaProductos} setListaProductos={setListaProductos}/>
+      <ProductoPopup delay={5000}/>
     </main>
   );
 }
