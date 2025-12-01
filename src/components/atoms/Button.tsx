@@ -2,11 +2,12 @@ import React from "react";
 
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "tertiary" | "outline";
+  variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
   size?: "sm" | "md" | "lg";
   href?: string;
   onClick?: () => void;
   className?: string;
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   href,
   onClick,
   className = "",
+  type = "button"
 }) => {
   const baseClasses = "font-bold rounded-2xl md:rounded-3xl transition-all duration-300 hover:scale-105 inline-block text-center";
   
@@ -24,6 +26,8 @@ const Button: React.FC<ButtonProps> = ({
     secondary: "bg-white text-[#0B0B1F] hover:bg-gray-100",
     tertiary: "bg-[#203565] text-white hover:bg-[#162E4D]",
     outline: "border-2 border-white text-white hover:bg-white hover:text-[#0B0B1F]",
+    success: "bg-[#008236] text-white hover:bg-[#006622]",
+    danger: "bg-[#DC3545] text-white hover:bg-[#C82333]",
   };
   
   const sizeClasses = {
@@ -43,7 +47,7 @@ const Button: React.FC<ButtonProps> = ({
   }
   
   return (
-    <button onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes}>
       {children}
     </button>
   );

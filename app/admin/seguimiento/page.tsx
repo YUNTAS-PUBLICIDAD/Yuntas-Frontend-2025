@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
+import Modal from "@/components/atoms/Modal";
+import AddClientForm from "@/components/molecules/admin/AddClientForm";
 import data from "@/data/admin/seguimientoData";
 
 const columns = [
@@ -14,7 +17,17 @@ const columns = [
     { key: "fecha", label: "FECHA" },
 ];
 
+interface ClientFormData {
+    nombre: string;
+    telefono: string;
+    gmail: string;
+    productoId: number;
+    fecha: string;
+}
+
 export default function SeguimientoPage() {
+    const [datosPaginados, setDatosPaginados] = useState<typeof data>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const onMensajes = () => {
         // para los mensajes
@@ -29,7 +42,12 @@ export default function SeguimientoPage() {
     };
 
     const onAdd = () => {
-        // para añadir datos
+        setIsModalOpen(true);
+    };
+
+    const onAddClient = (clientData: ClientFormData) => {
+        // para agregar el cliente
+        setIsModalOpen(false);
     };
 
     const onDelete = (id: string | number) => {
@@ -52,7 +70,8 @@ export default function SeguimientoPage() {
 
             <AdminTable
                 columns={columns}
-                data={data}
+                data={datosPaginados}
+                minRows={10}
                 actions={[
                     { type: "delete", onClick: onDelete },
                     { type: "edit", onClick: onEdit }
@@ -64,8 +83,19 @@ export default function SeguimientoPage() {
                 className="mt-4"
             />
             <div className="col-span-full  flex justify-center order-3 my-6">
-                <Pagination pageSize={6} items={data} setProductosPaginados={() => { }} />
+                <Pagination pageSize={10} items={data} setProductosPaginados={setDatosPaginados} />
             </div>
+
+            <Modal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)}
+                title="AÑADIR CLIENTE"
+            >
+                <AddClientForm 
+                    onSubmit={onAddClient}
+                    onCancel={() => setIsModalOpen(false)}
+                />
+            </Modal>
         </div>
     );
 }
