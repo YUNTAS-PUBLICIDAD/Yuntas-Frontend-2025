@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* estilo para popup inicio-desktop */
+@media (min-width: 640px) {
+  .clip-vase {
+    clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 0% 100%);
+    border-radius: 1rem;
+  }
+}
