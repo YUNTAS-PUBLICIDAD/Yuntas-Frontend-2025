@@ -5,6 +5,8 @@ import { FiEdit } from "react-icons/fi";
 interface Column {
     key: string;
     label: string;
+    render?: (value: any, row: any) => React.ReactNode;
+
 }
 
 type ActionType = "delete" | "approve" | "edit";
@@ -86,7 +88,7 @@ export default function AdminTable({
                                             col.key === 'id' ? "font-medium text-black" : "font-normal text-[#0D1030]"
                                         } text-xl rounded-lg text-center h-12`}
                                     >
-                                        {col.key === 'id' ? (index + 1) : isEmpty ? "" : row[col.key]}
+                                        {isEmpty? "": col.render? col.render(row[col.key], row) : row[col.key]}
                                     </td>
                                 ))}
                                 <td className="bg-[#F4F4F2] py-2 px-4 rounded-lg text-center h-12">
