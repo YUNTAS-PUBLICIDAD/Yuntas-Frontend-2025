@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,9 +18,10 @@ const Button: React.FC<ButtonProps> = ({
   href,
   onClick,
   className = "",
-  type = "button"
+  type = "button",
+  disabled = false,
 }) => {
-  const baseClasses = "font-bold rounded-2xl md:rounded-3xl transition-all duration-300 hover:scale-105 inline-block text-center";
+  const baseClasses = "font-bold rounded-2xl md:rounded-3xl transition-all duration-300 inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100";
   
   const variantClasses = {
     primary: "bg-[#23C1DE] text-white hover:bg-[#5BC5C7]",
@@ -36,9 +38,9 @@ const Button: React.FC<ButtonProps> = ({
     lg: "px-12 py-4 text-lg",
   };
   
-  const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+  const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${disabled ? "" : "hover:scale-105"} ${className}`;
   
-  if (href) {
+  if (href && !disabled) {
     return (
       <a href={href} className={classes}>
         {children}
@@ -47,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
   }
   
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes} disabled={disabled}>
       {children}
     </button>
   );
