@@ -16,12 +16,18 @@ export interface LoginResponse {
             celular: string;
             created_at: string;
             updated_at: string;
-        }
+        };
     };
 }
 
-export interface AuthError {
+export interface LogoutResponse {
     success: boolean;
     message: string;
-    errors: null | number;
+    data: null;
+}
+
+export interface AuthError {
+    success?: boolean;
+    message: string;
+    errors?: null | number;
 }

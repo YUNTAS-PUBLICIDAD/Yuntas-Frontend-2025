@@ -50,4 +50,4 @@ export const endpoints = {
     information: {
         sendInformation: "/api/v1/send-info",
     },
-};
+} as const;
