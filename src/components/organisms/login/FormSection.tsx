@@ -36,7 +36,7 @@ export default function FormSection() {
             {error && (
                 <div>
                     {/** Se tiene que mostrar algo */}
-                    {error.message}
+                    {error}
                 </div>
             )}
 

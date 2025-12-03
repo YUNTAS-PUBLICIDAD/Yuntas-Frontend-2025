@@ -20,14 +20,17 @@ export interface LoginResponse {
     };
 }
 
-export interface LogoutResponse {
+export interface LoginActionResponse {
     success: boolean;
     message: string;
-    data: null;
+    user?: {
+        id: number;
+        name: string;
+        email: string;
+        celular: string;
+    };
 }
 
 export interface AuthError {
-    success?: boolean;
     message: string;
-    errors?: null | number;
 }
