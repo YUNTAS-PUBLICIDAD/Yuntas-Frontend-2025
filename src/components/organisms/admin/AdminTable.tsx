@@ -23,22 +23,25 @@ interface AdminTableProps {
     actions?: ActionConfig[];
 }
 
-const actionIcons: Record<ActionType, { icon: React.ReactNode; color: string; hoverColor: string; title: string }> = {
+const actionIcons: Record<ActionType, { icon: React.ReactNode; color: string; disabledColor: string; hoverColor: string; title: string }> = {
     delete: {
         icon: <IoMdTrash size={22} />,
         color: "text-[#203565]",
+        disabledColor: "text-[#203565]/30",
         hoverColor: "hover:text-[#0D1030]",
         title: "Eliminar"
     },
     approve: {
         icon: <FaCheckCircle size={20} />,
         color: "text-[#23C1DE]",
+        disabledColor: "text-[#23C1DE]/30",
         hoverColor: "hover:text-[#1a9bb8]",
         title: "Aprobar"
     },
     edit: {
         icon: <FiEdit size={20} />,
         color: "text-[#23C1DE]",
+        disabledColor: "text-[#23C1DE]/30",
         hoverColor: "hover:text-[#1a9bb8]",
         title: "Editar"
     }
@@ -101,7 +104,7 @@ export default function AdminTable({
                                                     onClick={() => !isEmpty && action.onClick?.(row.id)}
                                                     className={`transition-colors ${
                                                         isEmpty
-                                                            ? `${config.color}/30 cursor-not-allowed`
+                                                            ? `${config.disabledColor} cursor-not-allowed`
                                                             : `${config.color} ${config.hoverColor}`
                                                     }`}
                                                     title={config.title}

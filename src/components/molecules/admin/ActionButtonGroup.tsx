@@ -3,7 +3,8 @@ import ActionButton from "@/components/atoms/ActionButton";
 interface ButtonConfig {
     label: string;
     onClick?: () => void;
-    variant?: "primary" | "secondary" | "tertiary" | "outline";
+    variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
+    bgColor?: string;
 }
 
 interface ActionButtonGroupProps {
@@ -30,6 +31,7 @@ export default function ActionButtonGroup({
                     key={index}
                     onClick={button.onClick}
                     variant={button.variant}
+                    bgColor={button.bgColor}
                 >
                     {button.label}
                 </ActionButton>
