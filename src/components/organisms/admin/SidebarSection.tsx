@@ -1,7 +1,12 @@
+'use client';
+
+import { useAuth } from "@/hooks/useAuth";
 import SwitchMode from "@/components/molecules/admin/SwitchMode";
 import Button from "@/components/atoms/Button";
 import NavList from "@/components/molecules/admin/NavList";
 import UserSection from "@/components/molecules/header/UserSection";
+import Loader from "@/components/atoms/Loader";
+
 interface NavItem {
     label: string;
     href: string;
@@ -16,14 +21,19 @@ const navItems: NavItem[] = [
 ];
 
 export default function SidebarSection() {
+    const { logout, isLoading } = useAuth();
+
+    const handleLogout = async () => {
+        await logout();
+    };
 
     return (
         <aside className="sticky top-0 h-full min-h-fit w-72 flex flex-col border-r border-gray-300 ">
             <h2 className="text-center text-[#0D1030] font-semibold text-2xl py-8 px-6">Administración</h2>
             <nav className="flex-1 px-12 text-xl text-[#203565]">
-                <NavList 
-                    items={navItems} 
-                    className="border-l border-gray-300" 
+                <NavList
+                    items={navItems}
+                    className="border-l border-gray-300"
                 />
             </nav>
             <div className="flex justify-center my-8">
@@ -42,8 +52,17 @@ export default function SidebarSection() {
                     <p className="font-bold">Bienvenido</p>
                     <p className="font-medium">Administrador</p>
                 </div>
-                <Button size="sm">
-                    <p className="font-semibold text-xl">Cerrar Sesión</p>
+                <Button size="sm" onClick={handleLogout} disabled={isLoading}>
+                    <div className="flex items-center gap-2">
+                        {isLoading ? (
+                            <>
+                                <Loader size="sm" color="border-white" />
+                                <span className="font-semibold text-xl">Cerrando...</span>
+                            </>
+                        ) : (
+                            <span className="font-semibold text-xl">Cerrar Sesión</span>
+                        )}
+                    </div>
                 </Button>
             </div>
         </aside>

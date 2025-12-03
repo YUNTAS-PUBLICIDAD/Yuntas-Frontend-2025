@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-import Pagination from '@/components/molecules/Pagination';
-import data from "@/data/admin/productosData";
+import PaginationServer from '@/components/molecules/PaginationServer';
+import { useProductos } from "@/hooks/useProductos";
+import { ProductoInput } from "@/types/admin/producto";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -14,8 +15,26 @@ const columns = [
 ];
 
 export default function productosPage() {
-    const [productosPaginados, setProductosPaginados] = useState<typeof data>([]);
-    
+    const [currentPage, setCurrentPage] = useState(1);
+    const perPage = 6;
+    const {
+        productos,
+        meta,
+        isLoading,
+        error,
+        getProductos,
+        createProducto,
+        deleteProducto
+    } = useProductos();
+
+    useEffect(() => {
+        getProductos(currentPage, perPage);
+    }, [currentPage, getProductos]);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
     const onAddProduct = () => {
         // añadir un producto
     }
@@ -69,18 +88,31 @@ export default function productosPage() {
                 <ActionButtonGroup buttons={[{ label: "Envio de Whatsapp", onClick: onSendWhatsapp, variant: "success" }]} className="mb-2" />
             </div>
             <ActionButtonGroup buttons={exportButtons} className="mb-4 mt-4" />
+
+            {error && (
+                <div>
+                    {error}
+                </div>
+            )}
+
             <AdminTable
                 columns={columns}
-                data={productosPaginados}
-                minRows={10}
+                data={productos}
+                minRows={perPage}
                 actions={[
                     { type: "delete", onClick: onDelete },
                     { type: "edit", onClick: onEdit }
                 ]}
             />
-            <div className="col-span-full  flex justify-center order-3 my-6">
-                <Pagination pageSize={10} items={data} setProductosPaginados={setProductosPaginados} />
-            </div>
+            {meta && (
+                <div className="flex justify-center my-6">
+                    <PaginationServer 
+                        meta={meta} 
+                        onPageChange={handlePageChange}
+                        isLoading={isLoading}
+                    />
+                </div>
+            )}
 
         </div>
     )
