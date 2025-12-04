@@ -5,10 +5,11 @@ export interface EtiquetaProducto {
 }
 
 export interface ImagenProducto {
-    id: number;
+    id?: number;
     title: string;
     url_imagen: string;
     texto_alt_SEO: string;
+    file?: File;
 }
 
 export interface Producto {
@@ -20,12 +21,43 @@ export interface Producto {
     seccion: string;
     imagen_principal: string;
     text_alt_principal: string | null;
-    especificaciones: any;
+    especificaciones: string[] | any;
     beneficios: string[];
     imagenes: ImagenProducto[];
     etiqueta: EtiquetaProducto;
     created_at: string;
     updated_at: string;
+}
+
+export interface ProductoInput {
+    // seccion datos para Dashboard
+    nombre: string;
+    seccion: string;
+    precio: number;
+    link: string;
+    
+    // seccion seo
+    meta_titulo: string;
+    meta_descripcion: string;
+    keywords: string[];
+    
+    // seccion datos para Frontend
+    titulo: string;
+    descripcion: string;
+    
+    // seccion listas
+    especificaciones: string[];
+    beneficios: string[];
+    
+    // seccion imagenes
+    imagen_principal: File | string | null;
+    text_alt_principal: string;
+    imagenes: {
+        hero: { file: File | string | null; alt: string };
+        especificaciones: { file: File | string | null; alt: string };
+        beneficios: { file: File | string | null; alt: string };
+        popup: { file: File | string | null; alt: string };
+    };
 }
 
 export interface ProductoListResponse {
@@ -53,16 +85,3 @@ export interface ProductoResponse {
     message: string;
     data: Producto;
 }
-
-///////////////////////////////////////// 
-export interface ProductoInput {
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    seccion: string;
-    link: string;
-    imagen?: string;
-}
-
-
-

@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import PaginationServer from '@/components/molecules/PaginationServer';
+import Modal from "@/components/atoms/Modal";
+import ProductForm from "@/components/molecules/admin/ProductoForm";
 import { useProductos } from "@/hooks/useProductos";
-import { ProductoInput } from "@/types/admin/producto";
+import { Producto, ProductoInput } from "@/types/admin/producto";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -14,7 +16,10 @@ const columns = [
     { key: "precio", label: "PRECIO" },
 ];
 
-export default function productosPage() {
+export default function ProductosPage() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<"create" | "edit">("create");
+    const [selectedProducto, setSelectedProducto] = useState<Producto | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const perPage = 6;
     const {
@@ -23,7 +28,9 @@ export default function productosPage() {
         isLoading,
         error,
         getProductos,
+        getProductoById,
         createProducto,
+        updateProducto,
         deleteProducto
     } = useProductos();
 
@@ -36,7 +43,9 @@ export default function productosPage() {
     };
 
     const onAddProduct = () => {
-        // añadir un producto
+        setModalMode("create");
+        setSelectedProducto(null);
+        setIsModalOpen(true);
     }
 
     const onSendEmail = () => {
@@ -63,12 +72,41 @@ export default function productosPage() {
         // imprimir
     }
 
-    const onDelete = (id: string | number) => {
-        // para eliminar datos
+    const onDelete = async (id: string | number) => {
+        const confirmed = window.confirm("¿Estas seguro de eliminar este producto?");
+        if (confirmed) {
+            const success = await deleteProducto(id);
+            if (success) {
+                getProductos(currentPage, perPage);
+            }
+        }
     };
 
-    const onEdit = (id: string | number) => {
-        // para editar datos
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedProducto(null);
+    };
+
+    const onEdit = async (id: string | number) => {
+        await getProductoById(id);
+        setModalMode("edit");
+        setIsModalOpen(true);
+    };
+
+    const handleSubmit = async (productoData: ProductoInput) => {
+        let success = false;
+
+        if (modalMode === "create") {
+            success = await createProducto(productoData);
+        } else if (selectedProducto) {
+            success = await updateProducto(selectedProducto.id, productoData);
+        }
+
+        if (success) {
+            setIsModalOpen(false);
+            setSelectedProducto(null);
+            getProductos(currentPage, perPage);
+        }
     };
 
 
@@ -106,13 +144,28 @@ export default function productosPage() {
             />
             {meta && (
                 <div className="flex justify-center my-6">
-                    <PaginationServer 
-                        meta={meta} 
+                    <PaginationServer
+                        meta={meta}
                         onPageChange={handlePageChange}
                         isLoading={isLoading}
                     />
                 </div>
             )}
+
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                title={modalMode === "create" ? "AÑADIR PRODUCTO" : "EDITAR PRODUCTO"}
+                size="lg"
+            >
+                <ProductForm
+                    onSubmit={handleSubmit}
+                    onCancel={handleCloseModal}
+                    isLoading={isLoading}
+                    initialData={selectedProducto}
+                    mode={modalMode}
+                />
+            </Modal>
 
         </div>
     )
