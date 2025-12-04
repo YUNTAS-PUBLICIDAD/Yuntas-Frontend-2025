@@ -15,12 +15,12 @@ const BlogSection = () => {
 
   return (
     <section className='py-6 md:py-10'>
-      <Banner className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-12 lg:px-20 md:flex-row md:items-center'>
-        <Text variant='banner'color='white' className='font-bold max-w-xl'>Descubre más sobre nuestros Productos</Text>
+      <Banner className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-10 lg:px-20 md:flex-row md:items-center'>
+        <Text variant='h2'color='white' className='font-bold max-w-xl'>Descubre más sobre nuestros Productos</Text>
         <SearchBar setBlog={setListaBlog}/>
       </Banner>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8'>
+      <div className='max-w-8xl mx-auto px-4 sm:px-6 lg:px-20 md:px-1 py-8 md:py-12'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 '>
           {blogPaginado.map((blog) => (
             <Link 
               key={blog.id}
