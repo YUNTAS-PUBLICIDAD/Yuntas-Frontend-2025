@@ -11,17 +11,17 @@ type BlogCardProps = {
 
 const BlogCard = ({ img, nombre, descripcion }: BlogCardProps) => {
   return (
-    <article className="w-full h-full max-w-[400px] mx-auto bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300">
-      <div className='relative w-full aspect-[4/3] overflow-hidden'>
+    <article className="w-full h-full max-w-[400px]  mx-auto bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300">
+      <div className='relative w-full max-h-[280px] aspect-[4/3] overflow-hidden'>
         <Img 
           src={img} 
           variant='blogCard'
-          classname='w-full h-full object-cover'
+          classname='w-full h-full   object-cover'
         />
       </div>
-      <div className='p-4 sm:p-5 '>
-        <Text variant='subtitle' className=' font-bold line-clamp '>{nombre} </Text>
-        <Text variant='body' className='text-gray-600 line-clamp-3'>{descripcion}</Text>
+      <div className='px-2  sm:px-5 sm:py-2 sm:pb-5 '>
+        <Text variant='subtitle' className=' font-bold line-clamp uppercase  '>{nombre} </Text>
+        <Text variant='small' className='text-gray-600 line-clamp-3 '>{descripcion}</Text>
       </div>
     </article>
   )

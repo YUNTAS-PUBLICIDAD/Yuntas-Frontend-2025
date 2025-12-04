@@ -6,3 +6,7 @@ export type Producto= {
   categorias: string[];
   //...
 }
+export type ProductoExport = {
+  nombre: string;
+  categorias: number;
+};

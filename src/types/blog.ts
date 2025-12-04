@@ -21,3 +21,10 @@ export type Blog= {
     galeria: StaticImageData[]
   //...
 }
+export type BlogExport = {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  fecha: string;
+  nro_de_imagenes: number;
+};

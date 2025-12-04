@@ -7,6 +7,9 @@ import data from "@/data/admin/seguimientoData";
 import { BlogData } from "@/data/blog/blogData";
 import { StaticImageData } from "next/image";
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
+import { exportExcel } from "@/utils/Export/exportExcel";
+import { exportToPDF } from "@/utils/Export/ExportPDF";
+import { exportCSV } from "@/utils/Export/ExportCVS";
 const columns = [
     { key: "id", label: "ID" },
     { key: "nombre", label: "PRODUCTO" },
@@ -49,10 +52,10 @@ export default function Page() {
 
     const topButtons = [
         { label: "Publicar", onClick: onMensajes },
-        { label: "Exportar CSV", onClick: onMensajes },
-        { label: "Exportar Excel", onClick: onMedioSeguimiento },
-        { label: "Exportar PDF", onClick: onMonitoreo },
-        { label: "Imprimir", onClick: onMonitoreo },
+        { label: "Exportar CSV", onClick: ()=>{exportCSV(blogPaginado) }},
+        { label: "Exportar Excel", onClick: ()=>{exportExcel(blogPaginado)} },
+        { label: "Exportar PDF", onClick: ()=>{exportToPDF(blogPaginado)} },
+        { label: "Imprimir", onClick: ()=>{exportToPDF(blogPaginado)} },
     ];
 
     return (
