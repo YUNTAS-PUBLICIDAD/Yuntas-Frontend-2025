@@ -7,11 +7,12 @@ const ContactoMedios: React.FC = () => {
     <section className="w-full">
       {/* ENCABEZADO CELESTE */}
       <div className="w-full bg-white py-6 px-6 md:px-16 text-center">
+        {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para escalado gradual en dispositivos */}
         <TextTitulo
           variant="caption"
-          className="text-[#203565] font-bold text-2xl md:text-4xl"
+          className="text-[#203565] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl"
         >
-          <span className="font-semibold">CONOCER NUESTROS MEDIOS DE</span>
+          <span className="font-semibold">CONOCE NUESTROS MEDIOS DE</span>
           <br />
           CONTACTO
         </TextTitulo>

@@ -41,13 +41,14 @@ const ContactoSection = () => {
             text-center
           "
           >
+            {/* Ajuste responsive del título - agregado sm:text-4xl lg:text-7xl para mejor proporción en diferentes pantallas */}
             <Heading
               level="h1"
               size="2xl"
               className="
                 mb-4 leading-tight 
                 drop-shadow-[0_2px_2px_#28BEDA] 
-                text-5xl sm:text-6xl md:text-7xl
+                text-3xl sm:text-4xl md:text-6xl lg:text-7xl
               "
             >
               CONTACTO
