@@ -1,56 +1,57 @@
 'use server';
 
 import { cookies } from "next/headers";
-import { LoginCredentials, LoginResponse, LoginActionResponse, AuthError } from "@/types/auth";
-import { apiConfig, endpoints } from "@/config";
+import { api, API_ENDPOINTS } from "@/config"; 
+import { LoginCredentials, LoginActionResponse } from "@/types/auth";
+import { AxiosError } from "axios";
 
 export async function loginAction(credentials: LoginCredentials): Promise<LoginActionResponse> {
     try {
-        const url = apiConfig.getUrl(endpoints.auth.login);
+        const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
 
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials),
-        });
+        const responseData = response.data; 
+        
+        const token = responseData.data?.token || responseData.token;
+        const user = responseData.data?.user || responseData.user;
 
-
-        if (!response.ok) {
-            const errorData: AuthError = await response.json();
-            return {
-                success: false,
-                message: errorData.message || "Credenciales inválidas"
-            };
+        if (!token) {
+            return { success: false, message: "Error: No se recibió token del servidor." };
         }
 
-        const data: LoginResponse = await response.json();
-
-        // guardar cookie
+        // 2. Guardar la Cookie en el Servidor de Next.js
         const cookieStore = cookies();
         cookieStore.set({
             name: "auth_token",
-            value: data.data.token,
-            httpOnly: true,
+            value: token,
+            httpOnly: true, 
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
-            maxAge: 60 * 60 * 24 * 7,
+            maxAge: 60 * 60 * 24 * 7, 
             path: "/",
         });
 
+        
+
         return {
-            success: data.success,
-            message: data.message,
+            success: true,
+            message: "Bienvenido",
             user: {
-                id: data.data.user.id,
-                name: data.data.user.name,
-                email: data.data.user.email,
-                celular: data.data.user.celular,
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                celular: user.celular,
             }
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión. Intenta de nuevo." };
+
+    } catch (error: any) {
+        console.error("Error en LoginAction:", error);
+
+        if (error instanceof AxiosError) {
+            const errorMessage = error.response?.data?.message || "Credenciales incorrectas";
+            return { success: false, message: errorMessage };
+        }
+
+        return { success: false, message: "Error de conexión con el servidor." };
     }
 }
 
@@ -60,35 +61,18 @@ export async function logoutAction(): Promise<LoginActionResponse> {
         const token = cookieStore.get("auth_token")?.value;
 
         if (token) {
-            const url = apiConfig.getUrl(endpoints.auth.logout);
-            await fetch(url, {
-                method: "POST",
+            await api.post(API_ENDPOINTS.AUTH.LOGOUT, {}, {
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
+                    Authorization: `Bearer ${token}`
+                }
             });
         }
-
-        // Eliminar cookie
-        cookieStore.set({
-            name: "auth_token",
-            value: "",
-            httpOnly: true,
-            maxAge: 0,
-            path: "/",
-        });
-
-        return { success: true, message: "Sesión cerrada" };
     } catch (error) {
+        console.error("Error al cerrar sesión en backend (ignorando para limpiar cookie local)", error);
+    } finally {
         const cookieStore = cookies();
-        cookieStore.set({
-            name: "auth_token",
-            value: "",
-            httpOnly: true,
-            maxAge: 0,
-            path: "/",
-        });
+        cookieStore.delete("auth_token");
+        
         return { success: true, message: "Sesión cerrada" };
     }
 }

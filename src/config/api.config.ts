@@ -1,22 +1,40 @@
-import { endpoints } from "./endpoints";
 
+import axios from 'axios';
 
-function createApiConfig() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
 
-    return {
-        apiUrl,
-        endpoints,
-        
-        getUrl: (endpoint: string): string => {
-            return `${apiUrl}${endpoint}`;
-        },
-        
-        getFullUrl: (endpoint: string | ((arg: any) => string), param?: any): string => {
-            const path = typeof endpoint === "function" ? endpoint(param) : endpoint;
-            return `${apiUrl}${path}`;
-        },
-    };
-}
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+  withCredentials: true,
+});
 
-export const apiConfig = createApiConfig();
+//Inyectar Token en cada petición
+api.interceptors.request.use(
+  (config) => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+//Manejar errores globales
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+   
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
