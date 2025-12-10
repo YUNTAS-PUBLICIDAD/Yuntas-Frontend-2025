@@ -9,9 +9,18 @@ type ProductoCardProps = {
 
 const ProductoCard = ({ img, nombre }: ProductoCardProps) => {
   return (
-    <article className=" bg-white rounded-3xl shadow-xl cursor-pointer hover:scale-105 transition duration-300" >
-      <Img src={img} classname='' variant='productoCard' />
-      <Text className='pt-3 pl-5 pb-8 font-bold'>{nombre}</Text>
+    // Tarjeta con ancho completo responsive y overflow-hidden para contener la imagen
+    <article className="w-full max-w-[700px] mx-auto bg-white rounded-3xl shadow-lg cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden" >
+      
+      {/* mb-4 agrega margen inferior para separar la imagen del texto */}
+      <div className="w-full aspect-[16/10] flex items-center justify-center mb-4">
+        <Img src={img} classname='w-full h-full object-cover' variant='productoCard' />
+      </div>
+      {/* textp a al izquierda*/}
+      
+      <div className="py-6 px-6 text-left">
+        <Text className='font-bold text-lg uppercase tracking-wide'>{nombre}</Text>
+      </div>
     </article>
   )
 }

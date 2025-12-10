@@ -34,9 +34,8 @@ export default function FormSection() {
             </Text>
 
             {error && (
-                <div>
-                    {/** Se tiene que mostrar algo */}
-                    {error}
+                <div className="w-full bg-red-500/20 border border-red-500 text-red-100 md:text-red-600 md:bg-red-100 px-4 py-3 rounded-lg text-sm text-center animate-pulse">
+                    ⚠️ {error}
                 </div>
             )}
 

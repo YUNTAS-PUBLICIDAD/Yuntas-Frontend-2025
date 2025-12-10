@@ -138,10 +138,8 @@ export default function ProductosPage() {
                 columns={columns}
                 data={productos}
                 minRows={perPage}
-                actions={[
-                    { type: "delete", onClick: onDelete },
-                    { type: "edit", onClick: onEdit }
-                ]}
+                onEdit={onEdit}
+                onDelete={onDelete}
             />
             {meta && links && (
                 <div className="flex justify-center my-6">

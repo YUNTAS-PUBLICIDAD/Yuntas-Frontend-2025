@@ -11,9 +11,10 @@ const SolicitudInfo: React.FC = () => {
     <section className="bg-white">
       <div className="container mx-auto px-4 text-center">
         <FormContainer>
+          {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para mejor legibilidad en todos los dispositivos */}
           <TextTitulo
             variant="caption"
-            className="text-[#203565] font-bold text-2xl md:text-4xl text-center"
+            className="text-[#203565] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center"
           >
             <span className="font-semibold">SOLICITA INFORMACIÓN</span>
           </TextTitulo>

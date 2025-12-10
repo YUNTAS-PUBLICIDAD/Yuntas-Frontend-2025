@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-
+import { useTableActions } from "@/hooks/ui/admin/useTableActions"; // Importamos tu Hook
 import data from "@/data/admin/inicioData";
 
 const columns = [
@@ -15,33 +15,31 @@ const columns = [
 ];
 
 export default function InicioPage() {
+    
+    const { handleDelete, handleApprove, isProcessing } = useTableActions();
 
     const onAdd = () => {
-        // se añade mas datos
-    }
-    
-    const onDelete = (id: string | number) => {
-        // se elimina el dato
-    }
-
-    const onApprove = (id: string | number) => {
-        // se aprueba el dato o no se
+        console.log("Navegar a formulario de añadir...");
     }
 
     return (
-        <div>
+        <div className="flex flex-col gap-6">
+            
+            {/* 2. Pasamos las funciones directamente. 
+                El Organismo AdminTable sabrá qué botones pintar basándose en si existe la función o no. */}
             <AdminTable
                 columns={columns}
                 data={data}
-                actions={[
-                    { type: "delete", onClick: onDelete },
-                    { type: "approve", onClick: onApprove }
-                ]}
+                onDelete={handleDelete}
+                onApprove={handleApprove}
+                // onEdit={handleEdit} // Si quisieras editar, solo descomentas y pasas la función
             />
             
             <ActionButtonGroup 
-                buttons={[{ label: "Añadir datos", onClick: onAdd, variant: "tertiary" }]} 
-                className="mt-4" 
+                buttons={[
+                    { label: "Añadir datos", onClick: onAdd, variant: "primary" }
+                ]} 
+                className="self-start" // Ajuste de Tailwind para alinear
             />
         </div>
     );
