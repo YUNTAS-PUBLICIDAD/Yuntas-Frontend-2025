@@ -30,7 +30,7 @@ export function useAuth(): UseAuthReturn {
             setError(result.message);
         }
 
-        setIsLoading(false);
+        setIsLoading(true);
     };
 
     const logout = async () => {
@@ -39,7 +39,7 @@ export function useAuth(): UseAuthReturn {
 
         await logoutAction();
 
-        setIsLoading(false);
+        setIsLoading(true);
         router.push("/login");
         router.refresh();
     };

@@ -1,2 +1,3 @@
-export { endpoints } from "./endpoints";
-export { apiConfig } from "./api.config";
+
+export { default as api } from './api.config';
+export { API_ENDPOINTS } from './endpoints';

@@ -9,6 +9,7 @@ interface ModalProps {
     title?: string;
     children: React.ReactNode;
     size?: "sm" | "md" | "lg";
+    className?: string;
 }
 
 export default function Modal({
@@ -16,7 +17,8 @@ export default function Modal({
     onClose,
     title,
     children,
-    size = "md"
+    size = "md",
+    className = ""
 }: ModalProps) {
 
     useEffect(() => {
@@ -40,24 +42,27 @@ export default function Modal({
     const sizeClasses = {
         sm: "max-w-sm",
         md: "max-w-md",
-        lg: "max-w-2xl"
+        lg: "max-w-3xl"
     };
+    const bgClass = className.includes("bg-") ? "" : "bg-white";
+    const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#203565]";
+    const closeBtnClass = className.includes("text-white") ? "text-white hover:text-gray-200" : "text-gray-400 hover:text-gray-600";
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
             onClick={onClose}
         >
             <div
-                className={`${sizeClasses[size]} w-full mx-4 bg-white rounded-2xl shadow-xl`}
+                className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-                        <h2 className="text-xl font-bold text-[#203565]">{title}</h2>
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
+                        <h2 className={`text-xl font-bold ${textTitleClass}`}>{title}</h2>
                         <button
                             onClick={onClose}
-                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                            className={`${closeBtnClass} transition-colors`}
                         >
                             <IoClose size={24} />
                         </button>
