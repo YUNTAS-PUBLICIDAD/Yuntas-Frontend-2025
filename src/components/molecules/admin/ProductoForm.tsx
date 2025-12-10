@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import { IoClose } from "react-icons/io5";
 import Button from "@/components/atoms/Button";
 import Loader from "@/components/atoms/Loader";
 import InputAdmin from "@/components/atoms/InputAdmin";
@@ -9,6 +11,7 @@ import FormSection from "@/components/molecules/admin/FormSection";
 import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
 import { Producto, ProductoInput } from "@/types/admin/producto";
+
 
 interface ProductFormProps {
     onSubmit: (data: ProductoInput) => void;
@@ -20,24 +23,21 @@ interface ProductFormProps {
 
 const defaultFormData: ProductoInput = {
     nombre: "",
-    seccion: "",
-    precio: 0,
     link: "",
-    meta_titulo: "",
-    meta_descripcion: "",
-    keywords: [""],
     titulo: "",
     descripcion: "",
+    precio: 0,
+    categoria: "",
+    imagen_principal: {
+        file: "",
+        alt: ""
+    },
+    galeria: [],
     especificaciones: [""],
     beneficios: [""],
-    imagen_principal: null,
-    text_alt_principal: "",
-    imagenes: {
-        hero: { file: null, alt: "" },
-        especificaciones: { file: null, alt: "" },
-        beneficios: { file: null, alt: "" },
-        popup: { file: null, alt: "" },
-    }
+    meta_titulo: "",
+    meta_descripcion: "",
+    keywords: [""]
 };
 
 export default function ProductForm({
@@ -49,48 +49,68 @@ export default function ProductForm({
 }: ProductFormProps) {
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
 
+    const [galeriaExistente, setGaleriaExistente] = useState<string[]>([]);
+
+    // imagenes nueva a subir
+    const [galeriaPreview, setGaleriaPreview] = useState<string[]>([]);
+
     // Cargar datos iniciales para editar
     useEffect(() => {
         if (initialData && mode === "edit") {
             setFormData({
                 nombre: initialData.nombre,
-                seccion: initialData.seccion,
-                precio: 0, // por mientras, ya que el backend no devuelve el precio
-                link: initialData.link,
-                meta_titulo: initialData.etiqueta?.meta_titulo || "",
-                meta_descripcion: initialData.etiqueta?.meta_descripcion || "",
-                keywords: initialData.etiqueta?.keywords?.length > 0 ? initialData.etiqueta.keywords : [""],
-                titulo: initialData.titulo,
+                link: initialData.slug,
+                titulo: initialData.titulo_corto,
                 descripcion: initialData.descripcion,
+                precio: Number(initialData.precio),
+                categoria: initialData.categoria || "",
+                imagen_principal: {
+                    file: initialData.imagen_principal?.url || null,
+                    alt: initialData.imagen_principal?.alt || ""
+                },
+                galeria: [],
+                meta_titulo: initialData.seo.meta_titulo || "",
+                meta_descripcion: initialData.seo.meta_descripcion || "",
+                keywords: initialData.seo.keywords?.length > 0 ? initialData.seo.keywords : [""],
                 especificaciones: initialData.especificaciones?.length > 0 ? initialData.especificaciones : [""],
                 beneficios: initialData.beneficios?.length > 0 ? initialData.beneficios : [""],
-                imagen_principal: initialData.imagen_principal,
-                text_alt_principal: initialData.text_alt_principal || "",
-                imagenes: {
-                    hero: {
-                        file: initialData.imagenes?.[0]?.url_imagen || null,
-                        alt: initialData.imagenes?.[0]?.texto_alt_SEO || ""
-                    },
-                    especificaciones: {
-                        file: initialData.imagenes?.[1]?.url_imagen || null,
-                        alt: initialData.imagenes?.[1]?.texto_alt_SEO || ""
-                    },
-                    beneficios: {
-                        file: initialData.imagenes?.[2]?.url_imagen || null,
-                        alt: initialData.imagenes?.[2]?.texto_alt_SEO || ""
-                    },
-                    popup: {
-                        file: initialData.imagenes?.[3]?.url_imagen || null,
-                        alt: initialData.imagenes?.[3]?.texto_alt_SEO || ""
-                    },
-                }
             });
+
+            const urlsGaleria = initialData.galeria
+                ?.map(img => img.url)
+                .filter((url): url is string => url !== null) || [];
+
+            console.log(initialData.galeria)
+            setGaleriaExistente(urlsGaleria);
         }
     }, [initialData, mode]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: name === "precio" ? Number(value) : value }));
+    };
+
+    const handleAddGaleriaImage = (file: File | null) => {
+        if (file) {
+            setFormData(prev => ({
+                ...prev,
+                galeria: [...prev.galeria, file]
+            }));
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setGaleriaPreview(prev => [...prev, reader.result as string]);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleRemoveNewImage = (index: number) => {
+        setFormData(prev => ({
+            ...prev,
+            galeria: prev.galeria.filter((_, i) => i !== index)
+        }));
+        setGaleriaPreview(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -116,8 +136,8 @@ export default function ProductForm({
 
                 <InputAdmin
                     label="Sección/Categoría"
-                    name="seccion"
-                    value={formData.seccion}
+                    name="categoria"
+                    value={formData.categoria || ""}
                     onChange={handleInputChange}
                     placeholder="Ej: Letreros LED, Sillas LED, Pisos LED, etc."
                     helperText="Máx. 255 caracteres (letras, números y espacios)."
@@ -150,7 +170,7 @@ export default function ProductForm({
                 <InputAdmin
                     label="Meta Título (SEO)"
                     name="meta_titulo"
-                    value={formData.meta_titulo}
+                    value={formData.meta_titulo || ""}
                     onChange={handleInputChange}
                     placeholder="Título para SEO del producto"
                     helperText="Máx. 70 caracteres (letras, números y espacios)."
@@ -160,7 +180,7 @@ export default function ProductForm({
                 <TextareaAdmin
                     label="Meta Descripción (SEO)"
                     name="meta_descripcion"
-                    value={formData.meta_descripcion}
+                    value={formData.meta_descripcion || ""}
                     onChange={handleInputChange}
                     placeholder="Descripción breve del producto para SEO…"
                     helperText="Máx. 160 caracteres (letras, números y espacios)."
@@ -225,94 +245,139 @@ export default function ProductForm({
                 />
             </FormSection>
 
+            { /* Galeria */}
+            {mode === "edit" && galeriaExistente.length > 0 && (
+                <FormSection title="Galería Actual">
+                    <p className="text-gray-500 text-sm mb-3">
+                        Imágenes actuales del producto.
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {galeriaExistente.map((url, index) => (
+                            <div
+                                key={index}
+                                className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200"
+                            >
+                                <Image
+                                    src={"http://127.0.0.1:8000"+url}
+                                    alt={`Imagen galería ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </FormSection>
+            )}
+
             {/* Seccion imagenes */}
             <FormSection title="Imágenes del Producto">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
-                    <p className="text-blue-800 text-sm font-medium">Estructura de imágenes:</p>
-                    <ul className="text-blue-700 text-xs mt-1 list-disc list-inside">
-                        <li><strong>Lista Productos:</strong> imagen_principal</li>
-                        <li><strong>Hero:</strong> images[0]</li>
-                        <li><strong>Especificaciones:</strong> images[1]</li>
-                        <li><strong>Beneficios:</strong> images[2]</li>
-                        <li><strong>Popups:</strong> images[3]</li>
-                    </ul>
-                </div>
-
+                {/* Preview de imágenes nuevas */}
+                {galeriaPreview.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4">
+                        {galeriaPreview.map((preview, index) => (
+                            <div
+                                key={index}
+                                className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-green-300"
+                            >
+                                <Image
+                                    src={preview}
+                                    alt={`Nueva imagen ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveNewImage(index)}
+                                    className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                                >
+                                    <IoClose size={14} />
+                                </button>
+                                <span className="absolute bottom-1 left-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded">
+                                    Nueva
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <ImageUpload
                         label="Imagen para Lista de Productos"
                         description="Esta imagen aparece en la página 'Nuestros Productos' y es obligatoria."
-                        altValue={formData.text_alt_principal}
-                        onAltChange={(alt) => setFormData(prev => ({ ...prev, text_alt_principal: alt }))}
-                        onFileChange={(file) => setFormData(prev => ({ ...prev, imagen_principal: file }))}
-                        currentImage={typeof formData.imagen_principal === "string" ? formData.imagen_principal : null}
+                        altValue={formData.imagen_principal.alt}
+                        onAltChange={(alt) => setFormData(prev => ({ ...prev, imagen_principal: { ...prev.imagen_principal, alt } }))}
+                        onFileChange={(file) => setFormData(prev => ({ ...prev, imagen_principal: { ...prev.imagen_principal, file } }))}
+                        currentImage={typeof formData.imagen_principal.file === "string" ? formData.imagen_principal.file !== ""  ? "http://127.0.0.1:8000"+formData.imagen_principal.file : "" : null}
                         required
                     />
 
                     <ImageUpload
                         label="Imagen Hero del Producto (Banner Principal)"
                         description="Imagen de fondo grande en la página individual del producto."
-                        altValue={formData.imagenes.hero.alt}
-                        onAltChange={(alt) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, hero: { ...prev.imagenes.hero, alt } }
-                        }))}
-                        onFileChange={(file) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, hero: { ...prev.imagenes.hero, file } }
-                        }))}
-                        currentImage={typeof formData.imagenes.hero.file === "string" ? formData.imagenes.hero.file : null}
+                        altValue={""}
+                        onAltChange={(alt) => { }}
+                        onFileChange={(file) => {
+                            if (file) {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    galeria: [...prev.galeria, file]
+                                }));
+                            }
+                        }}
+                        currentImage={""}
                     />
 
                     <ImageUpload
                         label="Imagen para Especificaciones (Sección Izquierda)"
                         description="Imagen que acompaña la sección de especificaciones."
-                        altValue={formData.imagenes.especificaciones.alt}
-                        onAltChange={(alt) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, especificaciones: { ...prev.imagenes.especificaciones, alt } }
-                        }))}
-                        onFileChange={(file) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, especificaciones: { ...prev.imagenes.especificaciones, file } }
-                        }))}
-                        currentImage={typeof formData.imagenes.especificaciones.file === "string" ? formData.imagenes.especificaciones.file : null}
+                        altValue={""}
+                        onAltChange={(alt) => { }}
+                        onFileChange={(file) => {
+                            if (file) {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    galeria: [...prev.galeria, file]
+                                }));
+                            }
+                        }}
+                        currentImage={""}
                     />
 
                     <ImageUpload
                         label="Imagen para Beneficios (Sección Derecha)"
                         description="Imagen que acompaña la sección de beneficios."
-                        altValue={formData.imagenes.beneficios.alt}
-                        onAltChange={(alt) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, beneficios: { ...prev.imagenes.beneficios, alt } }
-                        }))}
-                        onFileChange={(file) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, beneficios: { ...prev.imagenes.beneficios, file } }
-                        }))}
-                        currentImage={typeof formData.imagenes.beneficios.file === "string" ? formData.imagenes.beneficios.file : null}
+                        altValue={""}
+                        onAltChange={(alt) => { }}
+                        onFileChange={(file) => {
+                            if (file) {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    galeria: [...prev.galeria, file]
+                                }));
+                            }
+                        }}
+                        currentImage={""}
                     />
 
                     <ImageUpload
                         label="Imagen para Popups"
                         description="Imagen que acompaña los popups de registro de clientes."
-                        altValue={formData.imagenes.popup.alt}
-                        onAltChange={(alt) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, popup: { ...prev.imagenes.popup, alt } }
-                        }))}
-                        onFileChange={(file) => setFormData(prev => ({
-                            ...prev,
-                            imagenes: { ...prev.imagenes, popup: { ...prev.imagenes.popup, file } }
-                        }))}
-                        currentImage={typeof formData.imagenes.popup.file === "string" ? formData.imagenes.popup.file : null}
+                        altValue={""}
+                        onAltChange={(alt) => { }}
+                        onFileChange={(file) => {
+                            if (file) {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    galeria: [...prev.galeria, file]
+                                }));
+                            }
+                        }}
+                        currentImage={""}
                     />
                 </div>
             </FormSection>
 
             {/* Botones de accion */}
-            <div className="flex gap-4 sticky bottom-0 bg-white pt-4 border-t border-gray-200">
+            <div className="flex gap-4 sticky bottom-0 bg-white pt-4 pb-2 border-t border-gray-200 mx-4">
                 <Button
                     type="button"
                     variant="tertiary"

@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from "next/headers";
-import { LoginCredentials, LoginResponse, LoginActionResponse, AuthError } from "@/types/auth";
+import { LoginCredentials, LoginResponse, LoginActionResponse } from "@/types/auth";
 import { apiConfig, endpoints } from "@/config";
 
 export async function loginAction(credentials: LoginCredentials): Promise<LoginActionResponse> {
@@ -18,10 +18,10 @@ export async function loginAction(credentials: LoginCredentials): Promise<LoginA
 
 
         if (!response.ok) {
-            const errorData: AuthError = await response.json();
+            const errorData = await response.json();
             return {
                 success: false,
-                message: errorData.message || "Credenciales inválidas"
+                message: errorData.errors?.get("email")?.[0] || "Credenciales inválidas"
             };
         }
 
@@ -46,7 +46,6 @@ export async function loginAction(credentials: LoginCredentials): Promise<LoginA
                 id: data.data.user.id,
                 name: data.data.user.name,
                 email: data.data.user.email,
-                celular: data.data.user.celular,
             }
         };
     } catch (error) {

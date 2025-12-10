@@ -20,33 +20,31 @@ export default function ProductosPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<"create" | "edit">("create");
     const [selectedProducto, setSelectedProducto] = useState<Producto | null>(null);
-    const [currentPage, setCurrentPage] = useState(1);
     const perPage = 6;
+
     const {
         productos,
         meta,
+        links,
         isLoading,
         error,
         getProductos,
-        getProductoById,
+        goToNextPage,
+        goToPrevPage,
         createProducto,
         updateProducto,
-        deleteProducto
+        deleteProducto,
     } = useProductos();
 
-    useEffect(() => {
-        getProductos(currentPage, perPage);
-    }, [currentPage, getProductos]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+     useEffect(() => {
+        getProductos(perPage);
+    }, [getProductos]);
 
     const onAddProduct = () => {
         setModalMode("create");
         setSelectedProducto(null);
         setIsModalOpen(true);
-    }
+    };
 
     const onSendEmail = () => {
         // enviar email
@@ -73,11 +71,11 @@ export default function ProductosPage() {
     }
 
     const onDelete = async (id: string | number) => {
-        const confirmed = window.confirm("¿Estas seguro de eliminar este producto?");
+        const confirmed = window.confirm("¿Estás seguro de eliminar este producto?");
         if (confirmed) {
             const success = await deleteProducto(id);
             if (success) {
-                getProductos(currentPage, perPage);
+                getProductos(perPage);
             }
         }
     };
@@ -87,10 +85,14 @@ export default function ProductosPage() {
         setSelectedProducto(null);
     };
 
-    const onEdit = async (id: string | number) => {
-        await getProductoById(id);
-        setModalMode("edit");
-        setIsModalOpen(true);
+    const onEdit = (id: string | number) => {
+        const productoLocal = productos.find(p => p.id === Number(id));
+        
+        if (productoLocal) {
+            setSelectedProducto(productoLocal);
+            setModalMode("edit");
+            setIsModalOpen(true);
+        }
     };
 
     const handleSubmit = async (productoData: ProductoInput) => {
@@ -103,9 +105,8 @@ export default function ProductosPage() {
         }
 
         if (success) {
-            setIsModalOpen(false);
-            setSelectedProducto(null);
-            getProductos(currentPage, perPage);
+            handleCloseModal();
+            getProductos(perPage);
         }
     };
 
@@ -142,11 +143,13 @@ export default function ProductosPage() {
                     { type: "edit", onClick: onEdit }
                 ]}
             />
-            {meta && (
+            {meta && links && (
                 <div className="flex justify-center my-6">
                     <PaginationServer
                         meta={meta}
-                        onPageChange={handlePageChange}
+                        links={links}
+                        onPrevPage={goToPrevPage}
+                        onNextPage={goToNextPage}
                         isLoading={isLoading}
                     />
                 </div>

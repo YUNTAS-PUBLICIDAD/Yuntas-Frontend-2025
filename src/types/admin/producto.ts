@@ -1,87 +1,95 @@
-export interface EtiquetaProducto {
-    meta_titulo: string;
-    meta_descripcion: string;
-    keywords: string[];
+export interface ImagenProducto {
+    url: string | null;
+    alt: string | null;
+    title: string | null;
 }
 
-export interface ImagenProducto {
-    id?: number;
-    title: string;
-    url_imagen: string;
-    texto_alt_SEO: string;
-    file?: File;
+export interface SeoProducto {
+    meta_titulo: string | null;
+    meta_descripcion: string | null;
+    keywords: string[];
 }
 
 export interface Producto {
     id: number;
-    link: string;
     nombre: string;
-    titulo: string;
+    slug: string;
+    titulo_corto: string;
     descripcion: string;
-    seccion: string;
-    imagen_principal: string;
-    text_alt_principal: string | null;
-    especificaciones: string[] | any;
+    precio: string;
+    categoria?: string;
+    estado: "active" | "inactive";
+    imagen_principal: ImagenProducto;
+    galeria: ImagenProducto[];
+    especificaciones: string[];
     beneficios: string[];
-    imagenes: ImagenProducto[];
-    etiqueta: EtiquetaProducto;
-    created_at: string;
-    updated_at: string;
+    seo: SeoProducto;
+    creado_en: string;
 }
 
 export interface ProductoInput {
-    // seccion datos para Dashboard
     nombre: string;
-    seccion: string;
-    precio: number;
     link: string;
-    
-    // seccion seo
-    meta_titulo: string;
-    meta_descripcion: string;
-    keywords: string[];
-    
-    // seccion datos para Frontend
     titulo: string;
     descripcion: string;
-    
-    // seccion listas
+    precio: number;
+    categoria?: string;
+
+    imagen_principal: {
+        file: File | string | null;
+        alt: string;
+    };
+    galeria: File[];
+
     especificaciones: string[];
     beneficios: string[];
-    
-    // seccion imagenes
-    imagen_principal: File | string | null;
-    text_alt_principal: string;
-    imagenes: {
-        hero: { file: File | string | null; alt: string };
-        especificaciones: { file: File | string | null; alt: string };
-        beneficios: { file: File | string | null; alt: string };
-        popup: { file: File | string | null; alt: string };
+
+    meta_titulo: string | null;
+    meta_descripcion: string | null;
+    keywords: string[];
+}
+
+// links de la paginacion
+export interface PaginationLinks {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+}
+
+// meta de la paginacion
+export interface PaginationMeta {
+    current_page: number;
+    from: number | null;
+    last_page: number;
+    per_page: number;
+    to: number | null;
+    total: number;
+    path: string;
+}
+
+// lista de productos
+export interface ProductoListResponse {
+    success: boolean;
+    data: {
+        data: Producto[];
+        links: PaginationLinks;
+        meta: PaginationMeta;
     };
 }
 
-export interface ProductoListResponse {
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    data: Producto[];
+//un solo producto
+export interface ProductoResponse {
+    success: boolean;
+    message?: string;
+    data: Producto;
 }
 
+// respuesta de acciones
 export interface ProductoActionResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;
-    meta?: {
-        current_page: number;
-        per_page: number;
-        total: number;
-        last_page: number;
-    };
-}
-
-export interface ProductoResponse {
-    success: boolean;
-    message: string;
-    data: Producto;
+    meta?: PaginationMeta;
+    links?: PaginationLinks;
 }

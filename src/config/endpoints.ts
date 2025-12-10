@@ -1,53 +1,49 @@
 export const endpoints = {
     auth: {
-        login: "/api/v1/auth/login",
-        logout: "/api/v1/auth/logout",
-    },
-    users: {
-        list: "/api/v1/users",
-        detail: (id: number | string) => `/api/v1/users/${id}`,
-        create: "/api/v1/users",
-        update: (id: number | string) => `/api/v1/users/${id}`,
-        delete: (id: number | string) => `/api/v1/users/${id}`,
-    },
-    clientes: {
-        list: "/api/v1/clientes",
-        detail: (id: number | string) => `/api/v1/clientes/${id}`,
-        create: "/api/v1/clientes",
-        update: (id: number | string) => `/api/v1/clientes/${id}`,
-        delete: (id: number | string) => `/api/v1/clientes/${id}`,
+        login: "/api/auth/login",
+        logout: "/api/auth/logout",
     },
     productos: {
-        list: "/api/v1/productos",
-        all: "/api/v1/productos/all",
-        detail: (id: string | number) => `/api/v1/productos/${id}`,
-        link: (link: string) => `/api/v1/productos/link/${link}`,
-        create: "/api/v1/productos",
-        update: (id: number | string) => `/api/v1/productos/${id}`,
-        delete: (id: number | string) => `/api/v1/productos/${id}`,
-        info: "/api/v1/solicitar-info-producto",
+        list: "/api/productos",
+        detail: (slug: string) => `/api/productos/${slug}`,
+        create: "/api/productos",
+        update: (id: number | string) => `/api/productos/${id}`,
+        delete: (id: number | string) => `/api/productos/${id}`,
+    },
+    blogs: {
+        list: "/api/blogs",
+        detail: (slug: string) => `/api/blogs/${slug}`,
+        create: "/api/blogs",
+        update: (id: number | string) => `/api/blogs/${id}`,
+        delete: (id: number | string) => `/api/blogs/${id}`,
+    },
+    users: {
+        list: "/api/users",
+        detail: (id: number | string) => `/api/users/${id}`,
+        create: "/api/users",
+        update: (id: number | string) => `/api/users/${id}`,
+        delete: (id: number | string) => `/api/users/${id}`,
+    },
+    clientes: {
+        list: "/api/clientes",
+        detail: (id: number | string) => `/api/clientes/${id}`,
+        create: "/api/clientes",
+        update: (id: number | string) => `/api/clientes/${id}`,
+        delete: (id: number | string) => `/api/clientes/${id}`,
     },
     emailProducto: {
-        create: "/api/v1/email-producto/plantilla",
-        update: (id: number | string) => `/api/v1/email-producto/plantilla/${id}`,
-        plantillaPorProducto: (productoId: string | number) => 
-            `/api/v1/email-producto/plantilla/${productoId}`,
+        create: "/api/email-producto/plantilla",
+        update: (id: number | string) => `/api/email-producto/plantilla/${id}`,
+        plantillaPorProducto: (productoId: string | number) =>
+            `/api/email-producto/plantilla/${productoId}`,
     },
     whatsappProducto: {
         create: (productoId: number | string) =>
-            `/api/v1/whatsapp-producto/productos/${productoId}/whatsapp-template-basic`,
+            `/api/whatsapp-producto/productos/${productoId}/whatsapp-template-basic`,
         get: (productoId: number | string) =>
-            `/api/v1/whatsapp-producto/productos/${productoId}/whatsapp-template-basic`,
-    },
-    blogs: {
-        list: "/api/v1/blogs",
-        detail: (id: number | string) => `/api/v1/blogs/${id}`,
-        link: (link: string) => `/api/v1/blogs/link/${link}`,
-        create: "/api/v1/blogs",
-        update: (id: number | string) => `/api/v1/blogs/${id}`,
-        delete: (id: number | string) => `/api/v1/blogs/${id}`,
+            `/api/whatsapp-producto/productos/${productoId}/whatsapp-template-basic`,
     },
     information: {
-        sendInformation: "/api/v1/send-info",
+        sendInformation: "/api/send-info",
     },
 } as const;

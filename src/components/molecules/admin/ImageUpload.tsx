@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { IoCloudUpload, IoClose } from "react-icons/io5";
 import Image from "next/image";
 
@@ -26,6 +26,14 @@ export default function ImageUpload({
     const [preview, setPreview] = useState<string | null>(currentImage || null);
     const [error, setError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (currentImage) {
+            setPreview(currentImage);
+        } else {
+            setPreview(null);
+        }
+    }, [currentImage]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

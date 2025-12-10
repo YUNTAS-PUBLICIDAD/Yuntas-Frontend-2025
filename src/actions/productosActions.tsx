@@ -8,7 +8,7 @@ import {
     ProductoInput,
     ProductoListResponse,
     ProductoResponse,
-    ProductoActionResponse
+    ProductoActionResponse,
 } from "@/types/admin/producto";
 
 function getToken(): string | null {
@@ -17,8 +17,8 @@ function getToken(): string | null {
 }
 
 export async function getProductosAction(
-    page: number = 1,
-    perPage: number = 6
+    perPage: number = 6,
+    url?: string
 ): Promise<ProductoActionResponse<Producto[]>> {
     try {
         const token = getToken();
@@ -27,9 +27,9 @@ export async function getProductosAction(
             return { success: false, message: "No autenticado" };
         }
 
-        const url = `${apiConfig.getUrl(endpoints.productos.list)}?page=${page}&perPage=${perPage}`;
+        const fetchUrl = url || `${apiConfig.getUrl(endpoints.productos.list)}?per_page=${perPage}`;
 
-        const response = await fetch(url, {
+        const response = await fetch(fetchUrl, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -46,20 +46,16 @@ export async function getProductosAction(
 
         return {
             success: true,
-            data: result.data,
-            meta: {
-                current_page: result.current_page,
-                per_page: result.per_page,
-                total: result.total,
-                last_page: result.last_page,
-            }
+            data: result.data.data,
+            meta: result.data.meta,
+            links: result.data.links
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
     }
 }
 
-export async function getAllProductosAction(): Promise<ProductoActionResponse<Producto[]>> {
+export async function getProductoBySlugAction(slug: string): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
 
@@ -67,41 +63,7 @@ export async function getAllProductosAction(): Promise<ProductoActionResponse<Pr
             return { success: false, message: "No autenticado" };
         }
 
-        const url = apiConfig.getUrl(endpoints.productos.all);
-
-        const response = await fetch(url, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Error al obtener productos" };
-        }
-
-        const result = await response.json();
-
-        return {
-            success: true,
-            data: result.data
-        };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
-    }
-}
-
-export async function getProductoByIdAction(id: number | string): Promise<ProductoActionResponse<Producto>> {
-    try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
-        const url = apiConfig.getUrl(endpoints.productos.detail(id));
+        const url = apiConfig.getUrl(endpoints.productos.detail(slug));
 
         const response = await fetch(url, {
             headers: {
@@ -128,43 +90,7 @@ export async function getProductoByIdAction(id: number | string): Promise<Produc
     }
 }
 
-export async function getProductoByLinkAction(link: string): Promise<ProductoActionResponse<Producto>> {
-    try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
-        const url = apiConfig.getUrl(endpoints.productos.link(link));
-
-        const response = await fetch(url, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Producto no encontrado" };
-        }
-
-        const result: ProductoResponse = await response.json();
-
-        return {
-            success: true,
-            message: result.message,
-            data: result.data
-        };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
-    }
-}
-
-
-export async function createProductoAction(producto: ProductoInput): Promise<ProductoActionResponse<Producto>> {
+export async function createProductoAction(formData: FormData): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
 
@@ -178,9 +104,8 @@ export async function createProductoAction(producto: ProductoInput): Promise<Pro
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
             },
-            body: JSON.stringify(producto),
+            body: formData,
         });
 
         if (!response.ok) {
@@ -204,7 +129,7 @@ export async function createProductoAction(producto: ProductoInput): Promise<Pro
 
 export async function updateProductoAction(
     id: number | string,
-    producto: Partial<ProductoInput>
+    formData: FormData
 ): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
@@ -216,12 +141,11 @@ export async function updateProductoAction(
         const url = apiConfig.getUrl(endpoints.productos.update(id));
 
         const response = await fetch(url, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
             },
-            body: JSON.stringify(producto),
+            body: formData,
         });
 
         if (!response.ok) {
@@ -239,6 +163,7 @@ export async function updateProductoAction(
             data: result.data
         };
     } catch (error) {
+        console.error(error);
         return { success: false, message: "Error de conexión" };
     }
 }
