@@ -8,6 +8,7 @@ export type Blog= {
   fondoPrincipal: StaticImageData,  
   detalles:string,
   beneficio_principal:string,
+  fecha:Date
   beneficios:string[],
     testimonio: {
       titulo:string
@@ -20,3 +21,10 @@ export type Blog= {
     galeria: StaticImageData[]
   //...
 }
+export type BlogExport = {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  fecha: string;
+  nro_de_imagenes: number;
+};
