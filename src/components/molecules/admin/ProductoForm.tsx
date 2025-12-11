@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoAdd } from "react-icons/io5";
 import Button from "@/components/atoms/Button";
 import Loader from "@/components/atoms/Loader";
 import InputAdmin from "@/components/atoms/InputAdmin";
@@ -80,7 +80,6 @@ export default function ProductForm({
                 ?.map(img => img.url)
                 .filter((url): url is string => url !== null) || [];
 
-            console.log(initialData.galeria)
             setGaleriaExistente(urlsGaleria);
         }
     }, [initialData, mode]);
@@ -245,6 +244,25 @@ export default function ProductForm({
                 />
             </FormSection>
 
+            {/* Imagen Principal */}
+            <FormSection title="Imagen Principal">
+                <ImageUpload
+                    label="Imagen Principal del Producto"
+                    description="Esta imagen aparece en la lista de productos y como imagen destacada."
+                    altValue={formData.imagen_principal.alt}
+                    onAltChange={(alt) => setFormData(prev => ({
+                        ...prev,
+                        imagen_principal: { ...prev.imagen_principal, alt }
+                    }))}
+                    onFileChange={(file) => setFormData(prev => ({
+                        ...prev,
+                        imagen_principal: { ...prev.imagen_principal, file }
+                    }))}
+                    currentImage={typeof formData.imagen_principal.file === "string" ? formData.imagen_principal.file !== ""  ? "http://127.0.0.1:8000"+formData.imagen_principal.file : "" : null}
+                    required
+                />
+            </FormSection>
+
             { /* Galeria */}
             {mode === "edit" && galeriaExistente.length > 0 && (
                 <FormSection title="Galería Actual">
@@ -258,7 +276,7 @@ export default function ProductForm({
                                 className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200"
                             >
                                 <Image
-                                    src={"http://127.0.0.1:8000"+url}
+                                    src={"http://127.0.0.1:8000" + url}
                                     alt={`Imagen galería ${index + 1}`}
                                     fill
                                     className="object-cover"
@@ -269,15 +287,18 @@ export default function ProductForm({
                 </FormSection>
             )}
 
-            {/* Seccion imagenes */}
-            <FormSection title="Imágenes del Producto">
-                {/* Preview de imágenes nuevas */}
+            {/* Seccion galeria */}
+            <FormSection title="Agregar Imágenes a Galería">
+                <p className="text-gray-500 text-sm mb-3">
+                    Sube nuevas imagenes para agregar a la galería del producto.
+                </p>
+                {/* Preview de  nuevas */}
                 {galeriaPreview.length > 0 && (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4">
                         {galeriaPreview.map((preview, index) => (
                             <div
                                 key={index}
-                                className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-green-300"
+                                className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
                             >
                                 <Image
                                     src={preview}
@@ -299,81 +320,27 @@ export default function ProductForm({
                         ))}
                     </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <ImageUpload
-                        label="Imagen para Lista de Productos"
-                        description="Esta imagen aparece en la página 'Nuestros Productos' y es obligatoria."
-                        altValue={formData.imagen_principal.alt}
-                        onAltChange={(alt) => setFormData(prev => ({ ...prev, imagen_principal: { ...prev.imagen_principal, alt } }))}
-                        onFileChange={(file) => setFormData(prev => ({ ...prev, imagen_principal: { ...prev.imagen_principal, file } }))}
-                        currentImage={typeof formData.imagen_principal.file === "string" ? formData.imagen_principal.file !== ""  ? "http://127.0.0.1:8000"+formData.imagen_principal.file : "" : null}
-                        required
-                    />
-
-                    <ImageUpload
-                        label="Imagen Hero del Producto (Banner Principal)"
-                        description="Imagen de fondo grande en la página individual del producto."
-                        altValue={""}
-                        onAltChange={(alt) => { }}
-                        onFileChange={(file) => {
+                <label className="flex flex-col items-center justify-center w-full h-32 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <IoAdd className="text-3xl text-gray-400 mb-1" />
+                    <span className="text-gray-500 text-sm">Click para agregar imagen</span>
+                    <span className="text-gray-400 text-xs mt-1">Máximo 2MB por imagen</span>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
                             if (file) {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    galeria: [...prev.galeria, file]
-                                }));
+                                if (file.size > 2 * 1024 * 1024) {
+                                    alert("La imagen debe pesar menos de 2MB");
+                                    return;
+                                }
+                                handleAddGaleriaImage(file);
                             }
+                            e.target.value = "";
                         }}
-                        currentImage={""}
+                        className="hidden"
                     />
-
-                    <ImageUpload
-                        label="Imagen para Especificaciones (Sección Izquierda)"
-                        description="Imagen que acompaña la sección de especificaciones."
-                        altValue={""}
-                        onAltChange={(alt) => { }}
-                        onFileChange={(file) => {
-                            if (file) {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    galeria: [...prev.galeria, file]
-                                }));
-                            }
-                        }}
-                        currentImage={""}
-                    />
-
-                    <ImageUpload
-                        label="Imagen para Beneficios (Sección Derecha)"
-                        description="Imagen que acompaña la sección de beneficios."
-                        altValue={""}
-                        onAltChange={(alt) => { }}
-                        onFileChange={(file) => {
-                            if (file) {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    galeria: [...prev.galeria, file]
-                                }));
-                            }
-                        }}
-                        currentImage={""}
-                    />
-
-                    <ImageUpload
-                        label="Imagen para Popups"
-                        description="Imagen que acompaña los popups de registro de clientes."
-                        altValue={""}
-                        onAltChange={(alt) => { }}
-                        onFileChange={(file) => {
-                            if (file) {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    galeria: [...prev.galeria, file]
-                                }));
-                            }
-                        }}
-                        currentImage={""}
-                    />
-                </div>
+                </label>
             </FormSection>
 
             {/* Botones de accion */}

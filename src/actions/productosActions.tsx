@@ -31,9 +31,9 @@ export async function getProductosAction(
 
         return {
             success: true,
-            data: response.data.data,
-            meta: response.data.meta,
-            links: response.data.links
+            data: response.data.data.data,
+            meta: response.data.data.meta,
+            links: response.data.data.links
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -52,8 +52,8 @@ export async function getProductoBySlugAction(slug: string): Promise<ProductoAct
 
         return {
             success: true,
-            message: response.data.message,
-            data: response.data.data
+            message: response.data.data.message,
+            data: response.data.data.data
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -78,8 +78,8 @@ export async function createProductoAction(formData: FormData): Promise<Producto
 
         return {
             success: true,
-            message: response.data.message || "Producto creado exitosamente",
-            data: response.data.data
+            message: response.data.data.message || "Producto creado exitosamente",
+            data: response.data.data.data
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -107,8 +107,8 @@ export async function updateProductoAction(
 
         return {
             success: true,
-            message: response.data.message || "Producto actualizado exitosamente",
-            data: response.data.data
+            message: response.data.data.message || "Producto actualizado exitosamente",
+            data: response.data.data.data
         };
     } catch (error) {
         console.error(error);
