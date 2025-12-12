@@ -13,7 +13,6 @@ export interface LoginResponse {
             name: string;
             email: string;
             email_verified_at: null | string;
-            celular: string;
             created_at: string;
             updated_at: string;
         };
@@ -27,10 +26,5 @@ export interface LoginActionResponse {
         id: number;
         name: string;
         email: string;
-        celular: string;
     };
-}
-
-export interface AuthError {
-    message: string;
 }
