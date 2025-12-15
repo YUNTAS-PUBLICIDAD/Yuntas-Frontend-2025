@@ -5,8 +5,9 @@ import ProductoCard from '@/components/molecules/producto/ProductoCard'
 import CategoriaSelect from '@/components/molecules/producto/CategoriaSelect'
 import Text from '@/components/atoms/Text'
 import { useCategorias } from '@/hooks/ui/productos/useCategorias'
+import { useProductos } from '@/hooks/useProductos'
 import Pagination from '@/components/molecules/Pagination'
-import { Producto } from '@/types/producto'
+import { Producto } from '@/types/admin/producto'
 import { useSelectCategorias } from '@/hooks/ui/productos/useSelectCategoria'
 import { FaChevronDown } from "react-icons/fa";
 
@@ -16,10 +17,18 @@ type ProductoSection = {
 };
 const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => {
   const [openCategoria,setOpenCategoria]=useState(false);
-  const {listaCategorias,handleSelectCategoria,categoriaActiva}=useCategorias(productosData)
-  useSelectCategorias(categoriaActiva, setListaProductos);
+  const { productos, getProductos } = useProductos();
 
-  const [productosPaginados, setProductosPaginados] = useState<Producto[]>([]);
+  useEffect(() => {
+    getProductos(100);
+  }, []);
+
+  const {listaCategorias,handleSelectCategoria,categoriaActiva}=useCategorias(productos);
+  useSelectCategorias(categoriaActiva, setListaProductos, productos);
+
+  const [productosPaginados, setProductosPaginados] = useState<Producto[]>(productos);
+
+  console.log('productosPaginados',productosPaginados);
   return (
   <section className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-8 px-4 sm:px-6 md:px-8 lg:px-12 pt-8">
       
@@ -48,8 +57,9 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
         {productosPaginados.map((e, index) => (
           <ProductoCard 
             key={index} 
-            img={e.img} 
-            nombre={e.nombre}
+            img={e.main_image.url || ''} 
+            nombre={e.name}
+            href={`/productos/${e.slug}`}
           />
         ))}
       </div>
