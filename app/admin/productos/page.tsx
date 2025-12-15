@@ -1,11 +1,17 @@
 'use client'
 
 import { useState, useEffect } from "react";
+// Componentes UI
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import PaginationServer from '@/components/molecules/PaginationServer';
+import Modal from "@/components/atoms/Modal";
+
+// El Formulario
+import AddProductForm from "@/components/molecules/admin/products/AddProductForm";
+
+// Hooks
 import { useProductos } from "@/hooks/useProductos";
-import { ProductoInput } from "@/types/admin/producto";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -14,16 +20,17 @@ const columns = [
     { key: "precio", label: "PRECIO" },
 ];
 
-export default function productosPage() {
+export default function ProductosPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const perPage = 6;
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
     const {
         productos,
         meta,
         isLoading,
         error,
         getProductos,
-        createProducto,
         deleteProducto
     } = useProductos();
 
@@ -31,69 +38,32 @@ export default function productosPage() {
         getProductos(currentPage, perPage);
     }, [currentPage, getProductos]);
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+    const handlePageChange = (page: number) => setCurrentPage(page);
+    const onAddProduct = () => setIsAddModalOpen(true);
+    const handleCloseModal = () => setIsAddModalOpen(false);
 
-    const onAddProduct = () => {
-        // añadir un producto
-    }
-
-    const onSendEmail = () => {
-        // enviar email
-    }
-
-    const onSendWhatsapp = () => {
-        // enviar whatsapp
-    }
-
-    const onExportCSV = () => {
-        // exportar a CSV
-    }
-
-    const onExportExcel = () => {
-        // exportar a Excel
-    }
-
-    const onExportPDF = () => {
-        // exportar a PDF
-    }
-
-    const onPrint = () => {
-        // imprimir
-    }
-
-    const onDelete = (id: string | number) => {
-        // para eliminar datos
-    };
-
-    const onEdit = (id: string | number) => {
-        // para editar datos
-    };
-
-
-    const exportButtons = [
-        { label: "EXPORTAR A CSV", onClick: onExportCSV },
-        { label: "EXPORTAR A EXCEL", onClick: onExportExcel },
-        { label: "EXPORTAR A PDF", onClick: onExportPDF },
-        { label: "IMPRIMIR", onClick: onPrint },
-    ];
-
+    // Funciones placeholder...
+    const onDelete = (id: string | number) => console.log("Delete", id);
+    const onEdit = (id: string | number) => console.log("Edit", id);
+    // ... otros handlers (email, exportar, etc) ...
 
     return (
-        <div>
-            <div className="flex gap-4">
-                <ActionButtonGroup buttons={[{ label: "Añadir Producto", onClick: onAddProduct, variant: "tertiary" }]} className="mb-2" />
-                <ActionButtonGroup buttons={[{ label: "Envio de Email", onClick: onSendEmail, variant: "danger" }]} className="mb-2" />
-                <ActionButtonGroup buttons={[{ label: "Envio de Whatsapp", onClick: onSendWhatsapp, variant: "success" }]} className="mb-2" />
+        <div className="animate-fade-in p-4">
+            {/* Botones Superiores */}
+            <div className="flex gap-4 flex-wrap mb-4">
+                <ActionButtonGroup buttons={[{ label: "Añadir Producto", onClick: onAddProduct, variant: "tertiary" }]} />
+                <ActionButtonGroup buttons={[{ label: "Envio de Email", onClick: () => {}, variant: "danger" }]} />
+                <ActionButtonGroup buttons={[{ label: "Envio de Whatsapp", onClick: () => {}, variant: "success" }]} />
             </div>
-            <ActionButtonGroup buttons={exportButtons} className="mb-4 mt-4" />
+            
+            <ActionButtonGroup buttons={[
+                { label: "EXPORTAR A CSV", onClick: () => {} },
+                { label: "EXPORTAR A EXCEL", onClick: () => {} },
+                { label: "EXPORTAR A PDF", onClick: () => {} },
+                { label: "IMPRIMIR", onClick: () => {} },
+            ]} className="mb-4" />
 
-            {error && (
-                <div>
-                    {error}
-                </div>
-            )}
+            {error && <div className="text-red-500 mb-4">{error}</div>}
 
             <AdminTable
                 columns={columns}
@@ -104,6 +74,7 @@ export default function productosPage() {
                     { type: "edit", onClick: onEdit }
                 ]}
             />
+
             {meta && (
                 <div className="flex justify-center my-6">
                     <PaginationServer 
@@ -114,6 +85,18 @@ export default function productosPage() {
                 </div>
             )}
 
+            {/* --- MODAL AJUSTADO CON SCROLL --- */}
+            <Modal 
+                isOpen={isAddModalOpen} 
+                onClose={handleCloseModal} 
+                title="Ingresar Datos" // Título fijo arriba
+                size="lg"             // Ancho grande para 2 columnas
+            >
+               
+                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
+                    <AddProductForm onClose={handleCloseModal} />
+                </div>
+            </Modal>
         </div>
     )
 }
