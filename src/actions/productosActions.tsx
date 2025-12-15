@@ -2,13 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { apiConfig, endpoints } from "@/config";
+import { api, API_ENDPOINTS } from "@/config";
 import {
     Producto,
     ProductoInput,
     ProductoListResponse,
     ProductoResponse,
-    ProductoActionResponse
+    ProductoActionResponse,
 } from "@/types/admin/producto";
 
 function getToken(): string | null {
@@ -17,8 +17,8 @@ function getToken(): string | null {
 }
 
 export async function getProductosAction(
-    page: number = 1,
-    perPage: number = 6
+    perPage: number = 6,
+    url?: string
 ): Promise<ProductoActionResponse<Producto[]>> {
     try {
         const token = getToken();
@@ -27,39 +27,20 @@ export async function getProductosAction(
             return { success: false, message: "No autenticado" };
         }
 
-        const url = `${apiConfig.getUrl(endpoints.productos.list)}?page=${page}&perPage=${perPage}`;
-
-        const response = await fetch(url, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Error al obtener productos" };
-        }
-
-        const result: ProductoListResponse = await response.json();
+        const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
 
         return {
             success: true,
-            data: result.data,
-            meta: {
-                current_page: result.current_page,
-                per_page: result.per_page,
-                total: result.total,
-                last_page: result.last_page,
-            }
+            data: response.data.data.data,
+            meta: response.data.data.meta,
+            links: response.data.data.links
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
     }
 }
 
-export async function getAllProductosAction(): Promise<ProductoActionResponse<Producto[]>> {
+export async function getProductoBySlugAction(slug: string): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
 
@@ -67,33 +48,19 @@ export async function getAllProductosAction(): Promise<ProductoActionResponse<Pr
             return { success: false, message: "No autenticado" };
         }
 
-        const url = apiConfig.getUrl(endpoints.productos.all);
-
-        const response = await fetch(url, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Error al obtener productos" };
-        }
-
-        const result = await response.json();
+        const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ONE(slug));
 
         return {
             success: true,
-            data: result.data
+            message: response.data.data.message,
+            data: response.data.data.data
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
     }
 }
 
-export async function getProductoByIdAction(id: number | string): Promise<ProductoActionResponse<Producto>> {
+export async function createProductoAction(formData: FormData): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
 
@@ -101,101 +68,18 @@ export async function getProductoByIdAction(id: number | string): Promise<Produc
             return { success: false, message: "No autenticado" };
         }
 
-        const url = apiConfig.getUrl(endpoints.productos.detail(id));
-
-        const response = await fetch(url, {
+        const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, formData, {
             headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
-            cache: "no-store"
         });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Producto no encontrado" };
-        }
-
-        const result: ProductoResponse = await response.json();
-
-        return {
-            success: true,
-            message: result.message,
-            data: result.data
-        };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
-    }
-}
-
-export async function getProductoByLinkAction(link: string): Promise<ProductoActionResponse<Producto>> {
-    try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
-        const url = apiConfig.getUrl(endpoints.productos.link(link));
-
-        const response = await fetch(url, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Producto no encontrado" };
-        }
-
-        const result: ProductoResponse = await response.json();
-
-        return {
-            success: true,
-            message: result.message,
-            data: result.data
-        };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
-    }
-}
-
-
-export async function createProductoAction(producto: ProductoInput): Promise<ProductoActionResponse<Producto>> {
-    try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
-        const url = apiConfig.getUrl(endpoints.productos.create);
-
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(producto),
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Error al crear producto" };
-        }
-
-        const result: ProductoResponse = await response.json();
 
         revalidatePath("/admin/productos");
 
         return {
             success: true,
-            message: result.message || "Producto creado exitosamente",
-            data: result.data
+            message: response.data.data.message || "Producto creado exitosamente",
+            data: response.data.data.data
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -204,7 +88,7 @@ export async function createProductoAction(producto: ProductoInput): Promise<Pro
 
 export async function updateProductoAction(
     id: number | string,
-    producto: Partial<ProductoInput>
+    formData: FormData
 ): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
@@ -213,32 +97,21 @@ export async function updateProductoAction(
             return { success: false, message: "No autenticado" };
         }
 
-        const url = apiConfig.getUrl(endpoints.productos.update(id));
-
-        const response = await fetch(url, {
-            method: "PUT",
+        const response = await api.post(API_ENDPOINTS.PRODUCTS.UPDATE(Number(id)), formData, {
             headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
-            body: JSON.stringify(producto),
         });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Error al actualizar producto" };
-        }
-
-        const result: ProductoResponse = await response.json();
 
         revalidatePath("/admin/productos");
 
         return {
             success: true,
-            message: result.message || "Producto actualizado exitosamente",
-            data: result.data
+            message: response.data.data.message || "Producto actualizado exitosamente",
+            data: response.data.data.data
         };
     } catch (error) {
+        console.error(error);
         return { success: false, message: "Error de conexión" };
     }
 }
@@ -251,20 +124,7 @@ export async function deleteProductoAction(id: number | string): Promise<Product
             return { success: false, message: "No autenticado" };
         }
 
-        const url = apiConfig.getUrl(endpoints.productos.delete(id));
-
-        const response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            return { success: false, message: error.message || "Error al eliminar producto" };
-        }
+        const response = await api.delete(API_ENDPOINTS.PRODUCTS.DELETE(Number(id)));
 
         revalidatePath("/admin/productos");
 
