@@ -57,7 +57,7 @@ export default function AdminTable({
     // Se crean filas vacias
     const rows = [...data];
     while (rows.length < minRows) {
-        rows.push({ _empty: true });
+        rows.push({ _empty: true }); 
     }
 
     return (

@@ -49,7 +49,7 @@ export default function Modal({
             onClick={onClose}
         >
             <div
-                className={`${sizeClasses[size]} w-full mx-4 bg-white rounded-2xl shadow-xl`}
+                className={`${sizeClasses[size]}  overflow-y-auto h-[80vh] w-full mx-4 bg-white rounded-2xl shadow-xl`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {title && (
@@ -59,11 +59,11 @@ export default function Modal({
                             onClick={onClose}
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                         >
-                            <IoClose size={24} />
+                            <IoClose size={24} onClick={()=>onClose} />
                         </button>
                     </div>
                 )}
-                <div className="p-6">
+                <div className="p-6  overflow-y-autoh-full">
                     {children}
                 </div>
             </div>

@@ -15,8 +15,6 @@ export async function loginAction(credentials: LoginCredentials): Promise<LoginA
             },
             body: JSON.stringify(credentials),
         });
-
-
         if (!response.ok) {
             const errorData: AuthError = await response.json();
             return {
@@ -24,9 +22,7 @@ export async function loginAction(credentials: LoginCredentials): Promise<LoginA
                 message: errorData.message || "Credenciales inválidas"
             };
         }
-
         const data: LoginResponse = await response.json();
-
         // guardar cookie
         const cookieStore = cookies();
         cookieStore.set({
