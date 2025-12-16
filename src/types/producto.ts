@@ -1,9 +1,12 @@
 import {StaticImageData} from 'next/image'
 
 export type Producto= {
-  img: StaticImageData;
+  id: number;
   nombre: string;
-  categorias: string[];
+  precio: number;
+  imagen_url: string;
+  slug: string;
+  descripcion_corta: string;
   //...
 }
 export type ProductoExport = {

@@ -1,68 +1,95 @@
-export interface EtiquetaProducto {
-    meta_titulo: string;
-    meta_descripcion: string;
-    keywords: string[];
+export interface ImagenProducto {
+    url: string | null;
+    alt: string | null;
+    title: string | null;
 }
 
-export interface ImagenProducto {
-    id: number;
-    title: string;
-    url_imagen: string;
-    texto_alt_SEO: string;
+export interface SeoProducto {
+    meta_titulo: string | null;
+    meta_descripcion: string | null;
+    keywords: string[];
 }
 
 export interface Producto {
     id: number;
-    link: string;
     nombre: string;
+    slug: string;
+    titulo_corto: string;
+    descripcion: string;
+    precio: string;
+    categoria?: string;
+    estado: "active" | "inactive";
+    imagen_principal: ImagenProducto;
+    galeria: ImagenProducto[];
+    especificaciones: string[];
+    beneficios: string[];
+    seo: SeoProducto;
+    creado_en: string;
+}
+
+export interface ProductoInput {
+    nombre: string;
+    link: string;
     titulo: string;
     descripcion: string;
-    seccion: string;
-    imagen_principal: string;
-    text_alt_principal: string | null;
-    especificaciones: any;
+    precio: number;
+    categoria?: string;
+
+    imagen_principal: {
+        file: File | string | null;
+        alt: string;
+    };
+    galeria: File[];
+
+    especificaciones: string[];
     beneficios: string[];
-    imagenes: ImagenProducto[];
-    etiqueta: EtiquetaProducto;
-    created_at: string;
-    updated_at: string;
+
+    meta_titulo: string | null;
+    meta_descripcion: string | null;
+    keywords: string[];
 }
 
-export interface ProductoListResponse {
+// links de la paginacion
+export interface PaginationLinks {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+}
+
+// meta de la paginacion
+export interface PaginationMeta {
     current_page: number;
+    from: number | null;
     last_page: number;
     per_page: number;
+    to: number | null;
     total: number;
-    data: Producto[];
+    path: string;
 }
 
+// lista de productos
+export interface ProductoListResponse {
+    success: boolean;
+    data: {
+        data: Producto[];
+        links: PaginationLinks;
+        meta: PaginationMeta;
+    };
+}
+
+//un solo producto
+export interface ProductoResponse {
+    success: boolean;
+    message?: string;
+    data: Producto;
+}
+
+// respuesta de acciones
 export interface ProductoActionResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;
-    meta?: {
-        current_page: number;
-        per_page: number;
-        total: number;
-        last_page: number;
-    };
+    meta?: PaginationMeta;
+    links?: PaginationLinks;
 }
-
-export interface ProductoResponse {
-    success: boolean;
-    message: string;
-    data: Producto;
-}
-
-///////////////////////////////////////// 
-export interface ProductoInput {
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    seccion: string;
-    link: string;
-    imagen?: string;
-}
-
-
-

@@ -7,90 +7,69 @@ import ProductoSeoSection from './ProductoSeoSection';
 import VideoSection from './VideoSection';
 import Modal from '@/components/atoms/Modal';
 import Button from '@/components/atoms/Button';
-import { createBlogAction } from '@/actions/blogActions';
 import Loader from '@/components/atoms/Loader';
+import { createBlogAction } from '@/actions/blogActions';
+import { buildBlogFormData } from "@/utils/blogFormData";
+import { BlogInput } from "@/types/admin/blog";
 
 interface Props {
   openModal: boolean;
   onClose: () => void;
   onSuccess?: () => void;
 }
-
+const BLOG_INICIAL:BlogInput={
+  titulo: "",
+  subtitulo: "",
+  contenido: "",
+  url_video: "",
+  etiqueta: {
+    meta_titulo: "",
+    meta_descripcion: "",
+  },
+  imagen_principal: null,
+  imagen_principal_alt: "",
+  imagenes: [],
+  imagenes_alts: [],
+  parrafos: [],
+  beneficios: [],
+  bloques: [],
+}
 const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
-  const [beneficios, setBeneficios] = useState<string[]>(['']);
-  const [parrafos, setParrafos] = useState<string[]>(['']);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    
-    // Validaciones básicas
-    const form = e.currentTarget;
-
-    setIsSubmitting(true);
-
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading,SetLoading]=useState(false);
+    const [blog, setBlog] = useState<BlogInput>(BLOG_INICIAL)
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setError(null);
+      setIsSubmitting(true);
     try {
-      
-      const formData = new FormData(form);
-
-      // Limpiar y agregar beneficios
-      const beneficiosFiltrados = beneficios.filter(b => b.trim() !== '');
-      formData.delete('beneficios[]');
-      beneficiosFiltrados.forEach((beneficio) => {
-        formData.append('beneficios[]', beneficio.trim());
-      });
-
-      // Limpiar y agregar párrafos
-      const parrafosFiltrados = parrafos.filter(p => p.trim() !== '');
-      formData.delete('parrafos[]');
-      parrafosFiltrados.forEach((parrafo) => {
-        formData.append('parrafos[]', parrafo.trim());
-      });
-
-      // Construir objeto SEO
-      const metaTitulo = formData.get('meta_titulo') as string;
-      const metaDescripcion = formData.get('meta_descripcion') as string;
-      if (metaTitulo || metaDescripcion) {
-        const seoData = {
-          meta_titulo: metaTitulo || '',
-          meta_descripcion: metaDescripcion || '',
-        };
-        formData.set('etiqueta', JSON.stringify(seoData));
-      }
-      formData.delete('meta_titulo');
-      formData.delete('meta_descripcion');
-
-      // Llamar al Server Action
+      const formData = buildBlogFormData(blog);
       const result = await createBlogAction(formData);
+
       if (!result.success) {
-        setError(result.message || 'Error al crear el blog');
+        setError(result.message || "Error al crear el blog");
         return;
       }
-      // Éxito
-      alert(`${result.message}`);
-      // Resetear formulario
-      setBeneficios(['']);
-      setParrafos(['']);
-      form.reset();
-      // Callback de éxito (para refrescar lista)
-      if (onSuccess) {
-        onSuccess();
-      }
-      onClose();
 
-    } catch (error) {
-      console.error(' [CLIENT] Error al enviar formulario:', error);
-      setError('Error inesperado al crear el blog');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    // reset
+        setBlog(BLOG_INICIAL);    
+        alert(`${result.message}`);
+        onSuccess?.();
+        onClose();
+        
+      } catch (err) {
+        console.error(err);
+        setError("Error inesperado al crear el blog");
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
 
   return (
-    <Modal size="lg" title="Agregar nuevo blog" isOpen={openModal} onClose={onClose}>
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <Modal   size="lg" title="Agregar nuevo blog" isOpen={openModal} onClose={onClose}>
+      <form onSubmit={handleSubmit} className="space-y-6 overflow-y-auto h-[70vh]">
         
         {/* Mostrar errores */}
         {error && (
@@ -112,14 +91,12 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
           </div>
         )}
 
-        <ProductoSeoSection />
-        <ImagenesSection />
-        <VideoSection />
+        <ProductoSeoSection blog={blog} setBlog={setBlog} />
+        <ImagenesSection blog={blog} setBlog={setBlog} />
+        <VideoSection blog={blog} setBlog={setBlog} />
         <ContenidoBlog
-          beneficios={beneficios}
-          setBeneficios={setBeneficios}
-          parrafos={parrafos}
-          setParrafos={setParrafos}
+          blog={blog}
+          setBlog={setBlog}
         />
 
         <div className="flex gap-3 mt-8 pt-4 border-t">
@@ -129,7 +106,7 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
             disabled={isSubmitting}
             className="flex-1"
           >
-            {isSubmitting ? <Loader /> : '✅ Crear Blog'}
+            {isSubmitting ? <Loader /> : 'Crear Blog'}
           </Button>
           <Button 
             type="button" 

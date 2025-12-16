@@ -16,7 +16,7 @@ const ContactoMobil = () => {
       <div className="flex items-center ">
         <Icon href="#" label="Instagram" size="lg" bgColor="bg-transparent">
           <FaInstagram className="text-2xl" />
-         </Icon>
+          </Icon>
         <Text variant="body" color="white">Yuntas Producciones</Text>
       </div>
 

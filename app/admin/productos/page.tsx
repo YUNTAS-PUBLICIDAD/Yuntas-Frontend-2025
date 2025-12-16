@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import PaginationServer from '@/components/molecules/PaginationServer';
+import Modal from "@/components/atoms/Modal";
+import ProductForm from "@/components/molecules/admin/ProductoForm";
 import { useProductos } from "@/hooks/useProductos";
-import { ProductoInput } from "@/types/admin/producto";
+import { Producto, ProductoInput } from "@/types/admin/producto";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -14,30 +16,35 @@ const columns = [
     { key: "precio", label: "PRECIO" },
 ];
 
-export default function productosPage() {
-    const [currentPage, setCurrentPage] = useState(1);
+export default function ProductosPage() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<"create" | "edit">("create");
+    const [selectedProducto, setSelectedProducto] = useState<Producto | null>(null);
     const perPage = 6;
+
     const {
         productos,
         meta,
+        links,
         isLoading,
         error,
         getProductos,
+        goToNextPage,
+        goToPrevPage,
         createProducto,
-        deleteProducto
+        updateProducto,
+        deleteProducto,
     } = useProductos();
 
-    useEffect(() => {
-        getProductos(currentPage, perPage);
-    }, [currentPage, getProductos]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+     useEffect(() => {
+        getProductos(perPage);
+    }, [getProductos]);
 
     const onAddProduct = () => {
-        // añadir un producto
-    }
+        setModalMode("create");
+        setSelectedProducto(null);
+        setIsModalOpen(true);
+    };
 
     const onSendEmail = () => {
         // enviar email
@@ -63,12 +70,44 @@ export default function productosPage() {
         // imprimir
     }
 
-    const onDelete = (id: string | number) => {
-        // para eliminar datos
+    const onDelete = async (id: string | number) => {
+        const confirmed = window.confirm("¿Estás seguro de eliminar este producto?");
+        if (confirmed) {
+            const success = await deleteProducto(id);
+            if (success) {
+                getProductos(perPage);
+            }
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedProducto(null);
     };
 
     const onEdit = (id: string | number) => {
-        // para editar datos
+        const productoLocal = productos.find(p => p.id === Number(id));
+        
+        if (productoLocal) {
+            setSelectedProducto(productoLocal);
+            setModalMode("edit");
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleSubmit = async (productoData: ProductoInput) => {
+        let success = false;
+
+        if (modalMode === "create") {
+            success = await createProducto(productoData);
+        } else if (selectedProducto) {
+            success = await updateProducto(selectedProducto.id, productoData);
+        }
+
+        if (success) {
+            handleCloseModal();
+            getProductos(perPage);
+        }
     };
 
 
@@ -99,20 +138,35 @@ export default function productosPage() {
                 columns={columns}
                 data={productos}
                 minRows={perPage}
-                actions={[
-                    { type: "delete", onClick: onDelete },
-                    { type: "edit", onClick: onEdit }
-                ]}
+                onEdit={onEdit}
+                onDelete={onDelete}
             />
-            {meta && (
+            {meta && links && (
                 <div className="flex justify-center my-6">
-                    <PaginationServer 
-                        meta={meta} 
-                        onPageChange={handlePageChange}
+                    <PaginationServer
+                        meta={meta}
+                        links={links}
+                        onPrevPage={goToPrevPage}
+                        onNextPage={goToNextPage}
                         isLoading={isLoading}
                     />
                 </div>
             )}
+
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                title={modalMode === "create" ? "AÑADIR PRODUCTO" : "EDITAR PRODUCTO"}
+                size="lg"
+            >
+                <ProductForm
+                    onSubmit={handleSubmit}
+                    onCancel={handleCloseModal}
+                    isLoading={isLoading}
+                    initialData={selectedProducto}
+                    mode={modalMode}
+                />
+            </Modal>
 
         </div>
     )

@@ -9,18 +9,8 @@ import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import AddBlogModal from "@/components/organisms/admin/AddblogModal/AddBlogModal";
-type BlogImage = {
-  url: string;
-  alt?: string | null;
-};
-
-type Blog = {
-  id: number;
-  title: string;
-  meta_title: string;
-  gallery: BlogImage[];
-  created_at: string;
-};
+import UpdateBlogModal from "@/components/organisms/admin/AddblogModal/UpdateBlogModal";
+import { Blog } from "@/types/blog";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -44,7 +34,7 @@ export default function ClientPage({ blogs }: Props) {
   const [blogPaginado, setBlogPaginado] = useState<Blog[]>(blogs);
 
   const [openModal, setOpenModal] = useState(false);
-
+  const [openUpdateModal,setUpdateModal]=useState(false);
   const topButtons = [
     { label: "Publicar", onClick: () => setOpenModal(true) },
     { label: "Exportar CSV", onClick: () => exportCSV(blogPaginado) },
@@ -52,24 +42,28 @@ export default function ClientPage({ blogs }: Props) {
     { label: "Exportar PDF", onClick: () => exportToPDF(blogPaginado) },
     { label: "Imprimir", onClick: () => exportToPDF(blogPaginado) },
   ];
+  const handleDelete=()=>{
 
+  }
   return (
     <div>
+      <UpdateBlogModal
+        blog={blogPaginado[0]}
+        openModal={openUpdateModal}
+        onClose={() => setUpdateModal(false)}
+      />
       <AddBlogModal
         openModal={openModal}
         onClose={() => setOpenModal(false)}
       />
-
       <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
-
+      
       <AdminTable
         minRows={10}
         columns={columns}
         data={blogPaginado}
-        actions={[
-          { type: "delete", onClick: () => {} },
-          { type: "edit", onClick: () => {} },
-        ]}
+        onEdit={() => setUpdateModal(true)}
+        onDelete={handleDelete}
       />
 
       <div className="flex justify-center my-6">

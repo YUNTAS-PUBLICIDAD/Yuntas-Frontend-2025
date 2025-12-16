@@ -1,85 +1,110 @@
 'use server';
-import { revalidatePath } from "next/cache";
+
+import axios from 'axios';
 import { cookies } from "next/headers";
-import { apiConfig, endpoints } from "@/config";
+import { API_ENDPOINTS } from "@/config";
 import { BlogActionResponse } from "@/types/admin/blog";
-import { Blog } from "@/types/blog";
+import { Blog } from "@/types/admin/blog";
+
 function getToken(): string | null {
   return cookies().get("auth_token")?.value || null;
 }
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export async function getBlogsAction(): Promise<BlogActionResponse<Blog[]>> {
   const token = getToken();
-  if (!token){
-    return { success: false, message: "No autenticado. Inicia sesión." }
+  if (!token) {
+    return { success: false, message: "No autenticado. Inicia sesión." };
   }
   try {
-    const url = apiConfig.getUrl(endpoints.blogs.list);
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    });
-    const result = await response.json();
-    if (!response.ok) {
-      return {
-        success: false,
-        message: result.message || "Error al obtener los blogs"
+    const response = await axios.get(`${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ALL}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
       }
-    }
+    );
+
     return {
       success: true,
-      data: result.data
-    }
-  } 
-  catch (error) {
+      data: response.data.data,
+    };
+  } catch (error: any) {
     return {
       success: false,
-      message: error instanceof Error
-        ? error.message
-        : "No se pudo conectar con el servidor"
+      message:
+        error.response?.data?.message ||
+        error.message ||
+        "No se pudo conectar con el servidor",
     };
-
   }
 }
-export async function createBlogAction(formData: FormData): Promise<BlogActionResponse<Blog>> {
 
+export async function uptadeBlogAction(id:number,formData: FormData): Promise<BlogActionResponse<Blog>> {
+  const token = getToken();
+  if (!token) {
+    return { success: false, message: "No autenticado. Inicia sesión." };
+  }
+  
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api${API_ENDPOINTS.BLOG.UPDATE(id)}`,formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+  
+    return {
+      success: true,
+      message: response.data.message || "Blog creado correctamente",
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message:
+        error.response?.data?.message ||
+        error.message ||
+        "No se pudo conectar con el servidor",
+    };
+  }
+}
+
+export async function createBlogAction(formData: FormData): Promise<BlogActionResponse<Blog>> {
   const token = getToken();
   if (!token) {
     return { success: false, message: "No autenticado. Inicia sesión." };
   }
 
   try {
-    const url = apiConfig.getUrl(endpoints.blogs.create);
+    const response = await axios.post(
+      `${BASE_URL}/api${API_ENDPOINTS.BLOG.CREATE}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: formData,
-    });
-    const result = await response.json();
-    if (!response.ok) {
-      return {
-        success: false,
-        message: result.message || "Error al crear el blog"
-      };
-    }
-    revalidatePath("/admin/blogs");
-    revalidatePath("/blogs");
     return {
       success: true,
-      message: result.message || "Blog creado correctamente",
-      data: result.data
+      message: response.data.message || "Blog creado correctamente",
+      data: response.data.data,
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       success: false,
-      message: error instanceof Error
-        ? error.message
-        : "No se pudo conectar con el servidor"
+      message:
+        error.response?.data?.message ||
+        error.message ||
+        "No se pudo conectar con el servidor",
     };
   }
+
 }

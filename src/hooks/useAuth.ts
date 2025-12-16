@@ -31,7 +31,7 @@ export function useAuth(): UseAuthReturn {
             
         }
 
-        setIsLoading(false);
+        setIsLoading(true);
     };
 
     const logout = async () => {
@@ -40,7 +40,7 @@ export function useAuth(): UseAuthReturn {
 
         await logoutAction();
 
-        setIsLoading(false);
+        setIsLoading(true);
         router.push("/login");
         router.refresh();
     };

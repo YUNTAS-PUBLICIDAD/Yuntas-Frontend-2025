@@ -8,8 +8,10 @@ type HeroSearchSectionProps = {
 };
 const HeroSearchSection = ({ listaProductos, setListaProductos }:HeroSearchSectionProps) => {
   return (
-    <section className='grid grid-cols-1 md:grid-cols-2 items-center px-16 py-10 gap-4 place-items-center md:place-items-start'>
-        <Text variant='h2' color='black' className='leading-10 uppercase font-semibold  tracking-wider'>Descubre la seleccion <br />que tenemos para ti</Text>
+    <section className='grid grid-cols-1 md:grid-cols-2 items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-6 md:py-10 gap-6 md:gap-4 place-items-center md:place-items-start'>
+        <Text variant='h2' color='black' className='leading-tight uppercase font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wide md:tracking-wider'>
+          Descubre la selección <br />que tenemos para ti
+        </Text>
         <SearchBar listaProductos={listaProductos} setListaProductos={setListaProductos} />
     </section>
   )

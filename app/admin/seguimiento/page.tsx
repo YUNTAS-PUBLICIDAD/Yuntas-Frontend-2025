@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
@@ -6,7 +6,9 @@ import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
 import AddClientForm from "@/components/molecules/admin/AddClientForm";
+import EditClientForm from "@/components/organisms/admin/EditClientForm"; 
 import data from "@/data/admin/seguimientoData";
+import { ClientData } from "@/hooks/ui/admin/useClientEdit";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -17,46 +19,30 @@ const columns = [
     { key: "fecha", label: "FECHA" },
 ];
 
-interface ClientFormData {
-    nombre: string;
-    telefono: string;
-    gmail: string;
-    productoId: number;
-    fecha: string;
-}
-
 export default function SeguimientoPage() {
+    // --- Estados ---
     const [datosPaginados, setDatosPaginados] = useState<typeof data>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
 
-    const onMensajes = () => {
-        // para los mensajes
-    };
+    const onMensajes = () => console.log("Mensajes");
+    const onMedioSeguimiento = () => console.log("Seguimiento");
+    const onMonitoreo = () => console.log("Monitoreo");
 
-    const onMedioSeguimiento = () => {
-        // para el medio de seguimiento
-    };
-
-    const onMonitoreo = () => {
-        // para el monitoreo
-    };
-
-    const onAdd = () => {
-        setIsModalOpen(true);
-    };
-
-    const onAddClient = (clientData: ClientFormData) => {
-        // para agregar el cliente
-        setIsModalOpen(false);
-    };
-
-    const onDelete = (id: string | number) => {
-        // para eliminar datos
-    };
+    const onAdd = () => setIsAddModalOpen(true);
+    const onAddClientSubmit = (d: any) => setIsAddModalOpen(false);
 
     const onEdit = (id: string | number) => {
-        // para editar datos
+        const client = data.find(c => c.id === id);
+        if (client) {
+            // @ts-ignore
+            setSelectedClient(client);
+            setIsEditModalOpen(true);
+        }
     };
+
+    const onDelete = (id: string | number) => console.log("Eliminar", id);
 
     const topButtons = [
         { label: "Mensajes", onClick: onMensajes },
@@ -67,35 +53,34 @@ export default function SeguimientoPage() {
     return (
         <div>
             <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
-
             <AdminTable
                 columns={columns}
                 data={datosPaginados}
                 minRows={10}
-                actions={[
-                    { type: "delete", onClick: onDelete },
-                    { type: "edit", onClick: onEdit }
-                ]}
+                onDelete={onDelete}
+                onEdit={onEdit} 
+            
             />
 
             <ActionButtonGroup
                 buttons={[{ label: "Agregar Cliente", onClick: onAdd, variant: "tertiary" }]}
                 className="mt-4"
             />
-            <div className="col-span-full  flex justify-center order-3 my-6">
+            
+            <div className="col-span-full flex justify-center order-3 my-6">
                 <Pagination pageSize={10} items={data} setProductosPaginados={setDatosPaginados} />
             </div>
 
-            <Modal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)}
-                title="AÑADIR CLIENTE"
-            >
-                <AddClientForm 
-                    onSubmit={onAddClient}
-                    onCancel={() => setIsModalOpen(false)}
-                />
+            {/* Modales */}
+            <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="AÑADIR CLIENTE">
+                <AddClientForm onSubmit={onAddClientSubmit} onCancel={() => setIsAddModalOpen(false)} />
             </Modal>
+
+            <EditClientForm 
+                isOpen={isEditModalOpen} 
+                onClose={() => setIsEditModalOpen(false)}
+                client={selectedClient}
+            />
         </div>
     );
 }
