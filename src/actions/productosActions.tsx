@@ -52,8 +52,8 @@ export async function getProductoBySlugAction(slug: string): Promise<ProductoAct
 
         return {
             success: true,
-            message: response.data.data.message,
-            data: response.data.data.data
+            message: response.data.message,
+            data: response.data.data
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
