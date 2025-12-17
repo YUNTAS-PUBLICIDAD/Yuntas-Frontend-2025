@@ -1,7 +1,7 @@
 import InfoCard from "@/components/molecules/InfoCard";
 import Text from "@/components/atoms/Text";
 import SectionImage from "@/components/atoms/SectionImage";
-
+import { BASE_URL } from "@/config";
 type ListaDetalleSectionProps = {
 	text: string;
 	listItems: string[];
@@ -25,7 +25,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, reverse
                 </div>
                 <div className={`w-[45%] md:w-[60%] flex ${reverse ? 'justify-start' : 'justify-end'} md:justify-center items-center`}>
                     <SectionImage
-                        src={imageSrc}
+                        src={`${BASE_URL.replace('/api', '')}${imageSrc}`}
                         alt="Pantalla LED de gran formato"
                         className={`w-full h-full max-h-[18rem] md:min-h-0 md:max-w-[46rem] md:max-h-[38rem] object-cover md:aspect-square ${reverse ? 'rounded-r-3xl md:rounded-3xl' : 'rounded-l-3xl md:rounded-3xl'}`}
                     />

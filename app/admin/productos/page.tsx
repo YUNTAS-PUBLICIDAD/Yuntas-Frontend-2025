@@ -51,6 +51,7 @@ export default function ProductosPage() {
             label: "Eliminar",
             onClick: (id) => handleDelete(Number(id)) 
         }
+
     ];
 
     const exportButtons = [
@@ -105,6 +106,7 @@ export default function ProductosPage() {
                     <AddProductForm onClose={handleCloseModal} />
                 </div>
             </Modal>
+
         </div>
     )
 }

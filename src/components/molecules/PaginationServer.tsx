@@ -1,62 +1,37 @@
 import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
-import ItemPagination from "@/components/atoms/ItemPagination";
-
-interface PaginationMeta {
-    current_page: number;
-    per_page: number;
-    total: number;
-    last_page: number;
-}
+import ItemPagination from "../atoms/ItemPagination";
+import { PaginationMeta, PaginationLinks } from "@/types/admin/producto";
 
 interface PaginationServerProps {
     meta: PaginationMeta;
-    onPageChange: (page: number) => void;
+    links: PaginationLinks | null;
+    onPrevPage: () => void;
+    onNextPage: () => void;
     isLoading?: boolean;
 }
 
 export default function PaginationServer({ 
     meta, 
-    onPageChange, 
+    links,
+    onPrevPage,
+    onNextPage,
     isLoading = false 
 }: PaginationServerProps) {
-
     const { current_page, last_page } = meta;
 
+    const hasPrev = links?.prev !== null;
+    const hasNext = links?.next !== null;
+
     const handlePrev = () => {
-        if (current_page > 1 && !isLoading) {
-            onPageChange(current_page - 1);
+        if (hasPrev && !isLoading) {
+            onPrevPage();
         }
     };
 
     const handleNext = () => {
-        if (current_page < last_page && !isLoading) {
-            onPageChange(current_page + 1);
+        if (hasNext && !isLoading) {
+            onNextPage();
         }
-    };
-
-    const handleSelectPage = (page: number) => {
-        if (page !== current_page && !isLoading) {
-            onPageChange(page);
-        }
-    };
-
-    // generamos un rango de paginas para mostrar
-    const getPageNumbers = (): number[] => {
-        const pages: number[] = [];
-        const maxVisible = 5;
-        
-        let start = Math.max(1, current_page - Math.floor(maxVisible / 2));
-        let end = Math.min(last_page, start + maxVisible - 1);
-        
-        if (end - start + 1 < maxVisible) {
-            start = Math.max(1, end - maxVisible + 1);
-        }
-
-        for (let i = start; i <= end; i++) {
-            pages.push(i);
-        }
-
-        return pages;
     };
 
     if (last_page <= 1) return null;
@@ -65,26 +40,20 @@ export default function PaginationServer({
         <div className={`flex gap-3 ${isLoading ? "opacity-50 pointer-events-none" : ""}`}>
             <ItemPagination 
                 onClick={handlePrev}
-                disabled={current_page === 1}
+                disabled={!hasPrev}
             >
-                <MdOutlineNavigateBefore className="text-2xl" />
+                <MdOutlineNavigateBefore className="text-3xl" />
             </ItemPagination>
 
-            {getPageNumbers().map((num) => (
-                <ItemPagination
-                    key={num}
-                    onClick={() => handleSelectPage(num)}
-                    active={num === current_page}
-                >
-                    {String(num)}
-                </ItemPagination>
-            ))}
+            <span className="text-[#203565] font-medium px-4">
+                Página {current_page} de {last_page}
+            </span>
 
             <ItemPagination 
                 onClick={handleNext}
-                disabled={current_page === last_page}
+                disabled={!hasNext}
             >
-                <MdOutlineNavigateNext className="text-2xl" />
+                <MdOutlineNavigateNext className="text-3xl" />
             </ItemPagination>
         </div>
     );

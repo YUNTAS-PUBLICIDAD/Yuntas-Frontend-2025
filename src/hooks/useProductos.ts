@@ -1,95 +1,189 @@
-import { useState, useCallback } from "react";
-import api from "@/config/api.config"; 
-import { API_ENDPOINTS } from "@/config/endpoints";
+'use client';
 
-export interface ProductoFrontend {
-    id: number;
-    name: string;      
-    category: string;  
-    price: string | number; 
+import { useState, useCallback } from "react";
+import {
+    Producto,
+    ProductoInput,
+    PaginationMeta,
+    PaginationLinks
+} from "@/types/admin/producto";
+import {
+    getProductosAction,
+    getProductoBySlugAction,
+    createProductoAction,
+    updateProductoAction,
+    deleteProductoAction
+} from "@/actions/productosActions";
+import { buildProductoFormData } from "@/utils/productFormData";
+
+interface UseProductosReturn {
+    productos: Producto[];
+    producto: Producto | null;
+    meta: PaginationMeta | null;
+    links: PaginationLinks | null;
+    isLoading: boolean;
+    error: string | null;
+    getProductos: (perPage?: number) => Promise<void>;
+    goToPage: (url: string) => Promise<void>;
+    goToNextPage: () => Promise<void>;
+    goToPrevPage: () => Promise<void>;
+    getProductoBySlug: (slug: string) => Promise<Producto | null>;
+    createProducto: (producto: ProductoInput) => Promise<boolean>;
+    updateProducto: (id: number | string, producto: ProductoInput) => Promise<boolean>;
+    deleteProducto: (id: number | string) => Promise<boolean>;
+    clearError: () => void;
+    clearProducto: () => void;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
 }
 
-export function useProductos() {
-    const [productos, setProductos] = useState<ProductoFrontend[]>([]);
-    const [meta, setMeta] = useState<any>(null);
+export function useProductos(): UseProductosReturn {
+    const [productos, setProductos] = useState<Producto[]>([]);
+    const [producto, setProducto] = useState<Producto | null>(null);
+    const [meta, setMeta] = useState<PaginationMeta | null>(null);
+    const [links, setLinks] = useState<PaginationLinks | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [currentPerPage, setCurrentPerPage] = useState(6);
 
-    const getProductos = useCallback(async (page = 1, perPage = 6) => {
+    const clearError = () => setError(null);
+    const clearProducto = () => setProducto(null);
+
+    const hasNextPage = links?.next !== null;
+    const hasPrevPage = links?.prev !== null;
+
+    const getProductos = useCallback(async (perPage: number = 6) => {
+        setIsLoading(true);
+        setError(null);
+        setCurrentPerPage(perPage);
+
+        const result = await getProductosAction(perPage);
+        
+        if (result.success && result.data) {
+            setProductos(result.data);
+            setMeta(result.meta || null);
+            setLinks(result.links || null);
+        } else {
+            setError(result.message || 'Error desconocido');
+        }
+
+        setIsLoading(false);
+    }, []);
+
+    const goToPage = useCallback(async (url: string) => {
         setIsLoading(true);
         setError(null);
 
-        try {
-            const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL, {
-                params: { page, perPage }
-            });
+        const result = await getProductosAction(currentPerPage, url);
+        
+        if (result.success && result.data) {
+            setProductos(result.data);
+            setMeta(result.meta || null);
+            setLinks(result.links || null);
+        } else {
+            setError(result.message || 'Error desconocido');
+        }
 
-            const responseData = response.data; 
-            const listaBackend = responseData.data || responseData; 
-            
-            if (responseData.current_page) {
-                setMeta({
-                    current_page: responseData.current_page,
-                    last_page: responseData.last_page,
-                    total: responseData.total
-                });
-            }
+        setIsLoading(false);
+    }, [currentPerPage]);
 
-            const datosFormateados = Array.isArray(listaBackend) ? listaBackend.map((prod: any) => ({
-                id: prod.id,
-                name: prod.name,
-                category: prod.categories && prod.categories.length > 0 
-                    ? prod.categories[0].name 
-                    : "General",
-                price: `S/ ${prod.price}`
-            })) : [];
+    // ir a la pagina siguiente
+    const goToNextPage = useCallback(async () => {
+        if (links?.next) {
+            await goToPage(links.next);
+        }
+    }, [links, goToPage]);
 
-            setProductos(datosFormateados);
+    // ir a la pagina anterior
+    const goToPrevPage = useCallback(async () => {
+        if (links?.prev) {
+            await goToPage(links.prev);
+        }
+    }, [links, goToPage]);
 
-        } catch (err: any) {
-            console.error("Error:", err);
-            setError("Error al cargar productos.");
-        } finally {
+
+    const getProductoBySlug = useCallback(async (slug: string): Promise<Producto | null> => {
+        setIsLoading(true);
+        setError(null);
+
+        const result = await getProductoBySlugAction(slug);
+
+        if (result.success && result.data) {
+            setProducto(result.data);
             setIsLoading(false);
+            return result.data;
+        } else {
+            setError(result.message || 'Error desconocido');
+            setIsLoading(false);
+            return null;
         }
     }, []);
-    
-    const createProducto = async (formData: FormData) => {
-        setIsLoading(true);
-        try {
-            await api.post(API_ENDPOINTS.PRODUCTS.CREATE, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            await getProductos(1); 
-            return true;
-        } catch (err: any) {
-            console.error(err);
-            return false;
-        } finally { setIsLoading(false); }
-    };
 
-    const deleteProducto = async (id: number) => {
-        try {
-            await api.delete(API_ENDPOINTS.PRODUCTS.DELETE(id));
-            await getProductos(meta?.current_page || 1);
-            return true;
-        } catch (err) { return false; }
-    };
+    const createProducto = useCallback(async (productoData: ProductoInput): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        const formData = buildProductoFormData(productoData);
+        const result = await createProductoAction(formData);
+
+        if (!result.success) {
+            setError(result.message || 'Error desconocido');
+        }
+
+        setIsLoading(false);
+        return result.success;
+    }, []);
+
+    const updateProducto = useCallback(async (
+        id: number | string,
+        productoData: ProductoInput
+    ): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        const formData = buildProductoFormData(productoData);
+        const result = await updateProductoAction(id, formData);
+
+        if (!result.success) {
+            setError(result.message || 'Error desconocido');
+        }
+
+        setIsLoading(false);
+        return result.success;
+    }, []);
+
+    const deleteProducto = useCallback(async (id: number | string): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        const result = await deleteProductoAction(id);
+
+        if (!result.success) {
+            setError(result.message || 'Error desconocido');
+        }
+
+        setIsLoading(false);
+        return result.success;
+    }, []);
 
     return {
         productos,
+        producto,
         meta,
+        links,
         isLoading,
         error,
         getProductos,
+        goToPage,
+        goToNextPage,
+        goToPrevPage,
+        getProductoBySlug,
         createProducto,
+        updateProducto,
         deleteProducto,
-        getAllProductos: getProductos,
-        getProductoById: async () => {},
-        getProductoByLink: async () => {},
-        updateProducto: async () => false,
-        clearError: () => setError(null),
-        clearProducto: () => {},
-        producto: null
+        clearError,
+        clearProducto,
+        hasNextPage,
+        hasPrevPage
     };
 }

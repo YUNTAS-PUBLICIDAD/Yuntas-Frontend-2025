@@ -7,9 +7,10 @@ const UbicacionContacto: React.FC = () => {
   return (
     <section className="bg-white py-14">
       <div className="container mx-auto px-4">
+        {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para escalado proporcional */}
         <TextTitulo
           variant="caption"
-          className="text-[#203565] font-bold text-2xl md:text-4xl text-center py-8"
+          className="text-[#203565] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center py-8"
         >
           CADA VEZ MAS CERCA DE TI
         </TextTitulo>

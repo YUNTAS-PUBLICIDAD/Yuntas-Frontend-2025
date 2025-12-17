@@ -7,13 +7,13 @@ const ImgVariant={
     productoCard:"w-[450px] h-[330px] rounded-tr-xl rounded-tl-xl",
 }
 type ImgProps={
-    src:StaticImageData,
+    src:string,
     variant?:"blogCard"|"productoCard"|"normal",
     classname?:string
 }
 const Img = ({src, variant='normal',classname}:ImgProps) => {
   return (
-    <img src={src.src} className={` ${classname} ${ImgVariant[variant]}`}/>
+    <img src={src} className={` ${classname} ${ImgVariant[variant]}`}/>
   )
 }
 
