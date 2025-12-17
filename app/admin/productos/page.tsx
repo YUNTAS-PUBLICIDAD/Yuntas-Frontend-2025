@@ -6,6 +6,7 @@ import AdminTable, { TableAction } from "@/components/organisms/admin/Products/A
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import PaginationServer from '@/components/molecules/PaginationServer';
 import Modal from "@/components/atoms/Modal";
+import EditProductForm from "@/components/molecules/admin/products/EditProductForm"; 
 
 // El Formulario (Organismo)
 import AddProductForm from "@/components/molecules/admin/products/AddProductForm";
@@ -24,6 +25,8 @@ const columns = [
 
 export default function ProductosPage() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingProductId, setEditingProductId] = useState<number | null>(null);
 
     const { 
         products,      
@@ -44,7 +47,10 @@ export default function ProductosPage() {
         {
             type: "edit",
             label: "Editar",
-            onClick: (id) => console.log("Editar ID:", id)
+            onClick: (id) => {
+                setEditingProductId(Number(id)); 
+                setIsEditModalOpen(true);        
+            }
         },
         {
             type: "delete",
@@ -105,8 +111,27 @@ export default function ProductosPage() {
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
                     <AddProductForm onClose={handleCloseModal} />
                 </div>
+                
             </Modal>
-
+                <Modal 
+                isOpen={isEditModalOpen} 
+                onClose={() => setIsEditModalOpen(false)} 
+                title="Editar Datos" 
+                size="lg"
+            >
+                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
+                    {editingProductId && (
+                        <EditProductForm 
+                            productId={editingProductId} 
+                            onClose={() => {
+                                setIsEditModalOpen(false);
+                                setEditingProductId(null);
+                                // reload(); // Si tienes el reload del hook useAdminProducts
+                            }} 
+                        />
+                    )}
+                </div>
+            </Modal>
         </div>
     )
 }

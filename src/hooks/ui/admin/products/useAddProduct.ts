@@ -83,33 +83,39 @@ export const useAddProduct = (onClose: () => void) => {
         try {
             const data = new FormData();
 
-            data.append('nombre', formData.name); 
-            data.append('precio', formData.price);
-            data.append('link', formData.slug);
-            data.append('categoria', formData.category); 
-
-            data.append('titulo', formData.heroTitle); // Maps to short_description
-            data.append('descripcion', formData.description);
-
-            data.append('etiqueta[meta_titulo]', formData.metaTitle);
-            data.append('etiqueta[meta_description]', formData.metaDescription);
+            data.append('name', formData.name);      
             
-            if (formData.keywords) {
-                const keywordArray = formData.keywords.split(',').map(k => k.trim());
-                keywordArray.forEach((kw, index) => {
-                    data.append(`etiqueta[keywords][${index}]`, kw);
-                });
+            const cleanPrice = formData.price.toString().replace(/[^0-9.]/g, '');
+            data.append('price', cleanPrice);         
+            
+            data.append('slug', formData.slug);       
+            
+            if (formData.category) {
+                data.append('categories[]', formData.category);
             }
 
+            data.append('short_description', formData.heroTitle); 
+            data.append('description', formData.description); 
+            
+            data.append('meta_title', formData.metaTitle);
+            data.append('meta_description', formData.metaDescription);
+            
+            if (formData.keywords) {
+                data.append('keywords', formData.keywords);
+                
+                
+            }
+
+            
             if (formData.images.list) {
-                data.append('imagen_principal', formData.images.list);
-                data.append('alt_imagen_principal', formData.alts.list);
+                data.append('main_image', formData.images.list); 
+                if (formData.alts.list) data.append('main_image_alt', formData.alts.list);
             }
 
             const galleryFiles = [
-                formData.images.hero,
-                formData.images.specs,
-                formData.images.benefits,
+                formData.images.hero, 
+                formData.images.specs, 
+                formData.images.benefits, 
                 formData.images.popups
             ];
             
@@ -122,17 +128,17 @@ export const useAddProduct = (onClose: () => void) => {
 
             galleryFiles.forEach((file, index) => {
                 if (file) {
-                    data.append('imagenes[]', file);
-                    data.append('alts[]', galleryAlts[index]); 
+                    data.append(`gallery_images[${index}]`, file); 
+                    data.append(`gallery_alts[${index}]`, galleryAlts[index]);
                 }
             });
 
             formData.specifications.forEach((spec, index) => {
-                if(spec.trim() !== "") data.append(`especificaciones[${index}]`, spec);
+                if(spec.trim() !== "") data.append(`specifications[${index}]`, spec); 
             });
-
+            
             formData.benefits.forEach((ben, index) => {
-                if(ben.trim() !== "") data.append(`beneficios[${index}]`, ben);
+                if(ben.trim() !== "") data.append(`benefits[${index}]`, ben); 
             });
 
             const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, data, {
@@ -141,15 +147,15 @@ export const useAddProduct = (onClose: () => void) => {
 
             console.log("✅ Producto creado:", response.data);
             alert("Producto guardado con éxito");
-            onClose();
-            window.location.reload();
-
+            onClose(); 
+            window.location.reload(); 
+            
         } catch (error: any) {
             console.error("❌ Error al guardar:", error);
 
             if (error.response?.status === 422) {
                 const errors = error.response.data.errors;
-                let msg = "Faltan datos obligatorios:\n";
+                let msg = "Faltan datos obligatorios (Backend):\n";
                 Object.keys(errors).forEach(key => {
                     msg += `- ${key}: ${errors[key][0]}\n`;
                 });
@@ -163,7 +169,6 @@ export const useAddProduct = (onClose: () => void) => {
             setIsSaving(false);
         }
     };
-
     return {
         formData,
         handleChange,
