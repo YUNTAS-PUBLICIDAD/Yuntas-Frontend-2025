@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { api, API_ENDPOINTS } from "@/config"; 
+import { api, API_ENDPOINTS } from "@/config";
 
 export interface ProductFormData {
     name: string;
@@ -22,6 +22,13 @@ export interface ProductFormData {
         benefits: File | null;
         popups: File | null;
     };
+    alts: {
+        list: string;
+        hero: string;
+        specs: string;
+        benefits: string;
+        popups: string;
+    };
 }
 
 export const useAddProduct = (onClose: () => void) => {
@@ -29,9 +36,10 @@ export const useAddProduct = (onClose: () => void) => {
         name: "", category: "", price: "", slug: "",
         metaTitle: "", metaDescription: "", keywords: "",
         heroTitle: "", description: "",
-        specifications: [""], 
-        benefits: [""],       
-        images: { list: null, hero: null, specs: null, benefits: null, popups: null }
+        specifications: [""],
+        benefits: [""],
+        images: { list: null, hero: null, specs: null, benefits: null, popups: null },
+        alts: { list: "", hero: "", specs: "", benefits: "", popups: "" }
     });
 
     const [isSaving, setIsSaving] = useState(false);
@@ -52,13 +60,20 @@ export const useAddProduct = (onClose: () => void) => {
     };
 
     const handleFileChange = (type: keyof typeof formData.images, file: File | null) => {
-        if (file && file.size > 2 * 1024 * 1024) {
-            alert(`La imagen "${file.name}" es muy pesada. Máximo 2MB.`);
+        if (file && file.size > 10 * 1024 * 1024) { 
+            alert(`La imagen "${file.name}" es muy pesada. Máximo 10MB.`);
             return;
         }
         setFormData(prev => ({
             ...prev,
             images: { ...prev.images, [type]: file }
+        }));
+    };
+
+    const handleAltChange = (type: keyof typeof formData.alts, value: string) => {
+        setFormData(prev => ({
+            ...prev,
+            alts: { ...prev.alts, [type]: value }
         }));
     };
 
@@ -69,38 +84,56 @@ export const useAddProduct = (onClose: () => void) => {
             const data = new FormData();
 
             data.append('nombre', formData.name); 
-            
-            data.append('precio', formData.price); 
-            
-            
+            data.append('precio', formData.price);
+            data.append('link', formData.slug);
             data.append('categoria', formData.category); 
-            
-            data.append('slug', formData.slug); 
 
-           
-            data.append('meta_titulo', formData.metaTitle);        
-            data.append('meta_descripcion', formData.metaDescription); 
-            data.append('keywords', formData.keywords);
-            data.append('titulo_hero', formData.heroTitle);        
-            data.append('descripcion', formData.description);      
+            data.append('titulo', formData.heroTitle); // Maps to short_description
+            data.append('descripcion', formData.description);
+
+            data.append('etiqueta[meta_titulo]', formData.metaTitle);
+            data.append('etiqueta[meta_description]', formData.metaDescription);
+            
+            if (formData.keywords) {
+                const keywordArray = formData.keywords.split(',').map(k => k.trim());
+                keywordArray.forEach((kw, index) => {
+                    data.append(`etiqueta[keywords][${index}]`, kw);
+                });
+            }
+
+            if (formData.images.list) {
+                data.append('imagen_principal', formData.images.list);
+                data.append('alt_imagen_principal', formData.alts.list);
+            }
+
+            const galleryFiles = [
+                formData.images.hero,
+                formData.images.specs,
+                formData.images.benefits,
+                formData.images.popups
+            ];
+            
+            const galleryAlts = [
+                formData.alts.hero,
+                formData.alts.specs,
+                formData.alts.benefits,
+                formData.alts.popups
+            ];
+
+            galleryFiles.forEach((file, index) => {
+                if (file) {
+                    data.append('imagenes[]', file);
+                    data.append('alts[]', galleryAlts[index]); 
+                }
+            });
 
             formData.specifications.forEach((spec, index) => {
                 if(spec.trim() !== "") data.append(`especificaciones[${index}]`, spec);
             });
-            
+
             formData.benefits.forEach((ben, index) => {
                 if(ben.trim() !== "") data.append(`beneficios[${index}]`, ben);
             });
-
-            if (formData.images.list) {
-                data.append('imagen_principal', formData.images.list); 
-            }
-
-            if (formData.images.hero) data.append('imagen_hero', formData.images.hero);
-            if (formData.images.specs) data.append('imagen_especificaciones', formData.images.specs);
-            if (formData.images.benefits) data.append('imagen_beneficios', formData.images.benefits);
-            if (formData.images.popups) data.append('imagen_popup', formData.images.popups);
-
 
             const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -108,16 +141,15 @@ export const useAddProduct = (onClose: () => void) => {
 
             console.log("✅ Producto creado:", response.data);
             alert("Producto guardado con éxito");
-            onClose(); 
-            window.location.reload(); 
-            
+            onClose();
+            window.location.reload();
+
         } catch (error: any) {
             console.error("❌ Error al guardar:", error);
 
             if (error.response?.status === 422) {
                 const errors = error.response.data.errors;
                 let msg = "Faltan datos obligatorios:\n";
-                // Listamos los errores para saber qué nombre exacto pide el backend
                 Object.keys(errors).forEach(key => {
                     msg += `- ${key}: ${errors[key][0]}\n`;
                 });
@@ -138,6 +170,7 @@ export const useAddProduct = (onClose: () => void) => {
         handleListChange,
         addListItem,
         handleFileChange,
+        handleAltChange,
         handleSubmit,
         isSaving
     };

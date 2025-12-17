@@ -1,6 +1,6 @@
 'use client';
 
-import AdminTable from "@/components/organisms/admin/AdminTable";
+import AdminTable from "@/components/organisms/admin/Products/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import { useTableActions } from "@/hooks/ui/admin/useTableActions"; // Importamos tu Hook
 import data from "@/data/admin/inicioData";
@@ -25,8 +25,7 @@ export default function InicioPage() {
     return (
         <div className="flex flex-col gap-6">
             
-            {/* 2. Pasamos las funciones directamente. 
-                El Organismo AdminTable sabrá qué botones pintar basándose en si existe la función o no. */}
+            
             <AdminTable
                 columns={columns}
                 data={data}

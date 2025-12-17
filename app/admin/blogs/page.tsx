@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import AdminTable from "@/components/organisms/admin/AdminTable";
+import AdminTable from "@/components/organisms/admin/Products/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import data from "@/data/admin/seguimientoData";

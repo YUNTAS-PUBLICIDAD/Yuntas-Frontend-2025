@@ -1,173 +1,95 @@
-'use client';
-
 import { useState, useCallback } from "react";
-import { Producto, ProductoInput } from "@/types/admin/producto";
-import {
-    getProductosAction,
-    getAllProductosAction,
-    getProductoByIdAction,
-    getProductoByLinkAction,
-    createProductoAction,
-    updateProductoAction,
-    deleteProductoAction
-} from "@/actions/productosActions";
+import api from "@/config/api.config"; 
+import { API_ENDPOINTS } from "@/config/endpoints";
 
-interface PaginationMeta {
-    current_page: number;
-    per_page: number;
-    total: number;
-    last_page: number;
+export interface ProductoFrontend {
+    id: number;
+    name: string;      
+    category: string;  
+    price: string | number; 
 }
 
-interface UseProductosReturn {
-    productos: Producto[];
-    producto: Producto | null;
-    meta: PaginationMeta | null;
-    isLoading: boolean;
-    error: string | null;
-    getProductos: (page?: number, perPage?: number) => Promise<void>;
-    getAllProductos: () => Promise<void>;
-    getProductoById: (id: number | string) => Promise<void>;
-    getProductoByLink: (link: string) => Promise<void>;
-    createProducto: (producto: ProductoInput) => Promise<boolean>;
-    updateProducto: (id: number | string, producto: Partial<ProductoInput>) => Promise<boolean>;
-    deleteProducto: (id: number | string) => Promise<boolean>;
-    clearError: () => void;
-    clearProducto: () => void;
-}
-
-export function useProductos(): UseProductosReturn {
-    const [productos, setProductos] = useState<Producto[]>([]);
-    const [producto, setProducto] = useState<Producto | null>(null);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
+export function useProductos() {
+    const [productos, setProductos] = useState<ProductoFrontend[]>([]);
+    const [meta, setMeta] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const clearError = () => setError(null);
-    const clearProducto = () => setProducto(null);
-
-    const getProductos = useCallback(async (page: number = 1, perPage: number = 6) => {
+    const getProductos = useCallback(async (page = 1, perPage = 6) => {
         setIsLoading(true);
         setError(null);
 
-        const result = await getProductosAction(page, perPage);
+        try {
+            const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL, {
+                params: { page, perPage }
+            });
 
-        if (result.success && result.data) {
-            setProductos(result.data);
-            setMeta(result.meta || null);
-        } else {
-            setError(result.message || 'Error desconocido');
+            const responseData = response.data; 
+            const listaBackend = responseData.data || responseData; 
+            
+            if (responseData.current_page) {
+                setMeta({
+                    current_page: responseData.current_page,
+                    last_page: responseData.last_page,
+                    total: responseData.total
+                });
+            }
+
+            const datosFormateados = Array.isArray(listaBackend) ? listaBackend.map((prod: any) => ({
+                id: prod.id,
+                name: prod.name,
+                category: prod.categories && prod.categories.length > 0 
+                    ? prod.categories[0].name 
+                    : "General",
+                price: `S/ ${prod.price}`
+            })) : [];
+
+            setProductos(datosFormateados);
+
+        } catch (err: any) {
+            console.error("Error:", err);
+            setError("Error al cargar productos.");
+        } finally {
+            setIsLoading(false);
         }
-
-        setIsLoading(false);
     }, []);
-
-    const getAllProductos = useCallback(async () => {
+    
+    const createProducto = async (formData: FormData) => {
         setIsLoading(true);
-        setError(null);
+        try {
+            await api.post(API_ENDPOINTS.PRODUCTS.CREATE, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            await getProductos(1); 
+            return true;
+        } catch (err: any) {
+            console.error(err);
+            return false;
+        } finally { setIsLoading(false); }
+    };
 
-        const result = await getAllProductosAction();
-
-        if (result.success && result.data) {
-            setProductos(result.data);
-            setMeta(null);
-        } else {
-            setError(result.message || 'Error desconocido');
-        }
-
-        setIsLoading(false);
-    }, []);
-
-    const getProductoById = useCallback(async (id: number | string) => {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await getProductoByIdAction(id);
-
-        if (result.success && result.data) {
-            setProducto(result.data);
-        } else {
-            setError(result.message || 'Error desconocido');
-        }
-
-        setIsLoading(false);
-    }, []);
-
-    const getProductoByLink = useCallback(async (link: string) => {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await getProductoByLinkAction(link);
-
-        if (result.success && result.data) {
-            setProducto(result.data);
-        } else {
-            setError(result.message || 'Error desconocido');
-        }
-
-        setIsLoading(false);
-    }, []);
-
-
-    const createProducto = useCallback(async (productoData: ProductoInput): Promise<boolean> => {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await createProductoAction(productoData);
-
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
-
-        setIsLoading(false);
-        return result.success;
-    }, []);
-
-    const updateProducto = useCallback(async (
-        id: number | string,
-        productoData: Partial<ProductoInput>
-    ): Promise<boolean> => {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await updateProductoAction(id, productoData);
-
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
-
-        setIsLoading(false);
-        return result.success;
-    }, []);
-
-    const deleteProducto = useCallback(async (id: number | string): Promise<boolean> => {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await deleteProductoAction(id);
-
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
-
-        setIsLoading(false);
-        return result.success;
-    }, []);
+    const deleteProducto = async (id: number) => {
+        try {
+            await api.delete(API_ENDPOINTS.PRODUCTS.DELETE(id));
+            await getProductos(meta?.current_page || 1);
+            return true;
+        } catch (err) { return false; }
+    };
 
     return {
         productos,
-        producto,
         meta,
         isLoading,
         error,
         getProductos,
-        getAllProductos,
-        getProductoById,
-        getProductoByLink,
         createProducto,
-        updateProducto,
         deleteProducto,
-        clearError,
-        clearProducto
+        getAllProductos: getProductos,
+        getProductoById: async () => {},
+        getProductoByLink: async () => {},
+        updateProducto: async () => false,
+        clearError: () => setError(null),
+        clearProducto: () => {},
+        producto: null
     };
 }

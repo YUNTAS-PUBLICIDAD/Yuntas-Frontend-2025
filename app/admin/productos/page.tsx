@@ -1,98 +1,106 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // Componentes UI
-import AdminTable from "@/components/organisms/admin/AdminTable";
+import AdminTable, { TableAction } from "@/components/organisms/admin/Products/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import PaginationServer from '@/components/molecules/PaginationServer';
 import Modal from "@/components/atoms/Modal";
 
-// El Formulario
+// El Formulario (Organismo)
 import AddProductForm from "@/components/molecules/admin/products/AddProductForm";
 
 // Hooks
-import { useProductos } from "@/hooks/useProductos";
+// Usamos el hook que formatea los datos (useAdminProducts)
+import { useAdminProducts } from "@/hooks/ui/admin/products/useAdminProducts"; 
+
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "nombre", label: "NOMBRE" },
-    { key: "seccion", label: "SECCIÓN" },
-    { key: "precio", label: "PRECIO" },
+    { key: "nombre", label: "NOMBRE" },   
+    { key: "seccion", label: "SECCIÓN" }, 
+    { key: "precio", label: "PRECIO" },   
 ];
 
 export default function ProductosPage() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const perPage = 6;
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-    const {
-        productos,
-        meta,
-        isLoading,
-        error,
-        getProductos,
-        deleteProducto
-    } = useProductos();
+    const { 
+        products,      
+        loading,       
+        error,         
+        reload,        
+        handleDelete   
+    } = useAdminProducts();
 
-    useEffect(() => {
-        getProductos(currentPage, perPage);
-    }, [currentPage, getProductos]);
-
-    const handlePageChange = (page: number) => setCurrentPage(page);
     const onAddProduct = () => setIsAddModalOpen(true);
-    const handleCloseModal = () => setIsAddModalOpen(false);
+    
+    const handleCloseModal = () => {
+        setIsAddModalOpen(false);
+        reload(); 
+    };
 
-    // Funciones placeholder...
-    const onDelete = (id: string | number) => console.log("Delete", id);
-    const onEdit = (id: string | number) => console.log("Edit", id);
-    // ... otros handlers (email, exportar, etc) ...
+    const tableActions: TableAction[] = [
+        {
+            type: "edit",
+            label: "Editar",
+            onClick: (id) => console.log("Editar ID:", id)
+        },
+        {
+            type: "delete",
+            label: "Eliminar",
+            onClick: (id) => handleDelete(Number(id)) 
+        }
+    ];
+
+    const exportButtons = [
+        { label: "EXPORTAR A CSV", onClick: () => {} },
+        { label: "EXPORTAR A EXCEL", onClick: () => {} },
+        { label: "EXPORTAR A PDF", onClick: () => {} },
+        { label: "IMPRIMIR", onClick: () => {} },
+    ];
+
+    if (loading && products.length === 0) {
+        return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
+    }
 
     return (
         <div className="animate-fade-in p-4">
-            {/* Botones Superiores */}
             <div className="flex gap-4 flex-wrap mb-4">
                 <ActionButtonGroup buttons={[{ label: "Añadir Producto", onClick: onAddProduct, variant: "tertiary" }]} />
                 <ActionButtonGroup buttons={[{ label: "Envio de Email", onClick: () => {}, variant: "danger" }]} />
                 <ActionButtonGroup buttons={[{ label: "Envio de Whatsapp", onClick: () => {}, variant: "success" }]} />
             </div>
             
-            <ActionButtonGroup buttons={[
-                { label: "EXPORTAR A CSV", onClick: () => {} },
-                { label: "EXPORTAR A EXCEL", onClick: () => {} },
-                { label: "EXPORTAR A PDF", onClick: () => {} },
-                { label: "IMPRIMIR", onClick: () => {} },
-            ]} className="mb-4" />
+            <ActionButtonGroup buttons={exportButtons} className="mb-4" />
 
-            {error && <div className="text-red-500 mb-4">{error}</div>}
-
-            <AdminTable
-                columns={columns}
-                data={productos}
-                minRows={perPage}
-                actions={[
-                    { type: "delete", onClick: onDelete },
-                    { type: "edit", onClick: onEdit }
-                ]}
-            />
-
-            {meta && (
-                <div className="flex justify-center my-6">
-                    <PaginationServer 
-                        meta={meta} 
-                        onPageChange={handlePageChange}
-                        isLoading={isLoading}
-                    />
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
                 </div>
             )}
 
-            {/* --- MODAL AJUSTADO CON SCROLL --- */}
+            {/* TABLA */}
+            <AdminTable
+                columns={columns}
+                data={products} 
+                minRows={5}     
+                actions={tableActions} 
+            />
+
+             
+            {/* <div className="flex justify-center my-6">
+                <PaginationServer ... />
+            </div> 
+            */}
+
+            {/* MODAL DE AÑADIR */}
             <Modal 
                 isOpen={isAddModalOpen} 
                 onClose={handleCloseModal} 
-                title="Ingresar Datos" // Título fijo arriba
-                size="lg"             // Ancho grande para 2 columnas
+                title="Ingresar Datos" 
+                size="lg"
             >
-               
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
                     <AddProductForm onClose={handleCloseModal} />
                 </div>
