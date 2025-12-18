@@ -1,10 +1,14 @@
 import BlogSection from "@/components/organisms/blog/BlogSection";
 import HeroSection from "@/components/organisms/blog/HeroSection";
-export default function BlogPage() {
+import { BlogData } from "@/data/blog/blogData";
+export default async function   BlogPage() {
+  const response = await BlogData();
+  const blogs = response?.data?.data ?? [];
+  console.log(blogs);
   return (
     <main >
       <HeroSection/>
-      <BlogSection/>
+      <BlogSection data={blogs}/>
     </main>
   );
 }
