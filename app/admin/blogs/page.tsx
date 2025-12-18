@@ -72,7 +72,7 @@ export default function Blogspage() {
     <div>
       {blogSelected && (
         <ConfirmarEleminar
-          id={blogSelected.id}
+          Blog={blogSelected}
           isOpen={openDeleteModal}
           onClose={() => setOpenDeleteModal(false)}
         />

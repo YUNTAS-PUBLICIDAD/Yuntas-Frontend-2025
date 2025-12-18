@@ -54,20 +54,20 @@ export interface BlogActionResponse<T = null> {
 
 export interface Blog {
   id: number;
-  titulo: string;
+  title: string;
   slug: string;
-  subtitulo: string | null;
-  contenido: string | null;
-  fecha: string;
+  cover_subtitle: string | null;
+  content: string | null;
+  created_at: string;
   video_url: string | null;
-
-  meta_titulo: string | null;
-  meta_descripcion?: string | null;
+  content_blocks:unknown[]
+  meta_title: string | null;
+  meta_description?: string | null;
 
   main_image: BlogImagen | null;
 
-  parrafos: string[];
-  beneficios: string[];
+  paragraphs: string[];
+  benefits: string[];
   gallery: BlogImagen[];
 }
 

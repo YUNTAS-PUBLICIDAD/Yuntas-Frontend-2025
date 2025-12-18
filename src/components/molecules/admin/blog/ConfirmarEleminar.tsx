@@ -3,28 +3,34 @@ import Modal from '@/components/atoms/Modal'
 import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
 import { deleteBlogAction } from '@/actions/blogActions'
-
+import { Blog } from '@/types/admin/blog'
+import { useBlogs } from '@/hooks/useBlog'
 type ConfirmarEleminarProps={
     isOpen:boolean;
     onClose:()=>void;
-    id:number;
+    Blog:Blog;
+    
 }
 
-const ConfirmarEleminar = ({isOpen,onClose,id}:ConfirmarEleminarProps) => {
-    const handleEliminar = async () => {
-        try {
-            await deleteBlogAction(id);
+const ConfirmarEleminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
+    
+    const {deleteBlog,getBlogs}=useBlogs();
+    const handleDelete = async (id: number) => {
+        const success = await deleteBlog(id);
+        if (success) {
+            alert("Blog eliminado correctamente");
             onClose();
-        } catch (error) {
-            console.error('Error al eliminar el blog:', error);
+            getBlogs(10);
+        } else {
+        alert("Error al eliminar el blog");
         }
-    }
-
+    };
     return (
-        <Modal size='lg' title='Quiere eliminar' isOpen={isOpen} onClose={onClose}> 
-            <Text>Desea eliminar este blog?</Text>
+        <Modal size='lg' title='Desea eliminar este blog?' isOpen={isOpen} onClose={onClose}> 
+            <Text variant='small'>{Blog.title}</Text>
+            <Text variant='small'>{Blog.cover_subtitle}</Text>
             <div>
-                <Button onClick={handleEliminar} variant='danger'>Aceptar</Button>
+                <Button onClick={()=>handleDelete(Blog.id)} variant='danger'>Aceptar</Button>
                 <Button onClick={onClose}>Cancelar</Button>
             </div>
         </Modal>
