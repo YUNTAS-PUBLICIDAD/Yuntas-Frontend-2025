@@ -9,7 +9,6 @@ export interface BlogInput {
     meta_descripcion?: string;
   };
 
-  // archivos nuevos
   imagen_principal: File | null;
   imagen_principal_alt: string;
 
@@ -24,60 +23,60 @@ export interface BlogInput {
   bloques?: BlogBloque[];
 }
 
-export interface Blog {
-    id: number;
-    titulo: string;
-    slug: string;
-    subtitulo: string | null;
-    contenido: string | null;
-    fecha: string;
-    video_url: string | null;
-    //categorias?: string[];
-    // SEO
-    meta_titulo: string | null;
-    meta_descripcion?: string | null; 
-    // Imagen principal
-    main_image: BlogImagen | null;
-    // Contenido dinámico
-    parrafos: string[];
-    beneficios: string[];
-    galeria: BlogImagen[];
-    //bloque: BlogBloque[];   aun no se sabe su funcion xd
+
+export interface PaginationLinks {
+  first: string | null;
+  last: string | null;
+  prev: string | null;
+  next: string | null;
 }
-export interface BlogSEO {
-    meta_titulo: string | null;
-    meta_descripcion: string | null;
+
+export interface PaginationMeta {
+  current_page: number;
+  from: number | null;
+  last_page: number;
+  per_page: number;
+  to: number | null;
+  total: number;
+  path: string;
 }
+
+
 export interface BlogActionResponse<T = null> {
-    success: boolean;
-    message?: string;
-    data?: T;
-    meta?: {
-        current_page: number;
-        per_page: number;
-        total: number;
-        last_page: number;
-    };
+  success: boolean;
+  message?: string;
+  data?: {
+    data?:T
+  };
+  meta?: PaginationMeta;
+  links?: PaginationLinks;
 }
 
-export interface BlogListResponse {
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    data: Blog[];
-}
-export interface BlogBloque {
-    title: string;
-    content: string;
+export interface Blog {
+  id: number;
+  titulo: string;
+  slug: string;
+  subtitulo: string | null;
+  contenido: string | null;
+  fecha: string;
+  video_url: string | null;
+
+  meta_titulo: string | null;
+  meta_descripcion?: string | null;
+
+  main_image: BlogImagen | null;
+
+  parrafos: string[];
+  beneficios: string[];
+  gallery: BlogImagen[];
 }
 
-export interface BlogResponse {
-    success: boolean;
-    message: string;
-    data: Blog;
-}
 export interface BlogImagen {
-    url: string;
-    alt: string | null;
+  url: string;
+  alt: string | null;
+}
+
+export interface BlogBloque {
+  title: string;
+  content: string;
 }

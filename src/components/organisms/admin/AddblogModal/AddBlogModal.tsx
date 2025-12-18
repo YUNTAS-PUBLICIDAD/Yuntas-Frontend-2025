@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from "next/navigation";
 
 import React, { useState } from 'react';
 import ContenidoBlog from './ContenidoBlog';
@@ -39,20 +40,22 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading,SetLoading]=useState(false);
     const [blog, setBlog] = useState<BlogInput>(BLOG_INICIAL)
+    const router = useRouter();
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setError(null);
       setIsSubmitting(true);
-    try {
-      const formData = buildBlogFormData(blog);
-      const result = await createBlogAction(formData);
-
-      if (!result.success) {
-        setError(result.message || "Error al crear el blog");
-        return;
-      }
-
-    // reset
+      
+      try {
+        const formData = buildBlogFormData(blog);
+        const result = await createBlogAction(formData);
+        
+        if (!result.success) {
+          setError(result.message || "Error al crear el blog");
+          return;
+        }
+        
+        // reset
         setBlog(BLOG_INICIAL);    
         alert(`${result.message}`);
         onSuccess?.();
@@ -63,12 +66,13 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
         setError("Error inesperado al crear el blog");
       } finally {
         setIsSubmitting(false);
+        router.refresh();
       }
     };
-
-
-  return (
-    <Modal   size="lg" title="Agregar nuevo blog" isOpen={openModal} onClose={onClose}>
+    
+    
+    return (
+      <Modal   size="lg" title="Agregar nuevo blog" isOpen={openModal} onClose={onClose}>
       <form onSubmit={handleSubmit} className="space-y-6 overflow-y-auto h-[70vh]">
         
         {/* Mostrar errores */}

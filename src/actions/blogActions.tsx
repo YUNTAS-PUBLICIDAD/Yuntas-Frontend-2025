@@ -10,14 +10,13 @@ function getToken(): string | null {
   return cookies().get("auth_token")?.value || null;
 }
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
-export async function getBlogsAction(): Promise<BlogActionResponse<Blog[]>> {
+export async function deleteBlogAction(id: number): Promise<BlogActionResponse<null>> {
   const token = getToken();
-  if (!token) {
-    return { success: false, message: "No autenticado. Inicia sesión." };
-  }
+  if (!token) return { success: false, message: "No autenticado" };
+
   try {
-    const response = await axios.get(`${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ALL}`,
+    await axios.delete(
+      `${BASE_URL}/api${API_ENDPOINTS.BLOG.DELETE(id)}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -26,29 +25,55 @@ export async function getBlogsAction(): Promise<BlogActionResponse<Blog[]>> {
       }
     );
 
+    return { success: true };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message,
+    };
+  }
+}
+export async function getBlogsAction(
+  perPage = 10,
+  url?: string
+): Promise<BlogActionResponse<Blog[]>> {
+  const token = getToken();
+  if (!token) return { success: false, message: "No autenticado" };
+
+  try {
+    const endpoint = url
+      ? url
+      : `${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ALL}?per_page=${perPage}`;
+
+    const response = await axios.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
     return {
       success: true,
-      data: response.data.data,
+      data: response.data.data,   
+      meta: response.data.meta,   
+      links: response.data.links, 
     };
   } catch (error: any) {
     return {
       success: false,
-      message:
-        error.response?.data?.message ||
-        error.message ||
-        "No se pudo conectar con el servidor",
+      message: error.response?.data?.message || error.message,
     };
   }
 }
 
-export async function uptadeBlogAction(id:number,formData: FormData): Promise<BlogActionResponse<Blog>> {
+export async function updateBlogAction(id:number,formData: FormData): Promise<BlogActionResponse<Blog>> {
   const token = getToken();
   if (!token) {
     return { success: false, message: "No autenticado. Inicia sesión." };
   }
   
   try {
-    const response = await axios.post(
+    const response = await axios.put(
       `${BASE_URL}/api${API_ENDPOINTS.BLOG.UPDATE(id)}`,formData,
       {
         headers: {

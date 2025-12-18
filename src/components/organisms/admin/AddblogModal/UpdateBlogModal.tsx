@@ -9,9 +9,9 @@ import ProductoSeoSection from './ProductoSeoSection';
 import ImagenesSection from './ImagenesSection';
 import VideoSection from './VideoSection';
 import ContenidoBlog from './ContenidoBlog';
-import { Blog } from '@/types/blog';
+import { Blog } from '@/types/admin/blog';
 import {  BlogInput } from '@/types/admin/blog';
-import { uptadeBlogAction } from '@/actions/blogActions';
+import { updateBlogAction } from '@/actions/blogActions';
 import { buildBlogFormData } from '@/utils/blogFormData';
 import { mapBlogToInput } from '@/utils/blog/mapBlogToInput';
 
@@ -43,13 +43,11 @@ const UpdateBlogModal = ({ openModal, onClose, onSuccess, blog}: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 🔹 convertir Blog → BlogInput
   useEffect(() => {
     setForm(mapBlogToInput(blog));
   }, [blog]);
 
-  if (!form) return null; // evita errores de undefined
-
+  if (!form) return null; 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -59,7 +57,7 @@ const UpdateBlogModal = ({ openModal, onClose, onSuccess, blog}: Props) => {
       const formData = buildBlogFormData(form);
 
 
-      const result = await uptadeBlogAction(blog.id,formData);
+      const result = await updateBlogAction(blog.id,formData);
 
       if (!result.success) {
         setError(result.message ?? "Error al actualizar");

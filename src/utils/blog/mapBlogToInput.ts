@@ -12,10 +12,11 @@ export const mapBlogToInput = (blog: Blog): BlogInput => ({
   },
 
   imagen_principal: null, // no se puede convertir imagen remota a File
-  imagen_principal_alt: "",
-
+  imagen_principal_alt: blog.main_image?.alt ?? "",
+  imagen_principal_url: blog.main_image?.url ?? "",
+  imagenes_urls: blog.gallery.map(img => img.url),
   imagenes: [],
-  imagenes_alts: [],
+  imagenes_alts: blog.gallery.map(img => img.alt ?? ""),
 
   parrafos: blog.paragraphs ?? [],
   beneficios: blog.benefits ?? [],
