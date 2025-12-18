@@ -1,61 +1,17 @@
 'use client'
 
-import React, { useState } from "react";
+import React from "react";
+import { Toaster } from 'react-hot-toast';
 import TextTitulo from "@/components/atoms/TextTitulo";
 import InputText from "@/components/atoms/InputText";
 import TextArea from "@/components/atoms/TextArea";
 import PrimaryButton from "@/components/atoms/PrimaryButton";
 import FormRow from "@/components/molecules/contacto/FormRow";
 import FormContainer from "@/components/molecules/contacto/FormContainer";
-import { ContactoInput } from "@/types/admin/contacto";
-import { useContactos } from "@/hooks/useContactos";
-
-const defaultFormaData: ContactoInput = {
-  first_name: "",
-  last_name: "",
-  phone: "",
-  district: "",
-  request_detail: "",
-  message: ""
-}
+import { useSolicitudInfo } from "@/hooks/useSolicitudInfo";
 
 const SolicitudInfo: React.FC = () => {
-  const [formData, setFormData] = useState<ContactoInput>(defaultFormaData);
-  const { createContacto, isLoading, error } = useContactos();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (isLoading) return;
-
-    if (formData.first_name.trim() === "" || formData.last_name.trim() === "" || formData.phone.trim() === "" || formData.message.trim() === "") {
-      alert("Por favor complete los campos obligatorios.");
-      return;
-    } else if (formData.message.trim().length < 10) {
-      alert("El mensaje debe tener al menos 10 caracteres.");
-      return;
-    } else if (formData.phone.trim().length !== 9) {
-      alert("El teléfono debe tener 9 números.");
-      return;
-    }
-
-    const success = await createContacto(formData)
-    if (success) {
-      alert("Mensaje enviado")
-      setFormData(defaultFormaData)
-    } else {
-      alert(error)
-    }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    if (name === "phone" && value.length > 9 || Number(value) < 0) {
-      return;
-    }
-
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
 
   return (
     <section className="bg-white">
@@ -89,6 +45,17 @@ const SolicitudInfo: React.FC = () => {
             <div className="text-center">
               <PrimaryButton type="submit" disabled={isLoading}>{isLoading ? "ENVIANDO..." : "ENVIAR"}</PrimaryButton>
             </div>
+            <Toaster
+              position="bottom-right"
+              reverseOrder={false}
+              toastOptions={{
+                 style: {
+                    border: '1px solid #203565',
+                    padding: '16px',
+                    color: '#203565',
+                },
+              }}
+            />
           </form>
         </FormContainer>
       </div>

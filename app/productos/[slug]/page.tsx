@@ -5,7 +5,6 @@ import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaD
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import { useParams } from "next/navigation";
-import { productosDetalleData } from "@/data/productos/detalle/productosDetalleData";
 import { useProductos } from '@/hooks/useProductos'
 import { useEffect } from "react";
 
@@ -18,11 +17,6 @@ export default function ProductoDetallePage() {
 			getProductoBySlug(params.slug);
 		}
 	}, []);
-	console.log("id", producto);
-
-
-	const id = "letreros-neon-led";
-	const product = productosDetalleData[id];
 
 	return (
 		<main>
