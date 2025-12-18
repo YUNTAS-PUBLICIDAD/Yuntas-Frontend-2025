@@ -50,7 +50,11 @@ export const API_ENDPOINTS = {
     },
     INBOX: {
       LEADS: '/leads',
-      CONTACT: '/admin/contacto', 
+      CONTACT: {
+        GET_ALL: '/admin/contacto',
+        GET_ONE: (id: number) => `/admin/contacto/${id}`,
+        DELETE: (id: number) => `/admin/contacto/${id}`,
+      }, 
       CLAIMS: '/admin/claims', 
     }
   }
