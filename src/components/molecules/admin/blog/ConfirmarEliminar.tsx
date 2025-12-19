@@ -12,7 +12,7 @@ type ConfirmarEleminarProps={
     
 }
 
-const ConfirmarEleminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
+const ConfirmarEliminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
     
     const {deleteBlog,getBlogs}=useBlogs();
     const handleDelete = async (id: number) => {
@@ -26,10 +26,12 @@ const ConfirmarEleminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
         }
     };
     return (
-        <Modal size='lg' title='Desea eliminar este blog?' isOpen={isOpen} onClose={onClose}> 
-            <Text variant='small'>{Blog.title}</Text>
-            <Text variant='small'>{Blog.cover_subtitle}</Text>
-            <div>
+        <Modal size='lg' title='Desea eliminar este blog?' className='flex flex-col  ' isOpen={isOpen} onClose={onClose}> 
+            <div className='grid place-self-center'>
+                <Text variant='subtitle' className='font-semibold'>Titulo:   {Blog.title}</Text>
+                <Text variant='small'>{Blog.cover_subtitle}</Text>
+            </div>
+            <div className='flex justify-center items-center mt-10 gap-10'>
                 <Button onClick={()=>handleDelete(Blog.id)} variant='danger'>Aceptar</Button>
                 <Button onClick={onClose}>Cancelar</Button>
             </div>
@@ -37,4 +39,4 @@ const ConfirmarEleminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
   )
 }
 
-export default ConfirmarEleminar
+export default ConfirmarEliminar

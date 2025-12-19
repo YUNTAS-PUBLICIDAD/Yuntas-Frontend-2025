@@ -6,30 +6,40 @@ import InformacionSection from "@/components/organisms/productos/detalle/Informa
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import { useParams } from "next/navigation";
 import { productosDetalleData } from "@/data/productos/detalle/productosDetalleData";
+import { useProductos } from '@/hooks/useProductos'
+import { useEffect } from "react";
 
 export default function ProductoDetallePage() {
-	const params = useParams<{ id: string }>();
-	console.log("id", params.id);
+	const params = useParams<{ slug: string }>();
+	const { producto, getProductoBySlug } = useProductos();
+
+	useEffect(() => {
+		if (params.slug) {
+			getProductoBySlug(params.slug);
+		}
+	}, []);
+	console.log("id", producto);
+
 
 	const id = "letreros-neon-led";
 	const product = productosDetalleData[id];
 
 	return (
 		<main>
-			<HeroSection productName={product.name} backgroundImage={product.heroImage} />
+			<HeroSection productName={producto?.name || ""} backgroundImage={producto?.gallery[0].url || ""} />
 			<ListaDetalleSection
 				text="ESPECIFICACIONES"
-				listItems={product.specs}
-				imageSrc={product.specImage} />
-			<InformacionSection info={product.info} />
+				listItems={producto?.specifications || []}
+				imageSrc={producto?.gallery[1].url || ""} />
+			<InformacionSection info={producto?.description || ""} />
 			<ListaDetalleSection
 				text="BENEFICIOS"
-				listItems={product.benef}
-				imageSrc={product.benefImage}
+				listItems={producto?.benefits || []}
+				imageSrc={producto?.gallery[2].url || ""}
 				reverse={true}
 			/>
-			<CotizaSection/>
-			
+			<CotizaSection />
+
 		</main>
 	);
 }

@@ -14,18 +14,18 @@ export  const useCategorias=(lista:Producto[])=>{
 
     const listaCategorias: CategoriaItem[] = useMemo(() => {
         const categoriasUnicas = Array.from(
-            new Set(productosData.flatMap((p) => p.categorias))
+            new Set(lista.flatMap((p) => p.categories[0].name))
         );
         
         const categorias = categoriasUnicas.map((nombre) => ({
             nombre,
-            count: productosData.filter((p) => p.categorias.includes(nombre)).length,
+            count: lista.filter((p) => p.categories[0].name === nombre).length,
         }));
 
         return [
-        { nombre: total, count: productosData.length },...categorias,];
+        { nombre: total, count: lista.length },...categorias,];
 
-    }, [productosData]);
+    }, [lista]);
 
     const handleSelectCategoria=(categoria:string)=>setCategoriActiva(categoria)
     return {
