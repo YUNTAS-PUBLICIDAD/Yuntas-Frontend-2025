@@ -1,6 +1,4 @@
 'use client';
-import { useRouter } from "next/navigation";
-
 import React, { useState } from 'react';
 import ContenidoBlog from './ContenidoBlog';
 import ImagenesSection from './ImagenesSection';
@@ -9,10 +7,8 @@ import VideoSection from './VideoSection';
 import Modal from '@/components/atoms/Modal';
 import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
-import { createBlogAction } from '@/actions/blogActions';
-import { buildBlogFormData } from "@/utils/blogFormData";
 import { BlogInput } from "@/types/admin/blog";
-
+import { useBlogs } from "@/hooks/useBlog";
 interface Props {
   openModal: boolean;
   onClose: () => void;
@@ -36,88 +32,44 @@ const BLOG_INICIAL:BlogInput={
   bloques: [],
 }
 const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
-    const [error, setError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isLoading,SetLoading]=useState(false);
+    
+    const {createBlog,isLoading,error}=useBlogs();
     const [blog, setBlog] = useState<BlogInput>(BLOG_INICIAL)
-    const router = useRouter();
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setError(null);
-      setIsSubmitting(true);
-      
-      try {
-        const formData = buildBlogFormData(blog);
-        const result = await createBlogAction(formData);
-        
-        if (!result.success) {
-          setError(result.message || "Error al crear el blog");
-          return;
+    const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const success = await createBlog(blog);
+        if (success) {
+            alert("Blog creado correctamente");
+            onSuccess?.(); 
+            onClose();
+            setBlog(BLOG_INICIAL);
+        } else {
+        alert("Error al crear el blog");
         }
-        
-        // reset
-        setBlog(BLOG_INICIAL);    
-        alert(`${result.message}`);
-        onSuccess?.();
-        onClose();
-        
-      } catch (err) {
-        console.error(err);
-        setError("Error inesperado al crear el blog");
-      } finally {
-        setIsSubmitting(false);
-        router.refresh();
-      }
     };
-    
-    
     return (
       <Modal   size="lg" title="Agregar nuevo blog" isOpen={openModal} onClose={onClose}>
-      <form onSubmit={handleSubmit} className="space-y-6 overflow-y-auto h-[70vh]">
+      <form onSubmit={handleCreate} className="space-y-6 overflow-y-auto h-[70vh]">
+        {error && <p className="text-red-600">{error}</p>}
         
-        {/* Mostrar errores */}
-        {error && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl"></span>
-              <div className="flex-1">
-                <h3 className="font-semibold text-red-800 mb-1">Error</h3>
-                <p className="text-sm text-red-700 whitespace-pre-line">{error}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setError(null)}
-                className="text-red-400 hover:text-red-600"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        )}
-
         <ProductoSeoSection blog={blog} setBlog={setBlog} />
         <ImagenesSection blog={blog} setBlog={setBlog} />
         <VideoSection blog={blog} setBlog={setBlog} />
-        <ContenidoBlog
-          blog={blog}
-          setBlog={setBlog}
-        />
+        <ContenidoBlog blog={blog} setBlog={setBlog} />
 
-        <div className="flex gap-3 mt-8 pt-4 border-t">
+        <div className="grid grid-cols-2 gap-10 mt-8 p-4 border-t">
           <Button 
             type="submit" 
-            variant="success" 
-            disabled={isSubmitting}
-            className="flex-1"
-          >
-            {isSubmitting ? <Loader /> : 'Crear Blog'}
+            variant="tertiary" 
+            className="flex-1">
+            {isLoading ? <Loader /> : 'Crear Blog'}
           </Button>
+
           <Button 
             type="button" 
             onClick={onClose} 
-            disabled={isSubmitting}
-            variant="secondary"
-          >
+            variant="primary" 
+            className="flex-1">
             Cancelar
           </Button>
         </div>

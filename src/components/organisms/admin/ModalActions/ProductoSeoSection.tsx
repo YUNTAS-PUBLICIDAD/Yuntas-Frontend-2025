@@ -16,12 +16,13 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => (
 
     <div className="flex flex-col gap-4">
 
-      {/* SUBTÍTULO */}
-      <div>
+      <div className='w-full '>
         <Input
+          borderColor='border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all'
+          name='subtitulo'
           textLabel="Subtítulo *"
           placeholder=""
-          size="xl"
+          size="xxl"
           rounded="rounded-[5px]"
           value={blog.subtitulo }
           onChange={(e) =>
@@ -34,12 +35,14 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => (
       </div>
 
       {/* META TÍTULO */}
-      <div>
+      <div className='w-full'>
         <Input
+          borderColor='border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all'
           textLabel="Meta título"
           placeholder="Título optimizado SEO"
-          size="xl"
+          size="xxl"
           rounded="rounded-[5px]"
+          name='meta_titulo'
           value={blog.etiqueta.meta_titulo ?? ""}
           onChange={(e) =>
             setBlog(prev => ({
@@ -63,6 +66,8 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => (
         </label>
         <TextArea
           rows={2}
+          className='border-gray-300 rounded-lg  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all'
+          name='meta_descripcion'
           placeholder="Descripción optimizada SEO"
           value={blog.etiqueta.meta_descripcion ?? ""}
           onChange={(e) =>
@@ -81,13 +86,15 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => (
       </div>
 
       {/* TÍTULO (OBLIGATORIO) */}
-      <div>
+      <div className='w-full '>
         <Input
+          borderColor='border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all'
           textLabel="Link (URL amigable) *"
           placeholder="ejm: mi-blog-post"
-          size="xl"
+          size="xxl"
           rounded="rounded-[5px]"
           required
+          name='titulo'
           value={blog.titulo}
           onChange={(e) =>
             setBlog(prev => ({ ...prev, titulo: e.target.value }))

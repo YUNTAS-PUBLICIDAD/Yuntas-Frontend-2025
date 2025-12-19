@@ -11,7 +11,7 @@
  const BeneficioItem = ({ name, value, onChange, onUrl, onProduct, title}: BeneficioItemProps) => (
   <div className="relative mb-4 p-4 bg-white rounded border">
     <small className="text-gray-500">{title}</small>
-    <textarea  className="border border-gray-300 rounded px-3 py-2 w-full pr-20"
+    <textarea  className="border border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all rounded px-3 py-2 w-full pr-20"
       name={name} value={value} 
       onChange={onChange}
       rows={3}/>
