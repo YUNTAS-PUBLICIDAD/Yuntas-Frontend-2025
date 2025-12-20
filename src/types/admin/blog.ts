@@ -56,6 +56,7 @@ export interface BlogListResponseBySlug<T=null> {
   message?: string;
   data?: Blog
 }
+
 export interface Blog {
   id: number;
   title: string;

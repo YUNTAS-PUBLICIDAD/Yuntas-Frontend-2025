@@ -39,6 +39,7 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
         e.preventDefault();
         const success = await createBlog(blog);
         if (success) {
+            console.log(blog)
             alert("Blog creado correctamente");
             onSuccess?.(); 
             onClose();

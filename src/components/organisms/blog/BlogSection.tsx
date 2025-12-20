@@ -14,8 +14,6 @@ type Props={
 const BlogSection = ({data}:Props) => {
   const [listaBlog, setListaBlog] = useState<Blog[]>(data);
   const [blogPaginado, setBlogPaginado] = useState<Blog[]>(data)
- const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
   return (
     <section className='py-6 md:py-10'>
       <Banner className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-10 lg:px-20 md:flex-row md:items-center'>

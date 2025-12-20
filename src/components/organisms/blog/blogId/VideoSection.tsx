@@ -2,33 +2,10 @@ import React from 'react'
 import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
 import { Blog } from '@/types/admin/blog'
+import { getYoutubeEmbed } from '@/types/getYoutubeEmbed'
 type VideoSectionProps={
     data:Blog
 }
-// utils/getYoutubeEmbed.ts
-export const getYoutubeEmbed = (url?: string  | null) => {
-  if (!url) return "";
-
-  // youtu.be/ID
-  if (url.includes("youtu.be/")) {
-    return `https://www.youtube.com/embed/${url.split("youtu.be/")[1]}`;
-  }
-
-  // watch?v=ID
-  if (url.includes("watch?v=")) {
-    return `https://www.youtube.com/embed/${url.split("watch?v=")[1]}`;
-  }
-
-  // shorts/ID
-  if (url.includes("/shorts/")) {
-    return `https://www.youtube.com/embed/${url.split("/shorts/")[1]}`;
-  }
-
-  // ya es embed
-  if (url.includes("/embed/")) return url;
-
-  return "";
-};
 
 const VideoSection = ({data}:VideoSectionProps) => {
     const videoSrc = getYoutubeEmbed(data.video_url)

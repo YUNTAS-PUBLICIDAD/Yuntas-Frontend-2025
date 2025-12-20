@@ -1,9 +1,9 @@
 import {  BlogInput } from "@/types/admin/blog";
-import { Blog } from "@/types/blog";
+import { Blog } from "@/types/admin/blog";
 export const mapBlogToInput = (blog: Blog): BlogInput => ({
-  titulo: blog.slug,
+  titulo: blog.slug ?? "",
   subtitulo: blog.cover_subtitle ?? "",
-  contenido: blog.content,
+  contenido: blog.content ?? "",
   url_video: blog.video_url ?? "",
 
   etiqueta: {
@@ -20,5 +20,4 @@ export const mapBlogToInput = (blog: Blog): BlogInput => ({
 
   parrafos: blog.paragraphs ?? [],
   beneficios: blog.benefits ?? [],
-  bloques: blog.content_blocks ?? [],
 });

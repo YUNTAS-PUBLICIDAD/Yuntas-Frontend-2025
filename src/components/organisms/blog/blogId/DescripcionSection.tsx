@@ -12,16 +12,13 @@ type DescripcionSectionProps = {
 const DescripcionSection = ({ data }: DescripcionSectionProps) => {
   return (
     <section className="flex flex-col gap-20 py-20">
-      
       <Text
         variant="banner"
         className="font-bold text-center text-3xl uppercase"
       >
         {data.meta_title}
       </Text>
-
       <div className="grid grid-cols-1 md:grid-cols-2">
-        
         <Banner
           color="bg-[#E2F6F6]"
           className="h-auto p-4 font-normal md:text-2xl md:px-20 word-spacing-[4px] leading-relaxed"
@@ -32,7 +29,6 @@ const DescripcionSection = ({ data }: DescripcionSectionProps) => {
             }}
           />
         </Banner>
-
         <Img
           src={getImg(data.gallery?.[0]?.url)}
           classname=""

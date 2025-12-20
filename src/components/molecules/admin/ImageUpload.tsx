@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { IoCloudUpload, IoClose } from "react-icons/io5";
 import Image from "next/image";
-
+import { getImg } from "@/utils/getImg";
 interface ImageUploadProps {
     label: string;
     description?: string;
@@ -57,7 +57,7 @@ export default function ImageUpload({
             return;
         }
 
-        // preview
+        // preview 
         const reader = new FileReader();
         reader.onloadend = () => {
             setPreview(reader.result as string);

@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
+const API_BASE = process.env.NEXT_PUBLIC_URL
 
 export const getImg = (url?: string) => {
   if (!url) return "";
