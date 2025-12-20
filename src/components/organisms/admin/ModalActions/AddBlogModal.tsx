@@ -47,6 +47,10 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
         alert("Error al crear el blog");
         }
     };
+    const handleCancel=()=>{
+      onClose();
+      setBlog(BLOG_INICIAL);
+    }
     return (
       <Modal   size="lg" title="Agregar nuevo blog" isOpen={openModal} onClose={onClose}>
       <form onSubmit={handleCreate} className="space-y-6 overflow-y-auto h-[70vh]">
@@ -67,7 +71,7 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
 
           <Button 
             type="button" 
-            onClick={onClose} 
+            onClick={handleCancel} 
             variant="primary" 
             className="flex-1">
             Cancelar

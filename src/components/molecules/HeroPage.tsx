@@ -1,7 +1,8 @@
-import React from 'react'
-import Heading from '../atoms/Heading'
-import DividerLine from '../atoms/DividerLine';
-import { BASE_URL } from '@/config';
+import React from "react";
+import Heading from "../atoms/Heading";
+import DividerLine from "../atoms/DividerLine";
+import { BASE_URL } from "@/config";
+import { getImg } from "@/utils/getImg";
 const posicionesText = {
   medio: "justify-center",
   izquierda: "justify-start",
@@ -14,16 +15,15 @@ type HeroPageProps = {
   position: keyof typeof posicionesText;
 };
 
-const HeroPage = ({ url, text, position="medio" }: HeroPageProps) => {
-    
-  const bg = typeof url === "string" ? url : url.src;
+const HeroPage = ({ url, text, position = "medio" }: HeroPageProps) => {
 
   return (
     <section
-      className={`relative w-full h-screen flex items-center ${posicionesText[position]} 
-      overflow-hidden pt-24 bg-cover bg-center bg-no-repeat  px-8 md:px-0 text-center
-       md:h-screen h-[80vh] md:pt-24 `}
-      style={{ backgroundImage: `url(${BASE_URL.replace('/api', '')}${bg})` }}
+      className={`relative w-full h-screen flex items-center ${
+        posicionesText[position]
+      } overflow-hidden pt-24 bg-cover bg-center bg-no-repeat px-8 md:px-0 text-center
+       md:h-screen h-[80vh] md:pt-24`}
+      style={{   backgroundImage: getImg(url) ? `url(${getImg(url)})` : undefined, }}
     >
       <Heading
         level="h1"
@@ -32,7 +32,7 @@ const HeroPage = ({ url, text, position="medio" }: HeroPageProps) => {
       >
         {text}
       </Heading>
-      <DividerLine/>
+      <DividerLine />
     </section>
   );
 };

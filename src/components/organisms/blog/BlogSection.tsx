@@ -4,10 +4,10 @@ import Banner from '@/components/atoms/Banner'
 import Text from '@/components/atoms/Text'
 import SearchBar from '@/components/molecules/blog/SearchBar'
 import BlogCard from '@/components/molecules/blog/BlogCard'
-import { BlogData } from '@/data/blog/blogData'
 import Pagination from '@/components/molecules/Pagination'
-import { Blog } from '@/types/blog'
+import { Blog } from '@/types/admin/blog'
 import Link from 'next/link'
+import { getImg } from '@/utils/getImg'
 type Props={
   data:Blog[]
 }
@@ -26,10 +26,10 @@ const BlogSection = ({data}:Props) => {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 '>
           {blogPaginado.map((blog) => (
             <Link 
-              key={blog.id}
-              href={`/blog/${blog.id}`}
+              key={blog.slug}
+              href={`/blog/${blog.slug}`}
               className='transform transition-transform hover:scale-[1.02]  rounded-3xl'>
-              <BlogCard nombre={blog.cover_subtitle} img={`${BASE_URL}${blog.main_image?.url}` } descripcion={blog.meta_title}/>
+              <BlogCard nombre={blog.cover_subtitle || ""} img={getImg(blog.main_image?.url) } descripcion={blog.meta_title || "" }/>
             </Link>
           ))}
         </div>

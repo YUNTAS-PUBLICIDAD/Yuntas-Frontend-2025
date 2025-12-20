@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { cookies } from "next/headers";
 import { API_ENDPOINTS } from "@/config";
-import { BlogActionResponse } from "@/types/admin/blog";
+import { BlogActionResponse,BlogListResponseBySlug } from "@/types/admin/blog";
 import { Blog } from "@/types/admin/blog";
 
 function getToken(): string | null {
@@ -34,11 +34,12 @@ export async function deleteBlogAction(id: number): Promise<BlogActionResponse<n
   }
 }
 
-export async function getBlogsActionSlug(
+export async function getBlogBySlugAction(
   slug: string
-): Promise<BlogActionResponse<Blog[]>> {
+): Promise<BlogListResponseBySlug<Blog>> {
   const token = getToken();
-  if (!token) return { success: false, message: "No autenticado" };
+  if (!token) 
+    return { success: false, message: "No autenticado" };
 
   try {
     const endpoint = `${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ONE(slug)}`;
@@ -53,8 +54,7 @@ export async function getBlogsActionSlug(
     return {
       success: true,
       data: response.data.data,   
-      meta: response.data.meta,   
-      links: response.data.links, 
+
     };
   } catch (error: any) {
     return {
