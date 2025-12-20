@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { productosData } from '@/data/productosData'
 import ProductoCard from '@/components/molecules/producto/ProductoCard'
 import CategoriaSelect from '@/components/molecules/producto/CategoriaSelect'
 import Text from '@/components/atoms/Text'
