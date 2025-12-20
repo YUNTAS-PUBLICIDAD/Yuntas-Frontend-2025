@@ -10,8 +10,8 @@ const DatosSection = () => {
 
   return (
     <section>
-      <DividerLine></DividerLine>
-      <Banner>
+      <DividerLine className="relative z-[1]" />
+      <Banner className="relative z-[5]">
         <Text variant='banner' color='white' className='font-bold text-xl'>
           LIBRO DE RECLAMACIONES
         </Text>

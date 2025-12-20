@@ -23,7 +23,7 @@ interface PaginationReturn<T> {
   setPage: (page: number) => void;
 }
 
-export const usePagination = <T = any>({ 
+export const usePagination = <T,>({ 
   items, 
   pageSize,
   initialPage = 1,

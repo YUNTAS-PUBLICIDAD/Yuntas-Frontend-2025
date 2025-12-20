@@ -8,10 +8,11 @@ const ReclamoBlock = () => {
     return (
         <div className='flex flex-col gap-6 w-full'>
             
-            <Input
+            <Input 
                 textLabel={inputReclamos[0].textLabel}
                 placeholder={inputReclamos[0].placeholder}
                 size={inputReclamos[0].size}
+                className={"w-full placeholder-italic"} 
             />
             <Select 
                 textLabel={selectsReclamos[1].textLabel}
