@@ -7,14 +7,15 @@ interface Column {
     render?: (value: any, row: any) => React.ReactNode;
 }
 
-interface AdminTableProps {
+interface AdminTableProps<T = any> {
     columns: Column[];
-    data: Record<string, any>[];
+    data: T[];
     minRows?: number;
-    onDelete?: (id: string | number) => void;
-    onApprove?: (id: string | number) => void;
-    onEdit?: (id: string | number) => void;
+    onDelete?: (item: T) => void;
+    onApprove?: (item: T) => void;
+    onEdit?: (item: T) => void;
 }
+
 
 export default function AdminTable({ 
     columns, 
@@ -58,13 +59,13 @@ export default function AdminTable({
                                     </td>
                                 ))}
                                 <td className="bg-[#F4F4F2] py-3 px-4 rounded-r-lg text-center h-14">
-                                    <TableActions 
-                                        id={row.id} 
+                                    <TableActions
+                                        item={row}
                                         isEmpty={isEmpty}
                                         onDelete={onDelete}
                                         onApprove={onApprove}
                                         onEdit={onEdit}
-                                        actions={enabledActions} 
+                                        actions={enabledActions}
                                     />
                                 </td>
                             </tr>

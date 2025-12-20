@@ -58,17 +58,17 @@ export default function Modal({
                 onClick={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
+                    <div className="flex  items-center justify-between px-6 py-4 border-b border-white/20">
                         <h2 className={`text-xl font-bold ${textTitleClass}`}>{title}</h2>
                         <button
                             onClick={onClose}
                             className={`${closeBtnClass} transition-colors`}
                         >
-                            <IoClose size={24} />
+                            <IoClose size={24} onClick={()=>onClose} />
                         </button>
                     </div>
                 )}
-                <div className="p-6">
+                <div className="p-6  overflow-y-auto ">
                     {children}
                 </div>
             </div>

@@ -8,7 +8,7 @@ export interface ClientData {
     nombre: string;
     gmail: string;
     telefono: string;
-    producto: string; 
+    producto: string | number;
     fecha: string;
 }
 
@@ -31,6 +31,19 @@ export const useClientEdit = (initialData: ClientData | null, onClose: () => voi
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await api.get('/api/productos'); 
+                const lista = Array.isArray(response.data) ? response.data : response.data.data;
+                setProducts(lista || []);
+            } catch (error) {
+                console.error("Error cargando productos:", error);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
         if (initialData) {
             setFormData({
                 ...initialData,
@@ -40,18 +53,14 @@ export const useClientEdit = (initialData: ClientData | null, onClose: () => voi
     }, [initialData]);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await api.get('/api/productos'); 
-                const lista = Array.isArray(response.data) ? response.data : response.data.data;
-                setProducts(lista || []);
-            } catch (error) {
-                console.error("Error cargando productos en el hook:", error);
+        if (formData.producto && typeof formData.producto === 'string' && products.length > 0) {
+            const productMatch = products.find(p => p.name === formData.producto);
+            if (productMatch) {
+                setFormData(prev => ({ ...prev, producto: productMatch.id }));
             }
-        };
+        }
+    }, [formData.producto, products]);
 
-        fetchProducts();
-    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -75,11 +84,16 @@ export const useClientEdit = (initialData: ClientData | null, onClose: () => voi
         setIsSaving(true);
         try {
             const url = `${API_ENDPOINTS.ADMIN.INBOX.LEADS}/${formData.id}`;
+
             const payload = {
                 name: formData.nombre,
                 email: formData.gmail,
                 telefono: formData.telefono, 
+                
+               
                 product_id: Number(formData.producto), 
+
+              
                 created_at: formatDateForApi(formData.fecha)
             };
 
@@ -92,10 +106,10 @@ export const useClientEdit = (initialData: ClientData | null, onClose: () => voi
         } catch (error: any) {
             console.error("❌ Error al guardar:", error);
             if (error.response?.status === 422) {
-                const msg = error.response.data.message || "Error de validación";
+                const msg = error.response.data.message || "Datos inválidos";
                 alert(`Error: ${msg}`);
             } else {
-                alert("Ocurrió un error al guardar (500).");
+                alert("Error del servidor (500). Revisa que el ID del producto sea numérico.");
             }
         } finally {
             setIsSaving(false);

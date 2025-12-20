@@ -8,10 +8,13 @@ import { BlogData } from '@/data/blog/blogData'
 import Pagination from '@/components/molecules/Pagination'
 import { Blog } from '@/types/blog'
 import Link from 'next/link'
-
-const BlogSection = () => {
-  const [listaBlog, setListaBlog] = useState<Blog[]>(BlogData);
-  const [blogPaginado, setBlogPaginado] = useState<Blog[]>(BlogData)
+type Props={
+  data:Blog[]
+}
+const BlogSection = ({data}:Props) => {
+  const [listaBlog, setListaBlog] = useState<Blog[]>(data);
+  const [blogPaginado, setBlogPaginado] = useState<Blog[]>(data)
+ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   return (
     <section className='py-6 md:py-10'>
@@ -26,7 +29,7 @@ const BlogSection = () => {
               key={blog.id}
               href={`/blog/${blog.id}`}
               className='transform transition-transform hover:scale-[1.02]  rounded-3xl'>
-              <BlogCard nombre={blog.nombre} img={blog.img} descripcion={blog.descripcion}/>
+              <BlogCard nombre={blog.cover_subtitle} img={`${BASE_URL}${blog.main_image?.url}` } descripcion={blog.meta_title}/>
             </Link>
           ))}
         </div>

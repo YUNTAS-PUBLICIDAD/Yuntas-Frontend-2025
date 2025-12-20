@@ -28,6 +28,7 @@ export function useAuth(): UseAuthReturn {
             router.refresh();
         } else {
             setError(result.message);
+            
         }
 
         setIsLoading(true);
