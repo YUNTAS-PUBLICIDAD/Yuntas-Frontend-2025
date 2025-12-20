@@ -121,8 +121,6 @@ const SendEmailForm: React.FC<Props> = ({ products, onClose }) => {
                     </div>
                 </div>
             ))}
-
-            {/* BOTÓN DE ENVIAR */}
             <div className="flex justify-end gap-3 pt-4 border-t">
                 <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                     Cancelar
