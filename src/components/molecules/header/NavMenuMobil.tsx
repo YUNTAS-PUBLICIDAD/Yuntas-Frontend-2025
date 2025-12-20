@@ -2,6 +2,8 @@
 
 import MenuItem from "@/components/atoms/MenuItem";
 import { usePathname } from "next/navigation";
+import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
+
 
 type NavMenuMobilProps = {
   size?: "sm" | "md" | "lg";
@@ -45,6 +47,10 @@ export default function NavMenuMobil({ size = "md" ,variant="desktop"}: NavMenuM
         <MenuItem href="/contacto" active={pathname === "/contacto"} color={variant==='mobile'? "text-white":""}>
           CONTACTO
         </MenuItem>
+      </div>
+
+      <div className="w-full border-b-2 border-white px-4">
+        <AdminMenuMobil />
       </div>
     </nav>
   );
