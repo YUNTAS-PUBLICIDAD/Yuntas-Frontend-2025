@@ -14,8 +14,8 @@ const SolicitudInfo: React.FC = () => {
   const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
 
   return (
-    <section className="bg-white">
-      <div className="container mx-auto px-4 text-center">
+    <section className="bg-white ">
+      <div className="container mx-auto px-4 text-center ">
         <FormContainer>
           {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para mejor legibilidad en todos los dispositivos */}
           <TextTitulo
@@ -28,17 +28,17 @@ const SolicitudInfo: React.FC = () => {
           <form className="space-y-6 px-4 md:px-16 py-8 max-w-3xl mx-auto" onSubmit={handleSubmit}>
             {/* Nombre / Apellido */}
             <FormRow columns={2}>
-              <InputText placeholder="Nombre" name="first_name" required value={formData.first_name} onChange={handleInputChange} />
-              <InputText placeholder="Apellido" name="last_name" required value={formData.last_name} onChange={handleInputChange} />
+              <InputText placeholder="Nombre" className="rounded-xl" name="first_name" required value={formData.first_name} onChange={handleInputChange} />
+              <InputText placeholder="Apellido" className="rounded-xl" name="last_name" required value={formData.last_name} onChange={handleInputChange} />
             </FormRow>
 
             {/* Teléfono / Distrito */}
             <FormRow columns={2}>
-              <InputText type="number" placeholder="Teléfono" name="phone" required value={formData.phone} onChange={handleInputChange}/>
-              <InputText placeholder="Distrito" name="district" value={formData.district} onChange={handleInputChange}/>
+              <InputText type="number" placeholder="Teléfono" className="rounded-xl" name="phone" required value={formData.phone} onChange={handleInputChange}/>
+              <InputText placeholder="Distrito" className="rounded-xl" name="district" value={formData.district} onChange={handleInputChange}/>
             </FormRow>
 
-            <InputText placeholder="Detalle de solicitud" name="request_detail" value={formData.request_detail} onChange={handleInputChange}/>
+            <InputText placeholder="Detalle de solicitud" className="rounded-xl" name="request_detail" value={formData.request_detail} onChange={handleInputChange}/>
 
             <TextArea placeholder="Mensaje" className="h-40" required name="message" value={formData.message} onChange={handleInputChange}/>
 

@@ -21,7 +21,7 @@ const DatosBlock = () => {
           type={inp.type}
           />
         ))}
-      <div className='grid grid-row-1 md:grid-cols-2 gap-6'>
+      <div className='grid grid-row-1 md:grid-cols-2 gap-6 '>
         {selectsGrid.map((sel, i) => (
           <Select
             key={i}
