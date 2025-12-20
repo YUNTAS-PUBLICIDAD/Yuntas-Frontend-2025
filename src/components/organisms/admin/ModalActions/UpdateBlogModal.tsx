@@ -11,10 +11,9 @@ import VideoSection from './VideoSection';
 import ContenidoBlog from './ContenidoBlog';
 import { Blog } from '@/types/admin/blog';
 import {  BlogInput } from '@/types/admin/blog';
-import { updateBlogAction } from '@/actions/blogActions';
-import { buildBlogFormData } from '@/utils/blogFormData';
 import { mapBlogToInput } from '@/utils/blog/mapBlogToInput';
-
+import { useRouter } from 'next/navigation';
+import { useBlogs } from '@/hooks/useBlog';
 interface Props {
   openModal: boolean;
   onClose: () => void;
@@ -38,38 +37,25 @@ const BLOG_INICIAL:BlogInput={
   beneficios: [],
   bloques: [],
 }
-const UpdateBlogModal = ({ openModal, onClose, onSuccess, blog}: Props) => {
+const UpdateBlogModal = ({ openModal, onClose, blog, onSuccess }: Props) => {
   const [form, setForm] = useState<BlogInput>(BLOG_INICIAL);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {updateBlog,isLoading,error}=useBlogs();
+  const router = useRouter();
 
   useEffect(() => {
+  if (openModal && blog) {
     setForm(mapBlogToInput(blog));
-  }, [blog]);
-
-  if (!form) return null; 
+  }
+  }, [openModal, blog]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      const formData = buildBlogFormData(form);
-
-
-      const result = await updateBlogAction(blog.id,formData);
-
-      if (!result.success) {
-        setError(result.message ?? "Error al actualizar");
-        return;
-      }
-
-      onSuccess?.();
+    const success = await updateBlog(blog.id,form);
+    if (success) {
+      alert("Blog actualizado correctamente");
+      onSuccess?.(); 
       onClose();
-    } catch {
-      setError("Error inesperado");
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      alert("Error al actualizar el blog");
     }
   };
 
@@ -85,10 +71,10 @@ const UpdateBlogModal = ({ openModal, onClose, onSuccess, blog}: Props) => {
         <ContenidoBlog blog={form} setBlog={setForm} />
 
         <div className="flex gap-3 pt-4 border-t">
-          <Button type="submit" variant="success" disabled={isSubmitting}>
-            {isSubmitting ? <Loader /> : "Actualizar"}
+          <Button type="submit" variant="tertiary" >
+            {isLoading ? <Loader /> : "Actualizar"}
           </Button>
-          <Button type="button" variant="secondary" onClick={onClose}>
+          <Button type="button" variant="primary" onClick={onClose}>
             Cancelar
           </Button>
         </div>

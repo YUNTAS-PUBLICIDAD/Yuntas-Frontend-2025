@@ -5,31 +5,37 @@ import Button from '@/components/atoms/Button'
 import { deleteBlogAction } from '@/actions/blogActions'
 import { Blog } from '@/types/admin/blog'
 import { useBlogs } from '@/hooks/useBlog'
+import { useRouter } from 'next/navigation'
 type ConfirmarEleminarProps={
     isOpen:boolean;
-    onClose:()=>void;
     Blog:Blog;
-    
+    onClose:()=>void;
+    onSuccess?:()=>void;
 }
 
-const ConfirmarEleminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
+const ConfirmarEliminar = ({isOpen,onClose,Blog,onSuccess}:ConfirmarEleminarProps) => {
     
     const {deleteBlog,getBlogs}=useBlogs();
+    const router = useRouter();
     const handleDelete = async (id: number) => {
         const success = await deleteBlog(id);
         if (success) {
             alert("Blog eliminado correctamente");
             onClose();
+            onSuccess?.();   
             getBlogs(10);
         } else {
-        alert("Error al eliminar el blog");
+            alert("Error al eliminar el blog");
         }
+        router.refresh();
     };
     return (
-        <Modal size='lg' title='Desea eliminar este blog?' isOpen={isOpen} onClose={onClose}> 
-            <Text variant='small'>{Blog.title}</Text>
-            <Text variant='small'>{Blog.cover_subtitle}</Text>
-            <div>
+        <Modal size='lg' title='Desea eliminar este blog?' className='flex flex-col  ' isOpen={isOpen} onClose={onClose}> 
+            <div className='grid place-self-center'>
+                <Text variant='subtitle' className='font-semibold'>Titulo:   {Blog.title}</Text>
+                <Text variant='small'>{Blog.cover_subtitle}</Text>
+            </div>
+            <div className='flex justify-center items-center mt-10 gap-10'>
                 <Button onClick={()=>handleDelete(Blog.id)} variant='danger'>Aceptar</Button>
                 <Button onClick={onClose}>Cancelar</Button>
             </div>
@@ -37,4 +43,4 @@ const ConfirmarEleminar = ({isOpen,onClose,Blog}:ConfirmarEleminarProps) => {
   )
 }
 
-export default ConfirmarEleminar
+export default ConfirmarEliminar

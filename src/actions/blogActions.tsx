@@ -33,6 +33,36 @@ export async function deleteBlogAction(id: number): Promise<BlogActionResponse<n
     };
   }
 }
+
+export async function getBlogsActionSlug(
+  slug: string
+): Promise<BlogActionResponse<Blog[]>> {
+  const token = getToken();
+  if (!token) return { success: false, message: "No autenticado" };
+
+  try {
+    const endpoint = `${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ONE(slug)}`;
+
+    const response = await axios.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return {
+      success: true,
+      data: response.data.data,   
+      meta: response.data.meta,   
+      links: response.data.links, 
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message,
+    };
+  }
+}
 export async function getBlogsAction(
   perPage = 10,
   url?: string

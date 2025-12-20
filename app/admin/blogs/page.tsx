@@ -7,17 +7,20 @@ import { useBlogs } from "@/hooks/useBlog";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
+
 import PaginationServer from "@/components/molecules/PaginationServer";
 
+
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
-import AddBlogModal from "@/components/organisms/admin/AddblogModal/AddBlogModal";
-import UpdateBlogModal from "@/components/organisms/admin/AddblogModal/UpdateBlogModal";
-import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEleminar";
+import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
+import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
+import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
 
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { Blog } from "@/types/admin/blog";
+import { render } from "react-dom";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -30,7 +33,7 @@ const columns = [
       <BlogImageCarousel item={row.gallery} />
     )
   },
-  { key: "created_at", label: "FECHA" },
+  { key: "created_at", label: "FECHA",render:(_:unknown,row:Blog)=>new Date(row.created_at).toLocaleDateString() },
 ];
 export default function Blogspage() {
   const {
@@ -63,11 +66,13 @@ export default function Blogspage() {
   const handleEdit = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenUpdateModal(true);
+        router.refresh();  
   };
 
   const handleDelete = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenDeleteModal(true);
+    router.refresh();  
   };
   console.log(blogs)
   return (
@@ -77,6 +82,7 @@ export default function Blogspage() {
           Blog={blogSelected}
           isOpen={openDeleteModal}
           onClose={() => setOpenDeleteModal(false)}
+          onSuccess={() => getBlogs(10)}
         />
       )}
 
@@ -85,12 +91,14 @@ export default function Blogspage() {
           blog={blogSelected}
           openModal={openUpdateModal}
           onClose={() => setOpenUpdateModal(false)}
+          onSuccess={() => getBlogs(10)}
         />
       )}
 
       <AddBlogModal
         openModal={openAddModal}
         onClose={() => setOpenAddModal(false)}
+        onSuccess={() => getBlogs(10)}
       />
 
       <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
