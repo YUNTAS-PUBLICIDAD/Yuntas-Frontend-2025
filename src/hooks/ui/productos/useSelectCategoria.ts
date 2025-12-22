@@ -15,7 +15,7 @@ export const useSelectCategorias = (
     }
 
     const resultado = productos.filter(p =>
-      p.categories[0].name.includes(categoria)
+      p.categories[0]?.name.includes(categoria)
     );
 
     setLista(resultado);

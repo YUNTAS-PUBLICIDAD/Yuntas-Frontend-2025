@@ -10,7 +10,7 @@ export interface ProductFormData {
     slug: string;
     metaTitle: string;
     metaDescription: string;
-    keywords: string;
+    keywords: string[];
     heroTitle: string;
     description: string;
     specifications: string[];
@@ -32,9 +32,11 @@ export interface ProductFormData {
 }
 
 export const useAddProduct = (onClose: () => void) => {
+    const [currentKeyword, setCurrentKeyword] = useState("");
     const [formData, setFormData] = useState<ProductFormData>({
         name: "", category: "", price: "", slug: "",
-        metaTitle: "", metaDescription: "", keywords: "",
+        metaTitle: "", metaDescription: "", 
+        keywords: [""],
         heroTitle: "", description: "",
         specifications: [""],
         benefits: [""],
@@ -48,17 +50,38 @@ export const useAddProduct = (onClose: () => void) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
+    const handleAddKeyword = () => {
+        if (!currentKeyword.trim()) return;
+        setFormData(prev => ({
+            ...prev,
+            keywords: [...prev.keywords, currentKeyword.trim()]
+        }));
+        setCurrentKeyword("");
+    };
 
-    const handleListChange = (type: 'specifications' | 'benefits', index: number, value: string) => {
+  
+    const handleListChange = (type: 'specifications' | 'benefits' | 'keywords', index: number, value: string) => {
         const newList = [...formData[type]];
         newList[index] = value;
         setFormData(prev => ({ ...prev, [type]: newList }));
     };
+    const addListItem = (type: 'specifications' | 'benefits' | 'keywords') => {
+        const currentList = formData[type];
+        
+        if (currentList.length > 0) {
+            const lastItem = currentList[currentList.length - 1];
+            if (lastItem.trim() === "") {
+                return; 
+            }
+        }
 
-    const addListItem = (type: 'specifications' | 'benefits') => {
         setFormData(prev => ({ ...prev, [type]: [...prev[type], ""] }));
     };
-
+ const removeListItem = (type: 'specifications' | 'benefits' | 'keywords', index: number) => {
+        const newList = [...formData[type]];
+        newList.splice(index, 1);
+        setFormData(prev => ({ ...prev, [type]: newList }));
+    };
     const handleFileChange = (type: keyof typeof formData.images, file: File | null) => {
         if (file && file.size > 10 * 1024 * 1024) { 
             alert(`La imagen "${file.name}" es muy pesada. Máximo 10MB.`);
@@ -100,12 +123,9 @@ export const useAddProduct = (onClose: () => void) => {
             data.append('meta_title', formData.metaTitle);
             data.append('meta_description', formData.metaDescription);
             
-            if (formData.keywords) {
-                data.append('keywords', formData.keywords);
-                
-                
+            if (formData.keywords.length > 0) {
+                data.append('keywords', formData.keywords.join(','));
             }
-
             
             if (formData.images.list) {
                 data.append('main_image', formData.images.list); 
@@ -170,10 +190,11 @@ export const useAddProduct = (onClose: () => void) => {
         }
     };
     return {
-        formData,
+       formData,
         handleChange,
-        handleListChange,
-        addListItem,
+        handleListChange, 
+        addListItem,      
+        removeListItem,   
         handleFileChange,
         handleAltChange,
         handleSubmit,
