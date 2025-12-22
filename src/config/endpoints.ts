@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   PRODUCTS: {
     GET_ALL: '/productos', 
     GET_ONE: (slug: string) => `/productos/${slug}`, 
+    GET_BY_ID: (id: number) => `/productos/${id}`,
     CREATE: '/productos', 
     UPDATE: (id: number) => `/productos/${id}`, 
     DELETE: (id: number) => `/productos/${id}`, 
@@ -50,7 +51,11 @@ export const API_ENDPOINTS = {
     },
     INBOX: {
       LEADS: '/leads',
-      CONTACT: '/admin/contacto', 
+      CONTACT: {
+        GET_ALL: '/admin/contacto',
+        GET_ONE: (id: number) => `/admin/contacto/${id}`,
+        DELETE: (id: number) => `/admin/contacto/${id}`,
+      }, 
       CLAIMS: '/admin/claims', 
     }
   }

@@ -9,11 +9,12 @@ const ImgVariant={
 type ImgProps={
     src:string,
     variant?:"blogCard"|"productoCard"|"normal",
-    classname?:string
+    classname?:string,
+    alt?:string
 }
-const Img = ({src, variant='normal',classname}:ImgProps) => {
+const Img = ({alt="",src, variant='normal',classname}:ImgProps) => {
   return (
-    <img src={src} className={` ${classname} ${ImgVariant[variant]}`}/>
+    <img alt={alt} src={src} className={` ${classname} ${ImgVariant[variant]}`}/>
   )
 }
 

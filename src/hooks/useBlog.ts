@@ -7,9 +7,12 @@ import {
   getBlogsAction,
   createBlogAction,
   updateBlogAction,
-  deleteBlogAction
+  deleteBlogAction,
+  getBlogBySlugAction
 } from "@/actions/blogActions";
 import { buildBlogFormData } from "@/utils/blogFormData";
+// NOTA: Importar datos de prueba locales para desarrollo
+import { blogTestData } from "@/data/blog/blogData";
 
 export function useBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -28,15 +31,11 @@ export function useBlogs() {
     setError(null);
     setCurrentPerPage(perPage);
 
-    const result = await getBlogsAction(perPage);
-    console.log(result)
-    if (result.success && result.data) {
-      setBlogs(result.data.data ?? []);
-      setMeta(result.meta ?? null);
-      setLinks(result.links ?? null);
-    } else {
-      setError(result.message ?? 'Error desconocido');
-    }
+    // MODIFICADO: Usar datos locales de prueba en lugar del API backend
+    // TODO: Cambiar a getBlogsAction(perPage) cuando esté disponible el backend
+    setBlogs(blogTestData as Blog[]);
+    setMeta({ total: blogTestData.length, per_page: perPage, from: 1, to: blogTestData.length, current_page: 1, last_page: 1 });
+    setLinks({ first: null, last: null, prev: null, next: null });
 
     setIsLoading(false);
   }, []);
@@ -61,23 +60,23 @@ export function useBlogs() {
   const goToNextPage = () => links?.next && goToPage(links.next);
   const goToPrevPage = () => links?.prev && goToPage(links.prev);
 
-//   const getBlogBySlug = async (slug: string) => {
-//     setIsLoading(true);
-//     setError(null);
+  // Conseguir blog por su slug
+  const getBlogBySlug = async (slug: string) => {
+     setIsLoading(true);
+     setError(null);
 
-//     const result = await getBlogBySlugAction(slug);
+      const result = await getBlogBySlugAction(slug);
 
-//     if (result.success && result.data) {
-//       setBlog(result.data);
-//       setIsLoading(false);
-//       return result.data;
-//     }
+      if (result.success && result.data) {
+         setBlog(result.data ?? null);
+         setIsLoading(false);
+         return result.data;
+       }
 
-//     setError(result.message ?? 'Error desconocido');
-//     setIsLoading(false);
-//     return null;
-//   };
-
+     setError(result.message ?? 'Error desconocido');
+     setIsLoading(false);
+     return null;
+   }
   const createBlog = async (data: BlogInput) => {
     setIsLoading(true);
     setError(null);
@@ -123,7 +122,7 @@ export function useBlogs() {
     getBlogs,
     goToNextPage,
     goToPrevPage,
-    // getBlogBySlug,
+    getBlogBySlug,
     createBlog,
     updateBlog,
     deleteBlog

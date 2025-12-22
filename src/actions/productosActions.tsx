@@ -5,9 +5,6 @@ import { cookies } from "next/headers";
 import { api, API_ENDPOINTS } from "@/config";
 import {
     Producto,
-    ProductoInput,
-    ProductoListResponse,
-    ProductoResponse,
     ProductoActionResponse,
 } from "@/types/admin/producto";
 
@@ -21,12 +18,6 @@ export async function getProductosAction(
     url?: string
 ): Promise<ProductoActionResponse<Producto[]>> {
     try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
         const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
 
         return {
@@ -42,12 +33,6 @@ export async function getProductosAction(
 
 export async function getProductoBySlugAction(slug: string): Promise<ProductoActionResponse<Producto>> {
     try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
         const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ONE(slug));
 
         return {

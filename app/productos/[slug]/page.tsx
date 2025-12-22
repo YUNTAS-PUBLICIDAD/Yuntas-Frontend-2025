@@ -1,45 +1,56 @@
-'use client';
-
 import HeroSection from "@/components/organisms/productos/detalle/HeroSection";
 import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaDetalleSection";
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
-import { useParams } from "next/navigation";
-import { productosDetalleData } from "@/data/productos/detalle/productosDetalleData";
-import { useProductos } from '@/hooks/useProductos'
-import { useEffect } from "react";
+import { getProductoBySlugAction } from "@/actions/productosActions";
+import { Metadata } from "next";
+import { BASE_URL } from "@/config";
 
-export default function ProductoDetallePage() {
-	const params = useParams<{ slug: string }>();
-	const { producto, getProductoBySlug } = useProductos();
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+    const result = await getProductoBySlugAction(params.slug);
+    
+    if (!result.success || !result.data) {
+        return { title: "Yuntas Publicidad - Producto no encontrado" };
+    }
 
-	useEffect(() => {
-		if (params.slug) {
-			getProductoBySlug(params.slug);
-		}
-	}, []);
-	console.log("id", producto);
+    const producto = result.data;
 
+    return {
+        title: producto.meta_title || producto.name,
+        description: producto.meta_description || "",
+		keywords: producto.keywords?.join(", ") || "",
+        openGraph: {
+            title:  producto.meta_title || producto.name,
+            description: producto.meta_description || "",
+            images: producto.main_image?.url ? [{ url: `${BASE_URL.replace('/api', '')}${producto.main_image.url}` }] : [],
+        },
+    };
+}
 
-	const id = "letreros-neon-led";
-	const product = productosDetalleData[id];
+export default async function ProductoDetallePage({ params }: { params: { slug: string } }) {
+	const result = await getProductoBySlugAction(params.slug);
+    const producto = result.success ? result.data : null;
+
+	if (!producto) {
+        return <div className="flex justify-center items-center h-screen">Producto no encontrado</div>;
+    }
 
 	return (
 		<main>
-			<HeroSection productName={producto?.name || ""} backgroundImage={producto?.gallery[0].url || ""} />
-			<ListaDetalleSection
-				text="ESPECIFICACIONES"
-				listItems={producto?.specifications || []}
-				imageSrc={producto?.gallery[1].url || ""} />
-			<InformacionSection info={producto?.description || ""} />
-			<ListaDetalleSection
-				text="BENEFICIOS"
-				listItems={producto?.benefits || []}
-				imageSrc={producto?.gallery[2].url || ""}
-				reverse={true}
-			/>
-			<CotizaSection />
-
-		</main>
+            <HeroSection productName={producto.name} backgroundImage={`${BASE_URL.replace('/api', '')}${producto.gallery[0]?.url || ""}`} />
+            <ListaDetalleSection
+                text="ESPECIFICACIONES"
+                listItems={producto.specifications || []}
+                imageSrc={`${BASE_URL.replace('/api', '')}${producto.gallery[1]?.url || ""}`} 
+            />
+            <InformacionSection info={producto.description || ""} />
+            <ListaDetalleSection
+                text="BENEFICIOS"
+                listItems={producto.benefits || []}
+                imageSrc={`${BASE_URL.replace('/api', '')}${producto.gallery[2]?.url || ""}`}
+                reverse={true}
+            />
+            <CotizaSection />
+        </main>
 	);
 }

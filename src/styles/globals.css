@@ -9,3 +9,23 @@
     border-radius: 1rem;
   }
 }
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  nav, aside, header, footer {
+    display: none !important;
+  }
+
+  body, main {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+  
+  td:last-child, th:last-child {
+      display: none !important;
+  }
+}

@@ -1,0 +1,86 @@
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
+export const useProductExporter = () => {
+
+    // --- 1. EXPORTAR A EXCEL ---
+    const exportToExcel = (data: any[], fileName: string = 'productos.xlsx') => {
+        if (!data || data.length === 0) return alert("No hay datos para exportar");
+
+        const dataToExport = data.map(item => ({
+            ID: item.id,
+            Nombre: item.nombre,
+            Sección: item.seccion,
+            Precio: item.precio
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Productos");
+        XLSX.writeFile(workbook, fileName);
+    };
+
+    // --- 2. EXPORTAR A CSV ---
+    const exportToCSV = (data: any[], fileName: string = 'productos.csv') => {
+        if (!data || data.length === 0) return alert("No hay datos para exportar");
+
+        const dataToExport = data.map(item => ({
+            ID: item.id,
+            Nombre: item.nombre,
+            Sección: item.seccion,
+            Precio: item.precio
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const csvOutput = XLSX.utils.sheet_to_csv(worksheet);
+        
+        const blob = new Blob([csvOutput], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    // --- 3. EXPORTAR A PDF ---
+    const exportToPDF = (data: any[], fileName: string = 'productos.pdf') => {
+        if (!data || data.length === 0) return alert("No hay datos para exportar");
+
+        const doc = new jsPDF();
+
+        doc.text("Reporte de Productos - Yuntas", 14, 15);
+
+        
+        const tableColumn = ["ID", "Nombre", "Sección", "Precio"];
+        const tableRows: any[] = [];
+
+        data.forEach(item => {
+            const rowData = [
+                item.id,
+                item.nombre,
+                item.seccion,
+                item.precio 
+            ];
+            tableRows.push(rowData);
+        });
+
+        // @ts-ignore (autotable a veces da error de tipos, esto lo ignora)
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20,
+        });
+
+        doc.save(fileName);
+    };
+
+    const printTable = () => {
+        window.print();
+    };
+
+    return { exportToExcel, exportToCSV, exportToPDF, printTable };
+};

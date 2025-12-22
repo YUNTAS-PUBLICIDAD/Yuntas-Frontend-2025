@@ -1,19 +1,30 @@
-import { BlogData } from "@/data/blog/blogData";
+'use client'
 import HeroPage from "@/components/molecules/HeroPage";
 import DescripcionSection from "@/components/organisms/blog/blogId/DescripcionSection";
 import BeneficiosSection from "@/components/organisms/blog/blogId/BeneficiosSection";
 import OpinionSection from "@/components/organisms/blog/blogId/OpinionSection";
 import VideoSection from "@/components/organisms/blog/blogId/VideoSection";
+import { useBlogs } from "@/hooks/useBlog";
+import { useEffect } from "react";
+import Loader from "@/components/atoms/Loader";
 export default function BlogDetallePage({ params }: { params: { slug: string } }) {
-  const Data = BlogData.find(e => e.id === params.slug);
-  if(Data===undefined) return
+  
+  const {blog,getBlogBySlug,isLoading}=useBlogs()
+  useEffect(() => {
+    getBlogBySlug(params.slug);
+  }, []);
+  if (!blog) return null;
   return (
     <main className="">
-      <HeroPage url={Data?.fondoPrincipal} text={Data.nombre} position="medio"/>
-      <DescripcionSection data={Data}/>
-      <BeneficiosSection data={Data}/>
-      <OpinionSection data={Data}/>
-      <VideoSection data={Data}/>
+      {isLoading ? <Loader size="lg"/> :
+        <>
+          <HeroPage url={blog?.main_image?.url} text={blog?.title || "Sin titulo"} position="medio"/>
+          <DescripcionSection data={blog}/>
+          <BeneficiosSection data={blog}/>
+          <OpinionSection data={blog}/>
+          <VideoSection data={blog}/>
+        </>
+      }
     </main>
   );
 }

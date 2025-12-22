@@ -1,165 +1,104 @@
 'use server';
 
-import axios from 'axios';
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { API_ENDPOINTS } from "@/config";
-import { BlogActionResponse } from "@/types/admin/blog";
-import { Blog } from "@/types/admin/blog";
+import { api, API_ENDPOINTS } from "@/config";
+import { Blog, BlogActionResponse ,BlogListResponseBySlug} from "@/types/admin/blog";
 
 function getToken(): string | null {
-  return cookies().get("auth_token")?.value || null;
-}
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-export async function deleteBlogAction(id: number): Promise<BlogActionResponse<null>> {
-  const token = getToken();
-  if (!token) return { success: false, message: "No autenticado" };
-
-  try {
-    await axios.delete(
-      `${BASE_URL}/api${API_ENDPOINTS.BLOG.DELETE(id)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
-
-    return { success: true };
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.response?.data?.message || error.message,
-    };
-  }
+  const cookieStore = cookies();
+  return cookieStore.get("auth_token")?.value || null;
 }
 
-export async function getBlogsActionSlug(
-  slug: string
-): Promise<BlogActionResponse<Blog[]>> {
-  const token = getToken();
-  if (!token) return { success: false, message: "No autenticado" };
-
+export async function getBlogsAction(perPage: number = 10, url?: string): Promise<BlogActionResponse<Blog[]>> {
   try {
-    const endpoint = `${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ONE(slug)}`;
+    const token = getToken();
+    if (!token) return { success: false, message: "No autenticado" };
 
-    const response = await axios.get(endpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    });
+    const endpoint = url ?? API_ENDPOINTS.BLOG.GET_ALL + `?per_page=${perPage}`;
+    const response = await api.get(endpoint);
 
     return {
       success: true,
-      data: response.data.data,   
-      meta: response.data.meta,   
-      links: response.data.links, 
+      data: response.data.data,
+      meta: response.data.meta,
+      links: response.data.links,
     };
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.response?.data?.message || error.message,
-    };
-  }
-}
-export async function getBlogsAction(
-  perPage = 10,
-  url?: string
-): Promise<BlogActionResponse<Blog[]>> {
-  const token = getToken();
-  if (!token) return { success: false, message: "No autenticado" };
-
-  try {
-    const endpoint = url
-      ? url
-      : `${BASE_URL}/api${API_ENDPOINTS.BLOG.GET_ALL}?per_page=${perPage}`;
-
-    const response = await axios.get(endpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    });
-
-    return {
-      success: true,
-      data: response.data.data,   
-      meta: response.data.meta,   
-      links: response.data.links, 
-    };
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.response?.data?.message || error.message,
-    };
+  } catch (error) {
+    return { success: false, message: "Error de conexión" };
   }
 }
 
-export async function updateBlogAction(id:number,formData: FormData): Promise<BlogActionResponse<Blog>> {
-  const token = getToken();
-  if (!token) {
-    return { success: false, message: "No autenticado. Inicia sesión." };
-  }
-  
+export async function getBlogBySlugAction(slug: string): Promise<BlogListResponseBySlug<Blog>> {
   try {
-    const response = await axios.put(
-      `${BASE_URL}/api${API_ENDPOINTS.BLOG.UPDATE(id)}`,formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
-  
+    const token = getToken();
+    if (!token) return { success: false, message: "No autenticado" };
+
+    const response = await api.get(API_ENDPOINTS.BLOG.GET_ONE(slug));
+
     return {
       success: true,
-      message: response.data.message || "Blog creado correctamente",
+      message: response.data.message,
       data: response.data.data,
     };
-  } catch (error: any) {
-    return {
-      success: false,
-      message:
-        error.response?.data?.message ||
-        error.message ||
-        "No se pudo conectar con el servidor",
-    };
+  } catch (error) {
+    return { success: false, message: "Error de conexión" };
   }
 }
 
 export async function createBlogAction(formData: FormData): Promise<BlogActionResponse<Blog>> {
-  const token = getToken();
-  if (!token) {
-    return { success: false, message: "No autenticado. Inicia sesión." };
-  }
-
   try {
-    const response = await axios.post(
-      `${BASE_URL}/api${API_ENDPOINTS.BLOG.CREATE}`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+    const token = getToken();
+    if (!token) return { success: false, message: "No autenticado" };
+
+    const response = await api.post(API_ENDPOINTS.BLOG.CREATE, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    revalidatePath("/admin/blogs");
 
     return {
       success: true,
-      message: response.data.message || "Blog creado correctamente",
-      data: response.data.data,
+      message: response.data.data.message || "Blog creado exitosamente",
+      data: response.data.data.data,
     };
-  } catch (error: any) {
-    return {
-      success: false,
-      message:
-        error.response?.data?.message ||
-        error.message ||
-        "No se pudo conectar con el servidor",
-    };
+  } catch (error) {
+    return { success: false, message: "Error de conexión" };
   }
+}
 
+export async function updateBlogAction(id: number | string, formData: FormData): Promise<BlogActionResponse<Blog>> {
+  try {
+    const token = getToken();
+    if (!token) return { success: false, message: "No autenticado" };
+    formData.append("_method", "PUT");
+    const response = await api.post(API_ENDPOINTS.BLOG.UPDATE(Number(id)), formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    revalidatePath("/admin/blogs");
+    return {
+      success: true,
+      message: response.data.data.message || "Blog actualizado exitosamente",
+      data: response.data.data.data,
+    };
+  } catch (error: any) { 
+    console.error("Error al actualizar:", error.response?.data || error.message);
+
+    return { success: false, message: error.response?.data?.message || "Error de conexión" };
+  }
+}
+
+export async function deleteBlogAction(id: number | string): Promise<BlogActionResponse<null>> {
+  try {
+    const token = getToken();
+    if (!token) return { success: false, message: "No autenticado" };
+
+    await api.delete(API_ENDPOINTS.BLOG.DELETE(Number(id)));
+
+    revalidatePath("/admin/blogs");
+
+    return { success: true, message: "Blog eliminado exitosamente" };
+  } catch (error) {
+    return { success: false, message: "Error de conexión" };
+  }
 }
