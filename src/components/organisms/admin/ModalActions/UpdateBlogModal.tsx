@@ -48,7 +48,9 @@ const UpdateBlogModal = ({ openModal, onClose, blog, onSuccess }: Props) => {
   }
   }, [openModal, blog]);
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log(form)
     e.preventDefault();
+    
     const success = await updateBlog(blog.id,form);
     if (success) {
       alert("Blog actualizado correctamente");

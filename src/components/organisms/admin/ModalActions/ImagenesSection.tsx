@@ -2,12 +2,12 @@ import React from "react";
 import Text from "@/components/atoms/Text";
 import { BlogInput,Blog } from "@/types/admin/blog";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
+import { getImg } from "@/utils/getImg";
+
 type ImagenesSectionProps = {
   blog: BlogInput;
   setBlog: React.Dispatch<React.SetStateAction<BlogInput>>;
 };
-const URL=process.env.NEXT_PUBLIC_API_URL;
-
 const ImagenesSection = ({ blog, setBlog }: ImagenesSectionProps) => {
   const handleImagenPrincipal = (file: File | null, alt: string) => {
     setBlog(prev => ({
@@ -46,7 +46,7 @@ const ImagenesSection = ({ blog, setBlog }: ImagenesSectionProps) => {
         <Text>Imagen Principal *</Text>
         <ImageUpload
           label="Imagen Principal"
-          currentImage={blog.imagen_principal_url ? `${URL}${blog.imagen_principal_url}` : ''}
+          currentImage={blog.imagen_principal_url ? getImg(blog.imagen_principal_url) : ''}
           altValue={blog.imagen_principal_alt}
           onAltChange={alt =>
             setBlog(prev => ({ ...prev, imagen_principal_alt: alt }))
@@ -65,7 +65,7 @@ const ImagenesSection = ({ blog, setBlog }: ImagenesSectionProps) => {
             <ImageUpload
               key={index}
               label={`Imagen ${index + 1}`}
-              currentImage={blog.imagenes_urls?.[index] ? `${URL}${blog.imagenes_urls[index]}` : ''}
+              currentImage={blog.imagenes_urls?.[index] ? getImg(blog.imagenes_urls[index]) : ''}
               altValue={blog.imagenes_alts[index] ?? ""}
               onAltChange={alt =>
                 handleImagenSecundaria(index, null, alt)

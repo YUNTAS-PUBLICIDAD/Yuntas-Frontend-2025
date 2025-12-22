@@ -51,6 +51,11 @@ export interface BlogActionResponse<T = null> {
   meta?: PaginationMeta;
   links?: PaginationLinks;
 }
+export interface BlogListResponseBySlug<T=null> {
+  success: boolean;
+  message?: string;
+  data?: Blog
+}
 
 export interface Blog {
   id: number;
