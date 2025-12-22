@@ -20,7 +20,6 @@ import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { Blog } from "@/types/admin/blog";
-import { render } from "react-dom";
 
 const columns = [
   { key: "id", label: "ID" },

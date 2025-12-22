@@ -1,5 +1,6 @@
  
  type ParrafoItemProps = {
+  id:number
   placeholder?:string
   name: string;
   value: string;
@@ -8,9 +9,10 @@
   onProduct?: () => void;
 };
 
- const ParrafoItem = ({ name, value, onChange, onUrl, onProduct,placeholder }: ParrafoItemProps) => (
+ const ParrafoItem = ({ id,name, value, onChange, onUrl, onProduct,placeholder }: ParrafoItemProps) => (
   <div className="relative mb-4 bg-trasparent rounded border">
     <textarea  className="p-3 rounded w-ful bg-transparent w-full  border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all"
+      id={`parrafo-${id}`}
       name={name} value={value} 
       onChange={onChange}
       rows={5}
