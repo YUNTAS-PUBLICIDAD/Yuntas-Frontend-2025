@@ -2,6 +2,7 @@ import React from 'react';
 import Heading from '@/components/atoms/Heading';
 import heroBackground from "@/assets/Reclamaciones/heroBackground.png";
 
+
 const HeroSection = () => {
   return (
     <section

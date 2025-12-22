@@ -1,25 +1,25 @@
 import { useEffect } from 'react'
 import { Producto } from '@/types/producto'
-import { productosData } from '@/data/productosData'
 
 export const useSelectCategorias = (
   categoria: string,
-  setLista: React.Dispatch<React.SetStateAction<Producto[]>>
+  setLista: React.Dispatch<React.SetStateAction<Producto[]>>,
+  productos: Producto[] = []
 ) => {
 
   useEffect(() => {
 
     if (categoria === "Todos los Productos") {
-      setLista(productosData);
+      setLista(productos);
       return;
     }
-    
-    const resultado = productosData.filter(p =>
-      p.categorias.includes(categoria)
+
+    const resultado = productos.filter(p =>
+      p.categories[0].name.includes(categoria)
     );
 
     setLista(resultado);
 
-  }, [categoria, setLista]);
+  }, [categoria, setLista, productos]);
 
 };

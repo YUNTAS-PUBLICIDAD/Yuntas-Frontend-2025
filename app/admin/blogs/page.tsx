@@ -1,148 +1,132 @@
-'use client'
-import { useState } from "react";
+
+'use client';
+
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useBlogs } from "@/hooks/useBlog";
 import AdminTable from "@/components/organisms/admin/AdminTable";
+
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-import Pagination from '@/components/molecules/Pagination';
-import data from "@/data/admin/seguimientoData";
-import { BlogData } from "@/data/blog/blogData";
-import { StaticImageData } from "next/image";
+
+import PaginationServer from "@/components/molecules/PaginationServer";
+
+
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
-import BlogForm from "@/components/organisms/admin/BlogForm";
-import Modal from "@/components/atoms/Modal";
-import { useBlogForm } from "@/hooks/admin/useBlogForm";
+import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
+import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
+import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
+
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
-import { Blog } from "@/types/blog";
+import { Blog } from "@/types/admin/blog";
+import { render } from "react-dom";
+
 const columns = [
-    { key: "id", label: "ID" },
-    { key: "nombre", label: "PRODUCTO" },
-    { key: "descripcion", label: "SUBTITULO" },
-    {
-        key: "galeria", label: "IMAGEN",
-        render: (item: StaticImageData[]) => <BlogImageCarousel item={item} />,
-    },
-    {
-        key: "fecha", label: "FECHA"
-    }
-]
+  { key: "id", label: "ID" },
+  { key: "cover_subtitle", label: "TÍTULO" },
+  { key: "meta_title", label: "SUBTÍTULO" },
+  {
+    key: "gallery",
+    label: "IMAGEN",
+    render: (_: unknown, row: Blog) => (
+      <BlogImageCarousel item={row.gallery} />
+    )
+  },
+  { key: "created_at", label: "FECHA",render:(_:unknown,row:Blog)=>new Date(row.created_at).toLocaleDateString() },
+];
+export default function Blogspage() {
+  const {
+    blogs,
+    error,
+    meta,
+    links,
+    isLoading,
+    getBlogs,
+    goToNextPage,
+    goToPrevPage,
+  } = useBlogs();
 
-export default function Page() {
-    const [blogPaginado, setBlogPaginado] = useState<Blog[]>([]);
-    const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState<"create" | "edit">("create");
-    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [blogSelected, setBlogSelected] = useState<Blog | null>(null);
 
-    const blogForm = useBlogForm(selectedBlog || undefined, modalMode);
+  const router = useRouter();
 
-    const onAdd = () => {
-        setModalMode("create");
-        setSelectedBlog(null);
-        blogForm.resetForm();
-        setShowModal(true);
-    };
+  useEffect(() => {
+    getBlogs(10); // carga inicial
+  }, [getBlogs]);
+  const topButtons = useMemo(() => [
+    { label: "Publicar", onClick: () => setOpenAddModal(true) },
+    { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
+    { label: "Exportar Excel", onClick: () => exportExcel(blogs) },
+    { label: "Exportar PDF", onClick: () => exportToPDF(blogs) },
+  ], [blogs]);
+  const handleEdit = (blog: Blog) => {
+    setBlogSelected(blog);
+    setOpenUpdateModal(true);
+        router.refresh();  
+  };
 
-    const onEdit = (id: string | number) => {
-        const blog = blogPaginado.find(b => b.id === id);
-        if (blog) {
-            setModalMode("edit");
-            setSelectedBlog(blog);
-            setShowModal(true);
-        }
-    };
+  const handleDelete = (blog: Blog) => {
+    setBlogSelected(blog);
+    setOpenDeleteModal(true);
+    router.refresh();  
+  };
+  console.log(blogs)
+  return (
+    <div>
+      {blogSelected && (
+        <ConfirmarEleminar
+          Blog={blogSelected}
+          isOpen={openDeleteModal}
+          onClose={() => setOpenDeleteModal(false)}
+          onSuccess={() => getBlogs(10)}
+        />
+      )}
 
-    const onDelete = (id: string | number) => {
-        if (confirm("¿Estás seguro de que deseas eliminar este blog?")) {
-            // Aquí iría la llamada a la API para eliminar
-            console.log("Eliminando blog con ID:", id);
-            // Actualizar lista después de eliminar
-            const updatedBlogs = blogPaginado.filter(b => b.id !== id);
-            setBlogPaginado(updatedBlogs);
-        }
-    };
+      {blogSelected && (
+        <UpdateBlogModal
+          blog={blogSelected}
+          openModal={openUpdateModal}
+          onClose={() => setOpenUpdateModal(false)}
+          onSuccess={() => getBlogs(10)}
+        />
+      )}
 
-    const handleFormSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        try {
-            // Aquí iría la llamada a la API para crear/actualizar
-            console.log("Enviando formulario:", blogForm.formData);
-            
-            // Simular envío exitoso
-            setTimeout(() => {
-                alert(`Blog ${modalMode === "create" ? "creado" : "actualizado"} exitosamente`);
-                setShowModal(false);
-                blogForm.resetForm();
-                setIsLoading(false);
-            }, 1000);
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Error al guardar el blog");
-            setIsLoading(false);
-        }
-    };
+      <AddBlogModal
+        openModal={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        onSuccess={() => getBlogs(10)}
+      />
 
-    const handleCloseModal = () => {
-        setShowModal(false);
-        blogForm.resetForm();
-        setSelectedBlog(null);
-    };
+      <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
+      {error && (
+                <div>
+                    {error}
+                </div>
+            )}
+      
+      <AdminTable
+        minRows={10}
+        columns={columns}
+        data={blogs}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
-    const topButtons = [
-        { label: "Exportar CSV", onClick: () => exportCSV(blogPaginado) },
-        { label: "Exportar Excel", onClick: () => exportExcel(blogPaginado) },
-        { label: "Exportar PDF", onClick: () => exportToPDF(blogPaginado) },
-        { label: "Imprimir", onClick: () => exportToPDF(blogPaginado) },
-    ];
-
-    return (
-        <div>
-            <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
-
-            <AdminTable
-                minRows={10}
-                columns={columns}
-                data={blogPaginado}
-                onDelete={onDelete}
-                onEdit={onEdit}
-            />
-
-            <ActionButtonGroup
-                buttons={[{ label: "Añadir Blog", onClick: onAdd, variant: "tertiary" }]}
-                className="mt-4"
-            />
-
-            <div className="col-span-full flex justify-center order-3 my-6">
-                <Pagination pageSize={2} items={BlogData} setProductosPaginados={setBlogPaginado} />
-            </div>
-
-            {/* Modal para crear/editar blog */}
-            <Modal
-                isOpen={showModal}
-                onClose={handleCloseModal}
-                title={modalMode === "create" ? "Crear Nuevo Blog" : "Editar Blog"}
-                size="lg"
-            >
-                <BlogForm
-                    formData={blogForm.formData}
-                    previewSecundarias={blogForm.previewSecundarias}
-                    onInputChange={blogForm.handleInputChange}
-                    onBeneficioChange={blogForm.handleBeneficioChange}
-                    onImageChange={blogForm.handleImageChange}
-                    onImageAltChange={blogForm.handleImageAltChange}
-                    onSecondaryImageChange={blogForm.handleSecondaryImageChange}
-                    onBeneficiosChange={blogForm.handleBeneficiosChange}
-                    onSubmit={handleFormSubmit}
-                    onCancel={handleCloseModal}
-                    isLoading={isLoading}
-                    mode={modalMode}
-                    productos={[
-                        { id: "1", nombre: "Producto 1" },
-                        { id: "2", nombre: "Producto 2" },
-                    ]}
-                />
-            </Modal>
+      {meta && (
+        <div className="flex justify-center my-6">
+          <PaginationServer
+            meta={meta}
+            links={links}
+            onPrevPage={goToPrevPage}
+            onNextPage={goToNextPage}
+            isLoading={isLoading}
+          />
         </div>
-    );
+      )}
+    </div>
+  );
 }

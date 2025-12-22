@@ -1,75 +1,68 @@
-import React from "react";
+import React from 'react';
 
-interface SelectOption {
-    value: string;
-    label: string;
-}
+type SelectOption = {
+  value: string | number;
+  label: string;
+};
 
-interface SelectProps {
-    label?: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    options: SelectOption[];
-    placeholder?: string;
-    required?: boolean;
-    disabled?: boolean;
-    className?: string;
-    helperText?: string;
-    selectedText?: string;
-}
+type SelectProps = {
+  // Acepta tanto string[] como objetos con value/label
+  options: string[] | SelectOption[];
+  name?: string;
+  textLabel?: string;
+  colorLabel?: string;
+  defaultValue?: string | number;
+  required?: boolean;
+  multiple?: boolean;
+  className?: string;
+};
 
-export default function Select({
-    label,
-    name,
-    value,
-    onChange,
-    options,
-    placeholder = "-- Selecciona una opción --",
-    required = false,
-    disabled = false,
-    className = "",
-    helperText,
-    selectedText,
-}: SelectProps) {
-    const selectedOption = options.find(opt => opt.value === value);
+const Select = ({
+  name,
+  options,
+  textLabel,
+  colorLabel = "text-black",
+  defaultValue = "",
+  required = false,
+  multiple = false,
+  className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2"
+}: SelectProps) => {
+  // Normalizar opciones al formato {value, label}
+  const normalizedOptions: SelectOption[] = options.map((opt) => {
+    if (typeof opt === 'string') {
+      return { value: opt, label: opt };
+    }
+    return opt;
+  });
 
-    return (
-        <div className="w-full">
-            {label && (
-                <label className="block mb-2 font-medium text-gray-700">
-                    {label}
-                    {required && <span className="text-red-500 ml-1">*</span>}
-                </label>
-            )}
+  return (
+    <div className="flex flex-col gap-2">
+      {textLabel && (
+        <label className={colorLabel}>
+          {textLabel}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      )}
+      <select
+        name={name}
+        className={`${className} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        defaultValue={defaultValue}
+        required={required}
+        multiple={multiple}
+      >
+        {!multiple && (
+          <option value="" disabled>
+            --- Selecciona una opción ---
+          </option>
+        )}
+        {normalizedOptions.map((option, index) => (
+          <option key={index} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
 
-            <select
-                name={name}
-                value={value}
-                onChange={onChange}
-                required={required}
-                disabled={disabled}
-                className={`w-full bg-white text-black p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed ${className}`}
-            >
-                <option value="">{placeholder}</option>
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
-
-            {helperText && (
-                <small className="text-gray-500 block mt-1">
-                    {helperText}
-                </small>
-            )}
-
-            {selectedText && value && selectedOption && (
-                <p className="text-xs text-gray-500 mt-1">
-                    {selectedText}: <strong>{selectedOption.label}</strong>
-                </p>
-            )}
-        </div>
-    );
-}
+export default Select;

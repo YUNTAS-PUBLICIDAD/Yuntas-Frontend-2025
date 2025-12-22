@@ -8,8 +8,8 @@ import FormContainer from "@/components/molecules/contacto/FormContainer";
 
 const SolicitudInfo: React.FC = () => {
   return (
-    <section className="bg-white">
-      <div className="container mx-auto px-4 text-center">
+    <section className="bg-white ">
+      <div className="container mx-auto px-4 text-center ">
         <FormContainer>
           {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para mejor legibilidad en todos los dispositivos */}
           <TextTitulo
@@ -19,24 +19,25 @@ const SolicitudInfo: React.FC = () => {
             <span className="font-semibold">SOLICITA INFORMACIÓN</span>
           </TextTitulo>
 
-          <form className="space-y-6 px-4 md:px-16 py-8 max-w-3xl mx-auto">
+          <form className="space-y-6 px-4 md:px-16 py-8 max-w-3xl mx-auto ">
             {/* Nombre / Apellido */}
             <FormRow columns={2}>
-              <InputText placeholder="Nombre" />
-              <InputText placeholder="Apellido" />
+              <InputText placeholder="Nombre" className="rounded-xl" />
+              <InputText placeholder="Apellido" className="rounded-xl" />
             </FormRow>
 
             {/* Teléfono / Distrito */}
             <FormRow columns={2}>
-              <InputText placeholder="Teléfono" />
-              <InputText placeholder="Distrito" />
+              <InputText  placeholder="Teléfono" className="rounded-xl" />
+              <InputText placeholder="Distrito" className="rounded-xl" />
             </FormRow>
 
-            <InputText placeholder="Detalle de solicitud"/>
+            <InputText placeholder="Detalle de solicitud" 
+            className="rounded-xl" />
 
             <TextArea placeholder="Mensaje" className="h-40" />
 
-            <div className="text-center">
+            <div className="text-center ">
               <PrimaryButton>ENVIAR</PrimaryButton>
             </div>
           </form>
