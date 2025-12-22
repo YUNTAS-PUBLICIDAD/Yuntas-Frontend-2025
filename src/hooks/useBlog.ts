@@ -11,8 +11,6 @@ import {
   getBlogBySlugAction
 } from "@/actions/blogActions";
 import { buildBlogFormData } from "@/utils/blogFormData";
-// NOTA: Importar datos de prueba locales para desarrollo
-import { blogTestData } from "@/data/blog/blogData";
 
 export function useBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -31,11 +29,15 @@ export function useBlogs() {
     setError(null);
     setCurrentPerPage(perPage);
 
-    // MODIFICADO: Usar datos locales de prueba en lugar del API backend
-    // TODO: Cambiar a getBlogsAction(perPage) cuando esté disponible el backend
-    setBlogs(blogTestData as Blog[]);
-    setMeta({ total: blogTestData.length, per_page: perPage, from: 1, to: blogTestData.length, current_page: 1, last_page: 1 });
-    setLinks({ first: null, last: null, prev: null, next: null });
+    const result = await getBlogsAction(perPage);
+    console.log(result)
+    if (result.success && result.data) {
+      setBlogs(result.data.data ?? []);
+      setMeta(result.meta ?? null);
+      setLinks(result.links ?? null);
+    } else {
+      setError(result.message ?? 'Error desconocido');
+    }
 
     setIsLoading(false);
   }, []);

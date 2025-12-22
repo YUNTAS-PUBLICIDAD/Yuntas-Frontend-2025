@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '@/components/atoms/Input';
 import TextArea from '@/components/atoms/TextArea';
 import { BlogInput } from '@/types/admin/blog';
+import Select from '@/components/atoms/Select';
 
 type BlogSEOSectionProps = {
   blog: BlogInput;
@@ -15,7 +16,7 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => (
     </h3>
 
     <div className="flex flex-col gap-4">
-
+      {/* <Select options={}></Select> */}
       <div className='w-full '>
         <Input
           borderColor='border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all'
