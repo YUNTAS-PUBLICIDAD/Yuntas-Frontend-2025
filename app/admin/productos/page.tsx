@@ -68,22 +68,22 @@ export default function ProductosPage() {
         { 
             label: "EXPORTAR A CSV", 
             onClick: () => exportToCSV(products), 
-            variant: "info" 
+            backgraund: "#5bc5c7"
         },
         { 
             label: "EXPORTAR A EXCEL", 
             onClick: () => exportToExcel(products),
-            variant: "info"
+            backgraund: "#5bc5c7"
         },
         { 
             label: "EXPORTAR A PDF", 
             onClick: () => exportToPDF(products),
-            variant: "info"
+           backgraund: "#5bc5c7"
         },
         { 
             label: "IMPRIMIR", 
             onClick: printTable, 
-            variant: "info"
+            backgraund: "#5bc5c7"
         },
     ];
 
