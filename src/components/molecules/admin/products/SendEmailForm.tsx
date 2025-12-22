@@ -11,7 +11,7 @@ const SendEmailForm: React.FC<Props> = ({ products, onClose }) => {
         selectedProductId, setSelectedProductId, 
         sections, handleTextChange, handleFileChange, 
         handleSubmit, isSending 
-    } = useSendEmail(onClose);
+    } = useSendEmail(onClose, products);
 
     return (
         <div className="flex flex-col gap-6 p-4">
@@ -39,17 +39,23 @@ const SendEmailForm: React.FC<Props> = ({ products, onClose }) => {
                         <h3 className="text-red-700 font-bold text-lg">Sección Email {index + 1}</h3>
                     </div>
 
+                    {/* IMAGEN PRINCIPAL */}
                     <div className="mb-4">
                         <label className="block text-gray-500 text-sm mb-1">Imagen Principal</label>
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition relative">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition relative h-48 overflow-hidden">
                             <input 
                                 type="file" 
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                 onChange={(e) => handleFileChange(index, 'mainImage', e.target.files?.[0] || null)}
                                 accept="image/*"
                             />
-                            {section.mainImage ? (
-                                <span className="text-green-600 font-medium">{section.mainImage.name}</span>
+                            
+                            {section.mainImagePreview ? (
+                                <img 
+                                    src={section.mainImagePreview} 
+                                    alt="Preview" 
+                                    className="absolute inset-0 w-full h-full object-contain p-2"
+                                />
                             ) : (
                                 <>
                                     <span className="text-gray-400 text-2xl mb-2">🖼️</span>
@@ -59,38 +65,40 @@ const SendEmailForm: React.FC<Props> = ({ products, onClose }) => {
                         </div>
                     </div>
 
-                    {/* IMÁGENES SECUNDARIAS (Grid de 2) */}
+                   {/* GRID SECUNDARIAS */}
                     <div className="grid grid-cols-2 gap-4 mb-4">
+                        {/* Secundaria 1 */}
                         <div>
                             <label className="block text-gray-500 text-sm mb-1">Imagen Secundaria 1</label>
-                            <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 relative h-32">
+                            <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 relative h-32 overflow-hidden">
                                 <input 
                                     type="file" 
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     onChange={(e) => handleFileChange(index, 'secondaryImage1', e.target.files?.[0] || null)}
                                     accept="image/*"
                                 />
-                                {section.secondaryImage1 ? (
-                                    <span className="text-green-600 text-xs text-center truncate w-full">{section.secondaryImage1.name}</span>
+                                {section.secondaryImage1Preview ? (
+                                    <img src={section.secondaryImage1Preview} className="absolute inset-0 w-full h-full object-contain p-1" />
                                 ) : (
-                                    <span className="text-gray-500 text-xs text-center">Subir imagen</span>
+                                    <span className="text-gray-500 text-xs text-center">Subir</span>
                                 )}
                             </div>
                         </div>
+
                         {/* Secundaria 2 */}
                         <div>
                             <label className="block text-gray-500 text-sm mb-1">Imagen Secundaria 2</label>
-                            <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 relative h-32">
+                            <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 relative h-32 overflow-hidden">
                                 <input 
                                     type="file" 
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     onChange={(e) => handleFileChange(index, 'secondaryImage2', e.target.files?.[0] || null)}
                                     accept="image/*"
                                 />
-                                {section.secondaryImage2 ? (
-                                    <span className="text-green-600 text-xs text-center truncate w-full">{section.secondaryImage2.name}</span>
+                                {section.secondaryImage2Preview ? (
+                                    <img src={section.secondaryImage2Preview} className="absolute inset-0 w-full h-full object-contain p-1" />
                                 ) : (
-                                    <span className="text-gray-500 text-xs text-center">Subir imagen</span>
+                                    <span className="text-gray-500 text-xs text-center">Subir</span>
                                 )}
                             </div>
                         </div>
