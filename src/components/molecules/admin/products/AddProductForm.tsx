@@ -40,8 +40,16 @@ interface Props {
 }
 
 export default function AddProductForm({ onClose }: Props) {
-    const { formData, handleChange, handleListChange, addListItem, handleFileChange, handleSubmit, isSaving } = useAddProduct(onClose);
-
+   const { 
+        formData, 
+        handleChange, 
+        handleListChange, 
+        addListItem, 
+        removeListItem, 
+        handleFileChange, 
+        handleSubmit, 
+        isSaving 
+    } = useAddProduct(onClose);
     return (
         <div className="flex flex-col gap-6 p-1">
             <h2 className="text-xl font-bold text-[#0D1030] border-b pb-2">Ingresar Datos</h2>
@@ -85,10 +93,34 @@ export default function AddProductForm({ onClose }: Props) {
                             onChange={handleChange}
                         />
                     </div>
-                     <div className="flex flex-col gap-1 md:col-span-2">
-                        <label className="text-xs text-blue-500">Keywords (SEO)</label>
-                        <InputText name="keywords" placeholder="ej: letreros para negocio" value={formData.keywords} onChange={handleChange} className="bg-white" />
-                        <button className="text-blue-500 text-xs text-left mt-1 hover:underline">+ Agregar keyword</button>
+                     <div className="flex flex-col gap-1 md:col-span-2 bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                        <label className="text-xs text-blue-600 font-bold mb-1">Keywords (SEO)</label>
+                        
+                        {formData.keywords.map((kw, index) => (
+                            <div key={index} className="flex gap-2 mb-2 items-center">
+                                <InputText
+                                    value={kw}
+                                    onChange={(e) => handleListChange('keywords', index, e.target.value)}
+                                    placeholder="ej: letreros para negocio"
+                                    className="bg-white flex-1"
+                                />
+                                <button 
+                                    onClick={() => removeListItem('keywords', index)}
+                                    className="text-red-400 hover:text-red-600 font-bold text-lg px-2"
+                                    title="Eliminar keyword"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        ))}
+                        
+                        <button 
+                            onClick={() => addListItem('keywords')} 
+                            className="text-blue-500 text-xs font-bold hover:underline text-left mt-1 flex items-center gap-1"
+                        >
+                            + Agregar keyword
+                        </button>
+                        <p className="text-[10px] text-gray-400 mt-1">Palabras clave relevantes para buscadores.</p>
                     </div>
                 </div>
             </div>
