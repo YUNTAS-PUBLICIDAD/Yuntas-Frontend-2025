@@ -6,9 +6,9 @@ import { FaQuoteLeft } from "react-icons/fa";
 import { FaQuoteRight } from "react-icons/fa";
 
 interface OpinionCardProps {
-  quote: string;
+  quote?: string;
   description: string;
-  author: string;
+  author?: string;
   stars?: number;
   className?:string
 }
@@ -26,7 +26,11 @@ const OpinionCard: React.FC<OpinionCardProps> = ({
         <FaQuoteLeft className="inline-block " />{quote}
       </Text>
       <Text variant="body" className="text-gray-700 leading-relaxed  md:mb-3 ">
-        {description} <FaQuoteRight className="inline-block "/>
+           <div
+            dangerouslySetInnerHTML={{
+              __html: description ?? "",
+            }}
+          /> <FaQuoteRight className="inline-block "/>
       </Text>
       <div className="flex gap-1 md:mb-2">
         {Array.from({ length: stars }).map((_, i) => (

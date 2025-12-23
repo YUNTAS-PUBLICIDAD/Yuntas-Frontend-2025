@@ -7,7 +7,8 @@ import {
   getBlogsAction,
   createBlogAction,
   updateBlogAction,
-  deleteBlogAction
+  deleteBlogAction,
+  getBlogBySlugAction
 } from "@/actions/blogActions";
 import { buildBlogFormData } from "@/utils/blogFormData";
 // NOTA: Importar datos de prueba locales para desarrollo
@@ -59,23 +60,23 @@ export function useBlogs() {
   const goToNextPage = () => links?.next && goToPage(links.next);
   const goToPrevPage = () => links?.prev && goToPage(links.prev);
 
-//   const getBlogBySlug = async (slug: string) => {
-//     setIsLoading(true);
-//     setError(null);
+  // Conseguir blog por su slug
+  const getBlogBySlug = async (slug: string) => {
+     setIsLoading(true);
+     setError(null);
 
-//     const result = await getBlogBySlugAction(slug);
+      const result = await getBlogBySlugAction(slug);
 
-//     if (result.success && result.data) {
-//       setBlog(result.data);
-//       setIsLoading(false);
-//       return result.data;
-//     }
+      if (result.success && result.data) {
+         setBlog(result.data ?? null);
+         setIsLoading(false);
+         return result.data;
+       }
 
-//     setError(result.message ?? 'Error desconocido');
-//     setIsLoading(false);
-//     return null;
-//   };
-
+     setError(result.message ?? 'Error desconocido');
+     setIsLoading(false);
+     return null;
+   }
   const createBlog = async (data: BlogInput) => {
     setIsLoading(true);
     setError(null);
@@ -121,7 +122,7 @@ export function useBlogs() {
     getBlogs,
     goToNextPage,
     goToPrevPage,
-    // getBlogBySlug,
+    getBlogBySlug,
     createBlog,
     updateBlog,
     deleteBlog
