@@ -17,6 +17,7 @@ interface Props {
 const BLOG_INICIAL:BlogInput={
   titulo: "",
   subtitulo: "",
+  categorias: [],
   contenido: "",
   url_video: "",
   etiqueta: {
@@ -37,9 +38,9 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
     const [blog, setBlog] = useState<BlogInput>(BLOG_INICIAL)
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log(blog)
         const success = await createBlog(blog);
         if (success) {
-            console.log(blog)
             alert("Blog creado correctamente");
             onSuccess?.(); 
             onClose();

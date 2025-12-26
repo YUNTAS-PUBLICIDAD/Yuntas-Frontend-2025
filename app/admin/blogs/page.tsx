@@ -20,10 +20,11 @@ import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { Blog } from "@/types/admin/blog";
+import { render } from "react-dom";
 
 const columns = [
   { key: "id", label: "ID" },
-  { key: "cover_subtitle", label: "TÍTULO" },
+  { key: "categories", label: "PRODUCTO",render:(_:unknown,row:Blog)=>row.categories[0].name },
   { key: "meta_title", label: "SUBTÍTULO" },
   {
     key: "gallery",

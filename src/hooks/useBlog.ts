@@ -82,8 +82,18 @@ export function useBlogs() {
   const createBlog = async (data: BlogInput) => {
     setIsLoading(true);
     setError(null);
+   console.log("📤 DATOS ORIGINALES:", data);
+  
+  const formData = buildBlogFormData(data);
+  
+  console.log("📦 FORMDATA CONSTRUIDO:");
+  for (let [key, value] of formData.entries()) {
+    console.log(`  ${key}:`, value);
+  }
 
-    const result = await createBlogAction(buildBlogFormData(data));
+  const result = await createBlogAction(formData);
+  
+  console.log("📥 RESPUESTA:", result);
 
     if (!result.success) setError(result.message ?? 'Error desconocido');
     setIsLoading(false);
