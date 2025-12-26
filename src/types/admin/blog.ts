@@ -14,7 +14,7 @@ export interface BlogInput {
 
   imagenes?: File[];
   imagenes_alts: string[];
-
+  categorias?:categoria[]
   imagen_principal_url?: string | null;
   imagenes_urls?: string[];
 
@@ -22,7 +22,11 @@ export interface BlogInput {
   beneficios?: string[];
   bloques?: BlogBloque[];
 }
-
+interface categoria{
+  id:number;
+  name:string;
+  slug:string;
+}
 
 export interface PaginationLinks {
   first: string | null;
@@ -61,6 +65,7 @@ export interface Blog {
   id: number;
   title: string;
   slug: string;
+  categories:categoria[]
   cover_subtitle: string | null;
   content: string | null;
   created_at: string;

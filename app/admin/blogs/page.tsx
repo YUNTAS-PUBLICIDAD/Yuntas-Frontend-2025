@@ -7,24 +7,24 @@ import { useBlogs } from "@/hooks/useBlog";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-import ActionButton from "@/components/atoms/ActionButton";
 
 import PaginationServer from "@/components/molecules/PaginationServer";
 
 
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
 import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
-import EditBlogModal from "@/components/organisms/admin/ModalActions/EditBlogModal";
+import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
 import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
 
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { Blog } from "@/types/admin/blog";
+import { render } from "react-dom";
 
 const columns = [
   { key: "id", label: "ID" },
-  { key: "cover_subtitle", label: "TÍTULO" },
+  { key: "categories", label: "PRODUCTO",render:(_:unknown,row:Blog)=>row.categories[0].name },
   { key: "meta_title", label: "SUBTÍTULO" },
   {
     key: "gallery",
@@ -58,9 +58,10 @@ export default function Blogspage() {
     getBlogs(10); // carga inicial
   }, [getBlogs]);
   const topButtons = useMemo(() => [
-    { label: "Exportar CSV", onClick: () => exportCSV(blogs), variant: "tertiary" as const },
-    { label: "Exportar Excel", onClick: () => exportExcel(blogs), variant: "tertiary" as const },
-    { label: "Exportar PDF", onClick: () => exportToPDF(blogs), variant: "tertiary" as const },
+    { label: "Publicar", onClick: () => setOpenAddModal(true) },
+    { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
+    { label: "Exportar Excel", onClick: () => exportExcel(blogs) },
+    { label: "Exportar PDF", onClick: () => exportToPDF(blogs) },
   ], [blogs]);
   const handleEdit = (blog: Blog) => {
     setBlogSelected(blog);
@@ -86,10 +87,10 @@ export default function Blogspage() {
       )}
 
       {blogSelected && (
-        <EditBlogModal
-          blogToEdit={blogSelected}
-          isOpen={openUpdateModal}
-          setIsOpen={setOpenUpdateModal}
+        <UpdateBlogModal
+          blog={blogSelected}
+          openModal={openUpdateModal}
+          onClose={() => setOpenUpdateModal(false)}
           onSuccess={() => getBlogs(10)}
         />
       )}
@@ -114,13 +115,6 @@ export default function Blogspage() {
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
-
-      {/* Botón Añadir Blog debajo de la tabla */}
-      <div className="mt-6 flex justify-start">
-        <ActionButton variant="primary" onClick={() => setOpenAddModal(true)}>
-          Añadir Blog
-        </ActionButton>
-      </div>
 
       {meta && (
         <div className="flex justify-center my-6">
