@@ -23,7 +23,7 @@ const HeroPage = ({ url, text, position = "medio" }: HeroPageProps) => {
       className={`relative w-full h-screen flex items-center ${posicionesText[position]} 
       overflow-hidden pt-24 bg-cover bg-center bg-no-repeat  px-8 md:px-0 text-center
        md:h-screen h-[80vh] md:pt-24 `}
-      style={{ backgroundImage: `url(${bg})` }}
+      style={{ backgroundImage: `url(${url})` }}
 
     >
       <Heading
