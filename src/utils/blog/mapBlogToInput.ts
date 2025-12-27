@@ -1,10 +1,17 @@
-import {  BlogInput } from "@/types/admin/blog";
-import { Blog } from "@/types/admin/blog";
+// utils/blog/mapBlogToInput.ts
+import { BlogInput, Blog } from "@/types/admin/blog";
+
 export const mapBlogToInput = (blog: Blog): BlogInput => ({
   titulo: blog.slug ?? "",
   subtitulo: blog.cover_subtitle ?? "",
   contenido: blog.content ?? "",
   url_video: blog.video_url ?? "",
+
+  categorias: blog.categories?.map(cat => ({
+    id: cat.id,
+    name: cat.name,
+    slug: cat.slug
+  })) ?? [],
 
   etiqueta: {
     meta_titulo: blog.meta_title ?? "",
@@ -13,12 +20,14 @@ export const mapBlogToInput = (blog: Blog): BlogInput => ({
 
   imagen_principal: null, // no se puede convertir imagen remota a File
   imagen_principal_alt: blog.main_image?.alt ?? "",
-  imagen_principal_url: blog.main_image?.url ?? "",
-  // CORREGIDO: Validar que gallery exista antes de mapear
-  imagenes_urls: blog.gallery?.map(img => img.url) ?? [],
+  imagen_principal_url: blog.main_image?.url ?? null, // ✅ Cambiado a null en vez de ""
+
   imagenes: [],
+  imagenes_urls: blog.gallery?.map(img => img.url) ?? [],
   imagenes_alts: blog.gallery?.map(img => img.alt ?? "") ?? [],
 
   parrafos: blog.paragraphs ?? [],
   beneficios: blog.benefits ?? [],
+  
+
 });

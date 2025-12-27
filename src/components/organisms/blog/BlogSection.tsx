@@ -14,6 +14,7 @@ type Props={
 const BlogSection = ({data}:Props) => {
   const [listaBlog, setListaBlog] = useState<Blog[]>(data);
   const [blogPaginado, setBlogPaginado] = useState<Blog[]>(data)
+  console.log(data)
   return (
     <section className='py-6 md:py-10'>
       <Banner className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-10 lg:px-20 md:flex-row md:items-center'>
@@ -27,7 +28,7 @@ const BlogSection = ({data}:Props) => {
               key={blog.slug}
               href={`/blog/${blog.slug}`}
               className='transform transition-transform hover:scale-[1.02]  rounded-3xl'>
-              <BlogCard nombre={blog.cover_subtitle || ""} img={getImg(blog.main_image?.url) } descripcion={blog.meta_title || "" }/>
+              <BlogCard nombre={blog.categories[0].name || ""} img={getImg(blog.main_image?.url) } descripcion={blog.meta_title || "" }/>
             </Link>
           ))}
         </div>
