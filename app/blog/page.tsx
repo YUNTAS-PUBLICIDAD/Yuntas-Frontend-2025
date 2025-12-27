@@ -20,7 +20,7 @@ import { useEffect } from "react";
   const {getBlogs,blogs,isLoading}=useBlogs();
   useEffect(() => {
       getBlogs(6); 
-    }, [getBlogs]);
+    }, []);
   console.log("estos on los blogs",blogs);
   return (
     <main >

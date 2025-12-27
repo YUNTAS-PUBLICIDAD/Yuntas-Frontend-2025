@@ -1,7 +1,6 @@
 
 import {useState,useMemo,useEffect} from 'react'
 import { Producto } from '@/types/producto';
-import { productosData } from '@/data/productosData';
 interface CategoriaItem {
   nombre: string;
   count: number;
@@ -14,12 +13,15 @@ export  const useCategorias=(lista:Producto[])=>{
 
     const listaCategorias: CategoriaItem[] = useMemo(() => {
         const categoriasUnicas = Array.from(
-            new Set(lista.flatMap((p) => p.categories[0].name))
+            new Set(lista.flatMap((p) => { 
+                    return p.categories[0]?.name ? [p.categories[0].name] : [];
+                } 
+            ))
         );
         
         const categorias = categoriasUnicas.map((nombre) => ({
             nombre,
-            count: lista.filter((p) => p.categories[0].name === nombre).length,
+            count: lista.filter((p) => p.categories[0]?.name === nombre).length,
         }));
 
         return [
