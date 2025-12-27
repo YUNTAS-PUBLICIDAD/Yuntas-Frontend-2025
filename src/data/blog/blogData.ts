@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import axios from "axios";
 
 const BlogData = async () => {
@@ -8,7 +8,7 @@ const BlogData = async () => {
 };
 
 export default BlogData;
-=======
+
 // Datos de prueba para la tabla de blogs en modo desarrollo
 // NOTA: Estos datos son locales y se usan solo para testing
 // En producción, los datos se obtienen desde el API backend
@@ -36,4 +36,4 @@ export const blogTestData = [
     },
     
 ];
->>>>>>> origin/pre-masterf
+
