@@ -1,5 +1,5 @@
 // Marca como Client Component para usar hooks de navegación
-"use client";
+  "use client";
 
 import React from "react";
 // Hook para navegación en Client Components
@@ -12,7 +12,7 @@ import testimonialsBg from "@/assets/inicio/testimonialbackground.webp";
 
 const TestimonialsSection: React.FC = () => {
   // Instancia del router para manejar navegación 
-  const router = useRouter();
+    const router = useRouter();
   return (
     <section className="w-full bg-white py-0 px-0">
       <div className="w-full bg-[#18BFE3] py-6 px-6 md:px-16">
@@ -34,7 +34,7 @@ const TestimonialsSection: React.FC = () => {
               size="lg" 
               className="px-16 py-4 text-xl rounded-full shadow-xl font-bold tracking-wide"
               // Redirige a la página de contacto al hacer clic
-              onClick={() => router.push('/contacto')}
+                onClick={() => router.push('/contacto')}
             >
               ¡COTIZA AHORA!
             </Button>
