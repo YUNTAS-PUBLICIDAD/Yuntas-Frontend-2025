@@ -1,4 +1,9 @@
+// Marca como Client Component para usar hooks de navegación
+  "use client";
+
 import React from "react";
+// Hook para navegación en Client Components
+import { useRouter } from "next/navigation";
 import TestimonialCard from "@/components/molecules/inicio/TestimonialCard";
 import Text from "@/components/atoms/Text";
 import Button from "@/components/atoms/Button";
@@ -6,6 +11,8 @@ import { testimonialsData } from "@/data/inicio/testimonialsData";
 import testimonialsBg from "@/assets/inicio/testimonialbackground.webp";
 
 const TestimonialsSection: React.FC = () => {
+  // Instancia del router para manejar navegación 
+    const router = useRouter();
   return (
     <section className="w-full bg-white py-0 px-0">
       <div className="w-full bg-[#18BFE3] py-6 px-6 md:px-16">
@@ -22,7 +29,13 @@ const TestimonialsSection: React.FC = () => {
             ))}
           </div>
           <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 flex justify-center z-20">
-            <Button variant="primary" size="lg" className="px-16 py-4 text-xl rounded-full shadow-xl font-bold tracking-wide">
+            <Button 
+              variant="primary" 
+              size="lg" 
+              className="px-16 py-4 text-xl rounded-full shadow-xl font-bold tracking-wide"
+              // Redirige a la página de contacto al hacer clic
+                onClick={() => router.push('/contacto')}
+            >
               ¡COTIZA AHORA!
             </Button>
           </div>
