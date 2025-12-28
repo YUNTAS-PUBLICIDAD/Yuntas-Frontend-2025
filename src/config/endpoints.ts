@@ -56,7 +56,11 @@ export const API_ENDPOINTS = {
         GET_ONE: (id: number) => `/admin/contacto/${id}`,
         DELETE: (id: number) => `/admin/contacto/${id}`,
       }, 
-      CLAIMS: '/admin/claims', 
+      CLAIMS: {
+        GET_ALL: '/admin/claims',
+        GET_ONE: (id: number) => `/admin/claims/${id}`,
+        REPLY:  (id: number) => `/admin/claims/${id}/reply`,
+      } 
     }
   }
 };

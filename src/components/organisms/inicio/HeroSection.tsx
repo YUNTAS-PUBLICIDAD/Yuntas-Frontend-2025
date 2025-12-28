@@ -22,7 +22,7 @@ const HeroSection = () => {
             </Text>
           </div>
           <div className="flex md:w-1/2 w-full md:justify-end justify-center items-center md:h-full h-auto">
-              <Button variant="primary" size="lg" href="#contacto" className="relative z-20 md:mb-0 px-10 py-5 text-2xl">
+              <Button variant="primary" size="lg" href="/contacto" className="relative z-20 md:mb-0 px-10 py-5 text-2xl">
                 CONTÁCTANOS
               </Button>
           </div>

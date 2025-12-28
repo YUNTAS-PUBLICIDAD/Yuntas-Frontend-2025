@@ -15,6 +15,7 @@ type SelectProps = {
   required?: boolean;
   multiple?: boolean;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const Select = ({
@@ -25,7 +26,8 @@ const Select = ({
   defaultValue = "",
   required = false,
   multiple = false,
-  className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2"
+  className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2",
+  onChange
 }: SelectProps) => {
   // Normalizar opciones al formato {value, label}
   const normalizedOptions: SelectOption[] = options.map((opt) => {
@@ -49,6 +51,7 @@ const Select = ({
         defaultValue={defaultValue}
         required={required}
         multiple={multiple}
+        onChange={onChange}
       >
         {!multiple && (
           <option value="" disabled>

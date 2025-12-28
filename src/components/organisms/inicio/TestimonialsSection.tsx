@@ -22,7 +22,7 @@ const TestimonialsSection: React.FC = () => {
             ))}
           </div>
           <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 flex justify-center z-20">
-            <Button variant="primary" size="lg" className="px-16 py-4 text-xl rounded-full shadow-xl font-bold tracking-wide">
+            <Button variant="primary" href="/contacto" size="lg" className="px-16 py-4 text-xl rounded-full shadow-xl font-bold tracking-wide">
               ¡COTIZA AHORA!
             </Button>
           </div>

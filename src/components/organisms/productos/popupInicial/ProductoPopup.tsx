@@ -8,9 +8,10 @@ import CloseButton from "@/components/atoms/CloseButton";
 
 interface ProductoPopupProps {
   delay?: number;
+  imgSrc?: string;
 }
 
-const ProductoPopup: React.FC<ProductoPopupProps> = ({ delay = 5000 }) => {
+const ProductoPopup: React.FC<ProductoPopupProps> = ({ delay = 5000, imgSrc = imagenPopup.src }) => {
   const [show, setShow] = useState(false);
   const [closing, setClosing] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -49,11 +50,9 @@ const ProductoPopup: React.FC<ProductoPopupProps> = ({ delay = 5000 }) => {
         <CloseButton
           onClick={closeModal}
           className="absolute top-4 right-4 z-50 text-gray-500 hover:text-gray-700 p-2"
-        >
-          ✕
-        </CloseButton>
+        />
 
-        <PopupImage src={imagenPopup} />
+        <PopupImage src={imgSrc} />
 
         <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
           <PopupHeader title="¡Tu marca brillando como se merece!" />
