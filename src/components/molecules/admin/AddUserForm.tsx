@@ -3,119 +3,67 @@
 import { useState } from "react";
 import InputForm from "@/components/atoms/InputForm";
 import Button from "@/components/atoms/Button";
-
-interface UserFormData {
-    nombre: string;
-    email: string;
-    celular: string;
-    roles: string;
-    password: string;
-    confirmPassword: string;
-}
-
-interface AddUserFormProps {
-    onSubmit: (data: UserFormData) => void;
-    onCancel: () => void;
-}
+import { AddUserFormProps } from "@/types/admin";
 
 export default function AddUserForm({ onSubmit, onCancel }: AddUserFormProps) {
-    const [formData, setFormData] = useState<UserFormData>({
-        nombre: "",
+    const [formData, setFormData] = useState({
+        name: "",
         email: "",
-        celular: "",
-        roles: "",
         password: "",
-        confirmPassword: "",
+        role_id: 2, // Usuario normal por defecto
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: value,
+            [name]: name === "role_id" ? Number(value) : value
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         onSubmit(formData);
     };
 
     return (
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form className="flex flex-col gap-4">
             <InputForm
                 label="Nombre"
-                name="nombre"
-                value={formData.nombre}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
-                placeholder="Ingrese el nombre"
                 required
             />
-
             <InputForm
                 label="Email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="usuario@email.com"
                 required
             />
-
             <InputForm
-                label="Celular"
-                name="celular"
-                type="tel"
-                value={formData.celular}
-                onChange={handleChange}
-                placeholder="+51 999 999 999"
-            />
-
-            <InputForm
-                label="Roles (separados por coma)"
-                name="roles"
-                value={formData.roles}
-                onChange={handleChange}
-                placeholder="admin, vendedor"
-            />
-
-            <InputForm
-                label="Contraseña"
+                label="Password"
                 name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="********"
                 required
             />
+            <label>
+                Rol:
+                <select name="role_id" value={formData.role_id} onChange={handleChange}>
+                    <option value={1}>Administrador</option>
+                    <option value={2}>Usuario</option>
+                </select>
+            </label>
 
-            <InputForm
-                label="Confirmar contraseña"
-                name="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="********"
-                required
-            />
-
-            {/* Botones */}
-            <div className="col-span-1 md:col-span-2 flex justify-end gap-4 mt-4">
-                <Button
-                    type="button"
-                    variant="tertiary"
-                    size="md"
-                    onClick={onCancel}
-                >
-                    Cancelar
+            <div className="flex gap-4 mt-4">
+                <Button type="button" variant="primary" onClick={handleSubmit} className="flex-1">
+                    Guardar
                 </Button>
-
-                <Button
-                    type="submit"
-                    variant="primary"
-                    size="md"
-                >
-                    Agregar usuario
+                <Button type="button" variant="tertiary" onClick={onCancel} className="flex-1">
+                    Cancelar
                 </Button>
             </div>
         </form>

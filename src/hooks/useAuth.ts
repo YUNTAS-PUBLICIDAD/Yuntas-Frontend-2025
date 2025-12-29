@@ -24,14 +24,18 @@ export function useAuth(): UseAuthReturn {
         const result = await loginAction(credentials);
 
         if (result.success) {
+            // ✅ Guardar token en localStorage para frontend
+            if (result.user && result.token) {
+                localStorage.setItem("token", result.token);
+            }
+
             router.push("/admin");
             router.refresh();
         } else {
             setError(result.message);
-            
         }
 
-        setIsLoading(true);
+        setIsLoading(false);
     };
 
     const logout = async () => {
