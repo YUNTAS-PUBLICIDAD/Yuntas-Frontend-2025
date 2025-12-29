@@ -1,54 +1,82 @@
 import React from 'react'
 import Input from '@/components/atoms/Input'
 import Select from '@/components/atoms/Select'
-import { inputDatosData } from '@/data/reclamaciones/inputDatosData'
 import { selectsReclamos } from '@/data/reclamaciones/selectsReclamosData'
+import { ReclamoInput } from "@/types/admin/reclamo";
 
-const DatosBlock = () => {
+type DatosBlockProps = {
+    formData: ReclamoInput;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+}
 
-  const inputsTop = inputDatosData.slice(0, 2);   // Nombre, Apellido
-  const inputGrid = inputDatosData.slice(2, 3);   // Número documento
-  const inputsBottom = inputDatosData.slice(3);   // Correo, Teléfono
+const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
   const selectsGrid = selectsReclamos.slice(0, 1);  // Solo el select de Tipo documento
+
   return (
-      <div className='flex flex-col gap-6 w-full'>
-      {inputsTop.map((inp, i) => (
-          <Input
-          key={i}
-          textLabel={inp.textLabel}
-          placeholder={inp.placeholder}
-          size={inp.size}
-          type={inp.type}
-          />
-        ))}
-      <div className='grid grid-row-1 md:grid-cols-2 gap-6 '>
+    <div className='flex flex-col gap-6 w-full'>
+      <Input
+        textLabel="Nombre"
+        placeholder="ej: Jose Miguel"
+        size="xxl"
+        type="text"
+        required
+        name="first_name"
+        value={formData.first_name}
+        onChange={handleChange}
+      />
+      <Input
+        textLabel="Apellido"
+        placeholder="ej: Rojas Vasquez"
+        size="xxl"
+        type="text"
+        required
+        name="last_name"
+        value={formData.last_name}
+        onChange={handleChange}
+      />
+      <div className='grid grid-row-1 md:grid-cols-2 gap-6'>
         {selectsGrid.map((sel, i) => (
           <Select
             key={i}
             textLabel={sel.textLabel}
             options={sel.options}
+            required
+            name="document_type_id"
+            defaultValue={"DNI"}
+            onChange={handleChange}
           />
         ))}
-        {inputGrid.map((inp, i) => (
-          <Input
-            key={i}
-            textLabel={inp.textLabel}
-            placeholder={inp.placeholder}
-            size={inp.size}
-            type={inp.type}
-          />
-        ))}
+        <Input
+          textLabel="Número de documento"
+          placeholder="ej: 76798589"
+          size="xl"
+          type="number"
+          required
+          name="document_number"
+          value={formData.document_number}
+          onChange={handleChange}
+        />
       </div>
 
-      {inputsBottom.map((inp, i) => (
-        <Input
-          key={i}
-          textLabel={inp.textLabel}
-          placeholder={inp.placeholder}
-          size={inp.size}
-          type={inp.type}
-        />
-      ))}
+      <Input
+        textLabel="Correo Electrónico"
+        placeholder="ej: JoseM20@gmail.com"
+        size="xxl"
+        type="email"
+        required
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+      />
+      <Input
+        textLabel="Telefono"
+        placeholder="ej: 987654321"
+        size="xxl"
+        type="number"
+        name="phone"
+        value={formData.phone}
+        onChange={handleChange}
+      />
 
     </div>
   )

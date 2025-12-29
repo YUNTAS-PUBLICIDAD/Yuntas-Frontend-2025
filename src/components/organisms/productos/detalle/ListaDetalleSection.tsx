@@ -5,10 +5,11 @@ type ListaDetalleSectionProps = {
 	text: string;
 	listItems: string[];
 	imageSrc: string;
+    imageAlt: string;
 	reverse?: boolean;
 };
 
-export default function ListaDetalleSection({ text, listItems, imageSrc, reverse = false }: ListaDetalleSectionProps) {
+export default function ListaDetalleSection({ text, listItems, imageSrc, imageAlt, reverse = false }: ListaDetalleSectionProps) {
     return (
         <section className="w-full py-12 px-0 md:px-24 bg-white">
             <div className={`flex flex-row items-stretch md:items-center justify-between gap-2 md:gap-24 ${reverse ? 'flex-row-reverse' : ''}`}>
@@ -25,7 +26,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, reverse
                 <div className={`w-[45%] md:w-[60%] flex ${reverse ? 'justify-start' : 'justify-end'} md:justify-center items-center`}>
                     <SectionImage
                         src={imageSrc}
-                        alt="Pantalla LED de gran formato"
+                        alt={imageAlt}
                         className={`w-full h-full max-h-[18rem] md:min-h-0 md:max-w-[46rem] md:max-h-[38rem] object-cover md:aspect-square ${reverse ? 'rounded-r-3xl md:rounded-3xl' : 'rounded-l-3xl md:rounded-3xl'}`}
                     />
                 </div>
