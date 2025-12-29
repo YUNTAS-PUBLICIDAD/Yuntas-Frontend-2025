@@ -8,7 +8,7 @@ import Button from "@/components/atoms/Button";
 /* ===== Tipado ===== */
 export interface UserData {
     id: number;
-    nombre: string;
+    name: string;
     email: string;
 }
 
@@ -16,17 +16,19 @@ interface EditUserFormProps {
     isOpen: boolean;
     onClose: () => void;
     user: UserData | null;
+    onSave: (updatedUser: UserData) => void; // 🔹 Callback
 }
 
 export default function EditUserForm({
     isOpen,
     onClose,
     user,
+    onSave
 }: EditUserFormProps) {
 
     const [formData, setFormData] = useState<UserData>({
         id: 0,
-        nombre: "",
+        name: "",
         email: "",
     });
 
@@ -48,7 +50,7 @@ export default function EditUserForm({
     };
 
     const handleSave = () => {
-        console.log("Usuario editado:", formData);
+        onSave(formData); // 🔹 Llamamos al padre
         onClose();
     };
 
@@ -61,8 +63,8 @@ export default function EditUserForm({
             <form className="flex flex-col gap-4">
                 <InputForm
                     label="Nombre"
-                    name="nombre"
-                    value={formData.nombre}
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     required
                 />

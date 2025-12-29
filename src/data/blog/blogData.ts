@@ -1,3 +1,14 @@
+
+import axios from "axios";
+
+const BlogData = async () => {
+  return axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/blog`
+  );
+};
+
+export default BlogData;
+
 // Datos de prueba para la tabla de blogs en modo desarrollo
 // NOTA: Estos datos son locales y se usan solo para testing
 // En producción, los datos se obtienen desde el API backend
@@ -25,3 +36,4 @@ export const blogTestData = [
     },
     
 ];
+

@@ -25,6 +25,7 @@ const BLOG_INICIAL:BlogInput={
   subtitulo: "",
   contenido: "",
   url_video: "",
+  categorias: [],
   etiqueta: {
     meta_titulo: "",
     meta_descripcion: "",
