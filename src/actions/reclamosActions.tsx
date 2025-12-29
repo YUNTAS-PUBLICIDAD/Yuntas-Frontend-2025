@@ -70,6 +70,7 @@ export async function createReclamoAction(ReclamoData: ReclamoInput): Promise<Re
             data: response.data.data
         };
     } catch (error) {
+        console.log(error)
         return { success: false, message: "No se pudo crear el reclamo" };
     }
 }

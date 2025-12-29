@@ -33,6 +33,8 @@ const Select = ({
   const normalizedOptions: SelectOption[] = options.map((opt) => {
     if (typeof opt === 'string') {
       return { value: opt, label: opt };
+    } else if (typeof opt === 'object') { // especialmente para productos
+      return {value: opt.id, label: opt.name};
     }
     return opt;
   });

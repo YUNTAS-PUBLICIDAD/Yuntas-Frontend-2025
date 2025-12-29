@@ -63,6 +63,10 @@ export function useLibroReclamaciones() {
             return false;
         }
 
+        if (formData.product_id === 0) {
+            delete formData.product_id;
+        }
+
         const success = await createReclamo(formData);
 
         if (success) {

@@ -1,9 +1,11 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect } from 'react'
 import Input from '@/components/atoms/Input'
 import Select from '@/components/atoms/Select'
 import TextTarea from '@/components/atoms/TextTarea'
-import { selectsReclamos } from '@/data/reclamaciones/selectsReclamosData'
 import { ReclamoInput } from '@/types/admin/reclamo'
+import { useProductos } from '@/hooks/useProductos'
 
 type ReclamoBlockProps = {
     formData: ReclamoInput;
@@ -11,6 +13,11 @@ type ReclamoBlockProps = {
 }
 
 const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
+    const { getProductos, productos } = useProductos();
+
+    useEffect(() => {
+        getProductos(100);
+    }, [])
 
     return (
         <div className='flex flex-col gap-6 w-full'>
@@ -27,7 +34,7 @@ const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
             />
             <Select
                 textLabel="Productos"
-                options={selectsReclamos[1].options}
+                options={productos || []}
                 name="product_id"
                 onChange={handleChange}
             />
