@@ -40,7 +40,8 @@ export async function loginAction(credentials: LoginCredentials): Promise<LoginA
                 id: user.id,
                 name: user.name,
                 email: user.email,
-            }
+            },
+             token: token,
         };
 
     } catch (error: any) {

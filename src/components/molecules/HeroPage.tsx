@@ -26,6 +26,7 @@ const HeroPage = ({ url, text, position = "medio" }: HeroPageProps) => {
       style={{ backgroundImage: `url(${url})` }}
 
     >
+      <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
       <Heading
         level="h1"
         size="2xl"

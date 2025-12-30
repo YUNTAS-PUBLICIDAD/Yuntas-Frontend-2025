@@ -1,11 +1,11 @@
 import React from "react";
-
+import Link from "next/link";
 interface ButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
   size?: "sm" | "md" | "lg";
   href?: string;
-  onClick?: () => void;
+  onClick?: (e: React.FormEvent) => void;
   className?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
@@ -42,9 +42,9 @@ const Button: React.FC<ButtonProps> = ({
   
   if (href && !disabled) {
     return (
-      <a href={href} className={classes}>
+      <Link href={href} className={classes}>
         {children}
-      </a>
+      </Link>
     );
   }
   

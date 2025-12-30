@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import Modal from "@/components/atoms/Modal";
@@ -7,95 +7,99 @@ import Button from "@/components/atoms/Button";
 
 /* ===== Tipado ===== */
 export interface UserData {
-  id: number;
-  nombre: string;
-  email: string;
+    id: number;
+    name: string;
+    email: string;
 }
 
 interface EditUserFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  user: UserData | null;
-  onSave: (user: UserData) => void;
+    isOpen: boolean;
+    onClose: () => void;
+    user: UserData | null;
+    onSave: (updatedUser: UserData) => void; // 🔹 Callback
 }
 
 export default function EditUserForm({
-  isOpen,
-  onClose,
-  user,
-  onSave,
+    isOpen,
+    onClose,
+    user,
+    onSave
 }: EditUserFormProps) {
 
-  const [formData, setFormData] = useState<UserData>({
-    id: 0,
-    nombre: "",
-    email: "",
-  });
+    const [formData, setFormData] = useState<UserData>({
+        id: 0,
+        name: "",
+        email: "",
+    });
 
-  useEffect(() => {
-    if (user && isOpen) {
-      setFormData(user);
-    }
-  }, [user, isOpen]);
+    /* Cargar usuario seleccionado */
+    useEffect(() => {
+        if (user) {
+            setFormData(user);
+        }
+    }, [user]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+    if (!user) return null;
 
-  const handleSave = () => {
-    onSave(formData);
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="EDITAR USUARIO"
-    >
-      <form className="flex flex-col gap-4">
-        <InputForm
-          label="Nombre"
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-          required
-        />
+    const handleSave = () => {
+        onSave(formData); // 🔹 Llamamos al padre
+        onClose();
+    };
 
-        <InputForm
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+    return (
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="EDITAR USUARIO"
+        >
+            <form className="flex flex-col gap-4">
+                <InputForm
+                    label="Nombre"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                />
 
-        <div className="flex gap-4 mt-4">
-          <Button
-            type="button"
-            variant="primary"
-            size="md"
-            className="flex-1"
-            onClick={handleSave}
-          >
-            Guardar cambios
-          </Button>
+                <InputForm
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                />
 
-          <Button
-            type="button"
-            variant="tertiary"
-            size="md"
-            className="flex-1"
-            onClick={onClose}
-          >
-            Cancelar
-          </Button>
-        </div>
-      </form>
-    </Modal>
-  );
+                <div className="flex gap-4 mt-4">
+                    <Button
+                        type="button"
+                        variant="primary"
+                        size="md"
+                        className="flex-1"
+                        onClick={handleSave}
+                    >
+                        Guardar cambios
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="tertiary"
+                        size="md"
+                        className="flex-1"
+                        onClick={onClose}
+                    >
+                        Cancelar
+                    </Button>
+                </div>
+            </form>
+        </Modal>
+    );
 }

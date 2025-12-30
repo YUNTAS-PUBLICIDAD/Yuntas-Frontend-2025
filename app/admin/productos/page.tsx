@@ -39,6 +39,8 @@ export default function ProductosPage() {
         reload,        
         handleDelete   
     } = useAdminProducts();
+    
+    
 
     const onAddProduct = () => setIsAddModalOpen(true);
     
@@ -172,7 +174,7 @@ export default function ProductosPage() {
             >
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
                     <SendEmailForm 
-                        products={products} 
+                        email_productos={products} 
                         onClose={() => setIsEmailModalOpen(false)} 
                     />
                 </div>
