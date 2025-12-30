@@ -22,6 +22,7 @@ export interface LoginResponse {
 export interface LoginActionResponse {
     success: boolean;
     message: string;
+    token?: string;
     user?: {
         id: number;
         name: string;

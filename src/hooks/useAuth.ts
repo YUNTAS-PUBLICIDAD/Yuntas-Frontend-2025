@@ -24,6 +24,9 @@ export function useAuth(): UseAuthReturn {
         const result = await loginAction(credentials);
 
         if (result.success) {
+            if (result.token) {
+                localStorage.setItem("auth_token", result.token);
+            }
             router.push("/admin");
             router.refresh();
         } else {
@@ -31,7 +34,7 @@ export function useAuth(): UseAuthReturn {
             
         }
 
-        setIsLoading(true);
+        setIsLoading(false);
     };
 
     const logout = async () => {
@@ -39,8 +42,9 @@ export function useAuth(): UseAuthReturn {
         setError(null);
 
         await logoutAction();
+        localStorage.removeItem("auth_token");
 
-        setIsLoading(true);
+        setIsLoading(false);
         router.push("/login");
         router.refresh();
     };

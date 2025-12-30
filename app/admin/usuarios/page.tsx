@@ -1,103 +1,135 @@
-'use client';
+"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
 import AddUserForm from "@/components/molecules/admin/AddUserForm";
-import EditUserForm from "@/components/organisms/admin/EditUserForm";
-import data from "@/data/admin/usuariosData";
+import EditUserForm, { UserData } from "@/components/organisms/admin/EditUserForm";
 
-// 🔹 Utils de exportación
+import { useUsers } from "@/hooks/useUsers";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportTablePDF } from "@/utils/Export/exportTablePDF";
 
-interface UserData {
-  id: number;
-  nombre: string;
-  email: string;
-}
+const ROLE_LABELS: Record<number, string> = {
+  1: "Admin",
+  2: "Usuario",
+};
 
-// 🔹 Columnas
 const columns = [
-  { key: "id", label: "ID" },
+  { key: "role", label: "ROL" },
   { key: "nombre", label: "NOMBRE" },
   { key: "email", label: "EMAIL" },
 ];
 
 export default function UsuariosPage() {
+  const {
+    users,
+    setUsers,      // 👈 IMPORTANTE: usamos el estado de aquí
+    getUsers,
+    createUser,
+    updateUser,
+    deleteUser,
+    loading,
+  } = useUsers();
 
-  // 🔹 Estados
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
 
-  // 🔹 Exportaciones (NOMBRES DIFERENCIADOS)
-  const onExportCSV = () => exportCSV(data, "usuarios");
-  const onExportExcel = () => exportExcel(data, "usuarios");
+  useEffect(() => {
+    getUsers();
+  }, [getUsers]);
+
+  const usersForTable = users.map(user => ({
+    ...user,
+    role: ROLE_LABELS[user.role_id] || "Desconocido",
+  }));
+
+  const onExportCSV = () => exportCSV(usersForTable, "usuarios");
+  const onExportExcel = () => exportExcel(usersForTable, "usuarios");
   const onExportPDF = () =>
-    exportTablePDF(data, "Reporte de Usuarios", columns);
-  const onPrint = () =>
-    exportTablePDF(data, "Reporte de Usuarios", columns);
+    exportTablePDF(usersForTable, "Reporte de Usuarios", columns);
 
-  // 🔹 Eliminar
-  const onDelete = (id: string | number) => {
-    console.log("Eliminar:", id);
-  };
+  const onAddUser = () => setIsAddModalOpen(true);
 
-  // 🔹 Editar
-  const onEdit = (id: string | number) => {
-    const user = data.find(u => u.id === id);
-    if (user) {
-      setSelectedUser(user);
-      setIsEditModalOpen(true);
+  // ✅ AQUÍ ESTÁ LA CORRECCIÓN CLAVE
+  const onAddUserSubmit = async (userData: any) => {
+    const payload = {
+      nombre: userData.nombre,
+      email: userData.email,
+      celular: userData.celular,
+      password: userData.password,
+      password_confirmation: userData.confirmPassword,
+      role_id:
+        userData.roles === "admin" || userData.roles === "1"
+          ? 1
+          : 2,
+    };
+
+    const newUser = await createUser(payload);
+
+    if (newUser) {
+      // 👇 Actualizamos la tabla inmediatamente
+      setUsers(prev => [...prev, newUser]);
+
+      // 👇 Cerramos modal
+      setIsAddModalOpen(false);
     }
   };
 
-  // 🔹 Agregar
-  const onAddUser = () => setIsAddModalOpen(true);
-
-  const onAddUserSubmit = (userData: any) => {
-    console.log("Usuario agregado:", userData);
-    setIsAddModalOpen(false);
+  const onEdit = (user: UserData) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
   };
 
-  const onEditUserClose = () => {
-    setIsEditModalOpen(false);
-    setSelectedUser(null);
+  const onEditUserSave = async (user: UserData) => {
+    const success = await updateUser(user.id, user);
+    if (success) {
+      setIsEditModalOpen(false);
+      setSelectedUser(null);
+      getUsers();
+    }
   };
 
-  const exportButtons = [
-    { label: "EXPORTAR CSV", onClick: onExportCSV },
-    { label: "EXPORTAR EXCEL", onClick: onExportExcel },
-    { label: "EXPORTAR PDF", onClick: onExportPDF },
-    { label: "IMPRIMIR", onClick: onPrint },
-  ];
+  const onDelete = async (user: UserData) => {
+    if (confirm(`¿Estás seguro de eliminar a ${user.nombre}?`)) {
+      await deleteUser(user.id);
+      getUsers();
+    }
+  };
 
   return (
     <div>
-      {/* Exportación */}
-      <ActionButtonGroup buttons={exportButtons} className="mb-4 mt-4" />
-
-      {/* Tabla */}
-      <AdminTable
-        columns={columns}
-        data={data}
-        minRows={5}
-        onDelete={onDelete}
-        onEdit={onEdit}
-      />
-
-      {/* Agregar usuario */}
       <ActionButtonGroup
         buttons={[
-          { label: "Agregar Usuario", onClick: onAddUser, variant: "tertiary" }
+          { label: "EXPORTAR CSV", onClick: onExportCSV },
+          { label: "EXPORTAR EXCEL", onClick: onExportExcel },
+          { label: "EXPORTAR PDF", onClick: onExportPDF },
+        ]}
+        className="mb-4 mt-4"
+      />
+
+      {loading ? (
+        <p>Cargando usuarios...</p>
+      ) : (
+        <AdminTable
+          columns={columns}
+          data={usersForTable}
+          minRows={5}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
+      )}
+
+      <ActionButtonGroup
+        buttons={[
+          { label: "Agregar Usuario", onClick: onAddUser, variant: "tertiary" },
         ]}
         className="mt-4"
       />
 
-      {/* Modal agregar */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
@@ -109,11 +141,11 @@ export default function UsuariosPage() {
         />
       </Modal>
 
-      {/* Modal editar */}
       <EditUserForm
         isOpen={isEditModalOpen}
-        onClose={onEditUserClose}
+        onClose={() => setIsEditModalOpen(false)}
         user={selectedUser}
+        onSave={onEditUserSave}
       />
     </div>
   );
