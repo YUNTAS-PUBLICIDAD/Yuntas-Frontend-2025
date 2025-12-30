@@ -1,18 +1,6 @@
 'use client'
 import BlogSection from "@/components/organisms/blog/BlogSection";
 import HeroSection from "@/components/organisms/blog/HeroSection";
-
-import BlogData from "@/data/blog/blogData";
-
-export default async function BlogPage() {
-  const response = await BlogData();
-  const blogs = response?.data?.data ?? [];
-
-  return (
-    <main>
-      <HeroSection />
-      <BlogSection data={blogs} />
-
 import { useBlogs } from "@/hooks/useBlog";
 import Loader from "@/components/atoms/Loader";
 import { useEffect } from "react";
