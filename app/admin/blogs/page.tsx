@@ -36,16 +36,7 @@ const columns = [
   { key: "created_at", label: "FECHA",render:(_:unknown,row:Blog)=>new Date(row.created_at).toLocaleDateString() },
 ];
 export default function Blogspage() {
-  const {
-    blogs,
-    error,
-    meta,
-    links,
-    isLoading,
-    getBlogs,
-    goToNextPage,
-    goToPrevPage,
-  } = useBlogs();
+  const {blogs,error,meta,links,isLoading,getBlogs,goToNextPage,goToPrevPage,} = useBlogs();
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
