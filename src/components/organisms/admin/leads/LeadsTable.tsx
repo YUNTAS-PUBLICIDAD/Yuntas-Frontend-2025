@@ -1,22 +1,19 @@
 'use client';
 
 import { useState } from "react";
-// Átomos
 import Button from "@/components/atoms/Button";
-// Molécula (Formulario)
 import EditClientForm from "@/components/molecules/admin/leads/EditClientForm";
-// Hook / Tipos
-import { ClientData } from "@/hooks/ui/admin/useClientEdit";
+import { Lead } from "@/types/admin/lead";
 
 interface LeadsTableProps {
-    leads: ClientData[];
+    leads: Lead[];
 }
 
 export default function LeadsTable({ leads }: LeadsTableProps) {
-    const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
+    const [selectedClient, setSelectedClient] = useState<Lead | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleEditClick = (client: ClientData) => {
+    const handleEditClick = (client: Lead) => {
         setSelectedClient(client);
         setIsModalOpen(true);
     };
@@ -55,24 +52,24 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
                         >
                             <div className="font-bold text-gray-900">{lead.id}</div>
                             
-                            <div className="font-bold truncate px-1" title={lead.nombre}>
-                                {lead.nombre}
+                            <div className="font-bold truncate px-1" title={lead.name}>
+                                {lead.name}
                             </div>
                             
-                            <div className="truncate px-1 text-gray-600" title={lead.gmail}>
-                                {lead.gmail}
+                            <div className="truncate px-1 text-gray-600" title={lead.email}>
+                                {lead.email}
                             </div>
                             
                             <div className="font-bold text-gray-800">
-                                {lead.telefono}
+                                {lead.phone || "-"}
                             </div>
                             
                             <div className="font-bold text-gray-900 truncate px-1">
-                                {lead.producto}
+                                {lead.product?.name || "Sin producto"}
                             </div>
                             
                             <div className="font-bold text-gray-900 text-xs">
-                                {formatDate(lead.fecha)}
+                                {formatDate(lead.created_at || "")}
                             </div>
                             
                             <div className="flex justify-center items-center gap-2">

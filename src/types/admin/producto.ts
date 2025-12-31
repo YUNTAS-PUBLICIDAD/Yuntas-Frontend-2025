@@ -1,7 +1,15 @@
+import { Categoria } from "./categoria";
+
 export interface ImagenProducto {
     url: string | null;
     alt: string | null;
     title: string | null;
+}
+
+export interface Galeria {
+    url:  string;
+    alt:  string | null;
+    slot: string;
 }
 
 export interface SeoProducto {
@@ -12,19 +20,21 @@ export interface SeoProducto {
 
 export interface Producto {
     id: number;
-    nombre: string;
+    name: string;
     slug: string;
+    price: string;
     titulo_corto: string;
-    descripcion: string;
-    precio: string;
-    categoria?: string;
+    descripcion: string | null;
+    categories: Categoria[] | null;
     estado: "active" | "inactive";
-    imagen_principal: ImagenProducto;
-    galeria: ImagenProducto[];
-    especificaciones: string[];
-    beneficios: string[];
+    main_image: ImagenProducto | null;
+    gallery: Galeria[] | null;
+    images: Galeria[] | null;
+    specifications: string[] | [];
+    benefits: string[] | [];
+    keywords: string[] | [];
     seo: SeoProducto;
-    creado_en: string;
+    created_at: string;
 }
 
 export interface ProductoInput {

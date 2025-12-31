@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from "react";
+import { Lead } from "@/types/admin/lead";
 import Button from "@/components/atoms/Button";
-import { ClientData } from "@/hooks/ui/admin/useClientEdit";
 
 interface TrackingTableProps {
-    leads: ClientData[];
+    leads: Lead[];
 }
 
 export default function TrackingTable({ leads }: TrackingTableProps) {
@@ -40,7 +39,7 @@ export default function TrackingTable({ leads }: TrackingTableProps) {
                     >
                         <div className="col-span-1 font-bold text-gray-800">{lead.id}</div>
                         
-                        <div className="col-span-2 text-gray-600 truncate px-2">{lead.nombre}</div>
+                        <div className="col-span-2 text-gray-600 truncate px-2">{lead.name}</div>
                         
                         <div className="col-span-2 font-bold text-black">ENVIADO</div>
                         

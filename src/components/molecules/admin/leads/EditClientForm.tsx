@@ -4,12 +4,13 @@ import Modal from "@/components/atoms/Modal";
 import InputText from "@/components/atoms/InputText";
 import Button from "@/components/atoms/Button";
 import Loader from "@/components/atoms/Loader";
-import { useClientEdit, ClientData } from "@/hooks/ui/admin/useClientEdit";
+import { useClientEdit } from "@/hooks/ui/admin/useClientEdit";
+import { Lead } from "@/types/admin/lead";
 
 interface EditClientFormProps {
     isOpen: boolean;
     onClose: () => void;
-    client: ClientData | null;
+    client: Lead | null;
 }
 
 export default function EditClientForm({ isOpen, onClose, client }: EditClientFormProps) {

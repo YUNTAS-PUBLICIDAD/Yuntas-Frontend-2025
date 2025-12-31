@@ -3,34 +3,33 @@
 import { useState } from "react";
 import InputForm from "@/components/atoms/InputForm";
 import Button from "@/components/atoms/Button";
+import { LeadInput } from "@/types/admin/lead";
 
-interface ClientFormData {
-    nombre: string;
-    telefono: string;
-    gmail: string;
-    productoId: number;
-    fecha: string;
-}
+const defaultClientFormData: LeadInput = {
+    name: "",
+    phone: "",
+    email: "",
+    product_id: 0,
+    source_id: 1,
+};
 
 interface AddClientFormProps {
-    onSubmit: (data: ClientFormData) => void;
+    onSubmit: (data: LeadInput) => void;
     onCancel: () => void;
+    isLoading?: boolean;
 }
 
-export default function AddClientForm({ onSubmit, onCancel }: AddClientFormProps) {
-    const [formData, setFormData] = useState<ClientFormData>({
-        nombre: "",
-        telefono: "",
-        gmail: "",
-        productoId: 0,
-        fecha: new Date().toISOString().split('T')[0]
-    });
+export default function AddClientForm({ onSubmit, onCancel, isLoading = false }: AddClientFormProps) {
+    const [formData, setFormData] = useState<LeadInput>(defaultClientFormData);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+
+        if (name === "phone" && (value.length > 9 || Number(value) < 0)) return;
+
         setFormData(prev => ({
             ...prev,
-            [name]: name === "productoId" ? Number(value) : value
+            [name]: name === "product_id" ? Number(value) : value
         }));
     };
 
@@ -43,57 +42,58 @@ export default function AddClientForm({ onSubmit, onCancel }: AddClientFormProps
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <InputForm
                 label="Nombres"
-                name="nombre"
-                value={formData.nombre}
+                name="name"
+                value={formData.name || ""}
                 onChange={handleChange}
                 placeholder="Ingrese el nombre completo"
                 required
             />
             <InputForm
                 label="Teléfono"
-                name="telefono"
-                type="tel"
-                value={formData.telefono}
+                name="phone"
+                type="number"
+                value={formData.phone || ""}
                 onChange={handleChange}
-                placeholder="+51 999 999 999"
+                placeholder="987654321"
                 required
             />
             <InputForm
                 label="Gmail"
-                name="gmail"
+                name="email"
                 type="email"
-                value={formData.gmail}
+                value={formData.email || ""}
                 onChange={handleChange}
                 placeholder="ejemplo@gmail.com"
                 required
             />
             <InputForm
                 label="Producto ID"
-                name="productoId"
+                name="product_id"
                 type="number"
-                value={formData.productoId}
+                value={formData.product_id || ""}
                 onChange={handleChange}
                 placeholder="0"
+                min={1}
             />
             <InputForm
                 label="Fecha"
                 name="fecha"
                 type="date"
-                value={formData.fecha}
-                onChange={handleChange}
-                required
+                value={""}
+                onChange={() => { }}
             />
-            
+
             <div className="flex gap-4 mt-4">
-                <Button type="submit" variant="primary" size="md" className="flex-1">
-                    Añadir Cliente
+                <Button type="submit" variant="primary" size="md" className="flex-1" disabled={isLoading}>
+                    { isLoading ? "Añadiendo" : "Añadir Cliente"}
                 </Button>
-                <Button 
-                    type="button" 
-                    variant="tertiary" 
-                    size="md" 
+                <Button
+                    type="button"
+                    variant="tertiary"
+                    size="md"
                     className="flex-1"
                     onClick={onCancel}
+                    disabled={isLoading}
                 >
                     Cancelar
                 </Button>

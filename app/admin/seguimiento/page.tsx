@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Data y Hooks
-import data from "@/data/admin/seguimientoData";
-import { ClientData } from "@/hooks/ui/admin/useClientEdit";
+import { LeadInput, Lead } from "@/types/admin/lead";
 
 // Componentes Visuales
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
@@ -15,10 +14,32 @@ import AddClientForm from "@/components/molecules/admin/AddClientForm";
 import LeadsTable from "@/components/organisms/admin/leads/LeadsTable";       // Interfaz 1: Producto/Fecha
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable"; // Interfaz 2: Whatsapp/Gmail
 
+import { useLeads } from "@/hooks/useLeads";
+
 export default function SeguimientoPage() {
-    const [datosPaginados, setDatosPaginados] = useState<ClientData[]>([]);
+    
+    const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isTrackingMode, setIsTrackingMode] = useState(false);
+    const { getLeads, leads, createLead, error, isLoading } = useLeads();
+
+    useEffect(()=> {
+        getLeads(200);
+    }, [])
+
+    const handleSubmitClient = async (formData: LeadInput) => {
+        if (formData.product_id === 0) {
+            delete formData.product_id
+        }
+
+        const success = await createLead(formData); 
+        if (success) {
+            alert("Cliente creado");
+            setIsAddModalOpen(false)
+        } else {
+            alert(error);
+        }
+    }  
 
     const topButtons = [
         { 
@@ -64,7 +85,7 @@ export default function SeguimientoPage() {
             <div className="flex justify-center mt-8">
                 <Pagination 
                     pageSize={10} 
-                    items={data} 
+                    items={leads} 
                     setProductosPaginados={setDatosPaginados} 
                 />
             </div>
@@ -75,8 +96,9 @@ export default function SeguimientoPage() {
                 title="AÑADIR CLIENTE"
             >
                 <AddClientForm 
-                    onSubmit={() => setIsAddModalOpen(false)} 
+                    onSubmit={handleSubmitClient} 
                     onCancel={() => setIsAddModalOpen(false)} 
+                    isLoading={isLoading}
                 />
             </Modal>
         </div>
