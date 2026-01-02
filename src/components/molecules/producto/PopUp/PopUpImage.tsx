@@ -13,6 +13,8 @@ const PopupImage: React.FC<PopupImageProps> = ({ src }) => (
           alt="Popup"
           className="w-full h-full object-cover object-center"
           sizes="(max-width: 640px) 100vw, 50vw"
+          width={600}
+          height={400}
         />
         <div className="absolute inset-0 bg-black/10 sm:bg-transparent"></div>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { api,API_ENDPOINTS } from "@/config"; 
+import { api, API_ENDPOINTS, ASSETS_URL } from "@/config";
 
 export const useEditProduct = (productId: number | null, onClose: () => void) => {
     const [isSaving, setIsSaving] = useState(false);
@@ -58,12 +58,10 @@ export const useEditProduct = (productId: number | null, onClose: () => void) =>
                 if (!product) return;
 
                
-                const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-                
                 const fixUrl = (url: string) => {
                     if (!url) return "";
                     if (url.startsWith("http")) return url; 
-                    return `${BACKEND_URL}${url}`; 
+                    return `${ASSETS_URL}${url}`; 
                 };
 
                 const imgs = { list: "", hero: "", specs: "", benefits: "", popups: "" };

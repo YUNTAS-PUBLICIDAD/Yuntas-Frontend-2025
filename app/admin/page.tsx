@@ -21,7 +21,8 @@ export default function InicioPage() {
     const onAdd = () => {
         console.log("Navegar a formulario de añadir...");
     }
-
+    
+    
     return (
         <div className="flex flex-col gap-6">
             

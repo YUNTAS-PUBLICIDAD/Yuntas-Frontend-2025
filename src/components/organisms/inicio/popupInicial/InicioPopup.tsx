@@ -3,15 +3,14 @@ import PopupContainer from "@/components/atoms/PopContainer";
 import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
 import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
 import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
-import imagenPopup from "@/assets/productos/popup/Productos.webp";
+import imagenPopup from "@/assets/inicio/Popup/yuleLove.webp";
 import CloseButton from "@/components/atoms/CloseButton";
 
 interface ProductoPopupProps {
   delay?: number;
-  imgSrc?: string;
 }
 
-const ProductoPopup: React.FC<ProductoPopupProps> = ({ delay = 5000, imgSrc = imagenPopup.src }) => {
+const InicioPopup: React.FC<ProductoPopupProps> = ({ delay = 5000 }) => {
   const [show, setShow] = useState(false);
   const [closing, setClosing] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -50,19 +49,21 @@ const ProductoPopup: React.FC<ProductoPopupProps> = ({ delay = 5000, imgSrc = im
         <CloseButton
           onClick={closeModal}
           className="absolute top-4 right-4 z-50 text-gray-500 hover:text-gray-700 p-2"
-        />
+        >
+          ✕
+        </CloseButton>
 
-        <PopupImage src={imgSrc} />
+        <PopupImage src={imagenPopup} />
 
         <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
-          <PopupHeader title="¡Tu marca brillando como se merece!" />
+          <PopupHeader title="¡Un detalle que cambia todo!" />
           <div className="pt-8">
             <PopupForm
               formData={formData}
               errors={errors}
               handleChange={handleChange}
               handleSubmit={() => {}}
-              buttonText="Explorar opciones"
+              buttonText="Empieza a brillar"
               isSubmitting={isSubmitting}
             />
           </div>
@@ -72,4 +73,4 @@ const ProductoPopup: React.FC<ProductoPopupProps> = ({ delay = 5000, imgSrc = im
   );
 };
 
-export default ProductoPopup;
+export default InicioPopup;
