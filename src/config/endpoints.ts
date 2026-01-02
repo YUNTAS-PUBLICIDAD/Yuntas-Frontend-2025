@@ -37,11 +37,11 @@ export const API_ENDPOINTS = {
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
-      GET_ALL: '/admin/users',
-      CREATE: '/admin/users',
-      UPDATE: (id: number) => `/admin/users/${id}`,
-      DELETE: (id: number) => `/admin/users/${id}`,
-      ASSIGN_ROLE: (id: number) => `/admin/users/${id}/role`,
+      GET_ALL: '/users',
+      CREATE: '/users',
+      UPDATE: (id: number) => `/users/${id}`,
+      DELETE: (id: number) => `/users/${id}`,
+      ASSIGN_ROLE: (id: number) => `/users/${id}/role`,
     },
     CATEGORIES: {
       GET_ALL: '/admin/categorias',
@@ -56,11 +56,7 @@ export const API_ENDPOINTS = {
         GET_ONE: (id: number) => `/admin/contacto/${id}`,
         DELETE: (id: number) => `/admin/contacto/${id}`,
       }, 
-      CLAIMS: {
-        GET_ALL: '/admin/claims',
-        GET_ONE: (id: number) => `/admin/claims/${id}`,
-        REPLY:  (id: number) => `/admin/claims/${id}/reply`,
-      } 
+      CLAIMS: '/admin/claims', 
     }
   }
 };

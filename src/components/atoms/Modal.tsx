@@ -44,9 +44,12 @@ export default function Modal({
         md: "max-w-md",
         lg: "max-w-3xl"
     };
+
     const bgClass = className.includes("bg-") ? "" : "bg-white";
     const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#203565]";
-    const closeBtnClass = className.includes("text-white") ? "text-white hover:text-gray-200" : "text-gray-400 hover:text-gray-600";
+    const closeBtnClass = className.includes("text-white")
+        ? "text-white hover:text-gray-200"
+        : "text-gray-400 hover:text-gray-600";
 
     return (
         <div
@@ -58,17 +61,20 @@ export default function Modal({
                 onClick={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex  items-center justify-between px-6 py-4 border-b border-white/20">
-                        <h2 className={`text-xl font-bold ${textTitleClass}`}>{title}</h2>
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
+                        <h2 className={`text-xl font-bold ${textTitleClass}`}>
+                            {title}
+                        </h2>
                         <button
                             onClick={onClose}
-                            className={`${closeBtnClass} transition-colors`}
+                            className={closeBtnClass}
                         >
-                            <IoClose size={24} onClick={()=>onClose} />
+                            <IoClose size={24} />
                         </button>
                     </div>
                 )}
-                <div className="p-6  overflow-y-auto ">
+
+                <div className="p-6 overflow-y-auto">
                     {children}
                 </div>
             </div>

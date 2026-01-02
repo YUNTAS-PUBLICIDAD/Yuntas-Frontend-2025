@@ -11,6 +11,7 @@ import FormSection from "@/components/molecules/admin/FormSection";
 import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
 import { Producto, ProductoInput } from "@/types/admin/producto";
+import { ASSETS_URL } from "@/config";
 
 
 interface ProductFormProps {
@@ -258,7 +259,7 @@ export default function ProductForm({
                         ...prev,
                         imagen_principal: { ...prev.imagen_principal, file }
                     }))}
-                    currentImage={typeof formData.imagen_principal.file === "string" ? formData.imagen_principal.file !== ""  ? "http://127.0.0.1:8000"+formData.imagen_principal.file : "" : null}
+                    currentImage={typeof formData.imagen_principal.file === "string" ? formData.imagen_principal.file !== ""  ? ASSETS_URL+formData.imagen_principal.file : "" : null}
                     required
                 />
             </FormSection>
@@ -276,7 +277,7 @@ export default function ProductForm({
                                 className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200"
                             >
                                 <Image
-                                    src={"http://127.0.0.1:8000" + url}
+                                    src={ASSETS_URL + url}
                                     alt={`Imagen galería ${index + 1}`}
                                     fill
                                     className="object-cover"
