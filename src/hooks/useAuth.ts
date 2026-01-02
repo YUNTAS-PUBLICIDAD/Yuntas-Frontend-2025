@@ -24,17 +24,11 @@ export function useAuth(): UseAuthReturn {
         const result = await loginAction(credentials);
 
         if (result.success) {
-<<<<<<< HEAD
-            if (result.token) {
-                localStorage.setItem("auth_token", result.token);
-            }
-=======
             // ✅ Guardar token en localStorage para frontend
             if (result.user && result.token) {
                 localStorage.setItem("token", result.token);
             }
 
->>>>>>> origin/pre-masterf
             router.push("/admin");
             router.refresh();
         } else {
@@ -49,9 +43,8 @@ export function useAuth(): UseAuthReturn {
         setError(null);
 
         await logoutAction();
-        localStorage.removeItem("auth_token");
 
-        setIsLoading(false);
+        setIsLoading(true);
         router.push("/login");
         router.refresh();
     };

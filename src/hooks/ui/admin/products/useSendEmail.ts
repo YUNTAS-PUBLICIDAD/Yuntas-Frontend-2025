@@ -14,231 +14,157 @@ export interface EmailSectionData {
     paragraph: string;
 }
 
-type ImageField = "mainImage" | "secondaryImage1" | "secondaryImage2";
-type PreviewField =
-    | "mainImagePreview"
-    | "secondaryImage1Preview"
-    | "secondaryImage2Preview";
-
-export const useSendEmail = (
-    onClose: () => void,
-    email_productos: any[] // viene del backend
-) => {
+export const useSendEmail = (onClose: () => void, products: any[]) => {
     const [isSending, setIsSending] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState("");
-
-    const BACKEND_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-
-    const createEmptySection = (): EmailSectionData => ({
-        mainImage: null,
-        secondaryImage1: null,
-        secondaryImage2: null,
-        mainImagePreview: "",
-        secondaryImage1Preview: "",
-        secondaryImage2Preview: "",
-        title: "",
-        paragraph: "",
-    });
+    
+    const [clientData, setClientData] = useState({ nombre: "", correo: "", telefono: "" });
 
     const [sections, setSections] = useState<EmailSectionData[]>([
-        createEmptySection(),
-        createEmptySection(),
-        createEmptySection(),
+        { mainImage: null, secondaryImage1: null, secondaryImage2: null, mainImagePreview: "", secondaryImage1Preview: "", secondaryImage2Preview: "", title: "", paragraph: "" },
+        { mainImage: null, secondaryImage1: null, secondaryImage2: null, mainImagePreview: "", secondaryImage1Preview: "", secondaryImage2Preview: "", title: "", paragraph: "" },
+        { mainImage: null, secondaryImage1: null, secondaryImage2: null, mainImagePreview: "", secondaryImage1Preview: "", secondaryImage2Preview: "", title: "", paragraph: "" },
     ]);
 
     const fixUrl = (url: string) => {
         if (!url) return "";
-<<<<<<< HEAD
         if (url.startsWith("http")) return url; 
         if (url.startsWith("blob")) return url; 
         return `${ASSETS_URL}${url}`; 
-=======
-        if (url.startsWith("http") || url.startsWith("blob")) return url;
-        return `${BACKEND_URL}${url}`;
->>>>>>> origin/pre-masterf
     };
 
-    // --------------------------------------------------
-    // CARGAR PLANTILLA DESDE BACKEND
-    // --------------------------------------------------
+    
     useEffect(() => {
         if (!selectedProductId) return;
 
-        const loadTemplate = async () => {
-            try {
-                const res = await api.get(
-                    `/email-productos?producto_id=${selectedProductId}`
+        const product = products.find(p => p.id.toString() === selectedProductId.toString());
+        
+        if (product) {
+            const getImgBySlot = (slotName: string) => {
+                const img = product.images?.find((i: any) => 
+                    i.slot_name === slotName || i.slot?.name === slotName
                 );
+                return img ? fixUrl(img.url) : "";
+            };
 
-                if (!res.data || res.data.length === 0) {
-                    setSections([
-                        createEmptySection(),
-                        createEmptySection(),
-                        createEmptySection(),
-                    ]);
-                    return;
+            const heroImg = getImgBySlot('Hero');
+            const specsImg = getImgBySlot('Specs');
+            const benefitsImg = getImgBySlot('Benefits');
+            const listImg = getImgBySlot('List') || getImgBySlot('Main');
+            const popupImg = getImgBySlot('Popups');
+
+            const newSections: EmailSectionData[] = [
+                {
+                    title: product.name || "Nombre del Producto",
+                    paragraph: product.short_description || "Descripción corta del producto...",
+                    mainImage: null,
+                    mainImagePreview: heroImg || listImg, 
+                    secondaryImage1: null, secondaryImage1Preview: "",
+                    secondaryImage2: null, secondaryImage2Preview: ""
+                },
+                {
+                    title: "Características y Especificaciones",
+                    paragraph: product.description || "Detalles técnicos del producto...",
+                    mainImage: null,
+                    mainImagePreview: specsImg, 
+                    secondaryImage1: null, secondaryImage1Preview: listImg, 
+                    secondaryImage2: null, secondaryImage2Preview: ""
+                },
+                {
+                    title: "Beneficios Clave",
+                    paragraph: "Descubre cómo este producto mejora tu negocio o vida diaria.",
+                    mainImage: null,
+                    mainImagePreview: benefitsImg, 
+                    secondaryImage1: null, secondaryImage1Preview: popupImg, 
+                    secondaryImage2: null, secondaryImage2Preview: ""
                 }
+            ];
 
-                const ordered = res.data
-                    .sort((a: any, b: any) => a.paso - b.paso)
-                    .map((item: any) => {
-                        const secundarias = item.imagenes_secundarias
-                            ? JSON.parse(item.imagenes_secundarias)
-                            : [];
-
-                        return {
-                            mainImage: null,
-                            secondaryImage1: null,
-                            secondaryImage2: null,
-
-                            mainImagePreview: fixUrl(item.imagen_principal),
-                            secondaryImage1Preview: fixUrl(secundarias[0]),
-                            secondaryImage2Preview: fixUrl(secundarias[1]),
-
-                            title: item.titulo || "",
-                            paragraph: item.parrafo1 || "",
-                        };
-                    });
-
-                setSections(ordered);
-            } catch (error) {
-                console.error("Error cargando plantilla", error);
-            }
-        };
-
-        loadTemplate();
-    }, [selectedProductId]);
-
-    // --------------------------------------------------
-    // TEXTO
-    // --------------------------------------------------
-    const handleTextChange = (
-        index: number,
-        field: "title" | "paragraph",
-        value: string
-    ) => {
-        const copy = [...sections];
-        copy[index][field] = value;
-        setSections(copy);
-    };
-
-    // --------------------------------------------------
-    // IMÁGENES
-    // --------------------------------------------------
-    const handleFileChange = (
-        index: number,
-        field: ImageField,
-        file: File | null
-    ) => {
-        const copy = [...sections];
-        copy[index][field] = file;
-
-        const previewMap: Record<ImageField, PreviewField> = {
-            mainImage: "mainImagePreview",
-            secondaryImage1: "secondaryImage1Preview",
-            secondaryImage2: "secondaryImage2Preview",
-        };
-
-        const previewField = previewMap[field];
-        copy[index][previewField] = file ? URL.createObjectURL(file) : "";
-
-        setSections(copy);
-    };
-
-    // --------------------------------------------------
-    // GUARDAR PLANTILLA
-    // --------------------------------------------------
-    const handleSaveTemplate = async () => {
-        if (!selectedProductId) {
-            alert("Selecciona un producto");
-            return;
+            setSections(newSections);
         }
+    }, [selectedProductId, products]);
+
+
+    const handleClientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setClientData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleTextChange = (index: number, field: 'title' | 'paragraph', value: string) => {
+        const newSections = [...sections];
+        newSections[index][field] = value;
+        setSections(newSections);
+    };
+
+    const handleFileChange = (index: number, field: 'mainImage' | 'secondaryImage1' | 'secondaryImage2', file: File | null) => {
+        const newSections = [...sections];
+        newSections[index][field] = file;
+        
+        const previewField = `${field}Preview` as keyof EmailSectionData;
+        if (file) {
+            // @ts-ignore
+            newSections[index][previewField] = URL.createObjectURL(file);
+        } else {
+            // @ts-ignore
+            newSections[index][previewField] = ""; 
+        }
+        
+        setSections(newSections);
+    };
+
+    const handleSubmit = async () => {
+        if (!selectedProductId) return alert("Selecciona un producto.");
+        if (!clientData.correo) return alert("Ingresa el correo del cliente.");
 
         setIsSending(true);
-
         try {
-            for (let paso = 0; paso < sections.length; paso++) {
-                const section = sections[paso];
-                const formData = new FormData();
+            const formData = new FormData();
+            
+            formData.append('producto_id', selectedProductId);
+            formData.append('nombre', clientData.nombre);
+            formData.append('correo', clientData.correo);
+            formData.append('telefono', clientData.telefono);
 
-                formData.append("producto_id", selectedProductId);
-                formData.append("paso", String(paso));
-                formData.append("titulo", section.title);
-                formData.append("parrafo1", section.paragraph);
-
+            sections.forEach((section, index) => {
+                formData.append(`sections[${index}][title]`, section.title);
+                formData.append(`sections[${index}][paragraph]`, section.paragraph);
+                
                 if (section.mainImage) {
-                    formData.append("imagen_principal", section.mainImage);
+                    formData.append(`sections[${index}][main_image]`, section.mainImage);
+                } 
+                else if (section.mainImagePreview && section.mainImagePreview.startsWith('http')) {
+                    formData.append(`sections[${index}][existing_main_image]`, section.mainImagePreview);
                 }
 
-                if (section.secondaryImage1) {
-                    formData.append(
-                        "imagenes_secundarias[]",
-                        section.secondaryImage1
-                    );
-                }
+                if (section.secondaryImage1) formData.append(`sections[${index}][secondary_image_1]`, section.secondaryImage1);
+                else if (section.secondaryImage1Preview.startsWith('http')) formData.append(`sections[${index}][existing_secondary_image_1]`, section.secondaryImage1Preview);
 
-                if (section.secondaryImage2) {
-                    formData.append(
-                        "imagenes_secundarias[]",
-                        section.secondaryImage2
-                    );
-                }
-
-                await api.post("/email-productos", formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-            }
-
-            alert("Plantilla guardada correctamente");
-            onClose();
-        } catch (error) {
-            console.error(error);
-            alert("Error guardando plantilla");
-        } finally {
-            setIsSending(false);
-        }
-    };
-
-    // --------------------------------------------------
-    // ACTIVAR CAMPAÑA
-    // --------------------------------------------------
-    const handleActivateCampaign = async () => {
-        if (!selectedProductId) {
-            alert("Selecciona un producto");
-            return;
-        }
-
-        setIsSending(true);
-
-        try {
-            const res = await api.post("/email-campanas/enviar", {
-                producto_id: selectedProductId,
+                if (section.secondaryImage2) formData.append(`sections[${index}][secondary_image_2]`, section.secondaryImage2);
+                else if (section.secondaryImage2Preview.startsWith('http')) formData.append(`sections[${index}][existing_secondary_image_2]`, section.secondaryImage2Preview);
             });
 
-            console.log("Campaña enviada:", res.data);
+            await api.post('/email/send', formData, { 
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
 
-            alert(
-                `Campaña enviada correctamente\n\nLeads: ${res.data.total_leads}\nCorreos: ${res.data.total_correos}`
-            );
-
+            alert("Campaña de email guardada y enviada.");
             onClose();
         } catch (error) {
             console.error(error);
-            alert("Error enviando campaña");
+            alert("Error al procesar el envío.");
         } finally {
             setIsSending(false);
         }
     };
 
-    return {
-        selectedProductId,
-        setSelectedProductId,
-        sections,
-        handleTextChange,
-        handleFileChange,
-        handleSaveTemplate,
-        handleActivateCampaign,
-        isSending,
+    return { 
+        selectedProductId, 
+        setSelectedProductId, 
+        clientData, 
+        handleClientChange, 
+        sections, 
+        handleTextChange, 
+        handleFileChange, 
+        handleSubmit, 
+        isSending 
     };
 };
