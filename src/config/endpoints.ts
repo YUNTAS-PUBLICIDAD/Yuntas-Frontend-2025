@@ -37,11 +37,11 @@ export const API_ENDPOINTS = {
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
-      GET_ALL: '/users',
-      CREATE: '/users',
-      UPDATE: (id: number) => `/users/${id}`,
-      DELETE: (id: number) => `/users/${id}`,
-      ASSIGN_ROLE: (id: number) => `/users/${id}/role`,
+      GET_ALL: '/admin/users',
+      CREATE: '/admin/users',
+      UPDATE: (id: number) => `/admin/users/${id}`,
+      DELETE: (id: number) => `/admin/users/${id}`,
+      ASSIGN_ROLE: (id: number) => `/admin/users/${id}/role`,
     },
     CATEGORIES: {
       GET_ALL: '/admin/categorias',

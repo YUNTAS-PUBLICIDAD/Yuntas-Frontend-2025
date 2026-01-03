@@ -1,13 +1,13 @@
 "use client";
 
-import * as XLSX from "xlsx";
 import { Blog } from "@/types/blog";
 import { Producto } from "@/types/producto";
-import { BlogExport } from "@/types/blog";
-import { ProductoExport } from "@/types/producto";
+import { UserData } from "@/types/admin";
+
+type ExportRow = Record<string, string | number>;
 
 export const exportCSV = (
-  data: Blog[] | Producto[],
+  data: any[],
   fileName: string = "reporte"
 ) => {
   if (!data || data.length === 0) {
@@ -15,40 +15,60 @@ export const exportCSV = (
     return;
   }
 
-  let exportData: BlogExport[] | ProductoExport[] = [];
+  const firstItem = data[0];
+  let exportData: ExportRow[] = [];
 
-  const isBlog = (item: any): item is Blog => {
-    return Array.isArray(item?.galeria);
-  };
-
-  // 🔹 Normalización de datos según tipo
-  if (isBlog(data[0])) {
-    exportData = (data as Blog[]).map((blog): BlogExport => ({
-      id: blog.id,
-      nombre: blog.nombre,
-      descripcion: blog.descripcion,
-      fecha: blog.fecha.toString(),
-      nro_de_imagenes: blog.galeria?.length || 0,
+  // 🔹 BLOG
+  if (Array.isArray(firstItem?.galeria)) {
+    exportData = (data as Blog[]).map(blog => ({
+      ID: blog.id,
+      NOMBRE: blog.nombre,
+      DESCRIPCIÓN: blog.descripcion,
+      FECHA: String(blog.fecha),
+      IMÁGENES: blog.galeria?.length || 0,
     }));
-  } else {
-    exportData = (data as Producto[]).map(
-      (producto): ProductoExport => ({
-        nombre: producto.nombre,
-        categorias: producto.categorias?.length || 0,
-      })
-    );
   }
 
-  // 🔹 Crear CSV desde los datos normalizados
-  const worksheet = XLSX.utils.json_to_sheet(exportData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Datos");
+  // 🔹 PRODUCTO
+  else if (Array.isArray(firstItem?.categorias)) {
+    exportData = (data as Producto[]).map(producto => ({
+      NOMBRE: producto.nombre,
+      CATEGORÍAS: producto.categorias?.length || 0,
+    }));
+  }
 
-  // 🔹 Nombre dinámico + fecha
-  const date = new Date().toISOString().split("T")[0];
-  const finalFileName = `${fileName}_${date}.csv`;
+  // 🔹 USUARIOS ✅
+  else if ("email" in firstItem && "name" in firstItem) {
+    exportData = (data as UserData[]).map(user => ({
+      ID: user.id,
+      NOMBRE: user.name,
+      EMAIL: user.email,
+    }));
+  }
 
-  XLSX.writeFile(workbook, finalFileName, {
-    bookType: "csv",
+  else {
+    console.error("Tipo de datos no soportado para exportación CSV");
+    return;
+  }
+
+  // 🔹 Construcción manual del CSV (Excel-friendly)
+  const headers = Object.keys(exportData[0]).join(";");
+  const rows = exportData.map(row =>
+    Object.values(row)
+      .map(value =>
+        `"${String(value).replace(/"/g, '""')}"`
+      )
+      .join(";")
+  );
+
+  const csvContent = "\uFEFF" + [headers, ...rows].join("\n");
+
+  const blob = new Blob([csvContent], {
+    type: "text/csv;charset=utf-8;",
   });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${fileName}_${new Date().toISOString().split("T")[0]}.csv`;
+  link.click();
 };

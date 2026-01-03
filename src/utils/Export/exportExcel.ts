@@ -3,11 +3,12 @@
 import * as XLSX from "xlsx";
 import { Blog } from "@/types/blog";
 import { Producto } from "@/types/producto";
-import { BlogExport } from "@/types/blog";
-import { ProductoExport } from "@/types/producto";
+import { UserData } from "@/types/admin";
+
+type ExportRow = Record<string, string | number>;
 
 export const exportExcel = (
-  data: Blog[] | Producto[],
+  data: any[],
   fileName: string = "reporte"
 ) => {
   if (!data || data.length === 0) {
@@ -15,40 +16,46 @@ export const exportExcel = (
     return;
   }
 
-  const isBlog = (item: any): item is Blog => {
-    return Array.isArray(item?.galeria);
-  };
+  const firstItem = data[0];
+  let exportData: ExportRow[] = [];
 
-  let exportData: BlogExport[] | ProductoExport[] = [];
-
-  // 🔹 Normalización de datos
-  if (isBlog(data[0])) {
-    exportData = (data as Blog[]).map(
-      (blog): BlogExport => ({
-        id: blog.id,
-        nombre: blog.nombre,
-        descripcion: blog.descripcion,
-        fecha: blog.fecha.toString(),
-        nro_de_imagenes: blog.galeria?.length || 0,
-      })
-    );
-  } else {
-    exportData = (data as Producto[]).map(
-      (producto): ProductoExport => ({
-        nombre: producto.nombre,
-        categorias: producto.categorias?.length || 0,
-      })
-    );
+  // 🔹 BLOG
+  if (Array.isArray(firstItem?.galeria)) {
+    exportData = (data as Blog[]).map(blog => ({
+      ID: blog.id,
+      NOMBRE: blog.nombre,
+      DESCRIPCIÓN: blog.descripcion,
+      FECHA: String(blog.fecha),
+      IMÁGENES: blog.galeria?.length || 0,
+    }));
   }
 
-  // 🔹 Crear Excel
+  // 🔹 PRODUCTO
+  else if (Array.isArray(firstItem?.categorias)) {
+    exportData = (data as Producto[]).map(producto => ({
+      NOMBRE: producto.nombre,
+      CATEGORÍAS: producto.categorias?.length || 0,
+    }));
+  }
+
+  // 🔹 USUARIOS ✅
+  else if ("email" in firstItem && "name" in firstItem) {
+    exportData = (data as UserData[]).map(user => ({
+      ID: user.id,
+      NOMBRE: user.name,
+      EMAIL: user.email,
+    }));
+  }
+
+  else {
+    console.error("Tipo de datos no soportado para exportación");
+    return;
+  }
+
   const worksheet = XLSX.utils.json_to_sheet(exportData);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Datos");
 
-  // 🔹 Nombre dinámico + fecha
   const date = new Date().toISOString().split("T")[0];
-  const finalFileName = `${fileName}_${date}.xlsx`;
-
-  XLSX.writeFile(workbook, finalFileName);
+  XLSX.writeFile(workbook, `${fileName}_${date}.xlsx`);
 };

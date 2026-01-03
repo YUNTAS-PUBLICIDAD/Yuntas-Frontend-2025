@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { api, ASSETS_URL } from "@/config";
+import { api } from "@/config";
 
 export interface EmailSectionData {
     mainImage: File | null;
@@ -26,11 +26,13 @@ export const useSendEmail = (onClose: () => void, products: any[]) => {
         { mainImage: null, secondaryImage1: null, secondaryImage2: null, mainImagePreview: "", secondaryImage1Preview: "", secondaryImage2Preview: "", title: "", paragraph: "" },
     ]);
 
+    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+    
     const fixUrl = (url: string) => {
         if (!url) return "";
         if (url.startsWith("http")) return url; 
         if (url.startsWith("blob")) return url; 
-        return `${ASSETS_URL}${url}`; 
+        return `${BACKEND_URL}${url}`; 
     };
 
     
