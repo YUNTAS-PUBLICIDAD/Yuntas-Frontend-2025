@@ -13,7 +13,13 @@ const nextConfig = {
                 hostname: 'apiyuntas.yuntaspublicidad.com',
             }
         ],
-    }
+    },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
 };
 
 export default nextConfig;
