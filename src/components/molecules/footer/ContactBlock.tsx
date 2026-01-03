@@ -17,6 +17,7 @@ const ContactBlock = () => (
     </div>
 
     <div className="flex gap-3 mt-2">
+
       <Icon href="https://www.instagram.com/yuntaspublicidad/" label="Instagram" size="lg" bgColor="bg-transparent">
         <FaInstagram className="text-2xl" />
       </Icon>
@@ -30,6 +31,7 @@ const ContactBlock = () => (
       </Icon>
 
       <Icon href="https://www.youtube.com/@yuntaspublicidad" label="YouTube" size="lg" bgColor="bg-transparent">
+
         <FaYoutube className="text-2xl" />
       </Icon>
     </div>

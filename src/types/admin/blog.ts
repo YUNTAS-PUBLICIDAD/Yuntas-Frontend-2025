@@ -90,3 +90,12 @@ export interface BlogBloque {
   title: string;
   content: string;
 }
+export interface BlogExport {
+  ID: string | number;
+  Título: string;
+  Subtítulo: string;
+  "Meta Título": string;
+  Fecha: string;
+  "Cant. Párrafos": number;
+  "Cant. Imágenes": number;
+}

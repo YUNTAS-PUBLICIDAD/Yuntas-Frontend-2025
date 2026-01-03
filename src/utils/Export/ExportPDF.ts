@@ -1,89 +1,120 @@
-import { Blog } from "@/types/blog";
-export const exportToPDF = (data: Blog[]) => {
+import { Blog } from "@/types/admin/blog";
+import { Producto } from "@/types/producto";
+
+export const exportToPDF = (data: Blog[] | Producto[]) => {
   try {
     if (!data || data.length === 0) {
       alert("No hay datos para exportar");
       return;
     }
 
-    const printWindow = window.open("", "_blank", "width=900,height=700");
+    const printWindow = window.open("", "_blank", "width=1100,height=700"); // Un poco más ancho
     if (!printWindow) {
       alert("Permite ventanas emergentes para generar el PDF");
       return;
     }
 
+    // 1. Detectar tipo de dato
+    const isBlog = (item: any): item is Blog => {
+      return (item as Blog).title !== undefined;
+    };
+
+    const isBlogData = isBlog(data[0]);
+
+    // 2. Definir Encabezados
+    const headers = isBlogData
+      ? `
+        <th style="width: 5%;">ID</th>
+        <th style="width: 20%;">Título</th>
+        <th style="width: 20%;">Subtítulo</th>
+        <th style="width: 20%;">Meta Título</th>
+        <th style="width: 15%;">Fecha</th>
+        <th style="width: 10%;">Párrafos</th>
+        <th style="width: 10%;">Imágenes</th>
+      `
+      : `
+        <th>Nombre</th>
+        <th>Categorías</th>
+      `;
+
+    // 3. Generar Filas (CORREGIDO: div.truncate dentro de td)
+    const rows = isBlogData
+      ? (data as Blog[])
+          .map(
+            (blog) => `
+            <tr>
+              <td style="text-align:center">${blog.id}</td>
+              <td><div class="truncate">${blog.title}</div></td>
+              <td><div class="truncate">${blog.cover_subtitle || "-"}</div></td>
+              <td><div class="truncate">${blog.meta_title || "-"}</div></td>
+              <td style="text-align:center">${new Date(blog.created_at).toLocaleDateString("es-ES")}</td>
+              <td style="text-align:center">${blog.paragraphs?.length || 0}</td>
+              <td style="text-align:center">${blog.gallery?.length || 0}</td>
+            </tr>
+          `
+          )
+          .join("")
+      : (data as Producto[])
+          .map(
+            (prod) => `
+            <tr>
+              <td>${prod.nombre}</td>
+              <td style="text-align:center">${prod.nombre?.length || 0}</td>
+            </tr>
+          `
+          )
+          .join("");
+
+    // 4. Construir HTML
     const html = `
       <!DOCTYPE html>
       <html>
       <head>
         <meta charset="utf-8" />
-        <title>Reporte de Blogs</title>
+        <title>Reporte</title>
         <style>
-          body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            padding: 20px;
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 11px; padding: 20px; }
+          h1 { text-align: center; color: #0ea5e9; border-bottom: 2px solid #0ea5e9; padding-bottom: 15px; margin-bottom: 20px; }
+          
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            table-layout: fixed; /* Importante para respetar anchos */
           }
-          h1 {
+          
+          th, td { 
+            border: 1px solid #e2e8f0; 
+            padding: 8px; 
+            vertical-align: middle;
+          }
+          
+          th { 
+            background-color: #0ea5e9; 
+            color: white; 
+            font-weight: 600;
             text-align: center;
-            color: #0ea5e9;
-            border-bottom: 2px solid #0ea5e9;
-            padding-bottom: 10px;
           }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-          }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 5px;
-            font-size: 10px;
-          }
-          th {
-            background: #0ea5e9;
-            color: #fff;
-          }
-          tr:nth-child(even) {
-            background: #f5f5f5;
-          }
+          
+          tr:nth-child(even) { background-color: #f8fafc; }
+          
+          /* CLASE TRUNCATE CORREGIDA */
           .truncate {
-            max-width: 150px;
+            width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: block; /* Funciona bien dentro del DIV, no del TD */
           }
         </style>
       </head>
       <body>
-        <h1>📊 Reporte de Blogs</h1>
-
+        <h1>📊 Reporte de ${isBlogData ? "Blogs" : "Productos"}</h1>
         <table>
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th>Subtítulo</th>
-              <th>Meta Título</th>
-              <th>Fecha</th>
-              <th>Párrafos</th>
-              <th>Imágenes</th>
-            </tr>
+            <tr>${headers}</tr>
           </thead>
           <tbody>
-            ${data
-              .map(
-                (blog) => `
-              <tr>
-                <td>${blog.id}</td>
-                <td class="truncate">${blog.nombre || ""}</td>
-                <td class="truncate">${blog.descripcion || ""}</td>
-                <td class="truncate">${blog.testimonio || ""}</td>
-                <td>${new Date(blog.fecha).toLocaleDateString("es-ES")}</td>
-              </tr>
-            `
-              )
-              .join("")}
+            ${rows}
           </tbody>
         </table>
       </body>
@@ -96,7 +127,7 @@ export const exportToPDF = (data: Blog[]) => {
     printWindow.onload = () => {
       setTimeout(() => {
         printWindow.print();
-      }, 400);
+      }, 500);
     };
   } catch (e) {
     console.error("Error PDF", e);
