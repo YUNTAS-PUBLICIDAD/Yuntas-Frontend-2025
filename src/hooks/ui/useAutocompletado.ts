@@ -1,38 +1,71 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
 
-type AutocompletadoProps<T> = {
-  items: T[];
-  palabras: string;
-  onSelect: (item: T) => void;
+import { useEffect, useRef, useState } from "react";
+type FetcherResponse<T>={
+  success: boolean;
+  data?: T[];
+  message?: string;
 };
 
-export function useAutocompletado<T extends { nombre: string }>({
-  items,
-  palabras,
-  onSelect
-}: AutocompletadoProps<T>) {
-  
+type AutocompletadoProps<T> = {
+  palabras: string;
+  fetcher: (query: string) => Promise<FetcherResponse<T>>;
+  onSelect: (item: T) => void;
+  debounceMs?: number;
+};
+
+export function useAutocompletado<T>({palabras,fetcher,onSelect, debounceMs = 300,}: AutocompletadoProps<T>) {
   const [lista, setLista] = useState<T[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const containerRef = useRef<HTMLUListElement>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!palabras.trim()) {
       setLista([]);
+      setActiveIndex(-1);
       return;
     }
 
-    const coincidencias = items.filter((e) =>
-      e.nombre.toLowerCase().includes(palabras.toLowerCase())
-    );
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
 
-    setLista(coincidencias);
-    setActiveIndex(-1);
-  }, [palabras, items]);
+    debounceRef.current = setTimeout(async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetcher(palabras);
+        if (res.success && res.data) {
+          setLista(res.data);
+        } else {
+          setLista([]);
+          setError(res.message ?? "Error al buscar");
+        }
+      } catch {
+        setError("Error de conexión");
+        setLista([]);
+      } finally {
+        setLoading(false);
+        setActiveIndex(-1);
+      }
+    }, debounceMs);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [palabras, fetcher, debounceMs]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setActiveIndex(-1);
       }
     };
@@ -63,8 +96,10 @@ export function useAutocompletado<T extends { nombre: string }>({
   return {
     lista,
     activeIndex,
-    setActiveIndex,
+    loading,
+    error,
     containerRef,
     handleKeyDown,
+    setActiveIndex,
   };
 }
