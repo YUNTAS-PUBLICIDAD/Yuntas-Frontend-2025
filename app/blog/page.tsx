@@ -4,12 +4,12 @@ import HeroSection from "@/components/organisms/blog/HeroSection";
 import { useBlogs } from "@/hooks/useBlog";
 import Loader from "@/components/atoms/Loader";
 import { useEffect } from "react";
+
   export default  function   BlogPage() {
   const {getBlogs,blogs,isLoading}=useBlogs();
   useEffect(() => {
       getBlogs(6); 
     }, []);
-  console.log("estos on los blogs",blogs);
   return (
     <main >
       <HeroSection/>
@@ -21,5 +21,6 @@ import { useEffect } from "react";
             <BlogSection data={blogs}/> }
     </main>
   );
+
 }
 
