@@ -36,7 +36,9 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => {
               onChange={(e) => {
                 const selectedId = Number(e.target.value);
                 const selectedProducto = productos.find(p => p.id === selectedId);
-                
+                console.log(selectedProducto.id)
+                console.log(selectedProducto.name)
+                console.log(selectedProducto.slug)
                 setBlog(prev => ({
                   ...prev,
                   categorias: selectedProducto ? [{

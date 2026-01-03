@@ -14,16 +14,36 @@ const ContactBlock = () => (
       <span>yuntasproducciones@gmail.com</span>
     </div>
     <div className="flex gap-3 mt-2">
-      <Icon href="#" label="Instagram" size="lg" bgColor="bg-transparent">
+      <Icon
+        href="https://www.instagram.com/yuntaspublicidad/"
+        label="Instagram"
+        size="lg"
+        bgColor="bg-transparent"
+      >
         <FaInstagram className="text-2xl" />
       </Icon>
-      <Icon href="#" label="Facebook" size="lg" bgColor="bg-transparent">
+      <Icon
+        href="https://www.facebook.com/YuntasProducciones/"
+        label="Facebook"
+        size="lg"
+        bgColor="bg-transparent"
+      >
         <FaFacebook className="text-2xl" />
       </Icon>
-      <Icon href="#" label="TikTok" size="lg" bgColor="bg-transparent">
+      <Icon
+        href="https://www.tiktok.com/@yuntaspublicidad"
+        label="TikTok"
+        size="lg"
+        bgColor="bg-transparent"
+      >
         <FaTiktok className="text-2xl" />
       </Icon>
-      <Icon href="#" label="YouTube" size="lg" bgColor="bg-transparent">
+      <Icon
+        href="https://www.youtube.com/@yuntaspublicidad"
+        label="YouTube"
+        size="lg"
+        bgColor="bg-transparent"
+      >
         <FaYoutube className="text-2xl" />
       </Icon>
     </div>
