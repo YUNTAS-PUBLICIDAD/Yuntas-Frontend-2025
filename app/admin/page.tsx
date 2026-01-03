@@ -30,8 +30,8 @@ export default function InicioPage() {
             <AdminTable
                 columns={columns}
                 data={data}
-                onDelete={handleDelete}
-                onApprove={handleApprove}
+                
+                
                 // onEdit={handleEdit} // Si quisieras editar, solo descomentas y pasas la función
             />
             

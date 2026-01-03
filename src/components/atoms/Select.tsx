@@ -15,7 +15,7 @@ type SelectProps = {
   required?: boolean;
   multiple?: boolean;
   className?: string;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  
 };
 
 const Select = ({
@@ -28,7 +28,7 @@ const Select = ({
   required = false,
   multiple = false,
   className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2",
-  onChange
+  
 }: SelectProps) => {
   const normalizedOptions: SelectOption[] = options.map((opt) => {
     if (typeof opt === 'string') {
@@ -54,7 +54,7 @@ const Select = ({
         onChange={onChange}
         required={required}
         multiple={multiple}
-        onChange={onChange}
+        
       >
         {!multiple && (
           <option value="" disabled>
