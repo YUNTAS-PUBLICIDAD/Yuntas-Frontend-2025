@@ -35,10 +35,12 @@ export async function loginAction(credentials: LoginCredentials): Promise<LoginA
         return {
             success: true,
             message: "Bienvenido",
+            token: token,
             user: {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                
             },
              token: token,
         };

@@ -26,13 +26,13 @@ export function useAuth(): UseAuthReturn {
         if (result.success) {
             // ✅ Guardar token en localStorage para frontend
             if (result.user && result.token) {
-                localStorage.setItem("token", result.token);
+                localStorage.setItem("auth_token", result.token);
             }
 
             router.push("/admin");
             router.refresh();
         } else {
-            setError(result.message);
+            setError(result.message || "Error al iniciar sesión");
         }
 
         setIsLoading(false);
@@ -43,8 +43,9 @@ export function useAuth(): UseAuthReturn {
         setError(null);
 
         await logoutAction();
+        localStorage.removeItem("auth_token");
 
-        setIsLoading(true);
+        setIsLoading(false);
         router.push("/login");
         router.refresh();
     };

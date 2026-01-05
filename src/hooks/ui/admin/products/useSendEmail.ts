@@ -22,13 +22,10 @@ type PreviewField =
 
 export const useSendEmail = (
     onClose: () => void,
-    email_productos: any[] // viene del backend
+    email_productos: any[]
 ) => {
     const [isSending, setIsSending] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState("");
-
-    const BACKEND_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
     const createEmptySection = (): EmailSectionData => ({
         mainImage: null,
@@ -46,12 +43,6 @@ export const useSendEmail = (
         createEmptySection(),
         createEmptySection(),
     ]);
-
-    const fixUrl = (url: string) => {
-        if (!url) return "";
-        if (url.startsWith("http") || url.startsWith("blob")) return url;
-        return `${BACKEND_URL}${url}`;
-    };
 
     // --------------------------------------------------
     // CARGAR PLANTILLA DESDE BACKEND
@@ -86,9 +77,9 @@ export const useSendEmail = (
                             secondaryImage1: null,
                             secondaryImage2: null,
 
-                            mainImagePreview: fixUrl(item.imagen_principal),
-                            secondaryImage1Preview: fixUrl(secundarias[0]),
-                            secondaryImage2Preview: fixUrl(secundarias[1]),
+                            mainImagePreview: item.imagen_principal || "",
+                            secondaryImage1Preview: secundarias[0] || "",
+                            secondaryImage2Preview: secundarias[1] || "",
 
                             title: item.titulo || "",
                             paragraph: item.parrafo1 || "",
@@ -97,7 +88,7 @@ export const useSendEmail = (
 
                 setSections(ordered);
             } catch (error) {
-                console.error("Error cargando plantilla", error);
+                console.error("Error cargando plantilla email", error);
             }
         };
 
@@ -210,12 +201,9 @@ export const useSendEmail = (
                 producto_id: selectedProductId,
             });
 
-            console.log("Campaña enviada:", res.data);
-
             alert(
                 `Campaña enviada correctamente\n\nLeads: ${res.data.total_leads}\nCorreos: ${res.data.total_correos}`
             );
-
             onClose();
         } catch (error) {
             console.error(error);

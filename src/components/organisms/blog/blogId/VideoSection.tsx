@@ -3,6 +3,7 @@ import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
 import { Blog } from '@/types/admin/blog'
 import { getYoutubeEmbed } from '@/types/getYoutubeEmbed'
+import Link from 'next/link'
 type VideoSectionProps={
     data:Blog
 }
@@ -19,8 +20,10 @@ const VideoSection = ({data}:VideoSectionProps) => {
             title="YouTube video"
             allowFullScreen>
         </iframe>
-        <Button  className='w-full md:w-[344px] rounded-3xl text-white mx-auto bg-[#23C1DE]'
-        size='md'>!cotiza ahora¡</Button>
+        <Link href="/contacto" className="text-blue-500 hover:underline">
+          <Button  className='w-full uppercase md:w-[344px] rounded-3xl text-white mx-auto bg-[#23C1DE]'
+          size='md'>cotiza ahora</Button>
+        </Link>
     </section>
   )
 }
