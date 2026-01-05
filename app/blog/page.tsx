@@ -21,5 +21,6 @@ import { useEffect } from "react";
             <BlogSection data={blogs}/> }
     </main>
   );
+
 }
 
