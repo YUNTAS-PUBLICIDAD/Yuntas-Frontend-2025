@@ -12,19 +12,19 @@ export interface SeoProducto {
 
 export interface Producto {
     id: number;
-    nombre: string;
+    name: string;
     slug: string;
     titulo_corto: string;
-    descripcion: string;
+    description: string;
     precio: string;
-    categoria?: string;
+    categories?: string;
     estado: "active" | "inactive";
-    imagen_principal: ImagenProducto;
-    galeria: ImagenProducto[];
+    main_image: ImagenProducto;
+    gallery: ImagenProducto[];
     especificaciones: string[];
-    beneficios: string[];
+    benefits: string[];
     seo: SeoProducto;
-    creado_en: string;
+    created_at: string;
 }
 
 export interface ProductoInput {

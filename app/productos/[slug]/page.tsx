@@ -6,7 +6,7 @@ import ProductoDetallePopup from "@/components/organisms/productos/detalle/Produ
 import { getProductoBySlugAction } from "@/actions/productosActions";
 import { Metadata } from "next";
 import { BASE_URL } from "@/config";
-
+import { Producto } from "@/types/producto";
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const result = await getProductoBySlugAction(params.slug);
     

@@ -35,7 +35,9 @@ export function buildBlogFormData(data: BlogInput): FormData {
       })
     );
   }
-  
+  if (data.product) {
+    formData.append("product_id", String(data.product));
+  }
   // Imagen principal (REQUERIDA según validación)
   if (data.imagen_principal) {
     formData.append("imagen_principal", data.imagen_principal);

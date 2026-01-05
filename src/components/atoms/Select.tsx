@@ -11,7 +11,6 @@ type SelectProps = {
   textLabel?: string;
   colorLabel?: string;
   value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;
   multiple?: boolean;
   className?: string;
@@ -28,7 +27,6 @@ const Select = ({
   required = false,
   multiple = false,
   className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2",
-  onChange
 }: SelectProps) => {
   const normalizedOptions: SelectOption[] = options.map((opt) => {
     if (typeof opt === 'string') {
