@@ -16,6 +16,7 @@ export default function BlogDetallePage({ params }: { params: { slug: string } }
     
   }, [params.slug]);
   if (!blog) return null;
+  console.log(blog)
   return (
     <main className="">
       {isLoading ? <Loader size="lg"/> :
