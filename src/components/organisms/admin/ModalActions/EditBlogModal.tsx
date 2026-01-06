@@ -16,7 +16,7 @@ import { Blog, BlogInput } from '@/types/admin/blog';
 // Utilidad para mapear Blog a BlogInput
 import { mapBlogToInput } from '@/utils/blog/mapBlogToInput';
 // Hook del proyecto para operaciones de blog
-import { useBlogs } from '@/hooks/useBlog';
+import { useBlogs } from '@/hooks/useBlog'; 
 
 // Props del componente - compatible con la página de blogs
 interface Props {
@@ -40,6 +40,7 @@ const BLOG_INICIAL: BlogInput = {
   imagen_principal_alt: "",
   imagenes: [],
   imagenes_alts: [],
+  product: 0,
   parrafos: [],
   beneficios: [],
   bloques: [],

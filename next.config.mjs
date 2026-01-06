@@ -1,13 +1,17 @@
+import next from 'next';
+
 /**@type {import('next').NextConfig} */
 const nextConfig = {
   
  
 
-/** holaaaa */
-
+  // configurar next para exportar sitio estático
+  output: 'export',
+  trailingSlash: true, 
 
   images: {
     unoptimized: true,
+
     remotePatterns: [
       {
         protocol: 'http',
