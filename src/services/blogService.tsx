@@ -5,9 +5,6 @@ import { getToken } from "@/utils/token";
 
 export async function getBlogsService(perPage: number = 10, url?: string): Promise<BlogActionResponse<Blog[]>> {
   try {
-    const token = getToken();
-    if (!token) return { success: false, message: "No autenticado" };
-
     const endpoint = url ?? API_ENDPOINTS.BLOG.GET_ALL + `?per_page=${perPage}`;
     const response = await api.get(endpoint);
 

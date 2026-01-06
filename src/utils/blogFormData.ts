@@ -45,16 +45,15 @@ export function buildBlogFormData(data: BlogInput): FormData {
   }
   
   // Galería de imágenes
-  if (data.imagenes && data.imagenes.length > 0) {
-    data.imagenes.forEach((file, index) => {
-      formData.append(`imagenes[${index}]`, file);
-      formData.append(
-        `imagenes_alts[${index}]`,
-        data.imagenes_alts[index] ?? ""
-      );
-    });
-  }
-  
+  [0, 1, 2].forEach(index => {
+      // 1. Manejo del ARCHIVO
+      const file = data.imagenes?.[index];
+      if (file instanceof File) {
+          formData.append(`imagenes[${index}]`, file);
+      }
+      const alt = data.imagenes_alts?.[index];
+      formData.append(`imagenes_alts[${index}]`, alt ?? "");
+  });
   // Párrafos
   if (data.parrafos && data.parrafos.length > 0) {
     data.parrafos
