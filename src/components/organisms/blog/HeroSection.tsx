@@ -1,4 +1,4 @@
-import heroBackground from "@/assets/Blog/heroBackground.png";
+import heroBackground from "@/assets/blog/heroBackground.png";
 import HeroPage from '@/components/molecules/HeroPage';
 const HeroSection = () => {
   return (

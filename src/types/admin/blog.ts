@@ -104,3 +104,19 @@ export interface BlogExport {
   "Cant. Párrafos": number;
   "Cant. Imágenes": number;
 }
+
+export type BlogView = Blog | BlogStatic;
+export type BlogStatic = {
+  id: number;
+  slug: string;
+  title: string;
+  cover_subtitle?: string;
+  content: string;
+  categories: string[];
+  benefits?: string[];
+  opinion?: string;
+  video_url?: string;
+  main_image: {
+    url: string;
+  };
+};

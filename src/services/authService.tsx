@@ -28,6 +28,7 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
                 email: user.email,
                 
             },
+
         };
 
     } catch (error: any) {
