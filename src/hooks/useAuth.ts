@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginCredentials } from "@/types/auth";
-import { loginAction, logoutAction } from "@/actions/authActions";
+import { loginService, logoutService } from "@/services/authService";
 
 interface UseAuthReturn {
     login: (credentials: LoginCredentials) => Promise<void>;
@@ -21,26 +21,25 @@ export function useAuth(): UseAuthReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await loginAction(credentials);
+        const result = await loginService(credentials);
 
         if (result.success) {
             router.push("/admin");
             router.refresh();
         } else {
-            setError(result.message);
-            
+            setError(result.message || "Error al iniciar sesión");
         }
 
-        setIsLoading(true);
+        setIsLoading(false);
     };
 
     const logout = async () => {
         setIsLoading(true);
         setError(null);
 
-        await logoutAction();
+        await logoutService();
 
-        setIsLoading(true);
+        setIsLoading(false);
         router.push("/login");
         router.refresh();
     };

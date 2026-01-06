@@ -1,20 +1,22 @@
 import React from 'react';
 
+// Definimos la estructura básica de una opción
 type SelectOption = {
-  value: string | number; // Fixed: removed arrays
+  value: string | number;
   label: string;
 };
 
+// Props del componente
 type SelectProps = {
-  options: string[] | SelectOption[];
+  options: (string | SelectOption | any)[]; // 'any' añadido para permitir objetos flexibles como productos
   name?: string;
   textLabel?: string;
   colorLabel?: string;
   value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;
   multiple?: boolean;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void; // ¡Agregado!
 };
 
 const Select = ({
@@ -23,16 +25,25 @@ const Select = ({
   textLabel,
   colorLabel = "text-black",
   value = "",
-  onChange,
   required = false,
   multiple = false,
-  className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2"
+  className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2",
+  onChange, // ¡Agregado aquí también!
 }: SelectProps) => {
+
+  // Normalizamos las opciones para asegurarnos de que siempre tengan value y label
   const normalizedOptions: SelectOption[] = options.map((opt) => {
     if (typeof opt === 'string') {
       return { value: opt, label: opt };
+    } else if (typeof opt === 'object' && opt !== null) {
+      // Lógica para manejar tanto {value, label} como {id, name} (productos)
+      const val = opt.value !== undefined ? opt.value : opt.id;
+      const lab = opt.label !== undefined ? opt.label : opt.name;
+      
+      return { value: val, label: lab };
     }
-    return opt;
+    // Fallback por seguridad
+    return { value: String(opt), label: String(opt) };
   });
 
   return (
@@ -57,7 +68,7 @@ const Select = ({
           </option>
         )}
         {normalizedOptions.map((option, index) => (
-          <option key={index} value={option.value}>
+          <option key={`${option.value}-${index}`} value={option.value}>
             {option.label}
           </option>
         ))}

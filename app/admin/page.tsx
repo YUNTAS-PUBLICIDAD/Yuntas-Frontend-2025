@@ -21,7 +21,8 @@ export default function InicioPage() {
     const onAdd = () => {
         console.log("Navegar a formulario de añadir...");
     }
-
+    
+    
     return (
         <div className="flex flex-col gap-6">
             
@@ -29,8 +30,8 @@ export default function InicioPage() {
             <AdminTable
                 columns={columns}
                 data={data}
-                onDelete={handleDelete}
-                onApprove={handleApprove}
+                
+                
                 // onEdit={handleEdit} // Si quisieras editar, solo descomentas y pasas la función
             />
             

@@ -29,6 +29,7 @@ const BLOG_INICIAL:BlogInput={
   imagenes: [],
   imagenes_alts: [],
   parrafos: [],
+  product: 0,
   beneficios: [],
   bloques: [],
 }
@@ -38,9 +39,9 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
     const [blog, setBlog] = useState<BlogInput>(BLOG_INICIAL)
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(blog)
         const success = await createBlog(blog);
         if (success) {
+          console.log('Blog creado',blog)
             alert("Blog creado correctamente");
             onSuccess?.(); 
             onClose();

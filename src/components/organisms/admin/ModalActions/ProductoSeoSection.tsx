@@ -25,36 +25,33 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => {
 
       <div className="flex flex-col gap-4">
         {/* Product Selector */}
+        {/* --- SELECTOR DE PRODUCTO --- */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-gray-700">
-            Producto asociado *
-            <span className="text-red-500 ml-1">*</span>
+            Producto asociado <span className="text-red-500 ml-1">*</span>
           </label>
-            <select
-              className="px-3 py-2 bg-white border border-gray-300 rounded-[5px] focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all w-full"
-              value={blog.categorias?.[0]?.id || ''}
-              onChange={(e) => {
-                const selectedId = Number(e.target.value);
-                const selectedProducto = productos.find(p => p.id === selectedId);
-                
-                setBlog(prev => ({
-                  ...prev,
-                  categorias: selectedProducto ? [{
-                    id: selectedProducto.id,
-                    name: selectedProducto.name,
-                    slug: selectedProducto.slug
-                  }] : []
-                }));
-              }}
-              required
-            >
-              <option value="">-- Selecciona un producto --</option>
-              {productos.map((producto) => (
-                <option key={producto.id} value={producto.id}>
-                  {producto.name}
-                </option>
-              ))}
-            </select>
+          <select
+            className="px-3 py-2  bg-white border border-gray-300 rounded-[5px] focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all w-full"
+            // Como blog.product ahora es un número (ID), esto funciona directo
+            value={blog.product ?? ''} 
+            onChange={(e) => {
+              const selectedId = Number(e.target.value);
+              
+              setBlog(prev => ({
+                ...prev,
+                // Guardamos el ID directamente
+                product: selectedId || null, 
+              }));
+            }}
+            required
+          >
+            <option value="" >-- Selecciona un producto --</option>
+            {productos.map((producto) => (
+              <option key={producto.id} value={producto.id}>
+                {producto.name} {/* Asegúrate que sea .nombre o .name según tu interfaz Producto */}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Subtítulo */}

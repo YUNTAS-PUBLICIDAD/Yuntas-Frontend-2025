@@ -1,19 +1,12 @@
-'use server';
-
-import { cookies } from "next/headers";
 import { api, API_ENDPOINTS } from "@/config";
 import {
     Contacto,
     ContactoInput,
     ContactoActionResponse,
 } from "@/types/admin/contacto";
+import { getToken } from "@/utils/token";
 
-function getToken(): string | null {
-    const cookieStore = cookies();
-    return cookieStore.get("auth_token")?.value || null;
-}
-
-export async function getContactosAction(perPage: number = 20): Promise<ContactoActionResponse<Contacto[]>> {
+export async function getContactosService(perPage: number = 20): Promise<ContactoActionResponse<Contacto[]>> {
     try {
         const token = getToken();
 
@@ -36,7 +29,7 @@ export async function getContactosAction(perPage: number = 20): Promise<Contacto
     }
 }
 
-export async function getContactoByIdAction(id: number): Promise<ContactoActionResponse<Contacto>> {
+export async function getContactoByIdService(id: number): Promise<ContactoActionResponse<Contacto>> {
     try {
         const token = getToken();
 
@@ -60,10 +53,9 @@ export async function getContactoByIdAction(id: number): Promise<ContactoActionR
     }
 }
 
-export async function createContactoAction(contactoData: ContactoInput): Promise<ContactoActionResponse<Contacto>> {
+export async function createContactoService(contactoData: ContactoInput): Promise<ContactoActionResponse<Contacto>> {
     try {
         const response = await api.post(API_ENDPOINTS.FORMS.CONTACT, contactoData);
-        console.log(contactoData);
 
         return {
             success: true,
@@ -75,7 +67,7 @@ export async function createContactoAction(contactoData: ContactoInput): Promise
     }
 }
 
-export async function deleteContactoAction(id: number): Promise<ContactoActionResponse<null>> {
+export async function deleteContactoService(id: number): Promise<ContactoActionResponse<null>> {
     try {
         const token = getToken();
 

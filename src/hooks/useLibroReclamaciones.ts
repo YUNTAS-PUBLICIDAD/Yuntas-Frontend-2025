@@ -1,0 +1,90 @@
+'use client'
+
+import { useState } from "react";
+import toast from 'react-hot-toast';
+import { ReclamoInput } from "@/types/admin/reclamo";
+import { useReclamos } from "@/hooks/useReclamos";
+
+const defaultFormData: ReclamoInput = {
+    first_name: "",
+    last_name: "",
+    document_type_id: 1,
+    document_number: "",
+    email: "",
+    phone: "",
+    claim_type_id: 1,
+    detail: "",
+    product_id: 0,
+    purchase_date: "",
+    claimed_amount: 0
+}
+
+export function useLibroReclamaciones() {
+    const [formData, setFormData] = useState<ReclamoInput>(defaultFormData);
+    const { createReclamo, isLoading, error } = useReclamos();
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+
+        if (name === "document_number" && formData.document_type_id === 1 && (value.length > 8 || Number(value) < 0)) return;
+        if (name === "document_number" && formData.document_type_id === 2 && (value.length > 9 || Number(value) < 0)) return;
+        if (name === "phone" && (value.length > 9 || Number(value) < 0)) return;
+        if (name==="claimed_amount" && (value.charAt(0) === "0" || value.length > 8 || Number(value) < 0)) return;
+
+        let newValue : String | Number = value;
+        if (name === "document_type_id") {
+            newValue = value === "DNI" ? 1 : 2;
+        }
+        setFormData(prev => ({ ...prev, [name]: newValue }));
+        
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        console.log(formData)
+
+        if (isLoading) return false;
+
+        if (formData.first_name.trim() === "" || formData.last_name.trim() === "" || formData.phone?.trim() === "" || formData.detail.trim() === "" || formData.email.trim() === "" || formData.document_number.trim() === "") {
+            toast.error("Por favor complete los campos obligatorios");
+            return false;
+        } else if (formData.detail.trim().length < 10) {
+            toast.error("El detalle debe tener al menos 10 caracteres");
+            return false;
+        } else if (formData.phone?.trim().length !== 9) {
+            toast.error("El teléfono debe tener 9 números");
+            return false;
+        } else if (formData.document_type_id === 1 && formData.document_number?.trim().length !== 8) {
+            toast.error("El número del documento debe tener 8 números");
+            return false;
+        } else if (formData.document_type_id === 2 && formData.document_number?.trim().length !== 9) {
+            toast.error("El número del documento debe tener 9 caracteres");
+            return false;
+        }
+
+        if (formData.product_id === 0) {
+            delete formData.product_id;
+        }
+
+        const success = await createReclamo(formData);
+
+        if (success) {
+            toast.success("Reclamo enviado");
+            setFormData(defaultFormData);
+            return true;
+        } else {
+            toast.error("Error al enviar el reclamo");
+            return false;
+        }
+    };
+
+    return {
+        formData,
+        setFormData,
+        handleInputChange,
+        handleSubmit,
+        isLoading,
+        error
+    };
+}

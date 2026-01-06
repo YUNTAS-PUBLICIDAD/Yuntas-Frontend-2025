@@ -1,3 +1,4 @@
+import { GET } from "../../app/api/admin/users/route";
 
 
 export const API_ENDPOINTS = {
@@ -29,7 +30,6 @@ export const API_ENDPOINTS = {
 
   // FORMULARIOS PÚBLICOS
   FORMS: {
-    LEAD: '/leads', 
     CONTACT: '/contacto', 
     CLAIMS: '/claims', 
   },
@@ -37,11 +37,11 @@ export const API_ENDPOINTS = {
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
-      GET_ALL: '/admin/users',
-      CREATE: '/admin/users',
-      UPDATE: (id: number) => `/admin/users/${id}`,
-      DELETE: (id: number) => `/admin/users/${id}`,
-      ASSIGN_ROLE: (id: number) => `/admin/users/${id}/role`,
+      GET_ALL: '/users',
+      CREATE: '/users',
+      UPDATE: (id: number) => `/users/${id}`,
+      DELETE: (id: number) => `/users/${id}`,
+      ASSIGN_ROLE: (id: number) => `/users/${id}/role`,
     },
     CATEGORIES: {
       GET_ALL: '/admin/categorias',
@@ -50,13 +50,22 @@ export const API_ENDPOINTS = {
       DELETE: (id: number) => `/admin/categorias/${id}`,
     },
     INBOX: {
-      LEADS: '/leads',
+      LEADS: {
+        GET_ALL: '/admin/leads',
+        CREATE: '/admin/leads',
+        UPDATE: (id: number) => `/admin/leads/${id}`,
+        DELETE: (id: number) => `/admin/leads/${id}`,
+      },
       CONTACT: {
         GET_ALL: '/admin/contacto',
         GET_ONE: (id: number) => `/admin/contacto/${id}`,
         DELETE: (id: number) => `/admin/contacto/${id}`,
       }, 
-      CLAIMS: '/admin/claims', 
+      CLAIMS: {
+        GET_ALL: '/admin/claims',
+        GET_ONE: (id: number) => `/admin/claims/${id}`,
+        REPLY:  (id: number) => `/admin/claims/${id}/reply`,
+      } 
     }
   }
 };
