@@ -1,19 +1,12 @@
-'use server';
-
-import { cookies } from "next/headers";
 import { api, API_ENDPOINTS } from "@/config";
 import {
     Categoria,
     CategoriaInput,
     CategoriaActionResponse,
 } from "@/types/admin/categoria";
+import { getToken } from "@/utils/token";
 
-function getToken(): string | null {
-    const cookieStore = cookies();
-    return cookieStore.get("auth_token")?.value || null;
-}
-
-export async function getCategoriasAction(): Promise<CategoriaActionResponse<Categoria[]>> {
+export async function getCategoriasService(): Promise<CategoriaActionResponse<Categoria[]>> {
     try {
         const token = getToken();
 
@@ -34,7 +27,7 @@ export async function getCategoriasAction(): Promise<CategoriaActionResponse<Cat
     }
 }
 
-export async function createCategoriaAction(categoriaData: CategoriaInput): Promise<CategoriaActionResponse<Categoria>> {
+export async function createCategoriaService(categoriaData: CategoriaInput): Promise<CategoriaActionResponse<Categoria>> {
     try {
         const token = getToken();
 
@@ -58,7 +51,7 @@ export async function createCategoriaAction(categoriaData: CategoriaInput): Prom
     }
 }
 
-export async function updateCategoriaAction(id: number, categoriaData: CategoriaInput): Promise<CategoriaActionResponse<Categoria>> {
+export async function updateCategoriaService(id: number, categoriaData: CategoriaInput): Promise<CategoriaActionResponse<Categoria>> {
     try {
         const token = getToken();
 
@@ -83,7 +76,7 @@ export async function updateCategoriaAction(id: number, categoriaData: Categoria
     }
 }
 
-export async function deleteCategoriaAction(id: number): Promise<CategoriaActionResponse<null>> {
+export async function deleteCategoriaService(id: number): Promise<CategoriaActionResponse<null>> {
     try {
         const token = getToken();
 

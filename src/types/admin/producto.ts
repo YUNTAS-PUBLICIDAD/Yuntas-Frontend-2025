@@ -1,7 +1,15 @@
+import { Categoria } from "./categoria";
+
 export interface ImagenProducto {
     url: string | null;
     alt: string | null;
     title: string | null;
+}
+
+export interface Galeria {
+    url:  string;
+    alt:  string | null;
+    slot: string;
 }
 
 export interface SeoProducto {
@@ -14,6 +22,7 @@ export interface Producto {
     id: number;
     name: string;
     slug: string;
+    price: string;
     titulo_corto: string;
     description: string;
     precio: string;
