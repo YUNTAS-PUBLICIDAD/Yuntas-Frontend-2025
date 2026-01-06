@@ -1,6 +1,3 @@
-'use server';
-
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { api, API_ENDPOINTS } from "@/config";
 import {
@@ -8,13 +5,9 @@ import {
     LeadInput,
     LeadActionResponse,
 } from "@/types/admin/lead";
+import { getToken } from "@/utils/token";
 
-function getToken(): string | null {
-    const cookieStore = cookies();
-    return cookieStore.get("auth_token")?.value || null;
-}
-
-export async function getLeadsAction(perPage: number = 20): Promise<LeadActionResponse<Lead[]>> {
+export async function getLeadsService(perPage: number = 20): Promise<LeadActionResponse<Lead[]>> {
     try {
         const token = getToken();
 
@@ -37,7 +30,7 @@ export async function getLeadsAction(perPage: number = 20): Promise<LeadActionRe
     }
 }
 
-export async function createLeadAction(leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
+export async function createLeadService(leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
     try {
         const token = getToken();
 
@@ -64,7 +57,7 @@ export async function createLeadAction(leadData: LeadInput): Promise<LeadActionR
     }
 }
 
-export async function updateLeadAction(id: number, leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
+export async function updateLeadService(id: number, leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
     try {
         const token = getToken();
 
@@ -90,7 +83,7 @@ export async function updateLeadAction(id: number, leadData: LeadInput): Promise
     }
 }
 
-export async function deleteLeadAction(id: number): Promise<LeadActionResponse<null>> {
+export async function deleteLeadService(id: number): Promise<LeadActionResponse<null>> {
     try {
         const token = getToken();
 

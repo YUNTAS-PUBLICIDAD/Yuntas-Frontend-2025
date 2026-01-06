@@ -1,16 +1,9 @@
-'use server';
-
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { api, API_ENDPOINTS } from "@/config";
-import { Blog, BlogActionResponse ,BlogListResponseBySlug} from "@/types/admin/blog";
+import { Blog, BlogActionResponse, BlogListResponseBySlug } from "@/types/admin/blog";
+import { getToken } from "@/utils/token";
 
-function getToken(): string | null {
-  const cookieStore = cookies();
-  return cookieStore.get("auth_token")?.value || null;
-}
-
-export async function getBlogsAction(perPage: number = 10, url?: string): Promise<BlogActionResponse<Blog[]>> {
+export async function getBlogsService(perPage: number = 10, url?: string): Promise<BlogActionResponse<Blog[]>> {
   try {
     const token = getToken();
     if (!token) return { success: false, message: "No autenticado" };
@@ -29,7 +22,7 @@ export async function getBlogsAction(perPage: number = 10, url?: string): Promis
   }
 }
 
-export async function getBlogBySlugAction(slug: string): Promise<BlogListResponseBySlug<Blog>> {
+export async function getBlogBySlugService(slug: string): Promise<BlogListResponseBySlug<Blog>> {
   try {
     const token = getToken();
     if (!token) return { success: false, message: "No autenticado" };
@@ -46,7 +39,7 @@ export async function getBlogBySlugAction(slug: string): Promise<BlogListRespons
   }
 }
 
-export async function createBlogAction(formData: FormData): Promise<BlogActionResponse<Blog>> {
+export async function createBlogService(formData: FormData): Promise<BlogActionResponse<Blog>> {
   try {
     const token = getToken();
     if (!token) return { success: false, message: "No autenticado" };
@@ -67,7 +60,7 @@ export async function createBlogAction(formData: FormData): Promise<BlogActionRe
   }
 }
 
-export async function updateBlogAction(id: number | string, formData: FormData): Promise<BlogActionResponse<Blog>> {
+export async function updateBlogService(id: number | string, formData: FormData): Promise<BlogActionResponse<Blog>> {
   try {
     const token = getToken();
     if (!token) return { success: false, message: "No autenticado" };
@@ -81,14 +74,14 @@ export async function updateBlogAction(id: number | string, formData: FormData):
       message: response.data.data.message || "Blog actualizado exitosamente",
       data: response.data.data.data,
     };
-  } catch (error: any) { 
+  } catch (error: any) {
     console.error("Error al actualizar:", error.response?.data || error.message);
 
     return { success: false, message: error.response?.data?.message || "Error de conexión" };
   }
 }
 
-export async function deleteBlogAction(id: number | string): Promise<BlogActionResponse<null>> {
+export async function deleteBlogService(id: number | string): Promise<BlogActionResponse<null>> {
   try {
     const token = getToken();
     if (!token) return { success: false, message: "No autenticado" };

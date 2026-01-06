@@ -3,11 +3,11 @@
 import { useState, useCallback } from "react";
 import { Lead, LeadInput } from "@/types/admin/lead";
 import {
-    getLeadsAction,
-    createLeadAction,
-    updateLeadAction,
-    deleteLeadAction
-} from "@/actions/leadsActions";
+    getLeadsService,
+    createLeadService,
+    updateLeadService,
+    deleteLeadService
+} from "@/services/leadsService";
 
 interface UseLeadsReturn {
     leads: Lead[];
@@ -31,7 +31,7 @@ export function useLeads(): UseLeadsReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getLeadsAction(perPage);
+        const result = await getLeadsService(perPage);
         console.log(result)
 
         if (result.success && result.data) {
@@ -47,7 +47,7 @@ export function useLeads(): UseLeadsReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await updateLeadAction(id, leadData);
+        const result = await updateLeadService(id, leadData);
         if (!result.success) {
             setError(result.message || 'Error desconocido');
         }
@@ -61,7 +61,7 @@ export function useLeads(): UseLeadsReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await createLeadAction(leadData);
+        const result = await createLeadService(leadData);
         if (!result.success) {
             setError(result.message || 'Error desconocido');
         }
@@ -74,7 +74,7 @@ export function useLeads(): UseLeadsReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await deleteLeadAction(id);
+        const result = await deleteLeadService(id);
 
         if (!result.success) {
             setError(result.message || 'Error desconocido');

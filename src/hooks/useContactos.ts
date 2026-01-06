@@ -3,11 +3,11 @@
 import { useState, useCallback } from "react";
 import { Contacto, ContactoInput } from "@/types/admin/contacto";
 import {
-    getContactosAction,
-    getContactoByIdAction,
-    createContactoAction,
-    deleteContactoAction
-} from "@/actions/contactosActions";
+    getContactosService,
+    getContactoByIdService,
+    createContactoService,
+    deleteContactoService
+} from "@/services/contactosService";
 
 interface UseContactosReturn {
     contactos: Contacto[];
@@ -35,7 +35,7 @@ export function useContactos(): UseContactosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getContactosAction(perPage);
+        const result = await getContactosService(perPage);
 
         if (result.success && result.data) {
             setContactos(result.data);
@@ -50,7 +50,7 @@ export function useContactos(): UseContactosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getContactoByIdAction(id);
+        const result = await getContactoByIdService(id);
         if (result.success && result.data) {
             setContacto(result.data);
             setIsLoading(false);
@@ -66,7 +66,7 @@ export function useContactos(): UseContactosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await createContactoAction(contactoData);
+        const result = await createContactoService(contactoData);
         if (!result.success) {
             setError(result.message || 'Error desconocido');
         }
@@ -79,7 +79,7 @@ export function useContactos(): UseContactosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await deleteContactoAction(id);
+        const result = await deleteContactoService(id);
 
         if (!result.success) {
             setError(result.message || 'Error desconocido');
