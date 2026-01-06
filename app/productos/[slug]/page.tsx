@@ -6,9 +6,7 @@ import InformacionSection from "@/components/organisms/productos/detalle/Informa
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import ProductoDetallePopup from "@/components/organisms/productos/detalle/ProductoDetallePopup";
 import { useProductos } from "@/hooks/useProductos";
-import { Metadata } from "next";
 import { BASE_URL } from "@/config";
-import { Producto } from "@/types/producto";
 import { useEffect } from "react";
 
 /* export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
