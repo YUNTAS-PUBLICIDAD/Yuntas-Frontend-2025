@@ -7,20 +7,20 @@ import Text from '@/components/atoms/Text'
 import SearchBar from '@/components/molecules/blog/SearchBar'
 import BlogCard from '@/components/molecules/blog/BlogCard'
 import Pagination from '@/components/molecules/Pagination'
-import { Blog } from '@/types/admin/blog'
+import { BlogView } from '@/types/admin/blog'
 import { getImg } from '@/utils/getImg'
 import { useAutocompletado } from '@/hooks/ui/useAutocompletado'
 
 type Props = {
-  data: Blog[]
+  data: BlogView[]
 }
 
 const BlogSection = ({ data }: Props) => {
   
   const router = useRouter();
   const [query, setQuery] = useState(""); 
-  const [listaBlog, setListaBlog] = useState<Blog[]>(data);
-  const [blogPaginado, setBlogPaginado] = useState<Blog[]>(data);
+  const [listaBlog, setListaBlog] = useState<BlogView[]>(data);
+  const [blogPaginado, setBlogPaginado] = useState<BlogView[]>(data);
 
   const filtrarLocalmente = useCallback(async (textoBusqueda: string) => {    
     if (!textoBusqueda.trim()) {
@@ -107,7 +107,7 @@ const BlogSection = ({ data }: Props) => {
               href={`/blog/${blog.slug}`}
               className='transform transition-transform hover:scale-[1.02] rounded-3xl'>
               <BlogCard 
-                nombre={blog.categories?.[0]?.name || "General"} 
+                nombre={blog.product?.name || "General"} 
                 img={getImg(blog.main_image?.url)} 
                 descripcion={blog.meta_title || blog.title}
               />

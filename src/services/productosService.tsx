@@ -1,19 +1,12 @@
-'use server';
-
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { api, API_ENDPOINTS } from "@/config";
 import {
     Producto,
     ProductoActionResponse,
 } from "@/types/admin/producto";
+import { getToken } from "@/utils/token";
 
-function getToken(): string | null {
-    const cookieStore = cookies();
-    return cookieStore.get("auth_token")?.value || null;
-}
-
-export async function getProductosAction(
+export async function getProductosService(
     perPage: number = 6,
     url?: string
 ): Promise<ProductoActionResponse<Producto[]>> {
@@ -31,7 +24,7 @@ export async function getProductosAction(
     }
 }
 
-export async function getProductoBySlugAction(slug: string): Promise<ProductoActionResponse<Producto>> {
+export async function getProductoBySlugService(slug: string): Promise<ProductoActionResponse<Producto>> {
     try {
         const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ONE(slug));
 
@@ -45,7 +38,7 @@ export async function getProductoBySlugAction(slug: string): Promise<ProductoAct
     }
 }
 
-export async function createProductoAction(formData: FormData): Promise<ProductoActionResponse<Producto>> {
+export async function createProductoService(formData: FormData): Promise<ProductoActionResponse<Producto>> {
     try {
         const token = getToken();
 
@@ -71,7 +64,7 @@ export async function createProductoAction(formData: FormData): Promise<Producto
     }
 }
 
-export async function updateProductoAction(
+export async function updateProductoService(
     id: number | string,
     formData: FormData
 ): Promise<ProductoActionResponse<Producto>> {
@@ -101,7 +94,7 @@ export async function updateProductoAction(
     }
 }
 
-export async function deleteProductoAction(id: number | string): Promise<ProductoActionResponse> {
+export async function deleteProductoService(id: number | string): Promise<ProductoActionResponse> {
     try {
         const token = getToken();
 

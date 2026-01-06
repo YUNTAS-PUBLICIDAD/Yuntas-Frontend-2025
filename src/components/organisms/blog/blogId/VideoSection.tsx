@@ -1,11 +1,11 @@
 import React from 'react'
 import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
-import { Blog } from '@/types/admin/blog'
+import { BlogView } from '@/types/admin/blog'
 import { getYoutubeEmbed } from '@/types/getYoutubeEmbed'
 import Link from 'next/link'
 type VideoSectionProps={
-    data:Blog
+    data:BlogView
 }
 
 const VideoSection = ({data}:VideoSectionProps) => {

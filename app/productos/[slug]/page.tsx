@@ -3,58 +3,58 @@ import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaD
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import ProductoDetallePopup from "@/components/organisms/productos/detalle/ProductoDetallePopup";
-import { getProductoBySlugAction } from "@/actions/productosActions";
-import { Metadata } from "next";
-import { BASE_URL } from "@/config";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const result = await getProductoBySlugAction(params.slug);
-    
-    if (!result.success || !result.data) {
-        return { title: "Yuntas Publicidad - Producto no encontrado" };
-    }
+import { productosDetalleData } from "@/data/productos/detalle/productosDetalleData";
+import { notFound } from "next/navigation";
 
-    const producto = result.data;
-
-    return {
-        title: producto.meta_title || producto.name,
-        description: producto.meta_description || "",
-		keywords: producto.keywords?.join(", ") || "",
-        openGraph: {
-            title:  producto.meta_title || producto.name,
-            description: producto.meta_description || "",
-            images: producto.main_image?.url ? [{ url: `${BASE_URL.replace('/api', '')}${producto.main_image.url}` }] : [],
-        },
-    };
+/**
+ * ✅ OBLIGATORIO para output: 'export'
+ * Aquí Next sabe qué páginas generar
+ */
+export function generateStaticParams() {
+  return Object.keys(productosDetalleData).map(slug => ({
+    slug,
+  }));
 }
 
-export default async function ProductoDetallePage({ params }: { params: { slug: string } }) {
-	const result = await getProductoBySlugAction(params.slug);
-    const producto = result.success ? result.data : null;
+export default function ProductoDetallePage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const producto = productosDetalleData[params.slug];
 
-	if (!producto) {
-        return <div className="flex justify-center items-center h-screen">Producto no encontrado</div>;
-    }
+  if (!producto) {
+    notFound();
+  }
 
-	return (
-		<main>
-            <HeroSection productName={producto.name} backgroundImage={`${BASE_URL.replace('/api', '')}${producto.gallery[0]?.url || ""}`} />
-            <ListaDetalleSection
-                text="ESPECIFICACIONES"
-                listItems={producto.specifications || []}
-                imageSrc={`${BASE_URL.replace('/api', '')}${producto.gallery[1]?.url || ""}`} 
-                imageAlt={producto.gallery[1]?.alt_text || "Especificaciones del producto"}
-            />
-            <InformacionSection info={producto.description || ""} />
-            <ListaDetalleSection
-                text="BENEFICIOS"
-                listItems={producto.benefits || []}
-                imageSrc={`${BASE_URL.replace('/api', '')}${producto.gallery[2]?.url || ""}`}
-                imageAlt={producto.gallery[2]?.alt_text || "Beneficios del producto"}
-                reverse={true}
-            />
-            <CotizaSection />
-            <ProductoDetallePopup imgSrc={`${BASE_URL.replace('/api', '')}${producto.gallery[3]?.url || ""}`} />
-        </main>
-	);
+  return (
+    <main>
+      <HeroSection
+        productName={producto.name}
+        backgroundImage={producto.heroImage}
+      />
+
+      <ListaDetalleSection
+        text="ESPECIFICACIONES"
+        listItems={producto.specs}
+        imageSrc={producto.specImage}
+        imageAlt={`Especificaciones de ${producto.name}`}
+      />
+
+      <InformacionSection info={producto.info} />
+
+      <ListaDetalleSection
+        text="BENEFICIOS"
+        listItems={producto.benef}
+        imageSrc={producto.benefImage}
+        imageAlt={`Beneficios de ${producto.name}`}
+        reverse
+      />
+
+      <CotizaSection />
+
+      <ProductoDetallePopup imgSrc={producto.heroImage} />
+    </main>
+  );
 }

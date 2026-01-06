@@ -1,15 +1,15 @@
 import React from "react";
-import { Blog } from "@/types/admin/blog";
+import { BlogView } from "@/types/admin/blog";
 import Text from "@/components/atoms/Text";
 import Img from "@/components/atoms/Img";
 import InfoCard from "@/components/molecules/InfoCard";
 import { BASE_URL } from "@/config";
 import { getImg } from "@/utils/getImg";
-type BeneficiosSectionProps = {
-  data: Blog;
+type Props = {
+  data: BlogView;
 };
 
-const BeneficiosSection = ({ data }: BeneficiosSectionProps) => {
+const BeneficiosSection = ({ data }: Props) => {
   
   return (
     <section className="flex flex-col gap-20 px-5 pb-10">
