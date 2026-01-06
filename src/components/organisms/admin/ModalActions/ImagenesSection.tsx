@@ -17,16 +17,32 @@ const ImagenesSection = ({ blog, setBlog }: ImagenesSectionProps) => {
     }));
   };
 
-  const handleImagenSecundaria = (
+ const handleImagenSecundaria = (
     index: number,
     file: File | null,
     alt: string
   ) => {
     setBlog(prev => {
+      // Creamos copias de los arrays
       const imagenes = [...(prev.imagenes ?? [])];
       const alts = [...(prev.imagenes_alts ?? [])];
 
-      if (file) imagenes[index] = file;
+      // ASEGURAR ÍNDICES: Si el array es corto (ej: []), lo rellenamos 
+      // con 'undefined' hasta llegar al índice que estamos tocando.
+      while (imagenes.length <= index) imagenes.push(undefined as any);
+      while (alts.length <= index) alts.push("");
+
+      // LÓGICA DE REEMPLAZO EXACTO:
+      if (file) {
+        // Si hay archivo, lo ponemos en su casilla exacta
+        imagenes[index] = file;
+      } else {
+        // Si se eliminó (file es null), marcamos esa casilla ESPECÍFICA como null.
+        // NO usamos splice ni delete, para no mover las otras fotos.
+        imagenes[index] = null as any; 
+      }
+
+      // Guardamos el texto ALT en su posición exacta
       alts[index] = alt;
 
       return {
