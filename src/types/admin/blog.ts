@@ -17,10 +17,15 @@ export interface BlogInput {
   categorias?:categoria[]
   imagen_principal_url?: string | null;
   imagenes_urls?: string[];
-
+  product: number | null; // Puede ser null si no tiene producto
   parrafos?: string[];
   beneficios?: string[];
   bloques?: BlogBloque[];
+}
+export interface ProductoBlog { // Agregado porque ahora sí lo devuelves
+  id: number;
+  name: string;
+  slug: string | null;
 }
 interface categoria{
   id:number;
@@ -75,7 +80,7 @@ export interface Blog {
   meta_description?: string | null;
 
   main_image: BlogImagen | null;
-
+  product: ProductoBlog | null;
   paragraphs: string[];
   benefits: string[];
   gallery: BlogImagen[];

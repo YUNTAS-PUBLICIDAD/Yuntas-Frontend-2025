@@ -3,11 +3,11 @@
 import { useState, useCallback } from "react";
 import { Reclamo, ReclamoInput } from "@/types/admin/reclamo";
 import {
-    getReclamosAction,
-    getReclamoByIdAction,
-    createReclamoAction,
-    replyReclamoAction
-} from "@/actions/reclamosActions";
+    getReclamosService,
+    getReclamoByIdService,
+    createReclamoService,
+    replyReclamoService
+} from "@/services/reclamosService";
 
 interface UseReclamosReturn {
     reclamos: Reclamo[];
@@ -35,7 +35,7 @@ export function useReclamos(): UseReclamosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getReclamosAction(perPage);
+        const result = await getReclamosService(perPage);
 
         if (result.success && result.data) {
             setReclamos(result.data);
@@ -50,7 +50,7 @@ export function useReclamos(): UseReclamosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getReclamoByIdAction(id);
+        const result = await getReclamoByIdService(id);
         if (result.success && result.data) {
             setReclamo(result.data);
             setIsLoading(false);
@@ -66,7 +66,7 @@ export function useReclamos(): UseReclamosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await createReclamoAction(reclamoData);
+        const result = await createReclamoService(reclamoData);
         if (!result.success) {
             setError(result.message || 'Error desconocido');
         }
@@ -79,7 +79,7 @@ export function useReclamos(): UseReclamosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await replyReclamoAction(id);
+        const result = await replyReclamoService(id);
 
         if (!result.success) {
             setError(result.message || 'Error desconocido');
