@@ -5,9 +5,10 @@ const nextConfig = {
 
 /** holaaaa */
 
-
+    trailingSlash: true,
+    
   images: {
-    unoptimized: true,
+    unoptimized: true,  
     remotePatterns: [
       {
         protocol: 'http',
