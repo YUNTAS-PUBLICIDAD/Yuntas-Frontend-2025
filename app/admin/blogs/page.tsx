@@ -23,7 +23,7 @@ import { Blog } from "@/types/admin/blog";
 
 const columns = [
   { key: "id", label: "ID" },
-  { key: "categories", label: "PRODUCTO",render:(_:unknown,row:Blog)=>row.categories[0].name },
+  { key: "product", label: "PRODUCTO",render:(_:unknown,row:Blog)=> row.product?.name || "null" },
   { key: "meta_title", label: "SUBTÍTULO" },
   {
     key: "gallery",

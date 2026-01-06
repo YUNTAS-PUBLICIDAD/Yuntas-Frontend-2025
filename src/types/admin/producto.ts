@@ -24,15 +24,14 @@ export interface Producto {
     slug: string;
     price: string;
     titulo_corto: string;
-    descripcion: string | null;
-    categories: Categoria[] | null;
+    description: string;
+    precio: string;
+    categories?: string;
     estado: "active" | "inactive";
-    main_image: ImagenProducto | null;
-    gallery: Galeria[] | null;
-    images: Galeria[] | null;
-    specifications: string[] | [];
-    benefits: string[] | [];
-    keywords: string[] | [];
+    main_image: ImagenProducto;
+    gallery: ImagenProducto[];
+    especificaciones: string[];
+    benefits: string[];
     seo: SeoProducto;
     created_at: string;
 }

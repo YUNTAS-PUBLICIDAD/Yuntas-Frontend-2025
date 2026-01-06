@@ -107,7 +107,7 @@ const BlogSection = ({ data }: Props) => {
               href={`/blog/${blog.slug}`}
               className='transform transition-transform hover:scale-[1.02] rounded-3xl'>
               <BlogCard 
-                nombre={blog.categories?.[0]?.name || "General"} 
+                nombre={blog.product?.name || "General"} 
                 img={getImg(blog.main_image?.url)} 
                 descripcion={blog.meta_title || blog.title}
               />
