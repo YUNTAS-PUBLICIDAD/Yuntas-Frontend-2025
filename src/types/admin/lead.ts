@@ -22,6 +22,7 @@ export interface Lead {
 }
 
 export interface LeadInput {
+    id?: number;
     name: string;
     email: string;
     phone?: string;

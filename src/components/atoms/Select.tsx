@@ -1,7 +1,7 @@
 import React from 'react';
 
 type SelectOption = {
-  value: string | number; // Fixed: removed arrays
+  value: string | number;
   label: string;
 };
 
@@ -15,7 +15,6 @@ type SelectProps = {
   required?: boolean;
   multiple?: boolean;
   className?: string;
-  
 };
 
 const Select = ({
@@ -24,11 +23,10 @@ const Select = ({
   textLabel,
   colorLabel = "text-black",
   value = "",
-  onChange,
   required = false,
   multiple = false,
   className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2",
-  
+  onChange,
 }: SelectProps) => {
   const normalizedOptions: SelectOption[] = options.map((opt) => {
     if (typeof opt === 'string') {
@@ -54,7 +52,6 @@ const Select = ({
         onChange={onChange}
         required={required}
         multiple={multiple}
-        
       >
         {!multiple && (
           <option value="" disabled>

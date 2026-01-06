@@ -72,12 +72,11 @@ export async function updateLeadAction(id: number, leadData: LeadInput): Promise
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.post(API_ENDPOINTS.ADMIN.INBOX.LEADS.UPDATE(id), leadData, {
+        const response = await api.put(API_ENDPOINTS.ADMIN.INBOX.LEADS.UPDATE(id), leadData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
         });
-        
         revalidatePath("/admin/seguimiento");
 
         return {
@@ -86,6 +85,7 @@ export async function updateLeadAction(id: number, leadData: LeadInput): Promise
             data: response.data.data
         };
     } catch (error) {
+        console.log(error)
         return { success: false, message: "No se pudo actualizar el lead" };
     }
 }

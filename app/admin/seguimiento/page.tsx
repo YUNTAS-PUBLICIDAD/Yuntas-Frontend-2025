@@ -8,13 +8,13 @@ import { LeadInput, Lead } from "@/types/admin/lead";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
-import AddClientForm from "@/components/molecules/admin/AddClientForm";
 
 // Organismos (Las Tablas)
 import LeadsTable from "@/components/organisms/admin/leads/LeadsTable";       // Interfaz 1: Producto/Fecha
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable"; // Interfaz 2: Whatsapp/Gmail
 
 import { useLeads } from "@/hooks/useLeads";
+import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 
 export default function SeguimientoPage() {
     
@@ -27,7 +27,7 @@ export default function SeguimientoPage() {
         getLeads(200);
     }, [])
 
-    const handleSubmitClient = async (formData: LeadInput) => {
+    const handleEditClient = async (formData: LeadInput) => {
         if (formData.product_id === 0) {
             delete formData.product_id
         }
@@ -36,6 +36,7 @@ export default function SeguimientoPage() {
         if (success) {
             alert("Cliente creado");
             setIsAddModalOpen(false)
+            await getLeads(200);
         } else {
             alert(error);
         }
@@ -69,7 +70,7 @@ export default function SeguimientoPage() {
                 {isTrackingMode ? (
                     <TrackingTable leads={datosPaginados} />
                 ) : (
-                    <LeadsTable leads={datosPaginados} />
+                    <LeadsTable leads={datosPaginados} getLeads={getLeads} />
                 )}
             </div>
 
@@ -95,8 +96,8 @@ export default function SeguimientoPage() {
                 onClose={() => setIsAddModalOpen(false)} 
                 title="AÑADIR CLIENTE"
             >
-                <AddClientForm 
-                    onSubmit={handleSubmitClient} 
+                <LeadForm 
+                    onSubmit={handleEditClient} 
                     onCancel={() => setIsAddModalOpen(false)} 
                     isLoading={isLoading}
                 />

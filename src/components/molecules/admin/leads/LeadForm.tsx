@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputForm from "@/components/atoms/InputForm";
 import Button from "@/components/atoms/Button";
 import { LeadInput } from "@/types/admin/lead";
+import { useProductos } from "@/hooks/useProductos";
+import SelectForm from "@/components/atoms/SelectForm";
 
 const defaultClientFormData: LeadInput = {
     name: "",
@@ -13,16 +15,28 @@ const defaultClientFormData: LeadInput = {
     source_id: 1,
 };
 
-interface AddClientFormProps {
+interface LeadFormProps {
     onSubmit: (data: LeadInput) => void;
     onCancel: () => void;
     isLoading?: boolean;
+    initialData?: LeadInput | null;
 }
 
-export default function AddClientForm({ onSubmit, onCancel, isLoading = false }: AddClientFormProps) {
+export default function LeadForm({ onSubmit, onCancel, isLoading = false, initialData = null }: LeadFormProps) {
     const [formData, setFormData] = useState<LeadInput>(defaultClientFormData);
+    const { getProductos, productos } = useProductos();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        getProductos();
+    }, [])
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData(initialData);
+        }
+    }, [initialData]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
         if (name === "phone" && (value.length > 9 || Number(value) < 0)) return;
@@ -35,6 +49,9 @@ export default function AddClientForm({ onSubmit, onCancel, isLoading = false }:
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (formData.product_id === 0) {
+            delete formData.product_id;
+        }
         onSubmit(formData);
     };
 
@@ -66,26 +83,24 @@ export default function AddClientForm({ onSubmit, onCancel, isLoading = false }:
                 placeholder="ejemplo@gmail.com"
                 required
             />
-            <InputForm
-                label="Producto ID"
+            <SelectForm
+                label="Productos"
                 name="product_id"
-                type="number"
                 value={formData.product_id || ""}
+                options={productos}
                 onChange={handleChange}
-                placeholder="0"
-                min={1}
             />
-            <InputForm
+            {/* <InputForm
                 label="Fecha"
                 name="fecha"
                 type="date"
                 value={""}
                 onChange={() => { }}
-            />
+            /> */}
 
             <div className="flex gap-4 mt-4">
                 <Button type="submit" variant="primary" size="md" className="flex-1" disabled={isLoading}>
-                    { isLoading ? "Añadiendo" : "Añadir Cliente"}
+                    {isLoading ? (initialData !== null ? "Guardando..." : "Añadiendo...") : (initialData !== null ? "Guardar" : "Añadir Cliente")}
                 </Button>
                 <Button
                     type="button"
