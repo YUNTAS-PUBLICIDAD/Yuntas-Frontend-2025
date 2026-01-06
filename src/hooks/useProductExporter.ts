@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from "jspdf-autotable";
 
 export const useProductExporter = () => {
 
@@ -69,7 +69,7 @@ export const useProductExporter = () => {
         });
 
         // @ts-ignore (autotable a veces da error de tipos, esto lo ignora)
-        doc.autoTable({
+        autoTable(doc, {
             head: [tableColumn],
             body: tableRows,
             startY: 20,

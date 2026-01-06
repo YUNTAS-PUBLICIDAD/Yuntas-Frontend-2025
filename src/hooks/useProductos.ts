@@ -8,12 +8,12 @@ import {
     PaginationLinks
 } from "@/types/admin/producto";
 import {
-    getProductosAction,
-    getProductoBySlugAction,
-    createProductoAction,
-    updateProductoAction,
-    deleteProductoAction
-} from "@/actions/productosActions";
+    getProductosService,
+    getProductoBySlugService,
+    createProductoService,
+    updateProductoService,
+    deleteProductoService
+} from "@/services/productosService";
 import { buildProductoFormData } from "@/utils/productFormData";
 
 interface UseProductosReturn {
@@ -57,7 +57,7 @@ export function useProductos(): UseProductosReturn {
         setError(null);
         setCurrentPerPage(perPage);
 
-        const result = await getProductosAction(perPage);
+        const result = await getProductosService(perPage);
         
         if (result.success && result.data) {
             setProductos(result.data);
@@ -74,7 +74,7 @@ export function useProductos(): UseProductosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getProductosAction(currentPerPage, url);
+        const result = await getProductosService(currentPerPage, url);
         
         if (result.success && result.data) {
             setProductos(result.data);
@@ -106,7 +106,7 @@ export function useProductos(): UseProductosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getProductoBySlugAction(slug);
+        const result = await getProductoBySlugService(slug);
 
         if (result.success && result.data) {
             setProducto(result.data);
@@ -124,7 +124,7 @@ export function useProductos(): UseProductosReturn {
         setError(null);
 
         const formData = buildProductoFormData(productoData);
-        const result = await createProductoAction(formData);
+        const result = await createProductoService(formData);
 
         if (!result.success) {
             setError(result.message || 'Error desconocido');
@@ -142,7 +142,7 @@ export function useProductos(): UseProductosReturn {
         setError(null);
 
         const formData = buildProductoFormData(productoData);
-        const result = await updateProductoAction(id, formData);
+        const result = await updateProductoService(id, formData);
 
         if (!result.success) {
             setError(result.message || 'Error desconocido');
@@ -156,7 +156,7 @@ export function useProductos(): UseProductosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await deleteProductoAction(id);
+        const result = await deleteProductoService(id);
 
         if (!result.success) {
             setError(result.message || 'Error desconocido');
