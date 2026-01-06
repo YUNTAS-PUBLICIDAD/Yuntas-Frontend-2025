@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { api, API_ENDPOINTS } from "@/config";
 import {
     Lead,
@@ -44,8 +43,6 @@ export async function createLeadService(leadData: LeadInput): Promise<LeadAction
             }
         });
         
-        revalidatePath("/admin/seguimiento");
-        
         return {
             success: true,
             message: response.data.message || "Lead creado exitosamente",
@@ -70,7 +67,6 @@ export async function updateLeadService(id: number, leadData: LeadInput): Promis
                 Authorization: `Bearer ${token}`,
             }
         });
-        revalidatePath("/admin/seguimiento");
 
         return {
             success: true,

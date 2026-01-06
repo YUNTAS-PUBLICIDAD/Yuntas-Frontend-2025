@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { api, API_ENDPOINTS } from "@/config";
 import {
     Producto,
@@ -52,8 +51,6 @@ export async function createProductoService(formData: FormData): Promise<Product
             },
         });
 
-        revalidatePath("/admin/productos");
-
         return {
             success: true,
             message: response.data.data.message || "Producto creado exitosamente",
@@ -81,8 +78,6 @@ export async function updateProductoService(
             },
         });
 
-        revalidatePath("/admin/productos");
-
         return {
             success: true,
             message: response.data.data.message || "Producto actualizado exitosamente",
@@ -103,8 +98,6 @@ export async function deleteProductoService(id: number | string): Promise<Produc
         }
 
         const response = await api.delete(API_ENDPOINTS.PRODUCTS.DELETE(Number(id)));
-
-        revalidatePath("/admin/productos");
 
         return { success: true, message: "Producto eliminado exitosamente" };
     } catch (error) {
