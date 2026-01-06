@@ -7,20 +7,20 @@ import Text from '@/components/atoms/Text'
 import SearchBar from '@/components/molecules/blog/SearchBar'
 import BlogCard from '@/components/molecules/blog/BlogCard'
 import Pagination from '@/components/molecules/Pagination'
-import { Blog } from '@/types/admin/blog'
+import { BlogView } from '@/types/admin/blog'
 import { getImg } from '@/utils/getImg'
 import { useAutocompletado } from '@/hooks/ui/useAutocompletado'
 
 type Props = {
-  data: Blog[]
+  data: BlogView[]
 }
 
 const BlogSection = ({ data }: Props) => {
   
   const router = useRouter();
   const [query, setQuery] = useState(""); 
-  const [listaBlog, setListaBlog] = useState<Blog[]>(data);
-  const [blogPaginado, setBlogPaginado] = useState<Blog[]>(data);
+  const [listaBlog, setListaBlog] = useState<BlogView[]>(data);
+  const [blogPaginado, setBlogPaginado] = useState<BlogView[]>(data);
 
   const filtrarLocalmente = useCallback(async (textoBusqueda: string) => {    
     if (!textoBusqueda.trim()) {

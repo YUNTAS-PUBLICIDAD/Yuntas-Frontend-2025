@@ -3,14 +3,14 @@ import next from 'next';
 /**@type {import('next').NextConfig} */
 const nextConfig = {
   
- 
+    output: 'export',
 
-  // configurar next para exportar sitio estático
-  output: 'export',
-  trailingSlash: true, 
+/** holaaaa */
 
+    trailingSlash: true,
+    
   images: {
-    unoptimized: true,
+    unoptimized: true,  
 
     remotePatterns: [
       {
