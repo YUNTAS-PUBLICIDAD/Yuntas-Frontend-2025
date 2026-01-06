@@ -7,7 +7,7 @@ export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yu
 const api = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json', 
     'Accept': 'application/json',
   },
   withCredentials: true,

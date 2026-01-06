@@ -7,10 +7,9 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
     try {
         const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
 
-        const responseData = response.data; 
-        
-        const token = responseData.data?.token || responseData.token;
-        const user = responseData.data?.user || responseData.user;
+    const data = response.data;
+    const token = data.data?.token || data.token;
+    const user = data.data?.user || data.user;
 
         if (!token) {
             return { success: false, message: "Error: No se recibió token del servidor." };
@@ -41,7 +40,6 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
         return { success: false, message: "Error de conexión con el servidor." };
     }
 }
-
 export async function logoutService(): Promise<LoginActionResponse> {
     try {
         const token = getToken();

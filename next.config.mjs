@@ -1,3 +1,5 @@
+import next from 'next';
+
 /**@type {import('next').NextConfig} */
 const nextConfig = {
   
@@ -9,6 +11,7 @@ const nextConfig = {
     
   images: {
     unoptimized: true,  
+
     remotePatterns: [
       {
         protocol: 'http',
