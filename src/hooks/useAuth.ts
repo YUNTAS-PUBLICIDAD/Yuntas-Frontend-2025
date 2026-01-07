@@ -6,43 +6,42 @@ import { LoginCredentials } from "@/types/auth";
 import { loginService, logoutService } from "@/services/authService";
 
 interface UseAuthReturn {
-  login: (credentials: LoginCredentials) => Promise<void>;
-  logout: () => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
+    login: (credentials: LoginCredentials) => Promise<void>;
+    logout: () => Promise<void>;
+    isLoading: boolean;
+    error: string | null;
 }
 
 export function useAuth(): UseAuthReturn {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
 
-  const login = async (credentials: LoginCredentials) => {
-    setIsLoading(true);
-    setError(null);
+    const login = async (credentials: LoginCredentials) => {
+        setIsLoading(true);
+        setError(null);
 
-    const result = await loginService(credentials);
+        const result = await loginService(credentials);
 
-    if (result.success) {
-      router.replace("/admin");
-    } else {
-      setError(result.message || "Error al iniciar sesión");
-    }
+        if (result.success) {
+            router.replace("/admin");
+        } else {
+            setError(result.message || "Error al iniciar sesión");
+        }
 
-    setIsLoading(false);
-  };
+        setIsLoading(false);
+    };
 
-  const logout = async () => {
-    setIsLoading(true);
+    const logout = async () => {
+        setIsLoading(true);
 
-    await logoutService();
-    localStorage.removeItem("auth_token");
+        await logoutService();
 
-    setIsLoading(false);
-    router.replace("/login");
-  };
+        setIsLoading(false);
+        router.replace("/login");
+    };
 
-  return { login, logout, isLoading, error };
+    return { login, logout, isLoading, error };
 }
 
 export default useAuth;

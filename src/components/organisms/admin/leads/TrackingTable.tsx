@@ -1,86 +1,100 @@
 'use client';
 
-import { Lead } from "@/types/admin/lead";
-import Button from "@/components/atoms/Button";
+import TableActions from "@/components/molecules/admin/TableActions";
+import { useAdminTable } from "@/hooks/ui/admin/useAdminTable";
+import { RiCloseLine , RiCheckLine  } from "react-icons/ri";
 
-interface TrackingTableProps {
-    leads: Lead[];
+interface TrackingTableProps<T = any> {
+    data: T[];
+    minRows?: number;
+    onDelete?: (item: T) => void;
+    onEdit?: (item: T) => void;
 }
 
-export default function TrackingTable({ leads }: TrackingTableProps) {
-    const headers = ['ID', 'NOMBRE', 'WHATSAPP', 'RESPUESTA', 'GMAIL', 'RESPUESTA', 'ACCIÓN'];
+const columns = [
+    { key: 'id', label: 'ID' },
+    { key: 'name', label: 'NOMBRE' },
+    { key: 'whatsapp_status', label: 'WHATSAPP' },
+    { key: 'whatsapp_response', label: 'RESPUESTA' },
+    { key: 'email_status', label: 'GMAIL' },
+    { key: 'email_response', label: 'RESPUESTA' },
+];
+
+export default function TrackingTable({
+    data,
+    minRows = 5,
+    onDelete,
+    onEdit
+}: TrackingTableProps) {
+    const { enabledActions, rows } = useAdminTable({ data, minRows, onDelete, onEdit });
 
     return (
-        <div className="w-full">
-         
-            <div className="grid grid-cols-12 gap-2 mb-2 text-center">
-                {headers.map((header, index) => {
-                    let colSpan = "col-span-1";
-                    if (header === 'NOMBRE') colSpan = "col-span-2";
-                    if (header === 'WHATSAPP' || header === 'GMAIL') colSpan = "col-span-2";
-                    if (header === 'RESPUESTA') colSpan = "col-span-2";
-                    
-                    return (
-                        <div 
-                            key={index} 
-                            className={`${colSpan} bg-[#00C2CB] text-white font-bold py-3 px-1 rounded-md text-sm flex items-center justify-center uppercase tracking-wider`}
-                        >
-                            {header}
-                        </div>
-                    );
-                })}
-            </div>
+        <div className="w-full overflow-x-auto rounded-xl bg-white shadow-sm border border-gray-100">
+            <table className="w-full border-separate border-spacing-y-2 p-2">
+                <thead>
+                    <tr>
+                        {columns.map((col) => {
+                            return (
+                                <th key={col.key} className="bg-[#0D1030] text-white font-semibold text-lg py-3 px-4 first:rounded-l-lg last:rounded-r-lg text-center whitespace-nowrap">
+                                    {col.label}
+                                </th>
+                            )
+                        })}
+                        <th className="bg-[#0D1030] text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
+                            ACCIÓN
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map((row, index) => {
+                        const isEmpty = row._empty === true;
+                        return (
+                            <tr key={row.id || index} className="group hover:bg-gray-50 transition-colors">
+                                {columns.map((col) => {
+                                    const isStatus = col.key === 'whatsapp_status' || col.key === 'email_status';
+                                    const isResponse = col.key === 'whatsapp_response' || col.key === 'email_response';
 
-            <div className="flex flex-col gap-2">
-                {leads.map((lead) => (
-                    <div 
-                        key={lead.id} 
-                        className="grid grid-cols-12 gap-2 bg-[#F8F9FA] border border-gray-100 py-4 px-1 rounded-md items-center text-center text-sm hover:bg-gray-100 transition-colors shadow-sm"
-                    >
-                        <div className="col-span-1 font-bold text-gray-800">{lead.id}</div>
-                        
-                        <div className="col-span-2 text-gray-600 truncate px-2">{lead.name}</div>
-                        
-                        <div className="col-span-2 font-bold text-black">ENVIADO</div>
-                        
-                        <div className="col-span-2 flex justify-center gap-3">
-                            <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 flex items-center justify-center font-bold">
-                                ✕
-                            </button>
-                            <button className="w-8 h-8 rounded-full bg-[#D1FAE5] text-[#10B981] hover:bg-[#A7F3D0] flex items-center justify-center font-bold">
-                                ✓
-                            </button>
-                        </div>
-                        
-                        <div className="col-span-2 font-bold text-black">ENVIADO</div>
-                        
-                        <div className="col-span-2 flex justify-center gap-3">
-                            <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 flex items-center justify-center font-bold">
-                                ✕
-                            </button>
-                            <button className="w-8 h-8 rounded-full bg-[#D1FAE5] text-[#10B981] hover:bg-[#A7F3D0] flex items-center justify-center font-bold">
-                                ✓
-                            </button>
-                        </div>
-                        
-                        <div className="col-span-1 flex justify-center items-center gap-2">
-                            <Button 
-                                className="bg-red-100 hover:bg-red-200 text-red-500 p-2 rounded-lg w-8 h-8 flex items-center justify-center"
-                                onClick={() => alert("Eliminar")}
-                            >
-                                🗑️
-                            </Button>
-
-                            <Button 
-                                className="bg-green-100 hover:bg-green-200 text-green-600 p-2 rounded-lg w-8 h-8 flex items-center justify-center"
-                                onClick={() => alert("Editar")}
-                            >
-                                📝
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                                    return (
+                                        <td key={col.key} className={`bg-[#F4F4F2] py-3 px-4 text-center h-14 whitespace-nowrap first:rounded-l-lg
+                                        ${col.key === 'id' || isStatus ?
+                                                "font-bold text-black"
+                                                :
+                                                "text-[#0D1030]"}`}>
+                                            {isEmpty ?
+                                                ""
+                                                :
+                                                isStatus ?
+                                                    "ENVIADO"
+                                                    :
+                                                    isResponse ?
+                                                        <div className="flex justify-center gap-3">
+                                                            {/** Estos botones solo seran hasta que sepamos para que sirven */}
+                                                            <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 flex items-center justify-center font-bold">
+                                                                <RiCloseLine  size={24} />
+                                                            </button>
+                                                            <button className="w-8 h-8 rounded-full bg-[#D1FAE5] text-[#10B981] hover:bg-[#A7F3D0] flex items-center justify-center font-bold">
+                                                                <RiCheckLine size={24} />
+                                                            </button>
+                                                        </div>
+                                                        :
+                                                        row[col.key]}
+                                        </td>
+                                    )
+                                })}
+                                <td className="bg-[#F4F4F2] py-3 px-4 rounded-r-lg text-center h-14">
+                                    <TableActions
+                                        item={row}
+                                        isEmpty={isEmpty}
+                                        onDelete={onDelete}
+                                        onEdit={onEdit}
+                                        actions={enabledActions}
+                                    />
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
     );
 }

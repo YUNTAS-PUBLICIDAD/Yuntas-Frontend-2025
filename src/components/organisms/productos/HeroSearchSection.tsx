@@ -1,7 +1,7 @@
 import React from 'react'
 import SearchBar from '@/components/molecules/producto/SearchBar'
 import Text from '@/components/atoms/Text'
-import { Producto } from '@/types/producto';
+import { Producto } from '@/types/admin/producto';
 type HeroSearchSectionProps = {
   listaProductos: Producto[];
   setListaProductos: React.Dispatch<React.SetStateAction<Producto[]>>;

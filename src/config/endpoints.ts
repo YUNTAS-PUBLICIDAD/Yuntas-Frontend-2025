@@ -1,6 +1,3 @@
-import { GET } from "../../app/api/admin/users/route";
-
-
 export const API_ENDPOINTS = {
   // AUTENTICACIÓN
   AUTH: {

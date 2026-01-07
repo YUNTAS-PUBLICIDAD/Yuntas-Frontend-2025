@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { api, API_ENDPOINTS } from "@/config";
 import { Blog, BlogActionResponse, BlogListResponseBySlug } from "@/types/admin/blog";
 import { getToken } from "@/utils/token";
@@ -45,8 +44,6 @@ export async function createBlogService(formData: FormData): Promise<BlogActionR
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    revalidatePath("/admin/blogs");
-
     return {
       success: true,
       message: response.data.data.message || "Blog creado exitosamente",
@@ -65,7 +62,6 @@ export async function updateBlogService(id: number | string, formData: FormData)
     const response = await api.post(API_ENDPOINTS.BLOG.UPDATE(Number(id)), formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    revalidatePath("/admin/blogs");
     return {
       success: true,
       message: response.data.data.message || "Blog actualizado exitosamente",
@@ -84,8 +80,6 @@ export async function deleteBlogService(id: number | string): Promise<BlogAction
     if (!token) return { success: false, message: "No autenticado" };
 
     await api.delete(API_ENDPOINTS.BLOG.DELETE(Number(id)));
-
-    revalidatePath("/admin/blogs");
 
     return { success: true, message: "Blog eliminado exitosamente" };
   } catch (error) {
