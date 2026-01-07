@@ -1,5 +1,3 @@
-import { Categoria } from "./categoria";
-
 export interface ImagenProducto {
     url: string | null;
     alt: string | null;
@@ -9,13 +7,7 @@ export interface ImagenProducto {
 export interface Galeria {
     url:  string;
     alt:  string | null;
-    slot: string;
-}
-
-export interface SeoProducto {
-    meta_titulo: string | null;
-    meta_descripcion: string | null;
-    keywords: string[];
+    slot: "Hero" | "Specs" | "Benefits" | "Popups";
 }
 
 export interface Producto {
@@ -23,16 +15,17 @@ export interface Producto {
     name: string;
     slug: string;
     price: string;
-    titulo_corto: string;
+    short_description: string;
     description: string;
-    precio: string;
-    categories?: string;
-    estado: "active" | "inactive";
+    status: "active" | "inactive";
+    meta_title: string | null;
+    meta_description: string | null;
+    keywords: string[];
     main_image: ImagenProducto;
-    gallery: ImagenProducto[];
-    especificaciones: string[];
+    gallery: Galeria[];
+    category_name: string | null;
+    specifications: string[];
     benefits: string[];
-    seo: SeoProducto;
     created_at: string;
 }
 
@@ -57,6 +50,11 @@ export interface ProductoInput {
     meta_descripcion: string | null;
     keywords: string[];
 }
+
+export interface ProductoExport {
+  nombre: string;
+  categorias: number;
+};
 
 // links de la paginacion
 export interface PaginationLinks {

@@ -1,7 +1,8 @@
 'use client'
+
 import SidebarSection from "@/components/organisms/admin/SidebarSection";
 import Encabezado from "@/components/molecules/Encabezado";
-import  {useTokenValidation}  from "@/hooks/useTokenValidation";
+import { useTokenValidation } from "@/hooks/useTokenValidation";
 import Loader from "@/components/atoms/Loader";
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { isLoading } = useTokenValidation();

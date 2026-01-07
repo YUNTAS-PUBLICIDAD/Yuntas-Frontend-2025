@@ -3,7 +3,7 @@ import HeroSearchSection from "@/components/organisms/productos/HeroSearchSectio
 import HeroSection from "@/components/organisms/productos/HeroSection";
 import ProductoPopup from "@/components/organisms/productos/popupInicial/ProductoPopup";
 import ProductosSection from "@/components/organisms/productos/ProductosSection";
-import { Producto } from "@/types/producto";
+import { Producto } from "@/types/admin/producto";
 import { useState } from "react";
 export default function ProductosPage() {
   const [listaProductos,setListaProductos]=useState<Producto[]>([])

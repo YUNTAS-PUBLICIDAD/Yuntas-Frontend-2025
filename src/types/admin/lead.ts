@@ -1,12 +1,3 @@
-import { Producto } from "./producto";
-
-export interface Source {
-    id: number;
-    name: string;
-    created_at: string;
-    updated_at: string;
-}
-
 export interface Lead {
     id: number;
     name: string;
@@ -14,11 +5,9 @@ export interface Lead {
     phone: null | string;
     message: null | string;
     product_id: number | null;
+    product_name?: string;
     source_id: number | null;
     created_at: string | null;
-    updated_at: string | null;
-    product: Producto | null;
-    source: Source | null;
 }
 
 export interface LeadInput {

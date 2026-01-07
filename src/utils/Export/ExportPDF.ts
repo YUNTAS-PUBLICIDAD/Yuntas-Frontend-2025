@@ -1,5 +1,5 @@
 import { Blog } from "@/types/admin/blog";
-import { Producto } from "@/types/producto";
+import { Producto } from "@/types/admin/producto";
 
 export const exportToPDF = (data: Blog[] | Producto[]) => {
   try {
@@ -58,8 +58,8 @@ export const exportToPDF = (data: Blog[] | Producto[]) => {
           .map(
             (prod) => `
             <tr>
-              <td>${prod.nombre}</td>
-              <td style="text-align:center">${prod.nombre?.length || 0}</td>
+              <td>${prod.name}</td>
+              <td style="text-align:center">${prod.category_name}</td>
             </tr>
           `
           )
