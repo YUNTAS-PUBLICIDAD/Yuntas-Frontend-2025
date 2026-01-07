@@ -15,9 +15,9 @@ import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsapp
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "name", label: "NOMBRE" },
-    { key: "category_name", label: "SECCIÓN" },
-    { key: "price", label: "PRECIO" },
+    { key: "nombre", label: "NOMBRE" },         
+    { key: "seccion", label: "SECCIÓN" },       
+    { key: "precio", label: "PRECIO" },         
 ];
 
 export default function ProductosPage() {
@@ -30,6 +30,8 @@ export default function ProductosPage() {
     const { products, loading, error, reload, handleDelete } = useAdminProducts();
 
     const onAddProduct = () => setIsAddModalOpen(true);
+
+    console.log("DATOS DE PRODUCTOS RECIBIDOS:", products); 
 
     const handleCloseModal = () => {
         setIsAddModalOpen(false);
