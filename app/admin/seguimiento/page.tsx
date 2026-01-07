@@ -18,7 +18,7 @@ export default function SeguimientoPage() {
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTrackingMode, setIsTrackingMode] = useState(false);
-    const [selectedClient, setSelectedClient] = useState<LeadInput | null>(null);
+    const [selectedLead, setSelectedLead] = useState<LeadInput | null>(null);
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
 
     useEffect(() => {
@@ -35,11 +35,11 @@ export default function SeguimientoPage() {
             product_id: client.product_id || 0,
             source_id: client.source_id || 1,
         };
-        setSelectedClient(data);
+        setSelectedLead(data);
         setIsModalOpen(true);
     };
 
-    const handleCreateClient = async (formData: LeadInput) => {
+    const handleCreateLead = async (formData: LeadInput) => {
         if (formData.product_id === 0) {
             delete formData.product_id
         }
@@ -54,21 +54,21 @@ export default function SeguimientoPage() {
         }
     }
 
-    const handleEditClient = async (formData: LeadInput) => {
-        if (!selectedClient) return;
-        const success = await updateLead(selectedClient.id!, formData);
+    const handleEditLead = async (formData: LeadInput) => {
+        if (!selectedLead) return;
+        const success = await updateLead(selectedLead.id!, formData);
         if (success) {
             alert("Cliente actualizado");
             setIsModalOpen(false);
-            setSelectedClient(null);
+            setSelectedLead(null);
             await getLeads(200);
         } else {
             alert(error);
-            setSelectedClient(null);
+            setSelectedLead(null);
         }
     }
 
-    const handleDeleteClient = async (client: Lead) => {
+    const handleDeleteLead = async (client: Lead) => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este cliente?");
         if (!confirmDelete) return;
         const success = await deleteLead(client.id!);
@@ -81,7 +81,7 @@ export default function SeguimientoPage() {
     };
 
     const handleCloseModal = () => {
-        setSelectedClient(null);
+        setSelectedLead(null);
         setIsModalOpen(false);
     };
 
@@ -123,14 +123,14 @@ export default function SeguimientoPage() {
                     <TrackingTable
                         data={datosPaginados}
                         onEdit={handleEditClick}
-                        onDelete={handleDeleteClient}
+                        onDelete={handleDeleteLead}
                     />
                 ) : (
                     <AdminTable
                         data={datosPaginados}
                         columns={columns}
                         onEdit={handleEditClick}
-                        onDelete={handleDeleteClient}
+                        onDelete={handleDeleteLead}
                     />
                 )}
             </div>
@@ -151,13 +151,13 @@ export default function SeguimientoPage() {
             <Modal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                title={!selectedClient ? "Añadir Cliente" : "Editar Cliente"}
+                title={!selectedLead ? "Añadir Cliente" : "Editar Cliente"}
             >
                 <LeadForm
-                    onSubmit={!selectedClient ? handleCreateClient : handleEditClient}
+                    onSubmit={!selectedLead ? handleCreateLead : handleEditLead}
                     onCancel={handleCloseModal}
                     isLoading={isLoading}
-                    initialData={selectedClient}
+                    initialData={selectedLead}
                 />
             </Modal>
         </div>

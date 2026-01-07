@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Producto } from '@/types/producto'
+import { Producto } from '@/types/admin/producto'
 
 export const useSelectCategorias = (
   categoria: string,
@@ -15,7 +15,7 @@ export const useSelectCategorias = (
     }
 
     const resultado = productos.filter(p =>
-      p.categories[0]?.name.includes(categoria)
+      p.category_name?.includes(categoria)
     );
 
     setLista(resultado);

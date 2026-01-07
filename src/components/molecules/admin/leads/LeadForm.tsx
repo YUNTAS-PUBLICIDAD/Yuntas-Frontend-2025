@@ -7,7 +7,7 @@ import { LeadInput } from "@/types/admin/lead";
 import { useProductos } from "@/hooks/useProductos";
 import SelectForm from "@/components/atoms/SelectForm";
 
-const defaultClientFormData: LeadInput = {
+const defaultLeadFormData: LeadInput = {
     name: "",
     phone: "",
     email: "",
@@ -23,7 +23,7 @@ interface LeadFormProps {
 }
 
 export default function LeadForm({ onSubmit, onCancel, isLoading = false, initialData = null }: LeadFormProps) {
-    const [formData, setFormData] = useState<LeadInput>(defaultClientFormData);
+    const [formData, setFormData] = useState<LeadInput>(defaultLeadFormData);
     const { getProductos, productos } = useProductos();
 
     useEffect(() => {

@@ -14,7 +14,7 @@ interface NavListProps {
 }
 
 export default function NavList({ items, className = "" }: NavListProps) {
-    const pathname = usePathname();
+    const pathname = usePathname().replace(/\/+$/, "");
 
     return (
         <ul className={`flex flex-col gap-2 ${className}`}>

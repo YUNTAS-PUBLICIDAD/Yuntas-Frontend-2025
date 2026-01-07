@@ -3,7 +3,7 @@
 import * as XLSX from "xlsx";
 // Asegúrate de que las rutas a tus types sean correctas
 import { Blog, BlogExport } from "@/types/admin/blog";
-import { Producto, ProductoExport } from "@/types/producto";
+import { Producto, ProductoExport } from "@/types/admin/producto";
 
 export const exportCSV = (
   data: Blog[] | Producto[],
@@ -38,8 +38,8 @@ export const exportCSV = (
     // Lógica para Productos
     exportData = (data as Producto[]).map(
       (producto): ProductoExport => ({
-        nombre: producto.nombre,
-        categorias: producto.nombre?.length || 0,
+        nombre: producto.name,
+        categorias: producto.category_name ? 1 : 0,
         // Agrega el resto de campos necesarios
       })
     );

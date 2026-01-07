@@ -5,16 +5,22 @@ import {
 } from "@/types/admin/producto";
 import { getToken } from "@/utils/token";
 
-export async function getProductosService(
-    perPage: number = 6,
-    url?: string
-): Promise<ProductoActionResponse<Producto[]>> {
+function formatProduct(apiProduct: any): Producto {
+    return {
+        ...apiProduct,
+        category_name: apiProduct.categories.length > 0 ? apiProduct.categories[0].name : "-",
+    };
+};
+
+export async function getProductosService(perPage: number = 6, url?: string): Promise<ProductoActionResponse<Producto[]>> {
     try {
         const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
 
+        const formattedProducts = response.data.data.data.map(formatProduct);
+
         return {
             success: true,
-            data: response.data.data.data,
+            data: formattedProducts,
             meta: response.data.data.meta,
             links: response.data.data.links
         };
@@ -30,7 +36,7 @@ export async function getProductoBySlugService(slug: string): Promise<ProductoAc
         return {
             success: true,
             message: response.data.message,
-            data: response.data.data
+            data: formatProduct(response.data.data)
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -54,7 +60,7 @@ export async function createProductoService(formData: FormData): Promise<Product
         return {
             success: true,
             message: response.data.data.message || "Producto creado exitosamente",
-            data: response.data.data.data
+            data: formatProduct(response.data.data.data)
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -81,7 +87,7 @@ export async function updateProductoService(
         return {
             success: true,
             message: response.data.data.message || "Producto actualizado exitosamente",
-            data: response.data.data.data
+            data: formatProduct(response.data.data.data)
         };
     } catch (error) {
         console.error(error);

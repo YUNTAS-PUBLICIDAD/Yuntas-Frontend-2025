@@ -5,7 +5,7 @@ import Button from '@/components/atoms/Button'
 import Icon from '@/components/atoms/Icon'
 import { FaSearch } from "react-icons/fa";
 import { productosData } from '@/data/productosData'
-import { Producto } from '@/types/producto'
+import { Producto } from '@/types/admin/producto'
 import { Search } from '@/utils/search'
 import AutoCompletado from '../AutoCompletado'
 
@@ -26,7 +26,7 @@ const SearchBar = ({ setListaProductos }: SearchBarProps) => {
   }
 
   const handleSelectItem = (item: Producto) => {
-    setBusqueda(item.nombre)
+    setBusqueda(item.name)
     setListaProductos([item])
   }
 

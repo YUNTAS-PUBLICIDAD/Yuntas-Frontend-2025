@@ -15,9 +15,9 @@ import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsapp
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "nombre", label: "NOMBRE" },
-    { key: "seccion", label: "SECCIÓN" },
-    { key: "precio", label: "PRECIO" },
+    { key: "name", label: "NOMBRE" },
+    { key: "category_name", label: "SECCIÓN" },
+    { key: "price", label: "PRECIO" },
 ];
 
 export default function ProductosPage() {

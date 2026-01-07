@@ -3,7 +3,7 @@
 import * as XLSX from "xlsx";
 // Asegúrate de importar las interfaces correctamente desde tu ruta
 import { Blog, BlogExport } from "@/types/admin/blog";
-import { Producto, ProductoExport } from "@/types/producto";
+import { Producto, ProductoExport } from "@/types/admin/producto";
 
 export const exportExcel = (
   data: Blog[] | Producto[],
@@ -40,8 +40,8 @@ export const exportExcel = (
     // Lógica para Productos (Asumiendo que ProductoExport tiene esta estructura)
     exportData = (data as Producto[]).map(
       (producto): ProductoExport => ({
-        nombre: producto.nombre,
-        categorias: producto.nombre?.length || 0,
+        nombre: producto.name,
+        categorias: producto.category_name ? 1 : 0,
         // Agrega aquí más campos según tu interfaz ProductoExport
       })
     );
