@@ -1,7 +1,6 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
 import HeroSection from "@/components/organisms/productos/detalle/HeroSection";
 import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaDetalleSection";
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";

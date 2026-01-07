@@ -5,6 +5,15 @@ import {
     LeadActionResponse,
 } from "@/types/admin/lead";
 import { getToken } from "@/utils/token";
+import { formatDate } from "@/utils/formatDate";
+
+function formatLead(apiLead: any): Lead {
+    return {
+        ...apiLead,
+        product_name: apiLead.product?.name || "-",
+        created_at: formatDate(apiLead.created_at || "")
+    };
+}
 
 export async function getLeadsService(perPage: number = 20): Promise<LeadActionResponse<Lead[]>> {
     try {
@@ -14,15 +23,17 @@ export async function getLeadsService(perPage: number = 20): Promise<LeadActionR
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.get(API_ENDPOINTS.ADMIN.INBOX.LEADS.GET_ALL+`?perPage=${perPage}`, {
+        const response = await api.get(API_ENDPOINTS.ADMIN.INBOX.LEADS.GET_ALL + `?perPage=${perPage}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
         });
 
+        const transformedLeads = response.data.data.data.map(formatLead);
+
         return {
             success: true,
-            data: response.data.data.data,
+            data: transformedLeads,
         };
     } catch (error) {
         return { success: false, message: "Error de conexión" };
@@ -42,11 +53,11 @@ export async function createLeadService(leadData: LeadInput): Promise<LeadAction
                 Authorization: `Bearer ${token}`,
             }
         });
-        
+
         return {
             success: true,
             message: response.data.message || "Lead creado exitosamente",
-            data: response.data.data
+            data: formatLead(response.data.data)
         };
     } catch (error) {
         console.log(error)
@@ -71,7 +82,7 @@ export async function updateLeadService(id: number, leadData: LeadInput): Promis
         return {
             success: true,
             message: response.data.message || "Lead actualizado exitosamente",
-            data: response.data.data
+            data: formatLead(response.data.data)
         };
     } catch (error) {
         console.log(error)

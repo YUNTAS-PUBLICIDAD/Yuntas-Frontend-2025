@@ -1,4 +1,4 @@
-import { api, API_ENDPOINTS } from "@/config"; 
+import { api, API_ENDPOINTS } from "@/config";
 import { LoginCredentials, LoginActionResponse } from "@/types/auth";
 import { getToken, removeToken, setToken } from "@/utils/token";
 import { AxiosError } from "axios";
@@ -7,15 +7,15 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
     try {
         const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
 
-    const data = response.data;
-    const token = data.data?.token || data.token;
-    const user = data.data?.user || data.user;
+        const data = response.data;
+        const token = data.data?.token || data.token;
+        const user = data.data?.user || data.user;
 
         if (!token) {
             return { success: false, message: "Error: No se recibió token del servidor." };
         }
 
-        // Guardar el token en localStorage
+        // Guardar el token en cookies
         setToken(token);
 
         return {
@@ -26,7 +26,7 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                
+
             },
 
         };
@@ -55,7 +55,7 @@ export async function logoutService(): Promise<LoginActionResponse> {
         console.error("Error al cerrar sesión en backend", error);
     } finally {
         removeToken();
-        
+
         return { success: true, message: "Sesión cerrada" };
     }
 }
