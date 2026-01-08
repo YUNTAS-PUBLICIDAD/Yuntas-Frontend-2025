@@ -380,16 +380,6 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             {/* Botones de acción */}
             <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200">
                 <Button
-                    type="button"
-                    variant="tertiary"
-                    size="md"
-                    className="flex-1"
-                    onClick={onCancel}
-                    disabled={isLoading}
-                >
-                    Cancelar
-                </Button>
-                <Button
                     type="submit"
                     variant="primary"
                     size="md"
@@ -404,6 +394,16 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                     ) : (
                         initialData ? "Guardar Cambios" : "Añadir Producto"
                     )}
+                </Button>
+                <Button
+                    type="button"
+                    variant="tertiary"
+                    size="md"
+                    className="flex-1"
+                    onClick={onCancel}
+                    disabled={isLoading}
+                >
+                    Cancelar
                 </Button>
             </div>
         </form>
