@@ -1,5 +1,4 @@
 import React from "react";
-import { Producto } from "@/types/producto";
 import { useAutocompletado } from "@/hooks/ui/useAutocompletado";
 
 type AutoCompletadoProps = {

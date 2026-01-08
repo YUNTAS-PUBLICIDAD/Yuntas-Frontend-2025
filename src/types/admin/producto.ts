@@ -4,27 +4,29 @@ export interface ImagenProducto {
     title: string | null;
 }
 
-export interface SeoProducto {
-    meta_titulo: string | null;
-    meta_descripcion: string | null;
-    keywords: string[];
+export interface Galeria {
+    url:  string;
+    alt:  string | null;
+    slot: "Hero" | "Specs" | "Benefits" | "Popups";
 }
 
 export interface Producto {
     id: number;
-    nombre: string;
+    name: string;
     slug: string;
-    titulo_corto: string;
-    descripcion: string;
-    precio: string;
-    categoria?: string;
-    estado: "active" | "inactive";
-    imagen_principal: ImagenProducto;
-    galeria: ImagenProducto[];
-    especificaciones: string[];
-    beneficios: string[];
-    seo: SeoProducto;
-    creado_en: string;
+    price: string;
+    short_description: string;
+    description: string;
+    status: "active" | "inactive";
+    meta_title: string | null;
+    meta_description: string | null;
+    keywords: string[];
+    main_image: ImagenProducto;
+    gallery: Galeria[];
+    category_name: string | null;
+    specifications: string[];
+    benefits: string[];
+    created_at: string;
 }
 
 export interface ProductoInput {
@@ -48,6 +50,11 @@ export interface ProductoInput {
     meta_descripcion: string | null;
     keywords: string[];
 }
+
+export interface ProductoExport {
+  nombre: string;
+  categorias: number;
+};
 
 // links de la paginacion
 export interface PaginationLinks {

@@ -1,13 +1,17 @@
+import next from 'next';
+
 /**@type {import('next').NextConfig} */
 const nextConfig = {
   
- 
+    output: 'export',
 
 /** holaaaa */
 
-
+    trailingSlash: true,
+    
   images: {
-    unoptimized: true,
+    unoptimized: true,  
+
     remotePatterns: [
       {
         protocol: 'http',

@@ -1,15 +1,14 @@
 'use client'
+
 import { useState } from "react"
-import { Producto } from "@/types/producto"
-import { productosData } from "@/data/productosData"
-type useSearchProps={
-    listItem:any[],
+type useSearchProps = {
+    listItem: any[],
 }
 
-export const useSearch=({listItem}:useSearchProps)=>{
-    const [textSearch,setTextSearch]=useState("")
-    const searchList = listItem?.filter((e) => e.nombre.toLowerCase().includes(textSearch.toLowerCase())) || [];    
-    const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
+export const useSearch = ({ listItem }: useSearchProps) => {
+    const [textSearch, setTextSearch] = useState("")
+    const searchList = listItem?.filter((e) => e.nombre.toLowerCase().includes(textSearch.toLowerCase())) || [];
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const input = e.currentTarget.querySelector("input") as HTMLInputElement | null
         if (input) setTextSearch(input.value)

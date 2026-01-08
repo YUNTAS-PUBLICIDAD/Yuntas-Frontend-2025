@@ -17,10 +17,15 @@ export interface BlogInput {
   categorias?:categoria[]
   imagen_principal_url?: string | null;
   imagenes_urls?: string[];
-
+  product: number | null; // Puede ser null si no tiene producto
   parrafos?: string[];
   beneficios?: string[];
   bloques?: BlogBloque[];
+}
+export interface ProductoBlog { // Agregado porque ahora sí lo devuelves
+  id: number;
+  name: string;
+  slug: string | null;
 }
 interface categoria{
   id:number;
@@ -75,7 +80,7 @@ export interface Blog {
   meta_description?: string | null;
 
   main_image: BlogImagen | null;
-
+  product: ProductoBlog | null;
   paragraphs: string[];
   benefits: string[];
   gallery: BlogImagen[];
@@ -99,3 +104,19 @@ export interface BlogExport {
   "Cant. Párrafos": number;
   "Cant. Imágenes": number;
 }
+
+export type BlogView = Blog | BlogStatic;
+export type BlogStatic = {
+  id: number;
+  slug: string;
+  title: string;
+  cover_subtitle?: string;
+  content: string;
+  categories: string[];
+  benefits?: string[];
+  opinion?: string;
+  video_url?: string;
+  main_image: {
+    url: string;
+  };
+};

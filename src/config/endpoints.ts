@@ -1,5 +1,3 @@
-
-
 export const API_ENDPOINTS = {
   // AUTENTICACIÓN
   AUTH: {
@@ -29,7 +27,6 @@ export const API_ENDPOINTS = {
 
   // FORMULARIOS PÚBLICOS
   FORMS: {
-    LEAD: '/leads', 
     CONTACT: '/contacto', 
     CLAIMS: '/claims', 
   },
@@ -50,7 +47,12 @@ export const API_ENDPOINTS = {
       DELETE: (id: number) => `/admin/categorias/${id}`,
     },
     INBOX: {
-      LEADS: '/leads',
+      LEADS: {
+        GET_ALL: '/admin/leads',
+        CREATE: '/admin/leads',
+        UPDATE: (id: number) => `/admin/leads/${id}`,
+        DELETE: (id: number) => `/admin/leads/${id}`,
+      },
       CONTACT: {
         GET_ALL: '/admin/contacto',
         GET_ONE: (id: number) => `/admin/contacto/${id}`,

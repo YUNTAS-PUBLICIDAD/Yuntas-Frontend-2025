@@ -29,6 +29,7 @@ const BLOG_INICIAL:BlogInput={
   imagenes: [],
   imagenes_alts: [],
   parrafos: [],
+  product: 0,
   beneficios: [],
   bloques: [],
 }

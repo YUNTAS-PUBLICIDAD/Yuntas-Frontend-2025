@@ -57,7 +57,7 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
             key={index} 
             img={e.main_image.url || '' } 
             nombre={e.name}
-            href={`/productos/${e.slug}`}
+            href={`/productos/detalle?slug=${e.slug}`}
           />
         ))}
       </div>
