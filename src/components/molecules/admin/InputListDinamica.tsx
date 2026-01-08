@@ -1,6 +1,7 @@
 'use client';
 
 import { IoClose } from "react-icons/io5";
+import { useEffect } from "react";
 
 interface InputListDinamicaProps {
     label: string;
@@ -9,6 +10,7 @@ interface InputListDinamicaProps {
     placeholder?: string;
     helperText?: string;
     addButtonText?: string;
+    required?: boolean;
 }
 
 export default function InputListDinamica({
@@ -17,9 +19,16 @@ export default function InputListDinamica({
     onChange,
     placeholder = "",
     helperText,
-    addButtonText = "+ Agregar"
+    addButtonText = "+ Agregar",
+    required = false
 }: InputListDinamicaProps) {
-    
+
+    useEffect(() => {
+        if (items.length === 0) {
+            onChange([""]);
+        }
+    }, []);
+
     const handleItemChange = (index: number, value: string) => {
         const newItems = [...items];
         newItems[index] = value;
@@ -31,16 +40,18 @@ export default function InputListDinamica({
     };
 
     const handleRemoveItem = (index: number) => {
-        if (items.length > 1) {
-            const newItems = items.filter((_, i) => i !== index);
-            onChange(newItems);
+        if (required && items.length <= 1) {
+            return;
         }
+
+        const newItems = items.filter((_, i) => i !== index);
+        onChange(newItems.length === 0 ? [""] : newItems);
     };
 
     return (
         <div className="flex flex-col gap-2">
-            <label className="text-[#203565] font-medium">{label}</label>
-            
+            <label className="text-[#203565] font-medium">{label} {required && <span className="text-red-500">*</span>} </label>
+
             {items.map((item, index) => (
                 <div key={index} className="flex gap-2 items-center">
                     <input
@@ -48,15 +59,18 @@ export default function InputListDinamica({
                         value={item}
                         onChange={(e) => handleItemChange(index, e.target.value)}
                         placeholder={placeholder}
+                        required={required && index === 0}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all"
                     />
-                    {items.length > 1 && (
+                    {(items.length > 1 || !required) && (
                         <button
                             type="button"
                             onClick={() => handleRemoveItem(index)}
                             className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            title={required && items.length === 1 ? "Campo requerido" : "Eliminar"}
+                            disabled={required && items.length === 1}
                         >
-                            <IoClose size={20} />
+                            <IoClose size={20} className={required && items.length === 1 ? "opacity-30" : ""} />
                         </button>
                     )}
                 </div>
