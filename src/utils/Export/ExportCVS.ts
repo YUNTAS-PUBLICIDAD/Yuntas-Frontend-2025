@@ -1,17 +1,10 @@
 "use client";
 
-<<<<<<< HEAD
 import { Blog } from "@/types/blog";
 import { Producto } from "@/types/producto";
 import { UserData } from "@/types/admin";
 
 type ExportRow = Record<string, string | number>;
-=======
-import * as XLSX from "xlsx";
-// Asegúrate de que las rutas a tus types sean correctas
-import { Blog, BlogExport } from "@/types/admin/blog";
-import { Producto, ProductoExport } from "@/types/admin/producto";
->>>>>>> 994364b691fb84e9e08db8c68bb6ea4fc06c3ad5
 
 export const exportCSV = (
   data: any[],
@@ -34,29 +27,18 @@ export const exportCSV = (
       FECHA: String(blog.fecha),
       IMÁGENES: blog.galeria?.length || 0,
     }));
-<<<<<<< HEAD
-=======
-  } else {
-    // Lógica para Productos
-    exportData = (data as Producto[]).map(
-      (producto): ProductoExport => ({
-        nombre: producto.name,
-        categorias: producto.category_name ? 1 : 0,
-        // Agrega el resto de campos necesarios
-      })
-    );
->>>>>>> 994364b691fb84e9e08db8c68bb6ea4fc06c3ad5
   }
 
   // 🔹 PRODUCTO
   else if (Array.isArray(firstItem?.categorias)) {
     exportData = (data as Producto[]).map(producto => ({
+      ID: producto.id,
       NOMBRE: producto.nombre,
       CATEGORÍAS: producto.categorias?.length || 0,
     }));
   }
 
-  // 🔹 USUARIOS ✅
+  // 🔹 USUARIOS
   else if ("email" in firstItem && "name" in firstItem) {
     exportData = (data as UserData[]).map(user => ({
       ID: user.id,
@@ -74,9 +56,7 @@ export const exportCSV = (
   const headers = Object.keys(exportData[0]).join(";");
   const rows = exportData.map(row =>
     Object.values(row)
-      .map(value =>
-        `"${String(value).replace(/"/g, '""')}"`
-      )
+      .map(value => `"${String(value).replace(/"/g, '""')}"`)
       .join(";")
   );
 
