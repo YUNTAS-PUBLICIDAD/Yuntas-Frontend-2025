@@ -24,7 +24,7 @@ export default function InputAdmin({
     disabled = false
 }: InputAdminProps) {
     return (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 flex-1">
             <label htmlFor={name} className="text-[#203565] font-medium">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>

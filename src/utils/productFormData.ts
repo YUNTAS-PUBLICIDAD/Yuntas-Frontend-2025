@@ -1,36 +1,70 @@
 import { ProductoInput } from "@/types/admin/producto";
-import { toFormData, FormDataObject } from "./toFormData";
-import { logFormData } from "@/utils/toFormData";
+
+export function logFormData(formData: FormData): void {
+    formData.forEach((value, key) => {
+        if (value instanceof File) {
+            console.log(`${key}: [File] ${value.name} (${value.size} bytes)`);
+        } else {
+            console.log(`${key}: ${value}`);
+        }
+    });
+}
 
 export function buildProductoFormData(data: ProductoInput): FormData {
-    const formattedData: FormDataObject = {
-        nombre: data.nombre,
-        link: data.link,
-        titulo: data.titulo,
-        descripcion: data.descripcion,
-        precio: data.precio,
-        
-        // SEO
-        etiqueta: {
-            meta_titulo: data.meta_titulo,
-            meta_descripcion: data.meta_descripcion,
-            keywords: data.keywords.filter(k => k.trim() !== ""),
-        },
-        
-        // Listas
-        especificaciones: data.especificaciones.filter(e => e.trim() !== ""),
-        beneficios: data.beneficios.filter(b => b.trim() !== ""),
-        imagenes: data.galeria.filter(file => file instanceof File),
-    };
+    const formData = new FormData();
 
-    const formData = toFormData(formattedData);
+    formData.append("name", data.name);
+    formData.append("slug", data.slug || "");
+    formData.append("price", String(data.price));
+    formData.append("hero_title", data.hero_title);
+    formData.append("description", data.description);
+    formData.append("status", data.status || "active");
+
+    // SEO opcionales
+    if (data.meta_title) formData.append("meta_title", data.meta_title);
+    if (data.meta_description) formData.append("meta_description", data.meta_description);
+
+    // keywords
+    const cleanKeywords = data.keywords.filter(k => k.trim() !== "").join(", ");
+    if (cleanKeywords) formData.append("keywords", cleanKeywords);
 
     // Imagen principal
-    if (data.imagen_principal.file instanceof File) {
-        formData.append("imagen_principal", data.imagen_principal.file);
+    if (data.main_image instanceof File) {
+        formData.append("main_image", data.main_image);
     }
+    formData.append("main_image_alt", data.main_image_alt || "");
 
-    logFormData(formData);
+    // galeria
+    data.gallery.forEach((item, index) => {
+        formData.append(`gallery[${index}][slot]`, item.slot);
+
+        if (item.image instanceof File) {
+            formData.append(`gallery[${index}][image]`, item.image);
+        }
+
+        formData.append(`gallery[${index}][alt]`, item.alt || "");
+    });
+
+    // categoria
+    data.categories.forEach((category, index) => {
+        if (category.trim() !== "") {
+            formData.append(`categories[${index}]`, category);
+        }
+    });
+
+    // especificaciones
+    data.specifications
+        .filter(spec => spec.trim() !== "")
+        .forEach((spec, index) => {
+            formData.append(`specifications[${index}]`, spec);
+        });
+
+    // beneficios
+    data.benefits
+        .filter(benefit => benefit.trim() !== "")
+        .forEach((benefit, index) => {
+            formData.append(`benefits[${index}]`, benefit);
+        });
 
     return formData;
 }

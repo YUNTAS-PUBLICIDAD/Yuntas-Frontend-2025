@@ -32,7 +32,6 @@ export function useLeads(): UseLeadsReturn {
         setError(null);
 
         const result = await getLeadsService(perPage);
-        console.log(result)
 
         if (result.success && result.data) {
             setLeads(result.data);

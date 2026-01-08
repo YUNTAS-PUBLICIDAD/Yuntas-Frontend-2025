@@ -46,9 +46,9 @@ export default function SeguimientoPage() {
 
         const success = await createLead(formData);
         if (success) {
-            alert("Cliente creado");
-            setIsModalOpen(false);
+            handleCloseModal();
             await getLeads(200);
+            alert("Cliente creado");
         } else {
             alert(error);
         }
@@ -58,10 +58,9 @@ export default function SeguimientoPage() {
         if (!selectedLead) return;
         const success = await updateLead(selectedLead.id!, formData);
         if (success) {
-            alert("Cliente actualizado");
-            setIsModalOpen(false);
-            setSelectedLead(null);
+            handleCloseModal();
             await getLeads(200);
+            alert("Cliente actualizado");
         } else {
             alert(error);
             setSelectedLead(null);
@@ -73,8 +72,8 @@ export default function SeguimientoPage() {
         if (!confirmDelete) return;
         const success = await deleteLead(client.id!);
         if (success) {
-            alert("Cliente eliminado");
             await getLeads(200);
+            alert("Cliente eliminado");
         } else {
             alert("Error al eliminar el cliente");
         }
