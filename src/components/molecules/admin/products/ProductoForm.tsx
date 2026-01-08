@@ -9,9 +9,6 @@ import FormSection from "@/components/molecules/admin/FormSection";
 import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
 import { Producto, ProductoInput } from "@/types/admin/producto";
-import { BASE_URL } from "@/config/api.config";
-
-import { buildProductoFormData, logFormData } from "@/utils/productFormData";
 
 interface ProductFormProps {
     onSubmit: (data: ProductoInput) => void;
@@ -321,7 +318,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                     onFileChange={(file) => setFormData(prev => ({ ...prev, main_image: file }))}
                     currentImage={
                         typeof formData.main_image === "string" && formData.main_image
-                            ? `${BASE_URL.replace('/api', '')}${formData.main_image}`
+                            ? formData.main_image
                             : null
                     }
                     required
@@ -343,7 +340,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                         if (existingImage) {
                             if (typeof existingImage.image === 'string') {
                                 // imagen existente
-                                imageUrl = `${BASE_URL.replace('/api', '')}${existingImage.image}`;
+                                imageUrl = existingImage.image;
                             } else {
                                 // imagen nueva (File)
                                 imageUrl = galleryPreviews.get(value) || null;

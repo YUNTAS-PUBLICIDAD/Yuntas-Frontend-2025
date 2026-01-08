@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useSearchParams } from 'next/navigation';
@@ -8,10 +7,7 @@ import InformacionSection from "@/components/organisms/productos/detalle/Informa
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import ProductoDetallePopup from "@/components/organisms/productos/detalle/ProductoDetallePopup";
 import { useProductos } from "@/hooks/useProductos";
-import { BASE_URL } from "@/config";
 import { useEffect } from "react";
-
-
 
 export default function  ProductoDetalleContent() {
     const searchParams = useSearchParams();
@@ -37,24 +33,24 @@ export default function  ProductoDetalleContent() {
                     <main>
                         <HeroSection
                             productName={producto?.name || ""}
-                            backgroundImage={`${BASE_URL.replace('/api', '')}${producto?.gallery[0]?.url || ""}`}
+                            backgroundImage={producto?.gallery[0]?.url || ""}
                         />
                         <ListaDetalleSection
                             text="ESPECIFICACIONES"
                             listItems={producto?.specifications || []}
-                            imageSrc={`${BASE_URL.replace('/api', '')}${producto?.gallery[1]?.url || ""}`}
-                            imageAlt={producto?.gallery[1]?.alt_text || "Especificaciones del producto"}
+                            imageSrc={producto?.gallery[1]?.url || ""}
+                            imageAlt={producto?.gallery[1]?.alt || "Especificaciones del producto"}
                         />
                         <InformacionSection info={producto?.description || ""} />
                         <ListaDetalleSection
                             text="BENEFICIOS"
                             listItems={producto?.benefits || []}
-                            imageSrc={`${BASE_URL.replace('/api', '')}${producto?.gallery[2]?.url || ""}`}
-                            imageAlt={producto?.gallery[2]?.alt_text || "Beneficios del producto"}
+                            imageSrc={producto?.gallery[2]?.url || ""}
+                            imageAlt={producto?.gallery[2]?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
                         <CotizaSection />
-                        <ProductoDetallePopup imgSrc={`${BASE_URL.replace('/api', '')}${producto?.gallery[3]?.url || ""}`} />
+                        <ProductoDetallePopup imgSrc={producto?.gallery[3]?.url || ""} />
                     </main>
                 )
             }
