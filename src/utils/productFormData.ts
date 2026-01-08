@@ -31,18 +31,22 @@ export function buildProductoFormData(data: ProductoInput): FormData {
     // Imagen principal
     if (data.main_image instanceof File) {
         formData.append("main_image", data.main_image);
+        formData.append("main_image_alt", data.main_image_alt || "");
+    } else if (typeof data.main_image === "string") {
+        formData.append("main_image_alt", data.main_image_alt || "");
     }
-    formData.append("main_image_alt", data.main_image_alt || "");
 
     // galeria
-    data.gallery.forEach((item, index) => {
-        formData.append(`gallery[${index}][slot]`, item.slot);
-
+    let galleryIndex = 0;
+    data.gallery.forEach((item) => {
         if (item.image instanceof File) {
-            formData.append(`gallery[${index}][image]`, item.image);
+            formData.append(`gallery[${galleryIndex}][slot]`, item.slot);
+            formData.append(`gallery[${galleryIndex}][image]`, item.image);
+            formData.append(`gallery[${galleryIndex}][alt]`, item.alt || "");
+            galleryIndex++;
+        } else if (typeof item.image === "string") {
+            formData.append(`gallery_alt[${item.slot}]`, item.alt || "");
         }
-
-        formData.append(`gallery[${index}][alt]`, item.alt || "");
     });
 
     // categoria

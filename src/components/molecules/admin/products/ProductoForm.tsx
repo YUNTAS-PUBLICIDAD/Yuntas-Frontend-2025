@@ -153,6 +153,14 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             return;
         }
 
+        const emptyImages = formData.gallery.filter(
+            item => !item.image || (typeof item.image === 'string' && item.image.trim() === '')
+        );
+        if (emptyImages.length > 0) {
+            alert("Todas las imágenes de galería son requeridas");
+            return;
+        }
+
         // beneficios y especificaciones obligatorios
         const hasEmptySpecs = formData.specifications.some(spec => spec.trim() === "");
         const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");

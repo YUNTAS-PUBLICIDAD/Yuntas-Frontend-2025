@@ -63,7 +63,6 @@ export default function SeguimientoPage() {
             alert("Cliente actualizado");
         } else {
             alert(error);
-            setSelectedLead(null);
         }
     }
 
@@ -112,39 +111,38 @@ export default function SeguimientoPage() {
     ];
 
     return (
-        <div className="p-4 animate-fade-in">
-            <div className="flex gap-2 mb-6">
+        <div className="p-4">
+            <div className="flex gap-2 mb-4">
                 <ActionButtonGroup buttons={topButtons} />
             </div>
 
-            <div className="animate-fade-in-up">
-                {isTrackingMode ? (
-                    <TrackingTable
-                        data={datosPaginados}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteLead}
-                    />
-                ) : (
-                    <AdminTable
-                        data={datosPaginados}
-                        columns={columns}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteLead}
-                    />
-                )}
-            </div>
+            {isTrackingMode ? (
+                <TrackingTable
+                    data={datosPaginados}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteLead}
+                />
+            ) : (
+                <AdminTable
+                    data={datosPaginados}
+                    columns={columns}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteLead}
+                />
+            )}
 
-            <div className="mt-6 flex justify-start">
-                <ActionButtonGroup buttons={[{ label: "Añadir Cliente", onClick: () => setIsModalOpen(true), variant: "tertiary" }]} />
-            </div>
-
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-center mt-4">
                 <Pagination
                     pageSize={10}
                     items={leads}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>
+
+            <div className="mt-6 flex justify-start">
+                <ActionButtonGroup buttons={[{ label: "Añadir Cliente", onClick: () => setIsModalOpen(true), variant: "tertiary" }]} />
+            </div>
+
 
             {/** Modal para crear y editar cliente */}
             <Modal

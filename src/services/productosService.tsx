@@ -14,9 +14,14 @@ function formatProduct(apiProduct: any): Producto {
     };
 };
 
-export async function getProductosService(perPage: number = 6, url?: string): Promise<ProductoServiceResponse<Producto[]>> {
+export async function getProductosService(perPage: number = 10, url?: string): Promise<ProductoServiceResponse<Producto[]>> {
     try {
-        const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
+        const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL, {
+            params: {
+                per_page: perPage,
+                url: url || undefined,
+            },
+        });
 
         const formattedProducts = response.data.data.data.map(formatProduct);
 
@@ -55,9 +60,10 @@ export async function createProductoService(formData: ProductoInput): Promise<Pr
 
         const formattedFormData = buildProductoFormData(formData);
 
-        const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, formattedFormData, {
+        const response = await api.post(API_ENDPOINTS.ADMIN.PRODUCTS.CREATE, formattedFormData, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
             },
         });
 
@@ -81,12 +87,12 @@ export async function updateProductoService(id: number | string, formData: Produ
 
         const formattedFormData = buildProductoFormData(formData);
 
-        const response = await api.post(API_ENDPOINTS.PRODUCTS.UPDATE(Number(id)), formattedFormData, {
+        const response = await api.post(API_ENDPOINTS.ADMIN.PRODUCTS.UPDATE(Number(id)), formattedFormData, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
 
         return {
             success: true,
@@ -106,7 +112,11 @@ export async function deleteProductoService(id: number | string): Promise<Produc
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.delete(API_ENDPOINTS.PRODUCTS.DELETE(Number(id)));
+        const response = await api.delete(API_ENDPOINTS.ADMIN.PRODUCTS.DELETE(Number(id)), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         return { success: true, message: "Producto eliminado exitosamente" };
     } catch (error: any) {
