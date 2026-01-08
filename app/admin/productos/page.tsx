@@ -16,9 +16,9 @@ import Pagination from "@/components/molecules/Pagination";
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "name", label: "NOMBRE" },
-    { key: "category_name", label: "SECCIÓN" },
-    { key: "price", label: "PRECIO" },
+    { key: "nombre", label: "NOMBRE" },         
+    { key: "seccion", label: "SECCIÓN" },       
+    { key: "precio", label: "PRECIO" },         
 ];
 
 export default function ProductosPage() {
