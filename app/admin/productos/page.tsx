@@ -1,74 +1,100 @@
 'use client'
 
-import { useState } from "react";
-import AdminTable, { TableAction } from "@/components/organisms/admin/Products/AdminTable";
+import { useEffect, useState } from "react";
+import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
 
-import EditProductForm from "@/components/molecules/admin/products/EditProductForm";
-import AddProductForm from "@/components/molecules/admin/products/AddProductForm";
+import ProductForm from "@/components/molecules/admin/products/ProductoForm";
 
-import { useAdminProducts } from "@/hooks/ui/admin/products/useAdminProducts";
+import { useProductos } from "@/hooks/useProductos";
+import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
 import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
 import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsappForm";
+import Pagination from "@/components/molecules/Pagination";
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "nombre", label: "NOMBRE" },         
-    { key: "seccion", label: "SECCIÓN" },       
-    { key: "precio", label: "PRECIO" },         
+    { key: "name", label: "NOMBRE" },
+    { key: "category_name", label: "SECCIÓN" },
+    { key: "price", label: "PRECIO" },
 ];
 
 export default function ProductosPage() {
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [editingProductId, setEditingProductId] = useState<number | null>(null);
-    const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
+    const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
+    const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
+    const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
+
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
     const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
-    const { products, loading, error, reload, handleDelete } = useAdminProducts();
 
-    const onAddProduct = () => setIsAddModalOpen(true);
+    useEffect(() => {
+        getProductos(200);
+    }, [getProductos]);
 
-    console.log("DATOS DE PRODUCTOS RECIBIDOS:", products); 
+    const handleCreateProducto = async (formData: ProductoInput) => {
+        const result = await createProducto(formData);
+        if (result.success) {
+            handleCloseModal();
+            await getProductos(200);
+            alert("Producto creado");
+        } else {
+            alert(result.message);
+        }
+    }
 
-    const handleCloseModal = () => {
-        setIsAddModalOpen(false);
-        reload();
+    const handleEditClick = (producto: Producto) => {
+        setSelectedProduct(producto);
+        setIsAddEditModalOpen(true);
     };
 
-    const tableActions: TableAction[] = [
-        {
-            type: "edit",
-            label: "Editar",
-            onClick: (id) => {
-                setEditingProductId(Number(id));
-                setIsEditModalOpen(true);
-            }
-        },
-        {
-            type: "delete",
-            label: "Eliminar",
-            onClick: (id) => handleDelete(Number(id))
-        }
+    const handleEditProducto = async (formData: ProductoInput) => {
+        if (!selectedProduct) return;
 
-    ];
+        const result = await updateProducto(selectedProduct.id!, formData);
+        if (result.success) {
+            handleCloseModal();
+            await getProductos(200);
+            alert("Producto actualizado");
+        } else {
+            alert(result.message);
+        }
+    }
+
+    const handleDeleteProducto = async (producto: Producto) => {
+        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+        if (!confirmDelete) return;
+        const result = await deleteProducto(producto.id!);
+        if (result.success) {
+            await getProductos(200);
+            alert("Producto eliminado");
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+        setIsAddEditModalOpen(false);
+    };
 
     const exportButtons = [
         {
             label: "EXPORTAR A CSV",
-            onClick: () => exportToCSV(products),
+            onClick: () => exportToCSV(productos),
             backgraund: "#5bc5c7"
         },
         {
             label: "EXPORTAR A EXCEL",
-            onClick: () => exportToExcel(products),
+            onClick: () => exportToExcel(productos),
             backgraund: "#5bc5c7"
         },
         {
             label: "EXPORTAR A PDF",
-            onClick: () => exportToPDF(products),
+            onClick: () => exportToPDF(productos),
             backgraund: "#5bc5c7"
         },
         {
@@ -78,14 +104,18 @@ export default function ProductosPage() {
         },
     ];
 
-    if (loading && products.length === 0) {
+    if (isLoading && productos.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
     }
 
     return (
-        <div className="animate-fade-in p-4">
-            <div className="flex gap-4 flex-wrap mb-4">
-                <ActionButtonGroup buttons={[{ label: "Añadir Producto", onClick: onAddProduct, variant: "tertiary" }]} />
+        <div className="p-4">
+            <div className="flex gap-2 flex-wrap mb-4">
+                <ActionButtonGroup buttons={[{
+                    label: "Añadir Producto",
+                    onClick: () => setIsAddEditModalOpen(true),
+                    variant: "tertiary"
+                }]} />
 
                 <ActionButtonGroup buttons={[{
                     label: "Envio de Email",
@@ -113,41 +143,33 @@ export default function ProductosPage() {
             {/* TABLA */}
             <AdminTable
                 columns={columns}
-                data={products}
+                data={datosPaginados}
                 minRows={5}
-                actions={tableActions}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteProducto}
             />
 
-            {/* MODAL DE AÑADIR */}
-            <Modal
-                isOpen={isAddModalOpen}
-                onClose={handleCloseModal}
-                title="Ingresar Datos"
-                size="lg"
-            >
-                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    <AddProductForm onClose={handleCloseModal} />
-                </div>
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    pageSize={10}
+                    items={productos}
+                    setProductosPaginados={setDatosPaginados}
+                />
+            </div>
 
-            </Modal>
+            {/* MODAL DE AÑADIR Y EDITAR */}
             <Modal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                title="Editar Datos"
+                isOpen={isAddEditModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedProduct ? "Añadir Producto" : "Editar Producto"}
                 size="lg"
             >
-                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    {editingProductId && (
-                        <EditProductForm
-                            productId={editingProductId}
-                            onClose={() => {
-                                setIsEditModalOpen(false);
-                                setEditingProductId(null);
-                                // reload(); // Si tienes el reload del hook useAdminProducts
-                            }}
-                        />
-                    )}
-                </div>
+                <ProductForm
+                    onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
+                    onCancel={handleCloseModal}
+                    initialData={selectedProduct}
+                    isLoading={isLoading}
+                />
             </Modal>
             <Modal
                 isOpen={isEmailModalOpen}
@@ -157,11 +179,12 @@ export default function ProductosPage() {
             >
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
                     <SendEmailForm
-                        email_productos={products}
+                        email_productos={productos}
                         onClose={() => setIsEmailModalOpen(false)}
                     />
                 </div>
             </Modal>
+            
             <Modal
                 isOpen={isWhatsappModalOpen}
                 onClose={() => setIsWhatsappModalOpen(false)}
@@ -170,7 +193,7 @@ export default function ProductosPage() {
             >
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
                     <SendWhatsappForm
-                        products={products}
+                        products={productos}
                         onClose={() => setIsWhatsappModalOpen(false)}
                     />
                 </div>

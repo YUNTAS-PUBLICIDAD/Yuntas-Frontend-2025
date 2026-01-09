@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "@/config";
+import { getToken } from "@/utils/token";
 
 export interface EmailSectionData {
     mainImage: File | null;
@@ -53,8 +54,10 @@ export const useSendEmail = (
         const loadTemplate = async () => {
             try {
                 const res = await api.get(
-                    `/email-productos?producto_id=${selectedProductId}`
-                );
+                    `/admin/email-productos?producto_id=${selectedProductId}`
+                    , {
+                        headers: { Authorization: `Bearer ${getToken()}` }
+                    });
 
                 if (!res.data || res.data.length === 0) {
                     setSections([
@@ -170,8 +173,8 @@ export const useSendEmail = (
                     );
                 }
 
-                await api.post("/email-productos", formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
+                await api.post("/admin/email-productos", formData, {
+                    headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${getToken()}` },
                 });
             }
 
@@ -197,8 +200,10 @@ export const useSendEmail = (
         setIsSending(true);
 
         try {
-            const res = await api.post("/email-campanas/enviar", {
+            const res = await api.post("/admin/email-campanas/enviar", {
                 producto_id: selectedProductId,
+            }, {
+                headers: { Authorization: `Bearer ${getToken()}` }
             });
 
             alert(

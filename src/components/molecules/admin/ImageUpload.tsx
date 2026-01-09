@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import { IoCloudUpload, IoClose } from "react-icons/io5";
 import Image from "next/image";
-import { getImg } from "@/utils/getImg";
 interface ImageUploadProps {
     label: string;
     description?: string;
@@ -12,6 +11,7 @@ interface ImageUploadProps {
     onFileChange: (file: File | null) => void;
     currentImage?: string | null;
     required?: boolean;
+    onRemove?: () => void;
 }
 
 export default function ImageUpload({
@@ -21,7 +21,8 @@ export default function ImageUpload({
     onAltChange,
     onFileChange,
     currentImage,
-    required = false
+    required = false,
+    onRemove
 }: ImageUploadProps) {
     const [preview, setPreview] = useState<string | null>(currentImage || null);
     const [error, setError] = useState<string | null>(null);
@@ -73,6 +74,10 @@ export default function ImageUpload({
         if (inputRef.current) {
             inputRef.current.value = "";
         }
+
+        if (onRemove) {
+            onRemove();
+        }
     };
 
     return (
@@ -80,7 +85,7 @@ export default function ImageUpload({
             <label className="text-[#203565] font-medium">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
-            
+
             {description && (
                 <p className="text-gray-500 text-sm">{description}</p>
             )}

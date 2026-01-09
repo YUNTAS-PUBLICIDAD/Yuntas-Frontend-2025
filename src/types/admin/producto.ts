@@ -5,8 +5,8 @@ export interface ImagenProducto {
 }
 
 export interface Galeria {
-    url:  string;
-    alt:  string | null;
+    url: string;
+    alt: string | null;
     slot: "Hero" | "Specs" | "Benefits" | "Popups";
 }
 
@@ -15,7 +15,7 @@ export interface Producto {
     name: string;
     slug: string;
     price: string;
-    short_description: string;
+    hero_title: string;
     description: string;
     status: "active" | "inactive";
     meta_title: string | null;
@@ -30,30 +30,33 @@ export interface Producto {
 }
 
 export interface ProductoInput {
-    nombre: string;
-    link: string;
-    titulo: string;
-    descripcion: string;
-    precio: number;
-    categoria?: string;
+    name: string;
+    slug?: string;
+    price: string;
+    hero_title: string;
+    description: string;
+    status?: 'active' | 'inactive';
 
-    imagen_principal: {
-        file: File | string | null;
-        alt: string;
-    };
-    galeria: File[];
-
-    especificaciones: string[];
-    beneficios: string[];
-
-    meta_titulo: string | null;
-    meta_descripcion: string | null;
+    meta_title: string;
+    meta_description: string;
     keywords: string[];
+
+    main_image: File | string | null;
+    main_image_alt: string;
+    gallery: Array<{
+        slot: 'Hero' | 'Specs' | 'Benefits' | 'Popups';
+        image: File | string;
+        alt: string;
+    }>;
+
+    categories: string[];
+    specifications: string[];
+    benefits: string[];
 }
 
 export interface ProductoExport {
-  nombre: string;
-  categorias: number;
+    nombre: string;
+    categorias: number;
 };
 
 // links de la paginacion
@@ -92,8 +95,8 @@ export interface ProductoResponse {
     data: Producto;
 }
 
-// respuesta de acciones
-export interface ProductoActionResponse<T = null> {
+// respuesta de service
+export interface ProductoServiceResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;

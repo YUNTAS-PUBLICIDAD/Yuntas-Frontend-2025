@@ -26,7 +26,6 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
   useSelectCategorias(categoriaActiva, setListaProductos, productos);
 
   const [productosPaginados, setProductosPaginados] = useState<Producto[]>(productos);
-  console.log('ProductosSection - productosPaginados:', productosPaginados);
   return (
   <section className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-8 px-4 sm:px-6 md:px-8 lg:px-12 pt-8">
       
