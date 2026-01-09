@@ -21,7 +21,6 @@ const SearchBar = ({ setBlog, value, onChange, onKeyDown }: SearchBarProps) => {
     e.preventDefault();
     // Opcional: Si dan click en la lupa, podrías filtrar la lista principal
     // usando el valor actual 'value'.
-    console.log("Búsqueda manual activada para:", value);
   }
 
   return (
