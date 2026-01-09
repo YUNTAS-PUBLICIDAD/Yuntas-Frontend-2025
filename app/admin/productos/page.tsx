@@ -16,9 +16,9 @@ import Pagination from "@/components/molecules/Pagination";
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "nombre", label: "NOMBRE" },         
-    { key: "seccion", label: "SECCIÓN" },       
-    { key: "precio", label: "PRECIO" },         
+    { key: "name", label: "NOMBRE" },
+    { key: "category_name", label: "SECCIÓN" },
+    { key: "price", label: "PRECIO" },
 ];
 
 export default function ProductosPage() {
@@ -53,7 +53,7 @@ export default function ProductosPage() {
 
     const handleEditProducto = async (formData: ProductoInput) => {
         if (!selectedProduct) return;
-        
+
         const result = await updateProducto(selectedProduct.id!, formData);
         if (result.success) {
             handleCloseModal();
@@ -74,13 +74,13 @@ export default function ProductosPage() {
         } else {
             alert(result.message);
         }
-    }; 
+    };
 
     const handleCloseModal = () => {
         setSelectedProduct(null);
         setIsAddEditModalOpen(false);
     };
-    
+
     const exportButtons = [
         {
             label: "EXPORTAR A CSV",
@@ -102,7 +102,7 @@ export default function ProductosPage() {
             onClick: printTable,
             backgraund: "#5bc5c7"
         },
-    ]; 
+    ];
 
     if (isLoading && productos.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
