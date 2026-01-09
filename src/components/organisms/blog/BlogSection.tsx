@@ -7,16 +7,15 @@ import Text from '@/components/atoms/Text'
 import SearchBar from '@/components/molecules/blog/SearchBar'
 import BlogCard from '@/components/molecules/blog/BlogCard'
 import Pagination from '@/components/molecules/Pagination'
-import { BlogView } from '@/types/admin/blog'
 import { getImg } from '@/utils/getImg'
-
+import { Blog } from '@/types/admin/blog'
 type Props = {
-  data: BlogView[]
+  data: Blog[]
 }
 
 const BlogSection = ({ data }: Props) => {
   const [query, setQuery] = useState('')
-  const [blogPaginado, setBlogPaginado] = useState<BlogView[]>(data)
+  const [blogPaginado, setBlogPaginado] = useState<Blog[]>(data)
 
   /** 🔍 FILTRO LOCAL PURO (sin hooks raros) */
   const blogsFiltrados = useMemo(() => {
@@ -61,6 +60,7 @@ const BlogSection = ({ data }: Props) => {
                 nombre={blog.product?.name || 'General'}
                 img={getImg(blog.main_image?.url)}
                 descripcion={blog.meta_title || blog.title}
+                href={`/blog/detalle?slug=${blog.slug}`}
               />
             </Link>
           ))}

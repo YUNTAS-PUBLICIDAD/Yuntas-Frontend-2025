@@ -14,7 +14,7 @@ type ProductoSection = {
   ListaBusqueda: Producto[];
   setListaProductos:React.Dispatch<React.SetStateAction<Producto[]>>
 };
-const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => {
+const  ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => {
   const [openCategoria,setOpenCategoria]=useState(false);
   const { productos, getProductos } = useProductos();
 
