@@ -6,11 +6,22 @@ import {
 } from "@/types/admin/producto";
 import { buildProductoFormData } from "@/utils/productFormData";
 import { getToken } from "@/utils/token";
+import { getImg } from "@/utils/getImg";
 
 function formatProduct(apiProduct: any): Producto {
     return {
         ...apiProduct,
         category_name: apiProduct.categories.length > 0 ? apiProduct.categories[0].name : "-",
+        main_image: {
+            url: typeof apiProduct.main_image.url === "string" ? `${getImg(apiProduct.main_image.url)}` : apiProduct.main_image.url,
+            alt: apiProduct.main_image.alt,
+            title: apiProduct.main_image.title,
+        },
+        gallery: apiProduct.gallery.map((img: any) => ({
+            slot: img.slot,
+            url: typeof img.url === "string" ? `${getImg(img.url)}` : img.url,
+            alt: img.alt,
+        })),
     };
 };
 
