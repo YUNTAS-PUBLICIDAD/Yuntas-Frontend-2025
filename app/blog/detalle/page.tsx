@@ -8,9 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from "react";
 import { useBlogs } from "@/hooks/useBlog";
 import { getImg } from "@/utils/getImg";
-// 1. Eliminamos el async (los Client Components no pueden ser async)
 export default function BlogDetallePage() {
-  // 2. Los hooks deben ir DENTRO del componente
   const searchParams = useSearchParams();
   const slug = searchParams.get('slug');
   const { getBlogBySlug, blog, isLoading, error } = useBlogs();

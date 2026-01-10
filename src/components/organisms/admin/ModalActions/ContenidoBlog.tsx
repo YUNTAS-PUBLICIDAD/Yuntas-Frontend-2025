@@ -1,3 +1,4 @@
+
 import React from 'react';
 import BeneficioItem from '@/components/molecules/admin/blog/Modal/BeneficioItem';
 import ParrafoItem from '@/components/molecules/admin/blog/Modal/ParrafoITem';
@@ -6,14 +7,19 @@ import { BlogInput } from '@/types/admin/blog';
 import { useTextSelection } from '@/hooks/ui/useTextSelection';
 import LinkModal from '@/components/molecules/InsertarLink';
 import ProductModal from '@/components/molecules/InsertarProducto';
-
+import { useProductos } from '@/hooks/useProductos';
+import { useEffect } from 'react';
 type ContenidoBlogProp = {
   blog: BlogInput;
   setBlog: React.Dispatch<React.SetStateAction<BlogInput>>;
 };
 
 const ContenidoBlog = ({ blog, setBlog }: ContenidoBlogProp) => {
-
+  const { productos,getProductos,isLoading,error } = useProductos();
+  useEffect(() => {
+    getProductos();
+  }, []);
+  console.log(productos);
   const handleBeneficioChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
     index: number
@@ -52,8 +58,11 @@ const ContenidoBlog = ({ blog, setBlog }: ContenidoBlogProp) => {
       <ProductModal
         isOpen={linkHook.isProductModalOpen}
         onClose={linkHook.close}
-        productos={[]} // ← tu lista real
-        onSelect={(producto) => linkHook.insertProduct(producto)}
+        productos={productos} 
+        onSelect={(producto) => {
+          linkHook.insertProduct(producto); 
+          linkHook.close(); 
+        }}
       />
       <small className="text-gray-500 mb-4">
         Párrafo 1 (Introducción) *
