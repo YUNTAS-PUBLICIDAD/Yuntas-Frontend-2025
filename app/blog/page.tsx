@@ -1,26 +1,21 @@
+'use client'
 import BlogSection from "@/components/organisms/blog/BlogSection";
 import HeroSection from "@/components/organisms/blog/HeroSection";
-import { blogStaticData } from "@/data/blogStaticData";
+import { useBlogs } from "@/hooks/useBlog";
+import { useEffect } from "react";
 
-import {BlogView} from "@/types/admin/blog";
 
-async function getBlogs(): Promise<BlogView[]> {
-  const res = await fetch( 
-    //para traer todos los blogs disponibles
-    "https://apiyuntas.yuntaspublicidad.com/api/blogs?per_page=100",
-    { cache: "force-cache" }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch blogs");
+export default  function BlogPage() {
+  const { blogs, getBlogs, isLoading, error} = useBlogs();
+  useEffect(() => {
+    getBlogs();
+  }, [getBlogs]);
+  if (isLoading) {
+    return <div>Cargando...</div>;
   }
-  const json = await res.json();
-  // Retornamos el array de blogs desde data.data
-  return json.data.data;
-}
-
-export default async function BlogPage() {
-  const blogs = await getBlogs();
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
   return (
     <main>
       <HeroSection />

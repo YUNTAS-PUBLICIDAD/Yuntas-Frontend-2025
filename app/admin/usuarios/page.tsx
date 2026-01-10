@@ -18,6 +18,25 @@ const columns = [
   { key: "email", label: "EMAIL" },
 ];
 
+
+const getToken = () => {
+    if (typeof window === 'undefined') return null;
+
+    let token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+    
+    if (!token) {
+        const match = document.cookie.split('; ').find(row => row.startsWith('auth_token='));
+        if (match) {
+            token = match.split('=')[1];
+        }
+    }
+
+    if (!token) return null;
+    
+    // Limpia comillas si existen por si acaso
+    return token.replace(/"/g, '');
+};
+
 export default function UsuariosPage() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,12 +45,17 @@ export default function UsuariosPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
 
-  // 🔹 Cargar usuarios
+  // Cargar usuarios al iniciar
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("auth_token");
-        if (!token) throw new Error("No hay token");
+        const token = getToken();
+        
+        if (!token) {
+            console.error("⛔ No hay token disponible (ni en Storage ni en Cookies)");
+            setLoading(false);
+            return;
+        }
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/admin/users`,
@@ -43,11 +67,18 @@ export default function UsuariosPage() {
           }
         );
 
+        if (!res.ok) {
+            if (res.status === 401) {
+                console.error("⛔ Error 401: Token inválido o expirado.");
+            }
+            throw new Error(`Error ${res.status}`);
+        }
+
         const json = await res.json();
-        setUsers(json.data.data ?? []);
+       
+        setUsers(Array.isArray(json.data) ? json.data : json.data?.data || []);
       } catch (e) {
-        console.error(e);
-        setUsers([]);
+        console.error("Error cargando usuarios:", e);
       } finally {
         setLoading(false);
       }
@@ -56,18 +87,23 @@ export default function UsuariosPage() {
     fetchUsers();
   }, []);
 
-  // 🔹 Exportaciones
+  //  Funciones de Exportación
   const onExportCSV = () => exportCSV(users, "usuarios");
   const onExportExcel = () => exportExcel(users, "usuarios");
   const onExportPDF = () => exportTablePDF(users, "Reporte de Usuarios", columns);
   const onPrint = () => exportTablePDF(users, "Reporte de Usuarios", columns);
 
-  // 🔹 Eliminar
+  // Eliminar Usuario
   const onDelete = async (user: UserData) => {
-    if (!confirm(`¿Eliminar a ${user.name}?`)) return;
+    if (!confirm(`¿Estás seguro de eliminar a ${user.name}?`)) return;
 
     try {
-      const token = localStorage.getItem("auth_token");
+      const token = getToken();
+      if (!token) {
+          alert("Error de autenticación: No hay token");
+          return;
+      }
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${user.id}`,
         {
@@ -79,22 +115,32 @@ export default function UsuariosPage() {
         }
       );
 
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error("Error al eliminar");
+      
+      // Actualizar estado local eliminando el usuario
       setUsers(prev => prev.filter(u => u.id !== user.id));
+      alert("Usuario eliminado correctamente");
+
     } catch (e) {
-      alert("No se pudo eliminar");
+      console.error(e);
+      alert("No se pudo eliminar el usuario");
     }
   };
 
-  // 🔹 Editar
+  // Abrir Modal de Edición
   const onEdit = (user: UserData) => {
     setSelectedUser(user);
     setIsEditModalOpen(true);
   };
 
+  // Guardar Edición de Usuario
   const onEditUserSave = async (updated: UserData) => {
     try {
-      const token = localStorage.getItem("auth_token");
+      const token = getToken();
+      if (!token) {
+          alert("Error de autenticación");
+          return;
+      }
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${updated.id}`,
@@ -107,23 +153,47 @@ export default function UsuariosPage() {
           body: JSON.stringify({
             name: updated.name,
             email: updated.email,
+            
           }),
         }
       );
 
+      if (!res.ok) {
+        throw new Error("Error al actualizar");
+      }
+
       const json = await res.json();
+      const updatedData = json.data || json;
+
+      // Actualizar lista local
       setUsers(prev =>
-        prev.map(u => (u.id === updated.id ? json.data : u))
+        prev.map(u => (u.id === updated.id ? updatedData : u))
       );
+      
+      setIsEditModalOpen(false);
+      alert("Usuario actualizado correctamente");
+
     } catch (e) {
       console.error(e);
+      alert("Error al actualizar usuario");
     }
   };
 
-  // 🔹 Agregar
+  //  Agregar Nuevo Usuario
   const onAddUserSubmit = async (data: NewUserData) => {
     try {
-      const token = localStorage.getItem("auth_token");
+      const token = getToken();
+      
+      if (!token) {
+          alert("No estás autenticado. Cierra sesión e ingresa de nuevo.");
+          return;
+      }
+
+     
+      const payload = {
+        ...data,
+        password_confirmation: data.password 
+      };
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/users`,
@@ -131,26 +201,40 @@ export default function UsuariosPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Accept": "application/json",
+            Authorization: `Bearer ${token}`, 
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         }
       );
 
+      if (!res.ok) {
+          const errorData = await res.json().catch(() => null);
+          const message = errorData?.message || `Error del servidor: ${res.status}`;
+          throw new Error(message);
+      }
+
       const json = await res.json();
-      setUsers(prev => [...prev, json.data]);
+      const newUser = json.data || json;
+
+      // Agregar a la lista local
+      setUsers(prev => [newUser, ...prev]); 
       setIsAddModalOpen(false);
-    } catch {
-      alert("Error al agregar usuario");
+      alert("Usuario creado correctamente");
+
+    } catch (error: any) {
+      console.error("Error al crear usuario:", error);
+      alert(error.message);
     }
   };
 
   if (loading) {
-    return <p className="text-center mt-10">Cargando usuarios...</p>;
+    return <p className="text-center mt-10 text-gray-500">Cargando usuarios...</p>;
   }
 
   return (
     <div>
+     
       <ActionButtonGroup
         buttons={[
           { label: "CSV", onClick: onExportCSV },
@@ -161,6 +245,7 @@ export default function UsuariosPage() {
         className="mb-4 mt-4"
       />
 
+     
       <AdminTable
         columns={columns}
         data={users}
@@ -169,15 +254,18 @@ export default function UsuariosPage() {
         onEdit={onEdit}
       />
 
+   
       <ActionButtonGroup
         buttons={[{ label: "Agregar Usuario", onClick: () => setIsAddModalOpen(true), variant: "tertiary" }]}
         className="mt-4"
       />
 
+   
       <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="INGRESAR USUARIO">
         <AddUserForm onSubmit={onAddUserSubmit} onCancel={() => setIsAddModalOpen(false)} />
       </Modal>
 
+     
       <EditUserForm
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
