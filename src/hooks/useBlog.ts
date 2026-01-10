@@ -24,7 +24,8 @@ export function useBlogs() {
   const hasNextPage = Boolean(links?.next);
   const hasPrevPage = Boolean(links?.prev);
 
-  const getBlogs = useCallback(async (perPage = 1) => {
+  // Cambio del valor por defecto de 1 a 10 para traer más blogs
+  const getBlogs = useCallback(async (perPage = 10) => {
     setIsLoading(true);
     setError(null);
     setCurrentPerPage(perPage);

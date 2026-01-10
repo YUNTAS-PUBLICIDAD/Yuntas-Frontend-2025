@@ -6,7 +6,8 @@ import {BlogView} from "@/types/admin/blog";
 
 async function getBlogs(): Promise<BlogView[]> {
   const res = await fetch( 
-    "https://apiyuntas.yuntaspublicidad.com/api/blogs",
+    //para traer todos los blogs disponibles
+    "https://apiyuntas.yuntaspublicidad.com/api/blogs?per_page=100",
     { cache: "force-cache" }
   );
 
@@ -14,6 +15,7 @@ async function getBlogs(): Promise<BlogView[]> {
     throw new Error("Failed to fetch blogs");
   }
   const json = await res.json();
+  // Retornamos el array de blogs desde data.data
   return json.data.data;
 }
 

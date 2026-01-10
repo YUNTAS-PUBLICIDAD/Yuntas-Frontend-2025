@@ -9,7 +9,8 @@ import { BlogView } from "@/types/admin/blog";
 
 async function getBlogs(): Promise<BlogView[]> {
   const res = await fetch(
-    "https://apiyuntas.yuntaspublicidad.com/api/blogs",
+    //  per_page=100 para obtener todos los blogs y generar sus rutas
+    "https://apiyuntas.yuntaspublicidad.com/api/blogs?per_page=100",
     { cache: "force-cache" }
   );
 
