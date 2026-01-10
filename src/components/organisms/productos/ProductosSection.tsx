@@ -12,9 +12,10 @@ import { FaChevronDown } from "react-icons/fa";
 
 type ProductoSection = {
   ListaBusqueda: Producto[];
-  setListaProductos:React.Dispatch<React.SetStateAction<Producto[]>>
+  setListaProductos:React.Dispatch<React.SetStateAction<Producto[]>>;
+  setAllProductos?: React.Dispatch<React.SetStateAction<Producto[]>>;
 };
-const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => {
+const ProductosSection = ({ListaBusqueda,setListaProductos,setAllProductos}:ProductoSection) => {
   const [openCategoria,setOpenCategoria]=useState(false);
   const { productos, getProductos } = useProductos();
 
@@ -22,11 +23,16 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
     getProductos(100);
   }, []);
 
+  useEffect(() => {
+    if (productos && productos.length && setAllProductos) {
+      setAllProductos(productos);
+    }
+  }, [productos, setAllProductos]);
+
   const {listaCategorias,handleSelectCategoria,categoriaActiva}=useCategorias(productos);
   useSelectCategorias(categoriaActiva, setListaProductos, productos);
 
   const [productosPaginados, setProductosPaginados] = useState<Producto[]>(productos);
-  console.log('ProductosSection - productosPaginados:', productosPaginados);
   return (
   <section className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-8 px-4 sm:px-6 md:px-8 lg:px-12 pt-8">
       
@@ -55,9 +61,9 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
         {productosPaginados.map((e, index) => (
           <ProductoCard 
             key={index} 
-            img={e.main_image.url || '' } 
+            img={e.main_image?.url || ''} 
             nombre={e.name}
-            href={`/productos/${e.slug}`}
+            href={`/productos/detalle?slug=${e.slug}`}
           />
         ))}
       </div>

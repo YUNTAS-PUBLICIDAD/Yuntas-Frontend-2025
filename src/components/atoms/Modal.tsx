@@ -42,7 +42,7 @@ export default function Modal({
     const sizeClasses = {
         sm: "max-w-sm",
         md: "max-w-md",
-        lg: "max-w-3xl"
+        lg: "max-w-4xl"
     };
 
     const bgClass = className.includes("bg-") ? "" : "bg-white";
@@ -54,11 +54,11 @@ export default function Modal({
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-            onClick={onClose}
+            onMouseDown={onClose}
         >
             <div
                 className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
-                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
                     <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">

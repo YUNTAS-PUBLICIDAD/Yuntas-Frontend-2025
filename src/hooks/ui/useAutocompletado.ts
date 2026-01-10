@@ -9,12 +9,13 @@ type FetcherResponse<T>={
 
 type AutocompletadoProps<T> = {
   palabras: string;
-  fetcher: (query: string) => Promise<FetcherResponse<T>>;
+  fetcher?: (query: string) => Promise<FetcherResponse<T>>;
+  items?: T[];
   onSelect: (item: T) => void;
   debounceMs?: number;
 };
 
-export function useAutocompletado<T>({palabras,fetcher,onSelect, debounceMs = 300,}: AutocompletadoProps<T>) {
+export function useAutocompletado<T>({palabras,fetcher, items, onSelect, debounceMs = 300,}: AutocompletadoProps<T>) {
   const [lista, setLista] = useState<T[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
@@ -39,12 +40,20 @@ export function useAutocompletado<T>({palabras,fetcher,onSelect, debounceMs = 30
       setError(null);
 
       try {
-        const res = await fetcher(palabras);
-        if (res.success && res.data) {
-          setLista(res.data);
+        if (items) {
+          const q = palabras.toLowerCase();
+          const filtered = items.filter((it: any) => ((it.name || it.nombre || '') as string).toLowerCase().includes(q));
+          setLista(filtered as T[]);
+        } else if (fetcher) {
+          const res = await fetcher(palabras);
+          if (res.success && res.data) {
+            setLista(res.data);
+          } else {
+            setLista([]);
+            setError(res.message ?? "Error al buscar");
+          }
         } else {
           setLista([]);
-          setError(res.message ?? "Error al buscar");
         }
       } catch {
         setError("Error de conexión");
@@ -58,7 +67,7 @@ export function useAutocompletado<T>({palabras,fetcher,onSelect, debounceMs = 30
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [palabras, fetcher, debounceMs]);
+  }, [palabras, fetcher, items, debounceMs]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {

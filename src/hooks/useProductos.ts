@@ -5,16 +5,16 @@ import {
     Producto,
     ProductoInput,
     PaginationMeta,
-    PaginationLinks
+    PaginationLinks,
+    ProductoServiceResponse
 } from "@/types/admin/producto";
 import {
-    getProductosAction,
-    getProductoBySlugAction,
-    createProductoAction,
-    updateProductoAction,
-    deleteProductoAction
-} from "@/actions/productosActions";
-import { buildProductoFormData } from "@/utils/productFormData";
+    getProductosService,
+    getProductoBySlugService,
+    createProductoService,
+    updateProductoService,
+    deleteProductoService
+} from "@/services/productosService";
 
 interface UseProductosReturn {
     productos: Producto[];
@@ -28,9 +28,9 @@ interface UseProductosReturn {
     goToNextPage: () => Promise<void>;
     goToPrevPage: () => Promise<void>;
     getProductoBySlug: (slug: string) => Promise<Producto | null>;
-    createProducto: (producto: ProductoInput) => Promise<boolean>;
-    updateProducto: (id: number | string, producto: ProductoInput) => Promise<boolean>;
-    deleteProducto: (id: number | string) => Promise<boolean>;
+    createProducto: (producto: ProductoInput) => Promise<ProductoServiceResponse<Producto>>;
+    updateProducto: (id: number | string, producto: ProductoInput) => Promise<ProductoServiceResponse<Producto>>;
+    deleteProducto: (id: number | string) => Promise<ProductoServiceResponse>;
     clearError: () => void;
     clearProducto: () => void;
     hasNextPage: boolean;
@@ -43,7 +43,7 @@ export function useProductos(): UseProductosReturn {
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [links, setLinks] = useState<PaginationLinks | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null); // error solo se usa cuando se cargan datos
     const [currentPerPage, setCurrentPerPage] = useState(6);
 
     const clearError = () => setError(null);
@@ -57,8 +57,8 @@ export function useProductos(): UseProductosReturn {
         setError(null);
         setCurrentPerPage(perPage);
 
-        const result = await getProductosAction(perPage);
-        
+        const result = await getProductosService(perPage);
+
         if (result.success && result.data) {
             setProductos(result.data);
             setMeta(result.meta || null);
@@ -74,8 +74,8 @@ export function useProductos(): UseProductosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getProductosAction(currentPerPage, url);
-        
+        const result = await getProductosService(currentPerPage, url);
+
         if (result.success && result.data) {
             setProductos(result.data);
             setMeta(result.meta || null);
@@ -106,7 +106,7 @@ export function useProductos(): UseProductosReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await getProductoBySlugAction(slug);
+        const result = await getProductoBySlugService(slug);
 
         if (result.success && result.data) {
             setProducto(result.data);
@@ -119,51 +119,34 @@ export function useProductos(): UseProductosReturn {
         }
     }, []);
 
-    const createProducto = useCallback(async (productoData: ProductoInput): Promise<boolean> => {
+    const createProducto = useCallback(async (productoData: ProductoInput): Promise<ProductoServiceResponse<Producto>> => {
         setIsLoading(true);
         setError(null);
 
-        const formData = buildProductoFormData(productoData);
-        const result = await createProductoAction(formData);
-
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
+        const result = await createProductoService(productoData);
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
-    const updateProducto = useCallback(async (
-        id: number | string,
-        productoData: ProductoInput
-    ): Promise<boolean> => {
+    const updateProducto = useCallback(async (id: number | string, productoData: ProductoInput): Promise<ProductoServiceResponse<Producto>> => {
         setIsLoading(true);
         setError(null);
 
-        const formData = buildProductoFormData(productoData);
-        const result = await updateProductoAction(id, formData);
-
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
+        const result = await updateProductoService(id, productoData);
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
-    const deleteProducto = useCallback(async (id: number | string): Promise<boolean> => {
+    const deleteProducto = useCallback(async (id: number | string): Promise<ProductoServiceResponse> => {
         setIsLoading(true);
         setError(null);
 
-        const result = await deleteProductoAction(id);
-
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
+        const result = await deleteProductoService(id);
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
     return {

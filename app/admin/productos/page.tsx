@@ -1,116 +1,135 @@
 'use client'
 
-import { useState } from "react";
-// Componentes UI
-import AdminTable, { TableAction } from "@/components/organisms/admin/Products/AdminTable";
+import { useEffect, useState } from "react";
+import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-import PaginationServer from '@/components/molecules/PaginationServer';
 import Modal from "@/components/atoms/Modal";
-import EditProductForm from "@/components/molecules/admin/products/EditProductForm"; 
 
-// El Formulario (Organismo)
-import AddProductForm from "@/components/molecules/admin/products/AddProductForm";
+import ProductForm from "@/components/molecules/admin/products/ProductoForm";
 
-// Hooks
-// Usamos el hook que formatea los datos (useAdminProducts)
-import { useAdminProducts } from "@/hooks/ui/admin/products/useAdminProducts"; 
+import { useProductos } from "@/hooks/useProductos";
+import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
 import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
 import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsappForm";
+import Pagination from "@/components/molecules/Pagination";
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "nombre", label: "NOMBRE" },   
-    { key: "seccion", label: "SECCIÓN" }, 
-    { key: "precio", label: "PRECIO" },   
+    { key: "name", label: "NOMBRE" },
+    { key: "category_name", label: "SECCIÓN" },
+    { key: "price", label: "PRECIO" },
 ];
 
 export default function ProductosPage() {
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [editingProductId, setEditingProductId] = useState<number | null>(null);
-    const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
-    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-    const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
-    const { 
-        products,      
-        loading,       
-        error,         
-        reload,        
-        handleDelete   
-    } = useAdminProducts();
-    
-    
+    const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
+    const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
+    const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
 
-    const onAddProduct = () => setIsAddModalOpen(true);
-    
-    const handleCloseModal = () => {
-        setIsAddModalOpen(false);
-        reload(); 
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
+    const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+
+    useEffect(() => {
+        getProductos(200);
+    }, [getProductos]);
+
+    const handleCreateProducto = async (formData: ProductoInput) => {
+        const result = await createProducto(formData);
+        if (result.success) {
+            handleCloseModal();
+            await getProductos(200);
+            alert("Producto creado");
+        } else {
+            alert(result.message);
+        }
+    }
+
+    const handleEditClick = (producto: Producto) => {
+        setSelectedProduct(producto);
+        setIsAddEditModalOpen(true);
     };
 
-    const tableActions: TableAction[] = [
-        {
-            type: "edit",
-            label: "Editar",
-            onClick: (id) => {
-                setEditingProductId(Number(id)); 
-                setIsEditModalOpen(true);        
-            }
-        },
-        {
-            type: "delete",
-            label: "Eliminar",
-            onClick: (id) => handleDelete(Number(id)) 
-        }
+    const handleEditProducto = async (formData: ProductoInput) => {
+        if (!selectedProduct) return;
 
-    ];
+        const result = await updateProducto(selectedProduct.id!, formData);
+        if (result.success) {
+            handleCloseModal();
+            await getProductos(200);
+            alert("Producto actualizado");
+        } else {
+            alert(result.message);
+        }
+    }
+
+    const handleDeleteProducto = async (producto: Producto) => {
+        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+        if (!confirmDelete) return;
+        const result = await deleteProducto(producto.id!);
+        if (result.success) {
+            await getProductos(200);
+            alert("Producto eliminado");
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+        setIsAddEditModalOpen(false);
+    };
 
     const exportButtons = [
-        { 
-            label: "EXPORTAR A CSV", 
-            onClick: () => exportToCSV(products), 
+        {
+            label: "EXPORTAR A CSV",
+            onClick: () => exportToCSV(productos),
             backgraund: "#5bc5c7"
         },
-        { 
-            label: "EXPORTAR A EXCEL", 
-            onClick: () => exportToExcel(products),
+        {
+            label: "EXPORTAR A EXCEL",
+            onClick: () => exportToExcel(productos),
             backgraund: "#5bc5c7"
         },
-        { 
-            label: "EXPORTAR A PDF", 
-            onClick: () => exportToPDF(products),
-           backgraund: "#5bc5c7"
+        {
+            label: "EXPORTAR A PDF",
+            onClick: () => exportToPDF(productos),
+            backgraund: "#5bc5c7"
         },
-        { 
-            label: "IMPRIMIR", 
-            onClick: printTable, 
+        {
+            label: "IMPRIMIR",
+            onClick: printTable,
             backgraund: "#5bc5c7"
         },
     ];
 
-    if (loading && products.length === 0) {
+    if (isLoading && productos.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
     }
 
     return (
-        <div className="animate-fade-in p-4">
-            <div className="flex gap-4 flex-wrap mb-4">
-                <ActionButtonGroup buttons={[{ label: "Añadir Producto", onClick: onAddProduct, variant: "tertiary" }]} />
-                
-                <ActionButtonGroup buttons={[{ 
-                    label: "Envio de Email", 
-                    onClick: () => setIsEmailModalOpen(true),
-                    variant: "danger" 
+        <div className="p-4">
+            <div className="flex gap-2 flex-wrap mb-4">
+                <ActionButtonGroup buttons={[{
+                    label: "Añadir Producto",
+                    onClick: () => setIsAddEditModalOpen(true),
+                    variant: "tertiary"
                 }]} />
-                
-                <ActionButtonGroup buttons={[{ 
-                    label: "Envio de Whatsapp", 
+
+                <ActionButtonGroup buttons={[{
+                    label: "Envio de Email",
+                    onClick: () => setIsEmailModalOpen(true),
+                    variant: "danger"
+                }]} />
+
+                <ActionButtonGroup buttons={[{
+                    label: "Envio de Whatsapp",
                     onClick: () => setIsWhatsappModalOpen(true),
-                    variant: "success" 
+                    variant: "success"
                 }]} />
             </div>
-            
+
             <div className="mb-4 no-print">
                 <ActionButtonGroup buttons={exportButtons} />
             </div>
@@ -124,71 +143,58 @@ export default function ProductosPage() {
             {/* TABLA */}
             <AdminTable
                 columns={columns}
-                data={products} 
-                minRows={5}     
-                actions={tableActions} 
+                data={datosPaginados}
+                minRows={5}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteProducto}
             />
 
-             
-            {/* <div className="flex justify-center my-6">
-                <PaginationServer ... />
-            </div> 
-            */}
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    pageSize={10}
+                    items={productos}
+                    setProductosPaginados={setDatosPaginados}
+                />
+            </div>
 
-            {/* MODAL DE AÑADIR */}
-            <Modal 
-                isOpen={isAddModalOpen} 
-                onClose={handleCloseModal} 
-                title="Ingresar Datos" 
+            {/* MODAL DE AÑADIR Y EDITAR */}
+            <Modal
+                isOpen={isAddEditModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedProduct ? "Añadir Producto" : "Editar Producto"}
+                size="lg"
+            >
+                <ProductForm
+                    onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
+                    onCancel={handleCloseModal}
+                    initialData={selectedProduct}
+                    isLoading={isLoading}
+                />
+            </Modal>
+            <Modal
+                isOpen={isEmailModalOpen}
+                onClose={() => setIsEmailModalOpen(false)}
+                title="Envio de Emails"
                 size="lg"
             >
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    <AddProductForm onClose={handleCloseModal} />
-                </div>
-                
-            </Modal>
-                <Modal 
-                isOpen={isEditModalOpen} 
-                onClose={() => setIsEditModalOpen(false)} 
-                title="Editar Datos" 
-                size="lg"
-            >
-                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    {editingProductId && (
-                        <EditProductForm 
-                            productId={editingProductId} 
-                            onClose={() => {
-                                setIsEditModalOpen(false);
-                                setEditingProductId(null);
-                                // reload(); // Si tienes el reload del hook useAdminProducts
-                            }} 
-                        />
-                    )}
-                </div>
-            </Modal>
-            <Modal 
-                isOpen={isEmailModalOpen} 
-                onClose={() => setIsEmailModalOpen(false)} 
-                title="Envio de Emails" 
-                size="lg" 
-            >
-                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    <SendEmailForm 
-                        email_productos={products} 
-                        onClose={() => setIsEmailModalOpen(false)} 
+                    <SendEmailForm
+                        email_productos={productos}
+                        onClose={() => setIsEmailModalOpen(false)}
                     />
                 </div>
             </Modal>
-            <Modal 
-                isOpen={isWhatsappModalOpen} 
-                onClose={() => setIsWhatsappModalOpen(false)} 
-                title="Envio de Whatsapp" 
+            
+            <Modal
+                isOpen={isWhatsappModalOpen}
+                onClose={() => setIsWhatsappModalOpen(false)}
+                title="Envio de Whatsapp"
                 size="lg"
             >
                 <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    <SendWhatsappForm 
-                        products={products} 
-                        onClose={() => setIsWhatsappModalOpen(false)} 
+                    <SendWhatsappForm
+                        products={productos}
+                        onClose={() => setIsWhatsappModalOpen(false)}
                     />
                 </div>
             </Modal>

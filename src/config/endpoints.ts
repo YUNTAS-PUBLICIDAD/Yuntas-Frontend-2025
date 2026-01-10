@@ -1,5 +1,3 @@
-
-
 export const API_ENDPOINTS = {
   // AUTENTICACIÓN
   AUTH: {
@@ -8,14 +6,10 @@ export const API_ENDPOINTS = {
     PROFILE: '/auth/me',
   },
 
-  // PRODUCTOS (Catálogo y Admin)
+  // PRODUCTOS
   PRODUCTS: {
-    GET_ALL: '/productos', 
-    GET_ONE: (slug: string) => `/productos/${slug}`, 
-    GET_BY_ID: (id: number) => `/productos/${id}`,
-    CREATE: '/productos', 
-    UPDATE: (id: number) => `/productos/${id}`, 
-    DELETE: (id: number) => `/productos/${id}`, 
+    GET_ALL: '/productos',
+    GET_ONE: (slug: string) => `/productos/${slug}`,
   },
 
   // BLOG 
@@ -29,9 +23,8 @@ export const API_ENDPOINTS = {
 
   // FORMULARIOS PÚBLICOS
   FORMS: {
-    LEAD: '/leads', 
-    CONTACT: '/contacto', 
-    CLAIMS: '/claims', 
+    CONTACT: '/contacto',
+    CLAIMS: '/claims',
   },
 
   // ADMINISTRACIÓN (Tablas y Gestión)
@@ -43,6 +36,11 @@ export const API_ENDPOINTS = {
       DELETE: (id: number) => `/users/${id}`,
       ASSIGN_ROLE: (id: number) => `/users/${id}/role`,
     },
+    PRODUCTS: {
+      CREATE: '/admin/productos',
+      UPDATE: (id: number) => `/admin/productos/${id}`,
+      DELETE: (id: number) => `/admin/productos/${id}`,
+    },
     CATEGORIES: {
       GET_ALL: '/admin/categorias',
       CREATE: '/admin/categorias',
@@ -50,17 +48,22 @@ export const API_ENDPOINTS = {
       DELETE: (id: number) => `/admin/categorias/${id}`,
     },
     INBOX: {
-      LEADS: '/leads',
+      LEADS: {
+        GET_ALL: '/admin/leads',
+        CREATE: '/admin/leads',
+        UPDATE: (id: number) => `/admin/leads/${id}`,
+        DELETE: (id: number) => `/admin/leads/${id}`,
+      },
       CONTACT: {
         GET_ALL: '/admin/contacto',
         GET_ONE: (id: number) => `/admin/contacto/${id}`,
         DELETE: (id: number) => `/admin/contacto/${id}`,
-      }, 
+      },
       CLAIMS: {
         GET_ALL: '/admin/claims',
         GET_ONE: (id: number) => `/admin/claims/${id}`,
-        REPLY:  (id: number) => `/admin/claims/${id}/reply`,
-      } 
+        REPLY: (id: number) => `/admin/claims/${id}/reply`,
+      }
     }
   }
 };

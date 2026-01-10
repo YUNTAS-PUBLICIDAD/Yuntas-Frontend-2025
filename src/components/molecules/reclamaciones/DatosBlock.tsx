@@ -42,7 +42,6 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
             options={sel.options}
             required
             name="document_type_id"
-            defaultValue={"DNI"}
             onChange={handleChange}
           />
         ))}

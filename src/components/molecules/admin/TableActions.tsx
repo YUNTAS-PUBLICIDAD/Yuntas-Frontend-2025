@@ -27,18 +27,6 @@ const TableActions = <T,>({
 
     return (
         <div className="flex items-center justify-center gap-3">
-
-            {/* Eliminar */}
-            {actions.includes("delete") && (
-                <IconButton
-                    variant="delete"
-                    onClick={() => onDelete?.(item)}
-                    tooltip="Eliminar"
-                >
-                    <IoMdTrash size={22} />
-                </IconButton>
-            )}
-
             {/* Editar */}
             {actions.includes("edit") && (
                 <IconButton
@@ -58,6 +46,17 @@ const TableActions = <T,>({
                     tooltip="Aprobar"
                 >
                     <FaCheckCircle size={20} />
+                </IconButton>
+            )}
+
+            {/* Eliminar */}
+            {actions.includes("delete") && (
+                <IconButton
+                    variant="delete"
+                    onClick={() => onDelete?.(item)}
+                    tooltip="Eliminar"
+                >
+                    <IoMdTrash size={22} />
                 </IconButton>
             )}
         </div>

@@ -1,6 +1,5 @@
 import React from 'react'
 import Text from '@/components/atoms/Text'
-import { BASE_URL } from '@/config'
 import Link from 'next/link'
 import Img from '@/components/atoms/Img'
 type ProductoCardProps = {
@@ -16,7 +15,7 @@ const ProductoCard = ({ img, nombre, href }: ProductoCardProps) => {
       
       {/* mb-4 agrega margen inferior para separar la imagen del texto */}
       <div className="w-full aspect-[16/10] flex items-center justify-center mb-4">
-        <Img src={`${BASE_URL.replace('/api', '')}${img}`} classname='w-full h-full object-cover' variant='productoCard' />
+        <Img src={img} classname='w-full h-full object-cover' variant='productoCard' />
       </div>
       {/* textp a al izquierda*/}
       

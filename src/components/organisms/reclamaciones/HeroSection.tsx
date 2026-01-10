@@ -1,6 +1,6 @@
 import React from 'react';
 import Heading from '@/components/atoms/Heading';
-import heroBackground from "@/assets/Reclamaciones/heroBackground.png";
+import heroBackground from "@/assets/Reclamaciones/herobackground.png";
 
 
 const HeroSection = () => {

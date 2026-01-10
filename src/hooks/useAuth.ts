@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoginCredentials } from "@/types/auth";
-import { loginAction, logoutAction } from "@/actions/authActions";
+import { loginService, logoutService } from "@/services/authService";
 
 interface UseAuthReturn {
     login: (credentials: LoginCredentials) => Promise<void>;
@@ -21,16 +21,10 @@ export function useAuth(): UseAuthReturn {
         setIsLoading(true);
         setError(null);
 
-        const result = await loginAction(credentials);
+        const result = await loginService(credentials);
 
         if (result.success) {
-            // ✅ Guardar token en localStorage para frontend
-            if (result.user && result.token) {
-                localStorage.setItem("auth_token", result.token);
-            }
-
-            router.push("/admin");
-            router.refresh();
+            router.replace("/admin");
         } else {
             setError(result.message || "Error al iniciar sesión");
         }
@@ -40,15 +34,14 @@ export function useAuth(): UseAuthReturn {
 
     const logout = async () => {
         setIsLoading(true);
-        setError(null);
 
-        await logoutAction();
-        localStorage.removeItem("auth_token");
+        await logoutService();
 
         setIsLoading(false);
-        router.push("/login");
-        router.refresh();
+        router.replace("/login");
     };
 
     return { login, logout, isLoading, error };
 }
+
+export default useAuth;

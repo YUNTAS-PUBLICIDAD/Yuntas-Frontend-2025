@@ -4,12 +4,12 @@ import { useState, useCallback } from "react";
 import { Blog, BlogInput } from "@/types/admin/blog";
 import { PaginationMeta, PaginationLinks } from "@/types/admin/blog";
 import {
-  getBlogsAction,
-  createBlogAction,
-  updateBlogAction,
-  deleteBlogAction,
-  getBlogBySlugAction
-} from "@/actions/blogActions";
+  getBlogsService,
+  createBlogService,
+  updateBlogService,
+  deleteBlogService,
+  getBlogBySlugService
+} from "@/services/blogService";
 import { buildBlogFormData } from "@/utils/blogFormData";
 
 export function useBlogs() {
@@ -24,12 +24,13 @@ export function useBlogs() {
   const hasNextPage = Boolean(links?.next);
   const hasPrevPage = Boolean(links?.prev);
 
-  const getBlogs = useCallback(async (perPage = 1) => {
+  // Cambio del valor por defecto de 1 a 10 para traer más blogs
+  const getBlogs = useCallback(async (perPage = 10) => {
     setIsLoading(true);
     setError(null);
     setCurrentPerPage(perPage);
 
-    const result = await getBlogsAction(perPage);
+    const result = await getBlogsService(perPage);
     console.log(result)
     if (result.success && result.data) {
       setBlogs(result.data.data ?? []);
@@ -46,7 +47,7 @@ export function useBlogs() {
     setIsLoading(true);
     setError(null);
 
-    const result = await getBlogsAction(currentPerPage, url);
+    const result = await getBlogsService(currentPerPage, url);
 
     if (result.success && result.data) {
       setBlogs(result.data.data ?? []);
@@ -67,7 +68,7 @@ export function useBlogs() {
      setIsLoading(true);
      setError(null);
 
-      const result = await getBlogBySlugAction(slug);
+      const result = await getBlogBySlugService(slug);
 
       if (result.success && result.data) {
          setBlog(result.data ?? null);
@@ -91,7 +92,7 @@ export function useBlogs() {
     console.log(`  ${key}:`, value);
   }
 
-  const result = await createBlogAction(formData);
+  const result = await createBlogService(formData);
   
   console.log("📥 RESPUESTA:", result);
 
@@ -104,7 +105,7 @@ export function useBlogs() {
     setIsLoading(true);
     setError(null);
 
-    const result = await updateBlogAction(id, buildBlogFormData(data));
+    const result = await updateBlogService(id, buildBlogFormData(data));
 
     if (!result.success) setError(result.message ?? 'Error desconocido');
     setIsLoading(false);
@@ -115,7 +116,7 @@ export function useBlogs() {
     setIsLoading(true);
     setError(null);
 
-    const result = await deleteBlogAction(id);
+    const result = await deleteBlogService(id);
 
     if (!result.success) setError(result.message ?? 'Error desconocido');
     setIsLoading(false);
