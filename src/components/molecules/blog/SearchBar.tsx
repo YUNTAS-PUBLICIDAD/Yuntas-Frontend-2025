@@ -7,7 +7,7 @@ import type { Blog } from '@/types/admin/blog';
 
 // 1. Definimos las props que vienen de useAutocompletado (BlogSection)
 type SearchBarProps = {
-  setBlog: React.Dispatch<React.SetStateAction<Blog[]>>;
+  setBlog?: React.Dispatch<React.SetStateAction<Blog[]>>;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent) => void;

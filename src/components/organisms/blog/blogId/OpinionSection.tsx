@@ -5,9 +5,9 @@ import Text from "@/components/atoms/Text";
 import Img from "@/components/atoms/Img";
 import OpinionCard from "@/components/molecules/blog/OpinionCard";
 import { getImg } from "@/utils/getImg";
-
+import { Blog } from "@/types/admin/blog";
 type Props = {
-  data: BlogView;
+  data: Blog;
 };
 
 const OpinionSection = ({ data }: Props) => {
