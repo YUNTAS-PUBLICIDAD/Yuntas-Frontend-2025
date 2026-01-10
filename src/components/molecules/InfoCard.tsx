@@ -16,7 +16,13 @@ const InfoCard: React.FC<InfoCardProps> = ({ text, className = "" }) => (
     <Icon size="lg" bgColor="" className="">
       <MdCheck className="text-2xl md:text-4xl font-bold" />
     </Icon>
-    <Text color="text-[#00031E]" variant="body" className="text-4xl font-bold break-words whitespace-pre-line">{text}</Text>
+    <Text color="text-[#00031E]" variant="body" className="text-4xl font-bold break-words whitespace-pre-line">
+      <div
+            dangerouslySetInnerHTML={{
+              __html: text,
+            }}
+      />
+    </Text>
   </div>
 );
 

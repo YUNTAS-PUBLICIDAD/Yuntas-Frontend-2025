@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { BlogInput } from "@/types/admin/blog";
-
+import { Producto } from "@/types/admin/producto";
 type FieldType = "parrafos" | "beneficios";
 
 export const useTextSelection = (
@@ -79,8 +79,8 @@ export const useTextSelection = (
     const html = `<strong><a href="${url}" target="_blank" rel="noopener noreferrer">${selectedText}</a></strong>`;
     insertHtml(html);
   };
-  const insertProduct = (producto: { link: string; nombre: string }) => {
-    const html = `<strong><a href="/products/${producto.link}" title="${producto.nombre}">${selectedText}</a></strong>`;
+  const insertProduct = (producto: Producto) => {
+    const html = `<strong><a href="/productos/detalle/?slug=${producto.slug}" title="${producto.name}">${selectedText}</a></strong>`;
     insertHtml(html);
   };
   const reset = () => {
@@ -100,7 +100,7 @@ export const useTextSelection = (
     },
     openProduct: (field: FieldType, index: number) => {
        if (!selectText(field, index)) return;
-       setIsLinkModalOpen(true);
+       setIsProductModalOpen(true);
     },
 
     // acciones
