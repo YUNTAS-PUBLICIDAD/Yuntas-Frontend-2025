@@ -6,7 +6,7 @@ import DividerLine from '../atoms/DividerLine';
 const posicionesText = {
   medio: "justify-center",
   izquierda: "justify-start",
-  derecha: "justify-end",
+  derecha: "justify-end ",
 };
 
 type HeroPageProps = {

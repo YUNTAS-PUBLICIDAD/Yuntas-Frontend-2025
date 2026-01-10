@@ -1,12 +1,13 @@
 import React from "react";
 import { BlogView } from "@/types/admin/blog";
+import { Blog } from "@/types/admin/blog";
 import Text from "@/components/atoms/Text";
 import Img from "@/components/atoms/Img";
 import InfoCard from "@/components/molecules/InfoCard";
 import { BASE_URL } from "@/config";
 import { getImg } from "@/utils/getImg";
 type Props = {
-  data: BlogView;
+  data: Blog;
 };
 
 const BeneficiosSection = ({ data }: Props) => {

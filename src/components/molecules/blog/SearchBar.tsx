@@ -7,7 +7,7 @@ import type { Blog } from '@/types/admin/blog';
 
 // 1. Definimos las props que vienen de useAutocompletado (BlogSection)
 type SearchBarProps = {
-  setBlog: React.Dispatch<React.SetStateAction<Blog[]>>;
+  setBlog?: React.Dispatch<React.SetStateAction<Blog[]>>;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent) => void;
@@ -21,7 +21,6 @@ const SearchBar = ({ setBlog, value, onChange, onKeyDown }: SearchBarProps) => {
     e.preventDefault();
     // Opcional: Si dan click en la lupa, podrías filtrar la lista principal
     // usando el valor actual 'value'.
-    console.log("Búsqueda manual activada para:", value);
   }
 
   return (
