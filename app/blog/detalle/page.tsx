@@ -5,10 +5,12 @@ import BeneficiosSection from "@/components/organisms/blog/blogId/BeneficiosSect
 import OpinionSection from "@/components/organisms/blog/blogId/OpinionSection";
 import VideoSection from "@/components/organisms/blog/blogId/VideoSection";
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useBlogs } from "@/hooks/useBlog";
 import { getImg } from "@/utils/getImg";
-export default function BlogDetallePage() {
+// 1. Eliminamos el async (los Client Components no pueden ser async)
+function BlogDetalleContent() {
+  // 2. Los hooks deben ir DENTRO del componente
   const searchParams = useSearchParams();
   const slug = searchParams.get('slug');
   const { getBlogBySlug, blog, isLoading, error } = useBlogs();
@@ -44,4 +46,13 @@ export default function BlogDetallePage() {
       {blog.video_url && <VideoSection data={blog} />}
     </main>
   );
+}
+
+
+export default function BlogDetallePage() {
+  return (
+    <Suspense fallback={<div>Cargando blog...</div>}>
+      <BlogDetalleContent />
+    </Suspense>
+  )
 }

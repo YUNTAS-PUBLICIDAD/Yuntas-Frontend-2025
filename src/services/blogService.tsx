@@ -20,7 +20,6 @@ export async function getBlogsService(perPage: number = 10, url?: string): Promi
 
 export async function getBlogBySlugService(slug: string): Promise<BlogListResponseBySlug<Blog>> {
   try {
-    const token = getToken();
 
     const response = await api.get(API_ENDPOINTS.BLOG.GET_ONE(slug));
 

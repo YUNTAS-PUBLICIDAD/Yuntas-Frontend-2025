@@ -7,7 +7,7 @@ type useSearchProps = {
 
 export const useSearch = ({ listItem }: useSearchProps) => {
     const [textSearch, setTextSearch] = useState("")
-    const searchList = listItem?.filter((e) => e.nombre.toLowerCase().includes(textSearch.toLowerCase())) || [];
+    const searchList = listItem?.filter((e) => ((e.name || (e as any).nombre || '').toString().toLowerCase()).includes(textSearch.toLowerCase())) || [];
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const input = e.currentTarget.querySelector("input") as HTMLInputElement | null
