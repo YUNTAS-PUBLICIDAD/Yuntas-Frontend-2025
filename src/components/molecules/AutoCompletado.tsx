@@ -30,7 +30,7 @@ export default function AutoCompletado({ items, palabras, onSelect }: AutoComple
     >
       {lista.map((item, index) => (
         <li
-          key={item.nombre}
+          key={item.name || item.nombre}
           onClick={() => onSelect(item)}
           onMouseEnter={() => setActiveIndex(index)}
           className={`
@@ -38,7 +38,7 @@ export default function AutoCompletado({ items, palabras, onSelect }: AutoComple
             ${index === activeIndex ? "bg-gray-200" : "hover:bg-gray-100"}
           `}
         >
-          {item.nombre}
+          {item.name || item.nombre}
         </li>
       ))}
     </ul>

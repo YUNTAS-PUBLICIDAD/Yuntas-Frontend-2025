@@ -12,15 +12,22 @@ import { FaChevronDown } from "react-icons/fa";
 
 type ProductoSection = {
   ListaBusqueda: Producto[];
-  setListaProductos:React.Dispatch<React.SetStateAction<Producto[]>>
+  setListaProductos:React.Dispatch<React.SetStateAction<Producto[]>>;
+  setAllProductos?: React.Dispatch<React.SetStateAction<Producto[]>>;
 };
-const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => {
+const ProductosSection = ({ListaBusqueda,setListaProductos,setAllProductos}:ProductoSection) => {
   const [openCategoria,setOpenCategoria]=useState(false);
   const { productos, getProductos } = useProductos();
 
   useEffect(() => {
     getProductos(100);
   }, []);
+
+  useEffect(() => {
+    if (productos && productos.length && setAllProductos) {
+      setAllProductos(productos);
+    }
+  }, [productos, setAllProductos]);
 
   const {listaCategorias,handleSelectCategoria,categoriaActiva}=useCategorias(productos);
   useSelectCategorias(categoriaActiva, setListaProductos, productos);
@@ -54,7 +61,7 @@ const ProductosSection = ({ListaBusqueda,setListaProductos}:ProductoSection) => 
         {productosPaginados.map((e, index) => (
           <ProductoCard 
             key={index} 
-            img={e.main_image.url || '' } 
+            img={e.main_image?.url || ''} 
             nombre={e.name}
             href={`/productos/detalle?slug=${e.slug}`}
           />

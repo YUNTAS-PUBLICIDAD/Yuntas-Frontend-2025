@@ -4,21 +4,22 @@ import InputSearch from '@/components/atoms/InputSearch'
 import Button from '@/components/atoms/Button'
 import Icon from '@/components/atoms/Icon'
 import { FaSearch } from "react-icons/fa";
-import { productosData } from '@/data/productosData'
+
 import { Producto } from '@/types/admin/producto'
 import { Search } from '@/utils/search'
 import AutoCompletado from '../AutoCompletado'
 
 type SearchBarProps = {
   listaProductos: Producto[];
+  allProducts: Producto[];
   setListaProductos: React.Dispatch<React.SetStateAction<Producto[]>>;
 };
 
-const SearchBar = ({ setListaProductos }: SearchBarProps) => {
+const SearchBar = ({ listaProductos, allProducts, setListaProductos }: SearchBarProps) => {
 
   const [busqueda, setBusqueda] = useState("")
 
-  const { handleSubmit } = Search({ items: productosData, busqueda })
+  const { handleSubmit } = Search({ items: allProducts, busqueda })
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const resultado = handleSubmit(e)
@@ -48,8 +49,8 @@ const SearchBar = ({ setListaProductos }: SearchBarProps) => {
 
       {busqueda.length > 0 && (
         <AutoCompletado
-          items={productosData}  
-          palabras={busqueda}   
+          items={allProducts}
+          palabras={busqueda}
           onSelect={handleSelectItem}
         />
       )}
