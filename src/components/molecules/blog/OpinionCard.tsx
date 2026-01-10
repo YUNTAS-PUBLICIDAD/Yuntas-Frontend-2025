@@ -7,7 +7,7 @@ import { FaQuoteRight } from "react-icons/fa";
 
 interface OpinionCardProps {
   quote?: string;
-  description: string;
+  description: string | null;
   author?: string;
   stars?: number;
   className?:string
