@@ -21,9 +21,8 @@ export async function getCategoriasService(): Promise<CategoriaActionResponse<Ca
             message: response.data.message || "Categorías obtenidas exitosamente",
             data: response.data.data,
         };
-    } catch (error) {
-        console.log(error);
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -46,8 +45,8 @@ export async function createCategoriaService(categoriaData: CategoriaInput): Pro
             message: response.data.message || "Categoría creada exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -70,9 +69,8 @@ export async function updateCategoriaService(id: number, categoriaData: Categori
             message: response.data.message || "Categoría actualizada exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -91,7 +89,7 @@ export async function deleteCategoriaService(id: number): Promise<CategoriaActio
         });
 
         return { success: true, message: "Categoría eliminada exitosamente" };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }

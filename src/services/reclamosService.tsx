@@ -24,8 +24,8 @@ export async function getReclamosService(perPage: number = 20): Promise<ReclamoA
             success: true,
             data: response.data.data.data,
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -48,8 +48,8 @@ export async function getReclamoByIdService(id: number): Promise<ReclamoActionRe
             message: response.data.message || "Reclamo obtenido exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -62,9 +62,8 @@ export async function createReclamoService(ReclamoData: ReclamoInput): Promise<R
             message: response.data.message || "Reclamo creado exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        console.log(error)
-        return { success: false, message: "No se pudo crear el reclamo" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -83,7 +82,7 @@ export async function replyReclamoService(id: number): Promise<ReclamoActionResp
         });
 
         return { success: true, message: "Reclamo respondido exitosamente" };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }

@@ -24,8 +24,8 @@ export async function getContactosService(perPage: number = 20): Promise<Contact
             success: true,
             data: response.data.data.data,
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -48,8 +48,8 @@ export async function getContactoByIdService(id: number): Promise<ContactoAction
             message: response.data.message || "Contacto obtenido exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -62,8 +62,8 @@ export async function createContactoService(contactoData: ContactoInput): Promis
             message: response.data.message || "Contacto creado exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        return { success: false, message: "No se pudo enviar el mensaje" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -82,7 +82,7 @@ export async function deleteContactoService(id: number): Promise<ContactoActionR
         });
 
         return { success: true, message: "Contacto eliminado exitosamente" };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }

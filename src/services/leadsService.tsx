@@ -35,8 +35,8 @@ export async function getLeadsService(perPage: number = 20): Promise<LeadActionR
             success: true,
             data: transformedLeads,
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -59,9 +59,8 @@ export async function createLeadService(leadData: LeadInput): Promise<LeadAction
             message: response.data.message || "Lead creado exitosamente",
             data: formatLead(response.data.data)
         };
-    } catch (error) {
-        console.log(error)
-        return { success: false, message: "No se pudo crear el lead" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -84,9 +83,8 @@ export async function updateLeadService(id: number, leadData: LeadInput): Promis
             message: response.data.message || "Lead actualizado exitosamente",
             data: formatLead(response.data.data)
         };
-    } catch (error) {
-        console.log(error)
-        return { success: false, message: "No se pudo actualizar el lead" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
@@ -104,7 +102,7 @@ export async function deleteLeadService(id: number): Promise<LeadActionResponse<
             }
         });
         return { success: true, message: "Lead eliminado exitosamente" };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
