@@ -50,7 +50,8 @@ export default function  ProductoDetalleContent() {
                             reverse={true}
                         />
                         <CotizaSection />
-                        <ProductoDetallePopup imgSrc={producto?.gallery[3]?.url || ""} />
+                        <ProductoDetallePopup imgSrc={producto?.gallery[3]?.url || ""} 
+                        productId={producto?.id} />
                     </main>
                 )
             }
