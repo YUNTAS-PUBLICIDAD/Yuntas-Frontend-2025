@@ -53,7 +53,7 @@ const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
                 size="sl"
                 type="number"
                 name="claimed_amount"
-                value={formData.claimed_amount}
+                value={formData.claimed_amount === 0 ? "" : formData.claimed_amount}
                 onChange={handleChange}
             />
 
