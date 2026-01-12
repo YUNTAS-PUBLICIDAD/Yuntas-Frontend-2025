@@ -6,7 +6,22 @@ import {
     sendEmailCampanaResponse,
 } from "@/types/admin/emailPlantilla";
 import { buildEmailFormData } from "@/utils/emailFormData";
+import { getImg } from "@/utils/getImg";
 import { getToken } from "@/utils/token";
+
+function formatPlantilla(apiPlantilla: emailPlantilla[]): emailPlantilla[] {
+    let img_secundarias: (string[] | null)[] = apiPlantilla.map((item) => {
+        return typeof item.imagenes_secundarias === "string"
+            ? JSON.parse(item.imagenes_secundarias).map((img: string) => getImg("/" + img))
+            : item.imagenes_secundarias;
+    });
+
+    return apiPlantilla.map((item, index) => ({
+        ...item,
+        imagen_principal: item.imagen_principal ? getImg("/" + item.imagen_principal) : null,
+        imagenes_secundarias: img_secundarias[index] || null,
+    }))
+};
 
 export async function getEmailPlantillaByProductService(product_id: number): Promise<emailPlantillaServiceResponse<emailPlantilla[]>> {
     try {
@@ -22,12 +37,10 @@ export async function getEmailPlantillaByProductService(product_id: number): Pro
             }
         });
 
-        console.log("Response Data:", response.data);
-
         return {
             success: true,
             message: response.data.message || "Plantilla Email obtenida exitosamente",
-            data: response.data
+            data: formatPlantilla(response.data)
         };
     } catch (error: any) {
         return { success: false, message: error.message };
