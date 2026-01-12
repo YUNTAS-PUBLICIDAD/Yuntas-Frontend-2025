@@ -10,13 +10,13 @@ interface InfoCardProps {
 
 const InfoCard: React.FC<InfoCardProps> = ({ text, className = "" }) => (
   <div
-    className={`flex items-center gap-2 md:gap-6 rounded-lg p-1 md:p-4 w-full max-w-2xl  border-[#6DD0DB/20] shadow-lg ${className} min-h-[80px]`}
+    className={`flex items-center gap-3 md:gap-6 rounded-lg p-2 md:p-4 w-full max-w-2xl border-[#6DD0DB/20] shadow-lg ${className} min-h-[60px] md:min-h-[80px]`}
     style={{ background: "#6DD0DB33" }}
   >
-    <Icon size="lg" bgColor="" className="">
-      <MdCheck className="text-2xl md:text-4xl font-bold" />
+    <Icon size="lg" bgColor="" className="flex-shrink-0">
+      <MdCheck className="text-xl md:text-4xl font-bold" />
     </Icon>
-    <Text color="text-[#00031E]" variant="body" className="text-4xl font-bold break-words whitespace-pre-line">
+    <Text color="text-[#00031E]" variant="body" className="text-base md:text-4xl font-bold break-words whitespace-pre-line flex-1">
       <div
             dangerouslySetInnerHTML={{
               __html: text,

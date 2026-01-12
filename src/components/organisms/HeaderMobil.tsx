@@ -21,14 +21,16 @@ const HeaderMobil = () => {
   return (
     <>
     <header
-        className={` md:hidden fixed top-0 left-0 right-0 z-50 px-6 py-4 
+        className={` md:hidden fixed top-0 left-0 right-0 z-50 px-4 py-3 
                     flex justify-between items-center transition-all duration-300
                     ${open?"hidden":""} ${isScrolled ? "bg-white shadow-md" : "bg-transparent shadow-none"}`}>
         <button onClick={() => setOpen(!open)}
-          className="text-3xl text-gray-700">
+          className="text-2xl sm:text-3xl text-gray-700 p-2">
           {open ? <IoClose  /> : <IoMenu className={!isScrolled? "text-white":"text-blue-900"}/>}
         </button>
-        <UserSection size="md" color={!isScrolled?"bg-white":"bg-blue-900"}fill={!isScrolled?"":"white"} />
+        <div className="p-1">
+          <UserSection size="md" color={!isScrolled?"bg-white":"bg-blue-900"}fill={!isScrolled?"":"white"} />
+        </div>
       </header>
 
       <div className={`

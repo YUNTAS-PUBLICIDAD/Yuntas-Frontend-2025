@@ -10,7 +10,14 @@ export const FloatingWhatsApp = () => {
   const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const message = "Hola Yuntas, quisiera más información sobre sus servicios.";
 
-  if (!phoneNumber || pathname?.startsWith('/admin')) {
+  // Validar que existe el número de WhatsApp
+  if (!phoneNumber) {
+    return null;
+  }
+
+  // Ocultar el botón de WhatsApp en rutas específicas (login y formularios)
+  // Se utiliza startsWith para detectar si la ruta inicia con /login
+  if (pathname?.startsWith('/login')) {
     return null;
   }
 

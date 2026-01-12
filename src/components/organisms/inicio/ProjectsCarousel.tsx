@@ -11,7 +11,7 @@ const ProjectsCarousel: React.FC = () => {
   const { activeIndex, goTo } = useCarousel({ total: slides.length, autoplay: true, interval: 4000 });
 
   return (
-    <section className="relative w-full h-[500px] md:h-[650px] bg-gray-100 flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-[400px] md:h-[650px] bg-gray-100 flex items-center justify-center overflow-hidden">
       <div className="absolute top-0 right-0 z-30">
         <ProjectsTitleBox />
       </div>
@@ -39,7 +39,7 @@ const ProjectsCarousel: React.FC = () => {
         </AnimatePresence>
       </div>
       {/* Puntos de navegación */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center items-center z-20">
+      <div className="absolute bottom-4 md:bottom-8 left-0 right-0 flex justify-center items-center z-20">
         {slides.map((_, idx) => (
           <CarouselDot key={idx} active={idx === activeIndex} onClick={() => goTo(idx)} />
         ))}

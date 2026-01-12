@@ -14,15 +14,17 @@ export default function UserSection({
 }: UserSectionProps) {
   const scaleClass =
     size === "sm" ? "scale-100" : size === "lg" ? "scale-125" : "scale-110";
+  const imgClass =
+    size === "sm" ? "w-6 h-6" : size === "lg" ? "w-7 h-7" : "w-7 h-7";
 
   return (
-    <Link href={"/login"}>
+    <Link href="/login">
       <div className={`flex items-center gap-2 ${scaleClass}`}>
         <Icon size={size} bgColor={color}>
           <img
             src={UserImg.src}
             alt="User Icon"
-            className="w-7 h-7 object-contain"
+            className={`${imgClass} object-contain`}
           />
         </Icon>
       </div>
