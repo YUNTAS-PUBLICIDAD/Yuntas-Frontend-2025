@@ -111,7 +111,7 @@ export default function ReclamacionesPage() {
                             <th className="px-6 py-4">Fecha</th>
                             <th className="px-6 py-4">Cliente</th>
                             <th className="px-6 py-4">Documento</th>
-                            {/* NUEVA COLUMNA CORREO */}
+                          
                             <th className="px-6 py-4">Contacto</th> 
                             <th className="px-6 py-4">Monto</th>
                             <th className="px-6 py-4">Estado</th>
@@ -133,12 +133,12 @@ export default function ReclamacionesPage() {
                                         <td className="px-6 py-4 font-bold text-[#203565]">#{item.id}</td>
                                         <td className="px-6 py-4">{formatDate(item.purchase_date || item.created_at)}</td>
                                         
-                                        {/* COLUMNA CLIENTE (Solo nombre) */}
+                                        
                                         <td className="px-6 py-4 font-medium text-gray-900">
                                             {item.first_name} {item.last_name}
                                         </td>
 
-                                        {/* COLUMNA DOCUMENTO */}
+                                        
                                         <td className="px-6 py-4">
                                             {item.document_number}
                                             <span className="text-xs text-gray-400 ml-1">
@@ -146,7 +146,7 @@ export default function ReclamacionesPage() {
                                             </span>
                                         </td>
 
-                                        {/* NUEVA COLUMNA CONTACTO (Correo + Teléfono) */}
+                                        
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col">
                                                 <span className="text-gray-700">{item.email}</span>
@@ -201,7 +201,7 @@ export default function ReclamacionesPage() {
                                     </span>
                                 </p>
                              </div>
-                             {/* Agregamos también producto y monto en el modal para tener todo a la mano */}
+                             
                              <div>
                                 <p className="text-gray-500 text-xs">Producto ID</p>
                                 <p className="font-bold">{selectedReclamo.product_id || 'General'}</p>
