@@ -243,6 +243,9 @@ export default function ReclamacionesPage() {
                                     {isUpdating ? 'Guardando...' : 'Actualizar Estado'}
                                 </button>
                             </div>
+                            <p className="text-xs text-gray-500 mt-2">
+                                * Seleccione "Completo" cuando haya terminado de atender al cliente.
+                            </p>
                         </div>
                     </div>
                 )}
