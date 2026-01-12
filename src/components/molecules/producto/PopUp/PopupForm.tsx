@@ -4,13 +4,13 @@ import ButtonPrimary from "@/components/atoms/PrimaryButton";
 
 interface PopupFormProps {
   formData: {
-    nombre: string;
-    telefono: string;
+    name: string;
+    phone: string;
     email: string;
   };
   errors: {
-    nombre?: string;
-    telefono?: string;
+    name?: string;
+    phone?: string;
     email?: string;
   };
   handleChange: (field: string, value: string) => void;
@@ -33,17 +33,17 @@ const PopupForm: React.FC<PopupFormProps> = ({
   >
     <InputField
       placeholder="Nombre"
-      value={formData.nombre}
-      error={errors.nombre}
-      onChange={(e) => handleChange("nombre", e.target.value)}
+      value={formData.name}
+      error={errors.name}
+      onChange={(e) => handleChange("name", e.target.value)}
     />
 
     <InputField
       placeholder="Teléfono"
       maxLength={9}
-      value={formData.telefono}
-      error={errors.telefono}
-      onChange={(e) => handleChange("telefono", e.target.value)}
+      value={formData.phone}
+      error={errors.phone}
+      onChange={(e) => handleChange("phone", e.target.value)}
     />
 
     <InputField
