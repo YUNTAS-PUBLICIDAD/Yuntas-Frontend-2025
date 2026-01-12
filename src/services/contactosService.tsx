@@ -2,11 +2,11 @@ import { api, API_ENDPOINTS } from "@/config";
 import {
     Contacto,
     ContactoInput,
-    ContactoActionResponse,
+    ContactoServiceResponse,
 } from "@/types/admin/contacto";
 import { getToken } from "@/utils/token";
 
-export async function getContactosService(perPage: number = 20): Promise<ContactoActionResponse<Contacto[]>> {
+export async function getContactosService(perPage: number = 20): Promise<ContactoServiceResponse<Contacto[]>> {
     try {
         const token = getToken();
 
@@ -24,12 +24,12 @@ export async function getContactosService(perPage: number = 20): Promise<Contact
             success: true,
             data: response.data.data.data,
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
-export async function getContactoByIdService(id: number): Promise<ContactoActionResponse<Contacto>> {
+export async function getContactoByIdService(id: number): Promise<ContactoServiceResponse<Contacto>> {
     try {
         const token = getToken();
 
@@ -48,12 +48,12 @@ export async function getContactoByIdService(id: number): Promise<ContactoAction
             message: response.data.message || "Contacto obtenido exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
-export async function createContactoService(contactoData: ContactoInput): Promise<ContactoActionResponse<Contacto>> {
+export async function createContactoService(contactoData: ContactoInput): Promise<ContactoServiceResponse<Contacto>> {
     try {
         const response = await api.post(API_ENDPOINTS.FORMS.CONTACT, contactoData);
 
@@ -62,12 +62,12 @@ export async function createContactoService(contactoData: ContactoInput): Promis
             message: response.data.message || "Contacto creado exitosamente",
             data: response.data.data
         };
-    } catch (error) {
-        return { success: false, message: "No se pudo enviar el mensaje" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
-export async function deleteContactoService(id: number): Promise<ContactoActionResponse<null>> {
+export async function deleteContactoService(id: number): Promise<ContactoServiceResponse> {
     try {
         const token = getToken();
 
@@ -82,7 +82,7 @@ export async function deleteContactoService(id: number): Promise<ContactoActionR
         });
 
         return { success: true, message: "Contacto eliminado exitosamente" };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }

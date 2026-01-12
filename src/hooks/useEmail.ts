@@ -36,7 +36,7 @@ export function useEmail(): UseEmailReturn {
     const clearError = () => setError(null);
     const clearEmailPlantillas = () => setEmailPlantillas([]);
 
-    const getEmailPlantillas = useCallback(async (product_id: number) => {
+    const getEmailPlantillas = useCallback(async (product_id: number) : Promise<void> => {
         setIsLoading(true);
         setError(null);
 

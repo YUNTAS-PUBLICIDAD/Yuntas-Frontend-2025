@@ -2,7 +2,7 @@ import { api, API_ENDPOINTS } from "@/config";
 import {
     Lead,
     LeadInput,
-    LeadActionResponse,
+    LeadServiceResponse,
 } from "@/types/admin/lead";
 import { getToken } from "@/utils/token";
 import { formatDate } from "@/utils/formatDate";
@@ -15,7 +15,7 @@ function formatLead(apiLead: any): Lead {
     };
 }
 
-export async function getLeadsService(perPage: number = 20): Promise<LeadActionResponse<Lead[]>> {
+export async function getLeadsService(perPage: number = 20): Promise<LeadServiceResponse<Lead[]>> {
     try {
         const token = getToken();
 
@@ -35,12 +35,12 @@ export async function getLeadsService(perPage: number = 20): Promise<LeadActionR
             success: true,
             data: transformedLeads,
         };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
-export async function createLeadService(leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
+export async function createLeadService(leadData: LeadInput): Promise<LeadServiceResponse<Lead>> {
     try {
         const token = getToken();
 
@@ -59,13 +59,12 @@ export async function createLeadService(leadData: LeadInput): Promise<LeadAction
             message: response.data.message || "Lead creado exitosamente",
             data: formatLead(response.data.data)
         };
-    } catch (error) {
-        console.log(error)
-        return { success: false, message: "No se pudo crear el lead" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
-export async function updateLeadService(id: number, leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
+export async function updateLeadService(id: number, leadData: LeadInput): Promise<LeadServiceResponse<Lead>> {
     try {
         const token = getToken();
 
@@ -84,13 +83,12 @@ export async function updateLeadService(id: number, leadData: LeadInput): Promis
             message: response.data.message || "Lead actualizado exitosamente",
             data: formatLead(response.data.data)
         };
-    } catch (error) {
-        console.log(error)
-        return { success: false, message: "No se pudo actualizar el lead" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }
 
-export async function deleteLeadService(id: number): Promise<LeadActionResponse<null>> {
+export async function deleteLeadService(id: number): Promise<LeadServiceResponse<null>> {
     try {
         const token = getToken();
 
@@ -104,7 +102,7 @@ export async function deleteLeadService(id: number): Promise<LeadActionResponse<
             }
         });
         return { success: true, message: "Lead eliminado exitosamente" };
-    } catch (error) {
-        return { success: false, message: "Error de conexión" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 }

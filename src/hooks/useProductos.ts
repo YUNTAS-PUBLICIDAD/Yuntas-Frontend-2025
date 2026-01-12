@@ -27,7 +27,7 @@ interface UseProductosReturn {
     goToPage: (url: string) => Promise<void>;
     goToNextPage: () => Promise<void>;
     goToPrevPage: () => Promise<void>;
-    getProductoBySlug: (slug: string) => Promise<Producto | null>;
+    getProductoBySlug: (slug: string) => Promise<void>;
     createProducto: (producto: ProductoInput) => Promise<ProductoServiceResponse<Producto>>;
     updateProducto: (id: number | string, producto: ProductoInput) => Promise<ProductoServiceResponse<Producto>>;
     deleteProducto: (id: number | string) => Promise<ProductoServiceResponse>;
@@ -102,7 +102,7 @@ export function useProductos(): UseProductosReturn {
     }, [links, goToPage]);
 
 
-    const getProductoBySlug = useCallback(async (slug: string): Promise<Producto | null> => {
+    const getProductoBySlug = useCallback(async (slug: string): Promise<void> => {
         setIsLoading(true);
         setError(null);
 
@@ -111,11 +111,9 @@ export function useProductos(): UseProductosReturn {
         if (result.success && result.data) {
             setProducto(result.data);
             setIsLoading(false);
-            return result.data;
         } else {
             setError(result.message || 'Error desconocido');
             setIsLoading(false);
-            return null;
         }
     }, []);
 
