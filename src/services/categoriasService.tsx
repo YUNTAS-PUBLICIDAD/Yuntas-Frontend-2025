@@ -35,7 +35,7 @@ export async function createCategoriaService(categoriaData: CategoriaInput): Pro
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.post(API_ENDPOINTS.PRODUCTS.CREATE, categoriaData, {
+        const response = await api.post(API_ENDPOINTS.ADMIN.CATEGORIES.CREATE, categoriaData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
