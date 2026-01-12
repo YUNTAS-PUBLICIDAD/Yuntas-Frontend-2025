@@ -28,7 +28,7 @@ export interface ReclamoInput {
     claimed_amount?: number;
 }
 
-export interface ReclamoActionResponse<T> {
+export interface ReclamoServiceResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;

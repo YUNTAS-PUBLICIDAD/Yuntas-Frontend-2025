@@ -2,11 +2,11 @@ import { api, API_ENDPOINTS } from "@/config";
 import {
     Reclamo,
     ReclamoInput,
-    ReclamoActionResponse,
+    ReclamoServiceResponse,
 } from "@/types/admin/reclamo";
 import { getToken } from "@/utils/token";
 
-export async function getReclamosService(perPage: number = 20): Promise<ReclamoActionResponse<Reclamo[]>> {
+export async function getReclamosService(perPage: number = 20): Promise<ReclamoServiceResponse<Reclamo[]>> {
     try {
         const token = getToken();
 
@@ -29,7 +29,7 @@ export async function getReclamosService(perPage: number = 20): Promise<ReclamoA
     }
 }
 
-export async function getReclamoByIdService(id: number): Promise<ReclamoActionResponse<Reclamo>> {
+export async function getReclamoByIdService(id: number): Promise<ReclamoServiceResponse<Reclamo>> {
     try {
         const token = getToken();
 
@@ -53,7 +53,7 @@ export async function getReclamoByIdService(id: number): Promise<ReclamoActionRe
     }
 }
 
-export async function createReclamoService(ReclamoData: ReclamoInput): Promise<ReclamoActionResponse<Reclamo>> {
+export async function createReclamoService(ReclamoData: ReclamoInput): Promise<ReclamoServiceResponse<Reclamo>> {
     try {
         const response = await api.post(API_ENDPOINTS.FORMS.CLAIMS, ReclamoData);
 
@@ -67,7 +67,7 @@ export async function createReclamoService(ReclamoData: ReclamoInput): Promise<R
     }
 }
 
-export async function replyReclamoService(id: number): Promise<ReclamoActionResponse<null>> {
+export async function replyReclamoService(id: number): Promise<ReclamoServiceResponse<null>> {
     try {
         const token = getToken();
 

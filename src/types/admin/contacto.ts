@@ -15,7 +15,7 @@ export interface ContactoInput {
     message: string;
 }
 
-export interface ContactoActionResponse<T> {
+export interface ContactoServiceResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;

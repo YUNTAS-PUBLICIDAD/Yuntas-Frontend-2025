@@ -2,11 +2,11 @@ import { api, API_ENDPOINTS } from "@/config";
 import {
     Contacto,
     ContactoInput,
-    ContactoActionResponse,
+    ContactoServiceResponse,
 } from "@/types/admin/contacto";
 import { getToken } from "@/utils/token";
 
-export async function getContactosService(perPage: number = 20): Promise<ContactoActionResponse<Contacto[]>> {
+export async function getContactosService(perPage: number = 20): Promise<ContactoServiceResponse<Contacto[]>> {
     try {
         const token = getToken();
 
@@ -29,7 +29,7 @@ export async function getContactosService(perPage: number = 20): Promise<Contact
     }
 }
 
-export async function getContactoByIdService(id: number): Promise<ContactoActionResponse<Contacto>> {
+export async function getContactoByIdService(id: number): Promise<ContactoServiceResponse<Contacto>> {
     try {
         const token = getToken();
 
@@ -53,7 +53,7 @@ export async function getContactoByIdService(id: number): Promise<ContactoAction
     }
 }
 
-export async function createContactoService(contactoData: ContactoInput): Promise<ContactoActionResponse<Contacto>> {
+export async function createContactoService(contactoData: ContactoInput): Promise<ContactoServiceResponse<Contacto>> {
     try {
         const response = await api.post(API_ENDPOINTS.FORMS.CONTACT, contactoData);
 
@@ -67,7 +67,7 @@ export async function createContactoService(contactoData: ContactoInput): Promis
     }
 }
 
-export async function deleteContactoService(id: number): Promise<ContactoActionResponse<null>> {
+export async function deleteContactoService(id: number): Promise<ContactoServiceResponse> {
     try {
         const token = getToken();
 

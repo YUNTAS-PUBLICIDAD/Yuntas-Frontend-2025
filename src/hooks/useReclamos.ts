@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from "react";
-import { Reclamo, ReclamoInput } from "@/types/admin/reclamo";
+import { Reclamo, ReclamoInput, ReclamoServiceResponse } from "@/types/admin/reclamo";
 import {
     getReclamosService,
     getReclamoByIdService,
@@ -15,9 +15,9 @@ interface UseReclamosReturn {
     isLoading: boolean;
     error: string | null;
     getReclamos: (perPage?: number) => Promise<void>;
-    getReclamoById: (id: number) => Promise<Reclamo | null>;
-    createReclamo: (reclamo: ReclamoInput) => Promise<boolean>;
-    replyReclamo: (id: number) => Promise<boolean>;
+    getReclamoById: (id: number) => Promise<void>;
+    createReclamo: (reclamo: ReclamoInput) => Promise<ReclamoServiceResponse<Reclamo>>;
+    replyReclamo: (id: number) => Promise<ReclamoServiceResponse>;
     clearError: () => void;
     clearReclamo: () => void;
 }
@@ -41,12 +41,13 @@ export function useReclamos(): UseReclamosReturn {
             setReclamos(result.data);
         } else {
             setError(result.message || 'Error desconocido');
+            setReclamos([]);
         }
 
         setIsLoading(false);
     }, []);
 
-    const getReclamoById = useCallback(async (id: number): Promise<Reclamo | null> => {
+    const getReclamoById = useCallback(async (id: number): Promise<void> => {
         setIsLoading(true);
         setError(null);
 
@@ -54,39 +55,30 @@ export function useReclamos(): UseReclamosReturn {
         if (result.success && result.data) {
             setReclamo(result.data);
             setIsLoading(false);
-            return result.data;
         } else {
             setError(result.message || 'Error desconocido');
             setIsLoading(false);
-            return null;
         }
     }, []);
 
-    const createReclamo = useCallback(async (reclamoData: ReclamoInput): Promise<boolean> => {
+    const createReclamo = useCallback(async (reclamoData: ReclamoInput): Promise<ReclamoServiceResponse<Reclamo>> => {
         setIsLoading(true);
         setError(null);
 
         const result = await createReclamoService(reclamoData);
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
-    const replyReclamo = useCallback(async (id: number): Promise<boolean> => {
+    const replyReclamo = useCallback(async (id: number): Promise<ReclamoServiceResponse> => {
         setIsLoading(true);
         setError(null);
 
         const result = await replyReclamoService(id);
 
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
-
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
     return {

@@ -20,7 +20,7 @@ export interface LeadInput {
     source_id?: number;
 }
 
-export interface LeadActionResponse<T> {
+export interface LeadServiceResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;

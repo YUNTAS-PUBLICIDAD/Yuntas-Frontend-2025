@@ -2,7 +2,7 @@ import { api, API_ENDPOINTS } from "@/config";
 import {
     Lead,
     LeadInput,
-    LeadActionResponse,
+    LeadServiceResponse,
 } from "@/types/admin/lead";
 import { getToken } from "@/utils/token";
 import { formatDate } from "@/utils/formatDate";
@@ -15,7 +15,7 @@ function formatLead(apiLead: any): Lead {
     };
 }
 
-export async function getLeadsService(perPage: number = 20): Promise<LeadActionResponse<Lead[]>> {
+export async function getLeadsService(perPage: number = 20): Promise<LeadServiceResponse<Lead[]>> {
     try {
         const token = getToken();
 
@@ -40,7 +40,7 @@ export async function getLeadsService(perPage: number = 20): Promise<LeadActionR
     }
 }
 
-export async function createLeadService(leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
+export async function createLeadService(leadData: LeadInput): Promise<LeadServiceResponse<Lead>> {
     try {
         const token = getToken();
 
@@ -64,7 +64,7 @@ export async function createLeadService(leadData: LeadInput): Promise<LeadAction
     }
 }
 
-export async function updateLeadService(id: number, leadData: LeadInput): Promise<LeadActionResponse<Lead>> {
+export async function updateLeadService(id: number, leadData: LeadInput): Promise<LeadServiceResponse<Lead>> {
     try {
         const token = getToken();
 
@@ -88,7 +88,7 @@ export async function updateLeadService(id: number, leadData: LeadInput): Promis
     }
 }
 
-export async function deleteLeadService(id: number): Promise<LeadActionResponse<null>> {
+export async function deleteLeadService(id: number): Promise<LeadServiceResponse<null>> {
     try {
         const token = getToken();
 
