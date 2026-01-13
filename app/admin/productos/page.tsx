@@ -125,7 +125,7 @@ export default function ProductosPage() {
 
                 <ActionButtonGroup buttons={[{
                     label: "Envio de Whatsapp",
-                    onClick: () => setIsWhatsappModalOpen(true),
+                    //onClick: () => setIsWhatsappModalOpen(true),
                     variant: "success"
                 }]} />
             </div>
@@ -171,18 +171,18 @@ export default function ProductosPage() {
                     isLoading={isLoading}
                 />
             </Modal>
+
+            {/* MODAL PARA CAMPAÑA A TRAVES DE EMAIL */}
             <Modal
                 isOpen={isEmailModalOpen}
                 onClose={() => setIsEmailModalOpen(false)}
                 title="Envio de Emails"
                 size="lg"
             >
-                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    <SendEmailForm
-                        email_productos={productos}
-                        onClose={() => setIsEmailModalOpen(false)}
-                    />
-                </div>
+                <SendEmailForm
+                    products={productos}
+                    onClose={() => setIsEmailModalOpen(false)}
+                />
             </Modal>
             
             <Modal

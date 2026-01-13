@@ -1,210 +1,369 @@
-import React from "react";
-import { useSendEmail } from "@/hooks/ui/admin/products/useSendEmail";
+'use client';
 
-interface Props {
-    email_productos?: any[];
+import React, { useEffect, useState } from "react";
+import Button from "@/components/atoms/Button";
+import FormSection from "../FormSection";
+import InputAdmin from "@/components/atoms/InputAdmin";
+import ImageUpload from "../ImageUpload";
+import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
+import Loader from "@/components/atoms/Loader";
+import SelectForm from "@/components/atoms/SelectForm";
+import { Producto } from "@/types/admin/producto";
+import { EmailFormData, EmailSectionData } from "@/types/admin/emailPlantilla";
+import { useEmail } from "@/hooks/useEmail";
+import { parseEmailPlantillaData, createEmptySection, isSectionEmpty, isSectionComplete } from "@/utils/emailFormData";
+
+interface SendEmailFormProps {
     onClose: () => void;
+    products: Producto[];
 }
 
-const SendEmailForm: React.FC<Props> = ({
-    email_productos = [],
-    onClose,
-}) => {
-    const {
-        selectedProductId,
-        setSelectedProductId,
-        sections,
-        handleTextChange,
-        handleFileChange,
-        handleSaveTemplate,
-        handleActivateCampaign,
-        isSending,
-    } = useSendEmail(onClose, email_productos);
-
-    return (
-        <div className="flex flex-col gap-6 p-4">
-            {/* SELECTOR DE PRODUCTO */}
-            <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Selecciona un producto
-                </label>
-
-                <select
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-red-500"
-                    value={selectedProductId}
-                    onChange={(e) => setSelectedProductId(e.target.value)}
-                >
-                    <option value="">-- Elige un producto --</option>
-
-                    {email_productos.length === 0 ? (
-                        <option disabled>Cargando productos...</option>
-                    ) : (
-                        email_productos.map((p) => (
-                            <option key={p.id} value={p.id}>
-                                {p.nombre}
-                            </option>
-                        ))
-                    )}
-                </select>
-            </div>
-
-            {/* SECCIONES */}
-            {sections.map((section, index) => (
-                <div
-                    key={index}
-                    className="border border-red-100 rounded-xl bg-red-50/30 p-4 shadow-sm"
-                >
-                    <div className="flex items-center gap-2 mb-4">
-                        <div className="bg-red-700 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                            {index + 1}
-                        </div>
-                        <h3 className="text-red-700 font-bold text-lg">
-                            Sección Email {index + 1}
-                        </h3>
-                    </div>
-
-                    {/* IMAGEN PRINCIPAL */}
-                    <div className="mb-4">
-                        <label className="block text-gray-500 text-sm mb-1">
-                            Imagen Principal
-                        </label>
-
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-6 flex items-center justify-center relative h-48 overflow-hidden">
-                            <input
-                                type="file"
-                                className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                                accept="image/*"
-                                onChange={(e) =>
-                                    handleFileChange(
-                                        index,
-                                        "mainImage",
-                                        e.target.files?.[0] || null
-                                    )
-                                }
-                            />
-
-                            {section.mainImagePreview ? (
-                                <img
-                                    src={section.mainImagePreview}
-                                    alt="Preview"
-                                    className="absolute inset-0 w-full h-full object-contain p-2"
-                                />
-                            ) : (
-                                <span className="text-gray-400 text-sm">
-                                    Subir imagen
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* IMÁGENES SECUNDARIAS */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                        {(["secondaryImage1", "secondaryImage2"] as const).map(
-                            (field, i) => (
-                                <div key={field}>
-                                    <label className="block text-gray-500 text-sm mb-1">
-                                        Imagen Secundaria {i + 1}
-                                    </label>
-
-                                    <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-2 relative h-32 overflow-hidden">
-                                        <input
-                                            type="file"
-                                            className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                                            accept="image/*"
-                                            onChange={(e) =>
-                                                handleFileChange(
-                                                    index,
-                                                    field,
-                                                    e.target.files?.[0] || null
-                                                )
-                                            }
-                                        />
-
-                                        {field === "secondaryImage1"
-                                            ? section.secondaryImage1Preview && (
-                                                  <img
-                                                      src={
-                                                          section.secondaryImage1Preview
-                                                      }
-                                                      className="absolute inset-0 w-full h-full object-contain p-1"
-                                                  />
-                                              )
-                                            : section.secondaryImage2Preview && (
-                                                  <img
-                                                      src={
-                                                          section.secondaryImage2Preview
-                                                      }
-                                                      className="absolute inset-0 w-full h-full object-contain p-1"
-                                                  />
-                                              )}
-                                    </div>
-                                </div>
-                            )
-                        )}
-                    </div>
-
-                    {/* TEXTO */}
-                    <div className="mb-4">
-                        <label className="block text-gray-500 text-sm mb-1">
-                            Título
-                        </label>
-                        <input
-                            type="text"
-                            className="w-full border rounded px-3 py-2 text-sm"
-                            value={section.title}
-                            onChange={(e) =>
-                                handleTextChange(index, "title", e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-500 text-sm mb-1">
-                            Párrafo
-                        </label>
-                        <textarea
-                            rows={3}
-                            className="w-full border rounded px-3 py-2 text-sm"
-                            value={section.paragraph}
-                            onChange={(e) =>
-                                handleTextChange(
-                                    index,
-                                    "paragraph",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-                </div>
-            ))}
-
-            {/* BOTONES */}
-            <div className="flex justify-end gap-3 pt-4 border-t">
-                <button
-                    onClick={onClose}
-                    className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-                >
-                    Cancelar
-                </button>
-
-                <button
-                    onClick={handleSaveTemplate}
-                    disabled={isSending}
-                    className="px-6 py-2 bg-red-600 text-white rounded-lg disabled:opacity-50"
-                >
-                    {isSending ? "Guardando..." : "Guardar Plantilla"}
-                </button>
-
-                <button
-                    onClick={handleActivateCampaign}
-                    disabled={isSending}
-                    className="px-6 py-2 bg-red-700 text-white rounded-lg disabled:opacity-50"
-                >
-                    {isSending ? "Enviando..." : "Activar campaña"}
-                </button>
-            </div>
-        </div>
-    );
+const defaultFormData: EmailFormData = {
+    producto_id: "",
+    sections: [
+        createEmptySection(),
+        createEmptySection(),
+        createEmptySection(),
+    ],
 };
 
-export default SendEmailForm;
+export default function SendEmailForm({ onClose, products }: SendEmailFormProps) {
+    const {
+        getEmailPlantillas,
+        emailPlantillas,
+        sendEmailCampana,
+        saveEmailPlantilla,
+        isLoading,
+        isSaving,
+        isActivating,
+        clearEmailPlantillas
+    } = useEmail();
+
+    const [formData, setFormData] = useState<EmailFormData>(defaultFormData);
+    const [imagePreviews, setImagePreviews] = useState<Map<string, string>>(new Map());
+
+    // se carga la plantilla cuando cambia el producto
+    useEffect(() => {
+
+        clearEmailPlantillas();
+        setImagePreviews(new Map());
+
+        if (!formData.producto_id) {
+            setFormData(prev => ({
+                ...prev,
+                sections: [createEmptySection(), createEmptySection(), createEmptySection()]
+            }));
+            return;
+        }
+
+        // Resetear a secciones vacias primero 
+        setFormData(prev => ({
+            ...prev,
+            sections: [createEmptySection(), createEmptySection(), createEmptySection()]
+        }));
+
+        getEmailPlantillas(Number(formData.producto_id));
+    }, [formData.producto_id, getEmailPlantillas]);
+
+    useEffect(() => {
+        if (!emailPlantillas || emailPlantillas.length === 0) return;
+
+        const parsedSections = parseEmailPlantillaData(emailPlantillas);
+        setFormData(prev => ({
+            ...prev,
+            sections: parsedSections
+        }));
+    }, [emailPlantillas]);
+
+    // para cambios de texto (inputs y textareas)
+    const handleInputChange = (index: number, field: "title" | "paragraph", value: string) => {
+        setFormData(prev => {
+            const newSections = [...prev.sections];
+            newSections[index] = {
+                ...newSections[index],
+                [field]: value
+            };
+            return { ...prev, sections: newSections };
+        });
+    };
+
+    // para cambio en imagenes
+    const handleImageChange = (
+        index: number,
+        field: "mainImage" | "secondaryImage1" | "secondaryImage2",
+        file: File | null
+    ) => {
+        setFormData(prev => {
+            const newSections = [...prev.sections];
+            const currentSection = { ...newSections[index] };
+
+            // Si file es null, entonces se esta eliminando la imagen
+            if (file === null) {
+                currentSection[field] = null;
+                const previewField = `${field}Preview` as keyof EmailSectionData;
+                currentSection[previewField] = "" as any;
+            } else {
+                // nueva imagen
+                currentSection[field] = file;
+            }
+
+            newSections[index] = currentSection;
+            return { ...prev, sections: newSections };
+        });
+
+        if (file instanceof File) {
+            const previewKey = `${index}-${field}`;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreviews(prev => {
+                    const newMap = new Map(prev);
+                    newMap.set(previewKey, reader.result as string);
+                    return newMap;
+                });
+            };
+            reader.readAsDataURL(file);
+        } else if (file === null) {
+            // Limpiar preview cuando se elimina
+            const previewKey = `${index}-${field}`;
+            setImagePreviews(prev => {
+                const newMap = new Map(prev);
+                newMap.delete(previewKey);
+                return newMap;
+            });
+        }
+    };
+
+    const getImagePreview = (index: number, field: "mainImage" | "secondaryImage1" | "secondaryImage2"): string | null => {
+        const section = formData.sections[index];
+        const image = section[field];
+
+        if (image instanceof File) {
+            const previewKey = `${index}-${field}`;
+            return imagePreviews.get(previewKey) || null;
+        }
+
+        if (typeof image === "string" && image) {
+            return image;
+        }
+
+        const previewField = `${field}Preview` as keyof EmailSectionData;
+        return (section[previewField] as string) || null;
+    };
+
+    // Validaciones
+    const validateForm = (): string | null => {
+        if (!formData.producto_id) return "Selecciona un producto";
+
+        const completeSections = formData.sections.filter(section => !isSectionEmpty(section));
+        if (completeSections.length === 0) {
+            return "Debes completar al menos una sección";
+        }
+
+        // se verifica que las secciones con datos esten completas
+        for (let i = 0; i < formData.sections.length; i++) {
+            const section = formData.sections[i];
+
+            // Saltar secciones vacías
+            if (isSectionEmpty(section)) continue;
+
+            // Validar secciones parcialmente llenas
+            if (!section.title.trim()) {
+                return `El título es requerido en la sección ${i + 1}`;
+            }
+            if (!section.paragraph.trim()) {
+                return `El párrafo es requerido en la sección ${i + 1}`;
+            }
+
+            const hasMainImage = section.mainImage instanceof File ||
+                (typeof section.mainImage === 'string' && section.mainImage.length > 0) ||
+                section.mainImagePreview.length > 0;
+
+            if (!hasMainImage) {
+                return `La imagen principal es requerida en la sección ${i + 1}`;
+            }
+        }
+
+        return null;
+    };
+
+    // Guardar plantilla
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const error = validateForm();
+        if (error) {
+            alert(error);
+            return;
+        }
+
+        // Filtrar solo secciones completas
+        const sectionsToSave = formData.sections.filter(section => !isSectionEmpty(section));
+
+        if (sectionsToSave.length === 0) {
+            alert("No hay secciones completas para guardar");
+            return;
+        }
+
+        const dataToSave: EmailFormData = {
+            producto_id: formData.producto_id,
+            sections: sectionsToSave
+        };
+
+        const result = await saveEmailPlantilla(dataToSave);
+
+        if (result.success) {
+            alert("Plantilla guardada correctamente");
+            onClose();
+        } else {
+            alert(result.message || "Error guardando plantilla");
+        }
+    };
+
+    // Activar campaña
+    const handleActivateCampaign = async () => {
+        const error = validateForm();
+        if (error) {
+            alert(error);
+            return;
+        }
+
+        // se verifica que haya al menos una seccion completa
+        const completeSections = formData.sections.filter(section => isSectionComplete(section));
+
+        if (completeSections.length === 0) {
+            alert("Debes completar al menos una sección antes de activar la campaña");
+            return;
+        }
+
+        const result = await sendEmailCampana(Number(formData.producto_id));
+
+        if (result.success) {
+            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nCorreos: ${result.total_correos}`);
+            onClose();
+        } else {
+            alert(result.message || "Error enviando campaña");
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+            <FormSection title="Selección de Producto">
+                <SelectForm
+                    label="Selecciona un producto"
+                    name="producto"
+                    value={formData.producto_id}
+                    onChange={(e) => setFormData(prev => ({ ...prev, producto_id: e.target.value }))}
+                    required
+                    options={products}
+                />
+            </FormSection>
+
+            {/* Secciones de Email */}
+            {formData.sections.map((section, index) => (
+                <FormSection key={index} title={`Sección Email ${index + 1}`}>
+                    {/* Principal */}
+                    <ImageUpload
+                        label="Imagen Principal"
+                        description="Esta imagen aparece como encabezado de la sección"
+                        altValue=""
+                        onAltChange={() => { }}
+                        onFileChange={(file) => handleImageChange(index, "mainImage", file)}
+                        currentImage={getImagePreview(index, "mainImage")}
+                        showAltInput={false}
+                    />
+
+                    {/* Secundarias */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ImageUpload
+                            label="Imagen Secundaria 1"
+                            description="Primera imagen de apoyo"
+                            altValue=""
+                            onAltChange={() => { }}
+                            onFileChange={(file) => handleImageChange(index, "secondaryImage1", file)}
+                            currentImage={getImagePreview(index, "secondaryImage1")}
+                            showAltInput={false}
+                        />
+
+                        <ImageUpload
+                            label="Imagen Secundaria 2"
+                            description="Segunda imagen de apoyo"
+                            altValue=""
+                            onAltChange={() => { }}
+                            onFileChange={(file) => handleImageChange(index, "secondaryImage2", file)}
+                            currentImage={getImagePreview(index, "secondaryImage2")}
+                            showAltInput={false}
+                        />
+                    </div>
+
+                    <InputAdmin
+                        label="Título"
+                        name={`title-${index}`}
+                        value={section.title}
+                        onChange={(e) => handleInputChange(index, "title", e.target.value)}
+                        placeholder="Ej. Descubre nuestros productos"
+                        helperText="Título principal de la sección del email."
+                        maxLength={150}
+                    />
+
+                    <TextareaAdmin
+                        label="Párrafo"
+                        name={`paragraph-${index}`}
+                        value={section.paragraph}
+                        onChange={(e) => handleInputChange(index, "paragraph", e.target.value)}
+                        placeholder="Describe el contenido de esta sección del email..."
+                        helperText="Descripción o contenido de la sección."
+                        rows={4}
+                    />
+                </FormSection>
+            ))}
+
+            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200">
+                <Button
+                    type="submit"
+                    variant="primary"
+                    size="md"
+                    className="flex-1"
+                    disabled={isLoading || isSaving || isActivating}
+                >
+                    {isSaving ? (
+                        <div className="flex items-center justify-center gap-2">
+                            <Loader size="sm" color="border-white" />
+                            <span>Guardando...</span>
+                        </div>
+                    ) : (
+                        "Guardar Plantilla"
+                    )}
+                </Button>
+
+                <Button
+                    type="button"
+                    variant="primary"
+                    size="md"
+                    className="flex-1"
+                    onClick={handleActivateCampaign}
+                    disabled={isLoading || isSaving || isActivating}
+                >
+                    {isActivating ? (
+                        <div className="flex items-center justify-center gap-2">
+                            <Loader size="sm" color="border-white" />
+                            <span>Activando...</span>
+                        </div>
+                    ) : (
+                        "Activar Campaña"
+                    )}
+                </Button>
+
+                <Button
+                    type="button"
+                    variant="tertiary"
+                    size="md"
+                    className="flex-1"
+                    onClick={onClose}
+                    disabled={isLoading || isSaving || isActivating}
+                >
+                    Cancelar
+                </Button>
+            </div>
+        </form>
+    );
+}

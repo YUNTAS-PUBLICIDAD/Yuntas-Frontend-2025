@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from "react";
-import { Lead, LeadInput } from "@/types/admin/lead";
+import { Lead, LeadInput, LeadServiceResponse } from "@/types/admin/lead";
 import {
     getLeadsService,
     createLeadService,
@@ -14,9 +14,9 @@ interface UseLeadsReturn {
     isLoading: boolean;
     error: string | null;
     getLeads: (perPage?: number) => Promise<void>;
-    createLead: (lead: LeadInput) => Promise<boolean>;
-    updateLead: (id: number, lead: LeadInput) => Promise<boolean>;
-    deleteLead: (id: number) => Promise<boolean>;
+    createLead: (lead: LeadInput) => Promise<LeadServiceResponse<Lead>>;
+    updateLead: (id: number, lead: LeadInput) => Promise<LeadServiceResponse<Lead>>;
+    deleteLead: (id: number) => Promise<LeadServiceResponse>;
     clearError: () => void;
 }
 
@@ -37,39 +37,34 @@ export function useLeads(): UseLeadsReturn {
             setLeads(result.data);
         } else {
             setError(result.message || 'Error desconocido');
+            setLeads([]);
         }
 
         setIsLoading(false);
     }, []);
 
-    const updateLead = useCallback(async (id: number, leadData: LeadInput): Promise<boolean> => {
+    const updateLead = useCallback(async (id: number, leadData: LeadInput): Promise<LeadServiceResponse<Lead>> => {
         setIsLoading(true);
         setError(null);
 
         const result = await updateLeadService(id, leadData);
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
 
         setIsLoading(false);
-        return result.success;
+        return result;
 
     }, []);
 
-    const createLead = useCallback(async (leadData: LeadInput): Promise<boolean> => {
+    const createLead = useCallback(async (leadData: LeadInput): Promise<LeadServiceResponse<Lead>> => {
         setIsLoading(true);
         setError(null);
 
         const result = await createLeadService(leadData);
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
-    const deleteLead = useCallback(async (id: number): Promise<boolean> => {
+    const deleteLead = useCallback(async (id: number): Promise<LeadServiceResponse> => {
         setIsLoading(true);
         setError(null);
 
@@ -80,7 +75,7 @@ export function useLeads(): UseLeadsReturn {
         }
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
     return {

@@ -41,6 +41,14 @@ export const API_ENDPOINTS = {
       UPDATE: (id: number) => `/admin/productos/${id}`,
       DELETE: (id: number) => `/admin/productos/${id}`,
     },
+    CAMPANA: {
+      EMAILS: {
+        SAVE: '/admin/email-productos', // para crear y actualizar
+        GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/email-productos/?producto_id=${product_id}`,
+        SEND: '/admin/email-campanas/enviar',
+      },
+    },
+
     CATEGORIES: {
       GET_ALL: '/admin/categorias',
       CREATE: '/admin/categorias',

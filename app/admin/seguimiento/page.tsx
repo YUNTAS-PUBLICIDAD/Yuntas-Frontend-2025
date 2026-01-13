@@ -44,37 +44,37 @@ export default function SeguimientoPage() {
             delete formData.product_id
         }
 
-        const success = await createLead(formData);
-        if (success) {
+        const response = await createLead(formData);
+        if (response.success) {
             handleCloseModal();
             await getLeads(200);
             alert("Cliente creado");
         } else {
-            alert(error);
+            alert(response.message);
         }
     }
 
     const handleEditLead = async (formData: LeadInput) => {
         if (!selectedLead) return;
-        const success = await updateLead(selectedLead.id!, formData);
-        if (success) {
+        const response = await updateLead(selectedLead.id!, formData);
+        if (response.success) {
             handleCloseModal();
             await getLeads(200);
             alert("Cliente actualizado");
         } else {
-            alert(error);
+            alert(response.message);
         }
     }
 
     const handleDeleteLead = async (client: Lead) => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este cliente?");
         if (!confirmDelete) return;
-        const success = await deleteLead(client.id!);
-        if (success) {
+        const response = await deleteLead(client.id!);
+        if (response.success) {
             await getLeads(200);
             alert("Cliente eliminado");
         } else {
-            alert("Error al eliminar el cliente");
+            alert(response.message);
         }
     };
 

@@ -30,7 +30,6 @@ const Text: React.FC<TextProps> = ({
       : color;
   const classes = `${colorClass} ${className} ${variantClasses[variant]}`;
   
-  // se agrego div en lugar de p 
   return <div className={classes}>{children}</div>;
 };
 
