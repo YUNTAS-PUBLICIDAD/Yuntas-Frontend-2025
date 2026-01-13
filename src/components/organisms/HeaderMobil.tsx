@@ -45,7 +45,7 @@ const HeaderMobil = () => {
 
         <UserSection
           size="md"
-          color={!isScrolled ? "bg-white" : "bg-blue-900"}
+          
         />
       </header>
 
@@ -93,7 +93,7 @@ const HeaderMobil = () => {
           <hr className="my-6 border-white" />
 
           <div className="flex items-center gap-3">
-            <UserSection size="md" color="bg-transparent" />
+            <UserSection size="md"  />
             <div>
               <p className="text-sm font-semibold">BIENVENIDO</p>
               <p className="text-xs opacity-60">Administrador</p>
