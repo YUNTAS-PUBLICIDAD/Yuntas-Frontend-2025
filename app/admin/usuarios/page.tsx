@@ -237,9 +237,9 @@ export default function UsuariosPage() {
      
       <ActionButtonGroup
         buttons={[
-          { label: "CSV", onClick: onExportCSV },
-          { label: "EXCEL", onClick: onExportExcel },
-          { label: "PDF", onClick: onExportPDF },
+          { label: "EXPORTAR A CSV", onClick: onExportCSV },
+          { label: "EXPORTAR A EXCEL", onClick: onExportExcel },
+          { label: "EXPORTAR A PDF", onClick: onExportPDF },
           { label: "IMPRIMIR", onClick: onPrint },
         ]}
         className="mb-4 mt-4"

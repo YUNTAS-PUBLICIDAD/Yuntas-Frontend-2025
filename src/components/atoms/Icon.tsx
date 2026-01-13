@@ -7,6 +7,7 @@ interface IconProps {
   className?: string;
   href?: string;
   label?: string;
+  target?: string;
 }
 
 const sizeMap = {
@@ -17,19 +18,8 @@ const sizeMap = {
   "2xl": "h-24 w-24",
 };
 
-const Icon: React.FC<IconProps> = ({
-  children,
-  size = "md",
-  bgColor = "bg-blue-900",
-  className = "",
-  href,
-  label,
-}) => {
-  const sizeClass =
-    typeof size === "string"
-      ? sizeMap[size] || ""
-      : `h-[${size}px] w-[${size}px]`;
-
+const Icon: React.FC<IconProps> = ({ children, size = "md", bgColor = "bg-blue-900", className = "", href, label,target, }) => {
+  const sizeClass = typeof size === "string" ? sizeMap[size] || "" : `h-[${size}px] w-[${size}px]`;
   const content = (
     <div className={`${bgColor} rounded-full flex items-center justify-center p-2 ${sizeClass} ${className}`}>
       {children}
@@ -38,7 +28,7 @@ const Icon: React.FC<IconProps> = ({
 
   if (href) {
     return (
-      <a href={href} aria-label={label}>
+      <a href={href} target={target} aria-label={label} className="hover:text-blue-300">
         {content}
       </a>
     );

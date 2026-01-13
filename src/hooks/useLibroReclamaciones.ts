@@ -86,14 +86,14 @@ export function useLibroReclamaciones() {
         if (!payload.purchase_date) delete payload.purchase_date;
         if (!payload.claimed_amount) delete payload.claimed_amount;
 
-        const success = await createReclamo(payload);
+        const response = await createReclamo(payload);
 
-        if (success) {
+        if (response.success) {
             toast.success("Reclamo enviado correctamente");
             setFormData(defaultFormData);
             return true;
         } else {
-            toast.error("Error al enviar el reclamo");
+            toast.error(response.message || "Error al enviar el reclamo");
             return false;
         }
     };
