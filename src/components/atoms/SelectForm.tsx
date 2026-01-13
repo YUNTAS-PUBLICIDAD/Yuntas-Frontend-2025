@@ -11,7 +11,7 @@ interface SelectFormProps {
     value: string | number;
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     required?: boolean;
-    options: string[] | Producto[]
+    options: string[] | Record<string, any>[];
 }
 
 export default function SelectForm({
