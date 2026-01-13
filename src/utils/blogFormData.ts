@@ -66,7 +66,8 @@ export function buildBlogFormData(data: BlogInput): FormData {
   // Beneficios
   if (data.beneficios && data.beneficios.length > 0) {
     data.beneficios
-      .filter(b => b.trim() !== "")
+      
+      .filter(b => b?.trim?.() !== "")
       .forEach((b, i) => {
         formData.append(`beneficios[${i}]`, b);
       });
