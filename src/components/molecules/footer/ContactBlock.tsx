@@ -18,19 +18,19 @@ const ContactBlock = () => (
 
     <div className="flex gap-3 mt-2">
 
-      <Icon href="https://www.instagram.com/yuntaspublicidad/" label="Instagram" size="lg" bgColor="bg-transparent">
+      <Icon href="https://www.instagram.com/yuntaspublicidad/" target="_blank" label="Instagram" size="lg" bgColor="bg-transparent">
         <FaInstagram className="text-2xl" />
       </Icon>
 
-      <Icon href="https://www.facebook.com/kp.yuntas.1/" label="Facebook 1" size="lg" bgColor="bg-transparent">
+      <Icon href="https://www.facebook.com/kp.yuntas.1/" target="_blank" label="Facebook 1" size="lg" bgColor="bg-transparent">
         <FaFacebook className="text-2xl" />
       </Icon>
 
-      <Icon href="https://www.tiktok.com/@yuntaspublicidad" label="TikTok" size="lg" bgColor="bg-transparent">
+      <Icon href="https://www.tiktok.com/@yuntaspublicidad" target="_blank" label="TikTok" size="lg" bgColor="bg-transparent">
         <FaTiktok className="text-2xl" />
       </Icon>
 
-      <Icon href="https://www.youtube.com/@yuntaspublicidad" label="YouTube" size="lg" bgColor="bg-transparent">
+      <Icon href="https://www.youtube.com/@yuntaspublicidad" target="_blank" label="YouTube" size="lg" bgColor="bg-transparent">
 
         <FaYoutube className="text-2xl" />
       </Icon>
