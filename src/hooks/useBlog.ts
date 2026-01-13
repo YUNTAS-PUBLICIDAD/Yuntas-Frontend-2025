@@ -31,7 +31,7 @@ export function useBlogs() {
     setCurrentPerPage(perPage);
 
     const result = await getBlogsService(perPage);
-    console.log(result)
+    
     if (result.success && result.data) {
       setBlogs(result.data.data ?? []);
       setMeta(result.meta ?? null);
@@ -80,28 +80,50 @@ export function useBlogs() {
      setIsLoading(false);
      return null;
    }
+
   const createBlog = async (data: BlogInput) => {
+    // Verificar que hay 3 beneficios escritos
+    const beneficiosValidos = data.beneficios?.filter(b => b && b.trim() !== "") || [];
+
+    if (beneficiosValidos.length < 3) {
+      const msg = "⚠️ Por favor, completa los 3 beneficios obligatorios antes de guardar.";
+      alert(msg);   
+      setError(msg); 
+      return false;
+    }
+
+    // Si pasa la validación, procedemos a guardar
     setIsLoading(true);
     setError(null);
-   console.log("📤 DATOS ORIGINALES:", data);
+    console.log("📤 DATOS ORIGINALES:", data);
   
-  const formData = buildBlogFormData(data);
+    const formData = buildBlogFormData(data);
   
-  console.log("📦 FORMDATA CONSTRUIDO:");
-  for (let [key, value] of formData.entries()) {
-    console.log(`  ${key}:`, value);
-  }
+    console.log("📦 FORMDATA CONSTRUIDO:");
 
-  const result = await createBlogService(formData);
-  
-  console.log("📥 RESPUESTA:", result);
+
+    const result = await createBlogService(formData);
+    
+    console.log("📥 RESPUESTA:", result);
 
     if (!result.success) setError(result.message ?? 'Error desconocido');
     setIsLoading(false);
     return result.success;
   };
 
+
   const updateBlog = async (id: number, data: BlogInput) => {
+    
+    const beneficiosValidos = data.beneficios?.filter(b => b && b.trim() !== "") || [];
+
+    if (beneficiosValidos.length < 3) {
+      const msg = "⚠️  Debes mantener los 3 beneficios obligatorios.";
+      alert(msg);
+      setError(msg);
+      return false; 
+    }
+
+    
     setIsLoading(true);
     setError(null);
 
