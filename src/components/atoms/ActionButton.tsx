@@ -13,9 +13,20 @@ export default function ActionButton({
     variant = "primary",
     bgColor
 }: ActionButtonProps) {
+
+    // 👉 Si viene bgColor, debe tener prioridad TOTAL
+    const finalClasses = bgColor ?? "";
+
     return (
-        <Button size="sm" variant={variant} className={`py-1 ${bgColor ? bgColor : ""}`} onClick={onClick}>
-            <p className="font-semibold text-xl">{children}</p>
+        <Button
+            size="sm"
+            variant={variant}
+            onClick={onClick}
+            className={`py-1 ${finalClasses}`}
+        >
+            <p className="font-semibold text-xl">
+                {children}
+            </p>
         </Button>
     );
 }

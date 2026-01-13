@@ -1,13 +1,12 @@
-
 import React from "react";
-import { FaTrash, FaEdit, FaCheck, FaEye } from "react-icons/fa"; 
+import { FaTrash, FaEdit, FaCheck, FaEye } from "react-icons/fa";
 
 export interface TableAction {
   type: "delete" | "edit" | "view" | "approve" | "custom";
-  label?: string; 
+  label?: string;
   onClick: (id: string | number) => void;
-  icon?: React.ReactNode; 
-  className?: string; 
+  icon?: React.ReactNode;
+  className?: string;
 }
 
 interface Column {
@@ -20,7 +19,7 @@ interface AdminTableProps {
   columns: Column[];
   data: Record<string, any>[];
   minRows?: number;
-  actions?: TableAction[]; 
+  actions?: TableAction[];
 }
 
 export default function AdminTable({
@@ -29,46 +28,63 @@ export default function AdminTable({
   minRows = 5,
   actions = [],
 }: AdminTableProps) {
-  
   const rows = [...data];
   while (rows.length < minRows) {
     rows.push({ _empty: true, id: `empty-${rows.length}` });
   }
 
   return (
-    <div className="w-full overflow-x-auto rounded-xl bg-white shadow-sm border border-gray-100">
+    <div className="w-full overflow-x-auto rounded-xl">
       <table className="w-full border-separate border-spacing-y-2 p-2">
         <thead>
           <tr>
             {columns.map((col) => (
               <th
                 key={col.key}
-                className="bg-[#0D1030] text-white font-semibold text-lg py-3 px-4 first:rounded-l-lg last:rounded-r-lg text-center whitespace-nowrap"
+                className="
+                  py-3 px-4 text-center text-lg font-semibold whitespace-nowrap
+                  first:rounded-l-lg last:rounded-r-lg
+                  bg-[#0D1030] text-white
+                  dark:bg-[#293296]
+                "
               >
                 {col.label}
               </th>
             ))}
             {actions.length > 0 && (
-              <th className="bg-[#0D1030] text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
+              <th
+                className="
+                  py-3 px-4 text-center text-lg font-semibold w-40
+                  rounded-r-lg
+                  bg-[#0D1030] text-white
+                  dark:bg-[#293296]
+                "
+              >
                 ACCIÓN
               </th>
             )}
           </tr>
         </thead>
+
         <tbody>
           {rows.map((row, index) => {
             const isEmpty = row._empty === true;
+
             return (
-              <tr
-                key={row.id || index}
-                className="group hover:bg-gray-50 transition-colors"
-              >
+              <tr key={row.id || index}>
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={`bg-[#F4F4F2] py-3 px-4 text-center h-14 whitespace-nowrap first:rounded-l-lg ${
-                      col.key === "id" ? "font-bold text-black" : "text-[#0D1030]"
-                    }`}
+                    className={`
+                      py-3 px-4 h-14 text-center whitespace-nowrap
+                      first:rounded-l-lg
+                      bg-gray-100
+                      ${
+                        col.key === "id"
+                          ? "font-bold text-black"
+                          : "text-[#0D1030]"
+                      }
+                    `}
                   >
                     {isEmpty
                       ? ""
@@ -77,17 +93,16 @@ export default function AdminTable({
                       : row[col.key]}
                   </td>
                 ))}
-                
-                {/* Action Column */}
+
                 {actions.length > 0 && (
-                  <td className="bg-[#F4F4F2] py-3 px-4 rounded-r-lg text-center h-14">
+                  <td className="py-3 px-4 h-14 rounded-r-lg bg-white text-center">
                     {!isEmpty && (
                       <div className="flex justify-center gap-2">
                         {actions.map((action, idx) => (
-                          <ActionButton 
-                            key={idx} 
-                            action={action} 
-                            id={row.id} 
+                          <ActionButton
+                            key={idx}
+                            action={action}
+                            id={row.id}
                           />
                         ))}
                       </div>
@@ -105,8 +120,8 @@ export default function AdminTable({
 
 const ActionButton = ({ action, id }: { action: TableAction; id: string | number }) => {
   let icon = action.icon;
-  let baseClass = "p-2 rounded-full hover:bg-gray-200 transition";
-  let colorClass = "text-gray-600";
+  let baseClass = "p-2 rounded-full transition";
+  let colorClass = "text-gray-600 hover:bg-gray-200";
 
   switch (action.type) {
     case "delete":
