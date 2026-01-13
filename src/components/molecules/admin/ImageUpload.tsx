@@ -12,6 +12,7 @@ interface ImageUploadProps {
     currentImage?: string | null;
     required?: boolean;
     onRemove?: () => void;
+    showAltInput?: boolean;
 }
 
 export default function ImageUpload({
@@ -22,7 +23,8 @@ export default function ImageUpload({
     onFileChange,
     currentImage,
     required = false,
-    onRemove
+    onRemove,
+    showAltInput = true,
 }: ImageUploadProps) {
     const [preview, setPreview] = useState<string | null>(currentImage || null);
     const [error, setError] = useState<string | null>(null);
@@ -128,13 +130,15 @@ export default function ImageUpload({
 
             <span className="text-gray-500 text-xs">Cada imagen debe pesar menos de 2 MB.</span>
 
-            <input
-                type="text"
-                value={altValue}
-                onChange={(e) => onAltChange(e.target.value)}
-                placeholder="Texto ALT para SEO"
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all"
-            />
+            {showAltInput && (
+                <input
+                    type="text"
+                    value={altValue}
+                    onChange={(e) => onAltChange(e.target.value)}
+                    placeholder="Texto ALT para SEO"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all"
+                />
+            )}
         </div>
     );
 }

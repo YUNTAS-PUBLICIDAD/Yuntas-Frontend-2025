@@ -42,14 +42,14 @@ export function useSolicitudInfo() {
             return false;
         }
 
-        const success = await createContacto(formData);
+        const response = await createContacto(formData);
 
-        if (success) {
+        if (response.success) {
             toast.success("Mensaje enviado");
             setFormData(defaultFormaData);
             return true;
         } else {
-            toast.error("Error al enviar el mensaje");
+            toast.error(response.message || "Error al enviar el mensaje");
             return false;
         }
     };

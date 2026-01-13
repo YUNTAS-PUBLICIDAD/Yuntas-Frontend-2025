@@ -33,13 +33,7 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
         };
 
     } catch (error: any) {
-        console.error("Error en Login:", error); 
-        if (error instanceof AxiosError) {
-            const errorMessage = error.response?.data?.message || "Credenciales incorrectas";
-            return { success: false, message: errorMessage };
-        }
-
-        return { success: false, message: "Error de conexión con el servidor." };
+        return { success: false, message: error.message };
     }
 }
 
@@ -55,8 +49,8 @@ export async function logoutService(): Promise<LoginActionResponse> {
                 }
             });
         }
-    } catch (error) {
-        console.error("Error al cerrar sesión en backend", error);
+    } catch (error: any) {
+        return { success: false, message: error.message };
     } finally {
        
         removeToken();
