@@ -99,7 +99,7 @@ export default function ProductosPage() {
         },
         {
             label: "IMPRIMIR",
-            onClick: printTable,
+            onClick: () => printTable(productos),
             backgraund: "#5bc5c7"
         },
     ];
