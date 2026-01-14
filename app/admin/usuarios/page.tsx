@@ -4,274 +4,139 @@ import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
-import AddUserForm from "@/components/molecules/admin/AddUserForm";
-import EditUserForm from "@/components/organisms/admin/EditUserForm";
+import UserForm from "@/components/molecules/admin/users/UserForm";
+import { useUsers } from "@/hooks/useUsers";
 
-import { UserData, NewUserData } from "@/types/admin";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportTablePDF } from "@/utils/Export/exportTablePDF";
+import { User, UserInput } from "@/types/admin/user";
+import Pagination from "@/components/molecules/Pagination";
 
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "name", label: "NOMBRE" },
-  { key: "email", label: "EMAIL" },
+    { key: "id", label: "ID" },
+    { key: "name", label: "NOMBRE" },
+    { key: "email", label: "EMAIL" },
+    { key: "role_name", label: "ROL" },
+    { key: "created_at", label: "FECHA"}
 ];
 
+export default function UsuariosPage() {
+    const [datosPaginados, setDatosPaginados] = useState<User[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-const getToken = () => {
-    if (typeof window === 'undefined') return null;
+    const { users, getUsers, createUser, updateUser, deleteUser, isLoading, error } = useUsers();
 
-    let token = localStorage.getItem("token") || localStorage.getItem("auth_token");
-    
-    if (!token) {
-        const match = document.cookie.split('; ').find(row => row.startsWith('auth_token='));
-        if (match) {
-            token = match.split('=')[1];
+    useEffect(() => {
+        getUsers();
+    }, []);
+
+    const handleCreateUsuario = async (formData: UserInput) => {
+        const result = await createUser(formData);
+        if (result.success) {
+            handleCloseModal();
+            await getUsers();
+            alert("Usuario creado");
+        } else {
+            alert(result.message);
         }
     }
 
-    if (!token) return null;
-    
-    // Limpia comillas si existen por si acaso
-    return token.replace(/"/g, '');
-};
-
-export default function UsuariosPage() {
-  const [users, setUsers] = useState<UserData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
-
-  // Cargar usuarios al iniciar
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const token = getToken();
-        
-        if (!token) {
-            console.error("⛔ No hay token disponible (ni en Storage ni en Cookies)");
-            setLoading(false);
-            return;
-        }
-
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/admin/users`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) {
-            if (res.status === 401) {
-                console.error("⛔ Error 401: Token inválido o expirado.");
-            }
-            throw new Error(`Error ${res.status}`);
-        }
-
-        const json = await res.json();
-       
-        setUsers(Array.isArray(json.data) ? json.data : json.data?.data || []);
-      } catch (e) {
-        console.error("Error cargando usuarios:", e);
-      } finally {
-        setLoading(false);
-      }
+    const handleEditClick = (usuario: User) => {
+        setSelectedUser(usuario);
+        setIsModalOpen(true);
     };
 
-    fetchUsers();
-  }, []);
+    const handleEditUsuario = async (formData: UserInput) => {
+        if (!selectedUser) return;
 
-  //  Funciones de Exportación
-  const onExportCSV = () => exportCSV(users, "usuarios");
-  const onExportExcel = () => exportExcel(users, "usuarios");
-  const onExportPDF = () => exportTablePDF(users, "Reporte de Usuarios", columns);
-  const onPrint = () => exportTablePDF(users, "Reporte de Usuarios", columns);
-
-  // Eliminar Usuario
-  const onDelete = async (user: UserData) => {
-    if (!confirm(`¿Estás seguro de eliminar a ${user.name}?`)) return;
-
-    try {
-      const token = getToken();
-      if (!token) {
-          alert("Error de autenticación: No hay token");
-          return;
-      }
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${user.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+        const result = await updateUser(selectedUser.id!, formData);
+        if (result.success) {
+            handleCloseModal();
+            await getUsers();
+            alert("Usuario actualizado");
+        } else {
+            alert(result.message);
         }
-      );
-
-      if (!res.ok) throw new Error("Error al eliminar");
-      
-      // Actualizar estado local eliminando el usuario
-      setUsers(prev => prev.filter(u => u.id !== user.id));
-      alert("Usuario eliminado correctamente");
-
-    } catch (e) {
-      console.error(e);
-      alert("No se pudo eliminar el usuario");
     }
-  };
 
-  // Abrir Modal de Edición
-  const onEdit = (user: UserData) => {
-    setSelectedUser(user);
-    setIsEditModalOpen(true);
-  };
-
-  // Guardar Edición de Usuario
-  const onEditUserSave = async (updated: UserData) => {
-    try {
-      const token = getToken();
-      if (!token) {
-          alert("Error de autenticación");
-          return;
-      }
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${updated.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: updated.name,
-            email: updated.email,
-            
-          }),
+    const handleDeleteUsuario = async (usuario: User) => {
+        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
+        if (!confirmDelete) return;
+        const result = await deleteUser(usuario.id!);
+        if (result.success) {
+            await getUsers();
+            alert("Usuario eliminado");
+        } else {
+            alert(result.message);
         }
-      );
+    };
 
-      if (!res.ok) {
-        throw new Error("Error al actualizar");
-      }
+    const handleCloseModal = () => {
+        setSelectedUser(null);
+        setIsModalOpen(false);
+    };
 
-      const json = await res.json();
-      const updatedData = json.data || json;
+    const exportButtons = [
+        { label: "EXPORTAR A CSV", onClick: () => exportCSV(users, "usuarios") },
+        { label: "EXPORTAR A EXCEL", onClick: () => exportExcel(users, "usuarios") },
+        { label: "EXPORTAR A PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns) },
+        { label: "IMPRIMIR", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns) },
+    ];
 
-      // Actualizar lista local
-      setUsers(prev =>
-        prev.map(u => (u.id === updated.id ? updatedData : u))
-      );
-      
-      setIsEditModalOpen(false);
-      alert("Usuario actualizado correctamente");
-
-    } catch (e) {
-      console.error(e);
-      alert("Error al actualizar usuario");
+    if (isLoading && users.length === 0) {
+        return <div className="p-10 text-center animate-pulse">Cargando usuarios...</div>;
     }
-  };
 
-  //  Agregar Nuevo Usuario
-  const onAddUserSubmit = async (data: NewUserData) => {
-    try {
-      const token = getToken();
-      
-      if (!token) {
-          alert("No estás autenticado. Cierra sesión e ingresa de nuevo.");
-          return;
-      }
+    return (
+        <div className="p-4">
+            <div className="mb-4 no-print">
+                <ActionButtonGroup buttons={exportButtons} />
+            </div>
 
-     
-      const payload = {
-        ...data,
-        password_confirmation: data.password 
-      };
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
+            )}
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/users`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            Authorization: `Bearer ${token}`, 
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+            <AdminTable
+                columns={columns}
+                data={datosPaginados}
+                minRows={5}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteUsuario}
+            />
 
-      if (!res.ok) {
-          const errorData = await res.json().catch(() => null);
-          const message = errorData?.message || `Error del servidor: ${res.status}`;
-          throw new Error(message);
-      }
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    pageSize={10}
+                    items={users}
+                    setProductosPaginados={setDatosPaginados}
+                />
+            </div>
 
-      const json = await res.json();
-      const newUser = json.data || json;
+            <div className="mt-6 flex justify-start">
+                <ActionButtonGroup buttons={[{
+                    label: "Añadir Usuario",
+                    onClick: () => setIsModalOpen(true),
+                    variant: "tertiary"
+                }]} />
+            </div>
 
-      // Agregar a la lista local
-      setUsers(prev => [newUser, ...prev]); 
-      setIsAddModalOpen(false);
-      alert("Usuario creado correctamente");
-
-    } catch (error: any) {
-      console.error("Error al crear usuario:", error);
-      alert(error.message);
-    }
-  };
-
-  if (loading) {
-    return <p className="text-center mt-10 text-gray-500">Cargando usuarios...</p>;
-  }
-
-  return (
-    <div>
-     
-      <ActionButtonGroup
-        buttons={[
-          { label: "EXPORTAR A CSV", onClick: onExportCSV },
-          { label: "EXPORTAR A EXCEL", onClick: onExportExcel },
-          { label: "EXPORTAR A PDF", onClick: onExportPDF },
-          { label: "IMPRIMIR", onClick: onPrint },
-        ]}
-        className="mb-4 mt-4"
-      />
-
-     
-      <AdminTable
-        columns={columns}
-        data={users}
-        minRows={5}
-        onDelete={onDelete}
-        onEdit={onEdit}
-      />
-
-   
-      <ActionButtonGroup
-        buttons={[{ label: "Agregar Usuario", onClick: () => setIsAddModalOpen(true), variant: "tertiary" }]}
-        className="mt-4"
-      />
-
-   
-      <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="INGRESAR USUARIO">
-        <AddUserForm onSubmit={onAddUserSubmit} onCancel={() => setIsAddModalOpen(false)} />
-      </Modal>
-
-     
-      <EditUserForm
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        user={selectedUser}
-        onSave={onEditUserSave}
-      />
-    </div>
-  );
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedUser ? "Añadir Usuario" : "Editar Usuario"}
+            >
+                <UserForm
+                    onSubmit={!selectedUser ? handleCreateUsuario : handleEditUsuario}
+                    onCancel={handleCloseModal}
+                    isLoading={isLoading}
+                    initialData={selectedUser}
+                />
+            </Modal>
+        </div>
+    );
 }

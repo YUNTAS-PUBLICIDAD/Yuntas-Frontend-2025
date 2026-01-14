@@ -8,7 +8,7 @@ export interface emailPlantilla {
     imagenes_secundarias: string[] | null;
 }
 
-export interface EmailSectionData {
+export interface EmailSectionInput {
     mainImage: File | string | null;
     secondaryImage1: File | string | null;
     secondaryImage2: File | string | null;
@@ -19,9 +19,9 @@ export interface EmailSectionData {
     paragraph: string;
 }
 
-export interface EmailFormData {
+export interface EmailFormInput {
     producto_id: string;
-    sections: EmailSectionData[];
+    sections: EmailSectionInput[];
 }
 
 export interface emailPlantillaServiceResponse<T> {

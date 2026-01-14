@@ -30,11 +30,10 @@ export const API_ENDPOINTS = {
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
-      GET_ALL: '/users',
-      CREATE: '/users',
-      UPDATE: (id: number) => `/users/${id}`,
-      DELETE: (id: number) => `/users/${id}`,
-      ASSIGN_ROLE: (id: number) => `/users/${id}/role`,
+      GET_ALL: '/admin/users',
+      CREATE: '/admin/users',
+      UPDATE: (id: number) => `/admin/users/${id}`,
+      DELETE: (id: number) => `/admin/users/${id}`,
     },
     PRODUCTS: {
       CREATE: '/admin/productos',
@@ -47,6 +46,10 @@ export const API_ENDPOINTS = {
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/email-productos/?producto_id=${product_id}`,
         SEND: '/admin/email-campanas/enviar',
       },
+      WHATSAPP: {
+        SAVE: '/admin/whatsapp-productos', // para crear y actualizar
+        GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/whatsapp-productos/?producto_id=${product_id}`,
+      }
     },
 
     CATEGORIES: {
