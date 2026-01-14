@@ -46,6 +46,10 @@ export const API_ENDPOINTS = {
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/email-productos/?producto_id=${product_id}`,
         SEND: '/admin/email-campanas/enviar',
       },
+      WHATSAPP: {
+        SAVE: '/admin/whatsapp-productos', // para crear y actualizar
+        GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/whatsapp-productos/?producto_id=${product_id}`,
+      }
     },
 
     CATEGORIES: {

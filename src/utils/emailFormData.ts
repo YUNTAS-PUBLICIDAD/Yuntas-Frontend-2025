@@ -1,6 +1,6 @@
-import { EmailSectionData, emailPlantilla } from "@/types/admin/emailPlantilla";
+import { EmailSectionInput, emailPlantilla } from "@/types/admin/emailPlantilla";
 
-export const buildEmailFormData = (productId: string, section: EmailSectionData, paso: number): FormData => {
+export const buildEmailFormData = (productId: string, section: EmailSectionInput, paso: number): FormData => {
     const formData = new FormData();
 
     formData.append("producto_id", productId);
@@ -24,7 +24,7 @@ export const buildEmailFormData = (productId: string, section: EmailSectionData,
     return formData;
 };
 
-export const createEmptySection = (): EmailSectionData => ({
+export const createEmptySection = (): EmailSectionInput => ({
     mainImage: null,
     secondaryImage1: null,
     secondaryImage2: null,
@@ -35,10 +35,10 @@ export const createEmptySection = (): EmailSectionData => ({
     paragraph: "",
 });
 
-export const parseEmailPlantillaData = (emailPlantillas: emailPlantilla[]): EmailSectionData[] => {
+export const parseEmailPlantillaData = (emailPlantillas: emailPlantilla[]): EmailSectionInput[] => {
 
     // siempre se crean 3 secciones
-    const sections: EmailSectionData[] = [
+    const sections: EmailSectionInput[] = [
         createEmptySection(),
         createEmptySection(),
         createEmptySection(),
@@ -71,7 +71,7 @@ export const parseEmailPlantillaData = (emailPlantillas: emailPlantilla[]): Emai
 };
 
 // validar si ina seccion esta vacia
-export const isSectionEmpty = (section: EmailSectionData): boolean => {
+export const isSectionEmpty = (section: EmailSectionInput): boolean => {
     return !section.title.trim() && 
            !section.paragraph.trim() && 
            !section.mainImage &&
@@ -79,7 +79,7 @@ export const isSectionEmpty = (section: EmailSectionData): boolean => {
 };
 
 // validar si una seccion esta completa
-export const isSectionComplete = (section: EmailSectionData): boolean => {
+export const isSectionComplete = (section: EmailSectionInput): boolean => {
     const hasTitle = section.title.trim().length > 0;
     const hasParagraph = section.paragraph.trim().length > 0;
     const hasMainImage = section.mainImage instanceof File || 

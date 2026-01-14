@@ -1,7 +1,7 @@
 import { api, API_ENDPOINTS } from "@/config";
 import {
     emailPlantilla,
-    EmailFormData,
+    EmailFormInput,
     emailPlantillaServiceResponse,
     sendEmailCampanaResponse,
 } from "@/types/admin/emailPlantilla";
@@ -48,7 +48,7 @@ export async function getEmailPlantillaByProductService(product_id: number): Pro
 }
 
 // para crear y actualizar una plantilla
-export async function saveEmailPlantillaService(emailData: EmailFormData): Promise<emailPlantillaServiceResponse<emailPlantilla>> {
+export async function saveEmailPlantillaService(emailData: EmailFormInput): Promise<emailPlantillaServiceResponse<emailPlantilla>> {
     try {
         const token = getToken();
 

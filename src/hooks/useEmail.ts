@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import {
     emailPlantilla,
-    EmailFormData,
+    EmailFormInput,
     emailPlantillaServiceResponse,
     sendEmailCampanaResponse,
 } from "@/types/admin/emailPlantilla";
@@ -20,7 +20,7 @@ interface UseEmailReturn {
     isActivating: boolean;
     error: string | null;
     getEmailPlantillas: (product_id: number) => Promise<void>;
-    saveEmailPlantilla: (emailData: EmailFormData) => Promise<emailPlantillaServiceResponse<emailPlantilla>>;
+    saveEmailPlantilla: (emailData: EmailFormInput) => Promise<emailPlantillaServiceResponse<emailPlantilla>>;
     sendEmailCampana: (product_id: number) => Promise<sendEmailCampanaResponse>;
     clearError: () => void;
     clearEmailPlantillas: () => void;
@@ -51,7 +51,7 @@ export function useEmail(): UseEmailReturn {
         setIsLoading(false);
     }, []);
 
-    const saveEmailPlantilla = useCallback(async (emailData: EmailFormData): Promise<emailPlantillaServiceResponse<emailPlantilla>> => {
+    const saveEmailPlantilla = useCallback(async (emailData: EmailFormInput): Promise<emailPlantillaServiceResponse<emailPlantilla>> => {
         setIsSaving(true);
         setError(null);
 
