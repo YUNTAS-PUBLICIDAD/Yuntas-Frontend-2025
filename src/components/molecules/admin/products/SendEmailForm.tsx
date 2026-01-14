@@ -9,7 +9,7 @@ import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
 import Loader from "@/components/atoms/Loader";
 import SelectForm from "@/components/atoms/SelectForm";
 import { Producto } from "@/types/admin/producto";
-import { EmailFormData, EmailSectionData } from "@/types/admin/emailPlantilla";
+import { EmailFormInput, EmailSectionInput } from "@/types/admin/emailPlantilla";
 import { useEmail } from "@/hooks/useEmail";
 import { parseEmailPlantillaData, createEmptySection, isSectionEmpty, isSectionComplete } from "@/utils/emailFormData";
 
@@ -18,7 +18,7 @@ interface SendEmailFormProps {
     products: Producto[];
 }
 
-const defaultFormData: EmailFormData = {
+const defaultFormData: EmailFormInput = {
     producto_id: "",
     sections: [
         createEmptySection(),
@@ -36,10 +36,11 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         isLoading,
         isSaving,
         isActivating,
-        clearEmailPlantillas
+        clearEmailPlantillas,
+        error,
     } = useEmail();
 
-    const [formData, setFormData] = useState<EmailFormData>(defaultFormData);
+    const [formData, setFormData] = useState<EmailFormInput>(defaultFormData);
     const [imagePreviews, setImagePreviews] = useState<Map<string, string>>(new Map());
 
     // se carga la plantilla cuando cambia el producto
@@ -100,7 +101,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
             // Si file es null, entonces se esta eliminando la imagen
             if (file === null) {
                 currentSection[field] = null;
-                const previewField = `${field}Preview` as keyof EmailSectionData;
+                const previewField = `${field}Preview` as keyof EmailSectionInput;
                 currentSection[previewField] = "" as any;
             } else {
                 // nueva imagen
@@ -146,7 +147,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
             return image;
         }
 
-        const previewField = `${field}Preview` as keyof EmailSectionData;
+        const previewField = `${field}Preview` as keyof EmailSectionInput;
         return (section[previewField] as string) || null;
     };
 
@@ -204,7 +205,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
             return;
         }
 
-        const dataToSave: EmailFormData = {
+        const dataToSave: EmailFormInput = {
             producto_id: formData.producto_id,
             sections: sectionsToSave
         };
@@ -238,8 +239,8 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         const result = await sendEmailCampana(Number(formData.producto_id));
 
         if (result.success) {
-            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nCorreos: ${result.total_correos}`);
             onClose();
+            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nCorreos: ${result.total_correos}`);
         } else {
             alert(result.message || "Error enviando campaña");
         }
@@ -257,6 +258,8 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
                     options={products}
                 />
             </FormSection>
+
+            {error && (<span className="text-red-500 text-sm">{error}</span>)}
 
             {/* Secciones de Email */}
             {formData.sections.map((section, index) => (
