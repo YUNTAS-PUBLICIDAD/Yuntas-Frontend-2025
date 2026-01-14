@@ -30,9 +30,9 @@ export default function ActionButtonGroup({
         case "secondary":
             return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
         case "primary":
-            return "!bg-[#00031E] text-white hover:opacity-90 dark:!bg-[#293296]";
+            return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
         default:
-            return "!bg-[#00031E] text-white hover:opacity-90 dark:!bg-[#293296]";
+            return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
     }
 };
 
