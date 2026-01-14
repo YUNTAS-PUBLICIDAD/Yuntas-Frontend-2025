@@ -79,8 +79,8 @@ export default function SidebarSection() {
                 "
             >
                 <div className="flex flex-col items-center text-xl">
-                    <div className="mb-4 bg-white p-3 rounded-full shadow-sm">
-                        <UserSection size="lg" />
+                    <div className="mb-4  p-3 rounded-full shadow-sm">
+                        <UserSection size="lg" enableDarkMode />
                     </div>
                     <p className="font-bold">Bienvenido</p>
                     <p className="font-medium">Administrador</p>
