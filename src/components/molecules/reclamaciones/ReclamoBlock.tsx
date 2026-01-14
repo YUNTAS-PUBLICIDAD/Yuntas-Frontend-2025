@@ -36,6 +36,7 @@ const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
                 textLabel="Productos"
                 options={productos || []}
                 name="product_id"
+                value={formData.product_id || ""}
                 onChange={handleChange}
             />
             <TextTarea
