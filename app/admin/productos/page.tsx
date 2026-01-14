@@ -99,7 +99,7 @@ export default function ProductosPage() {
         },
         {
             label: "IMPRIMIR",
-            onClick: printTable,
+            onClick: () => printTable(productos),
             backgraund: "#5bc5c7"
         },
     ];
@@ -125,7 +125,7 @@ export default function ProductosPage() {
 
                 <ActionButtonGroup buttons={[{
                     label: "Envio de Whatsapp",
-                    //onClick: () => setIsWhatsappModalOpen(true),
+                    onClick: () => setIsWhatsappModalOpen(true),
                     variant: "success"
                 }]} />
             </div>
@@ -184,19 +184,17 @@ export default function ProductosPage() {
                     onClose={() => setIsEmailModalOpen(false)}
                 />
             </Modal>
-            
+
             <Modal
                 isOpen={isWhatsappModalOpen}
                 onClose={() => setIsWhatsappModalOpen(false)}
                 title="Envio de Whatsapp"
                 size="lg"
             >
-                <div className="max-h-[75vh] overflow-y-auto p-1 pr-2 custom-scrollbar">
-                    <SendWhatsappForm
-                        products={productos}
-                        onClose={() => setIsWhatsappModalOpen(false)}
-                    />
-                </div>
+                <SendWhatsappForm
+                    products={productos}
+                    onClose={() => setIsWhatsappModalOpen(false)}
+                />
             </Modal>
         </div>
     )
