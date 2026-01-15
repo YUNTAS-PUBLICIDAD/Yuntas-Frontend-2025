@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       transition-colors duration-300
     ">
       {/* Encabezado */}
-      <Encabezado variant="azul">SECCIÓN PRINCIPAL</Encabezado>
+      <Encabezado variant="azul">{title}</Encabezado>
 
       {/* Contenido */}
       <div className="
