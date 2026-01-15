@@ -7,9 +7,9 @@ interface ActionButtonProps {
     bgColor?: string;
 }
 
-export default function ActionButton({ 
-    children, 
-    onClick, 
+export default function ActionButton({
+    children,
+    onClick,
     variant = "primary",
     bgColor
 }: ActionButtonProps) {
@@ -24,7 +24,7 @@ export default function ActionButton({
             onClick={onClick}
             className={`py-1 ${finalClasses}`}
         >
-            <p className="font-semibold text-xl">
+            <p className="font-semibold text-sm md:text-base lg:text-xl">
                 {children}
             </p>
         </Button>

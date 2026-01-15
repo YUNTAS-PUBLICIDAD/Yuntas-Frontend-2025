@@ -12,13 +12,14 @@ import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportTablePDF } from "@/utils/Export/exportTablePDF";
 import { User, UserInput } from "@/types/admin/user";
 import Pagination from "@/components/molecules/Pagination";
+import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 
 const columns = [
     { key: "id", label: "ID" },
     { key: "name", label: "NOMBRE" },
     { key: "email", label: "EMAIL" },
     { key: "role_name", label: "ROL" },
-    { key: "created_at", label: "FECHA"}
+    { key: "created_at", label: "FECHA" }
 ];
 
 export default function UsuariosPage() {
@@ -78,11 +79,10 @@ export default function UsuariosPage() {
         setIsModalOpen(false);
     };
 
-    const exportButtons = [
-        { label: "EXPORTAR A CSV", onClick: () => exportCSV(users, "usuarios") },
-        { label: "EXPORTAR A EXCEL", onClick: () => exportExcel(users, "usuarios") },
-        { label: "EXPORTAR A PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns,"download") },
-        { label: "IMPRIMIR", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns,"print") },
+    const exportOptions = [
+        { label: "Exportar a CSV", onClick: () => exportCSV(users, "usuarios") },
+        { label: "Exportar a Excel", onClick: () => exportExcel(users, "usuarios") },
+        { label: "Exportar a PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download") },
     ];
 
     if (isLoading && users.length === 0) {
@@ -90,9 +90,20 @@ export default function UsuariosPage() {
     }
 
     return (
-        <div className="p-4">
-            <div className="mb-4 no-print">
-                <ActionButtonGroup buttons={exportButtons} />
+        <div className="p-2 md:p-4">
+            {/* Botones de Imprimir y Exportar */}
+            <div className="flex flex-wrap gap-2 mb-4 no-print">
+                <ExportDropdown options={exportOptions} />
+                <ActionButtonGroup buttons={[{
+                    label: "IMPRIMIR",
+                    onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
+                    variant: "primary"
+                }]} />
+                <ActionButtonGroup buttons={[{
+                    label: "AGREGAR USUARIO",
+                    onClick: () => setIsModalOpen(true),
+                    variant: "tertiary"
+                }]} />
             </div>
 
             {error && (
@@ -115,14 +126,6 @@ export default function UsuariosPage() {
                     items={users}
                     setProductosPaginados={setDatosPaginados}
                 />
-            </div>
-
-            <div className="mt-6 flex justify-start">
-                <ActionButtonGroup buttons={[{
-                    label: "Añadir Usuario",
-                    onClick: () => setIsModalOpen(true),
-                    variant: "tertiary"
-                }]} />
             </div>
 
             <Modal

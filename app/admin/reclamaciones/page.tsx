@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Modal from "@/components/atoms/Modal";
 import toast, { Toaster } from 'react-hot-toast';
-import { useProductos } from "@/hooks/useProductos"; 
-import Pagination from "@/components/molecules/Pagination"; 
+import { useProductos } from "@/hooks/useProductos";
+import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 
 const columns = [
@@ -14,7 +14,7 @@ const columns = [
     { key: "documento", label: "DOCUMENTO" },
     { key: "producto", label: "PRODUCTO" },
     { key: "monto", label: "MONTO" },
-    { key: "estado_visual", label: "ESTADO" }, 
+    { key: "estado_visual", label: "ESTADO" },
 ];
 
 const getToken = () => {
@@ -33,12 +33,12 @@ const formatDate = (dateString?: string) => {
 };
 
 export default function ReclamacionesPage() {
-    const [reclamos, setReclamos] = useState<any[]>([]); 
-    const [tableData, setTableData] = useState<any[]>([]); 
+    const [reclamos, setReclamos] = useState<any[]>([]);
+    const [tableData, setTableData] = useState<any[]>([]);
     const [paginatedData, setPaginatedData] = useState<any[]>([]);
 
-    const { productos, getProductos } = useProductos(); 
-    
+    const { productos, getProductos } = useProductos();
+
     const [loading, setLoading] = useState(true);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedReclamo, setSelectedReclamo] = useState<any | null>(null);
@@ -66,16 +66,16 @@ export default function ReclamacionesPage() {
             const formatted = reclamos.map(item => {
                 const isCompleto = item.claim_status_id === 2;
                 return {
-                    ...item, 
-                    
-                   
+                    ...item,
+
+
                     fecha: formatDate(item.purchase_date || item.created_at),
                     cliente: `${item.first_name} ${item.last_name}`,
                     documento: `${item.document_number} (${item.document_type_id === 1 ? 'DNI' : 'Pasaporte'})`,
-                    producto: getProductName(item.product_id), 
+                    producto: getProductName(item.product_id),
                     monto: item.claimed_amount ? `S/. ${item.claimed_amount}` : '-',
-                    
-                    
+
+
                     estado_visual: (
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${isCompleto ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                             {isCompleto ? 'Completo' : 'Pendiente'}
@@ -87,7 +87,7 @@ export default function ReclamacionesPage() {
         } else {
             setTableData([]);
         }
-    }, [reclamos, productos]); 
+    }, [reclamos, productos]);
 
 
     const fetchReclamos = async () => {
@@ -107,7 +107,7 @@ export default function ReclamacionesPage() {
 
     const onViewDetail = (reclamo: any) => {
         setSelectedReclamo(reclamo);
-        setNewStatusId(reclamo.claim_status_id); 
+        setNewStatusId(reclamo.claim_status_id);
         setIsDetailModalOpen(true);
     };
 
@@ -127,7 +127,7 @@ export default function ReclamacionesPage() {
             if (!res.ok) throw new Error("Error al actualizar estado");
 
             toast.success("Estado actualizado correctamente");
-            
+
             setReclamos(prev => prev.map(r => {
                 if (r.id === selectedReclamo.id) return { ...r, claim_status_id: newStatusId };
                 return r;
@@ -144,38 +144,38 @@ export default function ReclamacionesPage() {
     if (loading) return <div className="p-10 text-center animate-pulse">Cargando datos...</div>;
 
     return (
-        <div className="p-4">
+        <div className="p-2 md:p-4">
             <Toaster position="top-right" />
-            
-            <div className="mb-6">
-                 <h1 className="text-2xl font-bold text-[#203565]">Libro de Reclamaciones</h1>
+
+            <div className="mb-4 md:mb-6">
+                <h1 className="text-xl md:text-2xl font-bold text-[#203565]">Libro de Reclamaciones</h1>
             </div>
 
-          
+
             <AdminTable
                 columns={columns}
-                data={paginatedData} 
+                data={paginatedData}
                 minRows={5}
-                onEdit={onViewDetail} 
+                onEdit={onViewDetail}
             />
 
             <div className="flex justify-center mt-4">
                 <Pagination
                     pageSize={10}
-                    items={tableData} 
-                    setProductosPaginados={setPaginatedData} 
+                    items={tableData}
+                    setProductosPaginados={setPaginatedData}
                 />
             </div>
 
             {/* MODAL */}
-            <Modal 
-                isOpen={isDetailModalOpen} 
-                onClose={() => setIsDetailModalOpen(false)} 
+            <Modal
+                isOpen={isDetailModalOpen}
+                onClose={() => setIsDetailModalOpen(false)}
                 title={`Gestión de Reclamo #${selectedReclamo?.id}`}
-                size="lg" 
+                size="lg"
             >
                 {selectedReclamo && (
-                    <div className="flex flex-col gap-6 p-1 w-full"> 
+                    <div className="flex flex-col gap-6 p-1 w-full">
                         <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                             <h3 className="text-xs font-bold text-gray-400 uppercase mb-3 pb-1 border-b">Información del Cliente</h3>
                             <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
@@ -226,7 +226,7 @@ export default function ReclamacionesPage() {
                                 </div>
                                 <div className="flex gap-3 items-center w-full sm:w-auto bg-gray-50 p-2 rounded-lg">
                                     <span className="text-sm font-bold text-gray-700 hidden sm:block px-2">Estado:</span>
-                                    <select 
+                                    <select
                                         value={newStatusId}
                                         onChange={(e) => setNewStatusId(Number(e.target.value))}
                                         className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
@@ -234,7 +234,7 @@ export default function ReclamacionesPage() {
                                         <option value={1}>🟡 Pendiente</option>
                                         <option value={2}>🟢 Completo</option>
                                     </select>
-                                    <button 
+                                    <button
                                         onClick={handleUpdateStatus}
                                         disabled={isUpdating}
                                         className={`px-5 py-2 rounded text-white font-bold shadow transition-transform active:scale-95

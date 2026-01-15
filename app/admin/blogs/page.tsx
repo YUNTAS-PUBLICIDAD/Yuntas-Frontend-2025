@@ -23,7 +23,7 @@ import { Blog } from "@/types/admin/blog";
 
 const columns = [
   { key: "id", label: "ID" },
-  { key: "product", label: "PRODUCTO",render:(_:unknown,row:Blog)=> row.product?.name || "null" },
+  { key: "product", label: "PRODUCTO", render: (_: unknown, row: Blog) => row.product?.name || "null" },
   { key: "meta_title", label: "SUBTÍTULO" },
   {
     key: "gallery",
@@ -32,10 +32,10 @@ const columns = [
       <BlogImageCarousel item={row.gallery} />
     )
   },
-  { key: "created_at", label: "FECHA",render:(_:unknown,row:Blog)=>new Date(row.created_at).toLocaleDateString() },
+  { key: "created_at", label: "FECHA", render: (_: unknown, row: Blog) => new Date(row.created_at).toLocaleDateString() },
 ];
 export default function Blogspage() {
-  const {blogs,error,meta,links,isLoading,getBlogs,goToNextPage,goToPrevPage,} = useBlogs();
+  const { blogs, error, meta, links, isLoading, getBlogs, goToNextPage, goToPrevPage, } = useBlogs();
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -48,7 +48,7 @@ export default function Blogspage() {
     getBlogs(10); // carga inicial
   }, [getBlogs]);
 
-  
+
   const topButtons = useMemo(() => [
     { label: "Publicar", onClick: () => setOpenAddModal(true) },
     { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
@@ -58,13 +58,13 @@ export default function Blogspage() {
   const handleEdit = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenUpdateModal(true);
-        router.refresh();  
+    router.refresh();
   };
 
   const handleDelete = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenDeleteModal(true);
-    router.refresh();  
+    router.refresh();
   };
   console.log(blogs)
   return (
@@ -95,11 +95,11 @@ export default function Blogspage() {
 
       <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
       {error && (
-                <div>
-                    {error}
-                </div>
-            )}
-      
+        <div>
+          {error}
+        </div>
+      )}
+
       <AdminTable
         minRows={10}
         columns={columns}

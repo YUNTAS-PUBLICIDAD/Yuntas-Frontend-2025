@@ -31,6 +31,7 @@ export default function SidebarSection() {
     return (
         <aside
             className="
+                hidden lg:flex
                 sticky top-0 h-full min-h-fit w-72 flex flex-col
                 border-r border-gray-300
                 bg-white dark:bg-[#141A3F]

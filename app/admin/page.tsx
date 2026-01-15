@@ -1,6 +1,6 @@
 'use client';
 
-import AdminTable from "@/components/organisms/admin/Products/AdminTable";
+import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import data from "@/data/admin/inicioData";
 
@@ -14,23 +14,23 @@ const columns = [
 ];
 
 export default function InicioPage() {
-    
-    const onAdd = () => {}
-    
-    
+
+    const onAdd = () => { }
+
+
     return (
         <div className="flex flex-col gap-6 ">
-            
-            
+
+
             <AdminTable
                 columns={columns}
                 data={data}
             />
-            
-            <ActionButtonGroup 
+
+            <ActionButtonGroup
                 buttons={[
                     { label: "Añadir datos", onClick: onAdd, variant: "primary" }
-                ]} 
+                ]}
                 className="self-start"
             />
         </div>

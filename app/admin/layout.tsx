@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <div className="flex flex-1 bg-white">
         <SidebarSection />
-        <main className="flex-1 py-16 px-8">
+        <main className="flex-1 py-8 px-4 md:py-16 md:px-8">
           {children}
         </main>
       </div>
