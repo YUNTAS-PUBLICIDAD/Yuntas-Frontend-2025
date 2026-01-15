@@ -15,11 +15,9 @@ interface UseWhatsappReturn {
     whatsappPlantilla: WhatsappPlantilla | null;
     isLoading: boolean;
     isSaving: boolean;
-    isActivating: boolean;
     error: string | null;
     getWhatsappPlantilla: (product_id: number) => Promise<void>;
     saveWhatsappPlantilla: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
-    clearError: () => void;
     clearWhatsappPlantilla: () => void;
 }
 
@@ -27,25 +25,28 @@ export function useWhatsapp(): UseWhatsappReturn {
     const [whatsappPlantilla, setWhatsappPlantilla] = useState<WhatsappPlantilla | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [isActivating, setIsActivating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const clearError = () => setError(null);
     const clearWhatsappPlantilla = () => setWhatsappPlantilla(null);
 
     const getWhatsappPlantilla = useCallback(async (product_id: number) : Promise<void> => {
         setIsLoading(true);
         setError(null);
 
-        const result = await getWhatsappPlantillaByProductService(product_id);
-        if (result.success) {
-            setWhatsappPlantilla(result.data ?? null);
-        } else {
-            setError(result.message || 'Error desconocido');
+        try {
+            const result = await getWhatsappPlantillaByProductService(product_id);
+            if (result.success) {
+                setWhatsappPlantilla(result.data ?? null);
+            } else {
+                
+                setWhatsappPlantilla(null);
+            }
+        } catch (err) {
+            console.error(err);
             setWhatsappPlantilla(null);
+        } finally {
+            setIsLoading(false);
         }
-
-        setIsLoading(false);
     }, []);
 
     const saveWhatsappPlantilla = useCallback(async (whatsappData: WhatsappPlantillaInput): Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>> => {
@@ -53,6 +54,14 @@ export function useWhatsapp(): UseWhatsappReturn {
         setError(null);
 
         const result = await saveWhatsappPlantillaService(whatsappData);
+        
+        if (result.success && result.data) {
+             // Actualizamos el estado local con la nueva data guardada
+             setWhatsappPlantilla(result.data); 
+        } else {
+             setError(result.message || "Error al guardar");
+        }
+
         setIsSaving(false);
         return result;
     }, []);
@@ -61,11 +70,9 @@ export function useWhatsapp(): UseWhatsappReturn {
         whatsappPlantilla,
         isLoading,
         isSaving,
-        isActivating,
         error,
         getWhatsappPlantilla,
         saveWhatsappPlantilla,
-        clearError,
         clearWhatsappPlantilla,
     };
 }
