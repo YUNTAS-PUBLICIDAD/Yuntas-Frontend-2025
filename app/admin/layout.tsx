@@ -11,7 +11,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const segment = useSelectedLayoutSegment();
 
   if (isLoading) {
-    return <Loader size="lg" />;
+    return (
+      <div className="
+        min-h-screen flex items-center justify-center
+        bg-white dark:bg-[#141A3F]
+      ">
+        <Loader size="lg" />
+      </div>
+    );
   }
 
   const titleMap: Record<string, string> = {
@@ -27,15 +34,33 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const title = titleMap[key] ?? "Panel de Administración";
 
   return (
-    <div className="flex flex-col">
-      <Encabezado variant="azul">{title}</Encabezado>
+    <div className="
+      flex flex-col min-h-screen
+      bg-white dark:bg-[#141A3F]
+      transition-colors duration-300
+    ">
+      {/* Encabezado */}
+      <Encabezado variant="azul">SECCIÓN PRINCIPAL</Encabezado>
 
-      <div className="flex flex-1 bg-white">
+      {/* Contenido */}
+      <div className="
+        flex flex-1
+        bg-white dark:bg-[#141A3F]
+        transition-colors duration-300
+      ">
+        {/* Sidebar */}
         <SidebarSection />
-        <main className="flex-1 py-16 px-8">
+
+        {/* Página */}
+        <main className="
+          flex-1 py-16 px-8
+          bg-white dark:bg-[#141A3F]
+          transition-colors duration-300
+        ">
           {children}
         </main>
       </div>
     </div>
   );
+
 }
