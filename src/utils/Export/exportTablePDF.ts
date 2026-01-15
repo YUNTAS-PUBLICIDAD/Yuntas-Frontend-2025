@@ -1,57 +1,48 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 export const exportTablePDF = (
   data: any[],
   title: string,
-  columns: { key: string; label: string }[]
+  columns: { key: string; label: string }[],
+  action: "download" | "print" = "download"
 ) => {
   if (!data || data.length === 0) {
     alert("No hay datos para exportar");
     return;
   }
 
-  const printWindow = window.open("", "_blank", "width=900,height=700");
-  if (!printWindow) {
-    alert("Permite ventanas emergentes para generar el PDF");
-    return;
+  const doc = new jsPDF("l", "mm", "a4");
+
+  doc.setFontSize(14);
+  doc.text(title, 14, 15);
+
+  autoTable(doc, {
+    startY: 22,
+    head: [columns.map(col => col.label)],
+    body: data.map(row =>
+      columns.map(col => row[col.key] ?? "-")
+    ),
+    styles: {
+      fontSize: 9,
+    },
+    headStyles: {
+      fillColor: [14, 165, 233],
+      textColor: 255,
+      halign: "center",
+    },
+    alternateRowStyles: {
+      fillColor: [248, 250, 252],
+    },
+  });
+
+  if (action === "download") {
+    // 📥 DESCARGAR PDF
+    doc.save(`${title}.pdf`);
+  } else {
+    // 🖨️ IMPRIMIR → abre ventana de impresión clásica
+    doc.autoPrint();
+    const pdfBlobUrl = doc.output("bloburl");
+    window.open(pdfBlobUrl);
   }
-
-  const headers = columns.map(col => `<th>${col.label}</th>`).join("");
-
-  const rows = data
-    .map(row => `
-      <tr>
-        ${columns
-          .map(col => `<td>${row[col.key] ?? ""}</td>`)
-          .join("")}
-      </tr>
-    `)
-    .join("");
-
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8" />
-      <title>${title}</title>
-      <style>
-        body { font-family: Arial; font-size: 11px; padding: 20px; }
-        h1 { text-align: center; color: #0ea5e9; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 6px; }
-        th { background: #0ea5e9; color: #fff; }
-        tr:nth-child(even) { background: #f5f5f5; }
-      </style>
-    </head>
-    <body>
-      <h1>${title}</h1>
-      <table>
-        <thead><tr>${headers}</tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </body>
-    </html>
-  `;
-
-  printWindow.document.write(html);
-  printWindow.document.close();
-  printWindow.onload = () => printWindow.print();
 };

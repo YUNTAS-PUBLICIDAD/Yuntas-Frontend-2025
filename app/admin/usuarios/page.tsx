@@ -81,8 +81,8 @@ export default function UsuariosPage() {
     const exportButtons = [
         { label: "EXPORTAR A CSV", onClick: () => exportCSV(users, "usuarios") },
         { label: "EXPORTAR A EXCEL", onClick: () => exportExcel(users, "usuarios") },
-        { label: "EXPORTAR A PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns) },
-        { label: "IMPRIMIR", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns) },
+        { label: "EXPORTAR A PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns,"download") },
+        { label: "IMPRIMIR", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns,"print") },
     ];
 
     if (isLoading && users.length === 0) {
