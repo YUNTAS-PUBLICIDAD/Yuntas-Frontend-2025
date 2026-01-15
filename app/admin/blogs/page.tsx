@@ -47,6 +47,8 @@ export default function Blogspage() {
   useEffect(() => {
     getBlogs(10); // carga inicial
   }, [getBlogs]);
+
+  
   const topButtons = useMemo(() => [
     { label: "Publicar", onClick: () => setOpenAddModal(true) },
     { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
