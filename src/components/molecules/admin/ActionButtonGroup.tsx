@@ -13,8 +13,8 @@ interface ActionButtonGroupProps {
     className?: string;
 }
 
-export default function ActionButtonGroup({ 
-    buttons, 
+export default function ActionButtonGroup({
+    buttons,
     position = "start",
     className = ""
 }: ActionButtonGroupProps) {
@@ -26,19 +26,19 @@ export default function ActionButtonGroup({
     };
 
     const getBgColorByVariant = (variant?: ButtonConfig["variant"]) => {
-    switch (variant) {
-        case "secondary":
-            return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
-        case "primary":
-            return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
-        default:
-            return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
-    }
-};
+        switch (variant) {
+            case "secondary":
+                return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
+            case "primary":
+                return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
+            default:
+                return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
+        }
+    };
 
 
     return (
-        <div className={`flex ${positionClasses[position]} gap-4 ${className}`}>
+        <div className={`flex flex-wrap ${positionClasses[position]} gap-2 md:gap-4 ${className}`}>
             {buttons.map((button, index) => (
                 <ActionButton
                     key={index}
