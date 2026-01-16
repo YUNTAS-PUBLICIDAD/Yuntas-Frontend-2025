@@ -66,3 +66,49 @@ export async function saveWhatsappPlantillaService(whatsappData: WhatsappPlantil
         return { success: false, message: error.message };
     }
 }
+
+export async function requestQRService(): Promise<WhatsappPlantillaServiceResponse<null>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.REQUEST_QR, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return {
+            success: true,
+            message: "Generando nuevo QR...",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
+export async function resetSessionService(): Promise<WhatsappPlantillaServiceResponse<null>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.RESET_SESSION, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return {
+            success: true,
+            message: "Sesión reseteada correctamente",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
