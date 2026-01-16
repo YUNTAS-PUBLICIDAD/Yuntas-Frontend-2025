@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
@@ -16,40 +16,79 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
     const { requestQR, resetSession, isRequesting } = useWhatsapp();
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
-    const [socket, setSocket] = useState<Socket | null>(null);
+    const [socketStatus, setSocketStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
+    const [isWaitingQR, setIsWaitingQR] = useState(false);
+    const socketRef = useRef<Socket | null>(null);
 
     useEffect(() => {
         const newSocket = io(WHATSAPP_SOCKET_URL);
 
+        socketRef.current = newSocket;
+
         newSocket.on('connect', () => {
             console.log('Socket conectado');
+            setSocketStatus('connected');
         });
 
         newSocket.on('qr-update', (data) => {
-            setQrCode(data.qrData?.image || null);
             const connected = data.connectionStatus === 'connected';
+
+            setIsWaitingQR(false);
+            setQrCode(data.qrData?.image || null);
             setIsConnected(connected);
             onConnectionChange?.(connected);
+
+            if (connected) {
+                setQrCode(null);
+            }
         });
 
         newSocket.on('disconnect', () => {
             console.log('Socket desconectado');
+            setSocketStatus('disconnected');
         });
 
-        setSocket(newSocket);
+        newSocket.on('connect_error', (error) => {
+            console.error('Error de conexión socket:', error);
+            setSocketStatus('disconnected');
+        });
 
         return () => {
             newSocket.disconnect();
+            socketRef.current = null;
         };
     }, [onConnectionChange]);
 
-    const handleRequestQR = async () => {
-        await requestQR();
-    };
-
     const handleResetSession = async () => {
-        await resetSession();
+        const confirmReset = window.confirm(
+            '¿Estás seguro de que deseas reiniciar la sesión de WhatsApp?'
+        );
+
+        if (!confirmReset) return;
+
+        setQrCode(null);
+        setIsConnected(false);
+        onConnectionChange?.(false);
+        setIsWaitingQR(true);
+
+        // Resetear sesión
+        const resetResult = await resetSession();
+
+        if (!resetResult.success) {
+            alert(resetResult.message || 'Error al reiniciar la sesión');
+            setIsWaitingQR(false);
+            return;
+        }
+
+        // Solicitar nuevo QR
+        const qrResult = await requestQR();
+        if (!qrResult.success) {
+            alert(qrResult.message || 'Error al solicitar código QR');
+            setIsWaitingQR(false);
+        }
     }
+
+    const isLoading = isRequesting || isWaitingQR;
 
     return (
         <div>
@@ -62,45 +101,28 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
                         </span>
                     </div>
 
-                    {isConnected ?
+                    {isConnected && (
                         <Button
                             type="button"
                             variant="primary"
                             size="sm"
                             onClick={handleResetSession}
-                            disabled={isRequesting}
+                            disabled={isLoading || socketStatus !== 'connected'}
                         >
-                            {isRequesting ? (
+                            {isLoading ? (
                                 <div className="flex items-center gap-2">
-                                    <Loader size="sm" color="border-white" />
+                                    <Loader size="sm" color="border-gray-600" />
                                     <span>Reiniciando...</span>
                                 </div>
                             ) : (
                                 'Reiniciar Sesión'
                             )}
                         </Button>
-                        :
-                        <Button
-                            type="button"
-                            variant="primary"
-                            size="sm"
-                            onClick={handleRequestQR}
-                            disabled={isRequesting}
-                        >
-                            {isRequesting ? (
-                                <div className="flex items-center gap-2">
-                                    <Loader size="sm" color="border-white" />
-                                    <span>Generando...</span>
-                                </div>
-                            ) : (
-                                'Generar QR'
-                            )}
-                        </Button>
 
-                    }
+                    )}
                 </div>
 
-                {/* Mostrar QR Code */}
+                {/** Cuando se muestra el QR por socket*/}
                 {!isConnected && qrCode && (
                     <div className="p-4 bg-white border-2 border-dashed border-gray-300 rounded-lg text-center">
                         <p className="text-sm text-gray-600 mb-4">
@@ -115,6 +137,42 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
                         </div>
                         <p className="text-xs text-gray-500 mt-4">
                             Abre WhatsApp → Menú → Dispositivos vinculados → Vincular dispositivo
+                        </p>
+                    </div>
+                )}
+
+                {/** mientras carga el QR INICIAL */}
+                {!isConnected && !qrCode && !isLoading && socketStatus === 'connected' && (
+                    <div className="p-4 flex flex-col items-center gap-2">
+                        <p className="text-sm font-medium text-yellow-800">
+                            Esperando código QR
+                        </p>
+                        <p className="text-xs text-yellow-700 mt-1">
+                            El código QR se está generando. Esto puede tardar unos segundos...
+                        </p>
+                    </div>
+                )}
+
+                {/** Si no hay conexión al socket */}
+                {socketStatus === 'disconnected' && (
+                    <div className="p-4 flex flex-col items-center gap-2">
+                        <p className="text-sm font-medium text-red-800">
+                            No hay conexión con el servidor de WhatsApp
+                        </p>
+                        <p className="text-xs text-red-600">
+                            Verifica que el servicio de WhatsApp esté activo o recarga la página.
+                        </p>
+                    </div>
+                )}
+
+                {/* Mensaje de conexión exitosa */}
+                {isConnected && (
+                    <div className="p-4 flex flex-col items-center gap-2">
+                        <p className="text-sm font-medium text-green-800">
+                            WhatsApp conectado correctamente
+                        </p>
+                        <p className="text-xs text-green-600">
+                            Tu cuenta está vinculada y lista para enviar mensajes.
                         </p>
                     </div>
                 )}

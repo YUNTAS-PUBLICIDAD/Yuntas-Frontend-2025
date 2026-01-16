@@ -75,7 +75,7 @@ export async function requestQRService(): Promise<WhatsappPlantillaServiceRespon
             return { success: false, message: "No autenticado" };
         }
 
-        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.REQUEST_QR, {
+        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.REQUEST_QR, {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -98,7 +98,7 @@ export async function resetSessionService(): Promise<WhatsappPlantillaServiceRes
             return { success: false, message: "No autenticado" };
         }
 
-        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.RESET_SESSION, {
+        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.RESET_SESSION, {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
