@@ -11,7 +11,7 @@ import { useProductos } from "@/hooks/useProductos";
 import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
 import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
-import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsappForm";
+import WhatsappFormWithTabs from "@/components/molecules/admin/products/WhatsappFormWithTabs";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 
@@ -182,7 +182,7 @@ export default function ProductosPage() {
                 title="Envio de Whatsapp"
                 size="lg"
             >
-                <SendWhatsappForm
+                <WhatsappFormWithTabs
                     products={productos}
                     onClose={() => setIsWhatsappModalOpen(false)}
                 />

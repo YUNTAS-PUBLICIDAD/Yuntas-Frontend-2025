@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api';
+export const WHATSAPP_SOCKET_URL = process.env.NEXT_PUBLIC_WHATSAPP_SOCKET_URL || 'https://whatsapp-socket.yuntaspublicidad.com';
 
 interface BackendError {
 	message?: string;

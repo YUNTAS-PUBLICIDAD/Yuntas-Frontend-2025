@@ -9,11 +9,14 @@ import {
 import {
     getWhatsappPlantillaByProductService,
     saveWhatsappPlantillaService,
+    requestQRService,
+    resetSessionService,
 } from "@/services/whatsappService";
 
 interface UseWhatsappReturn {
     whatsappPlantilla: WhatsappPlantilla | null;
     isLoading: boolean;
+    isRequesting: boolean;
     isSaving: boolean;
     isActivating: boolean;
     error: string | null;
@@ -21,6 +24,8 @@ interface UseWhatsappReturn {
     saveWhatsappPlantilla: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
     clearError: () => void;
     clearWhatsappPlantilla: () => void;
+    requestQR: () => Promise<WhatsappPlantillaServiceResponse<null>>;
+    resetSession: () => Promise<WhatsappPlantillaServiceResponse<null>>;
 }
 
 export function useWhatsapp(): UseWhatsappReturn {
@@ -28,6 +33,7 @@ export function useWhatsapp(): UseWhatsappReturn {
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
+    const [isRequesting, setIsRequesting] = useState(false); // estado para solicitudes relacionadas a whatsapp
     const [error, setError] = useState<string | null>(null);
 
     const clearError = () => setError(null);
@@ -57,15 +63,36 @@ export function useWhatsapp(): UseWhatsappReturn {
         return result;
     }, []);
 
+    const requestQR = useCallback(async (): Promise<WhatsappPlantillaServiceResponse<null>> => {
+        setIsRequesting(true);
+        setError(null);
+
+        const result = await requestQRService();
+        setIsRequesting(false);
+        return result;
+    }, []);
+
+    const resetSession = useCallback(async (): Promise<WhatsappPlantillaServiceResponse<null>> => {
+        setIsRequesting(true);
+        setError(null);
+
+        const result = await resetSessionService();
+        setIsRequesting(false);
+        return result;
+    }, []);
+
     return {
         whatsappPlantilla,
         isLoading,
         isSaving,
         isActivating,
+        isRequesting,
         error,
         getWhatsappPlantilla,
         saveWhatsappPlantilla,
         clearError,
         clearWhatsappPlantilla,
+        requestQR,
+        resetSession
     };
 }
