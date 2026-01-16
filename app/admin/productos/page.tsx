@@ -11,8 +11,9 @@ import { useProductos } from "@/hooks/useProductos";
 import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
 import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
-import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsappForm";
+import WhatsappFormWithTabs from "@/components/molecules/admin/products/WhatsappFormWithTabs";
 import Pagination from "@/components/molecules/Pagination";
+import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -81,27 +82,10 @@ export default function ProductosPage() {
         setIsAddEditModalOpen(false);
     };
 
-    const exportButtons = [
-        {
-            label: "EXPORTAR A CSV",
-            onClick: () => exportToCSV(productos),
-            backgraund: "#5bc5c7"
-        },
-        {
-            label: "EXPORTAR A EXCEL",
-            onClick: () => exportToExcel(productos),
-            backgraund: "#5bc5c7"
-        },
-        {
-            label: "EXPORTAR A PDF",
-            onClick: () => exportToPDF(productos),
-            backgraund: "#5bc5c7"
-        },
-        {
-            label: "IMPRIMIR",
-            onClick: () => printTable(productos),
-            backgraund: "#5bc5c7"
-        },
+    const exportOptions = [
+        { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
+        { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
+        { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
     ];
 
     if (isLoading && productos.length === 0) {
@@ -109,8 +93,9 @@ export default function ProductosPage() {
     }
 
     return (
-        <div className="p-4">
-            <div className="flex gap-2 flex-wrap mb-4">
+        <div className="p-2 md:p-4">
+            {/* Botones de acción principales */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
                 <ActionButtonGroup buttons={[{
                     label: "Añadir Producto",
                     onClick: () => setIsAddEditModalOpen(true),
@@ -130,8 +115,14 @@ export default function ProductosPage() {
                 }]} />
             </div>
 
-            <div className="mb-4 no-print">
-                <ActionButtonGroup buttons={exportButtons} />
+            {/* Botones de Imprimir y Exportar */}
+            <div className="flex flex-wrap gap-2 mb-4 no-print">
+                <ActionButtonGroup buttons={[{
+                    label: "IMPRIMIR",
+                    onClick: () => printTable(productos),
+                    variant: "primary"
+                }]} />
+                <ExportDropdown options={exportOptions} />
             </div>
 
             {error && (
@@ -191,7 +182,7 @@ export default function ProductosPage() {
                 title="Envio de Whatsapp"
                 size="lg"
             >
-                <SendWhatsappForm
+                <WhatsappFormWithTabs
                     products={productos}
                     onClose={() => setIsWhatsappModalOpen(false)}
                 />

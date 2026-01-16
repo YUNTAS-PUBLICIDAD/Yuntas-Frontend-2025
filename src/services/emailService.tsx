@@ -84,7 +84,7 @@ export async function sendEmailCampanaService(product_id: number): Promise<sendE
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND, { producto_id: product_id },{
+        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND_CAMPANA, { producto_id: product_id },{
             headers: {
                 Authorization: `Bearer ${token}`,
             }

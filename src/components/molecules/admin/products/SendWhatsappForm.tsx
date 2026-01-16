@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "@/components/atoms/Button";
 import FormSection from "../FormSection";
-import ImageUpload from "../ImageUpload"; 
+import ImageUpload from "../ImageUpload";
 import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
 import Loader from "@/components/atoms/Loader";
 import SelectForm from "@/components/atoms/SelectForm";
@@ -14,6 +14,7 @@ import { useWhatsapp } from "@/hooks/useWhatsapp";
 interface SendWhatsappFormProps {
     onClose: () => void;
     products: Producto[];
+    isConnected: boolean;
 }
 
 const defaultFormData: WhatsappPlantillaInput = {
@@ -22,47 +23,49 @@ const defaultFormData: WhatsappPlantillaInput = {
     parrafo: "",
 };
 
-export default function SendWhatsappForm({ onClose, products }: SendWhatsappFormProps) {
+export default function SendWhatsappForm({ onClose, products, isConnected }: SendWhatsappFormProps) {
     const {
         getWhatsappPlantilla,
         whatsappPlantilla,
         saveWhatsappPlantilla,
         isLoading,
         isSaving,
+        isActivating,
         clearWhatsappPlantilla,
         error,
     } = useWhatsapp();
 
     const [formData, setFormData] = useState<WhatsappPlantillaInput>(defaultFormData);
 
-    //  Cargar plantilla
+    // se carga la plantilla cuando cambia el producto
     useEffect(() => {
         clearWhatsappPlantilla();
         if (!formData.producto_id) {
-            setFormData(prev => ({...defaultFormData, producto_id: prev.producto_id})); 
+            setFormData(defaultFormData);
             return;
         }
+
         getWhatsappPlantilla(Number(formData.producto_id));
     }, [formData.producto_id, getWhatsappPlantilla]);
 
-    // Llenar datos
     useEffect(() => {
-        if (whatsappPlantilla) {
+        if (!whatsappPlantilla) {
             setFormData({
-                producto_id: String(whatsappPlantilla.producto_id),
-                imagen_principal: whatsappPlantilla.imagen_principal,
-                parrafo: whatsappPlantilla.parrafo,
-            });
-        } else {
-            setFormData(prev => ({
-                producto_id: prev.producto_id,
+                producto_id: formData.producto_id,
                 imagen_principal: null,
                 parrafo: "",
-            }));
+            });
+            return;
         }
+
+        setFormData({
+            producto_id: String(whatsappPlantilla.producto_id),
+            imagen_principal: whatsappPlantilla.imagen_principal,
+            parrafo: whatsappPlantilla.parrafo,
+        });
     }, [whatsappPlantilla]);
 
-    // Guardar
+    // Guardar plantilla
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -70,33 +73,32 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
             alert("Selecciona un producto");
             return;
         }
+        if (!formData.imagen_principal) {
+            alert("La imagen principal es requerida");
+            return;
+        }
         if (!formData.parrafo.trim()) {
             alert("El párrafo no puede estar vacío");
             return;
-        }
-        
-        if (!formData.imagen_principal) {
-             alert("La imagen es requerida");
-             return;
         }
 
         const result = await saveWhatsappPlantilla(formData);
 
         if (result.success) {
+            onClose();
             alert("Plantilla guardada correctamente");
-            onClose(); 
         } else {
             alert(result.message || "Error guardando plantilla");
         }
     };
 
     return (
-        <form 
-            onSubmit={handleSubmit} 
-            
-            className="flex flex-col gap-6 max-h-[80vh] w-full overflow-y-auto overflow-x-hidden p-2"
-        >
-            
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto">
+            {!isConnected && (
+                <div className="text-yellow-800 text-sm text-center">
+                    WhatsApp no está conectado. Ve a la pestaña <strong>Conexión</strong> para escanear el código QR.
+                </div>
+            )}
             <FormSection title="Selección de Producto">
                 <SelectForm
                     label="Selecciona un producto"
@@ -108,44 +110,45 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
                 />
             </FormSection>
 
-            {error && (<div className="p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>)}
+            {error && (<span className="text-red-500 text-sm">{error}</span>)}
 
-            <FormSection title="Configuración del Mensaje">
+            {/* Sección de Whatsapp */}
+            <FormSection title={`Sección Whatsapp`}>
+                {/* Principal */}
                 <ImageUpload
-                    label="Imagen Promocional"
-                    description="Imagen que se enviará junto al texto."
-                    altValue="Imagen Whatsapp"
+                    label="Imagen Principal"
+                    description="Esta imagen aparece como "
+                    altValue=""
                     onAltChange={() => { }}
                     onFileChange={(file) => setFormData(prev => ({ ...prev, imagen_principal: file }))}
                     currentImage={
-                        typeof formData.imagen_principal === "string" 
-                            ? formData.imagen_principal 
-                            : (formData.imagen_principal instanceof File ? URL.createObjectURL(formData.imagen_principal) : null)
+                        typeof formData.imagen_principal === "string" && formData.imagen_principal
+                            ? formData.imagen_principal
+                            : null
                     }
-                    required={!formData.imagen_principal}
+                    required
                     showAltInput={false}
                 />
 
                 <TextareaAdmin
-                    label="Mensaje del WhatsApp"
+                    label="Párrafo"
                     name="parrafo"
                     value={formData.parrafo}
                     onChange={(e) => setFormData(prev => ({ ...prev, parrafo: e.target.value }))}
-                    placeholder="Hola! Te envío información sobre..."
-                    helperText="Este texto llegará al cliente junto con la imagen."
-                    rows={6}
+                    placeholder="Escribe el párrafo"
+                    helperText="Descripción o contenido de la sección."
+                    rows={4}
                     required
                 />
             </FormSection>
 
-            
-            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200 -mx-2 -mb-2 mt-auto z-10">
+            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200">
                 <Button
                     type="submit"
                     variant="primary"
                     size="md"
                     className="flex-1"
-                    disabled={isLoading || isSaving}
+                    disabled={isLoading || isSaving || isActivating}
                 >
                     {isSaving ? (
                         <div className="flex items-center justify-center gap-2">
@@ -157,13 +160,31 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
                     )}
                 </Button>
 
+                {/* <Button
+                    type="button"
+                    variant="primary"
+                    size="md"
+                    className="flex-1"
+                    onClick={() => {}}
+                    disabled={isLoading || isSaving || isActivating}
+                >
+                    {isActivating ? (
+                        <div className="flex items-center justify-center gap-2">
+                            <Loader size="sm" color="border-white" />
+                            <span>Activando...</span>
+                        </div>
+                    ) : (
+                        "Activar Campaña"
+                    )}
+                </Button> */}
+
                 <Button
                     type="button"
                     variant="tertiary"
                     size="md"
                     className="flex-1"
                     onClick={onClose}
-                    disabled={isSaving}
+                    disabled={isLoading || isSaving || isActivating}
                 >
                     Cancelar
                 </Button>

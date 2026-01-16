@@ -2,7 +2,7 @@
 
 import TableActions from "@/components/molecules/admin/TableActions";
 import { useAdminTable } from "@/hooks/ui/admin/useAdminTable";
-import { RiCloseLine , RiCheckLine  } from "react-icons/ri";
+import { RiCloseLine, RiCheckLine } from "react-icons/ri";
 
 interface TrackingTableProps<T = any> {
     data: T[];
@@ -26,62 +26,73 @@ export default function TrackingTable({
     onDelete,
     onEdit
 }: TrackingTableProps) {
+
     const { enabledActions, rows } = useAdminTable({ data, minRows, onDelete, onEdit });
 
     return (
-        <div className="w-full overflow-x-auto rounded-xl bg-white shadow-sm border border-gray-100">
-            <table className="w-full border-separate border-spacing-y-2 p-2">
-                <thead>
-                    <tr>
-                        {columns.map((col) => {
-                            return (
-                                <th key={col.key} className="bg-[#0D1030] text-white font-semibold text-lg py-3 px-4 first:rounded-l-lg last:rounded-r-lg text-center whitespace-nowrap">
-                                    {col.label}
-                                </th>
-                            )
-                        })}
-                        <th className="bg-[#0D1030] text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
+        <div className="w-full px-2 md:px-0">
+            <table className="w-full block lg:table border-separate border-spacing-y-4 lg:border-spacing-y-2">
+
+                {/* HEADER solo desktop */}
+                <thead className="hidden lg:table-header-group">
+                    <tr className="bg-[#0D1030]">
+                        {columns.map(col => (
+                            <th
+                                key={col.key}
+                                className="text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg"
+                            >
+                                {col.label}
+                            </th>
+                        ))}
+                        <th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
                             ACCIÓN
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+
+                <tbody className="block lg:table-row-group">
                     {rows.map((row, index) => {
                         const isEmpty = row._empty === true;
+
                         return (
-                            <tr key={row.id || index} className="group hover:bg-gray-50 transition-colors">
-                                {columns.map((col) => {
-                                    const isStatus = col.key === 'whatsapp_status' || col.key === 'email_status';
-                                    const isResponse = col.key === 'whatsapp_response' || col.key === 'email_response';
+                            <tr
+                                key={row.id || index}
+                                className="block lg:table-row bg-white border-2 border-[#0D1030] lg:border-none rounded-[2rem] mb-6 p-4 lg:p-0 shadow-sm"
+                            >
+                                {columns.map(col => {
+                                    const isStatus = col.key.includes('status');
+                                    const isResponse = col.key.includes('response');
 
                                     return (
-                                        <td key={col.key} className={`bg-[#F4F4F2] py-3 px-4 text-center h-14 whitespace-nowrap first:rounded-l-lg
-                                        ${col.key === 'id' || isStatus ?
-                                                "font-bold text-black"
-                                                :
-                                                "text-[#0D1030]"}`}>
-                                            {isEmpty ?
-                                                ""
-                                                :
-                                                isStatus ?
-                                                    "ENVIADO"
-                                                    :
-                                                    isResponse ?
-                                                        <div className="flex justify-center gap-3">
-                                                            {/** Estos botones solo seran hasta que sepamos para que sirven */}
-                                                            <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 flex items-center justify-center font-bold">
-                                                                <RiCloseLine  size={24} />
-                                                            </button>
-                                                            <button className="w-8 h-8 rounded-full bg-[#D1FAE5] text-[#10B981] hover:bg-[#A7F3D0] flex items-center justify-center font-bold">
-                                                                <RiCheckLine size={24} />
-                                                            </button>
-                                                        </div>
-                                                        :
-                                                        row[col.key]}
+                                        <td
+                                            key={col.key}
+                                            className="flex justify-between items-center lg:table-cell py-2 px-4 border-b border-gray-100 lg:border-none lg:bg-[#F4F4F2]"
+                                        >
+                                            <span className="lg:hidden font-black uppercase text-xs text-[#0D1030]">
+                                                {col.label}:
+                                            </span>
+
+                                            <span className="text-right lg:text-center ml-4 text-[#0D1030]">
+                                                {isEmpty ? "" :
+                                                    isStatus ? "ENVIADO" :
+                                                        isResponse ? (
+                                                            <div className="flex gap-3">
+                                                                <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center">
+                                                                    <RiCloseLine size={22} />
+                                                                </button>
+                                                                <button className="w-8 h-8 rounded-full bg-[#D1FAE5] text-[#10B981] flex items-center justify-center">
+                                                                    <RiCheckLine size={22} />
+                                                                </button>
+                                                            </div>
+                                                        ) : row[col.key]
+                                                }
+                                            </span>
                                         </td>
-                                    )
+                                    );
                                 })}
-                                <td className="bg-[#F4F4F2] py-3 px-4 rounded-r-lg text-center h-14">
+
+                                {/* ACCIONES */}
+                                <td className="flex justify-center lg:table-cell py-4 lg:py-3 lg:bg-[#F4F4F2] lg:rounded-r-lg">
                                     <TableActions
                                         item={row}
                                         isEmpty={isEmpty}
