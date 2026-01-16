@@ -123,7 +123,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
                 </div>
 
                 {/** Cuando se muestra el QR por socket*/}
-                {!isConnected && qrCode && (
+                {!isConnected && qrCode && socketStatus !== 'disconnected' && (
                     <div className="p-4 bg-white border-2 border-dashed border-gray-300 rounded-lg text-center">
                         <p className="text-sm text-gray-600 mb-4">
                             Escanea este código QR con WhatsApp:
