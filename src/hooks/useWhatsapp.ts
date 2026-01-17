@@ -9,18 +9,26 @@ import {
 import {
     getWhatsappPlantillaByProductService,
     saveWhatsappPlantillaService,
+    sendWhatsappService,
+    requestQRService,
+    resetSessionService,
 } from "@/services/whatsappService";
+import { LeadInput } from "@/types/admin/lead";
 
 interface UseWhatsappReturn {
     whatsappPlantilla: WhatsappPlantilla | null;
     isLoading: boolean;
+    isRequesting: boolean;
     isSaving: boolean;
     isActivating: boolean;
     error: string | null;
     getWhatsappPlantilla: (product_id: number) => Promise<void>;
     saveWhatsappPlantilla: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
+    sendWhatsapp: (leadData: LeadInput) => Promise<WhatsappPlantillaServiceResponse<null>>;
     clearError: () => void;
     clearWhatsappPlantilla: () => void;
+    requestQR: () => Promise<WhatsappPlantillaServiceResponse<null>>;
+    resetSession: () => Promise<WhatsappPlantillaServiceResponse<null>>;
 }
 
 export function useWhatsapp(): UseWhatsappReturn {
@@ -28,6 +36,7 @@ export function useWhatsapp(): UseWhatsappReturn {
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isActivating, setIsActivating] = useState(false);
+    const [isRequesting, setIsRequesting] = useState(false); // estado para solicitudes relacionadas a whatsapp
     const [error, setError] = useState<string | null>(null);
 
     const clearError = () => setError(null);
@@ -57,15 +66,46 @@ export function useWhatsapp(): UseWhatsappReturn {
         return result;
     }, []);
 
+    const sendWhatsapp = useCallback(async (leadData: LeadInput): Promise<WhatsappPlantillaServiceResponse<null>> => {
+        setIsActivating(true);
+        setError(null);
+
+        const result = await sendWhatsappService(leadData);
+        setIsActivating(false);
+        return result; 
+    }, []);
+
+    const requestQR = useCallback(async (): Promise<WhatsappPlantillaServiceResponse<null>> => {
+        setIsRequesting(true);
+        setError(null);
+
+        const result = await requestQRService();
+        setIsRequesting(false);
+        return result;
+    }, []);
+
+    const resetSession = useCallback(async (): Promise<WhatsappPlantillaServiceResponse<null>> => {
+        setIsRequesting(true);
+        setError(null);
+
+        const result = await resetSessionService();
+        setIsRequesting(false);
+        return result;
+    }, []);
+
     return {
         whatsappPlantilla,
         isLoading,
         isSaving,
         isActivating,
+        isRequesting,
         error,
         getWhatsappPlantilla,
         saveWhatsappPlantilla,
+        sendWhatsapp,
         clearError,
         clearWhatsappPlantilla,
+        requestQR,
+        resetSession
     };
 }

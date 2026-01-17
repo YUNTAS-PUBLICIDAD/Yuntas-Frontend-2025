@@ -8,10 +8,10 @@ import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
 
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
+import AdminTable from "@/components/organisms/admin/AdminTable";
 
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
-import AdminTable from "@/components/organisms/admin/AdminTable";
 
 export default function SeguimientoPage() {
 
@@ -19,13 +19,13 @@ export default function SeguimientoPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTrackingMode, setIsTrackingMode] = useState(false);
     const [selectedLead, setSelectedLead] = useState<LeadInput | null>(null);
+
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
 
     useEffect(() => {
         getLeads(200);
-    }, [])
+    }, []);
 
-    // Aqui se prepara los datos para mostrarlos en el modal de editar (cuando se hace click en el icono de editar)
     const handleEditClick = (client: Lead) => {
         const data: LeadInput = {
             id: client.id,
@@ -41,7 +41,7 @@ export default function SeguimientoPage() {
 
     const handleCreateLead = async (formData: LeadInput) => {
         if (formData.product_id === 0) {
-            delete formData.product_id
+            delete formData.product_id;
         }
 
         const response = await createLead(formData);
@@ -52,10 +52,11 @@ export default function SeguimientoPage() {
         } else {
             alert(response.message);
         }
-    }
+    };
 
     const handleEditLead = async (formData: LeadInput) => {
         if (!selectedLead) return;
+
         const response = await updateLead(selectedLead.id!, formData);
         if (response.success) {
             handleCloseModal();
@@ -64,11 +65,12 @@ export default function SeguimientoPage() {
         } else {
             alert(response.message);
         }
-    }
+    };
 
     const handleDeleteLead = async (client: Lead) => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este cliente?");
         if (!confirmDelete) return;
+
         const response = await deleteLead(client.id!);
         if (response.success) {
             await getLeads(200);
@@ -84,24 +86,26 @@ export default function SeguimientoPage() {
     };
 
     const topButtons = [
-    {
-        label: "MENSAJES",
-        onClick: () => {},
-        variant: "secondary" as const
-    },
-    {
-        label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
-        onClick: () => setIsTrackingMode(!isTrackingMode),
-        variant: "primary" as const,
-        bgColor: "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]"
-    },
-    {
-        label: "MONITOREO",
-        onClick: () => {},
-        variant: "secondary" as const
-    }
-];
-
+        {
+            label: "MENSAJES",
+            onClick: () => { },
+            variant: "secondary" as const,
+            className: "flex-auto w-auto"
+        },
+        {
+            label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
+            onClick: () => setIsTrackingMode(!isTrackingMode),
+            variant: "primary" as const,
+            bgColor: "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]",
+            className: "flex-auto w-auto"
+        },
+        {
+            label: "MONITOREO",
+            onClick: () => { },
+            variant: "secondary" as const,
+            className: "flex-auto w-auto"
+        }
+    ];
 
     const columns = [
         { key: "id", label: "ID" },
@@ -113,40 +117,54 @@ export default function SeguimientoPage() {
     ];
 
     return (
-        <div className="p-4">
-            <div className="flex gap-2 mb-4">
-                <ActionButtonGroup buttons={topButtons} />
+        <div className="p-2 md:p-4">
+
+            {/* BOTONES SUPERIORES */}
+            <div className="mb-4 flex flex-row flex-wrap gap-2">
+                <ActionButtonGroup buttons={topButtons} className="w-full" />
             </div>
 
-            {isTrackingMode ? (
-                <TrackingTable
-                    data={datosPaginados}
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteLead}
-                />
-            ) : (
-                <AdminTable
-                    data={datosPaginados}
-                    columns={columns}
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteLead}
-                />
-            )}
+            {/* TABLAS */}
+            <div className="w-full overflow-x-auto">
+                {isTrackingMode ? (
+                    <TrackingTable
+                        data={datosPaginados}
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteLead}
+                    />
+                ) : (
+                    <AdminTable
+                        data={datosPaginados}
+                        columns={columns}
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteLead}
+                    />
+                )}
+            </div>
 
-            <div className="flex justify-center mt-4">
+            {/* PAGINACIÓN */}
+            <div className="flex justify-center mt-4 w-full overflow-x-hidden">
                 <Pagination
-                    pageSize={10}
+                    pageSize={2}
                     items={leads}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>
 
+            {/* BOTÓN AÑADIR */}
             <div className="mt-6 flex justify-start">
-                <ActionButtonGroup buttons={[{ label: "Añadir Cliente", onClick: () => setIsModalOpen(true), variant: "tertiary" }]} />
+                <ActionButtonGroup
+                    buttons={[
+                        {
+                            label: "Añadir Cliente",
+                            onClick: () => setIsModalOpen(true),
+                            variant: "tertiary"
+                        }
+                    ]}
+                />
             </div>
 
-
-            {/** Modal para crear y editar cliente */}
+            {/* MODAL */}
             <Modal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
@@ -159,6 +177,7 @@ export default function SeguimientoPage() {
                     initialData={selectedLead}
                 />
             </Modal>
+
         </div>
     );
 }

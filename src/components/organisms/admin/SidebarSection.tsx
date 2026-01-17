@@ -38,20 +38,24 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         />
       )}
 
-      <aside
-        className={`
-          fixed md:static top-0 left-0 z-40
-          h-full min-h-screen w-72 flex flex-col
-          border-r border-gray-300
-          bg-white dark:bg-[#141A3F]
-          transition-transform duration-300 ease-in-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0
-        `}
-      >
-        <h2 className="text-center font-semibold text-2xl py-8 px-6 text-[#0D1030] dark:text-white">
-          Administración
-        </h2>
+    return (
+        <aside
+            className="
+                hidden lg:flex
+                sticky top-0 h-full min-h-fit w-72 flex flex-col
+                border-r border-gray-300
+                bg-white dark:bg-[#141A3F]
+                transition-colors duration-300
+            "
+        >
+            <h2
+                className="
+                    text-center font-semibold text-2xl py-8 px-6
+                    text-[#0D1030] dark:text-white
+                "
+            >
+                Administración
+            </h2>
 
         <nav className="flex-1 px-12 text-xl text-[#203565] dark:text-white">
           <NavList

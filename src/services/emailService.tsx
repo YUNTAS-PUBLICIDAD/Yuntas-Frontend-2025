@@ -5,6 +5,7 @@ import {
     emailPlantillaServiceResponse,
     sendEmailCampanaResponse,
 } from "@/types/admin/emailPlantilla";
+import { LeadInput } from "@/types/admin/lead";
 import { buildEmailFormData } from "@/utils/emailFormData";
 import { getImg } from "@/utils/getImg";
 import { getToken } from "@/utils/token";
@@ -76,6 +77,29 @@ export async function saveEmailPlantillaService(emailData: EmailFormInput): Prom
     }
 }
 
+export async function sendEmailService(leadData: LeadInput): Promise<emailPlantillaServiceResponse<null>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND_ONE, leadData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+
+        return {
+            success: true,
+            message: response.data.message || "Email enviado exitosamente",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
 export async function sendEmailCampanaService(product_id: number): Promise<sendEmailCampanaResponse> {
     try {
         const token = getToken();
@@ -84,7 +108,7 @@ export async function sendEmailCampanaService(product_id: number): Promise<sendE
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND, { producto_id: product_id },{
+        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND_CAMPANA, { producto_id: product_id },{
             headers: {
                 Authorization: `Bearer ${token}`,
             }
