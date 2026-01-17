@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
-import { useEmail } from "@/hooks/useEmail";
 import PopupContainer from "@/components/atoms/PopContainer";
 import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
 import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
@@ -17,7 +16,6 @@ interface ProductoPopupProps {
 
 const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: ProductoPopupProps) => {
     const { sendWhatsapp, isActivating: isSendingWhatsapp } = useWhatsapp();
-    const { sendEmail, isActivating: isSendingEmail } = useEmail();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -47,7 +45,8 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
 
         const newErrors: Record<string, string> = {};
         if (!formData.name) newErrors.name = "El nombre es obligatorio";
-        if (!formData.email) newErrors.email = "El correo es obligatorio";
+        if (!formData.phone) newErrors.phone = "El teléfono es obligatorio";
+        if (formData.phone?.trim().length !== 9) newErrors.phone = "El teléfono debe tener 9 dígitos";
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -61,19 +60,13 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
             ...(productId && { product_id: productId }),
         };
 
-        const result = await sendEmail(leadData);
+        const result = await sendWhatsapp(leadData);
         if (!result.success) {
-            setErrors({ general: result.message || "Error al enviar el email" });
+            setErrors({ general: result.message || "Error al enviar el WhatsApp" });
             return;
         }
 
-        if (!formData.phone?.trim()) {
-            const result = await sendWhatsapp(leadData);
-            if (!result.success) {
-                setErrors({ general: result.message || "Error al enviar el WhatsApp" });
-                return;
-            }
-        }
+        alert("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
         setFormData({ name: "", phone: "", email: "" });
         closeModal();
@@ -104,7 +97,7 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         buttonText="Explorar opciones"
-                        isSubmitting={isSendingWhatsapp || isSendingEmail}
+                        isSubmitting={isSendingWhatsapp}
                     />
                 </div>
             </PopupContainer>
