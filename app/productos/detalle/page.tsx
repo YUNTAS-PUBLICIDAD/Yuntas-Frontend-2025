@@ -5,7 +5,7 @@ import HeroSection from "@/components/organisms/productos/detalle/HeroSection";
 import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaDetalleSection";
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
-import ProductoDetallePopup from "@/components/organisms/productos/detalle/ProductoDetallePopup";
+import Popup from '@/components/molecules/Popup';
 import { useProductos } from "@/hooks/useProductos";
 import { Suspense, useEffect } from "react";
 
@@ -50,7 +50,13 @@ function ProductoDetalleContent() {
                             reverse={true}
                         />
                         <CotizaSection />
-                        <ProductoDetallePopup imgSrc={producto?.gallery[3]?.url || ""} productId={producto?.id} />
+                        <Popup
+                            imgSrc={producto?.gallery[3]?.url || ""}
+                            title="¡Tu marca brillando como se merece!"
+                            buttonText="Explorar opciones"
+                            productId={producto?.id}
+                            sourceId={1}
+                        />
                     </main>
                 )
             }

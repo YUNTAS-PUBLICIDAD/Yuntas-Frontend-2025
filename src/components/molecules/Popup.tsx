@@ -4,18 +4,27 @@ import PopupContainer from "@/components/atoms/PopContainer";
 import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
 import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
 import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
-import imagenPopup from "@/assets/productos/popup/Productos.webp";
 import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
 
-interface ProductoPopupProps {
+interface PopupProps {
     delay?: number;
-    imgSrc?: string;
+    imgSrc: string;
+    title: string;
+    buttonText: string;
     productId?: number;
+    sourceId?: number;
 }
 
-const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: ProductoPopupProps) => {
-    const { sendWhatsapp, isActivating: isSendingWhatsapp } = useWhatsapp();
+const Popup = ({
+    delay = 5000,
+    imgSrc,
+    title,
+    buttonText,
+    productId,
+    sourceId = 1,
+}: PopupProps) => {
+    const { sendWhatsapp, isActivating } = useWhatsapp();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -24,6 +33,7 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
         name: "",
         phone: "",
         email: "",
+        source_id: sourceId,
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,6 +68,7 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
+            source_id: sourceId,
             ...(productId && { product_id: productId }),
         };
 
@@ -69,7 +80,7 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
 
         alert("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
-        setFormData({ name: "", phone: "", email: "" });
+        setFormData({ name: "", phone: "", email: "", source_id: sourceId });
         closeModal();
     };
 
@@ -91,14 +102,14 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
                 <PopupImage src={imgSrc} />
 
                 <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
-                    <PopupHeader title="¡Tu marca brillando como se merece!" />
+                    <PopupHeader title={title} />
                     <PopupForm
                         formData={formData}
                         errors={errors}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
-                        buttonText="Explorar opciones"
-                        isSubmitting={isSendingWhatsapp}
+                        buttonText={buttonText}
+                        isSubmitting={isActivating}
                     />
                 </div>
             </PopupContainer>
@@ -106,4 +117,4 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
     );
 };
 
-export default ProductoPopup;
+export default Popup;

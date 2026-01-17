@@ -3,7 +3,8 @@ import HeroSection from "@/components/organisms/inicio/HeroSection";
 import InnovacionSection from "@/components/organisms/inicio/InnovacionSection";
 import ProjectsCarousel from "@/components/organisms/inicio/ProjectsCarousel";
 import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSection";
-import InicioPopup from "@/components/organisms/inicio/popupInicial/InicioPopup";
+import imagenPopup from "@/assets/inicio/Popup/yuleLove.webp";
+import Popup from "@/components/molecules/Popup";
 
 export default function HomePage() {
   return (
@@ -12,7 +13,11 @@ export default function HomePage() {
       <InnovacionSection />
       <ProjectsCarousel />
       <TestimonialsSection />
-      <InicioPopup delay={5000} />
+      <Popup
+        imgSrc={imagenPopup.src}
+        title="¡Un detalle que cambia todo!"
+        buttonText="Empieza a brillar"
+      />
     </main>
   );
 }
