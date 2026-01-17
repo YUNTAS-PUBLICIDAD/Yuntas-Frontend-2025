@@ -45,7 +45,8 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
 
         const newErrors: Record<string, string> = {};
         if (!formData.name) newErrors.name = "El nombre es obligatorio";
-        if (!formData.phone) newErrors.phone = "El teléfono es obligatorio";
+        if (!formData.phone?.trim()) newErrors.phone = "El teléfono es obligatorio";
+        if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
         if (formData.phone?.trim().length !== 9) newErrors.phone = "El teléfono debe tener 9 dígitos";
 
         if (Object.keys(newErrors).length > 0) {
