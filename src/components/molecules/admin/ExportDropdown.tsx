@@ -11,11 +11,13 @@ interface ExportOption {
 interface ExportDropdownProps {
     options: ExportOption[];
     label?: string;
+    className?: string;
 }
 
 export default function ExportDropdown({
     options,
-    label = "EXPORTAR"
+    label = "EXPORTAR",
+    className
 }: ExportDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,7 +44,7 @@ export default function ExportDropdown({
             {/* Botón principal */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#23C1DE] text-white font-semibold text-sm md:text-base rounded-full hover:opacity-90 transition-all"
+                className={`flex items-center justify-center gap-1 px-3 py-1 bg-[#23C1DE] text-white font-semibold text-xs sm:text-sm md:text-base rounded-full hover:opacity-90 transition-all ${className ?? "w-full sm:w-auto"}`}
             >
                 {label}
                 <FaChevronDown

@@ -88,6 +88,12 @@ export default function ProductosPage() {
         { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
     ];
 
+    const exportButtonsDesktop = [
+        { label: "EXPORTAR A CSV", onClick: () => exportToCSV(productos) },
+        { label: "EXPORTAR A EXCEL", onClick: () => exportToExcel(productos) },
+        { label: "EXPORTAR A PDF", onClick: () => exportToPDF(productos) },
+    ];
+
     if (isLoading && productos.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
     }
@@ -95,34 +101,48 @@ export default function ProductosPage() {
     return (
         <div className="p-2 md:p-4">
             {/* Botones de acción principales */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
-                <ActionButtonGroup buttons={[{
+            {/* Botones de acción principales */}
+            <div className="flex flex-row flex-wrap gap-2 mb-4">
+                <ActionButtonGroup className="flex-auto" buttons={[{
                     label: "Añadir Producto",
                     onClick: () => setIsAddEditModalOpen(true),
-                    variant: "tertiary"
+                    variant: "tertiary",
+                    className: "w-full"
                 }]} />
 
-                <ActionButtonGroup buttons={[{
+                <ActionButtonGroup className="flex-auto" buttons={[{
                     label: "Envio de Email",
                     onClick: () => setIsEmailModalOpen(true),
-                    variant: "danger"
+                    variant: "danger",
+                    className: "w-full"
                 }]} />
 
-                <ActionButtonGroup buttons={[{
+                <ActionButtonGroup className="flex-auto" buttons={[{
                     label: "Envio de Whatsapp",
                     onClick: () => setIsWhatsappModalOpen(true),
-                    variant: "success"
+                    variant: "success",
+                    className: "w-full"
                 }]} />
             </div>
 
             {/* Botones de Imprimir y Exportar */}
-            <div className="flex flex-wrap gap-2 mb-4 no-print">
-                <ActionButtonGroup buttons={[{
+            <div className="flex flex-row flex-wrap gap-2 mb-4 no-print items-center">
+                <ActionButtonGroup className="flex-auto" buttons={[{
                     label: "IMPRIMIR",
                     onClick: () => printTable(productos),
-                    variant: "primary"
+                    variant: "primary",
+                    className: "w-full"
                 }]} />
-                <ExportDropdown options={exportOptions} />
+
+                {/* Desktop: Botones separados */}
+                <div className="hidden md:block">
+                    <ActionButtonGroup buttons={exportButtonsDesktop} />
+                </div>
+
+                {/* Móvil: Dropdown */}
+                <div className="md:hidden flex-auto">
+                    <ExportDropdown options={exportOptions} className="w-full" />
+                </div>
             </div>
 
             {error && (
