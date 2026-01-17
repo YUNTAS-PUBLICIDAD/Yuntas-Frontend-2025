@@ -4,7 +4,7 @@ import ProductoPopup from "../popupInicial/ProductoPopup";
 
 interface Props {
   imgSrc: string;
-  productId: number; //  NUEVO
+  productId: number;
 }
 
 export default function ProductoDetallePopup({ imgSrc, productId }: Props) {
@@ -12,7 +12,7 @@ export default function ProductoDetallePopup({ imgSrc, productId }: Props) {
     <ProductoPopup
       delay={5000}
       imgSrc={imgSrc}
-      productId={productId} //  PASA ID
+      productId={productId}
     />
   );
 }

@@ -10,8 +10,10 @@ import {
 import {
     getEmailPlantillaByProductService,
     saveEmailPlantillaService,
+    sendEmailService,
     sendEmailCampanaService,
 } from "@/services/emailService";
+import { LeadInput } from "@/types/admin/lead";
 
 interface UseEmailReturn {
     emailPlantillas: emailPlantilla[];
@@ -21,6 +23,7 @@ interface UseEmailReturn {
     error: string | null;
     getEmailPlantillas: (product_id: number) => Promise<void>;
     saveEmailPlantilla: (emailData: EmailFormInput) => Promise<emailPlantillaServiceResponse<emailPlantilla>>;
+    sendEmail: (leadData: LeadInput) => Promise<emailPlantillaServiceResponse<null>>;
     sendEmailCampana: (product_id: number) => Promise<sendEmailCampanaResponse>;
     clearError: () => void;
     clearEmailPlantillas: () => void;
@@ -36,7 +39,7 @@ export function useEmail(): UseEmailReturn {
     const clearError = () => setError(null);
     const clearEmailPlantillas = () => setEmailPlantillas([]);
 
-    const getEmailPlantillas = useCallback(async (product_id: number) : Promise<void> => {
+    const getEmailPlantillas = useCallback(async (product_id: number): Promise<void> => {
         setIsLoading(true);
         setError(null);
 
@@ -61,6 +64,15 @@ export function useEmail(): UseEmailReturn {
         return result;
     }, []);
 
+    const sendEmail = useCallback(async (leadData: LeadInput): Promise<emailPlantillaServiceResponse<null>> => {
+        setIsActivating(true);
+        setError(null);
+
+        const result = await sendEmailService(leadData);
+        setIsActivating(false);
+        return result;
+    }, []);
+
     const sendEmailCampana = useCallback(async (product_id: number): Promise<sendEmailCampanaResponse> => {
         setIsActivating(true);
         setError(null);
@@ -79,6 +91,7 @@ export function useEmail(): UseEmailReturn {
         error,
         getEmailPlantillas,
         saveEmailPlantilla,
+        sendEmail,
         sendEmailCampana,
         clearError,
         clearEmailPlantillas,
