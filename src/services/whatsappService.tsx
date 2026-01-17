@@ -1,4 +1,5 @@
 import { api, API_ENDPOINTS } from "@/config";
+import { LeadInput } from "@/types/admin/lead";
 import {
     WhatsappPlantilla,
     WhatsappPlantillaInput,
@@ -61,6 +62,29 @@ export async function saveWhatsappPlantillaService(whatsappData: WhatsappPlantil
         return {
             success: true,
             message: "Plantilla whatsapp creada exitosamente",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
+export async function sendWhatsappService(leadData: LeadInput): Promise<WhatsappPlantillaServiceResponse<null>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.SEND_ONE, leadData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+
+        return {
+            success: true,
+            message: response.data.message || "WhatsApp enviado exitosamente",
         };
     } catch (error: any) {
         return { success: false, message: error.message };
