@@ -17,8 +17,10 @@ export interface WhatsappPlantillaServiceResponse<T = null> {
     data?: T;
 }
 
-/* export interface sendWhatsappCampanaResponse {
+export interface sendWhatsappCampanaResponse {
     success: boolean;
     message?: string;
     total_leads?: number;
-} */
+    exitosos?: number;
+    fallidos?: number;
+}
