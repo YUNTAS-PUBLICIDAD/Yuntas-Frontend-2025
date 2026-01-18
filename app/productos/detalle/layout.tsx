@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Productos - Yuntas Publicidad",
     description: "Catálogo completo de productos publicitarios",
-    images: [{ url: "https://yuntaspublicidad.com/og-default.jpg" }],
+    images: [{ url: "https://yuntaspublicidad.com/_next/static/media/burguerP.233aca31.webp" }],
   },
 };
 
