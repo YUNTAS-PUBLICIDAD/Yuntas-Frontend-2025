@@ -26,8 +26,10 @@ const defaultFormData: WhatsappPlantillaInput = {
 export default function SendWhatsappForm({ onClose, products, isConnected }: SendWhatsappFormProps) {
     const {
         getWhatsappPlantilla,
+        getWhatsappPlantillaDefault,
         whatsappPlantilla,
         saveWhatsappPlantilla,
+        saveWhatsappPlantillaDefault,
         isLoading,
         isSaving,
         isActivating,
@@ -45,9 +47,8 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
             return;
         }
 
-        getWhatsappPlantilla(Number(formData.producto_id));
-    }, [formData.producto_id, getWhatsappPlantilla]);
-
+        formData.producto_id === "0" ? getWhatsappPlantillaDefault() : getWhatsappPlantilla(Number(formData.producto_id));
+    }, [formData.producto_id, getWhatsappPlantilla, getWhatsappPlantillaDefault]);
     useEffect(() => {
         if (!whatsappPlantilla) {
             setFormData({
@@ -59,7 +60,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
         }
 
         setFormData({
-            producto_id: String(whatsappPlantilla.producto_id),
+            producto_id: whatsappPlantilla.producto_id === null ? "0" : String(whatsappPlantilla.producto_id),
             imagen_principal: whatsappPlantilla.imagen_principal,
             parrafo: whatsappPlantilla.parrafo,
         });
@@ -82,7 +83,9 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
             return;
         }
 
-        const result = await saveWhatsappPlantilla(formData);
+        const result = formData.producto_id === "0"
+            ? await saveWhatsappPlantillaDefault(formData)
+            : await saveWhatsappPlantilla(formData);
 
         if (result.success) {
             onClose();
@@ -106,7 +109,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                     value={formData.producto_id}
                     onChange={(e) => setFormData(prev => ({ ...prev, producto_id: e.target.value }))}
                     required
-                    options={products}
+                    options={[{ id: 0, name: "Por defecto" }, ...products]}
                 />
             </FormSection>
 

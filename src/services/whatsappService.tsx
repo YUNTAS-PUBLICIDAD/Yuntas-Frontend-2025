@@ -43,7 +43,31 @@ export async function getWhatsappPlantillaByProductService(product_id: number): 
     }
 }
 
-// para crear y actualizar una plantilla
+export async function getWhatsappPlantillaDefaultService(): Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla | null>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        const response = await api.get(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.GET_ONE_DEFAULT, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+
+        return {
+            success: true,
+            message: response.data.message || "Plantilla whatsapp por defecto obtenida exitosamente",
+            data: formatPlantilla(response.data.data),
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
+// para crear y actualizar una plantilla de whatsapp de un producto
 export async function saveWhatsappPlantillaService(whatsappData: WhatsappPlantillaInput): Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>> {
     try {
         const token = getToken();
@@ -61,7 +85,32 @@ export async function saveWhatsappPlantillaService(whatsappData: WhatsappPlantil
 
         return {
             success: true,
-            message: "Plantilla whatsapp creada exitosamente",
+            message: "Plantilla whatsapp de producto creada exitosamente",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
+// para crear y actualizar una plantilla por defecto
+export async function saveWhatsappPlantillaDefaultService(whatsappData: WhatsappPlantillaInput): Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.SAVE_DEFAULT, whatsappData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        return {
+            success: true,
+            message: "Plantilla whatsapp por defecto creada exitosamente",
         };
     } catch (error: any) {
         return { success: false, message: error.message };

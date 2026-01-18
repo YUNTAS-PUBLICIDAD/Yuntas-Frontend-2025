@@ -48,8 +48,10 @@ export const API_ENDPOINTS = {
         SEND_CAMPANA: '/admin/email-campanas/enviar-campana',
       },
       WHATSAPP: {
-        SAVE: '/admin/whatsapp-productos', // para crear y actualizar
+        SAVE: '/admin/whatsapp-productos', // para crear y actualizar plantilla de whatsapp de un producto
+        SAVE_DEFAULT: '/admin/whatsapp-productos/default', // para crear y actualizar plantilla por defecto
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/whatsapp-productos/?producto_id=${product_id}`,
+        GET_ONE_DEFAULT: '/admin/whatsapp-productos/default',
         REQUEST_QR: '/admin/whatsapp-campanas/pedir-qr',
         RESET_SESSION: '/admin/whatsapp-campanas/reset',
         SEND_ONE: '/admin/whatsapp-campanas/enviar',
