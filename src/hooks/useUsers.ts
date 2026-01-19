@@ -1,71 +1,91 @@
+'use client';
+
 import { useState, useCallback } from "react";
-import { api, API_ENDPOINTS } from "@/config";
+import { User, UserInput, UserServiceResponse } from "@/types/admin/user";
+import {
+    getUsersService,
+    createUserService,
+    updateUserService,
+    deleteUserService
+} from "@/services/usersService";
 
-export const useUsers = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+interface UseUsersReturn {
+    users: User[];
+    isLoading: boolean;
+    error: string | null;
+    getUsers: (perPage?: number) => Promise<void>;
+    createUser: (user: UserInput) => Promise<UserServiceResponse<User>>;
+    updateUser: (id: number, user: UserInput) => Promise<UserServiceResponse<User>>;
+    deleteUser: (id: number) => Promise<UserServiceResponse>;
+    clearError: () => void;
+}
 
-  // 🔹 GET USERS
-  const getUsers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await api.get(API_ENDPOINTS.ADMIN.USERS.GET_ALL);
-      // Ajuste según la estructura de tu API (data.data o data)
-      setUsers(res.data.data ?? res.data);
-    } catch (error) {
-      console.error("❌ Error al obtener usuarios:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+export function useUsers(): UseUsersReturn {
+    const [users, setUsers] = useState<User[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-  // 🔹 CREATE USER
-  const createUser = async (user: any) => {
-    try {
-      const res = await api.post(API_ENDPOINTS.ADMIN.USERS.CREATE, user);
-      return res.data.data; // 👈 DEVUELVE EL USUARIO
-    } catch (error) {
-      console.error("❌ Error al crear usuario:", error);
-      return null;
-    }
-  };
+    const clearError = () => setError(null);
 
-  // 🔹 UPDATE USER
-  const updateUser = async (id: number, user: any) => {
-    try {
-      const res = await api.put(API_ENDPOINTS.ADMIN.USERS.UPDATE(id), user);
-      const updatedUser = res.data.data ?? res.data;
+    const getUsers = useCallback(async (perPage: number = 20) => {
+        setIsLoading(true);
+        setError(null);
 
-      setUsers((prev) =>
-        prev.map((u) => (u.id === id ? updatedUser : u))
-      );
-      return true;
-    } catch (error) {
-      console.error("❌ Error al actualizar usuario:", error);
-      return false;
-    }
-  };
+        const result = await getUsersService(perPage);
 
-  // 🔹 DELETE USER
-  const deleteUser = async (id: number) => {
-    try {
-      await api.delete(API_ENDPOINTS.ADMIN.USERS.DELETE(id));
+        if (result.success && result.data) {
+            setUsers(result.data);
+        } else {
+            setError(result.message || 'Error desconocido');
+            setUsers([]);
+        }
 
-      setUsers((prev) => prev.filter((u) => u.id !== id));
-      return true;
-    } catch (error) {
-      console.error("❌ Error al eliminar usuario:", error);
-      return false;
-    }
-  };
+        setIsLoading(false);
+    }, []);
 
-  return {
-    users,
-    setUsers,
-    loading,
-    getUsers,
-    createUser,
-    updateUser,
-    deleteUser,
-  };
-};
+    const updateUser = useCallback(async (id: number, userData: UserInput): Promise<UserServiceResponse<User>> => {
+        setIsLoading(true);
+        setError(null);
+
+        const result = await updateUserService(id, userData);
+
+        setIsLoading(false);
+        return result;
+
+    }, []);
+
+    const createUser = useCallback(async (userData: UserInput): Promise<UserServiceResponse<User>> => {
+        setIsLoading(true);
+        setError(null);
+
+        const result = await createUserService(userData);
+
+        setIsLoading(false);
+        return result;
+    }, []);
+
+    const deleteUser = useCallback(async (id: number): Promise<UserServiceResponse> => {
+        setIsLoading(true);
+        setError(null);
+
+        const result = await deleteUserService(id);
+
+        if (!result.success) {
+            setError(result.message || 'Error desconocido');
+        }
+
+        setIsLoading(false);
+        return result;
+    }, []);
+
+    return {
+        users,
+        isLoading,
+        error,
+        getUsers,
+        createUser,
+        updateUser,
+        deleteUser,
+        clearError,
+    };
+}

@@ -1,3 +1,5 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { Blog } from "@/types/admin/blog";
 import { Producto } from "@/types/admin/producto";
 
@@ -8,129 +10,82 @@ export const exportToPDF = (data: Blog[] | Producto[]) => {
       return;
     }
 
-    const printWindow = window.open("", "_blank", "width=1100,height=700"); // Un poco más ancho
-    if (!printWindow) {
-      alert("Permite ventanas emergentes para generar el PDF");
-      return;
-    }
-
-    // 1. Detectar tipo de dato
+    // 🔍 Detectar tipo de dato
     const isBlog = (item: any): item is Blog => {
       return (item as Blog).title !== undefined;
     };
 
     const isBlogData = isBlog(data[0]);
 
-    // 2. Definir Encabezados
-    const headers = isBlogData
-      ? `
-        <th style="width: 5%;">ID</th>
-        <th style="width: 20%;">Título</th>
-        <th style="width: 20%;">Subtítulo</th>
-        <th style="width: 20%;">Meta Título</th>
-        <th style="width: 15%;">Fecha</th>
-        <th style="width: 10%;">Párrafos</th>
-        <th style="width: 10%;">Imágenes</th>
-      `
-      : `
-        <th>Nombre</th>
-        <th>Categorías</th>
-      `;
+    //Crear documento PDF (horizontal para tablas grandes)
+    const doc = new jsPDF("l", "mm", "a4");
 
-    // 3. Generar Filas (CORREGIDO: div.truncate dentro de td)
-    const rows = isBlogData
-      ? (data as Blog[])
-          .map(
-            (blog) => `
-            <tr>
-              <td style="text-align:center">${blog.id}</td>
-              <td><div class="truncate">${blog.title}</div></td>
-              <td><div class="truncate">${blog.cover_subtitle || "-"}</div></td>
-              <td><div class="truncate">${blog.meta_title || "-"}</div></td>
-              <td style="text-align:center">${new Date(blog.created_at).toLocaleDateString("es-ES")}</td>
-              <td style="text-align:center">${blog.paragraphs?.length || 0}</td>
-              <td style="text-align:center">${blog.gallery?.length || 0}</td>
-            </tr>
-          `
-          )
-          .join("")
-      : (data as Producto[])
-          .map(
-            (prod) => `
-            <tr>
-              <td>${prod.name}</td>
-              <td style="text-align:center">${prod.category_name}</td>
-            </tr>
-          `
-          )
-          .join("");
+    doc.setFontSize(14);
+    doc.text(
+      `Reporte de ${isBlogData ? "Blogs" : "Productos"} - Yuntas`,
+      14,
+      15
+    );
 
-    // 4. Construir HTML
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8" />
-        <title>Reporte</title>
-        <style>
-          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 11px; padding: 20px; }
-          h1 { text-align: center; color: #0ea5e9; border-bottom: 2px solid #0ea5e9; padding-bottom: 15px; margin-bottom: 20px; }
-          
-          table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            table-layout: fixed; /* Importante para respetar anchos */
-          }
-          
-          th, td { 
-            border: 1px solid #e2e8f0; 
-            padding: 8px; 
-            vertical-align: middle;
-          }
-          
-          th { 
-            background-color: #0ea5e9; 
-            color: white; 
-            font-weight: 600;
-            text-align: center;
-          }
-          
-          tr:nth-child(even) { background-color: #f8fafc; }
-          
-          /* CLASE TRUNCATE CORREGIDA */
-          .truncate {
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block; /* Funciona bien dentro del DIV, no del TD */
-          }
-        </style>
-      </head>
-      <body>
-        <h1>📊 Reporte de ${isBlogData ? "Blogs" : "Productos"}</h1>
-        <table>
-          <thead>
-            <tr>${headers}</tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      </body>
-      </html>
-    `;
+    if (isBlogData) {
+      //TABLA BLOGS
+      autoTable(doc, {
+        startY: 22,
+        head: [[
+          "ID",
+          "Título",
+          "Subtítulo",
+          "Meta Título",
+          "Fecha",
+          "Párrafos",
+          "Imágenes",
+        ]],
+        body: (data as Blog[]).map(blog => [
+          blog.id,
+          blog.title,
+          blog.cover_subtitle || "-",
+          blog.meta_title || "-",
+          new Date(blog.created_at).toLocaleDateString("es-ES"),
+          blog.paragraphs?.length || 0,
+          blog.gallery?.length || 0,
+        ]),
+        styles: {
+          fontSize: 9,
+          valign: "middle",
+        },
+        headStyles: {
+          fillColor: [14, 165, 233], // mismo azul que usabas
+          textColor: 255,
+          halign: "center",
+        },
+        bodyStyles: {
+          halign: "left",
+        },
+        alternateRowStyles: {
+          fillColor: [248, 250, 252],
+        },
+      });
+    } else {
+      //TABLA PRODUCTOS
+      autoTable(doc, {
+        startY: 22,
+        head: [["Nombre", "Categoría"]],
+        body: (data as Producto[]).map(prod => [
+          prod.name,
+          prod.category_name,
+        ]),
+        styles: { fontSize: 10 },
+        headStyles: {
+          fillColor: [14, 165, 233],
+          textColor: 255,
+        },
+      });
+    }
 
-    printWindow.document.write(html);
-    printWindow.document.close();
-
-    printWindow.onload = () => {
-      setTimeout(() => {
-        printWindow.print();
-      }, 500);
-    };
-  } catch (e) {
-    console.error("Error PDF", e);
-    alert("Error al generar PDF");
+    // Descargar PDF
+    doc.save(`reporte_${isBlogData ? "blogs" : "productos"}.pdf`);
+  } catch (error) {
+    console.error("Error al generar PDF:", error);
+    alert("Error al generar el PDF");
   }
 };

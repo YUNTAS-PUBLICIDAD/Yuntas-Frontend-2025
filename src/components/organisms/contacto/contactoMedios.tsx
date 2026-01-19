@@ -24,9 +24,9 @@ const ContactoMedios: React.FC = () => {
       <div className="container mx-auto px-4">
         {/* Los 3 divs en fila para escritorio con mismo tamaño */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {contactoData.map((valor) => {
+          {contactoData.map((valor, index) => {
             return (
-              <div className="text-center bg-[#E2F6F6] rounded-2xl p-8 flex flex-col items-center justify-center min-h-[200px]">
+              <div key={`contactos-medios-${index}`} className="text-center bg-[#E2F6F6] rounded-2xl p-8 flex flex-col items-center justify-center min-h-[200px]">
                 {/* Círculo azul con icono centrado */}
                 <div className="bg-[#203565] w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <valor.icon className="text-white size-10 md:size-14" />

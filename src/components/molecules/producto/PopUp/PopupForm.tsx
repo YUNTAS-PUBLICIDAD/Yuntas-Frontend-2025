@@ -1,17 +1,15 @@
 import React from "react";
 import InputField from "@/components/atoms/InputField";
 import ButtonPrimary from "@/components/atoms/PrimaryButton";
+import { LeadInput } from "@/types/admin/lead";
 
 interface PopupFormProps {
-  formData: {
-    nombre: string;
-    telefono: string;
-    email: string;
-  };
+  formData: LeadInput
   errors: {
-    nombre?: string;
-    telefono?: string;
+    name?: string;
+    phone?: string;
     email?: string;
+    general?: string;
   };
   handleChange: (field: string, value: string) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -33,17 +31,17 @@ const PopupForm: React.FC<PopupFormProps> = ({
   >
     <InputField
       placeholder="Nombre"
-      value={formData.nombre}
-      error={errors.nombre}
-      onChange={(e) => handleChange("nombre", e.target.value)}
+      value={formData.name}
+      error={errors.name}
+      onChange={(e) => handleChange("name", e.target.value)}
     />
 
     <InputField
       placeholder="Teléfono"
       maxLength={9}
-      value={formData.telefono}
-      error={errors.telefono}
-      onChange={(e) => handleChange("telefono", e.target.value)}
+      value={formData.phone}
+      error={errors.phone}
+      onChange={(e) => handleChange("phone", e.target.value)}
     />
 
     <InputField
@@ -53,6 +51,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       error={errors.email}
       onChange={(e) => handleChange("email", e.target.value)}
     />
+    {errors.general && (<div className="text-red-500 text-sm">{errors.general}</div>)}
     <div>
       <ButtonPrimary
         disabled={isSubmitting}

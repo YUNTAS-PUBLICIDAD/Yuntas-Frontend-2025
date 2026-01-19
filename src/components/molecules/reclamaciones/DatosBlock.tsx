@@ -11,7 +11,7 @@ type DatosBlockProps = {
 
 const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
   const selectsGrid = selectsReclamos.slice(0, 1);  // Solo el select de Tipo documento
-
+  const inputType = formData.document_type_id === 1 ? "number" : "text";
   return (
     <div className='flex flex-col gap-6 w-full'>
       <Input
@@ -42,6 +42,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
             options={sel.options}
             required
             name="document_type_id"
+            value={formData.document_type_id || ""} 
             onChange={handleChange}
           />
         ))}
@@ -49,7 +50,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
           textLabel="Número de documento"
           placeholder="ej: 76798589"
           size="xl"
-          type="number"
+          type={inputType}
           required
           name="document_number"
           value={formData.document_number}

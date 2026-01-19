@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from "react";
-import { Contacto, ContactoInput } from "@/types/admin/contacto";
+import { Contacto, ContactoServiceResponse, ContactoInput } from "@/types/admin/contacto";
 import {
     getContactosService,
     getContactoByIdService,
@@ -15,9 +15,9 @@ interface UseContactosReturn {
     isLoading: boolean;
     error: string | null;
     getContactos: (perPage?: number) => Promise<void>;
-    getContactoById: (id: number) => Promise<Contacto | null>;
-    createContacto: (contacto: ContactoInput) => Promise<boolean>;
-    deleteContacto: (id: number) => Promise<boolean>;
+    getContactoById: (id: number) => Promise<void>;
+    createContacto: (contacto: ContactoInput) => Promise<ContactoServiceResponse<Contacto>>;
+    deleteContacto: (id: number) => Promise<ContactoServiceResponse>;
     clearError: () => void;
     clearContacto: () => void;
 }
@@ -41,12 +41,13 @@ export function useContactos(): UseContactosReturn {
             setContactos(result.data);
         } else {
             setError(result.message || 'Error desconocido');
+            setContactos([]);
         }
 
         setIsLoading(false);
     }, []);
 
-    const getContactoById = useCallback(async (id: number): Promise<Contacto | null> => {
+    const getContactoById = useCallback(async (id: number): Promise<void> => {
         setIsLoading(true);
         setError(null);
 
@@ -54,39 +55,30 @@ export function useContactos(): UseContactosReturn {
         if (result.success && result.data) {
             setContacto(result.data);
             setIsLoading(false);
-            return result.data;
         } else {
             setError(result.message || 'Error desconocido');
             setIsLoading(false);
-            return null;
         }
     }, []);
 
-    const createContacto = useCallback(async (contactoData: ContactoInput): Promise<boolean> => {
+    const createContacto = useCallback(async (contactoData: ContactoInput): Promise<ContactoServiceResponse<Contacto>> => {
         setIsLoading(true);
         setError(null);
 
         const result = await createContactoService(contactoData);
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
 
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
-    const deleteContacto = useCallback(async (id: number): Promise<boolean> => {
+    const deleteContacto = useCallback(async (id: number): Promise<ContactoServiceResponse> => {
         setIsLoading(true);
         setError(null);
 
         const result = await deleteContactoService(id);
 
-        if (!result.success) {
-            setError(result.message || 'Error desconocido');
-        }
-
         setIsLoading(false);
-        return result.success;
+        return result;
     }, []);
 
     return {

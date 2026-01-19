@@ -1,9 +1,13 @@
 export interface Contacto {
-    id : number;
+    id: number;
     first_name: string;
     last_name: string;
     phone: string;
-    message: string;
+    district: string | null;       
+    request_detail: string | null; 
+    message: string | null;        
+    created_at: string;            
+    updated_at?: string;
 }
 
 export interface ContactoInput {
@@ -15,7 +19,7 @@ export interface ContactoInput {
     message: string;
 }
 
-export interface ContactoActionResponse<T> {
+export interface ContactoServiceResponse<T = any> {
     success: boolean;
     message?: string;
     data?: T;

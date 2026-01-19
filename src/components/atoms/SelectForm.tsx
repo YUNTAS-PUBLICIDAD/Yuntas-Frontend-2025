@@ -11,7 +11,7 @@ interface SelectFormProps {
     value: string | number;
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     required?: boolean;
-    options: string[] | Producto[]
+    options: string[] | Record<string, any>[];
 }
 
 export default function SelectForm({
@@ -46,13 +46,14 @@ export default function SelectForm({
                 value={value}
                 onChange={onChange}
                 required={required}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all overflow-y-auto max-h-50"
+                size={1}
             >
                 <option value="">
                     --- Selecciona una opción ---
                 </option>
                 {normalizedOptions.map((option, index) => (
-                    <option key={index} value={option?.value}>
+                    <option key={option?.value ?? index} value={option?.value}>
                         {option.label}
                     </option>
                 ))}

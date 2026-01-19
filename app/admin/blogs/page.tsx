@@ -15,6 +15,7 @@ import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarous
 import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
 import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
 import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
+import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
@@ -23,7 +24,7 @@ import { Blog } from "@/types/admin/blog";
 
 const columns = [
   { key: "id", label: "ID" },
-  { key: "product", label: "PRODUCTO",render:(_:unknown,row:Blog)=> row.product?.name || "null" },
+  { key: "product", label: "PRODUCTO", render: (_: unknown, row: Blog) => row.product?.name || "null" },
   { key: "meta_title", label: "SUBTÍTULO" },
   {
     key: "gallery",
@@ -32,10 +33,10 @@ const columns = [
       <BlogImageCarousel item={row.gallery} />
     )
   },
-  { key: "created_at", label: "FECHA",render:(_:unknown,row:Blog)=>new Date(row.created_at).toLocaleDateString() },
+  { key: "created_at", label: "FECHA", render: (_: unknown, row: Blog) => new Date(row.created_at).toLocaleDateString() },
 ];
 export default function Blogspage() {
-  const {blogs,error,meta,links,isLoading,getBlogs,goToNextPage,goToPrevPage,} = useBlogs();
+  const { blogs, error, meta, links, isLoading, getBlogs, goToNextPage, goToPrevPage, } = useBlogs();
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -47,8 +48,15 @@ export default function Blogspage() {
   useEffect(() => {
     getBlogs(10); // carga inicial
   }, [getBlogs]);
-  const topButtons = useMemo(() => [
-    { label: "Publicar", onClick: () => setOpenAddModal(true) },
+
+
+  const exportOptions = useMemo(() => [
+    { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
+    { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
+    { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
+  ], [blogs]);
+
+  const exportButtonsDesktop = useMemo(() => [
     { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
     { label: "Exportar Excel", onClick: () => exportExcel(blogs) },
     { label: "Exportar PDF", onClick: () => exportToPDF(blogs) },
@@ -56,13 +64,13 @@ export default function Blogspage() {
   const handleEdit = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenUpdateModal(true);
-        router.refresh();  
+    router.refresh();
   };
 
   const handleDelete = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenDeleteModal(true);
-    router.refresh();  
+    router.refresh();
   };
   console.log(blogs)
   return (
@@ -91,13 +99,26 @@ export default function Blogspage() {
         onSuccess={() => getBlogs(10)}
       />
 
-      <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
+      <div className="flex flex-row flex-wrap gap-2 mb-4 mt-4 items-center">
+        {/* Botón Publicar siempre visible */}
+        <ActionButtonGroup className="flex-auto" buttons={[{ label: "Publicar", onClick: () => setOpenAddModal(true), className: "w-full" }]} />
+
+        {/* Desktop: Botones de exportación separados */}
+        <div className="hidden md:block">
+          <ActionButtonGroup buttons={exportButtonsDesktop} />
+        </div>
+
+        {/* Móvil: Dropdown de exportación */}
+        <div className="md:hidden flex-auto">
+          <ExportDropdown options={exportOptions} className="w-full" />
+        </div>
+      </div>
       {error && (
-                <div>
-                    {error}
-                </div>
-            )}
-      
+        <div>
+          {error}
+        </div>
+      )}
+
       <AdminTable
         minRows={10}
         columns={columns}
