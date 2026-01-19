@@ -28,6 +28,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     usuarios: "Usuarios",
     reclamaciones: "Reclamaciones",
     seguimiento: "Seguimiento",
+    contacto: "Contacto",
   };
 
   const key = segment ?? "admin";

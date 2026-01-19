@@ -18,7 +18,8 @@ const navItems: NavItem[] = [
     { label: "Blogs", href: "/admin/blogs" },
     { label: "Productos", href: "/admin/productos" },
     { label: "Usuarios", href: "/admin/usuarios" },
-     { label: "Reclamaciones", href: "/admin/reclamaciones" },
+    { label: "Reclamaciones", href: "/admin/reclamaciones" },
+    { label: "Contacto", href: "/admin/contacto" },
 ];
 
 export default function SidebarSection() {
