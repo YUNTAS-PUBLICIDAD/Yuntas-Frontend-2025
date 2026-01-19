@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Modal from "@/components/atoms/Modal";
-import toast, { Toaster } from 'react-hot-toast';
+import { showToast } from "@/utils/showToast";
 import { useProductos } from "@/hooks/useProductos";
 import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
@@ -126,7 +126,7 @@ export default function ReclamacionesPage() {
             });
             if (!res.ok) throw new Error("Error al actualizar estado");
 
-            toast.success("Estado actualizado correctamente");
+            showToast.success("Estado actualizado correctamente");
 
             setReclamos(prev => prev.map(r => {
                 if (r.id === selectedReclamo.id) return { ...r, claim_status_id: newStatusId };
@@ -135,7 +135,7 @@ export default function ReclamacionesPage() {
 
             setIsDetailModalOpen(false);
         } catch (error: any) {
-            toast.error("Error: " + error.message);
+            showToast.error(error.message);
         } finally {
             setIsUpdating(false);
         }
@@ -145,8 +145,6 @@ export default function ReclamacionesPage() {
 
     return (
         <div className="p-2 md:p-4">
-            <Toaster position="top-right" />
-
             <div className="mb-4 md:mb-6">
                 <h1 className="text-xl md:text-2xl font-bold text-[#203565]">Libro de Reclamaciones</h1>
             </div>

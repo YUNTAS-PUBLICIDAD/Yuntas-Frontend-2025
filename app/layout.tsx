@@ -1,5 +1,6 @@
 import MainLayout from "@/components/layout/MainLayout";
 import "@/styles/globals.css";
+import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <MainLayout>{children}</MainLayout>
+        <Toaster />
       </body>
     </html>
   );

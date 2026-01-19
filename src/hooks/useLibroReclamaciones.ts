@@ -1,18 +1,17 @@
 'use client'
 
 import { useState } from "react";
-import toast from 'react-hot-toast';
 import { ReclamoInput } from "@/types/admin/reclamo";
 import { useReclamos } from "@/hooks/useReclamos";
 
 const defaultFormData: ReclamoInput = {
     first_name: "",
     last_name: "",
-    document_type_id: 0, 
+    document_type_id: 0,
     document_number: "",
     email: "",
     phone: "",
-    claim_type_id: 0,    
+    claim_type_id: 0,
     detail: "",
     product_id: 0,
     purchase_date: "",
@@ -26,38 +25,31 @@ export function useLibroReclamaciones() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
-
         if (name === "document_number" && formData.document_type_id === 1) {
-             if (value.length > 8 || Number(value) < 0) return;
+            if (value.length > 8 || Number(value) < 0) return;
         }
 
-        
         if (name === "document_number" && formData.document_type_id === 2) {
-             if (value.length > 12) return; 
+            if (value.length > 12) return;
         }
-        
+
         // Teléfono: Máximo 9 números.
         if (name === "phone" && (value.length > 9 || Number(value) < 0)) return;
-    
+
         // Monto Reclamado: Evitar números excesivos o negativos.
         if (name === "claimed_amount" && (value.length > 10 || Number(value) < 0)) return;
 
-
-
         let newValue: string | number = value;
 
-       
         if (name === "document_type_id") {
-             newValue = Number(value);
-             // setFormData(prev => ({ ...prev, document_number: "" })); 
+            newValue = Number(value);
         }
 
         // Si es el Select de Producto, convertir a número
         if (name === "product_id") {
             newValue = Number(value);
         }
-        
-      
+
         if (name === "claimed_amount") {
             newValue = value === "" ? 0 : parseFloat(value);
         }
@@ -70,42 +62,39 @@ export function useLibroReclamaciones() {
 
         if (isLoading) return false;
 
-       
-        
         // Campos obligatorios básicos
         if (formData.first_name.trim() === "" || formData.last_name.trim() === "" || formData.phone?.trim() === "" || formData.detail.trim() === "" || formData.email.trim() === "" || formData.document_number.trim() === "") {
-            toast.error("Por favor complete los campos obligatorios");
+            alert("Por favor complete los campos obligatorios");
             return false;
-        } 
-        
+        }
+
         // Validación detalle
         else if (formData.detail.trim().length < 10) {
-            toast.error("El detalle debe tener al menos 10 caracteres");
+            alert("El detalle debe tener al menos 10 caracteres");
             return false;
-        } 
-        
+        }
+
         // Validación teléfono
         else if (formData.phone?.trim().length !== 9) {
-            toast.error("El teléfono debe tener 9 números");
+            alert("El teléfono debe tener 9 números");
             return false;
-        } 
-        
+        }
+
         // Validación específica DNI 
         else if (formData.document_type_id === 1 && formData.document_number?.trim().length !== 8) {
-            toast.error("El DNI debe tener 8 números");
+            alert("El DNI debe tener 8 números");
             return false;
-        } 
-        
+        }
+
         // Validación específica Pasaporte
-        else if (formData.document_type_id === 2 && formData.document_number?.trim().length < 6) { 
-            toast.error("El número de pasaporte es muy corto");
+        else if (formData.document_type_id === 2 && formData.document_number?.trim().length < 6) {
+            alert("El número de pasaporte es muy corto");
             return false;
         }
 
         // Preparar payload para backend
         const payload = { ...formData };
-        payload.claim_type_id = 1; 
-
+        payload.claim_type_id = 1;
 
         if (payload.product_id === 0) delete payload.product_id;
         if (!payload.purchase_date) delete payload.purchase_date;
@@ -114,11 +103,11 @@ export function useLibroReclamaciones() {
         const response = await createReclamo(payload);
 
         if (response.success) {
-            toast.success("Reclamo enviado correctamente");
+            alert("Reclamo enviado correctamente");
             setFormData(defaultFormData);
             return true;
         } else {
-            toast.error(response.message || "Error al enviar el reclamo");
+            alert(response.message || "Error al enviar el reclamo");
             return false;
         }
     };
