@@ -38,7 +38,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         />
       )}
 
-    return (
+    
         <aside
             className="
                 hidden lg:flex
