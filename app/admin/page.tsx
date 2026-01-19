@@ -16,12 +16,12 @@ import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import data from "@/data/admin/inicioData";
 
 const columns = [
-    { key: "id", label: "ID" },
-    { key: "nombre", label: "NOMBRE" },
-    { key: "gmail", label: "GMAIL" },
-    { key: "telefono", label: "TELÉFONO" },
-    { key: "seccion", label: "SECCIÓN" },
-    { key: "fecha", label: "FECHA" },
+  { key: "id", label: "ID" },
+  { key: "nombre", label: "NOMBRE" },
+  { key: "gmail", label: "GMAIL" },
+  { key: "telefono", label: "TELÉFONO" },
+  { key: "seccion", label: "SECCIÓN" },
+  { key: "fecha", label: "FECHA" },
 ];
 
 export default function InicioPage() {
