@@ -8,28 +8,28 @@ import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
 
 type NavMenuMobilProps = {
   size?: "sm" | "md" | "lg";
-  variant?:"mobile"|"desktop"
+  variant?: "mobile" | "desktop"
 };
 const variantMap = {
-  mobile: "flex flex-col gap-y-1 w-full text-white uppercase tracking-wider text-sm font-medium", 
+  mobile: "flex flex-col gap-y-1 w-full text-white uppercase tracking-wider text-sm font-medium",
   desktop: "flex flex-row gap-x-10 items-center"
 };
-export default function NavMenuMobil({ size = "md" ,variant="desktop"}: NavMenuMobilProps) {
-  const pathname = usePathname(); 
+export default function NavMenuMobil({ size = "md", variant = "desktop" }: NavMenuMobilProps) {
+  const pathname = usePathname();
 
   const sizeClass =
     size === "sm"
       ? "text-base"
       : size === "lg"
-      ? "text-xl"
-      : "text-lg";
+        ? "text-xl"
+        : "text-lg";
 
   // Mobile variant: render vertical left divider and remove horizontal separators
   if (variant === 'mobile') {
     const [isAdminOpen, setIsAdminOpen] = useState(false);
 
     const adminItems = [
-      { label: "DASHBOARD", href: "/admin" },
+      //{ label: "DASHBOARD", href: "/admin" },//comentado por ahora
       { label: "SEGUIMIENTO", href: "/admin/seguimiento" },
       { label: "BLOGS", href: "/admin/blogs" },
       { label: "PRODUCTOS", href: "/admin/productos" },
@@ -41,7 +41,7 @@ export default function NavMenuMobil({ size = "md" ,variant="desktop"}: NavMenuM
         {/* Vertical divider on the left */}
         <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-white" aria-hidden />
 
-        <nav className={`${variantMap[variant]} ${sizeClass} pl-2`}> 
+        <nav className={`${variantMap[variant]} ${sizeClass} pl-2`}>
           <MenuItem href="/" active={pathname === "/"} color="text-white">
             <span className="block py-0">INICIO</span>
           </MenuItem>
