@@ -4,6 +4,7 @@ interface ButtonConfig {
     label: string;
     onClick?: () => void;
     variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
+    className?: string; // Permitir override por botón
     bgColor?: string;
 }
 
@@ -45,6 +46,7 @@ export default function ActionButtonGroup({
                     onClick={button.onClick}
                     variant={button.variant}
                     bgColor={button.bgColor ?? getBgColorByVariant(button.variant)}
+                    className={button.className} // Pasamos la clase personalizada
                 >
                     {button.label}
                 </ActionButton>

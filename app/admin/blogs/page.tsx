@@ -15,6 +15,7 @@ import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarous
 import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
 import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
 import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
+import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
@@ -49,8 +50,13 @@ export default function Blogspage() {
   }, [getBlogs]);
 
 
-  const topButtons = useMemo(() => [
-    { label: "Publicar", onClick: () => setOpenAddModal(true) },
+  const exportOptions = useMemo(() => [
+    { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
+    { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
+    { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
+  ], [blogs]);
+
+  const exportButtonsDesktop = useMemo(() => [
     { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
     { label: "Exportar Excel", onClick: () => exportExcel(blogs) },
     { label: "Exportar PDF", onClick: () => exportToPDF(blogs) },
@@ -93,7 +99,20 @@ export default function Blogspage() {
         onSuccess={() => getBlogs(10)}
       />
 
-      <ActionButtonGroup buttons={topButtons} className="mb-4 mt-4" />
+      <div className="flex flex-row flex-wrap gap-2 mb-4 mt-4 items-center">
+        {/* Botón Publicar siempre visible */}
+        <ActionButtonGroup className="flex-auto" buttons={[{ label: "Publicar", onClick: () => setOpenAddModal(true), className: "w-full" }]} />
+
+        {/* Desktop: Botones de exportación separados */}
+        <div className="hidden md:block">
+          <ActionButtonGroup buttons={exportButtonsDesktop} />
+        </div>
+
+        {/* Móvil: Dropdown de exportación */}
+        <div className="md:hidden flex-auto">
+          <ExportDropdown options={exportOptions} className="w-full" />
+        </div>
+      </div>
       {error && (
         <div>
           {error}
