@@ -38,6 +38,7 @@ export default function AdminLayout({
     usuarios: "Usuarios",
     reclamaciones: "Reclamaciones",
     seguimiento: "Seguimiento",
+    contacto: "Contacto",
   };
 
   const key = segment ?? "admin";
