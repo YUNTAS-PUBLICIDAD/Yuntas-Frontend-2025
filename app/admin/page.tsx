@@ -44,7 +44,4 @@ export default function InicioPage() {
         </div>
     );
 }
-<<<<<<< HEAD
-=======
 */
->>>>>>> 4ba8b087224885f66b95cac937aa3e831744a27a
