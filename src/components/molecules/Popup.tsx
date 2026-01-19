@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
+import { useEmail } from "@/hooks/useEmail";  //agregando envio de email
 import PopupContainer from "@/components/atoms/PopContainer";
 import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
 import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
@@ -25,6 +26,7 @@ const Popup = ({
     sourceId = 1,
 }: PopupProps) => {
     const { sendWhatsapp, isActivating } = useWhatsapp();
+    const { sendEmail } = useEmail(); //agregando envio de email
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -76,6 +78,12 @@ const Popup = ({
         if (!result.success) {
             setErrors({ general: result.message || "Error al enviar el WhatsApp" });
             return;
+        }
+        //email secuencial
+        try{
+            await sendEmail(leadData);
+        } catch (error) {
+            console.error("Error al enviar el email:", error);
         }
 
         alert("¡Gracias! Nos pondremos en contacto contigo pronto.");
