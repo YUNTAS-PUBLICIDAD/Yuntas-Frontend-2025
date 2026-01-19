@@ -191,7 +191,7 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
                     size="md"
                     className="flex-1"
                     onClick={handleActivateCampaign}
-                    disabled={isLoading || isSaving || isActivating}
+                    disabled={isLoading || isSaving || isActivating || formData.producto_id === "0"}
                 >
                     {isActivating ? (
                         <div className="flex items-center justify-center gap-2">
