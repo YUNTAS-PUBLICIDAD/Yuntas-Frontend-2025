@@ -1,23 +1,30 @@
 import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
-import { useEmail } from "@/hooks/useEmail";
 import PopupContainer from "@/components/atoms/PopContainer";
 import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
 import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
 import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
-import imagenPopup from "@/assets/productos/popup/Productos.webp";
 import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
 
-interface ProductoPopupProps {
+interface PopupProps {
     delay?: number;
-    imgSrc?: string;
+    imgSrc: string;
+    title: string;
+    buttonText: string;
     productId?: number;
+    sourceId?: number;
 }
 
-const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: ProductoPopupProps) => {
-    const { sendWhatsapp, isActivating: isSendingWhatsapp } = useWhatsapp();
-    const { sendEmail, isActivating: isSendingEmail } = useEmail();
+const Popup = ({
+    delay = 5000,
+    imgSrc,
+    title,
+    buttonText,
+    productId,
+    sourceId = 1,
+}: PopupProps) => {
+    const { sendWhatsapp, isActivating } = useWhatsapp();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -26,6 +33,7 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
         name: "",
         phone: "",
         email: "",
+        source_id: sourceId,
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -47,7 +55,9 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
 
         const newErrors: Record<string, string> = {};
         if (!formData.name) newErrors.name = "El nombre es obligatorio";
-        if (!formData.email) newErrors.email = "El correo es obligatorio";
+        if (!formData.phone?.trim()) newErrors.phone = "El teléfono es obligatorio";
+        if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
+        if (formData.phone?.trim().length !== 9) newErrors.phone = "El teléfono debe tener 9 dígitos";
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -58,24 +68,19 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
+            source_id: sourceId,
             ...(productId && { product_id: productId }),
         };
 
-        const result = await sendEmail(leadData);
+        const result = await sendWhatsapp(leadData);
         if (!result.success) {
-            setErrors({ general: result.message || "Error al enviar el email" });
+            setErrors({ general: result.message || "Error al enviar el WhatsApp" });
             return;
         }
 
-        if (!formData.phone?.trim()) {
-            const result = await sendWhatsapp(leadData);
-            if (!result.success) {
-                setErrors({ general: result.message || "Error al enviar el WhatsApp" });
-                return;
-            }
-        }
+        alert("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
-        setFormData({ name: "", phone: "", email: "" });
+        setFormData({ name: "", phone: "", email: "", source_id: sourceId });
         closeModal();
     };
 
@@ -97,14 +102,14 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
                 <PopupImage src={imgSrc} />
 
                 <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
-                    <PopupHeader title="¡Tu marca brillando como se merece!" />
+                    <PopupHeader title={title} />
                     <PopupForm
                         formData={formData}
                         errors={errors}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
-                        buttonText="Explorar opciones"
-                        isSubmitting={isSendingWhatsapp || isSendingEmail}
+                        buttonText={buttonText}
+                        isSubmitting={isActivating}
                     />
                 </div>
             </PopupContainer>
@@ -112,4 +117,4 @@ const ProductoPopup = ({ delay = 5000, imgSrc = imagenPopup.src, productId }: Pr
     );
 };
 
-export default ProductoPopup;
+export default Popup;

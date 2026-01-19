@@ -1,4 +1,15 @@
 'use client';
+import { redirect } from "next/navigation";
+
+export default function AdminPage() {
+    
+    redirect("/admin/seguimiento");
+}
+
+/* 
+================================================================
+   CÓDIGO ANTIGUO (INICIO)
+================================================================
 
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
@@ -17,11 +28,8 @@ export default function InicioPage() {
 
     const onAdd = () => { }
 
-
     return (
         <div className="flex flex-col gap-6 ">
-
-
             <AdminTable
                 columns={columns}
                 data={data}
@@ -36,3 +44,7 @@ export default function InicioPage() {
         </div>
     );
 }
+<<<<<<< HEAD
+=======
+*/
+>>>>>>> 4ba8b087224885f66b95cac937aa3e831744a27a

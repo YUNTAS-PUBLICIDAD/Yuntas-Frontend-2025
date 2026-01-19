@@ -1,7 +1,6 @@
 'use client';
 
 import Button from "@/components/atoms/Button";
-import { Toaster } from 'react-hot-toast';
 import Text from '@/components/atoms/Text'
 import CircleNumber from '@/components/molecules/reclamaciones/CircleNumber'
 import DatosBlock from '@/components/molecules/reclamaciones/DatosBlock'
@@ -38,17 +37,6 @@ export default function ReclamosForm() {
             >
                 {isLoading ? "Enviando..." : "Enviar"}
             </Button>
-            <Toaster
-              position="bottom-right"
-              reverseOrder={false}
-              toastOptions={{
-                 style: {
-                    border: '1px solid #203565',
-                    padding: '16px',
-                    color: '#203565',
-                },
-              }}
-            />
         </form>
     );
 }

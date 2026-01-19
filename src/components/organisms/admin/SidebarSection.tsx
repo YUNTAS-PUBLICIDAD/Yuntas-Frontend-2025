@@ -18,12 +18,12 @@ interface SidebarProps {
 }
 
 const navItems: NavItem[] = [
-  { label: "Inicio", href: "/admin" },
-  { label: "Seguimiento", href: "/admin/seguimiento" },
-  { label: "Blogs", href: "/admin/blogs" },
-  { label: "Productos", href: "/admin/productos" },
-  { label: "Usuarios", href: "/admin/usuarios" },
-  { label: "Reclamaciones", href: "/admin/reclamaciones" },
+  //{ label: "Inicio", href: "/admin" },
+    { label: "Seguimiento", href: "/admin/seguimiento" },
+    { label: "Blogs", href: "/admin/blogs" },
+    { label: "Productos", href: "/admin/productos" },
+    { label: "Usuarios", href: "/admin/usuarios" },
+     { label: "Reclamaciones", href: "/admin/reclamaciones" },
 ];
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
