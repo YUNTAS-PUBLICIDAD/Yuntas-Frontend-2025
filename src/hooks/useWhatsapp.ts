@@ -5,6 +5,7 @@ import {
     WhatsappPlantilla,
     WhatsappPlantillaInput,
     WhatsappPlantillaServiceResponse,
+    sendWhatsappCampanaResponse,
 } from "@/types/admin/whatsappPlantilla";
 import {
     getWhatsappPlantillaByProductService,
@@ -12,6 +13,7 @@ import {
     saveWhatsappPlantillaService,
     saveWhatsappPlantillaDefaultService,
     sendWhatsappService,
+    sendWhatsappCampanaService,
     requestQRService,
     resetSessionService,
 } from "@/services/whatsappService";
@@ -29,6 +31,7 @@ interface UseWhatsappReturn {
     saveWhatsappPlantilla: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
     saveWhatsappPlantillaDefault: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
     sendWhatsapp: (leadData: LeadInput) => Promise<WhatsappPlantillaServiceResponse<null>>;
+    sendWhatsappCampana: (product_id: number) => Promise<sendWhatsappCampanaResponse>;
     clearError: () => void;
     clearWhatsappPlantilla: () => void;
     requestQR: () => Promise<WhatsappPlantillaServiceResponse<null>>;
@@ -103,6 +106,16 @@ export function useWhatsapp(): UseWhatsappReturn {
         return result;
     }, []);
 
+    const sendWhatsappCampana = useCallback(async (product_id: number): Promise<sendWhatsappCampanaResponse> => {
+        setIsActivating(true);
+        setError(null);
+
+        const result = await sendWhatsappCampanaService(product_id);
+
+        setIsActivating(false);
+        return result;
+    }, []);
+
     const requestQR = useCallback(async (): Promise<WhatsappPlantillaServiceResponse<null>> => {
         setIsRequesting(true);
         setError(null);
@@ -133,6 +146,7 @@ export function useWhatsapp(): UseWhatsappReturn {
         saveWhatsappPlantilla,
         saveWhatsappPlantillaDefault,
         sendWhatsapp,
+        sendWhatsappCampana,
         clearError,
         clearWhatsappPlantilla,
         requestQR,

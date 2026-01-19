@@ -30,6 +30,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
         whatsappPlantilla,
         saveWhatsappPlantilla,
         saveWhatsappPlantillaDefault,
+        sendWhatsappCampana,
         isLoading,
         isSaving,
         isActivating,
@@ -92,6 +93,33 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
             alert("Plantilla guardada correctamente");
         } else {
             alert(result.message || "Error guardando plantilla");
+        }
+    };
+
+    // Activar campaña
+    const handleActivateCampaign = async () => {
+        if (!formData.producto_id) {
+            alert("Selecciona un producto");
+            return;
+        }
+
+        if (!formData.imagen_principal) {
+            alert("La imagen principal es requerida");
+            return;
+        }
+        
+        if (!formData.parrafo.trim()) {
+            alert("El párrafo no puede estar vacío");
+            return;
+        }
+
+        const result = await sendWhatsappCampana(Number(formData.producto_id));
+
+        if (result.success) {
+            onClose();
+            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`);
+        } else {
+            alert(result.message || "Error enviando campaña");
         }
     };
 
@@ -163,12 +191,12 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                     )}
                 </Button>
 
-                {/* <Button
+                <Button
                     type="button"
                     variant="primary"
                     size="md"
                     className="flex-1"
-                    onClick={() => {}}
+                    onClick={handleActivateCampaign}
                     disabled={isLoading || isSaving || isActivating}
                 >
                     {isActivating ? (
@@ -179,7 +207,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                     ) : (
                         "Activar Campaña"
                     )}
-                </Button> */}
+                </Button>
 
                 <Button
                     type="button"

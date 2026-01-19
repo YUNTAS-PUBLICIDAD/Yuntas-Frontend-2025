@@ -4,6 +4,7 @@ import {
     WhatsappPlantilla,
     WhatsappPlantillaInput,
     WhatsappPlantillaServiceResponse,
+    sendWhatsappCampanaResponse,
 } from "@/types/admin/whatsappPlantilla";
 import { getImg } from "@/utils/getImg";
 import { getToken } from "@/utils/token";
@@ -134,6 +135,32 @@ export async function sendWhatsappService(leadData: LeadInput): Promise<Whatsapp
         return {
             success: true,
             message: response.data.message || "WhatsApp enviado exitosamente",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
+export async function sendWhatsappCampanaService(product_id: number): Promise<sendWhatsappCampanaResponse> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.SEND_CAMPANA, { producto_id: product_id },{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+
+        return {
+            success: true,
+            message: response.data.message || "Campañas por WhatsApp enviadas exitosamente",
+            total_leads: response.data.total_leads,
+            exitosos: response.data.exitosos,
+            fallidos: response.data.fallidos,
         };
     } catch (error: any) {
         return { success: false, message: error.message };
