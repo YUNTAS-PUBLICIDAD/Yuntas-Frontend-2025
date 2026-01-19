@@ -1,7 +1,6 @@
 'use client'
 
 import React from "react";
-import { Toaster } from 'react-hot-toast';
 import TextTitulo from "@/components/atoms/TextTitulo";
 import InputText from "@/components/atoms/InputText";
 import TextArea from "@/components/atoms/TextArea";
@@ -45,17 +44,6 @@ const SolicitudInfo: React.FC = () => {
             <div className="text-center">
               <PrimaryButton type="submit" disabled={isLoading}>{isLoading ? "ENVIANDO..." : "ENVIAR"}</PrimaryButton>
             </div>
-            <Toaster
-              position="bottom-right"
-              reverseOrder={false}
-              toastOptions={{
-                 style: {
-                    border: '1px solid #203565',
-                    padding: '16px',
-                    color: '#203565',
-                },
-              }}
-            />
           </form>
         </FormContainer>
       </div>

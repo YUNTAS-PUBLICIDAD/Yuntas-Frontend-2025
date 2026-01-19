@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import toast from 'react-hot-toast';
+import { showToast } from "@/utils/showToast";
 import { ContactoInput } from "@/types/admin/contacto";
 import { useContactos } from "@/hooks/useContactos";
 
@@ -32,24 +32,24 @@ export function useSolicitudInfo() {
         if (isLoading) return false;
 
         if (formData.first_name.trim() === "" || formData.last_name.trim() === "" || formData.phone.trim() === "" || formData.message.trim() === "") {
-            toast.error("Por favor complete los campos obligatorios");
+            showToast.warning("Por favor complete los campos obligatorios");
             return false;
         } else if (formData.message.trim().length < 10) {
-            toast.error("El mensaje debe tener al menos 10 caracteres");
+            showToast.warning("El mensaje debe tener al menos 10 caracteres");
             return false;
         } else if (formData.phone.trim().length !== 9) {
-            toast.error("El teléfono debe tener 9 números");
+            showToast.warning("El teléfono debe tener 9 números");
             return false;
         }
 
         const response = await createContacto(formData);
 
         if (response.success) {
-            toast.success("Mensaje enviado");
+            showToast.success("Mensaje enviado");
             setFormData(defaultFormaData);
             return true;
         } else {
-            toast.error(response.message || "Error al enviar el mensaje");
+            showToast.error(response.message || "Error al enviar el mensaje");
             return false;
         }
     };
