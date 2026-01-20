@@ -9,6 +9,7 @@ import FormSection from "@/components/molecules/admin/FormSection";
 import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
 import { Producto, ProductoInput } from "@/types/admin/producto";
+import { showToast } from '@/utils/showToast'
 
 interface ProductFormProps {
     onSubmit: (data: ProductoInput) => void;
@@ -137,7 +138,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
 
         // imagen principal obligatoria
         if (!formData.main_image) {
-            alert("La imagen principal es requerida");
+            showToast.warning("La imagen principal es requerida");
             return;
         }
 
@@ -146,7 +147,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             ({ value }) => !formData.gallery.some(item => item.slot === value)
         );
         if (missingSlots.length > 0) {
-            alert(`Faltan imágenes para: ${missingSlots.map(s => s.label).join(", ")}`);
+            showToast.warning(`Faltan imágenes para: ${missingSlots.map(s => s.label).join(", ")}`);
             return;
         }
 
@@ -154,7 +155,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             item => !item.image || (typeof item.image === 'string' && item.image.trim() === '')
         );
         if (emptyImages.length > 0) {
-            alert("Todas las imágenes de galería son requeridas");
+            showToast.warning("Todas las imágenes de galería son requeridas");
             return;
         }
 
@@ -162,11 +163,11 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
         const hasEmptySpecs = formData.specifications.some(spec => spec.trim() === "");
         const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
         if (hasEmptySpecs) {
-            alert("Las especificaciones no pueden estar vacias");
+            showToast.warning("Las especificaciones no pueden estar vacias");
             return;
         }
         if (hasEmptyBenefits) {
-            alert("Los beneficios no pueden estar vacios");
+            showToast.warning("Los beneficios no pueden estar vacios");
             return;
         }
         onSubmit(formData);

@@ -17,6 +17,7 @@ import { Blog, BlogInput } from '@/types/admin/blog';
 import { mapBlogToInput } from '@/utils/blog/mapBlogToInput';
 // Hook del proyecto para operaciones de blog
 import { useBlogs } from '@/hooks/useBlog'; 
+import { showToast } from '@/utils/showToast';
 
 // Props del componente - compatible con la página de blogs
 interface Props {
@@ -78,11 +79,11 @@ const EditBlogModal = ({ isOpen, setIsOpen, blogToEdit, onSuccess }: Props) => {
     const success = await updateBlog(blogToEdit.id, form);
     
     if (success) {
-      alert("Blog actualizado correctamente");
+      showToast.success("Blog actualizado correctamente");
       onSuccess?.();
       handleClose();
     } else {
-      alert("Error al actualizar el blog");
+      showToast.error("Error al actualizar el blog");
     }
   };
 
