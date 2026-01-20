@@ -80,7 +80,6 @@ const Popup = ({
 
         alert("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
-        setFormData({ name: "", phone: "", email: "", source_id: sourceId });
         closeModal();
     };
 
