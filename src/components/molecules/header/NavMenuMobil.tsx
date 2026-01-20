@@ -5,27 +5,33 @@ import { usePathname } from "next/navigation";
 import { useState } from 'react';
 import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
 
-
 type NavMenuMobilProps = {
   size?: "sm" | "md" | "lg";
   variant?: "mobile" | "desktop"
 };
+
 const variantMap = {
-  mobile: "flex flex-col gap-y-1 w-full text-white uppercase tracking-wider text-sm font-medium",
+  mobile:
+    "flex flex-col gap-y-1 w-full uppercase tracking-wider text-sm font-medium " +
+    "text-[#04061a] dark:text-white",
   desktop: "flex flex-row gap-x-10 items-center"
 };
-export default function NavMenuMobil({ size = "md", variant = "desktop" }: NavMenuMobilProps) {
+
+export default function NavMenuMobil({
+  size = "md",
+  variant = "desktop",
+}: NavMenuMobilProps) {
   const pathname = usePathname();
 
   const sizeClass =
     size === "sm"
       ? "text-base"
       : size === "lg"
-        ? "text-xl"
-        : "text-lg";
+      ? "text-xl"
+      : "text-lg";
 
-  // Mobile variant: render vertical left divider and remove horizontal separators
-  if (variant === 'mobile') {
+  // ───────────────── MOBILE ─────────────────
+  if (variant === "mobile") {
     const [isAdminOpen, setIsAdminOpen] = useState(false);
 
     const adminItems = [
@@ -40,34 +46,61 @@ export default function NavMenuMobil({ size = "md", variant = "desktop" }: NavMe
 
     return (
       <div className="relative w-full">
-        {/* Vertical divider on the left */}
-        <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-white" aria-hidden />
+        {/* Divider */}
+        <span
+          className="absolute left-0 top-0 bottom-0 w-[2px]
+          bg-[#04061a] dark:bg-white"
+          aria-hidden
+        />
 
-        <nav className={`${variantMap[variant]} ${sizeClass} pl-2`}>
-          <MenuItem href="/" active={pathname === "/"} color="text-white">
-            <span className="block py-0">INICIO</span>
+        <nav className={`${variantMap[variant]} ${sizeClass} pl-2 `}>
+          <MenuItem
+            href="/"
+            active={pathname === "/"}
+            color="text-[#04061a] dark:text-white"
+          >
+            <span className="font-bold">INICIO</span>
           </MenuItem>
 
-          <MenuItem href="/productos" active={pathname.startsWith("/productos")} color="text-white">
-            <span className="block py-0">PRODUCTOS</span>
+          <MenuItem
+            href="/productos"
+            active={pathname.startsWith("/productos")}
+            color="text-[#04061a] dark:text-white"
+          >
+          <span className="font-bold">PRODUCTOS</span>
           </MenuItem>
 
-          <MenuItem href="/nosotros" active={pathname === "/nosotros"} color="text-white">
-            <span className="block py-0">NOSOTROS</span>
+          <MenuItem
+            href="/nosotros"
+            active={pathname === "/nosotros"}
+            color="text-[#04061a] dark:text-white"
+          >
+            <span className="font-bold">NOSOTROS</span>
           </MenuItem>
 
-          <MenuItem href="/blog" active={pathname.startsWith("/blog")} color="text-white">
-            <span className="block py-0">BLOG</span>
+          <MenuItem
+            href="/blog"
+            active={pathname.startsWith("/blog")}
+            color="text-[#04061a] dark:text-white"
+          >
+            <span className="font-bold">BLOG</span>
           </MenuItem>
 
-          <MenuItem href="/contacto" active={pathname === "/contacto"} color="text-white">
-            <span className="block py-0">CONTACTO</span>
+          <MenuItem
+            href="/contacto"
+            active={pathname === "/contacto"}
+            color="text-[#04061a] dark:text-white"
+          >
+            <span className="font-bold">CONTACTO</span>
           </MenuItem>
 
-          <AdminMenuMobil isOpen={isAdminOpen} onToggle={() => setIsAdminOpen(!isAdminOpen)} />
+          <AdminMenuMobil
+            isOpen={isAdminOpen}
+            onToggle={() => setIsAdminOpen(!isAdminOpen)}
+          />
         </nav>
 
-        {/* Admin submenu rendered in-flow */}
+        {/* Submenu admin */}
         {isAdminOpen && (
           <div className="pl-12 mt-1 space-y-0">
             {adminItems.map((item) => (
@@ -75,9 +108,9 @@ export default function NavMenuMobil({ size = "md", variant = "desktop" }: NavMe
                 <MenuItem
                   href={item.href}
                   active={pathname === item.href}
-                  color="text-white"
+                  color="text-[#04061a] dark:text-white"
                 >
-                  <span className="text-xs font-medium tracking-wide text-white uppercase">
+                  <span className="text-xs font-bold tracking-wide uppercase">
                     {item.label}
                   </span>
                 </MenuItem>
@@ -89,12 +122,13 @@ export default function NavMenuMobil({ size = "md", variant = "desktop" }: NavMe
     );
   }
 
+  // ───────────────── DESKTOP (sin cambios) ─────────────────
   return (
-    <nav className={`${variantMap[variant]} ${sizeClass} `}>
+    <nav className={`${variantMap[variant]} ${sizeClass}`}>
       <div className="w-full px-4">
         <MenuItem href="/" active={pathname === "/"}>INICIO</MenuItem>
       </div>
-      <div className="w-full px-4 ">
+      <div className="w-full px-4">
         <MenuItem href="/productos" active={pathname.startsWith("/productos")}>
           PRODUCTOS
         </MenuItem>
@@ -103,7 +137,7 @@ export default function NavMenuMobil({ size = "md", variant = "desktop" }: NavMe
         <MenuItem href="/nosotros" active={pathname === "/nosotros"}>
           NOSOTROS
         </MenuItem>
-      </div >
+      </div>
       <div className="w-full px-4">
         <MenuItem href="/blog" active={pathname.startsWith("/blog")}>
           BLOG

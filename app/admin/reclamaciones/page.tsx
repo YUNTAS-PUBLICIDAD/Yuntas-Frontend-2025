@@ -145,11 +145,7 @@ export default function ReclamacionesPage() {
 
     return (
         <div className="p-2 md:p-4">
-            <div className="mb-4 md:mb-6">
-                <h1 className="text-xl md:text-2xl font-bold text-[#203565]">Libro de Reclamaciones</h1>
-            </div>
-
-
+          
             <AdminTable
                 columns={columns}
                 data={paginatedData}
