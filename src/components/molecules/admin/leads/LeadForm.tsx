@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import InputForm from "@/components/atoms/InputForm";
 import Button from "@/components/atoms/Button";
-import { LeadInput } from "@/types/admin/lead";
+import { Lead, LeadInput } from "@/types/admin/lead";
 import { useProductos } from "@/hooks/useProductos";
 import SelectForm from "@/components/atoms/SelectForm";
 
@@ -12,14 +12,14 @@ const defaultLeadFormData: LeadInput = {
     phone: "",
     email: "",
     product_id: 0,
-    source_id: 1,
+    source_id: 4, // source id para "Administración"
 };
 
 interface LeadFormProps {
     onSubmit: (data: LeadInput) => void;
     onCancel: () => void;
     isLoading?: boolean;
-    initialData?: LeadInput | null;
+    initialData?: Lead | null;
 }
 
 export default function LeadForm({ onSubmit, onCancel, isLoading = false, initialData = null }: LeadFormProps) {
@@ -32,7 +32,13 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
 
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData);
+            setFormData({
+                id: initialData.id,
+                name: initialData.name || "",
+                phone: initialData.phone || "",
+                email: initialData.email || "",
+                product_id: initialData.product_id || 0,
+            });
         }
     }, [initialData]);
 

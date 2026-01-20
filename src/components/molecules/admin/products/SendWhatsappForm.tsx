@@ -14,6 +14,7 @@ import { useWhatsapp } from "@/hooks/useWhatsapp";
 interface SendWhatsappFormProps {
     onClose: () => void;
     products: Producto[];
+    isConnected: boolean;
 }
 
 const defaultFormData: WhatsappPlantillaInput = {
@@ -22,7 +23,7 @@ const defaultFormData: WhatsappPlantillaInput = {
     parrafo: "",
 };
 
-export default function SendWhatsappForm({ onClose, products }: SendWhatsappFormProps) {
+export default function SendWhatsappForm({ onClose, products, isConnected }: SendWhatsappFormProps) {
     const {
         getWhatsappPlantilla,
         getWhatsappPlantillaDefault,
@@ -124,6 +125,11 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto">
+            {!isConnected && (
+                <div className="text-yellow-800 text-sm text-center">
+                    WhatsApp no está conectado. Ve a la pestaña <strong>Conexión</strong> para escanear el código QR.
+                </div>
+            )}
             <FormSection title="Selección de Producto">
                 <SelectForm
                     label="Selecciona un producto"

@@ -18,7 +18,7 @@ export default function SeguimientoPage() {
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTrackingMode, setIsTrackingMode] = useState(false);
-    const [selectedLead, setSelectedLead] = useState<LeadInput | null>(null);
+    const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
 
@@ -27,15 +27,7 @@ export default function SeguimientoPage() {
     }, []);
 
     const handleEditClick = (client: Lead) => {
-        const data: LeadInput = {
-            id: client.id,
-            name: client.name || "",
-            phone: client.phone || "",
-            email: client.email || "",
-            product_id: client.product_id || 0,
-            source_id: client.source_id || 1,
-        };
-        setSelectedLead(data);
+        setSelectedLead(client);
         setIsModalOpen(true);
     };
 
@@ -124,6 +116,12 @@ export default function SeguimientoPage() {
                 <ActionButtonGroup buttons={topButtons} className="w-full" />
             </div>
 
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
+            )}
+
             {/* TABLAS */}
             <div className="w-full overflow-x-auto">
                 {isTrackingMode ? (
@@ -145,7 +143,7 @@ export default function SeguimientoPage() {
             {/* PAGINACIÓN */}
             <div className="flex justify-center mt-4 w-full overflow-x-hidden">
                 <Pagination
-                    pageSize={2}
+                    pageSize={5}
                     items={leads}
                     setProductosPaginados={setDatosPaginados}
                 />

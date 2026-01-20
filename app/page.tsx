@@ -17,6 +17,7 @@ export default function HomePage() {
         imgSrc={imagenPopup.src}
         title="¡Un detalle que cambia todo!"
         buttonText="Empieza a brillar"
+        sourceId={1} // source id para "Inicio"
       />
     </main>
   );
