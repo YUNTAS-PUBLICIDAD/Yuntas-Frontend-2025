@@ -29,45 +29,61 @@ const HeaderMobil = () => {
 
   return (
     <>
+      {/* ───────────── HEADER ───────────── */}
       <header
-        className={`md:hidden fixed top-0 left-0 right-0 z-50 px-6 py-4 
-        flex justify-between items-center transition-all duration-300
-        ${open ? "hidden" : ""} 
-        ${isScrolled ? "bg-white shadow-md" : "bg-transparent shadow-none"}`}
+        className={`
+          md:hidden fixed top-0 left-0 right-0 z-50
+          px-6 py-4 flex justify-between items-center
+          transition-all duration-300
+          ${open ? "hidden" : ""}
+          bg-white text-[#04061a] shadow-md
+          dark:bg-transparent dark:text-white dark:shadow-none
+        `}
       >
         <button
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(true)}
           aria-label="Abrir menú"
-          className="text-3xl text-gray-700"
+          className="text-3xl transition-colors"
         >
-          <IoMenu className={!isScrolled ? "text-white" : "text-blue-900"} />
+          <IoMenu className="text-[#04061a] dark:text-white" />
         </button>
 
-        <UserSection
-          size="md"
-          
-        />
+        <UserSection size="md" />
       </header>
 
-      {/* Overlay */}
+      {/* ───────────── OVERLAY ───────────── */}
       <div
-        className={`fixed inset-0 bg-black/40 z-30 transition-opacity duration-300 ${
-          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`
+          fixed inset-0 z-30 bg-black/40
+          transition-opacity duration-300
+          ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+        `}
         onClick={() => setOpen(false)}
       />
 
-      {/* Drawer */}
+      {/* ───────────── DRAWER ───────────── */}
       <div
-        className={`md:hidden fixed inset-0 z-40 text-white flex flex-col
-        transform transition-transform duration-500 ease-in-out
-        ${open ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ background: 'linear-gradient(180deg,#04061a 0%, #05051a 40%, #0b0b1f 100%)' }}
+        className={`
+          md:hidden fixed inset-0 z-40 flex flex-col
+          transform transition-transform duration-500 ease-in-out
+          ${open ? "translate-x-0" : "-translate-x-full"}
+
+          bg-white text-[#04061a]
+          dark:bg-gradient-to-b
+          dark:from-[#04061a] dark:via-[#05051a] dark:to-[#0b0b1f]
+          dark:text-white
+        `}
       >
+        {/* Cerrar */}
         <button
           onClick={() => setOpen(false)}
           aria-label="Cerrar menú"
-          className="absolute top-4 right-4 text-3xl text-white hover:text-red-700 transition-all"
+          className="
+            absolute top-4 right-4 text-3xl
+            text-[#04061a] hover:text-red-700
+            dark:text-white
+            transition-colors
+          "
         >
           <IoClose />
         </button>
@@ -75,27 +91,36 @@ const HeaderMobil = () => {
         <nav className="pt-16 px-6 flex-1 overflow-y-auto">
           <NavMenuMobil size="md" variant="mobile" />
 
-          <hr className="my-6 border-white" />
+          <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
+          {/* Dark Mode */}
           <div className="flex items-center justify-between">
-            <p className="uppercase tracking-wider text-sm text-white font-semibold">
+            <p className="uppercase tracking-wider text-sm font-bold">
               Dark Mode
             </p>
-            <SwitchMode onToggle={() => null} />
+            <SwitchMode
+              showIcons={false}
+              lightBgColor="#00031E"
+              darkBgColor="#23C1DE"
+              lightHandleColor="#ffffff"
+              darkHandleColor="#00031E"
+            />
+
+
           </div>
 
-          <hr className="my-6 border-white" />
+          <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
           <div className="flex gap-3 justify-start">
             <ContactoMobil compact />
           </div>
 
-          <hr className="my-6 border-white" />
+          <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
           <div className="flex items-center gap-3">
-            <UserSection size="md"  />
+            <UserSection size="md" />
             <div>
-              <p className="text-sm font-semibold">BIENVENIDO</p>
+              <p className="text-sm font-bold">BIENVENIDO</p>
               <p className="text-xs opacity-60">Administrador</p>
             </div>
           </div>
@@ -103,7 +128,11 @@ const HeaderMobil = () => {
           <div className="mt-4">
             <button
               onClick={handleLogout}
-              className="bg-cyan-400 text-[#04061a] px-6 py-2 rounded font-semibold text-sm uppercase tracking-wider"
+              className="
+                bg-cyan-400 text-white
+                px-6 py-2 rounded
+                font-semibold text-sm uppercase tracking-wider
+              "
             >
               Cerrar Sesión
             </button>

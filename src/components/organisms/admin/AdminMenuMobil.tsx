@@ -20,7 +20,7 @@ const AdminMenuMobil = ({ isOpen = false, onToggle }: Props) => {
         isAdminActive ? "text-white font-bold" : "text-white"
       }`}
     >
-      <span>ADMI</span>
+      <span className="font-bold">ADMI</span>
       <SlArrowDown
         className={`text-base transition-transform duration-300 ${
           isOpen ? "rotate-180" : ""
