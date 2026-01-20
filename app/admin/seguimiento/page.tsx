@@ -7,10 +7,9 @@ import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
 import { showToast } from "@/utils/showToast";
-
+import { useConfirm } from "@/hooks/useConfirm";
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
-
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 
@@ -22,6 +21,7 @@ export default function SeguimientoPage() {
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
+    const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         getLeads(200);
@@ -61,7 +61,7 @@ export default function SeguimientoPage() {
     };
 
     const handleDeleteLead = async (client: Lead) => {
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este cliente?");
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este cliente?" });
         if (!confirmDelete) return;
 
         const response = await deleteLead(client.id!);
@@ -176,6 +176,7 @@ export default function SeguimientoPage() {
                     initialData={selectedLead}
                 />
             </Modal>
+            <ConfirmDialog />
 
         </div>
     );
