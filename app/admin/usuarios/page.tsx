@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
+import { showToast } from "@/utils/showToast";
 import UserForm from "@/components/molecules/admin/users/UserForm";
 import { useUsers } from "@/hooks/useUsers";
 
@@ -38,9 +39,9 @@ export default function UsuariosPage() {
         if (result.success) {
             handleCloseModal();
             await getUsers();
-            alert("Usuario creado");
+            showToast.success("Usuario creado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al crear el usuario");
         }
     }
 
@@ -56,9 +57,9 @@ export default function UsuariosPage() {
         if (result.success) {
             handleCloseModal();
             await getUsers();
-            alert("Usuario actualizado");
+            showToast.success("Usuario actualizado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al actualizar el usuario");
         }
     }
 
@@ -68,9 +69,9 @@ export default function UsuariosPage() {
         const result = await deleteUser(usuario.id!);
         if (result.success) {
             await getUsers();
-            alert("Usuario eliminado");
+            showToast.success("Usuario eliminado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al eliminar el usuario");
         }
     };
 

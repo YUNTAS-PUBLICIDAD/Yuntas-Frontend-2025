@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from "jspdf-autotable";
 import { Producto } from '@/types/admin/producto';
-
+import { showToast } from '@/utils/showToast';
 export const useProductExporter = () => {
 
     const buildPDF = (data: Producto[]) => {
@@ -34,7 +34,10 @@ export const useProductExporter = () => {
 
     // --- EXCEL ---
     const exportToExcel = (data: Producto[], fileName = 'productos.xlsx') => {
-        if (!data || data.length === 0) return alert("No hay datos para exportar");
+        if (!data || data.length === 0) {
+            showToast.warning("No hay datos para exportar");
+            return;
+        }
 
         const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
             ID: item.id,
@@ -50,7 +53,10 @@ export const useProductExporter = () => {
 
     // --- CSV ---
     const exportToCSV = (data: Producto[], fileName = 'productos.csv') => {
-        if (!data || data.length === 0) return alert("No hay datos para exportar");
+        if (!data || data.length === 0) {
+            showToast.warning("No hay datos para exportar");
+            return;
+        }
 
         const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
             ID: item.id,
@@ -70,7 +76,10 @@ export const useProductExporter = () => {
 
     // --- PDF ---
     const exportToPDF = (data: Producto[], fileName = 'productos.pdf') => {
-        if (!data || data.length === 0) return alert("No hay datos para exportar");
+        if (!data || data.length === 0) {
+            showToast.warning("No hay datos para exportar");
+            return;
+        }
 
         const doc = buildPDF(data);
         doc.save(fileName);
@@ -78,7 +87,10 @@ export const useProductExporter = () => {
 
     // --- IMPRIMIR (MISMO DISEÑO QUE PDF) ---
     const printTable = (data: Producto[]) => {
-        if (!data || data.length === 0) return alert("No hay datos para imprimir");
+        if (!data || data.length === 0) {
+            showToast.warning("No hay datos para imprimir");
+            return;
+        }
 
         const doc = buildPDF(data);
         doc.autoPrint();

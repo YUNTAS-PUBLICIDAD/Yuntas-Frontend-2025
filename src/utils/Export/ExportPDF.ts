@@ -2,11 +2,12 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Blog } from "@/types/admin/blog";
 import { Producto } from "@/types/admin/producto";
+import { showToast } from "@/utils/showToast";
 
 export const exportToPDF = (data: Blog[] | Producto[]) => {
   try {
     if (!data || data.length === 0) {
-      alert("No hay datos para exportar");
+      showToast.warning("No hay datos para exportar");
       return;
     }
 
@@ -86,6 +87,6 @@ export const exportToPDF = (data: Blog[] | Producto[]) => {
     doc.save(`reporte_${isBlogData ? "blogs" : "productos"}.pdf`);
   } catch (error) {
     console.error("Error al generar PDF:", error);
-    alert("Error al generar el PDF");
+    showToast.error("Error al generar el PDF");
   }
 };

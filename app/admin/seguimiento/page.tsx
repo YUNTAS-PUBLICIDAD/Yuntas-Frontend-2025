@@ -6,6 +6,7 @@ import { LeadInput, Lead } from "@/types/admin/lead";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
+import { showToast } from "@/utils/showToast";
 
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
@@ -40,9 +41,9 @@ export default function SeguimientoPage() {
         if (response.success) {
             handleCloseModal();
             await getLeads(200);
-            alert("Cliente creado");
+            showToast.success("Cliente creado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al crear el cliente");
         }
     };
 
@@ -53,9 +54,9 @@ export default function SeguimientoPage() {
         if (response.success) {
             handleCloseModal();
             await getLeads(200);
-            alert("Cliente actualizado");
+            showToast.success("Cliente actualizado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al actualizar el cliente");
         }
     };
 
@@ -66,9 +67,9 @@ export default function SeguimientoPage() {
         const response = await deleteLead(client.id!);
         if (response.success) {
             await getLeads(200);
-            alert("Cliente eliminado");
+            showToast.success("Cliente eliminado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al eliminar el cliente");
         }
     };
 

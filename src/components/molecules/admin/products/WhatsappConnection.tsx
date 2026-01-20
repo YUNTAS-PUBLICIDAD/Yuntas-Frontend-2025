@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { showToast } from '@/utils/showToast';
 import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
 import FormSection from '../FormSection';
@@ -75,7 +76,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
         const resetResult = await resetSession();
 
         if (!resetResult.success) {
-            alert(resetResult.message || 'Error al reiniciar la sesión');
+            showToast.error(resetResult.message || 'Error al reiniciar la sesión');
             setIsWaitingQR(false);
             return;
         }
@@ -83,7 +84,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
         // Solicitar nuevo QR
         const qrResult = await requestQR();
         if (!qrResult.success) {
-            alert(qrResult.message || 'Error al solicitar código QR');
+            showToast.error(qrResult.message || 'Error al solicitar código QR');
             setIsWaitingQR(false);
         }
     }

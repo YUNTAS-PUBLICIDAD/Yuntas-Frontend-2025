@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
+import { showToast } from "@/utils/showToast";
 
 import ProductForm from "@/components/molecules/admin/products/ProductoForm";
 
@@ -41,9 +42,9 @@ export default function ProductosPage() {
         if (result.success) {
             handleCloseModal();
             await getProductos(200);
-            alert("Producto creado");
+            showToast.success("Producto creado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al crear el producto");
         }
     }
 
@@ -59,9 +60,9 @@ export default function ProductosPage() {
         if (result.success) {
             handleCloseModal();
             await getProductos(200);
-            alert("Producto actualizado");
+            showToast.success("Producto actualizado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al actualizar el producto");
         }
     }
 
@@ -71,9 +72,9 @@ export default function ProductosPage() {
         const result = await deleteProducto(producto.id!);
         if (result.success) {
             await getProductos(200);
-            alert("Producto eliminado");
+            showToast.success("Producto eliminado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al eliminar el producto");
         }
     };
 

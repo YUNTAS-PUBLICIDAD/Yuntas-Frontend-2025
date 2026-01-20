@@ -8,6 +8,7 @@ import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
 import Loader from "@/components/atoms/Loader";
 import SelectForm from "@/components/atoms/SelectForm";
 import { Producto } from "@/types/admin/producto";
+import { showToast } from "@/utils/showToast";
 import { WhatsappPlantillaInput } from "@/types/admin/whatsappPlantilla";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
 
@@ -72,15 +73,15 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
         e.preventDefault();
 
         if (!formData.producto_id) {
-            alert("Selecciona un producto");
+            showToast.warning("Selecciona un producto");
             return;
         }
         if (!formData.imagen_principal) {
-            alert("La imagen principal es requerida");
+            showToast.warning("La imagen principal es requerida");
             return;
         }
         if (!formData.parrafo.trim()) {
-            alert("El párrafo no puede estar vacío");
+            showToast.warning("El párrafo no puede estar vacío");
             return;
         }
 
@@ -90,26 +91,26 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
 
         if (result.success) {
             onClose();
-            alert("Plantilla guardada correctamente");
+            showToast.success("Plantilla guardada correctamente");
         } else {
-            alert(result.message || "Error guardando plantilla");
+            showToast.error(result.message || "Error guardando plantilla");
         }
     };
 
     // Activar campaña
     const handleActivateCampaign = async () => {
         if (!formData.producto_id) {
-            alert("Selecciona un producto");
+            showToast.warning("Selecciona un producto");
             return;
         }
 
         if (!formData.imagen_principal) {
-            alert("La imagen principal es requerida");
+            showToast.warning("La imagen principal es requerida");
             return;
         }
         
         if (!formData.parrafo.trim()) {
-            alert("El párrafo no puede estar vacío");
+            showToast.warning("El párrafo no puede estar vacío");
             return;
         }
 
@@ -117,9 +118,9 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
 
         if (result.success) {
             onClose();
-            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`);
+            showToast.success(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`);
         } else {
-            alert(result.message || "Error enviando campaña");
+            showToast.error(result.message || "Error enviando campaña");
         }
     };
 

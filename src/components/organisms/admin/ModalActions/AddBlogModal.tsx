@@ -9,6 +9,7 @@ import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
 import { BlogInput } from "@/types/admin/blog";
 import { useBlogs } from "@/hooks/useBlog";
+import { showToast } from '@/utils/showToast';
 interface Props {
   openModal: boolean;
   onClose: () => void;
@@ -42,12 +43,12 @@ const AddBlogModal = ({ openModal, onClose, onSuccess }: Props) => {
         const success = await createBlog(blog);
         if (success) {
           console.log('Blog creado',blog)
-            alert("Blog creado correctamente");
+            showToast.success("Blog creado correctamente");
             onSuccess?.(); 
             onClose();
             setBlog(BLOG_INICIAL);
         } else {
-        alert("Error al crear el blog");
+        showToast.error("Error al crear el blog");
         }
     };
     const handleCancel=()=>{

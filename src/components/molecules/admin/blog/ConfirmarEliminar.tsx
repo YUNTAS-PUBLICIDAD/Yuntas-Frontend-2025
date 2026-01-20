@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from '@/components/atoms/Modal'
 import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
+import { showToast } from '@/utils/showToast'
 import { Blog } from '@/types/admin/blog'
 import { useBlogs } from '@/hooks/useBlog'
 import { useRouter } from 'next/navigation'
@@ -19,12 +20,12 @@ const ConfirmarEliminar = ({isOpen,onClose,Blog,onSuccess}:ConfirmarEleminarProp
     const handleDelete = async (id: number) => {
         const success = await deleteBlog(id);
         if (success) {
-            alert("Blog eliminado correctamente");
+            showToast.success("Blog eliminado correctamente");
             onClose();
             onSuccess?.();   
             getBlogs(10);
         } else {
-            alert("Error al eliminar el blog");
+            showToast.error("Error al eliminar el blog");
         }
         router.refresh();
     };
