@@ -94,7 +94,7 @@ export default function SeguimientoPage() {
             label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
             onClick: () => setIsTrackingMode(!isTrackingMode),
             variant: "primary" as const,
-            bgColor: "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]",
+
             className: "flex-auto w-auto"
         },
         {

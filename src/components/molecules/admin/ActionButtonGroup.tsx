@@ -27,14 +27,10 @@ export default function ActionButtonGroup({
     };
 
     const getBgColorByVariant = (variant?: ButtonConfig["variant"]) => {
-        switch (variant) {
-            case "secondary":
-                return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
-            case "primary":
-                return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
-            default:
-                return "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]";
-        }
+        const baseColor = "!bg-[#203565] hover:!bg-[#162E4D] focus:!bg-[#203565] text-white active:!bg-[#203565]";
+        const darkColor = "dark:!bg-[#293296] dark:hover:!bg-[#1e2570] dark:focus:!bg-[#293296]";
+
+        return `${baseColor} ${darkColor}`;
     };
 
 

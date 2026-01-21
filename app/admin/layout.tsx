@@ -63,16 +63,10 @@ export default function AdminLayout({
         "
       >
         {/* Hamburguesa */}
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="text-2xl text-[#0D1030] dark:text-white"
-          aria-label="Abrir menú"
-        >
-          ☰
-        </button>
+
 
         {/* Usuario */}
-        <UserSection size="sm" />
+
       </div>
 
       {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
@@ -106,7 +100,7 @@ export default function AdminLayout({
         {/* Página */}
         <main
           className="
-            flex-1 py-16 px-8
+            flex-1 py-8 px-8
             bg-white dark:bg-[#141A3F]
             transition-colors duration-300
           "

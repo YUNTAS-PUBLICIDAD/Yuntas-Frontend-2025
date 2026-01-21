@@ -16,15 +16,15 @@ const AdminMenuMobil = ({ isOpen = false, onToggle }: Props) => {
   return (
     <button
       onClick={onToggle}
-      className={`w-full flex items-center justify-between px-4 py-2 font-medium uppercase tracking-wider transition ${
-        isAdminActive ? "text-white font-bold" : "text-white"
-      }`}
+      className={`w-full flex items-center justify-between px-4 py-2 font-medium uppercase tracking-wider transition ${isAdminActive
+        ? "text-[#04061a] dark:text-white font-bold"
+        : "text-[#04061a] dark:text-white"
+        }`}
     >
       <span className="font-bold">ADMI</span>
       <SlArrowDown
-        className={`text-base transition-transform duration-300 ${
-          isOpen ? "rotate-180" : ""
-        }`}
+        className={`text-base transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+          }`}
       />
     </button>
   );
