@@ -44,7 +44,7 @@ export const API_ENDPOINTS = {
       EMAILS: {
         SAVE: '/admin/email-productos', // para crear y actualizar
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/email-productos?producto_id=${product_id}`,
-        SEND_ONE: '/admin/email-campanas/enviar',
+        SEND_ONE: '/email-campanas/enviar',
         SEND_CAMPANA: '/admin/email-campanas/enviar-campana',
       },
       WHATSAPP: {
@@ -54,7 +54,7 @@ export const API_ENDPOINTS = {
         GET_ONE_DEFAULT: '/admin/whatsapp-productos/default',
         REQUEST_QR: '/admin/whatsapp-campanas/pedir-qr',
         RESET_SESSION: '/admin/whatsapp-campanas/reset',
-        SEND_ONE: '/admin/whatsapp-campanas/enviar',
+        SEND_ONE: '/whatsapp-campanas/enviar',
         SEND_CAMPANA: '/admin/whatsapp-campanas/enviar-campana',
       }
     },
