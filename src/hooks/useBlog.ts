@@ -11,6 +11,7 @@ import {
   getBlogBySlugService
 } from "@/services/blogService";
 import { buildBlogFormData } from "@/utils/blogFormData";
+import { showToast } from "@/utils/showToast";
 
 export function useBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -87,7 +88,7 @@ export function useBlogs() {
 
     if (beneficiosValidos.length < 3) {
       const msg = "⚠️ Por favor, completa los 3 beneficios obligatorios antes de guardar.";
-      alert(msg);   
+      showToast.warning(msg);
       setError(msg); 
       return false;
     }
@@ -118,7 +119,7 @@ export function useBlogs() {
 
     if (beneficiosValidos.length < 3) {
       const msg = "⚠️  Debes mantener los 3 beneficios obligatorios.";
-      alert(msg);
+      showToast.warning(msg);
       setError(msg);
       return false; 
     }

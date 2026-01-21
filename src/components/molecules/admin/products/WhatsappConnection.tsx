@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { showToast } from '@/utils/showToast';
 import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
 import FormSection from '../FormSection';
 import { useWhatsapp } from '@/hooks/useWhatsapp';
+import { useConfirm } from "@/hooks/useConfirm";
 import { WHATSAPP_SOCKET_URL } from '@/config';
 
 interface WhatsappConnectionProps {
@@ -13,6 +15,7 @@ interface WhatsappConnectionProps {
 }
 
 export default function WhatsappConnection({ onConnectionChange }: WhatsappConnectionProps) {
+    const { confirm, ConfirmDialog } = useConfirm();
     const { requestQR, resetSession, isRequesting } = useWhatsapp();
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
@@ -59,11 +62,9 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
         };
     }, [onConnectionChange]);
 
-    const handleResetSession = async () => {
-        const confirmReset = window.confirm(
-            '¿Estás seguro de que deseas reiniciar la sesión de WhatsApp?'
-        );
 
+    const handleResetSession = async () => {
+        const confirmReset = await confirm({ message: '¿Estás seguro de que deseas reiniciar la sesión de WhatsApp?' });
         if (!confirmReset) return;
 
         setQrCode(null);
@@ -75,7 +76,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
         const resetResult = await resetSession();
 
         if (!resetResult.success) {
-            alert(resetResult.message || 'Error al reiniciar la sesión');
+            showToast.error(resetResult.message || 'Error al reiniciar la sesión');
             setIsWaitingQR(false);
             return;
         }
@@ -83,7 +84,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
         // Solicitar nuevo QR
         const qrResult = await requestQR();
         if (!qrResult.success) {
-            alert(qrResult.message || 'Error al solicitar código QR');
+            showToast.error(qrResult.message || 'Error al solicitar código QR');
             setIsWaitingQR(false);
         }
     }
@@ -177,6 +178,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
                     </div>
                 )}
             </FormSection>
+            <ConfirmDialog />
         </div>
     );
 }

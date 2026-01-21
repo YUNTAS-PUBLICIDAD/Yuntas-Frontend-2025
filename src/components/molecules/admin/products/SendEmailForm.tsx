@@ -9,6 +9,7 @@ import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
 import Loader from "@/components/atoms/Loader";
 import SelectForm from "@/components/atoms/SelectForm";
 import { Producto } from "@/types/admin/producto";
+import { showToast } from '@/utils/showToast'
 import { EmailFormInput, EmailSectionInput } from "@/types/admin/emailPlantilla";
 import { useEmail } from "@/hooks/useEmail";
 import { parseEmailPlantillaData, createEmptySection, isSectionEmpty, isSectionComplete } from "@/utils/emailFormData";
@@ -193,7 +194,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
 
         const error = validateForm();
         if (error) {
-            alert(error);
+            showToast.warning(error);
             return;
         }
 
@@ -201,7 +202,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         const sectionsToSave = formData.sections.filter(section => !isSectionEmpty(section));
 
         if (sectionsToSave.length === 0) {
-            alert("No hay secciones completas para guardar");
+            showToast.warning("No hay secciones completas para guardar");
             return;
         }
 
@@ -213,10 +214,10 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         const result = await saveEmailPlantilla(dataToSave);
 
         if (result.success) {
-            alert("Plantilla guardada correctamente");
+            showToast.success("Plantilla guardada correctamente");
             onClose();
         } else {
-            alert(result.message || "Error guardando plantilla");
+            showToast.error(result.message || "Error guardando plantilla");
         }
     };
 
@@ -224,7 +225,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
     const handleActivateCampaign = async () => {
         const error = validateForm();
         if (error) {
-            alert(error);
+            showToast.warning(error);
             return;
         }
 
@@ -232,7 +233,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         const completeSections = formData.sections.filter(section => isSectionComplete(section));
 
         if (completeSections.length === 0) {
-            alert("Debes completar al menos una sección antes de activar la campaña");
+            showToast.warning("Debes completar al menos una sección antes de activar la campaña");
             return;
         }
 
@@ -240,9 +241,9 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
 
         if (result.success) {
             onClose();
-            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nCorreos: ${result.total_correos}`);
+            showToast.success(`Campaña enviada\n\nLeads: ${result.total_leads}\nCorreos: ${result.total_correos}`);
         } else {
-            alert(result.message || "Error enviando campaña");
+            showToast.error(result.message || "Error enviando campaña");
         }
     };
 

@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
+import { showToast } from "@/utils/showToast";
 import UserForm from "@/components/molecules/admin/users/UserForm";
 import { useUsers } from "@/hooks/useUsers";
-
+import { useConfirm } from "@/hooks/useConfirm";
 import { exportCSV } from "@/utils/Export/ExportCVS";
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportTablePDF } from "@/utils/Export/exportTablePDF";
@@ -26,7 +27,7 @@ export default function UsuariosPage() {
     const [datosPaginados, setDatosPaginados] = useState<User[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
+    const { confirm, ConfirmDialog } = useConfirm();
     const { users, getUsers, createUser, updateUser, deleteUser, isLoading, error } = useUsers();
 
     useEffect(() => {
@@ -38,9 +39,9 @@ export default function UsuariosPage() {
         if (result.success) {
             handleCloseModal();
             await getUsers();
-            alert("Usuario creado");
+            showToast.success("Usuario creado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al crear el usuario");
         }
     }
 
@@ -56,21 +57,21 @@ export default function UsuariosPage() {
         if (result.success) {
             handleCloseModal();
             await getUsers();
-            alert("Usuario actualizado");
+            showToast.success("Usuario actualizado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al actualizar el usuario");
         }
     }
 
     const handleDeleteUsuario = async (usuario: User) => {
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este usuario?" });
         if (!confirmDelete) return;
         const result = await deleteUser(usuario.id!);
         if (result.success) {
             await getUsers();
-            alert("Usuario eliminado");
+            showToast.success("Usuario eliminado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al eliminar el usuario");
         }
     };
 
@@ -159,6 +160,7 @@ export default function UsuariosPage() {
                     initialData={selectedUser}
                 />
             </Modal>
+            <ConfirmDialog />
         </div>
     );
 }

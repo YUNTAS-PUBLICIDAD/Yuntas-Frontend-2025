@@ -12,7 +12,7 @@ import ContenidoBlog from './ContenidoBlog';
 import { Blog, BlogInput } from '@/types/admin/blog';
 import { mapBlogToInput } from '@/utils/blog/mapBlogToInput'; // Asegúrate de tener este archivo
 import { useBlogs } from '@/hooks/useBlog';
-
+import { showToast } from '@/utils/showToast';
 interface Props {
   openModal: boolean;
   onClose: () => void;
@@ -63,7 +63,7 @@ const UpdateBlogModal = ({ openModal, onClose, blog, onSuccess }: Props) => {
     
     const success = await updateBlog(blog.id, form);
     if (success) {
-      alert("Blog actualizado correctamente");
+      showToast.success("Blog actualizado correctamente");
       onSuccess?.(); 
       onClose();
     } else {
