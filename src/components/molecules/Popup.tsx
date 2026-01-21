@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
+import { useEmail } from "@/hooks/useEmail";
 import PopupContainer from "@/components/atoms/PopContainer";
 import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
 import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
@@ -25,7 +26,8 @@ const Popup = ({
     productId,
     sourceId = 1,
 }: PopupProps) => {
-    const { sendWhatsapp, isActivating } = useWhatsapp();
+    const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
+    const { sendEmail, isActivating: isEmailSending } = useEmail();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -73,16 +75,23 @@ const Popup = ({
             ...(productId && { product_id: productId }),
         };
 
-        const result = await sendWhatsapp(leadData);
-        if (!result.success) {
-            setErrors({ general: result.message || "Error al enviar el WhatsApp" });
-            showToast.error(result.message || "Error al enviar el WhatsApp");
+        const whatsappResult = await sendWhatsapp(leadData);
+        if (!whatsappResult.success) {
+            setErrors({ general: whatsappResult.message || "Error al enviar el WhatsApp" });
+            showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
             return;
         }
 
+        const emailResult = await sendEmail(leadData);
+        if (!emailResult.success) {
+            setErrors({ general: emailResult.message || "Error al enviar el email" });
+            showToast.error(emailResult.message || "Error al enviar el email");
+            return;
+        }
+        
+        closeModal();
         showToast.success("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
-        closeModal();
     };
 
     useEffect(() => {
@@ -110,7 +119,7 @@ const Popup = ({
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         buttonText={buttonText}
-                        isSubmitting={isActivating}
+                        isSubmitting={isWhatsappSending || isEmailSending}
                     />
                 </div>
             </PopupContainer>

@@ -120,17 +120,7 @@ export async function saveWhatsappPlantillaDefaultService(whatsappData: Whatsapp
 
 export async function sendWhatsappService(leadData: LeadInput): Promise<WhatsappPlantillaServiceResponse<null>> {
     try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.SEND_ONE, leadData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        });
+        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.SEND_ONE, leadData);
 
         return {
             success: true,
