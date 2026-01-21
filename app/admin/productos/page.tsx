@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation"; 
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
@@ -23,6 +24,9 @@ const columns = [
 ];
 
 export default function ProductosPage() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
     const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
     const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
     const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
@@ -36,6 +40,19 @@ export default function ProductosPage() {
     useEffect(() => {
         getProductos(200);
     }, [getProductos]);
+
+
+
+    useEffect(() => {
+        const modalParam = searchParams.get('modal');
+
+        if (modalParam === 'whatsapp') {
+            setIsWhatsappModalOpen(true);
+            
+            // Limpia la URL para que si recarga la página no se vuelva a abrir solo
+            router.replace('/admin/productos', { scroll: false });
+        }
+    }, [searchParams]);
 
     const handleCreateProducto = async (formData: ProductoInput) => {
         const result = await createProducto(formData);
