@@ -19,7 +19,7 @@ const variantStyles: Record<EncabezadoVariant, { bg: string; text: string }> = {
         text: "text-[#203565]"
     },
     azul: {
-        bg: "bg-[#203565]",
+        bg: "bg-[#23C1DE] dark:bg-[#203565]",
         text: "text-white"
     }
 };
