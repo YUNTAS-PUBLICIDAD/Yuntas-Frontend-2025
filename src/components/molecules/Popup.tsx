@@ -6,6 +6,7 @@ import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
 import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
 import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
+import { showToast } from "@/utils/showToast";
 
 interface PopupProps {
     delay?: number;
@@ -75,10 +76,11 @@ const Popup = ({
         const result = await sendWhatsapp(leadData);
         if (!result.success) {
             setErrors({ general: result.message || "Error al enviar el WhatsApp" });
+            showToast.error(result.message || "Error al enviar el WhatsApp");
             return;
         }
 
-        alert("¡Gracias! Nos pondremos en contacto contigo pronto.");
+        showToast.success("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
         closeModal();
     };

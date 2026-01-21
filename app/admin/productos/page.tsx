@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
-
+import { showToast } from "@/utils/showToast";
+import { useConfirm } from "@/hooks/useConfirm";
 import ProductForm from "@/components/molecules/admin/products/ProductoForm";
-
 import { useProductos } from "@/hooks/useProductos";
 import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
@@ -31,6 +31,7 @@ export default function ProductosPage() {
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
     const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+    const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         getProductos(200);
@@ -41,9 +42,9 @@ export default function ProductosPage() {
         if (result.success) {
             handleCloseModal();
             await getProductos(200);
-            alert("Producto creado");
+            showToast.success("Producto creado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al crear el producto");
         }
     }
 
@@ -59,21 +60,21 @@ export default function ProductosPage() {
         if (result.success) {
             handleCloseModal();
             await getProductos(200);
-            alert("Producto actualizado");
+            showToast.success("Producto actualizado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al actualizar el producto");
         }
     }
 
     const handleDeleteProducto = async (producto: Producto) => {
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este producto?" });
         if (!confirmDelete) return;
         const result = await deleteProducto(producto.id!);
         if (result.success) {
             await getProductos(200);
-            alert("Producto eliminado");
+            showToast.success("Producto eliminado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al eliminar el producto");
         }
     };
 
@@ -182,6 +183,7 @@ export default function ProductosPage() {
                     isLoading={isLoading}
                 />
             </Modal>
+            <ConfirmDialog />
 
             {/* MODAL PARA CAMPAÑA A TRAVES DE EMAIL */}
             <Modal

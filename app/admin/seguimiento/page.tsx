@@ -6,10 +6,10 @@ import { LeadInput, Lead } from "@/types/admin/lead";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
-
+import { showToast } from "@/utils/showToast";
+import { useConfirm } from "@/hooks/useConfirm";
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
-
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 
@@ -21,6 +21,7 @@ export default function SeguimientoPage() {
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
+    const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         getLeads(200);
@@ -40,9 +41,9 @@ export default function SeguimientoPage() {
         if (response.success) {
             handleCloseModal();
             await getLeads(200);
-            alert("Cliente creado");
+            showToast.success("Cliente creado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al crear el cliente");
         }
     };
 
@@ -53,22 +54,22 @@ export default function SeguimientoPage() {
         if (response.success) {
             handleCloseModal();
             await getLeads(200);
-            alert("Cliente actualizado");
+            showToast.success("Cliente actualizado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al actualizar el cliente");
         }
     };
 
     const handleDeleteLead = async (client: Lead) => {
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este cliente?");
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este cliente?" });
         if (!confirmDelete) return;
 
         const response = await deleteLead(client.id!);
         if (response.success) {
             await getLeads(200);
-            alert("Cliente eliminado");
+            showToast.success("Cliente eliminado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al eliminar el cliente");
         }
     };
 
@@ -175,6 +176,7 @@ export default function SeguimientoPage() {
                     initialData={selectedLead}
                 />
             </Modal>
+            <ConfirmDialog />
 
         </div>
     );

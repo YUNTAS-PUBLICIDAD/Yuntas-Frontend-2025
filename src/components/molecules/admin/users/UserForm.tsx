@@ -5,6 +5,7 @@ import InputForm from "@/components/atoms/InputForm";
 import Button from "@/components/atoms/Button";
 import { User, UserInput } from "@/types/admin/user";
 import SelectForm from "@/components/atoms/SelectForm";
+import { showToast } from "@/utils/showToast";
 
 const defaultUserFormData: UserInput = {
     name: "",
@@ -51,7 +52,7 @@ export default function UserForm({ onSubmit, onCancel, isLoading = false, initia
             delete formData.password;
         }
         if (formData.password && formData.password.length < 6) {
-            alert("La contraseña debe tener al menos 6 caracteres.");
+            showToast.warning("La contraseña debe tener al menos 6 caracteres.");
             return;
         }
         

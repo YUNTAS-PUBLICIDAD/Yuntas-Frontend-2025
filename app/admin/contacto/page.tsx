@@ -16,7 +16,7 @@ const columns = [
     label: "CLIENTE", 
     render: (_: unknown, row: Contacto) => (
       <div className="flex flex-col">
-        <span className="font-semibold text-[#203565] dark:text-white">
+        <span className="font-semibold text-[#203565]">
           {row.first_name} {row.last_name}
         </span>
         <span className="text-xs text-gray-500">{row.phone}</span>
@@ -57,11 +57,6 @@ export default function ContactoPage() {
 
   return (
     <div>
-      
-      <h1 className="text-2xl font-bold text-[#203565] dark:text-white mb-6">
-        Solicitudes de Contacto
-      </h1>
-
       
       {selectedContacto && (
         <ViewContactoModal

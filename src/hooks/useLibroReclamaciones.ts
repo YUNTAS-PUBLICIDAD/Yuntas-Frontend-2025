@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ReclamoInput } from "@/types/admin/reclamo";
 import { useReclamos } from "@/hooks/useReclamos";
-
+import { showToast } from "@/utils/showToast";
 const defaultFormData: ReclamoInput = {
     first_name: "",
     last_name: "",
@@ -64,31 +64,31 @@ export function useLibroReclamaciones() {
 
         // Campos obligatorios básicos
         if (formData.first_name.trim() === "" || formData.last_name.trim() === "" || formData.phone?.trim() === "" || formData.detail.trim() === "" || formData.email.trim() === "" || formData.document_number.trim() === "") {
-            alert("Por favor complete los campos obligatorios");
+            showToast.warning("Por favor complete los campos obligatorios");
             return false;
         }
 
         // Validación detalle
         else if (formData.detail.trim().length < 10) {
-            alert("El detalle debe tener al menos 10 caracteres");
+            showToast.warning("El detalle debe tener al menos 10 caracteres");
             return false;
         }
 
         // Validación teléfono
         else if (formData.phone?.trim().length !== 9) {
-            alert("El teléfono debe tener 9 números");
+            showToast.warning("El teléfono debe tener 9 números");
             return false;
         }
 
         // Validación específica DNI 
         else if (formData.document_type_id === 1 && formData.document_number?.trim().length !== 8) {
-            alert("El DNI debe tener 8 números");
+            showToast.warning("El DNI debe tener 8 números");
             return false;
         }
 
         // Validación específica Pasaporte
         else if (formData.document_type_id === 2 && formData.document_number?.trim().length < 6) {
-            alert("El número de pasaporte es muy corto");
+            showToast.warning("El número de pasaporte es muy corto");
             return false;
         }
 
@@ -103,11 +103,11 @@ export function useLibroReclamaciones() {
         const response = await createReclamo(payload);
 
         if (response.success) {
-            alert("Reclamo enviado correctamente");
+            showToast.success("Reclamo enviado correctamente");
             setFormData(defaultFormData);
             return true;
         } else {
-            alert(response.message || "Error al enviar el reclamo");
+            showToast.error(response.message || "Error al enviar el reclamo");
             return false;
         }
     };
