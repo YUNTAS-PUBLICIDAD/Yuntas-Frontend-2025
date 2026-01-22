@@ -27,6 +27,10 @@ export const API_ENDPOINTS = {
     CLAIMS: '/claims',
   },
 
+  // ENVIOS DE EMAIL PROGRAMADIOS POR PLANTILLAS (LEADS/ POPUP)
+  EMAIL:{
+    SEND_ONE: '/email/send',
+  },
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
