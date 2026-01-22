@@ -27,10 +27,8 @@ const defaultFormData: WhatsappPlantillaInput = {
 export default function SendWhatsappForm({ onClose, products, isConnected }: SendWhatsappFormProps) {
     const {
         getWhatsappPlantilla,
-        getWhatsappPlantillaDefault,
         whatsappPlantilla,
         saveWhatsappPlantilla,
-        saveWhatsappPlantillaDefault,
         sendWhatsappCampana,
         isLoading,
         isSaving,
@@ -49,8 +47,8 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
             return;
         }
 
-        formData.producto_id === "0" ? getWhatsappPlantillaDefault() : getWhatsappPlantilla(Number(formData.producto_id));
-    }, [formData.producto_id, getWhatsappPlantilla, getWhatsappPlantillaDefault]);
+        getWhatsappPlantilla(Number(formData.producto_id));
+    }, [formData.producto_id, getWhatsappPlantilla]);
     useEffect(() => {
         if (!whatsappPlantilla) {
             setFormData({
@@ -85,12 +83,9 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
             return;
         }
 
-        const result = formData.producto_id === "0"
-            ? await saveWhatsappPlantillaDefault(formData)
-            : await saveWhatsappPlantilla(formData);
+        const result = await saveWhatsappPlantilla(formData);
 
         if (result.success) {
-            onClose();
             showToast.success("Plantilla guardada correctamente");
         } else {
             showToast.error(result.message || "Error guardando plantilla");
@@ -117,8 +112,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
         const result = await sendWhatsappCampana(Number(formData.producto_id));
 
         if (result.success) {
-            onClose();
-            showToast.success(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`);
+            showToast.success(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`, { duration: 5000 });
         } else {
             showToast.error(result.message || "Error enviando campaña");
         }
@@ -138,7 +132,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                     value={formData.producto_id}
                     onChange={(e) => setFormData(prev => ({ ...prev, producto_id: e.target.value }))}
                     required
-                    options={[{ id: 0, name: "Por defecto" }, ...products]}
+                    options={products}
                 />
             </FormSection>
 
@@ -198,7 +192,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                     size="md"
                     className="flex-1"
                     onClick={handleActivateCampaign}
-                    disabled={isLoading || isSaving || isActivating || formData.producto_id === "0"}
+                    disabled={isLoading || isSaving || isActivating}
                 >
                     {isActivating ? (
                         <div className="flex items-center justify-center gap-2">
