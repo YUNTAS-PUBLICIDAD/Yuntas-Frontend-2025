@@ -79,7 +79,7 @@ export async function saveEmailPlantillaService(emailData: EmailFormInput): Prom
 
 export async function sendEmailService(leadData: LeadInput): Promise<emailPlantillaServiceResponse<null>> {
     try {
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND_ONE, leadData);
+        const response = await api.post(API_ENDPOINTS.POPUP.EMAILS.SEND_ONE, leadData);
 
         return {
             success: true,
