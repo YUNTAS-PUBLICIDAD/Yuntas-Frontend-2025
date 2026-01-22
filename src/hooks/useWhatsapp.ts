@@ -9,9 +9,7 @@ import {
 } from "@/types/admin/whatsappPlantilla";
 import {
     getWhatsappPlantillaByProductService,
-    getWhatsappPlantillaDefaultService,
     saveWhatsappPlantillaService,
-    saveWhatsappPlantillaDefaultService,
     sendWhatsappService,
     sendWhatsappCampanaService,
     requestQRService,
@@ -27,9 +25,7 @@ interface UseWhatsappReturn {
     isActivating: boolean;
     error: string | null;
     getWhatsappPlantilla: (product_id: number) => Promise<void>;
-    getWhatsappPlantillaDefault: () => Promise<void>;
     saveWhatsappPlantilla: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
-    saveWhatsappPlantillaDefault: (whatsappData: WhatsappPlantillaInput) => Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>>;
     sendWhatsapp: (leadData: LeadInput) => Promise<WhatsappPlantillaServiceResponse<null>>;
     sendWhatsappCampana: (product_id: number) => Promise<sendWhatsappCampanaResponse>;
     clearError: () => void;
@@ -64,35 +60,11 @@ export function useWhatsapp(): UseWhatsappReturn {
         setIsLoading(false);
     }, []);
 
-    const getWhatsappPlantillaDefault = useCallback(async (): Promise<void> => {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await getWhatsappPlantillaDefaultService();
-        if (result.success) {
-            setWhatsappPlantilla(result.data ?? null);
-        } else {
-            setError(result.message || 'Error desconocido');
-            setWhatsappPlantilla(null);
-        }
-
-        setIsLoading(false);
-    }, []);
-
     const saveWhatsappPlantilla = useCallback(async (whatsappData: WhatsappPlantillaInput): Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>> => {
         setIsSaving(true);
         setError(null);
 
         const result = await saveWhatsappPlantillaService(whatsappData);
-        setIsSaving(false);
-        return result;
-    }, []);
-
-    const saveWhatsappPlantillaDefault = useCallback(async (whatsappData: WhatsappPlantillaInput): Promise<WhatsappPlantillaServiceResponse<WhatsappPlantilla>> => {
-        setIsSaving(true);
-        setError(null);
-
-        const result = await saveWhatsappPlantillaDefaultService(whatsappData);
         setIsSaving(false);
         return result;
     }, []);
@@ -142,9 +114,7 @@ export function useWhatsapp(): UseWhatsappReturn {
         isRequesting,
         error,
         getWhatsappPlantilla,
-        getWhatsappPlantillaDefault,
         saveWhatsappPlantilla,
-        saveWhatsappPlantillaDefault,
         sendWhatsapp,
         sendWhatsappCampana,
         clearError,
