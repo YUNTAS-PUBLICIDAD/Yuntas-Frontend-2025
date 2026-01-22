@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LeadInput, Lead } from "@/types/admin/lead";
 
@@ -14,6 +15,7 @@ import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 
 export default function SeguimientoPage() {
+    const router = useRouter();
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,7 +83,10 @@ export default function SeguimientoPage() {
     const topButtons = [
         {
             label: "MENSAJES",
-            onClick: () => { },
+            
+            onClick: () => { 
+                router.push('/admin/productos?modal=whatsapp');
+            },
             variant: "secondary" as const,
             className: "flex-auto w-auto"
         },
@@ -89,7 +94,7 @@ export default function SeguimientoPage() {
             label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
             onClick: () => setIsTrackingMode(!isTrackingMode),
             variant: "primary" as const,
-            bgColor: "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]",
+
             className: "flex-auto w-auto"
         },
         {
