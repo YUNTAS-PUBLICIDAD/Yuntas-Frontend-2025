@@ -76,6 +76,7 @@ const ImagenesSection = ({ blog, setBlog }: ImagenesSectionProps) => {
       {/* Imágenes secundarias */}
       <div className="grid gap-2">
         <Text>Imágenes Secundarias</Text>
+        <li>Subir las 3 imagenes secundarias obligatorio</li>
         <div className="grid gap-3 sm:grid-cols-3">
           {[0, 1, 2].map(index => (
             <ImageUpload

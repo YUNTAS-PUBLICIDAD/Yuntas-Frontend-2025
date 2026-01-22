@@ -77,27 +77,29 @@ export async function saveEmailPlantillaService(emailData: EmailFormInput): Prom
     }
 }
 
-export async function sendEmailService(leadData: LeadInput): Promise<emailPlantillaServiceResponse<null>> {
-    try {
-        const token = getToken();
+export async function sendEmailService(
+  leadData: LeadInput
+): Promise<emailPlantillaServiceResponse<null>> {
+  try {
+    const payload = {
+      nombre: leadData.name,
+      correo: leadData.email,
+      telefono: leadData.phone,
+      producto_id: leadData.product_id,
+    };
 
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
+    const response = await api.post('/email/send', payload);
 
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND_ONE, leadData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        });
-
-        return {
-            success: true,
-            message: response.data.message || "Email enviado exitosamente",
-        };
-    } catch (error: any) {
-        return { success: false, message: error.message };
-    }
+    return {
+      success: true,
+      message: response.data.message || "Email enviado exitosamente",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message,
+    };
+  }
 }
 
 export async function sendEmailCampanaService(product_id: number): Promise<sendEmailCampanaResponse> {
