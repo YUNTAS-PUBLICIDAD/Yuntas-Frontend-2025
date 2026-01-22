@@ -8,6 +8,8 @@ import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
 import { showToast } from "@/utils/showToast";
 
+import { useEmail } from "@/hooks/useEmail";
+
 interface PopupProps {
     delay?: number;
     imgSrc: string;
@@ -26,6 +28,7 @@ const Popup = ({
     sourceId = 1,
 }: PopupProps) => {
     const { sendWhatsapp, isActivating } = useWhatsapp();
+    const { sendEmail, isActivating: isEmailActivating } = useEmail();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -79,6 +82,15 @@ const Popup = ({
             showToast.error(result.message || "Error al enviar el WhatsApp");
             return;
         }
+
+        const resultEmail = await sendEmail(leadData);
+        if (!resultEmail.success) {
+            setErrors({ general: resultEmail.message || "Error al enviar el Email" });
+            showToast.error(resultEmail.message || "Error al enviar el Email");
+            return;
+        }
+
+
 
         showToast.success("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
