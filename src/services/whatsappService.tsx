@@ -71,7 +71,7 @@ export async function saveWhatsappPlantillaService(whatsappData: WhatsappPlantil
 
 export async function sendWhatsappService(leadData: LeadInput): Promise<WhatsappPlantillaServiceResponse<null>> {
     try {
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.WHATSAPP.SEND_ONE, leadData);
+        const response = await api.post(API_ENDPOINTS.POPUP.WHATSAPP.SEND_ONE, leadData);
 
         return {
             success: true,

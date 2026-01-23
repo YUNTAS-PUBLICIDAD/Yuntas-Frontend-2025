@@ -27,10 +27,15 @@ export const API_ENDPOINTS = {
     CLAIMS: '/claims',
   },
 
-  // ENVIOS DE EMAIL PROGRAMADIOS POR PLANTILLAS (LEADS/ POPUP)
-  EMAIL:{
-    SEND_ONE: '/email/send',
+  POPUP: {
+    EMAILS: { // ENVIOS DE EMAIL PROGRAMADIOS POR PLANTILLAS (LEADS/ POPUP)
+      SEND_ONE: '/email-popup/enviar',
+    },
+    WHATSAPP: {
+      SEND_ONE: '/whatsapp-popup/enviar',
+    },
   },
+
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
@@ -48,7 +53,6 @@ export const API_ENDPOINTS = {
       EMAILS: {
         SAVE: '/admin/email-productos', // para crear y actualizar
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/email-productos?producto_id=${product_id}`,
-        SEND_ONE: '/email-campanas/enviar',
         SEND_CAMPANA: '/admin/email-campanas/enviar-campana',
       },
       WHATSAPP: {
@@ -56,7 +60,6 @@ export const API_ENDPOINTS = {
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/whatsapp-productos?producto_id=${product_id}`,
         REQUEST_QR: '/admin/whatsapp-campanas/pedir-qr',
         RESET_SESSION: '/admin/whatsapp-campanas/reset',
-        SEND_ONE: '/whatsapp-campanas/enviar',
         SEND_CAMPANA: '/admin/whatsapp-campanas/enviar-campana',
       }
     },
