@@ -25,6 +25,7 @@ export default function ProductosPage() {
                 imgSrc={imagenPopup.src}
                 title="¡Tu marca brillando como se merece!"
                 buttonText="Explorar opciones"
+                sourceId={2} // source id para "Productos"
             />
         </main>
     );

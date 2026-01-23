@@ -44,7 +44,7 @@ export default function ExportDropdown({
             {/* Botón principal */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center justify-center gap-1 px-3 py-1 bg-[#23C1DE] text-white font-semibold text-xs sm:text-sm md:text-base rounded-full hover:opacity-90 transition-all ${className ?? "w-full sm:w-auto"}`}
+                className={`flex items-center justify-center gap-1 px-3 py-1 bg-[#203565] dark:bg-[#293296] text-white font-semibold text-xs sm:text-sm md:text-base rounded-[10px] !h-[32px] hover:opacity-90 transition-all ${className ?? "w-auto"}`}
             >
                 {label}
                 <FaChevronDown

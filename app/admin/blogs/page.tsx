@@ -99,9 +99,11 @@ export default function Blogspage() {
         onSuccess={() => getBlogs(10)}
       />
 
-      <div className="flex flex-row flex-wrap gap-2 mb-4 mt-4 items-center">
+      <div className="flex flex-row flex-wrap gap-2 mb-4 items-center">
         {/* Botón Publicar siempre visible */}
-        <ActionButtonGroup className="flex-auto" buttons={[{ label: "Publicar", onClick: () => setOpenAddModal(true), className: "w-full" }]} />
+        <div className="w-auto">
+          <ActionButtonGroup buttons={[{ label: "Publicar", onClick: () => setOpenAddModal(true), className: "w-auto md:w-[151px]" }]} />
+        </div>
 
         {/* Desktop: Botones de exportación separados */}
         <div className="hidden md:block">
@@ -109,8 +111,8 @@ export default function Blogspage() {
         </div>
 
         {/* Móvil: Dropdown de exportación */}
-        <div className="md:hidden flex-auto">
-          <ExportDropdown options={exportOptions} className="w-full" />
+        <div className="md:hidden w-auto">
+          <ExportDropdown options={exportOptions} className="w-auto" />
         </div>
       </div>
       {error && (

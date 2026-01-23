@@ -1,41 +1,36 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LeadInput, Lead } from "@/types/admin/lead";
 
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
-
+import { showToast } from "@/utils/showToast";
+import { useConfirm } from "@/hooks/useConfirm";
 import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
-
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 
 export default function SeguimientoPage() {
+    const router = useRouter();
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTrackingMode, setIsTrackingMode] = useState(false);
-    const [selectedLead, setSelectedLead] = useState<LeadInput | null>(null);
+    const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
+    const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         getLeads(200);
     }, []);
 
     const handleEditClick = (client: Lead) => {
-        const data: LeadInput = {
-            id: client.id,
-            name: client.name || "",
-            phone: client.phone || "",
-            email: client.email || "",
-            product_id: client.product_id || 0,
-            source_id: client.source_id || 1,
-        };
-        setSelectedLead(data);
+        setSelectedLead(client);
         setIsModalOpen(true);
     };
 
@@ -48,9 +43,9 @@ export default function SeguimientoPage() {
         if (response.success) {
             handleCloseModal();
             await getLeads(200);
-            alert("Cliente creado");
+            showToast.success("Cliente creado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al crear el cliente");
         }
     };
 
@@ -61,22 +56,22 @@ export default function SeguimientoPage() {
         if (response.success) {
             handleCloseModal();
             await getLeads(200);
-            alert("Cliente actualizado");
+            showToast.success("Cliente actualizado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al actualizar el cliente");
         }
     };
 
     const handleDeleteLead = async (client: Lead) => {
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este cliente?");
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este cliente?" });
         if (!confirmDelete) return;
 
         const response = await deleteLead(client.id!);
         if (response.success) {
             await getLeads(200);
-            alert("Cliente eliminado");
+            showToast.success("Cliente eliminado");
         } else {
-            alert(response.message);
+            showToast.error(response.message || "Error al eliminar el cliente");
         }
     };
 
@@ -88,7 +83,10 @@ export default function SeguimientoPage() {
     const topButtons = [
         {
             label: "MENSAJES",
-            onClick: () => { },
+            
+            onClick: () => { 
+                router.push('/admin/productos?modal=whatsapp');
+            },
             variant: "secondary" as const,
             className: "flex-auto w-auto"
         },
@@ -96,7 +94,7 @@ export default function SeguimientoPage() {
             label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
             onClick: () => setIsTrackingMode(!isTrackingMode),
             variant: "primary" as const,
-            bgColor: "!bg-[#23C1DE] text-white hover:opacity-90 dark:!bg-[#293296]",
+
             className: "flex-auto w-auto"
         },
         {
@@ -124,6 +122,12 @@ export default function SeguimientoPage() {
                 <ActionButtonGroup buttons={topButtons} className="w-full" />
             </div>
 
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
+            )}
+
             {/* TABLAS */}
             <div className="w-full overflow-x-auto">
                 {isTrackingMode ? (
@@ -145,7 +149,7 @@ export default function SeguimientoPage() {
             {/* PAGINACIÓN */}
             <div className="flex justify-center mt-4 w-full overflow-x-hidden">
                 <Pagination
-                    pageSize={2}
+                    pageSize={5}
                     items={leads}
                     setProductosPaginados={setDatosPaginados}
                 />
@@ -177,6 +181,7 @@ export default function SeguimientoPage() {
                     initialData={selectedLead}
                 />
             </Modal>
+            <ConfirmDialog />
 
         </div>
     );

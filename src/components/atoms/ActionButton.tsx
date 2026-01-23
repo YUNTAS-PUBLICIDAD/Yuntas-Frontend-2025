@@ -24,7 +24,7 @@ export default function ActionButton({
             size="sm"
             variant={variant}
             onClick={onClick}
-            className={`py-1 !px-3 sm:!px-4 ${className ?? "w-full sm:w-auto"} ${finalClasses}`}
+            className={`py-1 !px-3 sm:!px-4 !rounded-[10px] ${className ?? "w-full sm:w-auto"} ${finalClasses}`}
         >
             <p className="font-semibold text-xs sm:text-sm md:text-base">
                 {children}

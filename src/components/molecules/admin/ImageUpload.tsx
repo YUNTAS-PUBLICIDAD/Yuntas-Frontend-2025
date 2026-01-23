@@ -129,7 +129,7 @@ export default function ImageUpload({
             )}
 
             <span className="text-gray-500 text-xs">Cada imagen debe pesar menos de 2 MB.</span>
-
+            <span className="text-gray-500 text-xs">Cada imagen debe subirse en formato WEBP.</span>
             {showAltInput && (
                 <input
                     type="text"

@@ -55,7 +55,7 @@ function ProductoDetalleContent() {
                             title="¡Tu marca brillando como se merece!"
                             buttonText="Explorar opciones"
                             productId={producto?.id}
-                            sourceId={1}
+                            sourceId={3} // source id para "Producto detalle"
                         />
                     </main>
                 )

@@ -79,17 +79,7 @@ export async function saveEmailPlantillaService(emailData: EmailFormInput): Prom
 
 export async function sendEmailService(leadData: LeadInput): Promise<emailPlantillaServiceResponse<null>> {
     try {
-        const token = getToken();
-
-        if (!token) {
-            return { success: false, message: "No autenticado" };
-        }
-
-        const response = await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SEND_ONE, leadData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        });
+        const response = await api.post(API_ENDPOINTS.POPUP.EMAILS.SEND_ONE, leadData);
 
         return {
             success: true,

@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
+import { showToast } from "@/utils/showToast";
 export const exportTablePDF = (
   data: any[],
   title: string,
@@ -8,7 +8,7 @@ export const exportTablePDF = (
   action: "download" | "print" = "download"
 ) => {
   if (!data || data.length === 0) {
-    alert("No hay datos para exportar");
+    showToast.warning("No hay datos para exportar");
     return;
   }
 

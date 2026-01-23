@@ -8,12 +8,14 @@ import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
 import Loader from "@/components/atoms/Loader";
 import SelectForm from "@/components/atoms/SelectForm";
 import { Producto } from "@/types/admin/producto";
+import { showToast } from "@/utils/showToast";
 import { WhatsappPlantillaInput } from "@/types/admin/whatsappPlantilla";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
 
 interface SendWhatsappFormProps {
     onClose: () => void;
     products: Producto[];
+    isConnected: boolean;
 }
 
 const defaultFormData: WhatsappPlantillaInput = {
@@ -22,13 +24,11 @@ const defaultFormData: WhatsappPlantillaInput = {
     parrafo: "",
 };
 
-export default function SendWhatsappForm({ onClose, products }: SendWhatsappFormProps) {
+export default function SendWhatsappForm({ onClose, products, isConnected }: SendWhatsappFormProps) {
     const {
         getWhatsappPlantilla,
-        getWhatsappPlantillaDefault,
         whatsappPlantilla,
         saveWhatsappPlantilla,
-        saveWhatsappPlantillaDefault,
         sendWhatsappCampana,
         isLoading,
         isSaving,
@@ -47,8 +47,8 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
             return;
         }
 
-        formData.producto_id === "0" ? getWhatsappPlantillaDefault() : getWhatsappPlantilla(Number(formData.producto_id));
-    }, [formData.producto_id, getWhatsappPlantilla, getWhatsappPlantillaDefault]);
+        getWhatsappPlantilla(Number(formData.producto_id));
+    }, [formData.producto_id, getWhatsappPlantilla]);
     useEffect(() => {
         if (!whatsappPlantilla) {
             setFormData({
@@ -71,59 +71,60 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
         e.preventDefault();
 
         if (!formData.producto_id) {
-            alert("Selecciona un producto");
+            showToast.warning("Selecciona un producto");
             return;
         }
         if (!formData.imagen_principal) {
-            alert("La imagen principal es requerida");
+            showToast.warning("La imagen principal es requerida");
             return;
         }
         if (!formData.parrafo.trim()) {
-            alert("El párrafo no puede estar vacío");
+            showToast.warning("El párrafo no puede estar vacío");
             return;
         }
 
-        const result = formData.producto_id === "0"
-            ? await saveWhatsappPlantillaDefault(formData)
-            : await saveWhatsappPlantilla(formData);
+        const result = await saveWhatsappPlantilla(formData);
 
         if (result.success) {
-            onClose();
-            alert("Plantilla guardada correctamente");
+            showToast.success("Plantilla guardada correctamente");
         } else {
-            alert(result.message || "Error guardando plantilla");
+            showToast.error(result.message || "Error guardando plantilla");
         }
     };
 
     // Activar campaña
     const handleActivateCampaign = async () => {
         if (!formData.producto_id) {
-            alert("Selecciona un producto");
+            showToast.warning("Selecciona un producto");
             return;
         }
 
         if (!formData.imagen_principal) {
-            alert("La imagen principal es requerida");
+            showToast.warning("La imagen principal es requerida");
             return;
         }
         
         if (!formData.parrafo.trim()) {
-            alert("El párrafo no puede estar vacío");
+            showToast.warning("El párrafo no puede estar vacío");
             return;
         }
 
         const result = await sendWhatsappCampana(Number(formData.producto_id));
 
         if (result.success) {
-            onClose();
-            alert(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`);
+            showToast.success(`Campaña enviada\n\nLeads: ${result.total_leads}\nExitosos: ${result.exitosos}\nFallidos: ${result.fallidos}`, { duration: 5000 });
         } else {
-            alert(result.message || "Error enviando campaña");
+            showToast.error(result.message || "Error enviando campaña");
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto">
+            {!isConnected && (
+                <div className="text-yellow-800 text-sm text-center">
+                    WhatsApp no está conectado. Ve a la pestaña <strong>Conexión</strong> para escanear el código QR.
+                </div>
+            )}
             <FormSection title="Selección de Producto">
                 <SelectForm
                     label="Selecciona un producto"
@@ -131,7 +132,7 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
                     value={formData.producto_id}
                     onChange={(e) => setFormData(prev => ({ ...prev, producto_id: e.target.value }))}
                     required
-                    options={[{ id: 0, name: "Por defecto" }, ...products]}
+                    options={products}
                 />
             </FormSection>
 
@@ -191,7 +192,7 @@ export default function SendWhatsappForm({ onClose, products }: SendWhatsappForm
                     size="md"
                     className="flex-1"
                     onClick={handleActivateCampaign}
-                    disabled={isLoading || isSaving || isActivating || formData.producto_id === "0"}
+                    disabled={isLoading || isSaving || isActivating}
                 >
                     {isActivating ? (
                         <div className="flex items-center justify-center gap-2">

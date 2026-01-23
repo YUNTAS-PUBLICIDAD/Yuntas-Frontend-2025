@@ -1,19 +1,20 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation"; 
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
-
+import { showToast } from "@/utils/showToast";
+import { useConfirm } from "@/hooks/useConfirm";
 import ProductForm from "@/components/molecules/admin/products/ProductoForm";
-
 import { useProductos } from "@/hooks/useProductos";
 import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
 import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
+import WhatsappFormWithTabs from "@/components/molecules/admin/products/WhatsappFormWithTabs";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
-import SendWhatsappForm from "@/components/molecules/admin/products/SendWhatsappForm";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -23,6 +24,9 @@ const columns = [
 ];
 
 export default function ProductosPage() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
     const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
     const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
     const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
@@ -31,19 +35,33 @@ export default function ProductosPage() {
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
     const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+    const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         getProductos(200);
     }, [getProductos]);
+
+
+
+    useEffect(() => {
+        const modalParam = searchParams.get('modal');
+
+        if (modalParam === 'whatsapp') {
+            setIsWhatsappModalOpen(true);
+            
+            // Limpia la URL para que si recarga la página no se vuelva a abrir solo
+            router.replace('/admin/productos', { scroll: false });
+        }
+    }, [searchParams]);
 
     const handleCreateProducto = async (formData: ProductoInput) => {
         const result = await createProducto(formData);
         if (result.success) {
             handleCloseModal();
             await getProductos(200);
-            alert("Producto creado");
+            showToast.success("Producto creado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al crear el producto");
         }
     }
 
@@ -59,21 +77,21 @@ export default function ProductosPage() {
         if (result.success) {
             handleCloseModal();
             await getProductos(200);
-            alert("Producto actualizado");
+            showToast.success("Producto actualizado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al actualizar el producto");
         }
     }
 
     const handleDeleteProducto = async (producto: Producto) => {
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este producto?" });
         if (!confirmDelete) return;
         const result = await deleteProducto(producto.id!);
         if (result.success) {
             await getProductos(200);
-            alert("Producto eliminado");
+            showToast.success("Producto eliminado");
         } else {
-            alert(result.message);
+            showToast.error(result.message || "Error al eliminar el producto");
         }
     };
 
@@ -182,6 +200,7 @@ export default function ProductosPage() {
                     isLoading={isLoading}
                 />
             </Modal>
+            <ConfirmDialog />
 
             {/* MODAL PARA CAMPAÑA A TRAVES DE EMAIL */}
             <Modal
@@ -202,7 +221,7 @@ export default function ProductosPage() {
                 title="Envio de Whatsapp"
                 size="lg"
             >
-                <SendWhatsappForm
+                <WhatsappFormWithTabs
                     products={productos}
                     onClose={() => setIsWhatsappModalOpen(false)}
                 />
