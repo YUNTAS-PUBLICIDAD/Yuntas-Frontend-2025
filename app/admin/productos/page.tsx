@@ -35,6 +35,7 @@ export default function ProductosPage() {
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
     const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+    const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
     const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
@@ -45,8 +46,17 @@ export default function ProductosPage() {
 
     useEffect(() => {
         const modalParam = searchParams.get('modal');
+        const tabParam = searchParams.get('tab'); 
 
         if (modalParam === 'whatsapp') {
+            
+            if (tabParam) {
+                setWhatsappInitialTab(tabParam);
+            } else {
+                setWhatsappInitialTab("conexion");
+            }
+
+       
             setIsWhatsappModalOpen(true);
             
             // Limpia la URL para que si recarga la página no se vuelva a abrir solo
@@ -224,6 +234,7 @@ export default function ProductosPage() {
                 <WhatsappFormWithTabs
                     products={productos}
                     onClose={() => setIsWhatsappModalOpen(false)}
+                    initialTab={whatsappInitialTab} 
                 />
             </Modal>
         </div>
