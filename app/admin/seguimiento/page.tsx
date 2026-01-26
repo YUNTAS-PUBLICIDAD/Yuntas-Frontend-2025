@@ -111,7 +111,7 @@ export default function SeguimientoPage() {
         { key: "email", label: "EMAIL" },
         { key: "phone", label: "TELÉFONO" },
         { key: "product_name", label: "PRODUCTO" },
-        { key: "created_at", label: "FECHA" }
+        { key: "created_at", label: "FECHA DE INICIO" }
     ];
 
     return (
