@@ -86,6 +86,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         if (name === "price" && (Number(value) < 0 || Number(value) > 100000)) return;
+        
         setFormData(prev => ({ ...prev, [name]: name === "price" ? Number(value) : value }));
     };
 
@@ -215,7 +216,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                         value={formData.slug || ""}
                         onChange={handleInputChange}
                         placeholder="ej: letreros-neon-led"
-                        helperText="Solo minúsculas y guiones. Hasta 160 letras, números o espacios."
+                        helperText="Formato obligatorio: palabras en minúscula separadas por guiones. Sin espacios ni tildes. Máx. 160 caracteres."
                         maxLength={160}
                         required
                     />
