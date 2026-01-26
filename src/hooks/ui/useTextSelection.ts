@@ -80,7 +80,7 @@ export const useTextSelection = (
     insertHtml(html);
   };
   const insertProduct = (producto: Producto) => {
-    const html = `<strong><a href="/productos/detalle/?slug=${producto.slug}" title="${producto.name}">${selectedText}</a></strong>`;
+    const html = `<strong><a href="/productos/${producto.slug}" title="${producto.name}">${selectedText}</a></strong>`;
     insertHtml(html);
   };
   const reset = () => {
