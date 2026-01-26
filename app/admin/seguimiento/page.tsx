@@ -85,7 +85,7 @@ export default function SeguimientoPage() {
             label: "MENSAJES",
             
             onClick: () => { 
-                router.push('/admin/productos?modal=whatsapp');
+                router.push('/admin/productos?modal=whatsapp&tab=plantilla');
             },
             variant: "secondary" as const,
             className: "flex-auto w-auto"
