@@ -40,10 +40,30 @@ const defaultFormData: ProductoInput = {
 };
 
 const GALLERY_SLOTS = [
-    { value: 'Hero', label: 'Hero (Imagen principal grande)' },
-    { value: 'Specs', label: 'Especificaciones' },
-    { value: 'Benefits', label: 'Beneficios' },
-    { value: 'Popups', label: 'Popup' },
+    { 
+        value: 'Hero', 
+        label: 'Hero (Imagen principal grande)', 
+        size: '1920 x 800 px', 
+        desc: 'Formato horizontal panorámico.' 
+    },
+    { 
+        value: 'Specs', 
+        label: 'Especificaciones', 
+        size: '1000 x 1000 px', 
+        desc: 'Formato cuadrado o vertical (4:5).' 
+    },
+    { 
+        value: 'Benefits', 
+        label: 'Beneficios', 
+        size: '1000 x 1000 px', 
+        desc: 'Formato cuadrado o vertical (4:5).' 
+    },
+    { 
+        value: 'Popups', 
+        label: 'Popup', 
+        size: '800 x 800 px', 
+        desc: 'Formato cuadrado.' 
+    },
 ] as const;
 
 export default function ProductForm({ onSubmit, onCancel, isLoading = false, initialData = null }: ProductFormProps) {
@@ -314,7 +334,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             <FormSection title="Imagen Principal">
                 <ImageUpload
                     label="Imagen Principal del Producto"
-                    description="Esta imagen aparece en la lista de productos"
+                    description="Aparece en la lista de productos. Recomendado: 800 x 800 px (Cuadrado)."
                     altValue={formData.main_image_alt}
                     onAltChange={(alt) => setFormData(prev => ({ ...prev, main_image_alt: alt }))}
                     onFileChange={(file) => setFormData(prev => ({ ...prev, main_image: file }))}
@@ -334,7 +354,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {GALLERY_SLOTS.map(({ value, label }) => {
+                    {GALLERY_SLOTS.map(({ value, label, size, desc  }) => {
                         const existingImage = formData.gallery.find(item => item.slot === value);
 
                         // se determinar la URL del preview
@@ -353,7 +373,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                             <ImageUpload
                                 key={value}
                                 label={`Imagen para ${label}`}
-                                description="Esta imagen aparece en la sección correspondiente"
+                                description={`Medida: ${size}. ${desc}`}
                                 altValue={existingImage?.alt || ""}
                                 required
                                 onAltChange={(alt) => {
