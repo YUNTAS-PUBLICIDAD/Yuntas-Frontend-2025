@@ -3,6 +3,7 @@
 import TableActions from "@/components/molecules/admin/TableActions";
 import { useAdminTable } from "@/hooks/ui/admin/useAdminTable";
 import { RiCloseLine, RiCheckLine } from "react-icons/ri";
+import { getRole } from "@/utils/role";
 
 interface TrackingTableProps<T = any> {
     data: T[];
@@ -28,6 +29,7 @@ export default function TrackingTable({
 }: TrackingTableProps) {
 
     const { enabledActions, rows } = useAdminTable({ data, minRows, onDelete, onEdit });
+    const role = getRole();
 
     return (
         <div className="w-full px-2 md:px-0">
@@ -39,14 +41,14 @@ export default function TrackingTable({
                         {columns.map(col => (
                             <th
                                 key={col.key}
-                                className="text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg"
+                                className={`text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg ${role !== "admin" ? "last:rounded-r-lg" : ""}`}
                             >
                                 {col.label}
                             </th>
                         ))}
-                        <th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
+                        { role === "admin" &&<th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
                             ACCIÓN
-                        </th>
+                        </th> }
                     </tr>
                 </thead>
 
@@ -55,18 +57,20 @@ export default function TrackingTable({
                         const isEmpty = row._empty === true;
 
                         return (
-                            <tr
-                                key={row.id || index}
-                                className="block lg:table-row bg-white border-2 border-[#0D1030] lg:border-none rounded-[2rem] mb-6 p-4 lg:p-0 shadow-sm"
-                            >
+                            <tr key={row.id || index} >
                                 {columns.map(col => {
                                     const isStatus = col.key.includes('status');
                                     const isResponse = col.key.includes('response');
 
                                     return (
                                         <td
-                                            key={col.key}
-                                            className="flex justify-between items-center lg:table-cell py-2 px-4 border-b border-gray-100 lg:border-none lg:bg-[#F4F4F2]"
+                                            className={`
+                                            py-3 px-4 text-center
+                                            bg-[#F4F4F2] dark:bg-white
+                                            first:rounded-l-lg
+                                            ${role !== "admin" ? "last:rounded-r-lg" : ""}
+                                            ${col.key === "id" ? "font-bold text-[#0D1030]" : "text-[#0D1030]"}
+                                        `}
                                         >
                                             <span className="lg:hidden font-black uppercase text-xs text-[#0D1030]">
                                                 {col.label}:
@@ -76,7 +80,7 @@ export default function TrackingTable({
                                                 {isEmpty ? "" :
                                                     isStatus ? "ENVIADO" :
                                                         isResponse ? (
-                                                            <div className="flex gap-3">
+                                                            <div className="flex items-center justify-center gap-3">
                                                                 <button className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center">
                                                                     <RiCloseLine size={22} />
                                                                 </button>
@@ -92,7 +96,7 @@ export default function TrackingTable({
                                 })}
 
                                 {/* ACCIONES */}
-                                <td className="flex justify-center lg:table-cell py-4 lg:py-3 lg:bg-[#F4F4F2] lg:rounded-r-lg">
+                                { role === "admin" && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-white rounded-r-lg">
                                     <TableActions
                                         item={row}
                                         isEmpty={isEmpty}
@@ -100,7 +104,7 @@ export default function TrackingTable({
                                         onEdit={onEdit}
                                         actions={enabledActions}
                                     />
-                                </td>
+                                </td>}
                             </tr>
                         );
                     })}

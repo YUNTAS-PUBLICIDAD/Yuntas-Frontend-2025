@@ -6,7 +6,7 @@ import Button from "@/components/atoms/Button";
 import { User, UserInput } from "@/types/admin/user";
 import SelectForm from "@/components/atoms/SelectForm";
 import { showToast } from "@/utils/showToast";
-
+import { useRoles } from "@/hooks/useRoles";
 const defaultUserFormData: UserInput = {
     name: "",
     email: "",
@@ -23,7 +23,7 @@ interface UserFormProps {
 
 export default function UserForm({ onSubmit, onCancel, isLoading = false, initialData = null }: UserFormProps) {
     const [formData, setFormData] = useState<UserInput>(defaultUserFormData);
-
+    const { roles, getRoles } = useRoles();
     useEffect(() => {
         if (initialData) {
             setFormData({
@@ -32,7 +32,8 @@ export default function UserForm({ onSubmit, onCancel, isLoading = false, initia
                 role_id: initialData.role_id || 0,
             });
         }
-    }, [initialData]);
+        getRoles();
+    }, [initialData, getRoles]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -91,10 +92,7 @@ export default function UserForm({ onSubmit, onCancel, isLoading = false, initia
                 label="Seleccione un rol"
                 name="role_id"
                 value={formData.role_id || ""}
-                options={[
-                    { id: 1, name: "Administrador" },
-                    { id: 2, name: "Usuario" },
-                ]}
+                options={roles}
                 onChange={handleChange}
                 required
             />
