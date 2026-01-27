@@ -7,6 +7,7 @@ export interface Lead {
     product_id: number | null;
     product_name?: string;
     source_id: number | null;
+    source_name?: string;
     created_at: string | null;
 }
 
@@ -16,7 +17,7 @@ export interface LeadInput {
     email: string;
     phone?: string;
     message?: string;
-    product_id?: number;
+    product_id?: number;   
     source_id?: number;
 }
 
