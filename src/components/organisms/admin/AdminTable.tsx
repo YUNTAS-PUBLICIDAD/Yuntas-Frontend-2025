@@ -2,6 +2,7 @@
 
 import TableActions from "@/components/molecules/admin/TableActions";
 import { useAdminTable } from "@/hooks/ui/admin/useAdminTable";
+import { getRole } from "@/utils/role";
 
 interface Column {
     key: string;
@@ -35,6 +36,8 @@ export default function AdminTable({
         onEdit
     });
 
+    const role = getRole();
+
     return (
         <div className="w-full px-2 md:px-0">
             {/* DESKTOP: Tabla normal */}
@@ -42,13 +45,13 @@ export default function AdminTable({
                 <thead>
                     <tr className="bg-[#0D1030] dark:bg-[#293296]">
                         {columns.map((col) => (
-                            <th key={col.key} className="text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg last:rounded-r-lg">
+                            <th key={col.key} className={`text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg ${role !== "admin" ? "last:rounded-r-lg" : ""}`}>
                                 {col.label}
                             </th>
                         ))}
-                        <th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
+                        { role === "admin" && <th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
                             ACCIÓN
-                        </th>
+                        </th>}
                     </tr>
                 </thead>
 
@@ -65,23 +68,26 @@ export default function AdminTable({
                                             py-3 px-4 text-center
                                             bg-[#F4F4F2] dark:bg-white
                                             first:rounded-l-lg
+                                            ${role !== "admin" ? "last:rounded-r-lg" : ""}
                                             ${col.key === "id" ? "font-bold text-[#0D1030]" : "text-[#0D1030]"}
                                         `}
                                     >
-                                        {isEmpty ? "" : col.render ? col.render(row[col.key], row) : row[col.key]}
+                                        {isEmpty ? <>&nbsp;</> : col.render ? col.render(row[col.key], row) : row[col.key]}
                                     </td>
                                 ))}
 
-                                <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-white rounded-r-lg">
-                                    <TableActions
-                                        item={row}
-                                        isEmpty={isEmpty}
-                                        onDelete={onDelete}
-                                        onApprove={onApprove}
-                                        onEdit={onEdit}
-                                        actions={enabledActions}
-                                    />
-                                </td>
+                                { role === "admin" && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-white rounded-r-lg">
+                                    {isEmpty ? <>&nbsp;</> : (
+                                        <TableActions
+                                            item={row}
+                                            isEmpty={isEmpty}
+                                            onDelete={onDelete}
+                                            onApprove={onApprove}
+                                            onEdit={onEdit}
+                                            actions={enabledActions}
+                                        />
+                                    )}
+                                </td>}
                             </tr>
                         );
                     })}
@@ -115,7 +121,7 @@ export default function AdminTable({
                             </div>
 
                             {/* Acciones centradas al final */}
-                            <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
+                            {role === "admin" && <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
                                 <TableActions
                                     item={row}
                                     isEmpty={isEmpty}
@@ -124,7 +130,7 @@ export default function AdminTable({
                                     onEdit={onEdit}
                                     actions={enabledActions}
                                 />
-                            </div>
+                            </div>}
                         </div>
                     );
                 })}
