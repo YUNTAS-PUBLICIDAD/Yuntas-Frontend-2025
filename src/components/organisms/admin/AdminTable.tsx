@@ -77,16 +77,14 @@ export default function AdminTable({
                                 ))}
 
                                 { role === "admin" && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-white rounded-r-lg">
-                                    {isEmpty ? <>&nbsp;</> : (
-                                        <TableActions
-                                            item={row}
-                                            isEmpty={isEmpty}
-                                            onDelete={onDelete}
-                                            onApprove={onApprove}
-                                            onEdit={onEdit}
-                                            actions={enabledActions}
-                                        />
-                                    )}
+                                    <TableActions
+                                        item={row}
+                                        isEmpty={isEmpty}
+                                        onDelete={onDelete}
+                                        onApprove={onApprove}
+                                        onEdit={onEdit}
+                                        actions={enabledActions}
+                                    />
                                 </td>}
                             </tr>
                         );
