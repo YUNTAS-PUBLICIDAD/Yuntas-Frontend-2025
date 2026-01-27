@@ -70,6 +70,9 @@ export const API_ENDPOINTS = {
       UPDATE: (id: number) => `/admin/categorias/${id}`,
       DELETE: (id: number) => `/admin/categorias/${id}`,
     },
+    ROLES: {
+      GET_ALL: '/admin/roles',
+    },
     INBOX: {
       LEADS: {
         GET_ALL: '/admin/leads',

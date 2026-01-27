@@ -9,8 +9,6 @@ export async function generateStaticParams() {
         return [];
     }
 
-    console.log(`📡 Solicitando productos a: ${apiUrl}/productos`);
-
     const res = await fetch(`${apiUrl}/productos?per_page=100`, {
         cache: 'no-store' 
     });
@@ -35,9 +33,6 @@ export async function generateStaticParams() {
         productos = payload.data.data;
     }
 
-    console.log(`✅ Se encontraron ${productos.length} productos para generar rutas.`);
-
-
     if (!Array.isArray(productos)) {
         console.error("⚠️ La API respondió, pero no encontré un array de productos. Estructura recibida:", JSON.stringify(payload).substring(0, 200));
         return [];
@@ -48,7 +43,6 @@ export async function generateStaticParams() {
     }));
 
   } catch (error) {
-    console.error("❌ Error generando rutas estáticas:", error);
     return [];
   }
 }
