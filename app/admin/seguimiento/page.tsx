@@ -26,7 +26,7 @@ export default function SeguimientoPage() {
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isTrackingMode, setIsTrackingMode] = useState(false);
+    const [isTrackingMode, setIsTrackingMode] = useState(false); 
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
@@ -90,7 +90,6 @@ export default function SeguimientoPage() {
     const topButtons = [
         {
             label: "MENSAJES",
-            
             onClick: () => { 
                 router.push('/admin/productos?modal=whatsapp&tab=plantilla');
             },
@@ -98,16 +97,15 @@ export default function SeguimientoPage() {
             className: "flex-auto w-auto"
         },
         {
-            label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
-            onClick: () => setIsTrackingMode(!isTrackingMode),
-            variant: "primary" as const,
-
+            label: "SEGUIMIENTO",
+            onClick: () => setIsTrackingMode(false),
+            variant: (!isTrackingMode ? "primary" : "secondary") as "primary" | "secondary",
             className: "flex-auto w-auto"
         },
         {
             label: "MONITOREO",
-            onClick: () => { },
-            variant: "secondary" as const,
+            onClick: () => setIsTrackingMode(true),
+            variant: (isTrackingMode ? "primary" : "secondary") as "primary" | "secondary",
             className: "flex-auto w-auto"
         }
     ];
