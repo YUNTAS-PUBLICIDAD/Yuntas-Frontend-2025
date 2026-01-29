@@ -6,7 +6,7 @@ import { showToast } from "@/utils/showToast";
 import { useProductos } from "@/hooks/useProductos";
 import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
-
+import { getToken } from "@/utils/token";
 const columns = [
     { key: "id", label: "ID" },
     { key: "fecha", label: "FECHA" },
@@ -16,14 +16,6 @@ const columns = [
     { key: "monto", label: "MONTO" },
     { key: "estado_visual", label: "ESTADO" },
 ];
-
-const getToken = () => {
-    const t1 = localStorage.getItem("token");
-    const t2 = localStorage.getItem("auth_token");
-    let token = t1 || t2;
-    if (!token) return null;
-    return token.replace(/"/g, '');
-};
 
 const formatDate = (dateString?: string) => {
     if (!dateString) return "-";

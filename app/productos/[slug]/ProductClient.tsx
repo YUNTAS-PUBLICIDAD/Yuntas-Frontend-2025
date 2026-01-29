@@ -1,17 +1,19 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation'; 
 import HeroSection from "@/components/organisms/productos/detalle/HeroSection";
 import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaDetalleSection";
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import Popup from '@/components/molecules/Popup';
 import { useProductos } from "@/hooks/useProductos";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 
-function ProductoDetalleContent() {
-    const searchParams = useSearchParams();
-    const slug = searchParams.get('slug');
+export function ProductClient() {
+    const params = useParams();
+    
+    const slug = typeof params?.slug === 'string' ? params.slug : Array.isArray(params?.slug) ? params.slug[0] : null;
+
     const { getProductoBySlug, producto, isLoading, error } = useProductos();
 
     useEffect(() => {
@@ -21,7 +23,7 @@ function ProductoDetalleContent() {
     }, [slug, getProductoBySlug]);
 
     if (!slug) {
-        return <div className="flex justify-center items-center h-screen">No encontrado</div>;
+        return <div className="flex justify-center items-center h-screen">URL no válida</div>;
     }
 
     return (
@@ -55,7 +57,7 @@ function ProductoDetalleContent() {
                             title="¡Tu marca brillando como se merece!"
                             buttonText="Explorar opciones"
                             productId={producto?.id}
-                            sourceId={3} // source id para "Producto detalle"
+                            sourceId={3}
                         />
                     </main>
                 )
@@ -63,13 +65,5 @@ function ProductoDetalleContent() {
 
             {error && <div className="flex justify-center items-center h-screen">Producto no encontrado</div>}
         </>
-    );
-}
-
-export default function DetallePage() {
-    return (
-        <Suspense fallback={<div className='flex justify-center items-center h-screen'>Cargando producto...</div>}>
-            <ProductoDetalleContent />
-        </Suspense>
     );
 }

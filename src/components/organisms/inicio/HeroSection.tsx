@@ -10,19 +10,41 @@ const HeroSection = () => {
       style={{ backgroundImage: `url(${heroBackground.src})` }}
     >
       <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
-      <div className="relative z-20 w-full flex items-end h-full pb-20 md:pb-20 pb-16">
-        <div className="flex w-full max-w-[1600px] mx-auto gap-12 flex-row md:flex-row flex-col md:gap-12 gap-6 items-center">
-          <div className="flex flex-col justify-center md:w-1/2 w-full md:items-start items-center text-center md:text-left">
-            <Heading level="h1" size="2xl" className="mb-4 leading-tight drop-shadow-[0_2px_2px_#28BEDA] md:text-7xl text-5xl sm:text-6xl">
+      
+     
+      <div className="relative z-20 w-full flex items-end h-full pb-16 md:pb-24 px-6 md:px-12 lg:px-20">
+       
+        <div className="flex w-full max-w-[1440px] mx-auto flex-col md:flex-row items-center md:items-end justify-between gap-8 md:gap-0">
+          
+          {/* COLUMNA TEXTO */}
+          <div className="flex flex-col justify-center w-full md:w-7/12 items-center md:items-start text-center md:text-left">
+            <Heading 
+              level="h1" 
+              size="2xl" 
+              className="mb-2 md:mb-4 leading-tight drop-shadow-[0_2px_2px_#28BEDA] text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+            >
               ESPECIALISTAS EN<br />
               DISEÑAR TU ESPACIO
             </Heading>
-            <Text variant="caption" color="white" className="mb-0 md:text-2xl text-xl sm:text-2xl">
+            <Text 
+              variant="caption" 
+              color="white" 
+              className="mb-0 text-lg sm:text-xl md:text-2xl"
+            >
               ¡Somos <span className="text-[#6DE1E3] font-bold">YUNTAS</span> Publicidad!
             </Text>
           </div>
-          <div className="flex md:w-1/2 w-full md:justify-end justify-center items-center md:h-full h-auto">
-              <Button variant="primary" size="lg" href="/contacto" className="relative z-20 md:mb-0 px-10 py-5 text-2xl">
+
+          {/* COLUMNA BOTÓN 
+          
+          */}
+          <div className="flex w-full md:w-5/12 justify-center md:justify-end items-center md:items-end md:pb-2">
+              <Button 
+                variant="primary" 
+                size="lg" 
+                href="/contacto" 
+                className="relative z-20 px-8 py-4 md:px-10 md:py-5 text-xl md:text-2xl shadow-lg hover:scale-105 transition-transform"
+              >
                 CONTÁCTANOS
               </Button>
           </div>

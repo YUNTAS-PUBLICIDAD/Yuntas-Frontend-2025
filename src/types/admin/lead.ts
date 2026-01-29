@@ -7,7 +7,16 @@ export interface Lead {
     product_id: number | null;
     product_name?: string;
     source_id: number | null;
+    source_name?: string;
     created_at: string | null;
+    email_messages: number;
+    email_messages_last: string | null;
+    email_campaigns: number;
+    email_campaigns_last: string | null;
+    whatsapp_messages: number;
+    whatsapp_messages_last: string | null;
+    whatsapp_campaigns: number;
+    whatsapp_campaigns_last: string | null;
 }
 
 export interface LeadInput {
