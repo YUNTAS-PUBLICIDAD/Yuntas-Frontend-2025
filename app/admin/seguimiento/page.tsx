@@ -14,13 +14,6 @@ import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 
-const SOURCE_MAP: Record<number, string> = {
-    1: "Inicio",
-    2: "Productos",
-    3: "Producto detalle",
-    4: "Administración"
-};
-
 export default function SeguimientoPage() {
     const router = useRouter();
 
@@ -114,11 +107,6 @@ export default function SeguimientoPage() {
         { key: "created_at", label: "FECHA DE INICIO" }
     ];
 
-    const dataWithSource = datosPaginados.map(lead => ({
-        ...lead,
-        source_name: lead.source_name || (lead.source_id ? SOURCE_MAP[lead.source_id] : "Desconocido")
-    }));
-
     return (
         <div className="p-2 md:p-4">
 
@@ -137,11 +125,11 @@ export default function SeguimientoPage() {
             <div className="w-full overflow-x-auto">
                 {isMonitoreoMode ? (
                     <MonitoreoTable
-                        data={dataWithSource}
+                        data={datosPaginados}
                     />
                 ) : (
                     <AdminTable
-                        data={dataWithSource}
+                        data={datosPaginados}
                         columns={columns}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteLead}

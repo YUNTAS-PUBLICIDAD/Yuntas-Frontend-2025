@@ -10,8 +10,14 @@ interface MonitoreoTableProps<T = any> {
 const columns = [
     { key: 'id', label: 'ID' },
     { key: 'name', label: 'NOMBRE' },
-    { key: 'whatsapp_status', label: 'WHATSAPP' },
-    { key: 'email_status', label: 'GMAIL' },
+    { key: 'email_messages', label: 'MENSAJES EMAIL' },
+    { key: 'email_messages_last', label: 'ÚLTIMO EMAIL' },
+    { key: 'email_campaigns', label: 'CAMPAÑAS EMAIL' },
+    { key: 'email_campaigns_last', label: 'ÚLTIMA CAMPAÑA EMAIL' },
+    { key: 'whatsapp_messages', label: 'MENSAJES WHATSAPP' },
+    { key: 'whatsapp_messages_last', label: 'ÚLTIMO WHATSAPP' },
+    { key: 'whatsapp_campaigns', label: 'CAMPAÑAS WHATSAPP' },
+    { key: 'whatsapp_campaigns_last', label: 'ÚLTIMA CAMPAÑA WHATSAPP' },
 ];
 
 export default function MonitoreoTable({
@@ -31,7 +37,7 @@ export default function MonitoreoTable({
                         {columns.map(col => (
                             <th
                                 key={col.key}
-                                className={`text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg last:rounded-r-lg`}
+                                className={`text-white font-semibold text-sm py-3 px-3 text-center first:rounded-l-lg last:rounded-r-lg`}
                             >
                                 {col.label}
                             </th>
@@ -46,16 +52,20 @@ export default function MonitoreoTable({
                         return (
                             <tr key={row.id || index} >
                                 {columns.map(col => {
-                                    const isStatus = col.key.includes('status');
+                                    const isCount = ['email_messages', 'email_campaigns', 'whatsapp_messages', 'whatsapp_campaigns'].includes(col.key);
+                                    const isDate = col.key.includes('_last');
 
                                     return (
                                         <td
+                                            key={col.key}
                                             className={`
-                                            py-3 px-4 text-center
+                                            py-2 lg:py-3 px-4 lg:px-3 text-center
                                             bg-[#F4F4F2] dark:bg-white
                                             first:rounded-l-lg
                                             last:rounded-r-lg
                                             ${col.key === "id" ? "font-bold text-[#0D1030]" : "text-[#0D1030]"}
+                                            ${isCount ? "font-semibold" : ""}
+                                            ${isDate ? "text-sm text-gray-600" : ""}
                                         `}
                                         >
                                             <span className="lg:hidden font-black uppercase text-xs text-[#0D1030]">
@@ -63,9 +73,7 @@ export default function MonitoreoTable({
                                             </span>
 
                                             <span className="text-right lg:text-center ml-4 text-[#0D1030]">
-                                                {isEmpty ? "" :
-                                                    isStatus ? "ENVIADO" : row[col.key]
-                                                }
+                                                {isEmpty ? "" : row[col.key]}
                                             </span>
                                         </td>
                                     );
