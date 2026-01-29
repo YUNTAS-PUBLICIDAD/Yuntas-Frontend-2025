@@ -9,6 +9,14 @@ export interface Lead {
     source_id: number | null;
     source_name?: string;
     created_at: string | null;
+    email_messages: number;
+    email_messages_last: string | null;
+    email_campaigns: number;
+    email_campaigns_last: string | null;
+    whatsapp_messages: number;
+    whatsapp_messages_last: string | null;
+    whatsapp_campaigns: number;
+    whatsapp_campaigns_last: string | null;
 }
 
 export interface LeadInput {
@@ -17,7 +25,7 @@ export interface LeadInput {
     email: string;
     phone?: string;
     message?: string;
-    product_id?: number;   
+    product_id?: number;
     source_id?: number;
 }
 
