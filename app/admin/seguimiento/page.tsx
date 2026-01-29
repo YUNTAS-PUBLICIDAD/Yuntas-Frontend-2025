@@ -9,24 +9,17 @@ import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
 import { showToast } from "@/utils/showToast";
 import { useConfirm } from "@/hooks/useConfirm";
-import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
+import MonitoreoTable from "@/components/organisms/admin/leads/MonitoreoTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
-
-const SOURCE_MAP: Record<number, string> = {
-    1: "Inicio",
-    2: "Productos",
-    3: "Producto detalle",
-    4: "Administración"
-};
 
 export default function SeguimientoPage() {
     const router = useRouter();
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isTrackingMode, setIsTrackingMode] = useState(false); 
+    const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
@@ -97,15 +90,9 @@ export default function SeguimientoPage() {
             className: "flex-auto w-auto"
         },
         {
-            label: "SEGUIMIENTO",
-            onClick: () => setIsTrackingMode(false),
-            variant: (!isTrackingMode ? "primary" : "secondary") as "primary" | "secondary",
-            className: "flex-auto w-auto"
-        },
-        {
             label: "MONITOREO",
-            onClick: () => setIsTrackingMode(true),
-            variant: (isTrackingMode ? "primary" : "secondary") as "primary" | "secondary",
+            onClick: () => setIsMonitoreoMode(!isMonitoreoMode),
+            variant: (isMonitoreoMode ? "primary" : "secondary") as "primary" | "secondary",
             className: "flex-auto w-auto"
         }
     ];
@@ -119,11 +106,6 @@ export default function SeguimientoPage() {
         { key: "source_name", label: "ORIGEN" }, 
         { key: "created_at", label: "FECHA DE INICIO" }
     ];
-
-    const dataWithSource = datosPaginados.map(lead => ({
-        ...lead,
-        source_name: lead.source_name || (lead.source_id ? SOURCE_MAP[lead.source_id] : "Desconocido")
-    }));
 
     return (
         <div className="p-2 md:p-4">
@@ -141,15 +123,13 @@ export default function SeguimientoPage() {
 
             {/* TABLAS */}
             <div className="w-full overflow-x-auto">
-                {isTrackingMode ? (
-                    <TrackingTable
-                        data={dataWithSource}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteLead}
+                {isMonitoreoMode ? (
+                    <MonitoreoTable
+                        data={datosPaginados}
                     />
                 ) : (
                     <AdminTable
-                        data={dataWithSource}
+                        data={datosPaginados}
                         columns={columns}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteLead}

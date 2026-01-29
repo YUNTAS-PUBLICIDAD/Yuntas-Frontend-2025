@@ -11,7 +11,16 @@ function formatLead(apiLead: any): Lead {
     return {
         ...apiLead,
         product_name: apiLead.product?.name || "-",
-        created_at: formatDate(apiLead.created_at || "")
+        source_name: apiLead.source?.name || "-",
+        created_at: formatDate(apiLead.created_at || ""),
+        email_messages: apiLead.stats.email.popup.total_mensajes || 0,
+        email_messages_last: formatDate(apiLead.stats.email.popup.ultimo_envio || ""),
+        email_campaigns: apiLead.stats.email.campaign.total_campanas || 0,
+        email_campaigns_last: formatDate(apiLead.stats.email.campaign.ultimo_envio || ""),
+        whatsapp_messages: apiLead.stats.whatsapp.popup.total_mensajes || 0,
+        whatsapp_messages_last: formatDate(apiLead.stats.whatsapp.popup.ultimo_envio || ""),
+        whatsapp_campaigns: apiLead.stats.whatsapp.campaign.total_campanas || 0,
+        whatsapp_campaigns_last: formatDate(apiLead.stats.whatsapp.campaign.ultimo_envio || ""),
     };
 }
 
