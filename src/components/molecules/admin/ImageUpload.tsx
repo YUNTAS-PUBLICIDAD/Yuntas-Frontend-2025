@@ -54,9 +54,9 @@ export default function ImageUpload({
             return;
         }
 
-        // validamos el tipo de archivo
-        if (!file.type.startsWith("image/")) {
-            setError("El archivo debe ser una imagen");
+        // validamos el tipo de archivo webp
+        if (file.type !== "image/webp") {
+            setError("El archivo debe ser una imagen en formato WEBP");
             return;
         }
 
@@ -116,7 +116,7 @@ export default function ImageUpload({
                         <input
                             ref={inputRef}
                             type="file"
-                            accept="image/*"
+                            accept="image/webp"
                             onChange={handleFileChange}
                             className="hidden"
                         />

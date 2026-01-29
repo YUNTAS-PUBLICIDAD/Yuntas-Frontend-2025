@@ -8,7 +8,7 @@ interface ConfirmOptions {
   message: string;
   confirmText?: string;
   cancelText?: string;
-  variant?: 'danger' | 'success' | 'primary';
+  variant?: 'danger' | 'warning';
 }
 
 export const useConfirm = () => {

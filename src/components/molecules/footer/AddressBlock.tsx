@@ -9,7 +9,17 @@ const AddressBlock = () => (
     <span><span className="font-bold">S:</span> 9 a.m - 2 p.m</span>
     <div className="flex flex-col items-start mt-4">
       <a href="/reclamaciones" className="mt-1">
-      <span className="font-bold">Libro de reclamaciones</span>
+        <span className="font-bold">Libro de reclamaciones</span>
+      </a>
+    </div>
+    <div className="flex flex-col items-start mt-4">
+      <a href="/politicas-de-privacidad" className="mt-1">
+        <span className="font-bold">Políticas de privacidad</span>
+      </a>
+    </div>
+    <div className="flex flex-col items-start mt-4">
+      <a href="/terminos-y-condiciones" className="mt-1">
+        <span className="font-bold">Términos y condiciones</span>
       </a>
     </div>
   </div>

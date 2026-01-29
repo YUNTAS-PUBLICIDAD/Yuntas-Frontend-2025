@@ -64,7 +64,10 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
 
 
     const handleResetSession = async () => {
-        const confirmReset = await confirm({ message: '¿Estás seguro de que deseas reiniciar la sesión de WhatsApp?' });
+        const confirmReset = await confirm({
+            message: 'Esta acción cerrará la sesión actual de WhatsApp y será necesario escanear un nuevo código QR. ¿Deseas continuar?',
+            variant: 'warning'
+        });
         if (!confirmReset) return;
 
         setQrCode(null);

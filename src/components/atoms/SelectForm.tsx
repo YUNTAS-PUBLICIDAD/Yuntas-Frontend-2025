@@ -1,5 +1,3 @@
-import { Producto } from "@/types/admin/producto";
-
 type SelectOption = {
     value: string | number;
     label: string;

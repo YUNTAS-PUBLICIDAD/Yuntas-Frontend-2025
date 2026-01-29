@@ -9,7 +9,7 @@ import Pagination from '@/components/molecules/Pagination';
 import Modal from "@/components/atoms/Modal";
 import { showToast } from "@/utils/showToast";
 import { useConfirm } from "@/hooks/useConfirm";
-import TrackingTable from "@/components/organisms/admin/leads/TrackingTable";
+import MonitoreoTable from "@/components/organisms/admin/leads/MonitoreoTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
@@ -19,7 +19,7 @@ export default function SeguimientoPage() {
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isTrackingMode, setIsTrackingMode] = useState(false);
+    const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
@@ -83,24 +83,16 @@ export default function SeguimientoPage() {
     const topButtons = [
         {
             label: "MENSAJES",
-            
             onClick: () => { 
-                router.push('/admin/productos?modal=whatsapp');
+                router.push('/admin/productos?modal=whatsapp&tab=plantilla');
             },
             variant: "secondary" as const,
             className: "flex-auto w-auto"
         },
         {
-            label: isTrackingMode ? "SEGUIMIENTO" : "MEDIO DE SEGUIMIENTO",
-            onClick: () => setIsTrackingMode(!isTrackingMode),
-            variant: "primary" as const,
-
-            className: "flex-auto w-auto"
-        },
-        {
             label: "MONITOREO",
-            onClick: () => { },
-            variant: "secondary" as const,
+            onClick: () => setIsMonitoreoMode(!isMonitoreoMode),
+            variant: (isMonitoreoMode ? "primary" : "secondary") as "primary" | "secondary",
             className: "flex-auto w-auto"
         }
     ];
@@ -111,7 +103,8 @@ export default function SeguimientoPage() {
         { key: "email", label: "EMAIL" },
         { key: "phone", label: "TELÉFONO" },
         { key: "product_name", label: "PRODUCTO" },
-        { key: "created_at", label: "FECHA" }
+        { key: "source_name", label: "ORIGEN" }, 
+        { key: "created_at", label: "FECHA DE INICIO" }
     ];
 
     return (
@@ -130,11 +123,9 @@ export default function SeguimientoPage() {
 
             {/* TABLAS */}
             <div className="w-full overflow-x-auto">
-                {isTrackingMode ? (
-                    <TrackingTable
+                {isMonitoreoMode ? (
+                    <MonitoreoTable
                         data={datosPaginados}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteLead}
                     />
                 ) : (
                     <AdminTable
