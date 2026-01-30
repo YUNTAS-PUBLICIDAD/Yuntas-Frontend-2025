@@ -7,6 +7,7 @@ import InformacionSection from "@/components/organisms/productos/detalle/Informa
 import CotizaSection from "@/components/organisms/productos/detalle/CotizaSection";
 import Popup from '@/components/molecules/Popup';
 import { useProductos } from "@/hooks/useProductos";
+import { sourceData } from "@/data/popup/sourceData";
 import { useEffect } from "react";
 
 export function ProductClient() {
@@ -57,7 +58,7 @@ export function ProductClient() {
                             title="¡Tu marca brillando como se merece!"
                             buttonText="Explorar opciones"
                             productId={producto?.id}
-                            sourceId={3}
+                            sourceId={sourceData.PRODUCTO_DETALLE} // source id para "Producto detalle"
                         />
                     </main>
                 )
