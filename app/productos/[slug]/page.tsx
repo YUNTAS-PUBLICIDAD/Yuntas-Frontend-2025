@@ -10,7 +10,6 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const result = await getProductoBySlugService(params.slug);
 
-  // 🔗 Canonical SIN www
   const canonicalUrl = `https://yuntaspublicidad.com/productos/${params.slug}`;
 
   if (!result.success || !result.data) {
@@ -18,6 +17,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: "Producto no encontrado - Yuntas Publicidad",
       alternates: {
         canonical: canonicalUrl,
+      },
+      robots: {
+        index: true,
+        follow: true,
       },
     };
   }
@@ -34,9 +37,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     keywords: producto.keywords?.join(", ") || "",
 
-    // ✅ Canonical SIN www
     alternates: {
       canonical: canonicalUrl,
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
     },
 
     openGraph: {
@@ -52,6 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
   };
 }
+
 
 
 export async function generateStaticParams() {
