@@ -5,8 +5,9 @@ type InputSearchProps = {
     value?: string,
     className?: string,
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    // 1. Agregamos el tipo para el evento de teclado
-    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void 
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void,
+    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void,
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 const InputSearch = ({
@@ -14,18 +15,20 @@ const InputSearch = ({
     value,
     className,
     onChange,
-    onKeyDown // 2. Recibimos la prop
+    onKeyDown,
+    onFocus,
+    onBlur
 }: InputSearchProps) => {
   return (
     <input 
         type='search'
         value={value}
         onChange={onChange}
-        onKeyDown={onKeyDown} // 3. Se la pasamos al input nativo
+        onKeyDown={onKeyDown}
+        onFocus={onFocus}
+        onBlur={onBlur}
         placeholder={placeholder}
         className={`w-full px-4 py-3 outline-none ${className}`}
-        // Recomendación: Desactiva el autocompletado nativo del navegador
-        // para que no tape tu lista personalizada
         autoComplete="off" 
     />
   )
