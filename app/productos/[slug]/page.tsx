@@ -10,28 +10,49 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const result = await getProductoBySlugService(params.slug);
 
+  // 🔗 Canonical SIN www
+  const canonicalUrl = `https://yuntaspublicidad.com/productos/${params.slug}`;
+
   if (!result.success || !result.data) {
     return {
       title: "Producto no encontrado - Yuntas Publicidad",
+      alternates: {
+        canonical: canonicalUrl,
+      },
     };
   }
 
   const producto: Producto = result.data;
+
   const title = producto.meta_title || `${producto.name} - Yuntas Publicidad`;
-  const description = producto.meta_description || producto.description.substring(0, 160);
-  const keywords = producto.keywords?.join(", ") || "";
+  const description =
+    producto.meta_description ||
+    producto.description.substring(0, 160);
 
   return {
     title,
     description,
-    keywords,
+    keywords: producto.keywords?.join(", ") || "",
+
+    // ✅ Canonical SIN www
+    alternates: {
+      canonical: canonicalUrl,
+    },
+
     openGraph: {
       title,
       description,
-      images: producto.gallery.map(img => ({ url: img.url, alt: img.alt || producto.name })),
+      url: canonicalUrl,
+      siteName: "Yuntas Publicidad",
+      images: producto.gallery.map((img) => ({
+        url: img.url,
+        alt: img.alt || producto.name,
+      })),
+      type: "website",
     },
   };
 }
+
 
 export async function generateStaticParams() {
   try {
