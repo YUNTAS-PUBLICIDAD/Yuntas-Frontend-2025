@@ -1,8 +1,19 @@
 'use client';
 
-import { redirect } from "next/navigation";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/atoms/Loader";
 
 export default function AdminPage() {
-    
-    redirect("/admin/seguimiento");
+    const router = useRouter();
+
+    useEffect(() => {
+        router.replace("/admin/seguimiento");
+    }, [router]);
+
+    return (
+        <div className="min-h-screen flex items-center justify-center">
+            <Loader size="lg" />
+        </div>
+    );
 }
