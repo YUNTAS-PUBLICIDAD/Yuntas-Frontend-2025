@@ -13,11 +13,13 @@ import MonitoreoTable from "@/components/organisms/admin/leads/MonitoreoTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
+import SearchBar from "@/components/molecules/SearchBar";
 
 export default function SeguimientoPage() {
     const router = useRouter();
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
+    const [leadsFiltered, setLeadsFiltered] = useState<Lead[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
@@ -28,6 +30,10 @@ export default function SeguimientoPage() {
     useEffect(() => {
         getLeads(200);
     }, []);
+
+    useEffect(() => {
+        setLeadsFiltered(leads);
+    }, [leads]);
 
     const handleEditClick = (client: Lead) => {
         setSelectedLead(client);
@@ -121,6 +127,19 @@ export default function SeguimientoPage() {
                 </div>
             )}
 
+            {/* BUSCADOR*/}
+            {isMonitoreoMode && (
+                <div className="mb-4">
+                    <SearchBar
+                        items={leads}
+                        onSearch={setLeadsFiltered}
+                        placeholder="Buscar por ID o Nombre..."
+                        searchKeys={['id', 'name']}
+                        getDisplayValue={(item) => `${item.id} - ${item.name}`}
+                    />
+                </div>
+            )}
+
             {/* TABLAS */}
             <div className="w-full overflow-x-auto">
                 {isMonitoreoMode ? (
@@ -141,7 +160,7 @@ export default function SeguimientoPage() {
             <div className="flex justify-center mt-4 w-full overflow-x-hidden">
                 <Pagination
                     pageSize={5}
-                    items={leads}
+                    items={leadsFiltered}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>

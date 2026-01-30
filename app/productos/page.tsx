@@ -11,10 +11,9 @@ export default function ProductosPage() {
     const [listaProductos, setListaProductos] = useState<Producto[]>([])
     const [allProductos, setAllProductos] = useState<Producto[]>([])
     return (
-        <main className="">
+        <main>
             <HeroSection />
             <HeroSearchSection
-                listaProductos={listaProductos}
                 setListaProductos={setListaProductos}
                 allProductos={allProductos} />
             <ProductosSection
