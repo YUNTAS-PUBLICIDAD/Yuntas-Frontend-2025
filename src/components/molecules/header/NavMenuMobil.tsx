@@ -35,7 +35,6 @@ export default function NavMenuMobil({
     const [isAdminOpen, setIsAdminOpen] = useState(false);
 
     const adminItems = [
-      //{ label: "DASHBOARD", href: "/admin" },
       { label: "SEGUIMIENTO", href: "/admin/seguimiento" },
       { label: "BLOGS", href: "/admin/blogs" },
       { label: "PRODUCTOS", href: "/admin/productos" },

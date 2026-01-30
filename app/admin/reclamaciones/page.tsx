@@ -201,7 +201,7 @@ export default function ReclamacionesPage() {
                         <div>
                             <p className="text-xs font-bold text-gray-400 uppercase mb-2">Descripción del Problema</p>
                             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm h-32 overflow-y-auto text-gray-700 italic">
-                                "{selectedReclamo.detail}"
+                                &quot;{selectedReclamo.detail}&quot;
                             </div>
                         </div>
 
@@ -231,7 +231,7 @@ export default function ReclamacionesPage() {
                                 </div>
                             </div>
                             <p className="text-xs text-gray-500 text-right w-full italic">
-                                * Seleccione "Completo" cuando haya terminado de atender al cliente.
+                                * Seleccione &quot;Completo&quot; cuando haya terminado de atender al cliente.
                             </p>
                         </div>
                     </div>

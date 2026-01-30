@@ -14,7 +14,7 @@ export default function LoginPage() {
         const token = getToken();
 
         if (token) {
-            router.replace("/admin");
+            router.replace("/admin/seguimiento");
         }
     }, [router]);
 

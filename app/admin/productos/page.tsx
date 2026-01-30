@@ -35,7 +35,7 @@ export default function ProductosPage() {
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
     const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
-    const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("plantilla");
+    const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
     const { confirm, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
