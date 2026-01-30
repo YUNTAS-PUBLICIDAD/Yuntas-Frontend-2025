@@ -1,12 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { getImg } from '@/utils/getImg';
-import { get } from 'node:http';
 
 interface BlogImage {
   url: string;

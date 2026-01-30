@@ -43,7 +43,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
       <aside
         className="
                 hidden lg:flex
-                sticky top-0 h-full min-h-fit w-72 flex flex-col
+                sticky top-0 h-full min-h-fit w-72 flex-col
                 border-r border-gray-300
                 bg-white dark:bg-[#141A3F]
                 transition-colors duration-300
