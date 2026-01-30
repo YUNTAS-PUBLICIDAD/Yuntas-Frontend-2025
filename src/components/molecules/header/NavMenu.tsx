@@ -24,12 +24,15 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   return (
     <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
       <MenuItem href="/" active={pathname === "/"} color={variant==='mobile'? "text-white":""}>INICIO</MenuItem>
-      <MenuItem href="/productos" active={pathname.startsWith("/productos")} color={variant==='mobile'? "text-white":""}>
-        PRODUCTOS
-      </MenuItem>
+
       <MenuItem href="/nosotros" active={pathname === "/nosotros"} color={variant==='mobile'? "text-white":""}>
         NOSOTROS
       </MenuItem>
+      
+      <MenuItem href="/productos" active={pathname.startsWith("/productos")} color={variant==='mobile'? "text-white":""}>
+        PRODUCTOS
+      </MenuItem>
+      
       <MenuItem href="/blog" active={pathname.startsWith("/blog")} color={variant==='mobile'? "text-white":""}>
         BLOG
       </MenuItem>
