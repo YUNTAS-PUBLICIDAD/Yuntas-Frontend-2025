@@ -7,6 +7,7 @@ export interface ImagenProducto {
 export interface Galeria {
     url: string;
     alt: string | null;
+    title: string | null;
     slot: "Hero" | "Specs" | "Benefits" | "Popups";
 }
 
@@ -42,10 +43,12 @@ export interface ProductoInput {
     keywords: string[];
 
     main_image: File | string | null;
+    main_image_title: string;
     main_image_alt: string;
     gallery: Array<{
         slot: 'Hero' | 'Specs' | 'Benefits' | 'Popups';
         image: File | string;
+        title: string;
         alt: string;
     }>;
 

@@ -31,6 +31,7 @@ const defaultFormData: ProductoInput = {
     keywords: [],
 
     main_image: null,
+    main_image_title: "",
     main_image_alt: "",
     gallery: [],
 
@@ -71,7 +72,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
 
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
 
-
+    console.log("Formulario datos:", initialData);
     // Cargar datos iniciales para editar
     useEffect(() => {
         if (initialData) {
@@ -88,11 +89,13 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 keywords: initialData.keywords || [],
 
                 main_image: initialData.main_image?.url || null,
+                main_image_title: initialData.main_image?.title || "",
                 main_image_alt: initialData.main_image?.alt || "",
 
                 gallery: initialData.gallery?.map(img => ({
                     slot: img.slot,
                     image: img.url,
+                    title: img.title || "",
                     alt: img.alt || "",
                 })) || [],
 
@@ -121,7 +124,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
 
         setFormData(prev => ({
             ...prev,
-            gallery: [...filteredGallery, { slot: slot as any, image: file, alt: "", }]
+            gallery: [...filteredGallery, { slot: slot as any, image: file, title: "", alt: "", }]
         }));
 
         if (file instanceof File) {
@@ -148,6 +151,15 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             newMap.delete(slot);
             return newMap;
         });
+    };
+
+    const handleUpdateGalleryTitle = (slot: string, newTitle: string) => { // busca por slot para actualizar title
+        setFormData(prev => ({
+            ...prev,
+            gallery: prev.gallery.map(item =>
+                item.slot === slot ? { ...item, title: newTitle } : item
+            )
+        }));
     };
 
     const handleUpdateGalleryAlt = (slot: string, newAlt: string) => { // busca por slot para actualizar alt
@@ -340,7 +352,9 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 <ImageUpload
                     label="Imagen Principal del Producto"
                     description="Aparece en la lista de productos. Recomendado: 800 x 800 px (Cuadrado)."
+                    titleValue={formData.main_image_title || ""}
                     altValue={formData.main_image_alt}
+                    onTitleChange={(title) => setFormData(prev => ({ ...prev, main_image_title: title }))}
                     onAltChange={(alt) => setFormData(prev => ({ ...prev, main_image_alt: alt }))}
                     onFileChange={(file) => setFormData(prev => ({ ...prev, main_image: file }))}
                     currentImage={
@@ -379,8 +393,12 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                                 key={value}
                                 label={`Imagen para ${label}`}
                                 description={`Medida: ${size}. ${desc}`}
+                                titleValue={existingImage?.title || ""}
                                 altValue={existingImage?.alt || ""}
                                 required
+                                onTitleChange={(title) => {
+                                    handleUpdateGalleryTitle(value, title);
+                                }}
                                 onAltChange={(alt) => {
                                     handleUpdateGalleryAlt(value, alt);
                                 }}
