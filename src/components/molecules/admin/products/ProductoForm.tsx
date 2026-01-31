@@ -41,29 +41,29 @@ const defaultFormData: ProductoInput = {
 };
 
 const GALLERY_SLOTS = [
-    { 
-        value: 'Hero', 
-        label: 'Hero (Imagen principal grande)', 
-        size: '1920 x 800 px', 
-        desc: 'Formato horizontal panorámico.' 
+    {
+        value: 'Hero',
+        label: 'Hero (Imagen principal grande)',
+        size: '1920 x 800 px',
+        desc: 'Formato horizontal panorámico.'
     },
-    { 
-        value: 'Specs', 
-        label: 'Especificaciones', 
-        size: '1000 x 1000 px', 
-        desc: 'Formato cuadrado o vertical (4:5).' 
+    {
+        value: 'Specs',
+        label: 'Especificaciones',
+        size: '1000 x 1000 px',
+        desc: 'Formato cuadrado o vertical (4:5).'
     },
-    { 
-        value: 'Benefits', 
-        label: 'Beneficios', 
-        size: '1000 x 1000 px', 
-        desc: 'Formato cuadrado o vertical (4:5).' 
+    {
+        value: 'Benefits',
+        label: 'Beneficios',
+        size: '1000 x 1000 px',
+        desc: 'Formato cuadrado o vertical (4:5).'
     },
-    { 
-        value: 'Popups', 
-        label: 'Popup', 
-        size: '800 x 800 px', 
-        desc: 'Formato cuadrado.' 
+    {
+        value: 'Popups',
+        label: 'Popup',
+        size: '800 x 800 px',
+        desc: 'Formato cuadrado.'
     },
 ] as const;
 
@@ -72,7 +72,6 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
 
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
 
-    console.log("Formulario datos:", initialData);
     // Cargar datos iniciales para editar
     useEffect(() => {
         if (initialData) {
@@ -114,18 +113,27 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             const regex = /^[a-z0-9-]*$/;
             if (!regex.test(value)) return;
         }
-        
+
         setFormData(prev => ({ ...prev, [name]: name === "price" ? Number(value) : value }));
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
-        // se elimna imagen existente de ese slot si hay
-        const filteredGallery = formData.gallery.filter(item => item.slot !== slot);
-
-        setFormData(prev => ({
-            ...prev,
-            gallery: [...filteredGallery, { slot: slot as any, image: file, title: "", alt: "", }]
-        }));
+        setFormData(prev => {
+            const existing = prev.gallery.find(item => item.slot === slot); // buscar si ya hay una imagen en ese slot
+            const filteredGallery = prev.gallery.filter(item => item.slot !== slot); // se elimna imagen existente de ese slot si hay
+            return {
+                ...prev,
+                gallery: [
+                    ...filteredGallery,
+                    {
+                        slot: slot as any,
+                        image: file,
+                        title: existing?.title || "", // conservar title y alt si ya existen
+                        alt: existing?.alt || "",
+                    }
+                ]
+            }
+        });
 
         if (file instanceof File) {
             const reader = new FileReader();
@@ -143,7 +151,9 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
     const handleRemoveGalleryImage = (slot: string) => { // se busca por slot para elimnar
         setFormData(prev => ({
             ...prev,
-            gallery: prev.gallery.filter(item => item.slot !== slot)
+            gallery: prev.gallery.map(item =>
+                item.slot === slot ? { ...item, image: "" } : item
+            )
         }));
 
         setGalleryPreviews(prev => { // se elimina el preview tambien
@@ -373,7 +383,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {GALLERY_SLOTS.map(({ value, label, size, desc  }) => {
+                    {GALLERY_SLOTS.map(({ value, label, size, desc }) => {
                         const existingImage = formData.gallery.find(item => item.slot === value);
 
                         // se determinar la URL del preview
