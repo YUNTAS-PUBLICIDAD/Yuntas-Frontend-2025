@@ -114,3 +114,26 @@ export async function sendEmailCampanaService(product_id: number): Promise<sendE
         return { success: false, message: error.message };
     }
 }
+
+export async function deleteEmailPlantillaService(product_id: number, paso: number): Promise<emailPlantillaServiceResponse<null>> {
+    try {
+        const token = getToken();
+
+        if (!token) {
+            return { success: false, message: "No autenticado" };
+        }
+
+        const response = await api.delete(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.DELETE(product_id, paso), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+
+        return {
+            success: true,
+            message: response.data.message || "Sección eliminada exitosamente",
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
