@@ -6,24 +6,30 @@ import Image from "next/image";
 interface ImageUploadProps {
     label: string;
     description?: string;
+    titleValue?: string;
     altValue: string;
+    onTitleChange?: (title: string) => void;
     onAltChange: (alt: string) => void;
     onFileChange: (file: File | null) => void;
     currentImage?: string | null;
     required?: boolean;
     onRemove?: () => void;
+    showTitleInput?: boolean;
     showAltInput?: boolean;
 }
 
 export default function ImageUpload({
     label,
     description,
+    titleValue = "",
     altValue,
+    onTitleChange,
     onAltChange,
     onFileChange,
     currentImage,
     required = false,
     onRemove,
+    showTitleInput = true,
     showAltInput = true,
 }: ImageUploadProps) {
     const [preview, setPreview] = useState<string | null>(currentImage || null);
@@ -48,7 +54,7 @@ export default function ImageUpload({
             return;
         }
 
-        // validamos el tamaño. Tiene qye ser menor a 2MB
+        // validamos el tamaño. Tiene que ser menor a 2MB
         if (file.size > 2 * 1024 * 1024) {
             setError("La imagen debe pesar menos de 2 MB");
             return;
@@ -130,6 +136,17 @@ export default function ImageUpload({
 
             <span className="text-gray-500 text-xs">Cada imagen debe pesar menos de 2 MB.</span>
             <span className="text-gray-500 text-xs">Cada imagen debe subirse en formato WEBP.</span>
+
+            {showTitleInput && onTitleChange && (
+                <input
+                    type="text"
+                    value={titleValue}
+                    onChange={(e) => onTitleChange(e.target.value)}
+                    placeholder="Título para SEO"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all"
+                />
+            )}
+
             {showAltInput && (
                 <input
                     type="text"

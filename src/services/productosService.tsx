@@ -20,6 +20,7 @@ function formatProduct(apiProduct: any): Producto {
         gallery: apiProduct.gallery.map((img: any) => ({
             slot: img.slot,
             url: typeof img.url === "string" ? `${getImg(img.url)}` : img.url,
+            title: img.title,
             alt: img.alt,
         })),
     };

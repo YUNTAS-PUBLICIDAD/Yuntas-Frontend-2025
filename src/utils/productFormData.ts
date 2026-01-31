@@ -31,8 +31,10 @@ export function buildProductoFormData(data: ProductoInput): FormData {
     // Imagen principal
     if (data.main_image instanceof File) {
         formData.append("main_image", data.main_image);
+        formData.append("main_image_title", data.main_image_title || "");
         formData.append("main_image_alt", data.main_image_alt || "");
     } else if (typeof data.main_image === "string") {
+        formData.append("main_image_title", data.main_image_title || "");
         formData.append("main_image_alt", data.main_image_alt || "");
     }
 
@@ -42,9 +44,11 @@ export function buildProductoFormData(data: ProductoInput): FormData {
         if (item.image instanceof File) {
             formData.append(`gallery[${galleryIndex}][slot]`, item.slot);
             formData.append(`gallery[${galleryIndex}][image]`, item.image);
+            formData.append(`gallery[${galleryIndex}][title]`, item.title || "");
             formData.append(`gallery[${galleryIndex}][alt]`, item.alt || "");
             galleryIndex++;
         } else if (typeof item.image === "string") {
+            formData.append(`gallery_title[${item.slot}]`, item.title || "");
             formData.append(`gallery_alt[${item.slot}]`, item.alt || "");
         }
     });
