@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation'; 
+import { useParams } from 'next/navigation';
 import HeroSection from "@/components/organisms/productos/detalle/HeroSection";
 import ListaDetalleSection from "@/components/organisms/productos/detalle/ListaDetalleSection";
 import InformacionSection from "@/components/organisms/productos/detalle/InformacionSection";
@@ -8,63 +8,72 @@ import CotizaSection from "@/components/organisms/productos/detalle/CotizaSectio
 import Popup from '@/components/molecules/Popup';
 import { useProductos } from "@/hooks/useProductos";
 import { sourceData } from "@/data/popup/sourceData";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Producto } from '@/types/admin/producto';
 
-export function ProductClient() {
+interface ProductClientProps {
+    initialProduct?: Producto | null;
+}
+
+export function ProductClient({ initialProduct }: ProductClientProps) {
     const params = useParams();
-    
+
     const slug = typeof params?.slug === 'string' ? params.slug : Array.isArray(params?.slug) ? params.slug[0] : null;
 
-    const { getProductoBySlug, producto, isLoading, error } = useProductos();
+    const { getProductoBySlug, producto: hookProducto, isLoading, error } = useProductos();
+
+    // Usar el producto inicial si está disponible, de lo contrario usar el del hook
+    const displayProducto = hookProducto || initialProduct;
 
     useEffect(() => {
-        if (slug) {
+        // Solo cargar si no tenemos el producto inicial o si el slug cambió
+        if (slug && (!initialProduct || initialProduct.slug !== slug)) {
             getProductoBySlug(slug);
         }
-    }, [slug, getProductoBySlug]);
+    }, [slug, getProductoBySlug, initialProduct]);
 
-    if (!slug) {
+    if (!slug && !displayProducto) {
         return <div className="flex justify-center items-center h-screen">URL no válida</div>;
     }
 
     return (
         <>
-            {isLoading && <div className="flex justify-center items-center h-screen">Cargando producto...</div>}
+            {isLoading && !displayProducto && <div className="flex justify-center items-center h-screen">Cargando producto...</div>}
 
             {
-                producto && !isLoading && (
+                displayProducto && (
                     <main>
                         <HeroSection
-                            productName={producto?.name || ""}
-                            backgroundImage={producto?.gallery[0]?.url || ""}
+                            productName={displayProducto?.name || ""}
+                            backgroundImage={displayProducto?.gallery[0]?.url || ""}
                         />
                         <ListaDetalleSection
                             text="ESPECIFICACIONES"
-                            listItems={producto?.specifications || []}
-                            imageSrc={producto?.gallery[1]?.url || ""}
-                            imageAlt={producto?.gallery[1]?.alt || "Especificaciones del producto"}
+                            listItems={displayProducto?.specifications || []}
+                            imageSrc={displayProducto?.gallery[1]?.url || ""}
+                            imageAlt={displayProducto?.gallery[1]?.alt || "Especificaciones del producto"}
                         />
-                        <InformacionSection info={producto?.description || ""} />
+                        <InformacionSection info={displayProducto?.description || ""} />
                         <ListaDetalleSection
                             text="BENEFICIOS"
-                            listItems={producto?.benefits || []}
-                            imageSrc={producto?.gallery[2]?.url || ""}
-                            imageAlt={producto?.gallery[2]?.alt || "Beneficios del producto"}
+                            listItems={displayProducto?.benefits || []}
+                            imageSrc={displayProducto?.gallery[2]?.url || ""}
+                            imageAlt={displayProducto?.gallery[2]?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
                         <CotizaSection />
                         <Popup
-                            imgSrc={producto?.gallery[3]?.url || ""}
+                            imgSrc={displayProducto?.gallery[3]?.url || ""}
                             title="¡Tu marca brillando como se merece!"
                             buttonText="Explorar opciones"
-                            productId={producto?.id}
+                            productId={displayProducto?.id}
                             sourceId={sourceData.PRODUCTO_DETALLE} // source id para "Producto detalle"
                         />
                     </main>
                 )
             }
 
-            {error && <div className="flex justify-center items-center h-screen">Producto no encontrado</div>}
+            {error && !displayProducto && <div className="flex justify-center items-center h-screen">Producto no encontrado</div>}
         </>
     );
 }
