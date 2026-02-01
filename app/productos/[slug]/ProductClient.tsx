@@ -48,11 +48,14 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                         <HeroSection
                             productName={displayProducto?.name || ""}
                             backgroundImage={displayProducto?.gallery[0]?.url || ""}
+                            imageTitle={displayProducto?.gallery[0]?.title || `${displayProducto.name} - Yuntas Publicidad`}
+                            imageAlt={displayProducto.gallery[0]?.alt || `${displayProducto.name} - Yuntas Publicidad`}
                         />
                         <ListaDetalleSection
                             text="ESPECIFICACIONES"
                             listItems={displayProducto?.specifications || []}
                             imageSrc={displayProducto?.gallery[1]?.url || ""}
+                            imageTitle={displayProducto?.gallery[1]?.title || "Especificaciones del producto"}
                             imageAlt={displayProducto?.gallery[1]?.alt || "Especificaciones del producto"}
                         />
                         <InformacionSection info={displayProducto?.description || ""} />
@@ -60,12 +63,15 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             text="BENEFICIOS"
                             listItems={displayProducto?.benefits || []}
                             imageSrc={displayProducto?.gallery[2]?.url || ""}
+                            imageTitle={displayProducto?.gallery[2]?.title || "Beneficios del producto"}
                             imageAlt={displayProducto?.gallery[2]?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
                         <CotizaSection />
                         <Popup
                             imgSrc={displayProducto?.gallery[3]?.url || ""}
+                            imgTitle={displayProducto?.gallery[3]?.title || "Cotiza tu producto"}
+                            imgAlt={displayProducto?.gallery[3]?.alt || "Cotiza tu producto"}
                             title="¡Tu marca brillando como se merece!"
                             buttonText="Explorar opciones"
                             productId={displayProducto?.id}

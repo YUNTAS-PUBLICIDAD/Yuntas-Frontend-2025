@@ -5,11 +5,12 @@ type ListaDetalleSectionProps = {
 	text: string;
 	listItems: string[];
 	imageSrc: string;
+    imageTitle: string;
     imageAlt: string;
 	reverse?: boolean;
 };
 
-export default function ListaDetalleSection({ text, listItems, imageSrc, imageAlt, reverse = false }: ListaDetalleSectionProps) {
+export default function ListaDetalleSection({ text, listItems, imageSrc, imageTitle, imageAlt, reverse = false }: ListaDetalleSectionProps) {
     return (
         <section className="w-full py-12 px-0 md:px-24 bg-white">
             <div className={`flex flex-row items-stretch md:items-center justify-between gap-2 md:gap-24 ${reverse ? 'flex-row-reverse' : ''}`}>
@@ -27,6 +28,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, imageAl
                     <SectionImage
                         src={imageSrc}
                         alt={imageAlt}
+                        title={imageTitle}
                         className={`w-full h-full max-h-[18rem] md:min-h-0 md:max-w-[46rem] md:max-h-[38rem] object-cover md:aspect-square ${reverse ? 'rounded-r-3xl md:rounded-3xl' : 'rounded-l-3xl md:rounded-3xl'}`}
                     />
                 </div>

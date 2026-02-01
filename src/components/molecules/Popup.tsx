@@ -12,6 +12,8 @@ import { showToast } from "@/utils/showToast";
 interface PopupProps {
     delay?: number;
     imgSrc: string;
+    imgTitle?: string;
+    imgAlt: string;
     title: string;
     buttonText: string;
     productId?: number;
@@ -21,6 +23,8 @@ interface PopupProps {
 const Popup = ({
     delay = 5000,
     imgSrc,
+    imgTitle,
+    imgAlt,
     title,
     buttonText,
     productId,
@@ -109,7 +113,7 @@ const Popup = ({
                     className="absolute top-4 right-4 z-50"
                 />
 
-                <PopupImage src={imgSrc} />
+                <PopupImage src={imgSrc} title={imgTitle} alt={imgAlt} />
 
                 <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
                     <PopupHeader title={title} />

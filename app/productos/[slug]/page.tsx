@@ -52,15 +52,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
 
         openGraph: {
-            title,
+            title: producto.hero_title || title,
             description,
             url: canonicalUrl,
             siteName: "Yuntas Publicidad",
             images: producto.gallery.map((img) => ({
                 url: img.url,
                 alt: img.alt || producto.name,
+                width: 1200,
+                height: 630,
             })),
             type: "website",
+            locale: "es_PE",
         },
     };
 }

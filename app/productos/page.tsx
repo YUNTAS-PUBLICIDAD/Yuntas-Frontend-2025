@@ -24,6 +24,8 @@ export default function ProductosPage() {
                 setAllProductos={setAllProductos} />
             <Popup
                 imgSrc={imagenPopup.src}
+                imgTitle="Luces bar estilo neon"
+                imgAlt="Luces bar estilo neon"
                 title="¡Tu marca brillando como se merece!"
                 buttonText="Explorar opciones"
                 sourceId={sourceData.PRODUCTOS} // source id para "Productos"

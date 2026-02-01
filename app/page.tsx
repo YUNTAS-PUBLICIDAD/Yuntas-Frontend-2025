@@ -16,6 +16,8 @@ export default function HomePage() {
       <TestimonialsSection />
       <Popup
         imgSrc={imagenPopup.src}
+        imgTitle="Luces moradas estilo neon"
+        imgAlt="Luces moradas estilo neon"
         title="¡Un detalle que cambia todo!"
         buttonText="Empieza a brillar"
         sourceId={sourceData.INICIO} // source id para "Inicio"
