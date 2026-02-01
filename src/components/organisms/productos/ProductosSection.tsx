@@ -63,7 +63,6 @@ const ProductosSection = ({ListaBusqueda,setListaProductos,setAllProductos}:Prod
             key={index} 
             img={e.main_image?.url || ''} 
             nombre={e.name}
-            
             href={`/productos/${e.slug}`}
           />
         ))}
