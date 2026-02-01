@@ -12,6 +12,6 @@ export default function Logo({ size = "md", src = "/logo.svg", alt = "Yuntas Pub
     : size === "2xl" ? "h-32"
     : "h-12";
   return (
-    <img src={src} alt={alt} className={`${sizeClass} w-auto`} />
+    <img src={src} alt={alt} title={alt} className={`${sizeClass} w-auto`} />
   );
 }
