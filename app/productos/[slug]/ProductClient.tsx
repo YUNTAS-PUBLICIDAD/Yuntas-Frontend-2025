@@ -27,10 +27,8 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
 
     useEffect(() => {
         // Solo cargar si no tenemos el producto inicial o si el slug cambió
-        console.log('[ProductClient] mount slug=', slug, 'initialProduct=', initialProduct);
         if (slug && (!initialProduct || initialProduct.slug !== slug)) {
             getProductoBySlug(slug);
-            console.log('[ProductClient] fetching product for', slug);
         }
     }, [slug, getProductoBySlug, initialProduct]);
 
