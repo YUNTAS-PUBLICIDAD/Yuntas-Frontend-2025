@@ -4,6 +4,7 @@ import MenuItem from "@/components/atoms/MenuItem";
 import { usePathname } from "next/navigation";
 import { useState } from 'react';
 import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
+import useAuth from '@/hooks/useAuth'; 
 
 type NavMenuMobilProps = {
   size?: "sm" | "md" | "lg";
@@ -22,6 +23,7 @@ export default function NavMenuMobil({
   variant = "desktop",
 }: NavMenuMobilProps) {
   const pathname = usePathname();
+  const { user } = useAuth(); 
 
   const sizeClass =
     size === "sm"
@@ -93,14 +95,17 @@ export default function NavMenuMobil({
             <span className="font-bold">CONTACTO</span>
           </MenuItem>
 
-          <AdminMenuMobil
-            isOpen={isAdminOpen}
-            onToggle={() => setIsAdminOpen(!isAdminOpen)}
-          />
+          {/* SOLO MOSTRAR SI USER EXISTE */}
+          {user && (
+            <AdminMenuMobil
+              isOpen={isAdminOpen}
+              onToggle={() => setIsAdminOpen(!isAdminOpen)}
+            />
+          )}
         </nav>
 
         {/* Submenu admin */}
-        {isAdminOpen && (
+        {user && isAdminOpen && (
           <div className="pl-12 mt-1 space-y-0">
             {adminItems.map((item) => (
               <div key={item.href} className="py-1">
@@ -121,7 +126,7 @@ export default function NavMenuMobil({
     );
   }
 
-  // ───────────────── DESKTOP (sin cambios) ─────────────────
+  // ───────────────── DESKTOP  ─────────────────
   return (
     <nav className={`${variantMap[variant]} ${sizeClass}`}>
       <div className="w-full px-4">
@@ -148,9 +153,12 @@ export default function NavMenuMobil({
         </MenuItem>
       </div>
 
-      <div className="w-full px-4">
-        <AdminMenuMobil />
-      </div>
+     
+      {user && (
+        <div className="w-full px-4">
+          <AdminMenuMobil />
+        </div>
+      )}
     </nav>
   );
 }

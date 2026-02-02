@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { IoMenu, IoClose } from "react-icons/io5";
+import Link from 'next/link';
 import NavMenuMobil from "../molecules/header/NavMenuMobil";
 import UserSection from '../molecules/header/UserSection';
 import ContactoMobil from '../molecules/header/ContactoMobil';
@@ -11,7 +12,7 @@ import useAuth from '@/hooks/useAuth';
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +49,8 @@ const HeaderMobil = () => {
           <IoMenu className="text-[#04061a] dark:text-white" />
         </button>
 
-        <UserSection size="md" />
+        {/* Solo mostrar avatar si está autenticado */}
+        {user && <UserSection size="md" />}
       </header>
 
       {/* ───────────── OVERLAY ───────────── */}
@@ -74,7 +76,7 @@ const HeaderMobil = () => {
           dark:text-white
         `}
       >
-        {/* Cerrar */}
+        {/* Botón Cerrar */}
         <button
           onClick={() => setOpen(false)}
           aria-label="Cerrar menú"
@@ -93,7 +95,7 @@ const HeaderMobil = () => {
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-          {/* Dark Mode */}
+          {/* Dark Mode Switch */}
           <div className="flex items-center justify-between">
             <p className="uppercase tracking-wider text-sm font-bold">
               Dark Mode
@@ -105,38 +107,59 @@ const HeaderMobil = () => {
               lightHandleColor="#ffffff"
               darkHandleColor="#00031E"
             />
-
-
           </div>
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
+          {/* Contacto */}
           <div className="flex gap-3 justify-start">
             <ContactoMobil compact />
           </div>
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-          <div className="flex items-center gap-3">
-            <UserSection size="md" />
-            <div>
-              <p className="text-sm font-bold">BIENVENIDO</p>
-              <p className="text-xs opacity-60">Administrador</p>
-            </div>
-          </div>
+          {/* ───────────── SECCIÓN DE USUARIO/LOGIN ───────────── */}
+          {user ? (
+            // SI ESTÁ AUTENTICADO - Mostrar info y botón logout
+            <>
+              <div className="flex items-center gap-3">
+                <UserSection size="md" />
+                <div>
+                  <p className="text-sm font-bold">BIENVENIDO</p>
+                  <p className="text-xs opacity-60">{user.name}</p>
+                </div>
+              </div>
 
-          <div className="mt-4">
-            <button
-              onClick={handleLogout}
+              <div className="mt-4">
+                <button
+                  onClick={handleLogout}
+                  className="
+                    bg-cyan-400 text-white
+                    px-6 py-2 rounded
+                    font-semibold text-sm uppercase tracking-wider
+                    hover:bg-cyan-500 transition-colors
+                  "
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            </>
+          ) : (
+            // SI NO ESTÁ AUTENTICADO - Mostrar botón de login
+            <Link 
+              href="/login" 
+              onClick={() => setOpen(false)}
               className="
+                block w-full text-center
                 bg-cyan-400 text-white
                 px-6 py-2 rounded
                 font-semibold text-sm uppercase tracking-wider
+                hover:bg-cyan-500 transition-colors
               "
             >
-              Cerrar Sesión
-            </button>
-          </div>
+              Iniciar Sesión
+            </Link>
+          )}
         </nav>
       </div>
     </>

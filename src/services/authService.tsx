@@ -1,52 +1,48 @@
 import { api, API_ENDPOINTS } from "@/config";
 import { LoginCredentials, LoginActionResponse } from "@/types/auth";
-import { getToken, removeToken, setToken } from "@/utils/token";
-import { removeRole, setRole } from "@/utils/role";
+import { setToken, removeToken } from "@/utils/token";
+import { setRole, removeRole } from "@/utils/role";
 
 export async function loginService(credentials: LoginCredentials): Promise<LoginActionResponse> {
     try {
         const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
-
         const data = response.data;
-       
+
         const token = data.data?.token || data.token || data.access_token;
-        const role = data.data?.user?.role.name || data.user?.role.name;
+        
+        const user = data.data?.user || data.user; 
+        
+        const roleName = user?.role?.name || "user"; 
 
         if (!token) {
-            return { success: false, message: "Error: No se recibió token del servidor." };
+            return { success: false, message: "No se recibió token del servidor." };
         }
 
+        // Guardamos credenciales técnicas
         setToken(token);
-        setRole(role);
+        setRole(roleName);
 
         return {
             success: true,
             message: "Bienvenido",
+            user: user, 
+            token: token
         };
 
     } catch (error: any) {
-        return { success: false, message: error.message };
+        console.error("Login error:", error);
+        const msg = error.response?.data?.message || "Error al conectar con el servidor";
+        return { success: false, message: msg };
     }
 }
 
-export async function logoutService(): Promise<LoginActionResponse> {
+export async function logoutService(): Promise<void> {
     try {
-        
-        const token = getToken();
 
-        if (token) {
-            await api.post(API_ENDPOINTS.AUTH.LOGOUT, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-        }
-    } catch (error: any) {
-        return { success: false, message: error.message };
+    } catch (error) {
+        console.error("Error en logout API", error);
     } finally {
         removeToken();
         removeRole();
-
-        return { success: true, message: "Sesión cerrada" };
     }
 }
