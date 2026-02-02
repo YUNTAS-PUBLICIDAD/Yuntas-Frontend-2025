@@ -3,9 +3,6 @@
 import Logo from "@/components/atoms/Logo";
 import NavMenu from "@/components/molecules/header/NavMenu";
 import UserSection from "@/components/molecules/header/UserSection";
-import { IoMenu, IoClose } from "react-icons/io5";
-import ContactBlock from "../molecules/footer/ContactBlock";
-import NavMenuMobil from "../molecules/header/NavMenuMobil";
 export default function Header() {
   
 
