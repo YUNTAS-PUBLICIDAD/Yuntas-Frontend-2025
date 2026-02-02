@@ -4,7 +4,6 @@ import MenuItem from "@/components/atoms/MenuItem";
 import { usePathname } from "next/navigation";
 import { useState } from 'react';
 import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
-import useAuth from '@/hooks/useAuth'; 
 
 type NavMenuMobilProps = {
   size?: "sm" | "md" | "lg";
@@ -23,14 +22,13 @@ export default function NavMenuMobil({
   variant = "desktop",
 }: NavMenuMobilProps) {
   const pathname = usePathname();
-  const { user } = useAuth(); 
 
   const sizeClass =
     size === "sm"
       ? "text-base"
       : size === "lg"
-      ? "text-xl"
-      : "text-lg";
+        ? "text-xl"
+        : "text-lg";
 
   // ───────────────── MOBILE ─────────────────
   if (variant === "mobile") {
@@ -68,7 +66,7 @@ export default function NavMenuMobil({
             active={pathname.startsWith("/productos")}
             color="text-[#04061a] dark:text-white"
           >
-          <span className="font-bold">PRODUCTOS</span>
+            <span className="font-bold">PRODUCTOS</span>
           </MenuItem>
 
           <MenuItem
@@ -95,17 +93,14 @@ export default function NavMenuMobil({
             <span className="font-bold">CONTACTO</span>
           </MenuItem>
 
-          {/* SOLO MOSTRAR SI USER EXISTE */}
-          {user && (
-            <AdminMenuMobil
-              isOpen={isAdminOpen}
-              onToggle={() => setIsAdminOpen(!isAdminOpen)}
-            />
-          )}
+          <AdminMenuMobil
+            isOpen={isAdminOpen}
+            onToggle={() => setIsAdminOpen(!isAdminOpen)}
+          />
         </nav>
 
         {/* Submenu admin */}
-        {user && isAdminOpen && (
+        {isAdminOpen && (
           <div className="pl-12 mt-1 space-y-0">
             {adminItems.map((item) => (
               <div key={item.href} className="py-1">
@@ -153,12 +148,9 @@ export default function NavMenuMobil({
         </MenuItem>
       </div>
 
-     
-      {user && (
-        <div className="w-full px-4">
-          <AdminMenuMobil />
-        </div>
-      )}
+      <div className="w-full px-4">
+        <AdminMenuMobil />
+      </div>
     </nav>
   );
 }

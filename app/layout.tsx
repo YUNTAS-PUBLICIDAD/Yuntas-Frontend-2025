@@ -1,5 +1,4 @@
 import MainLayout from "@/components/layout/MainLayout";
-import { AuthProvider } from "@/context/AuthContext";
 import "@/styles/globals.css";
 import { Toaster } from 'react-hot-toast';
 import { Metadata } from "next";
@@ -19,10 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <body>
-        <AuthProvider>
         <MainLayout>{children}</MainLayout>
         <Toaster />
-        </AuthProvider>
       </body>
     </html>
   );
