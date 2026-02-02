@@ -7,19 +7,25 @@ import UserSection from '../molecules/header/UserSection';
 import ContactoMobil from '../molecules/header/ContactoMobil';
 import SwitchMode from '@/components/molecules/admin/SwitchMode';
 import useAuth from '@/hooks/useAuth';
-
+import { getToken } from '@/utils/token';
+import { getRole } from '@/utils/role';
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const { logout } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const checkAuth = () => {
+      setIsAdmin(Boolean(getToken() && getRole()));
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    checkAuth();
+
+    window.addEventListener('auth-change', checkAuth);
+    
+    return () => {
+      window.removeEventListener('auth-change', checkAuth);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -135,7 +141,7 @@ const HeaderMobil = () => {
                     hover:bg-cyan-500 transition-colors
                   "
             >
-              Cerrar Sesión
+              {isAdmin ? "Cerrar Sesión" : "Iniciar Sesión"}
             </button>
           </div>
         </nav>
