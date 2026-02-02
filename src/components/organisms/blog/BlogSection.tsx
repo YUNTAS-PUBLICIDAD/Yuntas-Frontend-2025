@@ -49,18 +49,18 @@ const BlogSection = ({ data }: Props) => {
 
       {/* GRID DE BLOGS */}
       <div className='max-w-8xl mx-auto px-4 sm:px-6 lg:px-20 py-8 md:py-12 z-10 relative'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8'>
+
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12'>
           {blogPaginado.map(blog => (
             <Link
               key={blog.slug}
-              href={`/blog/${blog.slug}`}
-              className='transform transition-transform hover:scale-[1.02] rounded-3xl'
+              href={`/blog/detalle?slug=${blog.slug}`}
+              className='block group'
             >
               <BlogCard
-                nombre={blog.product?.name || 'General'}
+                nombre={blog.product?.name || 'Inspiración'}
                 img={getImg(blog.main_image?.url)}
-                descripcion={blog.meta_title || blog.title}
-                href={`/blog/detalle?slug=${blog.slug}`}
+                descripcion={blog.title}
               />
             </Link>
           ))}
