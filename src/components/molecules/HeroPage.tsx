@@ -13,10 +13,11 @@ type HeroPageProps = {
   url: any;
   text: string;
   position: keyof typeof posicionesText;
+  imageTitle?: string;
+  imageAlt?: string;
 };
 
-const HeroPage = ({ url, text, position = "medio" }: HeroPageProps) => {
-
+const HeroPage = ({ url, text, position = "medio", imageTitle, imageAlt }: HeroPageProps) => {
   return (
     <section
 
@@ -26,6 +27,7 @@ const HeroPage = ({ url, text, position = "medio" }: HeroPageProps) => {
       style={{ backgroundImage: `url(${url})` }}
 
     >
+      {imageAlt && <img src={url} alt={imageAlt} title={imageTitle} className="sr-only" aria-hidden="false" />}
       <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
       <Heading
         level="h1"
