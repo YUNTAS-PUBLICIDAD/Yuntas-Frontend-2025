@@ -12,6 +12,7 @@ import {
     saveEmailPlantillaService,
     sendEmailService,
     sendEmailCampanaService,
+    deleteEmailPlantillaService,
 } from "@/services/emailService";
 import { LeadInput } from "@/types/admin/lead";
 
@@ -25,6 +26,7 @@ interface UseEmailReturn {
     saveEmailPlantilla: (emailData: EmailFormInput) => Promise<emailPlantillaServiceResponse<emailPlantilla>>;
     sendEmail: (leadData: LeadInput) => Promise<emailPlantillaServiceResponse<null>>;
     sendEmailCampana: (product_id: number) => Promise<sendEmailCampanaResponse>;
+    deleteEmailPlantilla: (product_id: number, paso: number) => Promise<emailPlantillaServiceResponse<null>>;
     clearError: () => void;
     clearEmailPlantillas: () => void;
 }
@@ -83,6 +85,16 @@ export function useEmail(): UseEmailReturn {
         return result;
     }, []);
 
+    const deleteEmailPlantilla = useCallback(async (product_id: number, paso: number): Promise<emailPlantillaServiceResponse<null>> => {
+        setIsSaving(true);
+        setError(null);
+
+        const result = await deleteEmailPlantillaService(product_id, paso);
+
+        setIsSaving(false);
+        return result;
+    }, []);
+
     return {
         emailPlantillas,
         isLoading,
@@ -93,6 +105,7 @@ export function useEmail(): UseEmailReturn {
         saveEmailPlantilla,
         sendEmail,
         sendEmailCampana,
+        deleteEmailPlantilla,
         clearError,
         clearEmailPlantillas,
     };

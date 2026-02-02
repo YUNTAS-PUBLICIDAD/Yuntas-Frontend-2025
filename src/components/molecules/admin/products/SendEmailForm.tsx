@@ -13,6 +13,7 @@ import { showToast } from '@/utils/showToast'
 import { EmailFormInput, EmailSectionInput } from "@/types/admin/emailPlantilla";
 import { useEmail } from "@/hooks/useEmail";
 import { parseEmailPlantillaData, createEmptySection, isSectionEmpty, isSectionComplete } from "@/utils/emailFormData";
+import { useConfirm } from "@/hooks/useConfirm";
 
 interface SendEmailFormProps {
     onClose: () => void;
@@ -34,12 +35,14 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         emailPlantillas,
         sendEmailCampana,
         saveEmailPlantilla,
+        deleteEmailPlantilla,
         isLoading,
         isSaving,
         isActivating,
         clearEmailPlantillas,
         error,
     } = useEmail();
+    const { confirm, ConfirmDialog } = useConfirm();
 
     const [formData, setFormData] = useState<EmailFormInput>(defaultFormData);
     const [imagePreviews, setImagePreviews] = useState<Map<string, string>>(new Map());
@@ -221,6 +224,49 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         }
     };
 
+    // Eliminar sección
+    const handleDeleteSection = async (index: number) => {
+        if (!formData.producto_id) {
+            showToast.warning("Selecciona un producto primero");
+            return;
+        }
+
+        const section = formData.sections[index];
+
+        if (isSectionEmpty(section)) { // solo se limpia localmente si ya esta vacia
+            setFormData(prev => {
+                const newSections = [...prev.sections];
+                newSections[index] = createEmptySection();
+                return { ...prev, sections: newSections };
+            });
+            showToast.success("Sección limpiada");
+            return;
+        }
+
+        const confirmDelete = await confirm({ message: `¿Estás seguro de eliminar la Sección ${index + 1}?` });
+        if (!confirmDelete) return;
+
+        const result = await deleteEmailPlantilla(Number(formData.producto_id), index);
+
+        if (result.success) {
+            showToast.success("Sección eliminada exitosamente");
+            setFormData(prev => { // limpiar la sección localmente
+                const newSections = [...prev.sections];
+                newSections[index] = createEmptySection();
+                return { ...prev, sections: newSections };
+            });
+            setImagePreviews(prev => { // limpiar previews
+                const newMap = new Map(prev);
+                newMap.delete(`${index}-mainImage`);
+                newMap.delete(`${index}-secondaryImage1`);
+                newMap.delete(`${index}-secondaryImage2`);
+                return newMap;
+            });
+        } else {
+            showToast.error(result.message || "Error eliminando sección");
+        }
+    };
+
     // Activar campaña
     const handleActivateCampaign = async () => {
         const error = validateForm();
@@ -264,7 +310,21 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
 
             {/* Secciones de Email */}
             {formData.sections.map((section, index) => (
-                <FormSection key={index} title={`Sección Email ${index + 1}`}>
+                <FormSection
+                    key={index}
+                    title={`Sección Email ${index + 1}`}
+                    headerActions={
+                        <Button
+                            type="button"
+                            variant="danger"
+                            size="sm"
+                            onClick={() => handleDeleteSection(index)}
+                            disabled={isLoading || isSaving || isActivating}
+                        >
+                            Eliminar Sección
+                        </Button>
+                    }
+                >
                     {/* Principal */}
                     <ImageUpload
                         label="Imagen Principal"
@@ -368,6 +428,8 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
                     Cancelar
                 </Button>
             </div>
+            <ConfirmDialog />
         </form>
+
     );
 }

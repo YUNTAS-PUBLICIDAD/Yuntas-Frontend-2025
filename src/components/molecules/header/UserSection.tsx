@@ -32,7 +32,8 @@ export default function UserSection({
         >
           <img
             src={UserImg.src}
-            alt="User Icon"
+            alt="Icono de usuario"
+            title="Icono de usuario"
             className={`
               w-7 h-7 object-contain
               ${enableDarkMode ? "filter dark:invert-[0.6]" : ""}

@@ -51,9 +51,10 @@ export const API_ENDPOINTS = {
     },
     CAMPANA: {
       EMAILS: {
-        SAVE: '/admin/email-productos', // para crear y actualizar
+        SAVE: '/admin/email-productos', // para crear y actualizar plantilla de email de un producto
         GET_ONE_BY_PRODUCT: (product_id: number) => `/admin/email-productos?producto_id=${product_id}`,
         SEND_CAMPANA: '/admin/email-campanas/enviar-campana',
+        DELETE: (product_id: number, paso: number) => `/admin/email-productos?producto_id=${product_id}&paso=${paso}`,
       },
       WHATSAPP: {
         SAVE: '/admin/whatsapp-productos', // para crear y actualizar plantilla de whatsapp de un producto

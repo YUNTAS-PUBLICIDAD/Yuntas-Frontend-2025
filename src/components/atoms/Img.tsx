@@ -12,13 +12,15 @@ type ImgProps = {
     variant?: "blogCard" | "productoCard" | "normal",
     classname?: string,
     alt?: string,
+    title?: string,
     priority?: boolean,
     quality?: number
 }
 
 const Img = ({ 
-    alt = "", 
     src, 
+    alt = "", 
+    title = "", 
     variant = 'normal', 
     classname,
     priority = false,
@@ -28,6 +30,7 @@ const Img = ({
         <Image 
             alt={alt} 
             src={src} 
+            title={title}
             width={variant === "blogCard" ? 400 : variant === "productoCard" ? 450 : 800}
             height={variant === "blogCard" ? 300 : variant === "productoCard" ? 330 : 600}
             className={`${classname} ${ImgVariant[variant]} object-cover`}

@@ -31,6 +31,7 @@ const defaultFormData: ProductoInput = {
     keywords: [],
 
     main_image: null,
+    main_image_title: "",
     main_image_alt: "",
     gallery: [],
 
@@ -40,29 +41,29 @@ const defaultFormData: ProductoInput = {
 };
 
 const GALLERY_SLOTS = [
-    { 
-        value: 'Hero', 
-        label: 'Hero (Imagen principal grande)', 
-        size: '1920 x 800 px', 
-        desc: 'Formato horizontal panorámico.' 
+    {
+        value: 'Hero',
+        label: 'Hero (Imagen principal grande)',
+        size: '1920 x 800 px',
+        desc: 'Formato horizontal panorámico.'
     },
-    { 
-        value: 'Specs', 
-        label: 'Especificaciones', 
-        size: '1000 x 1000 px', 
-        desc: 'Formato cuadrado o vertical (4:5).' 
+    {
+        value: 'Specs',
+        label: 'Especificaciones',
+        size: '1000 x 1000 px',
+        desc: 'Formato cuadrado o vertical (4:5).'
     },
-    { 
-        value: 'Benefits', 
-        label: 'Beneficios', 
-        size: '1000 x 1000 px', 
-        desc: 'Formato cuadrado o vertical (4:5).' 
+    {
+        value: 'Benefits',
+        label: 'Beneficios',
+        size: '1000 x 1000 px',
+        desc: 'Formato cuadrado o vertical (4:5).'
     },
-    { 
-        value: 'Popups', 
-        label: 'Popup', 
-        size: '800 x 800 px', 
-        desc: 'Formato cuadrado.' 
+    {
+        value: 'Popups',
+        label: 'Popup',
+        size: '800 x 800 px',
+        desc: 'Formato cuadrado.'
     },
 ] as const;
 
@@ -70,7 +71,6 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
 
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
-
 
     // Cargar datos iniciales para editar
     useEffect(() => {
@@ -88,11 +88,13 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 keywords: initialData.keywords || [],
 
                 main_image: initialData.main_image?.url || null,
+                main_image_title: initialData.main_image?.title || "",
                 main_image_alt: initialData.main_image?.alt || "",
 
                 gallery: initialData.gallery?.map(img => ({
                     slot: img.slot,
                     image: img.url,
+                    title: img.title || "",
                     alt: img.alt || "",
                 })) || [],
 
@@ -111,18 +113,27 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             const regex = /^[a-z0-9-]*$/;
             if (!regex.test(value)) return;
         }
-        
+
         setFormData(prev => ({ ...prev, [name]: name === "price" ? Number(value) : value }));
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
-        // se elimna imagen existente de ese slot si hay
-        const filteredGallery = formData.gallery.filter(item => item.slot !== slot);
-
-        setFormData(prev => ({
-            ...prev,
-            gallery: [...filteredGallery, { slot: slot as any, image: file, alt: "", }]
-        }));
+        setFormData(prev => {
+            const existing = prev.gallery.find(item => item.slot === slot); // buscar si ya hay una imagen en ese slot
+            const filteredGallery = prev.gallery.filter(item => item.slot !== slot); // se elimna imagen existente de ese slot si hay
+            return {
+                ...prev,
+                gallery: [
+                    ...filteredGallery,
+                    {
+                        slot: slot as any,
+                        image: file,
+                        title: existing?.title || "", // conservar title y alt si ya existen
+                        alt: existing?.alt || "",
+                    }
+                ]
+            }
+        });
 
         if (file instanceof File) {
             const reader = new FileReader();
@@ -140,7 +151,9 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
     const handleRemoveGalleryImage = (slot: string) => { // se busca por slot para elimnar
         setFormData(prev => ({
             ...prev,
-            gallery: prev.gallery.filter(item => item.slot !== slot)
+            gallery: prev.gallery.map(item =>
+                item.slot === slot ? { ...item, image: "" } : item
+            )
         }));
 
         setGalleryPreviews(prev => { // se elimina el preview tambien
@@ -148,6 +161,15 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
             newMap.delete(slot);
             return newMap;
         });
+    };
+
+    const handleUpdateGalleryTitle = (slot: string, newTitle: string) => { // busca por slot para actualizar title
+        setFormData(prev => ({
+            ...prev,
+            gallery: prev.gallery.map(item =>
+                item.slot === slot ? { ...item, title: newTitle } : item
+            )
+        }));
     };
 
     const handleUpdateGalleryAlt = (slot: string, newAlt: string) => { // busca por slot para actualizar alt
@@ -340,7 +362,9 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 <ImageUpload
                     label="Imagen Principal del Producto"
                     description="Aparece en la lista de productos. Recomendado: 800 x 800 px (Cuadrado)."
+                    titleValue={formData.main_image_title || ""}
                     altValue={formData.main_image_alt}
+                    onTitleChange={(title) => setFormData(prev => ({ ...prev, main_image_title: title }))}
                     onAltChange={(alt) => setFormData(prev => ({ ...prev, main_image_alt: alt }))}
                     onFileChange={(file) => setFormData(prev => ({ ...prev, main_image: file }))}
                     currentImage={
@@ -359,7 +383,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {GALLERY_SLOTS.map(({ value, label, size, desc  }) => {
+                    {GALLERY_SLOTS.map(({ value, label, size, desc }) => {
                         const existingImage = formData.gallery.find(item => item.slot === value);
 
                         // se determinar la URL del preview
@@ -379,8 +403,12 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                                 key={value}
                                 label={`Imagen para ${label}`}
                                 description={`Medida: ${size}. ${desc}`}
+                                titleValue={existingImage?.title || ""}
                                 altValue={existingImage?.alt || ""}
                                 required
+                                onTitleChange={(title) => {
+                                    handleUpdateGalleryTitle(value, title);
+                                }}
                                 onAltChange={(alt) => {
                                     handleUpdateGalleryAlt(value, alt);
                                 }}
