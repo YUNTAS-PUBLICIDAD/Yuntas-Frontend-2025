@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
 import { useEmail } from "@/hooks/useEmail";

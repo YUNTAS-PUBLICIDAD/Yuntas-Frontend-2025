@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!result.success || !result.data) {
         return {
-            title: "Producto no encontrado - Yuntas Publicidad",
+            title: "Producto no encontrado",
             alternates: {
                 canonical: canonicalUrl,
             },
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const producto: Producto = result.data;
 
-    const title = producto.meta_title || `${producto.name} - Yuntas Publicidad`;
+    const title = producto.meta_title || `${producto.name}`;
     const description =
         producto.meta_description ||
         producto.description.substring(0, 160);
