@@ -1,41 +1,59 @@
-name: Deploy Frontend to Hostinger
+name: Deploy Next.js to Hostinger
 
 on:
   push:
-    branches:
-      - main
-  repository_dispatch:
-    types: [webhook-rebuild-frontend]
+    branches: [ "main" ]
+  workflow_dispatch:  # Botón manual
+  repository_dispatch:  # Webhook desde Laravel
+    types: [rebuild-frontend]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: 🚚 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 📦 Install dependencies
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: 🏗️ Build project
+      - name: Build Project
         run: npm run build
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api' }}
-          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL || 'https://yuntaspublicidad.com' }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_WHATSAPP_SERVICE_URL: ${{ secrets.NEXT_PUBLIC_WHATSAPP_SERVICE_URL }}
+          NEXT_PUBLIC_WHATSAPP_NUMBER: ${{ secrets.NEXT_PUBLIC_WHATSAPP_NUMBER }}
 
-      - name: 🚀 Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./out/
-          server-dir: /public_html/
-          # Nota: Ajusta 'server-dir' segun la carpeta donde este tu web en Hostinger
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+
+      - name: Add known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.HOSTINGER_PORT }} ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy with Rsync
+        run: |
+          rsync -avz --delete \
+            --exclude='back/' \
+            --exclude='api/' \
+            --exclude='.htaccess' \
+            --exclude='.git/' \
+            --exclude='*.log' \
+            -e "ssh -p ${{ secrets.HOSTINGER_PORT }} -o StrictHostKeyChecking=no" \
+            ./out/ ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:~/domains/yuntaspublicidad.com/public_html/
+      
+      - name: Notify completion
+        if: success()
+        run: echo "✅ Deploy completado en $(date)"
