@@ -2,7 +2,7 @@ name: Deploy Next.js to Hostinger
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   workflow_dispatch:  # Botón manual
   repository_dispatch:  # Webhook desde Laravel
     types: [rebuild-frontend]
