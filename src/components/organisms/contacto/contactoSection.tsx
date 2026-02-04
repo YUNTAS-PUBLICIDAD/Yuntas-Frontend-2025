@@ -5,14 +5,14 @@ const ContactoSection = () => {
   return (
     <section
       className="
-        relative w-full h-[80vh] md:h-screen 
+        relative w-full h-[60vh] md:h-[80vh] 
         flex items-center justify-start 
-        pt-24 md:pt-24 overflow-hidden 
-        bg-cover bg-top bg-no-repeat 
-        border-b-8 border-[#98D8DF]
+        overflow-hidden 
+        bg-cover bg-center bg-no-repeat 
+        border-b-[12px] border-[#98D8DF]
       "
       style={{ backgroundImage: `url(${contactoBackground.src})` }}
-      aria-label="Sección Nosotros"
+      aria-label="Sección Contacto"
     >
       {/* Degradado Lineal */}
       <div

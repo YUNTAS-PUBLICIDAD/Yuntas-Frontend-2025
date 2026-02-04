@@ -7,19 +7,25 @@ import UserSection from '../molecules/header/UserSection';
 import ContactoMobil from '../molecules/header/ContactoMobil';
 import SwitchMode from '@/components/molecules/admin/SwitchMode';
 import useAuth from '@/hooks/useAuth';
-
+import { getToken } from '@/utils/token';
+import { getRole } from '@/utils/role';
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const { logout } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const checkAuth = () => {
+      setIsAdmin(Boolean(getToken() && getRole()));
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    checkAuth();
+
+    window.addEventListener('auth-change', checkAuth);
+    
+    return () => {
+      window.removeEventListener('auth-change', checkAuth);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -74,7 +80,7 @@ const HeaderMobil = () => {
           dark:text-white
         `}
       >
-        {/* Cerrar */}
+        {/* Botón Cerrar */}
         <button
           onClick={() => setOpen(false)}
           aria-label="Cerrar menú"
@@ -93,7 +99,7 @@ const HeaderMobil = () => {
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-          {/* Dark Mode */}
+          {/* Dark Mode Switch */}
           <div className="flex items-center justify-between">
             <p className="uppercase tracking-wider text-sm font-bold">
               Dark Mode
@@ -105,18 +111,18 @@ const HeaderMobil = () => {
               lightHandleColor="#ffffff"
               darkHandleColor="#00031E"
             />
-
-
           </div>
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
+          {/* Contacto */}
           <div className="flex gap-3 justify-start">
             <ContactoMobil compact />
           </div>
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
+          {/* ───────────── SECCIÓN DE USUARIO/LOGIN ───────────── */}
           <div className="flex items-center gap-3">
             <UserSection size="md" />
             <div>
@@ -129,12 +135,13 @@ const HeaderMobil = () => {
             <button
               onClick={handleLogout}
               className="
-                bg-cyan-400 text-white
-                px-6 py-2 rounded
-                font-semibold text-sm uppercase tracking-wider
-              "
+                    bg-cyan-400 text-white
+                    px-6 py-2 rounded
+                    font-semibold text-sm uppercase tracking-wider
+                    hover:bg-cyan-500 transition-colors
+                  "
             >
-              Cerrar Sesión
+              {isAdmin ? "Cerrar Sesión" : "Iniciar Sesión"}
             </button>
           </div>
         </nav>

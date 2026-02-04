@@ -12,7 +12,6 @@ export const useSearch = ({ listItem }: useSearchProps) => {
         e.preventDefault()
         const input = e.currentTarget.querySelector("input") as HTMLInputElement | null
         if (input) setTextSearch(input.value)
-        console.log(input?.value)
     }
     return {
         searchList,

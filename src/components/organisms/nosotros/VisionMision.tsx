@@ -21,10 +21,7 @@ const VisionMision: React.FC = () => {
               color="black"
               className="text-lg md:text-xl leading-snug text-gray-900 max-w-[380px] text-center"
             >
-              <span className="font-extrabold">MISIÓN</span>
-              <br />
-              <br />
-              <br />
+              <span className="font-extrabold block mb-3">MISIÓN</span>
               Transformar espacios y generar{" "}
               <span className="font-extrabold">
                 experiencias inolvidables
@@ -47,9 +44,7 @@ const VisionMision: React.FC = () => {
               color="black"
               className="text-lg md:text-xl leading-snug text-gray-900 max-w-[380px] text-center"
             >
-              <span className="font-extrabold">VISIÓN</span>
-              <br />
-              <br />
+              <span className="font-extrabold block mb-3">VISIÓN</span>
               Ser reconocidos como líderes en{" "}
               <span className="font-extrabold">
                 soluciones tecnológicas

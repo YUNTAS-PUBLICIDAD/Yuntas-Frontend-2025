@@ -2,8 +2,10 @@
 
 import MenuItem from "@/components/atoms/MenuItem";
 import { usePathname } from "next/navigation";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
+import { getToken } from '@/utils/token';
+import { getRole } from '@/utils/role';
 
 type NavMenuMobilProps = {
   size?: "sm" | "md" | "lg";
@@ -22,18 +24,32 @@ export default function NavMenuMobil({
   variant = "desktop",
 }: NavMenuMobilProps) {
   const pathname = usePathname();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const sizeClass =
     size === "sm"
       ? "text-base"
       : size === "lg"
-      ? "text-xl"
-      : "text-lg";
+        ? "text-xl"
+        : "text-lg";
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsAdmin(Boolean(getToken() && getRole()));
+    };
+
+    checkAuth(); 
+
+    window.addEventListener('auth-change', checkAuth);
+
+    return () => {
+      window.removeEventListener('auth-change', checkAuth);
+    };
+  }, []);
 
   // ───────────────── MOBILE ─────────────────
   if (variant === "mobile") {
-    const [isAdminOpen, setIsAdminOpen] = useState(false);
-
     const adminItems = [
       { label: "SEGUIMIENTO", href: "/admin/seguimiento" },
       { label: "BLOGS", href: "/admin/blogs" },
@@ -66,7 +82,7 @@ export default function NavMenuMobil({
             active={pathname.startsWith("/productos")}
             color="text-[#04061a] dark:text-white"
           >
-          <span className="font-bold">PRODUCTOS</span>
+            <span className="font-bold">PRODUCTOS</span>
           </MenuItem>
 
           <MenuItem
@@ -93,14 +109,16 @@ export default function NavMenuMobil({
             <span className="font-bold">CONTACTO</span>
           </MenuItem>
 
-          <AdminMenuMobil
-            isOpen={isAdminOpen}
-            onToggle={() => setIsAdminOpen(!isAdminOpen)}
-          />
+          {isAdmin && (
+            <AdminMenuMobil
+              isOpen={isAdminOpen}
+              onToggle={() => setIsAdminOpen(!isAdminOpen)}
+            />
+          )}
         </nav>
 
         {/* Submenu admin */}
-        {isAdminOpen && (
+        {isAdminOpen && isAdmin && (
           <div className="pl-12 mt-1 space-y-0">
             {adminItems.map((item) => (
               <div key={item.href} className="py-1">
@@ -121,7 +139,7 @@ export default function NavMenuMobil({
     );
   }
 
-  // ───────────────── DESKTOP (sin cambios) ─────────────────
+  // ───────────────── DESKTOP  ─────────────────
   return (
     <nav className={`${variantMap[variant]} ${sizeClass}`}>
       <div className="w-full px-4">
@@ -148,9 +166,11 @@ export default function NavMenuMobil({
         </MenuItem>
       </div>
 
-      <div className="w-full px-4">
-        <AdminMenuMobil />
-      </div>
+      {isAdmin && (
+        <div className="w-full px-4">
+          <AdminMenuMobil />
+        </div>
+      )}
     </nav>
   );
 }

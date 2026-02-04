@@ -24,7 +24,14 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
     const socketRef = useRef<Socket | null>(null);
 
     useEffect(() => {
-        const newSocket = io(WHATSAPP_SOCKET_URL);
+        const newSocket = io(WHATSAPP_SOCKET_URL, {
+            transports: ['websocket', 'polling'],
+            withCredentials: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 2000,
+            timeout: 10000,
+        });
 
         socketRef.current = newSocket;
 
@@ -43,6 +50,21 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
 
             if (connected) {
                 setQrCode(null);
+            }
+
+            // se pide qr solo para cuando se cierra sesión desde el teléfono
+            const dataKeys = Object.keys(data);
+            if (dataKeys.length === 4 && 
+                data.connectionStatus === 'disconnected' && 
+                data.qrData === null && 
+                data.isConnected === false &&
+                data.hasActiveQR === false
+            ) {
+                setTimeout(async () => {
+                    setIsWaitingQR(true);
+                    await requestQR();
+                    setIsWaitingQR(false);
+                }, 1000);
             }
         });
 

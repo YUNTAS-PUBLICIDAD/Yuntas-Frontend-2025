@@ -1,10 +1,18 @@
 import HeroPage from '@/components/molecules/HeroPage';
 
-const HeroSection = ({ productName, backgroundImage } : { productName: string, backgroundImage: string }) => {
-  return (
-    <HeroPage url={backgroundImage} text={productName} position='medio'/>
+interface HeroSectionProps {
+    productName: string;
+    backgroundImage: string;
+    imageTitle: string;
+    imageAlt: string;
+}
 
-  );
+const HeroSection = ({ productName, backgroundImage, imageTitle, imageAlt }: HeroSectionProps) => {
+    return (
+        <HeroPage url={backgroundImage} text={productName} position='medio' imageAlt={imageAlt} imageTitle={imageTitle} />
+
+    );
 };
+
 
 export default HeroSection;
