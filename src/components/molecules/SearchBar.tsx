@@ -11,19 +11,22 @@ type SearchBarProps<T> = {
   placeholder?: string;
   searchKeys: (keyof T)[];
   getDisplayValue: (item: T) => string;
+  noResultsMessage?: string;
 };
 
-function SearchBar<T>({ 
-  items, 
-  onSearch, 
-  placeholder = 'Buscar...', 
+function SearchBar<T>({
+  items,
+  onSearch,
+  placeholder = 'Buscar...',
   searchKeys,
-  getDisplayValue 
+  getDisplayValue,
+  noResultsMessage
 }: SearchBarProps<T>) {
 
   const [busqueda, setBusqueda] = useState("")
   const [showAutocomplete, setShowAutocomplete] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
+  const [hasNoResults, setHasNoResults] = useState(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -33,19 +36,20 @@ function SearchBar<T>({
 
   const executeSearch = (searchTerm: string) => {
     const searchLower = searchTerm.toLowerCase().trim()
-    
+
     if (!searchLower) {
       onSearch(items)
       return
     }
 
-    const results = items.filter(item => 
+    const results = items.filter(item =>
       searchKeys.some(key => {
         const value = item[key]
         return String(value).toLowerCase().includes(searchLower)
       })
     )
-    
+
+    setHasNoResults(results.length === 0)
     onSearch(results)
   }
 
@@ -54,9 +58,10 @@ function SearchBar<T>({
     setBusqueda(value)
     setShowAutocomplete(value.length > 0)
     setActiveIndex(-1)
-    
+
     // Búsqueda en tiempo real opcional
     if (value.length === 0) {
+      setHasNoResults(false)
       onSearch(items)
     }
   }
@@ -75,7 +80,7 @@ function SearchBar<T>({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setActiveIndex(prev => 
+        setActiveIndex(prev =>
           prev < filteredItems.length - 1 ? prev + 1 : prev
         )
         break
@@ -96,18 +101,18 @@ function SearchBar<T>({
     }
   }
 
-  const filteredItems = busqueda.length > 0 
-    ? items.filter(item => 
-        searchKeys.some(key => 
-          String(item[key]).toLowerCase().includes(busqueda.toLowerCase())
-        )
-      ).slice(0, 5)
+  const filteredItems = busqueda.length > 0
+    ? items.filter(item =>
+      searchKeys.some(key =>
+        String(item[key]).toLowerCase().includes(busqueda.toLowerCase())
+      )
+    ).slice(0, 5)
     : []
 
   return (
     <div className="relative w-full">
-      <form 
-        onSubmit={handleSubmit} 
+      <form
+        onSubmit={handleSubmit}
         className='flex border-2 border-[#23C1DE] w-full items-center px-2 rounded-3xl'
         onKeyDown={handleKeyDown}
       >
@@ -145,6 +150,13 @@ function SearchBar<T>({
             </li>
           ))}
         </ul>
+      )}
+
+      {/* Alerta de no resultados */}
+      {hasNoResults && noResultsMessage && (
+        <div className="absolute top-full left-0 w-full px-4 py-2 mt-1 text-sm text-red-500 font-medium animate-fade-in">
+          {noResultsMessage}
+        </div>
       )}
     </div>
   )

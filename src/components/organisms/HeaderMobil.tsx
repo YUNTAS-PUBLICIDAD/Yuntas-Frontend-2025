@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { IoMenu, IoClose } from "react-icons/io5";
 import NavMenuMobil from "../molecules/header/NavMenuMobil";
+import { usePathname } from "next/navigation";
 import UserSection from '../molecules/header/UserSection';
 import ContactoMobil from '../molecules/header/ContactoMobil';
 import SwitchMode from '@/components/molecules/admin/SwitchMode';
@@ -11,20 +12,30 @@ import { getToken } from '@/utils/token';
 import { getRole } from '@/utils/role';
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { logout } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
+  const pathname = usePathname();
+  const isAdminPath = pathname.startsWith('/admin');
 
   useEffect(() => {
     const checkAuth = () => {
       setIsAdmin(Boolean(getToken() && getRole()));
     };
 
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
     checkAuth();
+    handleScroll();
 
     window.addEventListener('auth-change', checkAuth);
-    
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
       window.removeEventListener('auth-change', checkAuth);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -43,7 +54,8 @@ const HeaderMobil = () => {
           transition-all duration-300
           ${open ? "hidden" : ""}
           bg-white text-[#04061a] shadow-md
-          dark:bg-transparent dark:text-white dark:shadow-none
+          ${isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "dark:bg-transparent"} 
+          dark:text-white dark:shadow-none
         `}
       >
         <button
