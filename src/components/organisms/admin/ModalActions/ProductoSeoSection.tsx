@@ -14,7 +14,7 @@ const BlogSEOSection = ({ blog, setBlog }: BlogSEOSectionProps) => {
   const { productos, getProductos } = useProductos();
 
   useEffect(() => {
-    getProductos(100);
+    getProductos(200);
   }, [getProductos]);
   console.log(productos)
   return (

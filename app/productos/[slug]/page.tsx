@@ -7,6 +7,9 @@ interface PageProps {
     params: { slug: string };
 }
 
+export const dynamicParams = true;
+export const revalidate = false; 
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const result = await getProductoBySlugService(params.slug);
 
@@ -19,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
                 canonical: canonicalUrl,
             },
             robots: {
-                index: true,
+                index: false,
                 follow: true,
             },
         };

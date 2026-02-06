@@ -17,7 +17,7 @@ type ContenidoBlogProp = {
 const ContenidoBlog = ({ blog, setBlog }: ContenidoBlogProp) => {
   const { productos,getProductos,isLoading,error } = useProductos();
   useEffect(() => {
-    getProductos();
+    getProductos(200);
   }, []);
   console.log(productos);
   const handleBeneficioChange = (

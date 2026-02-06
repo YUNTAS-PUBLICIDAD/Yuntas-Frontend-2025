@@ -27,7 +27,7 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
     const { getProductos, productos } = useProductos();
 
     useEffect(() => {
-        getProductos();
+        getProductos(200);
     }, [])
 
     useEffect(() => {
