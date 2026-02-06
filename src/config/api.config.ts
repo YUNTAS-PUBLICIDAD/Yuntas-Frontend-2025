@@ -64,6 +64,7 @@ api.interceptors.response.use(
 				}
 			}
 		} else if (error.request) {
+			console.log(error);
 			// error de red
 			userMessage = 'Error de conexión. Verifica tu internet.';
 		}
