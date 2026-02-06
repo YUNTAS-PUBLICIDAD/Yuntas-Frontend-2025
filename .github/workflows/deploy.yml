@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+      
+      - name: Clear Next.js cache
+        run: |
+          rm -rf .next
+          rm -rf out
 
       - name: Install dependencies
         run: npm ci
