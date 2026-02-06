@@ -7,10 +7,13 @@ import InputText from '@/components/atoms/InputText';
 import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
 import { useAuth } from '@/hooks/useAuth';
+import { HiEye, HiEyeOff } from "react-icons/hi"; 
 
 export default function FormSection() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    
     const { login, isLoading, error } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -50,16 +53,34 @@ export default function FormSection() {
                     required
                     disabled={isLoading}
                 />
-                <InputText 
-                    placeholder='Contraseña' 
-                    className='rounded-full' 
-                    type='password'
-                    name='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={isLoading}
-                />
+                
+                <div className="relative w-full">
+                    <InputText 
+                        placeholder='Contraseña' 
+                        
+                        className='rounded-full pr-12' 
+                        type={showPassword ? 'text' : 'password'}
+                        name='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        disabled={isLoading}
+                    />
+                    
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                       
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer z-10 transition-colors p-1"
+                    >
+                        {showPassword ? (
+                            <HiEyeOff size={22} /> 
+                        ) : (
+                            <HiEye size={22} />   
+                        )}
+                    </button>
+                </div>
+
                 <Button 
                     type='submit' 
                     className='uppercase flex items-center justify-center gap-2'
