@@ -38,8 +38,8 @@ const SidebarProductos = ({
   return (
     <div className="w-full md:w-64 flex flex-col pr-2 font-sans">
       
-      {/* TÍTULO */}
-      <h2 className="text-xl font-bold text-[#0F172A] uppercase mb-4 tracking-wide">
+      {/* TÍTULO - Solo visible en desktop */}
+      <h2 className="hidden md:block text-xl font-bold text-[#0F172A] uppercase mb-4 tracking-wide">
         CATEGORÍA
       </h2>
 
