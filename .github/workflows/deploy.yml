@@ -59,6 +59,17 @@ jobs:
             -e "ssh -p ${{ secrets.HOSTINGER_PORT }} -o StrictHostKeyChecking=no" \
             ./out/ ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:~/domains/yuntaspublicidad.com/public_html/
       
-      - name: Notify completion
+      - name: Notify Laravel on completion
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          curl -X POST https://apiyuntas.yuntaspublicidad.com/api/webhooks/deploy-frontend-complete \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Token: ${{ secrets.LARAVEL_WEBHOOK_TOKEN }}" \
+            -d "{\"status\": \"$STATUS\", \"timestamp\": \"$(date -Iseconds)\", \"workflow_run_id\": \"${{ github.run_id }}\"}" \
+            --max-time 10 \
+            --retry 2 \
+            || echo "No se pudo notificar a Laravel (no crítico)"
+      - name: Final status
         if: success()
         run: echo "✅ Deploy completado en $(date)"
