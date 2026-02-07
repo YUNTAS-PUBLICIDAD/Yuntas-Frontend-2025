@@ -1,6 +1,6 @@
 import React from 'react';
 import Heading from '@/components/atoms/Heading';
-import heroBackground from "@/assets/Reclamaciones/herobackground.png";
+import { imagenes } from "@/data/imagenes";
 
 interface CommonHeroProps {
     title: string;
@@ -12,8 +12,9 @@ const CommonHero: React.FC<CommonHeroProps> = ({ title }) => {
             className='relative w-full h-[60vh] flex items-center justify-center
       overflow-hidden pt-24 bg-cover bg-center bg-no-repeat px-8 md:px-0 text-center
       md:h-[70vh] md:pt-24'
-            style={{ backgroundImage: `url('${heroBackground.src}')` }}
+            style={{ backgroundImage: `url('${imagenes.reclamaciones.hero.src}')` }}
         >
+            {imagenes.reclamaciones.hero.alt && <img src={imagenes.reclamaciones.hero.src} alt={imagenes.reclamaciones.hero.alt} title={imagenes.reclamaciones.hero.title} className="sr-only" aria-hidden="false" />}
             <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
             <Heading
                 level="h1"

@@ -1,6 +1,6 @@
 import React from "react";
 import Text from "@/components/atoms/Text";
-import negocioImagen from "@/assets/nosotros/negocioImagen.webp";
+import { imagenes } from "@/data/imagenes";
 
 const NegocioSection: React.FC = () => {
   return (
@@ -24,8 +24,9 @@ const NegocioSection: React.FC = () => {
           {/* IMAGEN */}
           <div className="flex justify-center lg:justify-start">
             <img
-              src={negocioImagen.src}
-              alt="Equipo de trabajo en Yuntas"
+              src={imagenes.nosotros.detalle.src}
+              alt={imagenes.nosotros.detalle.alt}
+              title={imagenes.nosotros.detalle.title}
               className="w-full max-w-xl rounded-[2.5rem] shadow-lg object-cover h-[420px]"
             />
           </div>

@@ -6,8 +6,7 @@ import TestimonialCard from "@/components/molecules/inicio/TestimonialCard";
 import Text from "@/components/atoms/Text";
 import Button from "@/components/atoms/Button";
 import { testimonialsData } from "@/data/inicio/testimonialsData";
-import testimonialsBg from "@/assets/inicio/testimonialbackground.webp";
-
+import { imagenes } from "@/data/imagenes";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 
@@ -31,7 +30,7 @@ const TestimonialsSection: React.FC = () => {
         <div 
           className="w-full rounded-3xl overflow-visible relative flex items-center justify-center mt-10 md:mt-20 pb-24 md:pb-24" 
           style={{ 
-            backgroundImage: `url(${testimonialsBg.src})`, 
+            backgroundImage: `url(${imagenes.inicio.testimonio.src})`, 
             backgroundSize: 'cover', 
             backgroundPosition: 'bottom', 
             backgroundRepeat: 'no-repeat', 
@@ -39,7 +38,7 @@ const TestimonialsSection: React.FC = () => {
             minHeight: '600px' 
           }}
         >
-          
+          {imagenes.inicio.testimonio.alt && <img src={imagenes.inicio.testimonio.src} alt={imagenes.inicio.testimonio.alt} title={imagenes.inicio.testimonio.title} className="sr-only" aria-hidden="false" />}
           <div className="absolute inset-0 bg-black/10 rounded-3xl" />
 
           
