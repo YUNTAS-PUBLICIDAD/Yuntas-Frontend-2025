@@ -1,24 +1,24 @@
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import Text from "@/components/atoms/Text";
-import heroBackground from "@/assets/inicio/heroBackground.webp";
+import { imagenes } from "@/data/imagenes";
 
 import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
     <section
-      className="relative w-full h-screen flex items-center justify-start overflow-hidden pt-24 bg-cover bg-center bg-no-repeat border-b-8 border-[#6DE1E3] md:h-screen h-[80vh] md:pt-24 pt-8"
-     
+      className="relative w-full h-screen flex items-center justify-start overflow-hidden pt-24 bg-cover bg-center bg-no-repeat border-b-8 border-[#6DE1E3] md:h-screen h-[80vh] md:pt-24 pt-8"     
     >
      
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBackground.src})` }}
+        style={{ backgroundImage: `url(${imagenes.inicio.hero.src})` }}
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         transition={{ duration: 2.5, ease: "easeOut" }}
       />
+      {imagenes.inicio.hero.alt && <img src={imagenes.inicio.hero.src} alt={imagenes.inicio.hero.alt} title={imagenes.inicio.hero.title} className="sr-only" aria-hidden="false" />}
 
       <div className="absolute inset-0 bg-black/30 md:bg-black/40 z-10" />
       

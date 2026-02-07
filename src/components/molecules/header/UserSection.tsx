@@ -1,7 +1,6 @@
 import Icon from "@/components/atoms/Icon";
 import Link from "next/link";
-import UserImg from "@/assets/inicio/user-1.png";
-
+import { imagenes } from "@/data/imagenes";
 type UserSectionProps = {
   size?: "sm" | "md" | "lg";
   enableDarkMode?: boolean;
@@ -31,9 +30,9 @@ export default function UserSection({
           }
         >
           <img
-            src={UserImg.src}
-            alt="Icono de usuario"
-            title="Icono de usuario"
+            src={imagenes.inicio.user.src}
+            alt={imagenes.inicio.user.alt}
+            title={imagenes.inicio.user.title}
             className={`
               w-7 h-7 object-contain
               ${enableDarkMode ? "filter dark:invert-[0.6]" : ""}

@@ -1,6 +1,5 @@
 import Heading from "@/components/atoms/Heading";
-import contactoBackground from "@/assets/contacto/contactoBackground.webp";
-
+import { imagenes } from "@/data/imagenes";
 const ContactoSection = () => {
   return (
     <section
@@ -11,9 +10,10 @@ const ContactoSection = () => {
         bg-cover bg-center bg-no-repeat 
         border-b-[12px] border-[#98D8DF]
       "
-      style={{ backgroundImage: `url(${contactoBackground.src})` }}
+      style={{ backgroundImage: `url(${imagenes.contacto.hero.src})` }}
       aria-label="Sección Contacto"
     >
+      {imagenes.contacto.hero.alt && <img src={imagenes.contacto.hero.src} alt={imagenes.contacto.hero.alt} title={imagenes.contacto.hero.title} className="sr-only" aria-hidden="false" />}
       {/* Degradado Lineal */}
       <div
         className="absolute inset-0"
