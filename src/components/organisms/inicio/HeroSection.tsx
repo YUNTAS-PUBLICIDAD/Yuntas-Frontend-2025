@@ -1,14 +1,15 @@
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import Text from "@/components/atoms/Text";
-import heroBackground from "@/assets/inicio/heroBackground.webp";
+import { imagenes } from "@/data/imagenes";
 
 const HeroSection = () => {
   return (
     <section
       className="relative w-full h-screen flex items-center justify-start overflow-hidden pt-24 bg-cover bg-center bg-no-repeat border-b-8 border-[#6DE1E3] md:h-screen h-[80vh] md:pt-24 pt-8"
-      style={{ backgroundImage: `url(${heroBackground.src})` }}
+      style={{ backgroundImage: `url(${imagenes.inicio.hero.src})` }}
     >
+      {imagenes.inicio.hero.alt && <img src={imagenes.inicio.hero.src} alt={imagenes.inicio.hero.alt} title={imagenes.inicio.hero.title} className="sr-only" aria-hidden="false" />}
       <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
       
      

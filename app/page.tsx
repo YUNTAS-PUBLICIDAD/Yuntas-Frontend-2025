@@ -3,9 +3,9 @@ import HeroSection from "@/components/organisms/inicio/HeroSection";
 import InnovacionSection from "@/components/organisms/inicio/InnovacionSection";
 import ProjectsCarousel from "@/components/organisms/inicio/ProjectsCarousel";
 import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSection";
-import imagenPopup from "@/assets/inicio/Popup/yuleLove.webp";
 import Popup from "@/components/molecules/Popup";
 import { sourceData } from "@/data/popup/sourceData";
+import { imagenes } from "@/data/imagenes";
 
 export default function HomePage() {
   return (
@@ -15,9 +15,9 @@ export default function HomePage() {
       <ProjectsCarousel />
       <TestimonialsSection />
       <Popup
-        imgSrc={imagenPopup.src}
-        imgTitle="Luces moradas estilo neon"
-        imgAlt="Luces moradas estilo neon"
+        imgSrc={imagenes.inicio.popup.src}
+        imgTitle={imagenes.inicio.popup.title}
+        imgAlt={imagenes.inicio.popup.alt}
         title="¡Un detalle que cambia todo!"
         buttonText="Empieza a brillar"
         sourceId={sourceData.INICIO} // source id para "Inicio"

@@ -1,6 +1,5 @@
 import Heading from "@/components/atoms/Heading";
-import nosotrosBackground from "@/assets/nosotros/nosotrosBackground.webp";
-
+import { imagenes } from "@/data/imagenes";
 const NosotrosSection = () => {
   return (
     <section
@@ -11,9 +10,10 @@ const NosotrosSection = () => {
         bg-cover bg-top bg-no-repeat 
         border-b-8 border-[#98D8DF]
       "
-      style={{ backgroundImage: `url(${nosotrosBackground.src})` }}
+      style={{ backgroundImage: `url(${imagenes.nosotros.hero.src})` }}
       aria-label="Sección Nosotros"
     >
+      {imagenes.nosotros.hero.alt && <img src={imagenes.nosotros.hero.src} alt={imagenes.nosotros.hero.alt} title={imagenes.nosotros.hero.title} className="sr-only" aria-hidden="false" />}
       {/* Degradado Lineal */}
       <div
         className="absolute inset-0"

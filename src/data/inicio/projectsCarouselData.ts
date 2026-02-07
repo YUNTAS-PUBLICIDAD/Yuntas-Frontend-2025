@@ -1,17 +1,15 @@
-import burguerP from "@/assets/inicio/burguerP.webp";
-import innovation01 from "@/assets/inicio/innovation01.webp";
-import innovation02 from "@/assets/inicio/innovation02.webp";
+import { imagenes } from "@/data/imagenes";
 export const projectsCarouselSlides = [
   {
-    src: burguerP.src,
-    alt: "Proyecto Burgers",
+    src: imagenes.inicio.detalle3.src,
+    alt: imagenes.inicio.detalle3.alt,
   },
   {
-    src: innovation01.src,
-    alt: "Proyecto 2",
+    src: imagenes.inicio.detalle1.src,
+    alt: imagenes.inicio.detalle1.alt,
   },
   {
-    src: innovation02.src,
-    alt: "Proyecto 3",
+    src: imagenes.inicio.detalle2.src,
+    alt: imagenes.inicio.detalle2.alt,
   },
 ];
