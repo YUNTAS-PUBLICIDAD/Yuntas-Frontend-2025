@@ -65,7 +65,7 @@ jobs:
           STATUS="${{ job.status }}"
           curl -X POST https://apiyuntas.yuntaspublicidad.com/api/webhooks/deploy-frontend-complete \
             -H "Content-Type: application/json" \
-            -H "X-GitHub-Token: ${{ secrets.LARAVEL_WEBHOOK_TOKEN }}" \
+            -H "X-GitHub-Token: ${{ secrets.WEBHOOK_TOKEN }}" \
             -d "{\"status\": \"$STATUS\", \"timestamp\": \"$(date -Iseconds)\", \"workflow_run_id\": \"${{ github.run_id }}\"}" \
             --max-time 10 \
             --retry 2 \
