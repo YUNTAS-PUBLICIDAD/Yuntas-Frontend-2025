@@ -39,11 +39,16 @@ const BlogSection = ({ data }: Props) => {
           Descubre más sobre nuestros Productos
         </Text>
 
-        <div className="relative w-full md:w-auto z-50">
+        <div className="relative w-full md:flex-1 md:max-w-md z-50">
           <SearchBar
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
+          {query.trim() && blogsFiltrados.length === 0 && (
+            <div className="absolute top-full left-0 w-full px-4 py-2 mt-1 text-sm text-red-500 font-medium animate-fade-in bg-white/10 rounded-lg">
+              No se encuentra ese blog
+            </div>
+          )}
         </div>
       </Banner>
 

@@ -47,10 +47,9 @@ export default function AdminLayout({
       className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
       {/* ───────────────── TOP BAR (solo móvil) ───────────────── */}
       <div
-        className=" flex items-center justify-between h-16 px-6 bg-white dark:bg-[#141A3F]border-b border-gray-20 dark:border-white/10 md:hidden">
+        className="flex items-center justify-between h-16 px-6 bg-white dark:bg-transparent border-b border-gray-20 dark:border-white/10 md:hidden">
         {/* Hamburguesa */}
         {/* Usuario */}
-
       </div>
 
       {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
