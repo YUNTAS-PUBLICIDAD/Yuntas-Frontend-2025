@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api';
 export const WHATSAPP_SOCKET_URL = process.env.NEXT_PUBLIC_WHATSAPP_SERVICE_URL;
+
 interface BackendError {
 	message?: string;
 	errors?: Record<string, string[]>;
@@ -13,8 +14,7 @@ const api = axios.create({
 	headers: {
 		'Content-Type': 'application/json',
 		'Accept': 'application/json',
-	},
-	withCredentials: true,
+	}
 });
 
 //Manejar errores globales
