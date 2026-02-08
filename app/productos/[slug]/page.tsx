@@ -72,23 +72,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-    console.log('=====================================');
-    console.log('🚀 INICIANDO generateStaticParams');
-    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
-    console.log('Fecha:', new Date().toISOString());
-    console.log('=====================================');
-    
     try {
         const products = await getProductosService(100);
-        
-        console.log('📊 Resultado de getProductosService:');
-        console.log('Success:', products.success);
-        console.log('Data length:', products.data?.length || 0);
-        console.log('Data:', products.data ? 'Existe' : 'null/undefined');
 
         if (!products.success || !products.data) {
-            console.error('❌ Error: No se obtuvieron productos');
-            console.error('Message:', products.message);
+            console.error('Error message:', products.message);
             return [];
         }
 
@@ -96,13 +84,9 @@ export async function generateStaticParams() {
             slug: product.slug,
         }));
         
-        console.log('✅ Generando', params.length, 'rutas');
-        console.log('Primeras 3 rutas:', params.slice(0, 3));
-        
         return params;
     } catch (error) {
-        console.error('❌❌❌ ERROR CRÍTICO en generateStaticParams:');
-        console.error(error);
+        console.error('Error:', error);
         return [];
     }
 }
