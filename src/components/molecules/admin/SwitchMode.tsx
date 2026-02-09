@@ -48,6 +48,7 @@ export default function SwitchMode({
     <Switch
       checked={checked}
       onChange={handleChange}
+      aria-label="Alternar modo oscuro"
       handleDiameter={24}
       height={32}
       width={70}
