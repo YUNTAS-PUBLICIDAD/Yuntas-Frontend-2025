@@ -91,6 +91,9 @@ export const API_ENDPOINTS = {
         GET_ONE: (id: number) => `/admin/claims/${id}`,
         REPLY: (id: number) => `/admin/claims/${id}/reply`,
       }
+    },
+    DEPLOY: {
+      TRIGGER: '/admin/deploy/trigger',
     }
   }
 };

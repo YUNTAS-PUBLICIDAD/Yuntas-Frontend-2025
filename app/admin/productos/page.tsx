@@ -9,6 +9,7 @@ import { showToast } from "@/utils/showToast";
 import { useConfirm } from "@/hooks/useConfirm";
 import ProductForm from "@/components/molecules/admin/products/ProductoForm";
 import { useProductos } from "@/hooks/useProductos";
+import { useDeploy } from "@/hooks/useDeploy";
 import { Producto, ProductoInput } from "@/types/admin/producto";
 import { useProductExporter } from "@/hooks/useProductExporter";
 import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
@@ -37,12 +38,11 @@ export default function ProductosPage() {
     const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
     const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
     const { confirm, ConfirmDialog } = useConfirm();
+    const { isLoading: isDeploying, triggerDeploy } = useDeploy();
 
     useEffect(() => {
         getProductos(200);
     }, [getProductos]);
-
-
 
     useEffect(() => {
         const modalParam = searchParams.get('modal');
@@ -105,6 +105,17 @@ export default function ProductosPage() {
         }
     };
 
+    const handleTriggerDeploy = async () => {
+        const confirmDeploy = await confirm({ message: "¿Estás seguro de que deseas desplegar los cambios?" });
+        if (!confirmDeploy) return; 
+        const result = await triggerDeploy();
+        if (result.success) {
+            showToast.success(result.message || "Despliegue iniciado");
+        } else {
+            showToast.error(result.message || "Error al iniciar el despliegue");
+        }   
+    };
+
     const handleCloseModal = () => {
         setSelectedProduct(null);
         setIsAddEditModalOpen(false);
@@ -128,7 +139,6 @@ export default function ProductosPage() {
 
     return (
         <div className="p-2 md:p-4">
-            {/* Botones de acción principales */}
             {/* Botones de acción principales */}
             <div className="flex flex-row flex-wrap gap-2 mb-4">
                 <ActionButtonGroup className="flex-auto" buttons={[{
@@ -171,6 +181,15 @@ export default function ProductosPage() {
                 <div className="md:hidden flex-auto">
                     <ExportDropdown options={exportOptions} className="w-full" />
                 </div>
+            </div>
+
+            <div className="flex flex-row flex-wrap gap-2 mb-4">
+                <ActionButtonGroup className="flex-auto" buttons={[{
+                    label: "Desplegar Cambios",
+                    onClick: () => handleTriggerDeploy(),
+                    variant: "danger",
+                    className: "w-full"
+                }]} />
             </div>
 
             {error && (
