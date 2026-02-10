@@ -72,23 +72,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-    try {
-        const products = await getProductosService(100);
+    const MAX_ATTEMPTS = 3;
+    const DELAY_MS = 5000;
+    
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        try {
+            const products = await getProductosService(100);
 
-        if (!products.success || !products.data) {
-            console.error('Error message:', products.message);
-            return [];
+            if (products.success && products.data && products.data.length > 0) {
+                const params = products.data.map((product) => ({
+                    slug: product.slug,
+                }));
+
+                return params;
+            }
+
+            if (!products.success) {
+                console.warn(`Intento ${attempt} falló:`, products.message);
+            }
+        } catch (error) {
+            console.error(`Error en intento ${attempt}:`, error);
         }
-
-        const params = products.data.map((product) => ({
-            slug: product.slug,
-        }));
         
-        return params;
-    } catch (error) {
-        console.error('Error:', error);
-        return [];
+        if (attempt < MAX_ATTEMPTS) {
+            await new Promise(resolve => setTimeout(resolve, DELAY_MS));
+        }
     }
+    
+    console.warn('Todos los intentos fallaron.');
+    return [];
 }
 
 export default async function Page({ params }: PageProps) {
