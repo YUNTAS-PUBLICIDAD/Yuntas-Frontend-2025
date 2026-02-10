@@ -44,6 +44,7 @@ export async function getProductosService(perPage: number = 10, url?: string): P
             links: response.data.data.links
         };
     } catch (error: any) {
+        console.error("Error fetching products:", error);
         return { success: false, message: error.message };
     }
 }
@@ -57,7 +58,7 @@ export async function getProductoBySlugService(slug: string): Promise<ProductoSe
             message: response.data.message,
             data: formatProduct(response.data.data)
         };
-    } catch (error) {
+    } catch (error: any) {
         return { success: false, message: "Error de conexión" };
     }
 }
