@@ -106,7 +106,7 @@ export default function ProductosPage() {
     };
 
     const handleTriggerDeploy = async () => {
-        const confirmDeploy = await confirm({ message: "¿Estás seguro de que deseas desplegar los cambios?" });
+        const confirmDeploy = await confirm({ message: "¿Estás seguro de que deseas publicar los cambios?" });
         if (!confirmDeploy) return; 
         const result = await triggerDeploy();
         if (result.success) {

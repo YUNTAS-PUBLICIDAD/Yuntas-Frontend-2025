@@ -72,6 +72,7 @@ jobs:
             -H "Content-Type: application/json" \
             -H "X-GitHub-Token: ${{ secrets.WEBHOOK_TOKEN }}" \
             -d "{\"status\": \"$STATUS\", \"timestamp\": \"$(date -Iseconds)\", \"workflow_run_id\": \"${{ github.run_id }}\"}" \
+            -v \
             --max-time 10 \
             --retry 2 \
             || echo "No se pudo notificar a Laravel (no crítico)"
