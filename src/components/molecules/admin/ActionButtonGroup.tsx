@@ -6,6 +6,7 @@ interface ButtonConfig {
     variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
     className?: string; // Permitir override por botón
     bgColor?: string;
+    isLoading?: boolean;
 }
 
 interface ActionButtonGroupProps {
@@ -42,7 +43,8 @@ export default function ActionButtonGroup({
                     onClick={button.onClick}
                     variant={button.variant}
                     bgColor={button.bgColor ?? getBgColorByVariant(button.variant)}
-                    className={button.className} // Pasamos la clase personalizada
+                    className={button.className}
+                    isLoading={button.isLoading ?? false}
                 >
                     {button.label}
                 </ActionButton>

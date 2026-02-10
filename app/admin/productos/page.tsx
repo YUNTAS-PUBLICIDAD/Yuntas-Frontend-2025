@@ -188,7 +188,8 @@ export default function ProductosPage() {
                     label: "Publicar Cambios",
                     onClick: () => handleTriggerDeploy(),
                     variant: "danger",
-                    className: "w-full"
+                    className: "w-full",
+                    isLoading: isDeploying
                 }]} />
             </div>
 
