@@ -185,10 +185,11 @@ export default function ProductosPage() {
 
             <div className="flex flex-row flex-wrap gap-2 mb-4">
                 <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "Desplegar Cambios",
+                    label: "Publicar Cambios",
                     onClick: () => handleTriggerDeploy(),
                     variant: "danger",
-                    className: "w-full"
+                    className: "w-full",
+                    isLoading: isDeploying
                 }]} />
             </div>
 
