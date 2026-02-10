@@ -18,37 +18,37 @@ const TestimonialsSection: React.FC = () => {
 
   return (
     <section className="w-full bg-white py-0 px-0">
-     
-      <div className="w-full bg-[#18BFE3] py-6 px-6 md:px-16">
-        <Text variant="caption" className="text-white font-bold text-2xl md:text-4xl">
+
+      <div className="w-full bg-[#0b6e82] py-6 px-6 md:px-16">
+        <Text variant="caption" className="text-white font-bold text-2xl md:text-4xl text-xl md:text-2xl">
           <span className="italic font-semibold">TU OPINIÓN ES</span> IMPORTANTE<br />PARA NOSOTROS
         </Text>
       </div>
 
       <div className="relative w-full flex flex-col items-center justify-center px-2 md:px-8 py-8 mb-8">
-       
-        <div 
-          className="w-full rounded-3xl overflow-visible relative flex items-center justify-center mt-10 md:mt-20 pb-24 md:pb-24" 
-          style={{ 
-            backgroundImage: `url(${imagenes.inicio.testimonio.src})`, 
-            backgroundSize: 'cover', 
-            backgroundPosition: 'bottom', 
-            backgroundRepeat: 'no-repeat', 
-            
-            minHeight: '600px' 
+
+        <div
+          className="w-full rounded-3xl overflow-visible relative flex items-center justify-center mt-10 md:mt-20 pb-24 md:pb-24"
+          style={{
+            backgroundImage: `url(${imagenes.inicio.testimonio.src})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'bottom',
+            backgroundRepeat: 'no-repeat',
+
+            minHeight: '600px'
           }}
         >
           {imagenes.inicio.testimonio.alt && <img src={imagenes.inicio.testimonio.src} alt={imagenes.inicio.testimonio.alt} title={imagenes.inicio.testimonio.title} className="sr-only" aria-hidden="false" />}
           <div className="absolute inset-0 bg-black/10 rounded-3xl" />
 
-          
+
           <div className="relative w-full max-w-[1400px] py-10 z-10 px-4">
             <Swiper
               modules={[Pagination, Autoplay]}
-              spaceBetween={30} 
-              slidesPerView={1} 
-              pagination={{ clickable: true, dynamicBullets: true }} 
-              autoplay={{ delay: 3500, disableOnInteraction: false }} 
+              spaceBetween={30}
+              slidesPerView={1}
+              pagination={{ clickable: true, dynamicBullets: true }}
+              autoplay={{ delay: 3500, disableOnInteraction: false }}
               loop={true}
               breakpoints={{
                 640: {
@@ -64,11 +64,11 @@ const TestimonialsSection: React.FC = () => {
                   spaceBetween: 40,
                 },
               }}
-              className="mySwiper !pb-14" 
+              className="mySwiper !pb-14"
             >
               {testimonialsData.map((t, idx) => (
                 <SwiperSlide key={idx} className="flex justify-center pt-12">
-                  
+
                   <div className="flex justify-center w-full">
                     <TestimonialCard {...t} />
                   </div>
@@ -77,11 +77,11 @@ const TestimonialsSection: React.FC = () => {
             </Swiper>
           </div>
 
-         
+
           <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 flex justify-center z-20 w-full px-4">
-            <Button 
-              variant="primary" 
-              size="lg" 
+            <Button
+              variant="primary"
+              size="lg"
               className="px-10 md:px-16 py-3 md:py-4 text-lg md:text-xl rounded-full shadow-xl font-bold tracking-wide w-full md:w-auto"
               onClick={() => router.push('/contacto')}
             >

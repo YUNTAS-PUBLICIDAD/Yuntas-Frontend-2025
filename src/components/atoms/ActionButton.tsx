@@ -6,6 +6,7 @@ interface ActionButtonProps {
     variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
     className?: string;
     bgColor?: string;
+    isLoading?: boolean;
 }
 
 export default function ActionButton({
@@ -13,10 +14,10 @@ export default function ActionButton({
     onClick,
     variant = "primary",
     bgColor,
-    className
+    className,
+    isLoading = false
 }: ActionButtonProps) {
 
-    // 👉 Si viene bgColor, debe tener prioridad TOTAL
     const finalClasses = bgColor ?? "";
 
     return (
@@ -25,6 +26,7 @@ export default function ActionButton({
             variant={variant}
             onClick={onClick}
             className={`py-1 !px-3 sm:!px-4 !rounded-[10px] ${className ?? "w-full sm:w-auto"} ${finalClasses}`}
+            disabled={isLoading}
         >
             <p className="font-semibold text-xs sm:text-sm md:text-base">
                 {children}

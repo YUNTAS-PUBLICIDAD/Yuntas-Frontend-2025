@@ -1,4 +1,5 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { removeToken } from '@/utils/token';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api';
 export const WHATSAPP_SOCKET_URL = process.env.NEXT_PUBLIC_WHATSAPP_SERVICE_URL;
@@ -9,8 +10,17 @@ interface BackendError {
 	error?: string;
 }
 
+interface RetryConfig extends InternalAxiosRequestConfig {
+	_retry?: number;
+	_retryCount?: number;
+}
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 1 segundo
+
 const api = axios.create({
 	baseURL: BASE_URL,
+	timeout: 30000,
 	headers: {
 		'Content-Type': 'application/json',
 		'Accept': 'application/json',
@@ -20,12 +30,21 @@ const api = axios.create({
 //Manejar errores globales
 api.interceptors.response.use(
 	(response) => response,
-	(error: AxiosError<BackendError>) => {
-
+	async (error: AxiosError<BackendError>) => {
+		const config = error.config as RetryConfig;
 		let userMessage = 'Error desconocido';
-		
+
 		if (error.response) {
 			const backendError = error.response.data;
+
+			// token inválido o expirado (401)
+            if (error.response.status === 401) {
+                removeToken();
+                if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+                    window.location.href = '/login';
+                }
+                userMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+            }
 
 			// error de validacion (422)
 			if (error.response.status === 422 && backendError?.errors) {
@@ -44,9 +63,6 @@ api.interceptors.response.use(
 			// error segun codigo HTTP
 			else {
 				switch (error.response.status) {
-					case 401:
-						userMessage = 'No estás autenticado. Por favor, inicia sesión.';
-						break;
 					case 403:
 						userMessage = 'No tienes permisos para realizar esta acción.';
 						break;
@@ -65,8 +81,36 @@ api.interceptors.response.use(
 			}
 		} else if (error.request) {
 			console.log(error);
-			// error de red
-			userMessage = 'Error de conexión. Verifica tu internet.';
+			console.error('Network Error Details:', {
+                url: config?.url,
+                method: config?.method,
+                baseURL: config?.baseURL,
+                headers: config?.headers,
+                timeout: config?.timeout,
+                code: error.code,
+                message: error.message,
+            });
+			
+			if (!config) {
+				userMessage = 'Error de conexión. No se pudo configurar la petición.';
+			} else {
+				config._retryCount = config._retryCount ?? 0;
+
+				if (config._retryCount < MAX_RETRIES) {
+					config._retryCount += 1;
+					console.warn(`Error de conexión. Reintentando (${config._retryCount}/${MAX_RETRIES})...`);
+
+					await new Promise(resolve =>
+						setTimeout(resolve, RETRY_DELAY * config._retryCount!)
+					);
+
+					// Reintentar la petición
+					return api(config);
+				}
+
+				// Máximo de reintentos alcanzado
+				userMessage = `Error de conexión después de ${MAX_RETRIES} intentos.`;
+			}
 		}
 		error.message = userMessage;
 
