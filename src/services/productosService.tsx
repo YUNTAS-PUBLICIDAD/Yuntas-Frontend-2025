@@ -44,7 +44,16 @@ export async function getProductosService(perPage: number = 10, url?: string): P
             links: response.data.data.links
         };
     } catch (error: any) {
-        console.error("Error fetching products:", error);
+        const is403 = error.response?.status === 403;
+
+        let errorMessage = error.message;
+
+        if (is403 && error.response?.data?.includes?.('jschallenge')) {
+            errorMessage = "Bloqueado por firewall/CDN. Esto es un problema temporal del servidor.";
+        }
+
+        console.error('Error fetching products', errorMessage);
+
         return { success: false, message: error.message };
     }
 }
