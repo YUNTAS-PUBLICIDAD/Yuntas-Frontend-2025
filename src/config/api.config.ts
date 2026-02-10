@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { removeToken } from '@/utils/token';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api';
 export const WHATSAPP_SOCKET_URL = process.env.NEXT_PUBLIC_WHATSAPP_SERVICE_URL;
@@ -36,6 +37,15 @@ api.interceptors.response.use(
 		if (error.response) {
 			const backendError = error.response.data;
 
+			// token inválido o expirado (401)
+            if (error.response.status === 401) {
+                removeToken();
+                if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+                    window.location.href = '/login';
+                }
+                userMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+            }
+
 			// error de validacion (422)
 			if (error.response.status === 422 && backendError?.errors) {
 				const validationErrors = Object.entries(backendError.errors)
@@ -53,9 +63,6 @@ api.interceptors.response.use(
 			// error segun codigo HTTP
 			else {
 				switch (error.response.status) {
-					case 401:
-						userMessage = 'No estás autenticado. Por favor, inicia sesión.';
-						break;
 					case 403:
 						userMessage = 'No tienes permisos para realizar esta acción.';
 						break;
@@ -91,6 +98,7 @@ api.interceptors.response.use(
 
 				if (config._retryCount < MAX_RETRIES) {
 					config._retryCount += 1;
+					console.warn(`Error de conexión. Reintentando (${config._retryCount}/${MAX_RETRIES})...`);
 
 					await new Promise(resolve =>
 						setTimeout(resolve, RETRY_DELAY * config._retryCount!)
