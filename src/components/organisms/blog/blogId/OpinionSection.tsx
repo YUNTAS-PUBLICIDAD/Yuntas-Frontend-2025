@@ -7,7 +7,7 @@ import OpinionCard from "@/components/molecules/blog/OpinionCard";
 import { getImg } from "@/utils/getImg";
 import { Blog } from "@/types/admin/blog";
 type Props = {
-  data: Blog;
+  data: BlogView;
 };
 
 const OpinionSection = ({ data }: Props) => {
