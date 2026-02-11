@@ -24,21 +24,21 @@ const SearchBar = ({ setBlog, value, onChange, onKeyDown }: SearchBarProps) => {
   }
 
   return (
-    <form 
+    <form
       className='flex gap-2 relative z-20 bg-white rounded-full w-full md:w-full'
       onSubmit={onSubmit}
     >
-      <InputSearch 
+      <InputSearch
         // 2. Conectamos las props para que el hook funcione
         value={value}
         onChange={onChange}
         onKeyDown={onKeyDown} // <--- Vital para navegar con flechas
         className='rounded-full'
         placeholder='Buscar Articulos...'
-        // Asegúrate que tu InputSearch soporte autocomplete="off"
+      // Asegúrate que tu InputSearch soporte autocomplete="off"
       />
 
-      <Button className='bg-blue-950' size='sm' type="submit">
+      <Button className='bg-blue-950' size='sm' type="submit" aria-label="Buscar artículos">
         <Icon className='bg-inherit'>
           <FaSearch className='text-white' />
         </Icon>

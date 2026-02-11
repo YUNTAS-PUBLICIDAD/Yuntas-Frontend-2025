@@ -22,22 +22,22 @@ const OpinionSection = ({ data }: Props) => {
     "paragraphs" in data && Array.isArray(data.paragraphs)
       ? data.paragraphs[1] ?? ""
       : "opinion" in data
-      ? data.opinion ?? ""
-      : "";
+        ? data.opinion ?? ""
+        : "";
 
   // 🔹 Imagen principal
   const imageUrl =
     "gallery" in data && data.gallery?.length > 2
       ? getImg(data.gallery[2]?.url)
       : "main_image" in data && data.main_image?.url
-      ? getImg(data.main_image.url)
-      : "";
+        ? getImg(data.main_image.url)
+        : "";
 
   if (!opinionText) return null;
 
   return (
     <section>
-      <Banner className="uppercase" size="small">
+      <Banner color="bg-[#18879B]" className="uppercase" size="small">
         <Text
           variant="banner"
           className="font-bold text-white px-4 md:px-20 mr-auto"
