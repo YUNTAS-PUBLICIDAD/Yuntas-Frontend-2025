@@ -7,7 +7,7 @@ type PaginationProps = {
   pageSize: number;
   items: any[];
   setProductosPaginados: (items: any[]) => void;
-  maxVisiblePages?: number;  
+  maxVisiblePages?: number;
 }
 
 const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 5 }: PaginationProps) => {
@@ -17,14 +17,14 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
     totalPages,
     hasNextPage,
     hasPrevPage,
-    visiblePages, 
+    visiblePages,
     handlePageNext,
     handlePagePrev,
     handleSelectPage
-  } = usePagination({ 
-    pageSize, 
-    items, 
-    maxVisiblePages 
+  } = usePagination({
+    pageSize,
+    items,
+    maxVisiblePages
   });
 
   useEffect(() => {
@@ -35,13 +35,13 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
 
   return (
     <div className='flex gap-3 items-center'>
-      <ItemPagination onClick={handlePagePrev} disabled={!hasPrevPage}>
-        <MdOutlineNavigateBefore className='text-3xl'/>
+      <ItemPagination onClick={handlePagePrev} disabled={!hasPrevPage} aria-label="Página anterior">
+        <MdOutlineNavigateBefore className='text-3xl' />
       </ItemPagination>
-      
+
       {visiblePages[0] > 1 && (
         <>
-          <ItemPagination onClick={() => handleSelectPage(1)}>
+          <ItemPagination onClick={() => handleSelectPage(1)} aria-label="Página 1">
             1
           </ItemPagination>
           {visiblePages[0] > 2 && <span className="px-2">...</span>}
@@ -53,23 +53,24 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
           key={num}
           onClick={() => handleSelectPage(num)}
           active={num === page}
+          aria-label={`Página ${num}`}
         >
           {String(num)}
         </ItemPagination>
       ))}
-      
+
       {visiblePages[visiblePages.length - 1] < totalPages && (
         <>
           {visiblePages[visiblePages.length - 1] < totalPages - 1 && (
             <span className="px-2">...</span>
           )}
-          <ItemPagination onClick={() => handleSelectPage(totalPages)}>
+          <ItemPagination onClick={() => handleSelectPage(totalPages)} aria-label={`Página ${totalPages}`}>
             {totalPages}
           </ItemPagination>
         </>
       )}
 
-      <ItemPagination onClick={handlePageNext} disabled={!hasNextPage}>
+      <ItemPagination onClick={handlePageNext} disabled={!hasNextPage} aria-label="Página siguiente">
         <MdOutlineNavigateNext className='text-3xl' />
       </ItemPagination>
     </div>

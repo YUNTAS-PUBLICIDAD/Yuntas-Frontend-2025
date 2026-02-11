@@ -6,12 +6,12 @@ const NegocioSection: React.FC = () => {
   return (
     <section className="w-full border-b-8 border-[#98D8DF]">
       {/* ENCABEZADO CELESTE */}
-      <div className="w-full bg-[#23C1DE] py-6 px-6 md:px-16 text-center">
+      <div className="w-full bg-[#18879B] py-6 px-6 md:px-16 text-center">
         <Text
-          variant="caption"
-          className="text-white font-bold text-2xl md:text-4xl"
+          variant="h2"
+          className="text-white font-bold"
         >
-          <span className="font-semibold">TU SOCIO PARA PERSONALIZAR</span>
+          TU SOCIO PARA PERSONALIZAR
           <br />
           TU NEGOCIO
         </Text>

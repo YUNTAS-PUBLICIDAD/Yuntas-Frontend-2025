@@ -26,13 +26,13 @@ const BlogCard = ({ img, nombre, descripcion, href }: BlogCardProps) => {
       {/* Contenido */}
       <div className='p-6 flex flex-col h-full'>
         <div className="flex-grow">
-          <Text variant='small' color="gray" className='font-bold uppercase tracking-wider mb-2 opacity-70'>{nombre}</Text>
-          <Text variant='subtitle' className='font-extrabold text-[#203565] line-clamp-2 leading-tight mb-3 group-hover:text-[#23C1DE] transition-colors'>
+          <Text variant='small' className='font-bold uppercase tracking-wider mb-2 text-gray-800'>{nombre}</Text>
+          <Text variant='subtitle' className='font-extrabold text-[#203565] line-clamp-2 leading-tight mb-3 group-hover:text-[#18879B] transition-colors'>
             {descripcion}
           </Text>
         </div>
 
-        <div className="flex items-center text-[#23C1DE] font-bold text-sm mt-4">
+        <div className="flex items-center text-[#18879B] font-bold text-sm mt-4">
           <span className="mr-2 uppercase tracking-tighter">Leer más</span>
           <svg
             className="w-4 h-4 transform transition-transform group-hover:translate-x-1"
