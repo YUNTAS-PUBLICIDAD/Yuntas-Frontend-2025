@@ -34,7 +34,7 @@ const BlogSection = ({ data }: Props) => {
 
   return (
     <section className='py-6 md:py-10 relative'>
-      <Banner className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-10 lg:px-20 md:flex-row md:items-center relative z-20'>
+      <Banner color="bg-[#18879B]" className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-10 lg:px-20 md:flex-row md:items-center relative z-20'>
         <Text variant='h2' color='white' className='font-bold max-w-xl'>
           Descubre más sobre nuestros Productos
         </Text>

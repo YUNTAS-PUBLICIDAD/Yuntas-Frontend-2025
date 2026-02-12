@@ -9,7 +9,7 @@ import { useLibroReclamaciones } from "@/hooks/useLibroReclamaciones";
 
 export default function ReclamosForm() {
     const { formData, handleInputChange, isLoading, handleSubmit } = useLibroReclamaciones();
-    
+
     return (
         <form className='flex flex-col gap-12 px-6 md:px-16 py-10 max-w-4xl mx-auto'>
 
@@ -20,7 +20,7 @@ export default function ReclamosForm() {
                     Datos de la persona que presenta el reclamo
                 </Text>
             </div>
-            <DatosBlock formData={formData} handleChange={handleInputChange}/>
+            <DatosBlock formData={formData} handleChange={handleInputChange} />
 
             {/*seccion donde se detalla el reclamo */}
             <div className='flex items-center gap-4'>
@@ -29,7 +29,7 @@ export default function ReclamosForm() {
                     Información de reclamo
                 </Text>
             </div>
-            <ReclamoBlock formData={formData} handleChange={handleInputChange}/>
+            <ReclamoBlock formData={formData} handleChange={handleInputChange} />
             <Button
                 size='md'
                 className='w-full md:w-[344px] rounded-3xl text-white mx-auto bg-[#23C1DE]'

@@ -1,14 +1,11 @@
 import React from "react";
 import Link from "next/link";
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
   size?: "sm" | "md" | "lg";
   href?: string;
-  onClick?: (e: React.FormEvent) => void;
   className?: string;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,15 +13,14 @@ const Button: React.FC<ButtonProps> = ({
   variant = "primary",
   size = "md",
   href,
-  onClick,
   className = "",
-  type = "button",
   disabled = false,
+  ...props
 }) => {
   const baseClasses = "font-bold rounded-2xl md:rounded-3xl transition-all duration-300 inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100";
 
   const variantClasses = {
-    primary: "bg-[#23C1DE] text-[#04061a] hover:bg-[#5BC5C7]",
+    primary: "bg-[#23C1DE] text-white hover:bg-[#5BC5C7]",
     secondary: "bg-white text-[#0B0B1F] hover:bg-gray-100",
     tertiary: "bg-[#203565] text-white hover:bg-[#162E4D]",
     outline: "border-2 border-white text-white hover:bg-white hover:text-[#0B0B1F]",
@@ -49,7 +45,7 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes} disabled={disabled}>
+    <button className={classes} disabled={disabled} {...props}>
       {children}
     </button>
   );

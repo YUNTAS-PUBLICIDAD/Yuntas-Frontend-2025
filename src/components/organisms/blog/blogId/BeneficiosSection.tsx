@@ -7,21 +7,23 @@ import InfoCard from "@/components/molecules/InfoCard";
 import { BASE_URL } from "@/config";
 import { getImg } from "@/utils/getImg";
 type Props = {
-  data: Blog;
+  data: BlogView;
 };
 
 const BeneficiosSection = ({ data }: Props) => {
-  
+  const metaDescription = "meta_description" in data ? data.meta_description : "";
+  const gallery = "gallery" in data ? data.gallery : [];
+
   return (
     <section className="flex flex-col gap-20 px-5 pb-10">
       <Text variant="subtitle" className="text-center font-medium">
-        {data.meta_description}
+        {metaDescription}
       </Text>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <Img
-          src={getImg(data.gallery?.[1]?.url)}
-          alt={data.gallery?.[2]?.alt || ""}
+          src={getImg(gallery?.[1]?.url)}
+          alt={gallery?.[2]?.alt || ""}
           classname=""
         />
 
@@ -30,7 +32,7 @@ const BeneficiosSection = ({ data }: Props) => {
             Beneficios Clave
           </Text>
 
-          {data.benefits.map((e, i) => (
+          {data.benefits && data.benefits.map((e, i) => (
             <InfoCard key={i} text={e} />
           ))}
         </div>
