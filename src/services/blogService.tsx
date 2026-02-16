@@ -38,8 +38,8 @@ export async function createBlogService(formData: FormData): Promise<BlogActionR
         const token = getToken();
         if (!token) return { success: false, message: "No autenticado" };
 
-        const response = await api.post(API_ENDPOINTS.BLOG.CREATE, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+        const response = await api.post(API_ENDPOINTS.ADMIN.BLOG.CREATE, formData, {
+            headers: { "Content-Type": "multipart/form-data" , Authorization: `Bearer ${token}` },
         });
 
         return {
@@ -57,8 +57,8 @@ export async function updateBlogService(id: number | string, formData: FormData)
         const token = getToken();
         if (!token) return { success: false, message: "No autenticado" };
         formData.append("_method", "PUT");
-        const response = await api.post(API_ENDPOINTS.BLOG.UPDATE(Number(id)), formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+        const response = await api.post(API_ENDPOINTS.ADMIN.BLOG.UPDATE(Number(id)), formData, {
+            headers: { "Content-Type": "multipart/form-data" , Authorization: `Bearer ${token}` },
         });
         return {
             success: true,
@@ -75,7 +75,9 @@ export async function deleteBlogService(id: number | string): Promise<BlogAction
         const token = getToken();
         if (!token) return { success: false, message: "No autenticado" };
 
-        await api.delete(API_ENDPOINTS.BLOG.DELETE(Number(id)));
+        await api.delete(API_ENDPOINTS.ADMIN.BLOG.DELETE(Number(id)), {
+            headers: { Authorization: `Bearer ${token}` },
+        });
 
         return { success: true, message: "Blog eliminado exitosamente" };
     } catch (error: any) {

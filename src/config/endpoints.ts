@@ -16,9 +16,6 @@ export const API_ENDPOINTS = {
   BLOG: {
     GET_ALL: '/blogs',
     GET_ONE: (slug: string) => `/blogs/${slug}`,
-    CREATE: '/blogs',
-    UPDATE: (id: number) => `/blogs/${id}`,
-    DELETE: (id: number) => `/blogs/${id}`,
   },
 
   // FORMULARIOS PÚBLICOS
@@ -43,6 +40,11 @@ export const API_ENDPOINTS = {
       CREATE: '/admin/users',
       UPDATE: (id: number) => `/admin/users/${id}`,
       DELETE: (id: number) => `/admin/users/${id}`,
+    },
+    BLOG: {
+      CREATE: '/admin/blogs',
+      UPDATE: (id: number) => `/admin/blogs/${id}`,
+      DELETE: (id: number) => `/admin/blogs/${id}`,
     },
     PRODUCTS: {
       CREATE: '/admin/productos',
