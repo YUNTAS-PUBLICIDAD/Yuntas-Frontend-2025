@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useMemo, useState } from "react";
@@ -7,9 +6,7 @@ import { useBlogs } from "@/hooks/useBlog";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-
 import PaginationServer from "@/components/molecules/PaginationServer";
-
 
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
 import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
@@ -33,10 +30,25 @@ const columns = [
       <BlogImageCarousel item={row.gallery} />
     )
   },
-  { key: "created_at", label: "FECHA", render: (_: unknown, row: Blog) => new Date(row.created_at).toLocaleDateString() },
+  {
+    key: "created_at",
+    label: "FECHA",
+    render: (_: unknown, row: Blog) =>
+      new Date(row.created_at).toLocaleDateString(),
+  },
 ];
+
 export default function Blogspage() {
-  const { blogs, error, meta, links, isLoading, getBlogs, goToNextPage, goToPrevPage, } = useBlogs();
+  const {
+    blogs,
+    error,
+    meta,
+    links,
+    isLoading,
+    getBlogs,
+    goToNextPage,
+    goToPrevPage,
+  } = useBlogs();
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -46,21 +58,18 @@ export default function Blogspage() {
   const router = useRouter();
 
   useEffect(() => {
-    getBlogs(10); // carga inicial
+    getBlogs(10);
   }, [getBlogs]);
 
+  const exportOptions = useMemo(
+    () => [
+      { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
+      { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
+      { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
+    ],
+    [blogs]
+  );
 
-  const exportOptions = useMemo(() => [
-    { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
-    { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
-    { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
-  ], [blogs]);
-
-  const exportButtonsDesktop = useMemo(() => [
-    { label: "Exportar CSV", onClick: () => exportCSV(blogs) },
-    { label: "Exportar Excel", onClick: () => exportExcel(blogs) },
-    { label: "Exportar PDF", onClick: () => exportToPDF(blogs) },
-  ], [blogs]);
   const handleEdit = (blog: Blog) => {
     setBlogSelected(blog);
     setOpenUpdateModal(true);
@@ -72,7 +81,7 @@ export default function Blogspage() {
     setOpenDeleteModal(true);
     router.refresh();
   };
-  console.log(blogs)
+
   return (
     <div>
       {blogSelected && (
@@ -99,27 +108,30 @@ export default function Blogspage() {
         onSuccess={() => getBlogs(10)}
       />
 
-      <div className="flex flex-row flex-wrap gap-2 mb-4 items-center">
-        {/* Botón Publicar siempre visible */}
-        <div className="w-auto">
-          <ActionButtonGroup buttons={[{ label: "Publicar", onClick: () => setOpenAddModal(true), className: "w-auto md:w-[151px]" }]} />
+      {/* BOTONES */}
+      <div className="flex flex-wrap gap-3 mb-4 max-w-5xl mx-auto">
+        <div className="flex-1 min-w-[120px]">
+          <ActionButtonGroup
+            buttons={[
+              {
+                label: "Publicar",
+                onClick: () => setOpenAddModal(true),
+                className: "w-full h-[40px]",
+              },
+            ]}
+          />
         </div>
 
-        {/* Desktop: Botones de exportación separados */}
-        <div className="hidden md:block">
-          <ActionButtonGroup buttons={exportButtonsDesktop} />
-        </div>
-
-        {/* Móvil: Dropdown de exportación */}
-        <div className="md:hidden w-auto">
-          <ExportDropdown options={exportOptions} className="w-auto" />
+        <div className="flex-1 min-w-[120px]">
+          <ExportDropdown
+            label="Exportar"
+            options={exportOptions}
+            className="w-full h-[40px]"
+          />
         </div>
       </div>
-      {error && (
-        <div>
-          {error}
-        </div>
-      )}
+
+      {error && <div>{error}</div>}
 
       <AdminTable
         minRows={10}

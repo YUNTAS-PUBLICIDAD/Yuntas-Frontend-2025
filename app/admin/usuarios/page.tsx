@@ -43,7 +43,7 @@ export default function UsuariosPage() {
         } else {
             showToast.error(result.message || "Error al crear el usuario");
         }
-    }
+    };
 
     const handleEditClick = (usuario: User) => {
         setSelectedUser(usuario);
@@ -61,11 +61,12 @@ export default function UsuariosPage() {
         } else {
             showToast.error(result.message || "Error al actualizar el usuario");
         }
-    }
+    };
 
     const handleDeleteUsuario = async (usuario: User) => {
         const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este usuario?" });
         if (!confirmDelete) return;
+
         const result = await deleteUser(usuario.id!);
         if (result.success) {
             await getUsers();
@@ -86,44 +87,52 @@ export default function UsuariosPage() {
         { label: "Exportar a PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download") },
     ];
 
-    const exportButtonsDesktop = [
-        { label: "EXPORTAR A CSV", onClick: () => exportCSV(users, "usuarios") },
-        { label: "EXPORTAR A EXCEL", onClick: () => exportExcel(users, "usuarios") },
-        { label: "EXPORTAR A PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download") },
-    ];
-
     if (isLoading && users.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando usuarios...</div>;
     }
 
     return (
         <div className="p-2 md:p-4">
-            {/* Botones de Imprimir y Exportar */}
-            {/* Botones de Imprimir y Exportar */}
-            <div className="flex flex-row flex-wrap gap-2 mb-4 no-print items-center">
 
-                {/* Desktop: Botones separados */}
-                <div className="hidden md:block">
-                    <ActionButtonGroup buttons={exportButtonsDesktop} />
+            {/* BOTONES */}
+            <div className="flex flex-wrap gap-3 mb-4 no-print max-w-5xl mx-auto">
+
+                {/* EXPORTAR */}
+                <div className="flex-1 min-w-[120px]">
+                    <ExportDropdown
+                        className="w-full h-[40px]"
+                        options={exportOptions}
+                    />
                 </div>
 
-                {/* Móvil: Dropdown */}
-                <div className="md:hidden flex-auto">
-                    <ExportDropdown options={exportOptions} className="w-full" />
+                {/* IMPRIMIR */}
+                <div className="flex-1 min-w-[120px]">
+                    <ActionButtonGroup
+                        buttons={[
+                            {
+                                label: "IMPRIMIR",
+                                onClick: () =>
+                                    exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
+                                variant: "primary",
+                                className: "w-full h-[40px]",
+                            },
+                        ]}
+                    />
                 </div>
 
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "IMPRIMIR",
-                    onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
-                    variant: "primary",
-                    className: "w-full"
-                }]} />
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "AGREGAR USUARIO",
-                    onClick: () => setIsModalOpen(true),
-                    variant: "tertiary",
-                    className: "w-full"
-                }]} />
+                {/* AGREGAR */}
+                <div className="flex-1 min-w-[120px]">
+                    <ActionButtonGroup
+                        buttons={[
+                            {
+                                label: "AGREGAR USUARIO",
+                                onClick: () => setIsModalOpen(true),
+                                variant: "tertiary",
+                                className: "w-full h-[40px]",
+                            },
+                        ]}
+                    />
+                </div>
             </div>
 
             {error && (
@@ -160,6 +169,7 @@ export default function UsuariosPage() {
                     initialData={selectedUser}
                 />
             </Modal>
+
             <ConfirmDialog />
         </div>
     );
