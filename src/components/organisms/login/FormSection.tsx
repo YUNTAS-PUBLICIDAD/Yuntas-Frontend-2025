@@ -32,7 +32,7 @@ export default function FormSection() {
                 <Logo src="/logo.svg" size="xl" alt="Yuntas Publicidad" />
             </div>
             
-            <Text variant='h2' className='font-bold text-white'>
+            <Text variant='h2' className='font-bold text-white drop-shadow-[0_0_2px_rgba(0,0,0,0.40)]'>
                 Bienvenido
             </Text>
 
