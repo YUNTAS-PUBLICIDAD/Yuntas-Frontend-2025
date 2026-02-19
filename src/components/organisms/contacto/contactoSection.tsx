@@ -1,5 +1,9 @@
+"use client";
+
 import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
+import { motion } from "framer-motion";
+
 const ContactoSection = () => {
   return (
     <section
@@ -7,16 +11,33 @@ const ContactoSection = () => {
         relative w-full h-[60vh] md:h-[80vh] 
         flex items-center justify-start 
         overflow-hidden 
-        bg-cover bg-center bg-no-repeat 
         border-b-[12px] border-[#98D8DF]
       "
-      style={{ backgroundImage: `url(${imagenes.contacto.hero.src})` }}
       aria-label="Sección Contacto"
     >
-      {imagenes.contacto.hero.alt && <img src={imagenes.contacto.hero.src} alt={imagenes.contacto.hero.alt} title={imagenes.contacto.hero.title} className="sr-only" aria-hidden="false" />}
-      {/* Degradado Lineal */}
+
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${imagenes.contacto.hero.src})` }}
+        initial={{ scale: 1.2 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 2.5, ease: "easeOut" }}
+      />
+
+      {/* Imagen SEO */}
+      {imagenes.contacto.hero.alt && (
+        <img 
+          src={imagenes.contacto.hero.src} 
+          alt={imagenes.contacto.hero.alt} 
+          title={imagenes.contacto.hero.title} 
+          className="sr-only" 
+          aria-hidden="false" 
+        />
+      )}
+
+
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 z-10"
         style={{
           background:
             "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
@@ -32,7 +53,7 @@ const ContactoSection = () => {
           gap-6 md:gap-12
         "
         >
-          {/* Texto principal */}
+         {/* Texto principal */}
           <div
             className="
             flex flex-col w-full 
@@ -41,7 +62,6 @@ const ContactoSection = () => {
             text-center
           "
           >
-            {/* Ajuste responsive del título - agregado sm:text-4xl lg:text-7xl para mejor proporción en diferentes pantallas */}
             <Heading
               level="h1"
               size="2xl"

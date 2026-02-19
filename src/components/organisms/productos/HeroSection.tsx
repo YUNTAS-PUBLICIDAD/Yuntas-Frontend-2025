@@ -54,16 +54,13 @@ const HeroSection = () => {
         "
         >
        
-          <motion.div
+          <div
             className="
             flex flex-col w-full 
             justify-center 
             items-center
             text-center
           "
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             
             <Heading
@@ -77,7 +74,7 @@ const HeroSection = () => {
             >
               PRODUCTOS
             </Heading>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
