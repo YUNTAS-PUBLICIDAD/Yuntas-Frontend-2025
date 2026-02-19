@@ -1,19 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useBlogs } from "@/hooks/useBlog";
 import AdminTable from "@/components/organisms/admin/AdminTable";
-
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-import PaginationServer from "@/components/molecules/PaginationServer";
-
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
-import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
-import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
-import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
-
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
@@ -22,6 +14,7 @@ import { useConfirm } from "@/hooks/useConfirm";
 import { showToast } from "@/utils/showToast";
 import Pagination from "@/components/molecules/Pagination";
 import Modal from "@/components/atoms/Modal";
+import BlogForm from "@/components/molecules/blog/BlogForm";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -49,16 +42,6 @@ export default function Blogspage() {
     const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
     const { confirm, ConfirmDialog } = useConfirm();
-
-
-    /// -------------------------------------------------------------- ///
-    const [openAddModal, setOpenAddModal] = useState(false);
-    const [openUpdateModal, setOpenUpdateModal] = useState(false);
-    const [openDeleteModal, setOpenDeleteModal] = useState(false);
-    const [blogSelected, setBlogSelected] = useState<Blog | null>(null);
-
-    const router = useRouter();
-    /// -------------------------------------------------------------- ///
 
     useEffect(() => {
         getBlogs(200);
