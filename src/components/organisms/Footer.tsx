@@ -11,7 +11,7 @@ export default function Footer() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-start justify-items-center md:justify-items-start">
 
-          <div className="flex flex-col items-center md:items-start w-full gap-8">
+          <div className="flex flex-col items-center w-full h-full gap-8">
             <LogoBlock />
             <div className="w-full h-[2px] bg-[#6DE1E3] md:hidden"></div>
             <div className="md:hidden">
