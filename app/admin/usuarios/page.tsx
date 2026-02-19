@@ -88,7 +88,7 @@ export default function UsuariosPage() {
     ];
 
     if (isLoading && users.length === 0) {
-        return <div className="p-10 text-center animate-pulse">Cargando usuarios...</div>;
+        return <div className="p-10 text-center animate-pulse text-black dark:text-white">Cargando usuarios...</div>;
     }
 
     return (
