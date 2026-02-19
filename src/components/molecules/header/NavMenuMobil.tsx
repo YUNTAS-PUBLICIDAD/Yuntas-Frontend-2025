@@ -76,6 +76,14 @@ export default function NavMenuMobil({
           >
             <span className="font-bold">INICIO</span>
           </MenuItem>
+          
+          <MenuItem
+            href="/nosotros"
+            active={pathname === "/nosotros"}
+            color="text-[#04061a] dark:text-white"
+          >
+            <span className="font-bold">NOSOTROS</span>
+          </MenuItem>
 
           <MenuItem
             href="/productos"
@@ -85,13 +93,6 @@ export default function NavMenuMobil({
             <span className="font-bold">PRODUCTOS</span>
           </MenuItem>
 
-          <MenuItem
-            href="/nosotros"
-            active={pathname === "/nosotros"}
-            color="text-[#04061a] dark:text-white"
-          >
-            <span className="font-bold">NOSOTROS</span>
-          </MenuItem>
 
           <MenuItem
             href="/blog"
