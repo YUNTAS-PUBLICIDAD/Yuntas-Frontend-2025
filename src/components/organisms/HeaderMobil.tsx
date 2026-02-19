@@ -10,6 +10,7 @@ import SwitchMode from '@/components/molecules/admin/SwitchMode';
 import useAuth from '@/hooks/useAuth';
 import { getToken } from '@/utils/token';
 import { getRole } from '@/utils/role';
+
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,6 +21,7 @@ const HeaderMobil = () => {
 
   useEffect(() => {
     const checkAuth = () => {
+      // Verifica si hay token y rol para determinar si es admin
       setIsAdmin(Boolean(getToken() && getRole()));
     };
 
@@ -111,21 +113,25 @@ const HeaderMobil = () => {
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-          {/* Dark Mode Switch */}
-          <div className="flex items-center justify-between">
-            <p className="uppercase tracking-wider text-sm font-bold">
-              Dark Mode
-            </p>
-            <SwitchMode
-              showIcons={false}
-              lightBgColor="#00031E"
-              darkBgColor="#23C1DE"
-              lightHandleColor="#ffffff"
-              darkHandleColor="#00031E"
-            />
-          </div>
+      {/* Dark Mode Switch */}
+          {isAdmin && (
+            <>
+              <div className="flex items-center justify-between">
+                <p className="uppercase tracking-wider text-sm font-bold">
+                  Dark Mode
+                </p>
+                <SwitchMode
+                  showIcons={false}
+                  lightBgColor="#00031E"
+                  darkBgColor="#23C1DE"
+                  lightHandleColor="#ffffff"
+                  darkHandleColor="#00031E"
+                />
+              </div>
 
-          <hr className="my-6 border-[#04061a]/30 dark:border-white" />
+              <hr className="my-6 border-[#04061a]/30 dark:border-white" />
+            </>
+          )}
 
           {/* Contacto */}
           <div className="flex gap-3 justify-start">
@@ -139,7 +145,9 @@ const HeaderMobil = () => {
             <UserSection size="md" />
             <div>
               <p className="text-sm font-bold">BIENVENIDO</p>
-              <p className="text-xs opacity-60">Administrador</p>
+              <p className="text-xs opacity-60">
+                {isAdmin ? "Administrador" : "Cliente"}
+              </p>
             </div>
           </div>
 
