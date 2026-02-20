@@ -19,25 +19,25 @@ interface BlogFormProps {
 }
 
 const defaultFormData: BlogInput = {
-    name: "",
+    title: "",
     slug: "",
-    price: "",
     hero_title: "",
-    description: "",
-    status: "active",
+    cover_subtitle: "",
+    video_url: "",
 
     meta_title: "",
     meta_description: "",
-    keywords: [],
 
     main_image: null,
     main_image_title: "",
     main_image_alt: "",
     gallery: [],
 
-    categories: [],
-    specifications: [],
+    description: "",
+    testimonial: "",
     benefits: [],
+
+    product_id: "",
 };
 
 const GALLERY_SLOTS = [
@@ -48,8 +48,8 @@ const GALLERY_SLOTS = [
         desc: 'Formato horizontal panorámico.'
     },
     {
-        value: 'Specs',
-        label: 'Especificaciones',
+        value: 'Desc',
+        label: 'Descripción',
         size: '1000 x 1000 px',
         desc: 'Formato cuadrado o vertical (4:5).'
     },
@@ -60,8 +60,8 @@ const GALLERY_SLOTS = [
         desc: 'Formato cuadrado o vertical (4:5).'
     },
     {
-        value: 'Popups',
-        label: 'Popup',
+        value: 'Testimonial',
+        label: 'Testimonio',
         size: '800 x 800 px',
         desc: 'Formato cuadrado.'
     },
@@ -76,16 +76,14 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
     useEffect(() => {
         if (initialData) {
             setFormData({
-                name: initialData.name,
+                title: initialData.title,
                 slug: initialData.slug,
-                price: initialData.price,
                 hero_title: initialData.hero_title,
-                description: initialData.description,
-                status: initialData.status,
+                cover_subtitle: initialData.cover_subtitle,
+                video_url: initialData.video_url || "",
 
-                meta_title: initialData.meta_title || "",
-                meta_description: initialData.meta_description || "",
-                keywords: initialData.keywords || [],
+                meta_title: initialData.meta_title,
+                meta_description: initialData.meta_description,
 
                 main_image: initialData.main_image?.url || null,
                 main_image_title: initialData.main_image?.title || "",
@@ -98,23 +96,24 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     alt: img.alt || "",
                 })) || [],
 
-                categories: initialData.category_name ? [initialData.category_name] : [],
-                specifications: initialData.specifications?.length > 0 ? initialData.specifications : [""],
-                benefits: initialData.benefits?.length > 0 ? initialData.benefits : [""],
+                description: initialData.description,
+                testimonial: initialData.testimonial,
+                benefits: initialData.benefits.length > 0 ? initialData.benefits : [""],
+
+                product_id: initialData.product?.id ? String(initialData.product.id) : "",
             });
         }
     }, [initialData]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        if (name === "price" && (Number(value) < 0 || Number(value) > 100000)) return;
         if (name === "slug") {
             // permitir solo minusculas, numeros y guiones
             const regex = /^[a-z0-9-]*$/;
             if (!regex.test(value)) return;
         }
 
-        setFormData(prev => ({ ...prev, [name]: name === "price" ? Number(value) : value }));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
@@ -207,15 +206,14 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
             return;
         }
 
-        // beneficios y especificaciones obligatorios
-        const hasEmptySpecs = formData.specifications.some(spec => spec.trim() === "");
+        // beneficios obligatorios (3 max)
         const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
-        if (hasEmptySpecs) {
-            showToast.warning("Las especificaciones no pueden estar vacias");
-            return;
-        }
         if (hasEmptyBenefits) {
             showToast.warning("Los beneficios no pueden estar vacios");
+            return;
+        }
+        if (formData.benefits.length > 3) {
+            showToast.warning("Solo se permiten 3 beneficios");
             return;
         }
         onSubmit(formData);
@@ -224,56 +222,43 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
 
-            {/* Seccion datos para Dashboard */}
-            <FormSection title="Datos para Dashboard (Gestión Interna)">
+            {/* Informacion */}
+            <FormSection title="Información Principal">
                 <div className="flex gap-4 flex-col md:flex-row">
                     <InputAdmin
-                        label="Nombre del Producto"
-                        name="name"
-                        value={formData.name}
+                        label="Titulo del Blog"
+                        name="title"
+                        value={formData.title || ""}
                         onChange={handleInputChange}
-                        placeholder="Ej. Letreros Neón LED"
+                        placeholder="Ej. Letreros Neón LED: Guía Completa"
                         helperText="Máx. 150 caracteres (letras, números y espacios)."
                         maxLength={150}
                         required
                     />
 
                     <InputAdmin
-                        label="Sección/Categoría (Aparece en tabla)"
-                        name="category_name"
-                        value={formData.categories[0] || ""}
-                        onChange={(e) => {
-                            const { value } = e.target;
-                            setFormData(prev => ({
-                                ...prev,
-                                categories: value ? [value] : []
-                            }));
-                        }}
-                        placeholder="Ej: Muebles"
-                        helperText="Máx. 255 caracteres (letras, números y espacios)."
-                        maxLength={255}
+                        label="Subtitulo"
+                        name="cover_subtitle"
+                        value={formData.cover_subtitle || ""}
+                        onChange={handleInputChange}
+                        placeholder="Ej: Descubre cómo los letreros de neón LED pueden..."
+                        helperText="Máx. 150 caracteres (letras, números y espacios)."
+                        maxLength={150}
                         required
                     />
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
+                    {/** TODO: FALTA LISTA DE PRODUCTO ASOCIADO */}
+
                     <InputAdmin
                         label="Link/URL"
                         name="slug"
                         value={formData.slug || ""}
                         onChange={handleInputChange}
-                        placeholder="ej: letreros-neon-led"
+                        placeholder="ej: letreros-neon-led-guia-completa"
                         helperText="Solo palabras en minúscula separadas por guiones. Sin espacios ni tildes. Máx. 160 caracteres."
                         maxLength={160}
-                        required
-                    />
-                    <InputAdmin
-                        label="Precio (Aparece en tabla)"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        placeholder="Ej: 500.00"
-                        helperText="Coloca el precio en números (máx. 100 000)."
                         required
                     />
                 </div>
@@ -283,21 +268,42 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     name="hero_title"
                     value={formData.hero_title || ""}
                     onChange={handleInputChange}
-                    placeholder="Ej: Letreros Neón LED"
-                    helperText="Máx. 255 caracteres (letras, números y espacios)."
-                    maxLength={255}
+                    placeholder="Ej: Letreros Neón LED: Guía Completa"
+                    helperText="Máx. 150 caracteres (letras, números y espacios)."
+                    maxLength={150}
                     required
                 />
 
                 <TextareaAdmin
-                    label="Descripción (Aparece en 'Información' del producto)"
+                    label="Introducción del Blog"
                     name="description"
                     value={formData.description || ""}
                     onChange={handleInputChange}
-                    placeholder="Describe el producto, sus usos y características principales…"
-                    helperText="Descripción completa del producto."
+                    placeholder="Los pisos LED se han convertido en una herramienta ..."
+                    helperText="Desarrollo completo del blog."
                     rows={6}
                     required
+                />
+
+                <TextareaAdmin
+                    label="Testimonio (aparece al final del blog)"
+                    name="testimonial"
+                    value={formData.testimonial || ""}
+                    onChange={handleInputChange}
+                    placeholder="Ej: “Gracias a Yuntas, nuestro negocio ha ganado una visibilidad increíble...”"
+                    helperText="Desarrollo completo del testimonio."
+                    rows={6}
+                    required
+                />
+
+                <InputAdmin
+                    label="URL del Video (opcional, se muestra al final del blog)"
+                    name="video_url"
+                    value={formData.video_url || ""}
+                    onChange={handleInputChange}
+                    placeholder="Ej: https://www.youtube.com/watch?v=..."
+                    helperText="Máx. 150 caracteres (letras, números y espacios)."
+                    maxLength={150}
                 />
             </FormSection>
 
@@ -307,7 +313,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     name="meta_title"
                     value={formData.meta_title || ""}
                     onChange={handleInputChange}
-                    placeholder="Título para SEO del producto"
+                    placeholder="Título para SEO del blog"
                     helperText="Máx. 70 caracteres (letras, números y espacios)."
                     maxLength={70}
                 />
@@ -317,41 +323,20 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     name="meta_description"
                     value={formData.meta_description || ""}
                     onChange={handleInputChange}
-                    placeholder="Descripción breve del producto para SEO…"
+                    placeholder="Descripción breve del blog para SEO…"
                     helperText="Máx. 160 caracteres (letras, números y espacios)."
                     maxLength={160}
                     rows={2}
                 />
-
-                <InputListDinamica
-                    label="Keywords"
-                    items={formData.keywords}
-                    onChange={(keywords) => setFormData(prev => ({ ...prev, keywords }))}
-                    placeholder="ej: letreros para negocio"
-                    addButtonText="+ Agregar keyword"
-                    helperText="Palabras clave relevantes para que los buscadores encuentren el producto."
-                />
-            </FormSection>
-
-            {/* Seccion especificaciones */}
-            <FormSection title="Especificaciones (Checkmarks en el producto)">
-                <InputListDinamica
-                    label="Especificaciones"
-                    items={formData.specifications}
-                    onChange={(specifications) => setFormData(prev => ({ ...prev, specifications }))}
-                    placeholder="Ej: Materiales duraderos"
-                    addButtonText="+ Agregar especificación"
-                    required
-                />
             </FormSection>
 
             {/* Seccion beneficios */}
-            <FormSection title="Beneficios (Checkmarks en el producto)">
+            <FormSection title="Beneficios (máximo 3)">
                 <InputListDinamica
                     label="Beneficios"
                     items={formData.benefits}
                     onChange={(benefits) => setFormData(prev => ({ ...prev, benefits }))}
-                    placeholder="Ej: Iluminación con colores vibrantes"
+                    placeholder="Ej: Aumenta la visibilidad de tu negocio"
                     addButtonText="+ Agregar beneficio"
                     required
                 />
@@ -360,8 +345,8 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
             {/* Imagen Principal */}
             <FormSection title="Imagen Principal">
                 <ImageUpload
-                    label="Imagen Principal del Producto"
-                    description="Aparece en la lista de productos. Recomendado: 800 x 800 px (Cuadrado)."
+                    label="Imagen Principal del Blog"
+                    description="Aparece en la lista de blogs. Recomendado: 800 x 800 px (Cuadrado)."
                     titleValue={formData.main_image_title || ""}
                     altValue={formData.main_image_alt}
                     onTitleChange={(title) => setFormData(prev => ({ ...prev, main_image_title: title }))}
@@ -379,7 +364,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
             { /* Galeria */}
             <FormSection title="Galería de Imágenes por Sección">
                 <p className="text-gray-500 text-sm mb-4">
-                    Asigna una imagen a cada sección de la página del producto.
+                    Asigna una imagen a cada sección de la página del blog.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -444,7 +429,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                             <span>Guardando...</span>
                         </div>
                     ) : (
-                        initialData ? "Guardar Cambios" : "Añadir Producto"
+                        initialData ? "Guardar Cambios" : "Añadir Blog"
                     )}
                 </Button>
                 <Button
