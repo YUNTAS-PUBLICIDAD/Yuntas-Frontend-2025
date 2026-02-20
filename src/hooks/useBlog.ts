@@ -1,166 +1,110 @@
 'use client';
 
 import { useState, useCallback } from "react";
-import { Blog, BlogInput } from "@/types/admin/blog";
-import { PaginationMeta, PaginationLinks } from "@/types/admin/blog";
+import { Blog, BlogInput, BlogServiceResponse } from "@/types/admin/blog";
 import {
-  getBlogsService,
-  createBlogService,
-  updateBlogService,
-  deleteBlogService,
-  getBlogBySlugService
+	getBlogsService,
+	createBlogService,
+	updateBlogService,
+	deleteBlogService,
+	getBlogBySlugService
 } from "@/services/blogService";
-import { buildBlogFormData } from "@/utils/blogFormData";
-import { showToast } from "@/utils/showToast";
 
-export function useBlogs() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [blog, setBlog] = useState<Blog | null>(null);
-  const [meta, setMeta] = useState<PaginationMeta | null>(null);
-  const [links, setLinks] = useState<PaginationLinks | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPerPage, setCurrentPerPage] = useState(6);
+interface UseBlogsReturn {
+	blogs: Blog[];
+	blog: Blog | null;
+	isLoading: boolean;
+	error: string | null;
+	getBlogs: (perPage?: number) => Promise<void>;
+	getBlogBySlug: (slug: string) => Promise<void>;
+	createBlog: (producto: BlogInput) => Promise<BlogServiceResponse<Blog>>;
+	updateBlog: (id: number | string, Blog: BlogInput) => Promise<BlogServiceResponse<Blog>>;
+	deleteBlog: (id: number | string) => Promise<BlogServiceResponse>;
+	clearError: () => void;
+	clearBlog: () => void;
+}
 
-  const hasNextPage = Boolean(links?.next);
-  const hasPrevPage = Boolean(links?.prev);
+export function useBlogs(): UseBlogsReturn {
+	const [blogs, setBlogs] = useState<Blog[]>([]);
+	const [blog, setBlog] = useState<Blog | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-  // Cambio del valor por defecto de 1 a 10 para traer más blogs
-  const getBlogs = useCallback(async (perPage = 10) => {
-    setIsLoading(true);
-    setError(null);
-    setCurrentPerPage(perPage);
+	const clearError = () => setError(null);
+    const clearBlog = () => setBlog(null);
 
-    const result = await getBlogsService(perPage);
-    
-    if (result.success && result.data) {
-      setBlogs(result.data.data ?? []);
-      setMeta(result.meta ?? null);
-      setLinks(result.links ?? null);
-    } else {
-      setError(result.message ?? 'Error desconocido');
-    }
+	const getBlogs = useCallback(async (perPage = 10) => {
+		setIsLoading(true);
+		setError(null);
 
-    setIsLoading(false);
-  }, []);
+		const result = await getBlogsService(perPage);
 
-  const goToPage = useCallback(async (url: string) => {
-    setIsLoading(true);
-    setError(null);
+		if (result.success && result.data) {
+			setBlogs(result.data);
+		} else {
+			setError(result.message || 'Error desconocido');
+		}
 
-    const result = await getBlogsService(currentPerPage, url);
+		setIsLoading(false);
+	}, []);
 
-    if (result.success && result.data) {
-      setBlogs(result.data.data ?? []);
-      setMeta(result.meta ?? null);
-      setLinks(result.links ?? null);
-    } else {
-      setError(result.message ?? 'Error desconocido');
-    }
+	const getBlogBySlug =  useCallback(async (slug: string): Promise<void> => {
+		setIsLoading(true);
+		setError(null);
 
-    setIsLoading(false);
-  }, [currentPerPage]);
+		const result = await getBlogBySlugService(slug);
 
-  const goToNextPage = () => links?.next && goToPage(links.next);
-  const goToPrevPage = () => links?.prev && goToPage(links.prev);
+		if (result.success && result.data) {
+			setBlog(result.data);
+			setIsLoading(false);
+		} else {
+            setError(result.message || 'Error desconocido');
+            setIsLoading(false);
+        }
+	}, []);
 
-  // Conseguir blog por su slug
-  const getBlogBySlug = async (slug: string) => {
-     setIsLoading(true);
-     setError(null);
+	const createBlog =  useCallback(async (data: BlogInput): Promise<BlogServiceResponse<Blog>> => {
+		setIsLoading(true);
+		setError(null);
 
-      const result = await getBlogBySlugService(slug);
+		const result = await createBlogService(data);
 
-      if (result.success && result.data) {
-         setBlog(result.data ?? null);
-         setIsLoading(false);
-         return result.data;
-       }
-
-     setError(result.message ?? 'Error desconocido');
-     setIsLoading(false);
-     return null;
-   }
-
-  const createBlog = async (data: BlogInput) => {
-    // Verificar que hay 3 beneficios escritos
-    const beneficiosValidos = data.beneficios?.filter(b => b && b.trim() !== "") || [];
-
-    if (beneficiosValidos.length < 3) {
-      const msg = "⚠️ Por favor, completa los 3 beneficios obligatorios antes de guardar.";
-      showToast.warning(msg);
-      setError(msg); 
-      return false;
-    }
-
-    // Si pasa la validación, procedemos a guardar
-    setIsLoading(true);
-    setError(null);
-    console.log("📤 DATOS ORIGINALES:", data);
-  
-    const formData = buildBlogFormData(data);
-  
-    console.log("📦 FORMDATA CONSTRUIDO:");
+		setIsLoading(false);
+		return result;
+	}, []);
 
 
-    const result = await createBlogService(formData);
-    
-    console.log("📥 RESPUESTA:", result);
+	const updateBlog = useCallback(async (id: number | string, data: BlogInput): Promise<BlogServiceResponse<Blog>> => {
+		setIsLoading(true);
+		setError(null);
 
-    if (!result.success) setError(result.message ?? 'Error desconocido');
-    setIsLoading(false);
-    return result.success;
-  };
+		const result = await updateBlogService(id, data);
 
+		setIsLoading(false);
+		return result;
+	}, []);
 
-  const updateBlog = async (id: number, data: BlogInput) => {
-    
-    const beneficiosValidos = data.beneficios?.filter(b => b && b.trim() !== "") || [];
+	const deleteBlog = useCallback(async (id: number | string): Promise<BlogServiceResponse> => {
+		setIsLoading(true);
+		setError(null);
 
-    if (beneficiosValidos.length < 3) {
-      const msg = "⚠️  Debes mantener los 3 beneficios obligatorios.";
-      showToast.warning(msg);
-      setError(msg);
-      return false; 
-    }
+		const result = await deleteBlogService(id);
 
-    
-    setIsLoading(true);
-    setError(null);
+		setIsLoading(false);
+		return result;
+	}, []);
 
-    const result = await updateBlogService(id, buildBlogFormData(data));
-
-    if (!result.success) setError(result.message ?? 'Error desconocido');
-    setIsLoading(false);
-    return result.success;
-  };
-
-  const deleteBlog = async (id: number) => {
-    setIsLoading(true);
-    setError(null);
-
-    const result = await deleteBlogService(id);
-
-    if (!result.success) setError(result.message ?? 'Error desconocido');
-    setIsLoading(false);
-    return result.success;
-  };
-
-  return {
-    blogs,
-    blog,
-    meta,
-    links,
-    isLoading,
-    error,
-    hasNextPage,
-    hasPrevPage,
-    getBlogs,
-    goToNextPage,
-    goToPrevPage,
-    getBlogBySlug,
-    createBlog,
-    updateBlog,
-    deleteBlog
-  };
+	return {
+		blogs,
+		blog,
+		isLoading,
+		error,
+		getBlogs,
+		getBlogBySlug,
+		createBlog,
+		updateBlog,
+		deleteBlog,
+		clearError,
+		clearBlog,
+	};
 }
