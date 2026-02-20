@@ -4,9 +4,10 @@ import * as XLSX from "xlsx";
 // Asegúrate de que las rutas a tus types sean correctas
 import { Blog, BlogExport } from "@/types/admin/blog";
 import { Producto, ProductoExport } from "@/types/admin/producto";
+import { User, UserExport } from "@/types/admin/user";
 
 export const exportCSV = (
-  data: Blog[] | Producto[],
+  data: Blog[] | Producto[] | User[],
   fileName: string = "reporte"
 ) => {
   if (!data || data.length === 0) {
@@ -14,13 +15,16 @@ export const exportCSV = (
     return;
   }
 
-  // 1. Type Guard: Detectamos si es Blog verificando si tiene la propiedad 'title'
-  // Es más seguro que verificar arrays opcionales como 'galeria'
+  // 1. Type Guards: Detectamos el tipo de dato
   const isBlog = (item: any): item is Blog => {
     return (item as Blog).title !== undefined;
   };
 
-  let exportData: BlogExport[] | ProductoExport[] = [];
+  const isUser = (item: any): item is User => {
+    return (item as User).email !== undefined && (item as User).role_id !== undefined;
+  };
+
+  let exportData: BlogExport[] | ProductoExport[] | UserExport[] = [];
 
   // 2. Normalización de datos (Mapeo correcto de propiedades)
   if (isBlog(data[0])) {
@@ -34,6 +38,17 @@ export const exportCSV = (
         "Cant. Párrafos": blog.paragraphs?.length || 0,
         "Cant. Imágenes": blog.gallery?.length || 0,// Nota: es 'gallery', no 'galeria'
     }));
+  } else if (isUser(data[0])) {
+    // Lógica para Usuarios
+    exportData = (data as User[]).map(
+      (user): UserExport => ({
+        ID: user.id,
+        Nombre: user.name,
+        Email: user.email,
+        Rol: user.role?.name || "Sin rol",
+        "Fecha de Creación": user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A",
+      })
+    );
   } else {
     // Lógica para Productos
     exportData = (data as Producto[]).map(
