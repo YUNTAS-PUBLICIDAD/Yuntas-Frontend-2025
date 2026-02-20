@@ -9,7 +9,7 @@ import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
-import { Blog } from "@/types/admin/blog";
+import { Blog, BlogInput } from "@/types/admin/blog";
 import { useConfirm } from "@/hooks/useConfirm";
 import { showToast } from "@/utils/showToast";
 import Pagination from "@/components/molecules/Pagination";
@@ -18,8 +18,8 @@ import BlogForm from "@/components/molecules/blog/BlogForm";
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "product", label: "PRODUCTO", render: (_: unknown, row: Blog) => row.product?.name || "null" },
-    { key: "meta_title", label: "SUBTÍTULO" },
+    { key: "product", label: "PRODUCTO" },
+    { key: "title", label: "TITULO" },
     {
         key: "gallery",
         label: "IMAGEN",
@@ -27,12 +27,7 @@ const columns = [
             <BlogImageCarousel item={row.gallery} />
         )
     },
-    {
-        key: "created_at",
-        label: "FECHA",
-        render: (_: unknown, row: Blog) =>
-            new Date(row.created_at).toLocaleDateString(),
-    },
+    { key: "created_at", label: "FECHA" },
 ];
 
 export default function Blogspage() {
@@ -109,19 +104,15 @@ export default function Blogspage() {
     return (
         <div>
             {/* BOTONES */}
-            <div className="flex flex-wrap gap-3 mb-4 max-w-5xl mx-auto">
-                <div className="flex-1 min-w-[120px]">
-                    <ActionButtonGroup
-                        buttons={[
-                            {
-                                label: "Publicar",
-                                onClick: () => setOpenAddModal(true),
-                                className: "w-full h-[40px]",
-                            },
-                        ]}
-                    />
-                </div>
-
+            <div className="flex flex-row flex-wrap gap-2 mb-4">
+                <ActionButtonGroup className="flex-auto"
+                    buttons={[{
+                        label: "Añadir Blog",
+                        onClick: () => setIsAddEditModalOpen(true),
+                        className: "w-full",
+                    }]} />
+            </div>
+            <div className="flex flex-wrap gap-3 mb-4 no-print max-w-5xl mx-auto">
                 <div className="flex-1 min-w-[120px]">
                     <ExportDropdown
                         label="Exportar"
