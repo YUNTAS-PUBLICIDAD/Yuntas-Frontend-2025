@@ -4,7 +4,6 @@ import {
   FaFacebook,
   FaTiktok,
   FaYoutube,
-  FaLinkedin,
   FaWhatsapp,
 } from "react-icons/fa";
 import Text from "@/components/atoms/Text";
@@ -14,11 +13,21 @@ type ContactoMobilProps = {
 };
 
 const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
+  // URLs centralizadas
+  const links = {
+    instagram: "https://www.instagram.com/yuntaspublicidad/",
+    facebook: "https://www.facebook.com/YuntasProducciones/",
+    tiktok: "https://www.tiktok.com/@yuntaspublicidad",
+    youtube: "https://www.youtube.com/@yuntaspublicidad",
+    whatsapp: "https://wa.me/51912849782",
+  };
+
   if (compact) {
     return (
       <div className="flex items-center gap-0 justify-start">
         <Icon
-          href="https://www.instagram.com/yuntaspublicidad/"
+          href={links.instagram}
+          target="_blank"
           label="Instagram"
           size="lg"
           bgColor="bg-transparent"
@@ -28,7 +37,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
         </Icon>
 
         <Icon
-          href="https://www.facebook.com/kp.yuntas.1/"
+          href={links.facebook}
+          target="_blank"
           label="Facebook"
           size="lg"
           bgColor="bg-transparent"
@@ -38,7 +48,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
         </Icon>
 
         <Icon
-          href="https://www.tiktok.com/@yuntaspublicidad"
+          href={links.tiktok}
+          target="_blank"
           label="TikTok"
           size="lg"
           bgColor="bg-transparent"
@@ -48,7 +59,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
         </Icon>
 
         <Icon
-          href="https://www.youtube.com/@yuntaspublicidad"
+          href={links.youtube}
+          target="_blank"
           label="YouTube"
           size="lg"
           bgColor="bg-transparent"
@@ -58,7 +70,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
         </Icon>
 
         <Icon
-          href="https://wa.me/51912849782"
+          href={links.whatsapp}
+          target="_blank"
           label="WhatsApp"
           size="lg"
           bgColor="bg-transparent"
@@ -74,7 +87,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
     <div className="flex flex-wrap gap-x-5">
       <div className="flex items-center">
         <Icon
-          href=""
+          href={links.instagram}
+          target="_blank"
           label="Instagram"
           size="lg"
           bgColor="bg-transparent"
@@ -87,7 +101,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
 
       <div className="flex items-center">
         <Icon
-          href=""
+          href={links.whatsapp}
+          target="_blank"
           label="WhatsApp"
           size="lg"
           bgColor="bg-transparent"
@@ -100,7 +115,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
 
       <div className="flex items-center">
         <Icon
-          href=""
+          href={links.facebook}
+          target="_blank"
           label="Facebook"
           size="lg"
           bgColor="bg-transparent"
@@ -113,7 +129,8 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
 
       <div className="flex items-center">
         <Icon
-          href=""
+          href={links.tiktok}
+          target="_blank"
           label="TikTok"
           size="lg"
           bgColor="bg-transparent"
@@ -126,26 +143,14 @@ const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
 
       <div className="flex items-center">
         <Icon
-          href=""
+          href={links.youtube}
+          target="_blank"
           label="YouTube"
           size="lg"
           bgColor="bg-transparent"
           className="p-0 w-auto h-auto min-w-0"
         >
           <FaYoutube className="text-2xl" />
-        </Icon>
-        <Text variant="body" color="white">Yuntas Producciones</Text>
-      </div>
-
-      <div className="flex items-center">
-        <Icon
-          href=""
-          label="LinkedIn"
-          size="lg"
-          bgColor="bg-transparent"
-          className="p-0 w-auto h-auto min-w-0"
-        >
-          <FaLinkedin className="text-2xl" />
         </Icon>
         <Text variant="body" color="white">Yuntas Producciones</Text>
       </div>
