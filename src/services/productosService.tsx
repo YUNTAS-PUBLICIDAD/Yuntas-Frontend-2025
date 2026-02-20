@@ -40,8 +40,6 @@ export async function getProductosService(perPage: number = 10, url?: string): P
         return {
             success: true,
             data: formattedProducts,
-            meta: response.data.data.meta,
-            links: response.data.data.links
         };
     } catch (error: any) {
         const is403 = error.response?.status === 403;
