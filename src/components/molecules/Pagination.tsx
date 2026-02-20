@@ -8,9 +8,10 @@ type PaginationProps = {
   items: any[];
   setProductosPaginados: (items: any[]) => void;
   maxVisiblePages?: number;
+  onPageChange?: () => void;
 }
 
-const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 5 }: PaginationProps) => {
+const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 5, onPageChange }: PaginationProps) => {
   const {
     page,
     currentItems,
@@ -31,17 +32,32 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
     setProductosPaginados(currentItems);
   }, [currentItems, setProductosPaginados]);
 
+  const onClickPrev = () => {
+    handlePagePrev();
+    onPageChange?.();
+  };
+
+  const onClickNext = () => {
+    handlePageNext();
+    onPageChange?.();
+  };
+
+  const onClickPage = (num: number) => {
+    handleSelectPage(num);
+    onPageChange?.();
+  };
+
   if (totalPages <= 1) return null;
 
   return (
     <div className='flex gap-3 items-center'>
-      <ItemPagination onClick={handlePagePrev} disabled={!hasPrevPage} aria-label="Página anterior">
+      <ItemPagination onClick={onClickPrev} disabled={!hasPrevPage} aria-label="Página anterior">
         <MdOutlineNavigateBefore className='text-3xl' />
       </ItemPagination>
 
       {visiblePages[0] > 1 && (
         <>
-          <ItemPagination onClick={() => handleSelectPage(1)} aria-label="Página 1">
+          <ItemPagination onClick={() => onClickPage(1)} aria-label="Página 1">
             1
           </ItemPagination>
           {visiblePages[0] > 2 && <span className="px-2">...</span>}
@@ -51,7 +67,7 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
       {visiblePages.map((num) => (
         <ItemPagination
           key={num}
-          onClick={() => handleSelectPage(num)}
+          onClick={() => onClickPage(num)}
           active={num === page}
           aria-label={`Página ${num}`}
         >
@@ -64,13 +80,13 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
           {visiblePages[visiblePages.length - 1] < totalPages - 1 && (
             <span className="px-2">...</span>
           )}
-          <ItemPagination onClick={() => handleSelectPage(totalPages)} aria-label={`Página ${totalPages}`}>
+          <ItemPagination onClick={() => onClickPage(totalPages)} aria-label={`Página ${totalPages}`}>
             {totalPages}
           </ItemPagination>
         </>
       )}
 
-      <ItemPagination onClick={handlePageNext} disabled={!hasNextPage} aria-label="Página siguiente">
+      <ItemPagination onClick={onClickNext} disabled={!hasNextPage} aria-label="Página siguiente">
         <MdOutlineNavigateNext className='text-3xl' />
       </ItemPagination>
     </div>
