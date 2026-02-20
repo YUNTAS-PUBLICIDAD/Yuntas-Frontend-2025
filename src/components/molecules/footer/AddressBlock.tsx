@@ -1,19 +1,32 @@
 const AddressBlock = () => (
-  <div className="flex flex-col gap-6 text-center md:text-left items-center md:items-start">
+  <div className="flex flex-col gap-8 text-center md:text-left items-center md:items-start">
+    
     {/* Sección Dirección */}
     <div className="flex flex-col gap-2">
-        <span className="font-bold text-[#6DE1E3] text-xl">Dirección</span>
-        <span className="text-lg">Urb. Alameda La Rivera Mz F Lt 30</span>
+      <h3 className="font-semibold text-[#6DE1E3] text-xl tracking-wide">
+        Dirección
+      </h3>
+      <p className="text-base md:text-lg text-gray-200">
+        Urb. Alameda La Rivera Mz F Lt 30
+      </p>
     </div>
 
     {/* Sección Horario */}
     <div className="flex flex-col gap-2">
-        <span className="font-bold text-[#6DE1E3] text-xl">Horario</span>
-        <div className="flex flex-col gap-1">
-        <span className="text-lg"><span className="font-bold">L - V:</span> 9 a.m - 5 p.m</span>
-        <span className="text-lg"><span className="font-bold">S:</span> 9 a.m - 2 p.m</span>
-        </div>
+      <h3 className="font-semibold text-[#6DE1E3] text-xl tracking-wide">
+        Horario
+      </h3>
+
+      <div className="flex flex-col gap-1 text-base md:text-lg text-gray-200">
+        <p>
+          <span className="font-semibold">Lunes a Viernes:</span> 9 a.m – 5 p.m
+        </p>
+        <p>
+          <span className="font-semibold">Sábado:</span> 9 a.m – 2 p.m
+        </p>
+      </div>
     </div>
+
   </div>
 );
 
