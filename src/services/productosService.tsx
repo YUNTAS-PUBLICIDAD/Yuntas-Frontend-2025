@@ -66,7 +66,7 @@ export async function getProductoBySlugService(slug: string): Promise<ProductoSe
             data: formatProduct(response.data.data)
         };
     } catch (error: any) {
-        return { success: false, message: "Error de conexión" };
+        return { success: false, message: error.message };
     }
 }
 
@@ -132,7 +132,7 @@ export async function deleteProductoService(id: number | string): Promise<Produc
             return { success: false, message: "No autenticado" };
         }
 
-        const response = await api.delete(API_ENDPOINTS.ADMIN.PRODUCTS.DELETE(Number(id)), {
+        await api.delete(API_ENDPOINTS.ADMIN.PRODUCTS.DELETE(Number(id)), {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
