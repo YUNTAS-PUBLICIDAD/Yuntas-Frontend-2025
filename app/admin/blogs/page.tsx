@@ -108,21 +108,17 @@ export default function Blogspage() {
         <div>
             {/* BOTONES */}
             <div className="flex flex-row flex-wrap gap-2 mb-4">
-                <ActionButtonGroup className="flex-auto"
+                <ActionButtonGroup
                     buttons={[{
                         label: "Añadir Blog",
                         onClick: () => setIsAddEditModalOpen(true),
-                        className: "w-full",
                     }]} />
-            </div>
-            <div className="flex flex-wrap gap-3 mb-4 no-print max-w-5xl mx-auto">
-                <div className="flex-1 min-w-[120px]">
-                    <ExportDropdown
-                        label="Exportar"
-                        options={exportOptions}
-                        className="w-full h-[40px]"
-                    />
-                </div>
+                <ExportDropdown
+                    label="Exportar"
+                    options={exportOptions}
+                    className="w-full"
+                    buttonClassName="px-4 h-[40px]"
+                />
             </div>
 
             {error && (
