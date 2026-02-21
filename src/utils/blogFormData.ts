@@ -11,11 +11,11 @@ export function buildBlogFormData(data: BlogInput): FormData {
 	formData.append("meta_description", data.meta_description);
 
 	formData.append("description", data.description);
-	formData.append("testimonial", data.testimonial);
 	formData.append("product_id", data.product_id);
 	
 	if (data.video_url) formData.append("video_url", data.video_url);
-
+	if (data.testimonial) formData.append("testimonial", data.testimonial);
+	
 	// imagen principal
 	if (data.main_image instanceof File) {
 		formData.append("main_image", data.main_image);

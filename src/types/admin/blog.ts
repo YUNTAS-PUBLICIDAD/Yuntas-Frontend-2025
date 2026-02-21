@@ -56,7 +56,7 @@ export interface BlogInput {
     }>;
 
 	description: string;
-	testimonial: string;
+	testimonial?: string;
 	benefits: string[];
 
 	product_id: string;
