@@ -310,6 +310,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                     placeholder="Título para SEO del producto"
                     helperText="Máx. 70 caracteres (letras, números y espacios)."
                     maxLength={70}
+                    required
                 />
 
                 <TextareaAdmin
@@ -321,6 +322,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                     helperText="Máx. 160 caracteres (letras, números y espacios)."
                     maxLength={160}
                     rows={2}
+                    required
                 />
 
                 <InputListDinamica
@@ -330,6 +332,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                     placeholder="ej: letreros para negocio"
                     addButtonText="+ Agregar keyword"
                     helperText="Palabras clave relevantes para que los buscadores encuentren el producto."
+                    required
                 />
             </FormSection>
 

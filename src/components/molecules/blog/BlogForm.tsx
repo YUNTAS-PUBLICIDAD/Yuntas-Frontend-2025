@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 import Button from "@/components/atoms/Button";
 import Loader from "@/components/atoms/Loader";
 import InputAdmin from "@/components/atoms/InputAdmin";
+import SelectForm from "@/components/atoms/SelectForm";
 import TextareaAdmin from "@/components/atoms/TextAreaAdmin";
 import FormSection from "@/components/molecules/admin/FormSection";
 import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
+import LinkableTextarea from "@/components/molecules/blog/LinkableTextarea";
+import { useProductos } from "@/hooks/useProductos";
 import { Blog, BlogInput } from "@/types/admin/blog";
 import { showToast } from '@/utils/showToast'
 
@@ -49,7 +52,7 @@ const GALLERY_SLOTS = [
     },
     {
         value: 'Desc',
-        label: 'Descripción',
+        label: 'Introducción',
         size: '1000 x 1000 px',
         desc: 'Formato cuadrado o vertical (4:5).'
     },
@@ -69,7 +72,7 @@ const GALLERY_SLOTS = [
 
 export default function BlogForm({ onSubmit, onCancel, isLoading = false, initialData = null }: BlogFormProps) {
     const [formData, setFormData] = useState<BlogInput>(defaultFormData);
-
+    const { productos, getProductos } = useProductos();
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
 
     // Cargar datos iniciales para editar
@@ -103,9 +106,11 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                 product_id: initialData.product?.id ? String(initialData.product.id) : "",
             });
         }
+        getProductos(200);
     }, [initialData]);
+    
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         if (name === "slug") {
             // permitir solo minusculas, numeros y guiones
@@ -206,14 +211,14 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
             return;
         }
 
-        // beneficios obligatorios (3 max)
+        // beneficios obligatorios
         const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
         if (hasEmptyBenefits) {
             showToast.warning("Los beneficios no pueden estar vacios");
             return;
         }
-        if (formData.benefits.length > 3) {
-            showToast.warning("Solo se permiten 3 beneficios");
+        if (formData.benefits.length !== 3) {
+            showToast.warning("Debe haber exactamente 3 beneficios");
             return;
         }
         onSubmit(formData);
@@ -249,8 +254,6 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
-                    {/** TODO: FALTA LISTA DE PRODUCTO ASOCIADO */}
-
                     <InputAdmin
                         label="Link/URL"
                         name="slug"
@@ -259,6 +262,15 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                         placeholder="ej: letreros-neon-led-guia-completa"
                         helperText="Solo palabras en minúscula separadas por guiones. Sin espacios ni tildes. Máx. 160 caracteres."
                         maxLength={160}
+                        required
+                    />
+
+                    <SelectForm
+                        label="Producto Relacionado"
+                        name="product_id"
+                        value={formData.product_id || ""}
+                        onChange={handleInputChange}
+                        options={productos}
                         required
                     />
                 </div>
@@ -274,30 +286,32 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     required
                 />
 
-                <TextareaAdmin
+                <LinkableTextarea
                     label="Introducción del Blog"
                     name="description"
                     value={formData.description || ""}
-                    onChange={handleInputChange}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
                     placeholder="Los pisos LED se han convertido en una herramienta ..."
                     helperText="Desarrollo completo del blog."
                     rows={6}
                     required
+                    productos={productos}
                 />
 
-                <TextareaAdmin
-                    label="Testimonio (aparece al final del blog)"
+                <LinkableTextarea
+                    label="Testimonio"
                     name="testimonial"
                     value={formData.testimonial || ""}
-                    onChange={handleInputChange}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, testimonial: value }))}
                     placeholder="Ej: “Gracias a Yuntas, nuestro negocio ha ganado una visibilidad increíble...”"
                     helperText="Desarrollo completo del testimonio."
                     rows={6}
                     required
+                    productos={productos}
                 />
 
                 <InputAdmin
-                    label="URL del Video (opcional, se muestra al final del blog)"
+                    label="URL del Video (opcional)"
                     name="video_url"
                     value={formData.video_url || ""}
                     onChange={handleInputChange}
@@ -316,6 +330,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     placeholder="Título para SEO del blog"
                     helperText="Máx. 70 caracteres (letras, números y espacios)."
                     maxLength={70}
+                    required
                 />
 
                 <TextareaAdmin
@@ -327,11 +342,12 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     helperText="Máx. 160 caracteres (letras, números y espacios)."
                     maxLength={160}
                     rows={2}
+                    required
                 />
             </FormSection>
 
             {/* Seccion beneficios */}
-            <FormSection title="Beneficios (máximo 3)">
+            <FormSection title="Beneficios (3 beneficios obligatorios)">
                 <InputListDinamica
                     label="Beneficios"
                     items={formData.benefits}
