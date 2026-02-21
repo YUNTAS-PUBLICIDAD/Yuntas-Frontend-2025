@@ -36,6 +36,8 @@ export default function ReclamacionesPage() {
     const [selectedReclamo, setSelectedReclamo] = useState<any | null>(null);
     const [newStatusId, setNewStatusId] = useState<number>(1);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [estadoFiltro, setEstadoFiltro] = useState<string>("todos");
+    console.log(reclamos)
 
     // Carga inicial
     useEffect(() => {
@@ -96,6 +98,39 @@ export default function ReclamacionesPage() {
             console.error(e);
         }
     };
+const filtrarPorEstado = () => {
+
+    if (estadoFiltro === "todos") {
+        setTableData(
+            reclamos.map(item => ({
+                ...item,
+                fecha: formatDate(item.purchase_date || item.created_at),
+                cliente: `${item.first_name} ${item.last_name}`,
+                documento: `${item.document_number} (${item.document_type?.label?.toUpperCase()})`,
+                producto: getProductName(item.product_id),
+                monto: item.claimed_amount ? `S/. ${item.claimed_amount}` : '-',
+                estado_visual: (
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        item.claim_status?.name === 'completo'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                        {item.claim_status?.name}
+                    </span>
+                )
+            }))
+        );
+        return;
+    }
+
+    const filtrados = reclamos.filter(r => {
+        if (estadoFiltro === "pendiente") return r.claim_status_id === 1;
+        if (estadoFiltro === "completo") return r.claim_status_id === 2;
+        return true;
+    });
+
+    setTableData(filtrados);
+};
 
     const onViewDetail = (reclamo: any) => {
         setSelectedReclamo(reclamo);
@@ -137,6 +172,24 @@ export default function ReclamacionesPage() {
 
     return (
         <div className="p-2 md:p-4">
+            <div className="flex gap-3 mb-4 items-center">
+    <select
+        value={estadoFiltro}
+        onChange={(e) => setEstadoFiltro(e.target.value)}
+        className="border border-gray-300 rounded px-3 py-2 text-sm"
+    >
+        <option value="todos">Todos</option>
+        <option value="pendiente">🟡 Pendiente</option>
+        <option value="completo">🟢 Completo</option>
+    </select>
+
+    <button
+        onClick={filtrarPorEstado}
+        className="bg-[#23C1DE] text-white px-4 py-2 rounded font-bold hover:bg-[#1faac4]"
+    >
+        Buscar
+    </button>
+</div>
           
             <AdminTable
                 columns={columns}
