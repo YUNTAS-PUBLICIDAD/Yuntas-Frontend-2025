@@ -15,6 +15,7 @@ import { showToast } from "@/utils/showToast";
 import Pagination from "@/components/molecules/Pagination";
 import Modal from "@/components/atoms/Modal";
 import BlogForm from "@/components/molecules/blog/BlogForm";
+import { useProductos } from "@/hooks/useProductos";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -32,6 +33,7 @@ const columns = [
 
 export default function Blogspage() {
     const { blogs, getBlogs, createBlog, updateBlog, deleteBlog, error, isLoading } = useBlogs();
+    const { productos, getProductos } = useProductos();
     const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
     const [datosPaginados, setDatosPaginados] = useState<Blog[]>([]);
     const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
@@ -40,7 +42,8 @@ export default function Blogspage() {
 
     useEffect(() => {
         getBlogs(200);
-    }, [getBlogs]);
+        getProductos(200);
+    }, [getBlogs, getProductos]);
 
     const exportOptions = useMemo(
         () => [
@@ -157,6 +160,7 @@ export default function Blogspage() {
                     onCancel={handleCloseModal}
                     initialData={selectedBlog}
                     isLoading={isLoading}
+                    productos={productos}
                 />
             </Modal>
             <ConfirmDialog />

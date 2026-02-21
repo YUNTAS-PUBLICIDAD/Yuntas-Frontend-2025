@@ -10,15 +10,16 @@ import FormSection from "@/components/molecules/admin/FormSection";
 import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
 import LinkableTextarea from "@/components/molecules/blog/LinkableTextarea";
-import { useProductos } from "@/hooks/useProductos";
 import { Blog, BlogInput } from "@/types/admin/blog";
 import { showToast } from '@/utils/showToast'
+import { Producto } from "@/types/admin/producto";
 
 interface BlogFormProps {
     onSubmit: (data: BlogInput) => void;
     onCancel: () => void;
     isLoading?: boolean;
     initialData?: Blog | null;
+    productos: Producto[];
 }
 
 const defaultFormData: BlogInput = {
@@ -70,9 +71,8 @@ const GALLERY_SLOTS = [
     },
 ] as const;
 
-export default function BlogForm({ onSubmit, onCancel, isLoading = false, initialData = null }: BlogFormProps) {
+export default function BlogForm({ onSubmit, onCancel, isLoading = false, initialData = null, productos }: BlogFormProps) {
     const [formData, setFormData] = useState<BlogInput>(defaultFormData);
-    const { productos, getProductos } = useProductos();
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
 
     // Cargar datos iniciales para editar
@@ -106,7 +106,6 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                 product_id: initialData.product?.id ? String(initialData.product.id) : "",
             });
         }
-        getProductos(200);
     }, [initialData]);
     
 

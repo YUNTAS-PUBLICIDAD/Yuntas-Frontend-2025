@@ -5,7 +5,6 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
-import { getImg } from '@/utils/getImg';
 
 interface BlogImage {
   url: string;
@@ -23,7 +22,7 @@ const BlogImageCarousel: React.FC<BlogImageCarouselProps> = ({ item }) => {
   if (item.length === 1) {
     return (
       <img
-        src={getImg(item[0].url)}
+        src={item[0].url}
         alt={item[0].alt ?? "Imagen"}
         className="w-full max-w-[120px] h-20 object-cover rounded-lg shadow-md"
       />
@@ -42,7 +41,7 @@ const BlogImageCarousel: React.FC<BlogImageCarouselProps> = ({ item }) => {
       {item.map((image, index) => (
         <SwiperSlide key={index}>
           <img
-            src={getImg(image.url)}
+            src={image.url}
             alt={image.alt ?? `Imagen ${index + 1}`}
             className="w-full h-20 object-cover rounded-lg"
           />
