@@ -2,6 +2,8 @@ import { api, API_ENDPOINTS } from "@/config";
 import { Blog, BlogServiceResponse, BlogInput } from "@/types/admin/blog";
 import { getToken } from "@/utils/token";
 import { getImg } from "@/utils/getImg";
+import { buildBlogFormData } from "@/utils/blogFormData";
+import { formatDate } from "@/utils/formatDate";
 
 function formatBlog(apiBlog: any): Blog {
     return {
@@ -17,6 +19,8 @@ function formatBlog(apiBlog: any): Blog {
             title: img.title,
             alt: img.alt,
         })),
+        product_name: apiBlog.product?.name || "-",
+        created_at: formatDate(apiBlog.created_at || ""),
     };
 };
 
@@ -54,38 +58,48 @@ export async function getBlogBySlugService(slug: string): Promise<BlogServiceRes
         return { success: false, message: error.message };
     }
 }
-////////////////////////////////////// FALTA REFACTORIZAR ESTO  //////////////////////////////////////
-export async function createBlogService(formData: FormData): Promise<BlogServiceResponse<Blog>> {
+
+export async function createBlogService(formData: BlogInput): Promise<BlogServiceResponse<Blog>> {
     try {
         const token = getToken();
         if (!token) return { success: false, message: "No autenticado" };
 
-        const response = await api.post(API_ENDPOINTS.ADMIN.BLOG.CREATE, formData, {
-            headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        const formattedFormData = buildBlogFormData(formData);
+
+        const response = await api.post(API_ENDPOINTS.ADMIN.BLOG.CREATE, formattedFormData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         return {
             success: true,
-            message: response.data.data.message || "Blog creado exitosamente",
-            data: response.data.data.data,
+            message: response.data.message || "Blog creado exitosamente",
+            data: formatBlog(response.data.data),
         };
     } catch (error: any) {
         return { success: false, message: error.message };
     }
 }
-////////////////////////////////////// FALTA REFACTORIZAR ESTO  //////////////////////////////////////
-export async function updateBlogService(id: number | string, formData: FormData): Promise<BlogServiceResponse<Blog>> {
+
+export async function updateBlogService(id: number | string, formData: BlogInput): Promise<BlogServiceResponse<Blog>> {
     try {
         const token = getToken();
         if (!token) return { success: false, message: "No autenticado" };
-        formData.append("_method", "PUT");
-        const response = await api.post(API_ENDPOINTS.ADMIN.BLOG.UPDATE(Number(id)), formData, {
-            headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+
+        const formattedFormData = buildBlogFormData(formData);
+
+        const response = await api.post(API_ENDPOINTS.ADMIN.BLOG.UPDATE(Number(id)), formattedFormData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
         });
         return {
             success: true,
-            message: response.data.data.message || "Blog actualizado exitosamente",
-            data: response.data.data.data,
+            message: response.data.message || "Blog actualizado exitosamente",
+            data: formatBlog(response.data.data),
         };
     } catch (error: any) {
         return { success: false, message: error.message };

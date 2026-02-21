@@ -25,6 +25,7 @@ export interface Blog {
 	meta_title: string;
 	meta_description: string;
 	product: Pick<Producto, "id" | "name"> | null;
+	product_name: string;
 	main_image: ImagenBlog;
 	gallery: Galeria[];
 	description: string;

@@ -18,7 +18,7 @@ import BlogForm from "@/components/molecules/blog/BlogForm";
 
 const columns = [
     { key: "id", label: "ID" },
-    { key: "product", label: "PRODUCTO" },
+    { key: "product_name", label: "PRODUCTO" },
     { key: "title", label: "TITULO" },
     {
         key: "gallery",
