@@ -2,18 +2,15 @@ import Banner from "@/components/atoms/Banner";
 import Text from "@/components/atoms/Text";
 import Img from "@/components/atoms/Img";
 import OpinionCard from "@/components/molecules/blog/OpinionCard";
-import { Blog } from "@/types/admin/blog";
 
+type OpinionSectionProps = {
+	testimonial: string;
+	imageSrc: string;
+    imageTitle: string;
+    imageAlt: string;
+};
 
-const OpinionSection = ({ blog }: { blog: Blog }) => {
-	const imgDesc = blog.gallery.filter(e => e.slot === "Testimonial")[0];
-	const imgUrl = imgDesc?.url || blog.main_image?.url || "";
-	const imgAlt = imgDesc?.alt || blog.main_image?.alt || blog.title;
-	const imgTitle = imgDesc?.title || blog.main_image?.title || blog.title;
-
-	const opinionText = blog.testimonial;
-	if (!opinionText) return null;
-
+const OpinionSection = ({ testimonial, imageSrc, imageTitle, imageAlt }: OpinionSectionProps) => {
 	return (
 		<section>
 			<Banner color="bg-[#18879B]" className="uppercase" size="small">
@@ -30,12 +27,12 @@ const OpinionSection = ({ blog }: { blog: Blog }) => {
 
 				<div
 					className="absolute inset-0 bg-cover bg-center opacity-20"
-					style={{ backgroundImage: `url(${imgUrl})` }}
+					style={{ backgroundImage: `url(${imageSrc})` }}
 				/>
 
 				<div className="relative z-10 w-full h-full flex px-4 py-8 md:px-8 md:py-12">
 					<div className="relative z-20 w-full top-20 md:max-w-md md:ml-8 lg:ml-16 md:top-1/2 md:left-40">
-						<OpinionCard description={blog.testimonial} />
+						<OpinionCard description={testimonial} />
 					</div>
 
 					<div
@@ -45,9 +42,9 @@ const OpinionSection = ({ blog }: { blog: Blog }) => {
                          md:w-[800px] md:h-[500px] z-0"
 					>
 						<Img
-							src={imgUrl}
-							alt={imgAlt}
-							title={imgTitle}
+							src={imageSrc}
+							alt={imageAlt}
+							title={imageTitle}
 							classname="w-full h-full object-cover rounded-3xl shadow-2xl"
 						/>
 					</div>

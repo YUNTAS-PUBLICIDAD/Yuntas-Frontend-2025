@@ -2,10 +2,13 @@ import Text from '@/components/atoms/Text'
 import Button from '@/components/atoms/Button'
 import { getYoutubeEmbed } from '@/types/getYoutubeEmbed'
 import Link from 'next/link'
-import { Blog } from '@/types/admin/blog'
 
-const VideoSection = ({ blog }: { blog: Blog }) => {
-	const videoSrc = getYoutubeEmbed(blog.video_url)
+type VideoSectionProps = {
+	videoUrl: string;
+};
+
+const VideoSection = ({ videoUrl }: VideoSectionProps) => {
+	const videoSrc = getYoutubeEmbed(videoUrl)
 	return (
 		<section className='text-center p-4  md:p-20 flex flex-col gap-5'>
 			<Text variant='h2' className='font-bold'>Mira Nuestro Video</Text>
