@@ -298,13 +298,14 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                 />
 
                 <LinkableTextarea
-                    label="Testimonio (opcional)"
+                    label="Testimonio"
                     name="testimonial"
                     value={formData.testimonial || ""}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, testimonial: value }))}
                     placeholder="Ej: “Gracias a Yuntas, nuestro negocio ha ganado una visibilidad increíble...”"
                     helperText="Desarrollo completo del testimonio."
                     rows={6}
+                    required
                     productos={productos}
                 />
 
