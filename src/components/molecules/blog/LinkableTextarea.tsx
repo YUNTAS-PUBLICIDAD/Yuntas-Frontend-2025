@@ -20,7 +20,6 @@ interface LinkableTextareaProps {
     rows?: number;
     required?: boolean;
     productos: Producto[];
-    productBasePath?: string;
 }
 
 type LinkModalType = "custom" | "product";
@@ -30,6 +29,19 @@ type LinkSelection = {
     end: number;
     text: string;
 };
+
+function isSafeHttpUrl(value: string): boolean {
+    try {
+        const url = new URL(value);
+        return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
+function sanitizeMarkerLabel(value: string): string {
+    return value.replace(/[\]|]/g, " ").trim();
+}
 
 function LinkToolbar({ onCustomLink, onProductLink }: { onCustomLink: () => void; onProductLink: () => void }) {
     return (
@@ -69,8 +81,7 @@ export default function LinkableTextarea({
     helperText,
     rows = 6,
     required = false,
-    productos,
-    productBasePath = "/productos"
+    productos
 }: LinkableTextareaProps) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -107,22 +118,26 @@ export default function LinkableTextarea({
         setLinkSelection(null);
     };
 
-    const insertLinkAtSelection = (href: string, isExternal: boolean) => {
+    const insertMarkerAtSelection = (type: LinkModalType, target: string) => {
         if (!linkSelection) return;
-        const anchor = isExternal
-            ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${linkSelection.text}</a>`
-            : `<a href="${href}">${linkSelection.text}</a>`;
-        const updated = value.slice(0, linkSelection.start) + anchor + value.slice(linkSelection.end);
+        const safeLabel = sanitizeMarkerLabel(linkSelection.text);
+        const marker = `[${type}:${target}|${safeLabel}]`;
+        const updated = value.slice(0, linkSelection.start) + marker + value.slice(linkSelection.end);
         onValueChange(updated);
         closeLinkModal();
     };
 
     const handleInsertCustomLink = () => {
-        if (!customLinkUrl.trim()) {
+        const trimmedUrl = customLinkUrl.trim();
+        if (!trimmedUrl) {
             showToast.warning("Ingresa un enlace valido");
             return;
         }
-        insertLinkAtSelection(customLinkUrl.trim(), true);
+        if (!isSafeHttpUrl(trimmedUrl)) {
+            showToast.warning("Solo se permiten enlaces http o https");
+            return;
+        }
+        insertMarkerAtSelection("custom", trimmedUrl);
     };
 
     const handleInsertProductLink = () => {
@@ -137,7 +152,7 @@ export default function LinkableTextarea({
             showToast.warning("Producto no valido");
             return;
         }
-        insertLinkAtSelection(`${productBasePath}/${selectedProduct.slug}`, false);
+        insertMarkerAtSelection("product", selectedProduct.slug);
     };
 
     return (
