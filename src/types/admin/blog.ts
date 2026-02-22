@@ -78,7 +78,6 @@ export interface BlogExport {
 	"Cant. Imágenes": number;
 }
 
-export type BlogView = Blog | BlogStatic;
 export type BlogStatic = {
 	id: number;
 	slug: string;
