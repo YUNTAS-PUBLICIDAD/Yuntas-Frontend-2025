@@ -70,3 +70,10 @@ export interface ProductoExport {
     nombre: string;
     categorias: number;
 };
+
+export const imageProductoSlots = {
+	HERO: "Hero",
+	SPECS: "Specs",
+	BENEFITS: "Benefits",
+	POPUPS: "Popups"
+} as const;
