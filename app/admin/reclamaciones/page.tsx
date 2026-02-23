@@ -7,6 +7,7 @@ import { useProductos } from "@/hooks/useProductos";
 import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
+import SearchBar from "@/components/molecules/SearchBar";
 const columns = [
     { key: "id", label: "ID" },
     { key: "fecha", label: "FECHA" },
@@ -25,6 +26,8 @@ const formatDate = (dateString?: string) => {
 };
 
 export default function ReclamacionesPage() {
+    const [estadoFiltro, setEstadoFiltro] = useState("todos");
+    const [searchTerm, setSearchTerm] = useState("");AdminTable
     const [reclamos, setReclamos] = useState<any[]>([]);
     const [tableData, setTableData] = useState<any[]>([]);
     const [paginatedData, setPaginatedData] = useState<any[]>([]);
@@ -36,7 +39,6 @@ export default function ReclamacionesPage() {
     const [selectedReclamo, setSelectedReclamo] = useState<any | null>(null);
     const [newStatusId, setNewStatusId] = useState<number>(1);
     const [isUpdating, setIsUpdating] = useState(false);
-    const [estadoFiltro, setEstadoFiltro] = useState<string>("todos");
     console.log(reclamos)
 
     // Carga inicial
@@ -83,6 +85,33 @@ export default function ReclamacionesPage() {
         }
     }, [reclamos, productos]);
 
+useEffect(() => {
+
+    let filtered = tableData;
+
+    // 🔎 FILTRO POR TEXTO
+    if (searchTerm.trim() !== "") {
+        const term = searchTerm.toLowerCase();
+
+        filtered = filtered.filter(item =>
+            item.id?.toString().includes(term) ||
+            item.cliente?.toLowerCase().includes(term) ||
+            item.documento?.toLowerCase().includes(term) ||
+            item.producto?.toLowerCase().includes(term)
+        );
+    }
+
+    // 🎯 FILTRO POR ESTADO (AUTOMÁTICO)
+    if (estadoFiltro !== "todos") {
+        filtered = filtered.filter(item =>
+            item.claim_status?.name?.toLowerCase() === estadoFiltro.toLowerCase()
+        );
+    }
+
+    setPaginatedData(filtered);
+
+}, [searchTerm, estadoFiltro, tableData]);
+
 
     const fetchReclamos = async () => {
         try {
@@ -122,14 +151,29 @@ const filtrarPorEstado = () => {
         );
         return;
     }
+    const filtrados = reclamos.filter(r =>
+        r.claim_status?.name?.toLowerCase() === estadoFiltro
+    );
 
-    const filtrados = reclamos.filter(r => {
-        if (estadoFiltro === "pendiente") return r.claim_status_id === 1;
-        if (estadoFiltro === "completo") return r.claim_status_id === 2;
-        return true;
-    });
+    const formateados = filtrados.map(item => ({
+        ...item,
+        fecha: formatDate(item.purchase_date || item.created_at),
+        cliente: `${item.first_name} ${item.last_name}`,
+        documento: `${item.document_number} (${item.document_type?.label?.toUpperCase()})`,
+        producto: getProductName(item.product_id),
+        monto: item.claimed_amount ? `S/. ${item.claimed_amount}` : '-',
+        estado_visual: (
+            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                item.claim_status?.name === 'completo'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-yellow-100 text-yellow-700'
+            }`}>
+                {item.claim_status?.name}
+            </span>
+        )
+    }));
 
-    setTableData(filtrados);
+    setTableData(formateados);
 };
 
     const onViewDetail = (reclamo: any) => {
@@ -173,24 +217,36 @@ const filtrarPorEstado = () => {
     return (
         <div className="p-2 md:p-4">
             <div className="flex gap-3 mb-4 items-center">
-    <select
-        value={estadoFiltro}
-        onChange={(e) => setEstadoFiltro(e.target.value)}
-        className="border border-gray-300 rounded px-3 py-2 text-sm"
-    >
-        <option value="todos">Todos</option>
-        <option value="pendiente">🟡 Pendiente</option>
-        <option value="completo">🟢 Completo</option>
-    </select>
-
-    <button
-        onClick={filtrarPorEstado}
-        className="bg-[#23C1DE] text-white px-4 py-2 rounded font-bold hover:bg-[#1faac4]"
-    >
-        Buscar
-    </button>
 </div>
-          
+<div className="flex items-center justify-between mb-4 gap-4">
+
+    {/* Buscador estilo Seguimiento */}
+    <div className="flex-1">
+        <SearchBar
+            items={tableData}
+            onSearch={setPaginatedData}
+            placeholder="Buscar por ID, CLIENTE, DOCUMENTO, PRODUCTO..."
+            searchKeys={['id', 'cliente', 'documento', 'producto']}
+            getDisplayValue={(item) => `${item.id} - ${item.cliente}`}
+        />
+    </div>
+
+    {/* Select Estado */}
+    <div className="w-60">
+        <select
+            value={estadoFiltro}
+            onChange={(e) => setEstadoFiltro(e.target.value)}
+            className="w-full px-4 py-2 rounded-full border border-gray-300 
+                       focus:ring-2 focus:ring-[#23C1DE] 
+                       focus:border-[#23C1DE] outline-none"
+        >
+            <option value="todos">👤 Todos</option>
+            <option value="pendiente">🟡 Pendiente</option>
+            <option value="completo">🟢 Completo</option>
+        </select>
+    </div>
+
+</div>
             <AdminTable
                 columns={columns}
                 data={paginatedData}
@@ -270,8 +326,9 @@ const filtrarPorEstado = () => {
                                         onChange={(e) => setNewStatusId(Number(e.target.value))}
                                         className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
                                     >
-                                        <option value={1}>🟡 Pendiente</option>
-                                        <option value={2}>🟢 Completo</option>
+                                    <option value="todos">Todos</option>
+                                    <option value="pendiente">🟡 Pendiente</option>
+                                    <option value="completo">🟢 Completo</option>
                                     </select>
                                     <button
                                         onClick={handleUpdateStatus}
