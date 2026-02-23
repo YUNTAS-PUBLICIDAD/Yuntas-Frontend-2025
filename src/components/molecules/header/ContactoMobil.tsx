@@ -13,13 +13,15 @@ type ContactoMobilProps = {
 };
 
 const ContactoMobil = ({ compact = false }: ContactoMobilProps) => {
+  const mensajeWhatsapp = "Hola Yuntas, quisiera más información sobre sus servicios.";
+  
   // URLs centralizadas
   const links = {
     instagram: "https://www.instagram.com/yuntaspublicidad/",
     facebook: "https://www.facebook.com/YuntasProducciones/",
     tiktok: "https://www.tiktok.com/@yuntaspublicidad",
     youtube: "https://www.youtube.com/@yuntaspublicidad",
-    whatsapp: "https://wa.me/51912849782",
+    whatsapp: `https://wa.me/51912849782?text=${encodeURIComponent(mensajeWhatsapp)}`,
   };
 
   if (compact) {
