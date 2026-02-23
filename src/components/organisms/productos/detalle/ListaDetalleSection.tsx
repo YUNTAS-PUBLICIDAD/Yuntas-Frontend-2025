@@ -29,7 +29,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, imageTi
                         src={imageSrc}
                         alt={imageAlt}
                         title={imageTitle}
-                        className={`w-full h-full max-h-[18rem] md:min-h-0 md:max-w-[46rem] md:max-h-[38rem] object-cover md:aspect-square ${reverse ? 'rounded-r-3xl md:rounded-3xl' : 'rounded-l-3xl md:rounded-3xl'}`}
+                        className={`aspect-square max-h-[18rem] md:min-h-0 md:max-w-[46rem] md:max-h-[38rem] object-cover md:aspect-square ${reverse ? 'rounded-r-3xl md:rounded-3xl' : 'rounded-l-3xl md:rounded-3xl'}`}
                     />
                 </div>
             </div>

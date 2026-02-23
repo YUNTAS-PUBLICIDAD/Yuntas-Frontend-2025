@@ -4,9 +4,10 @@ import * as XLSX from "xlsx";
 // Asegúrate de importar las interfaces correctamente desde tu ruta
 import { Blog, BlogExport } from "@/types/admin/blog";
 import { Producto, ProductoExport } from "@/types/admin/producto";
+import { User, UserExport } from "@/types/admin/user";
 
 export const exportExcel = (
-  data: Blog[] | Producto[],
+  data: Blog[] | Producto[] | User[],
   fileName: string = "reporte"
 ) => {
   if (!data || data.length === 0) {
@@ -14,13 +15,16 @@ export const exportExcel = (
     return;
   }
 
-  // 1. Type Guard: Verificamos si es Blog comprobando si tiene la propiedad 'title'
-  // (La interfaz Blog tiene 'title', Producto usualmente tiene 'nombre')
+  // 1. Type Guards: Verificamos el tipo de dato
   const isBlog = (item: any): item is Blog => {
     return (item as Blog).title !== undefined;
   };
 
-  let exportData: BlogExport[] | ProductoExport[] = [];
+  const isUser = (item: any): item is User => {
+    return (item as User).email !== undefined && (item as User).role_id !== undefined;
+  };
+
+  let exportData: BlogExport[] | ProductoExport[] | UserExport[] = [];
 
   // 2. Normalización de datos
   if (isBlog(data[0])) {
@@ -34,6 +38,17 @@ export const exportExcel = (
         Fecha: new Date(blog.created_at).toLocaleDateString(), // Corregido: 'fecha' no existía
         "Cant. Párrafos": blog.paragraphs?.length || 0,
         "Cant. Imágenes": blog.gallery?.length || 0, // Corregido: es 'gallery', no 'galeria'
+      })
+    );
+  } else if (isUser(data[0])) {
+    // Lógica para Usuarios
+    exportData = (data as User[]).map(
+      (user): UserExport => ({
+        ID: user.id,
+        Nombre: user.name,
+        Email: user.email,
+        Rol: user.role?.name || "Sin rol",
+        "Fecha de Creación": user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A",
       })
     );
   } else {

@@ -121,18 +121,6 @@ export default function ProductosPage() {
         setIsAddEditModalOpen(false);
     };
 
-    const exportOptions = [
-        { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-        { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-        { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
-    ];
-
-    const exportButtonsDesktop = [
-        { label: "EXPORTAR A CSV", onClick: () => exportToCSV(productos) },
-        { label: "EXPORTAR A EXCEL", onClick: () => exportToExcel(productos) },
-        { label: "EXPORTAR A PDF", onClick: () => exportToPDF(productos) },
-    ];
-
     if (isLoading && productos.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
     }
@@ -164,34 +152,48 @@ export default function ProductosPage() {
             </div>
 
             {/* Botones de Imprimir y Exportar */}
-            <div className="flex flex-row flex-wrap gap-2 mb-4 no-print items-center">
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "IMPRIMIR",
-                    onClick: () => printTable(productos),
-                    variant: "primary",
-                    className: "w-full"
-                }]} />
+            <div className="flex flex-wrap gap-3 mb-4 no-print max-w-5xl mx-auto">
+              <div className="flex-1 min-w-[120px]">
+                <ActionButtonGroup
+                  buttons={[
+                    {
+                      label: "Publicar Cambios",
+                      onClick: () => handleTriggerDeploy(),
+                      variant: "info",
+                      className: "w-full h-[40px]",
+                      isLoading: isDeploying,
+                    },
+                  ]}
+                />
+              </div>
 
-                {/* Desktop: Botones separados */}
-                <div className="hidden md:block">
-                    <ActionButtonGroup buttons={exportButtonsDesktop} />
-                </div>
+              <div className="flex-1 min-w-[120px]">
+                <ActionButtonGroup
+                  buttons={[
+                    {
+                      label: "IMPRIMIR",
+                      onClick: () => printTable(productos),
+                      variant: "primary",
+                      className: "w-full h-[40px]",
+                    },
+                  ]}
+                />
+              </div>
 
-                {/* Móvil: Dropdown */}
-                <div className="md:hidden flex-auto">
-                    <ExportDropdown options={exportOptions} className="w-full" />
-                </div>
+              <div className="flex-1 min-w-[120px]">
+                <ExportDropdown
+                  className="w-full h-[40px]"
+                  label="EXPORTAR"
+                  options={[
+                    { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
+                    { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
+                    { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
+                  ]}
+                />
+              </div>
             </div>
 
-            <div className="flex flex-row flex-wrap gap-2 mb-4">
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "Publicar Cambios",
-                    onClick: () => handleTriggerDeploy(),
-                    variant: "danger",
-                    className: "w-full",
-                    isLoading: isDeploying
-                }]} />
-            </div>
+
 
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">

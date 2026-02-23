@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ProductoCard from '@/components/molecules/producto/ProductoCard'
 import Text from '@/components/atoms/Text'
 import { useCategorias } from '@/hooks/ui/productos/useCategorias'
@@ -19,12 +19,17 @@ type ProductoSection = {
 const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: ProductoSection) => {
     const [openCategoria, setOpenCategoria] = useState(false);
     const [productosPaginados, setProductosPaginados] = useState<Producto[]>([]);
+    const productosSectionRef = useRef<HTMLDivElement>(null);
+    
+    const scrollToProductosSection = () => {
+        productosSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     const { handleSelectCategoria, categoriaActiva } = useCategorias(allProductos);
     useSelectCategorias(categoriaActiva, setListaProductos, allProductos);
 
     return (
-        <section className="min-h-[80vh] pb-24 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-8 px-4 sm:px-6 md:px-8 lg:px-12 pt-8">
+        <section ref={productosSectionRef} className="min-h-[80vh] pb-24 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-8 px-4 sm:px-6 md:px-8 lg:px-12 pt-8 scroll-mt-20">
             
             {/* SIDEBAR */}
             <div className='flex flex-col'>
@@ -74,7 +79,7 @@ const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: Pr
                 </div>
 
                 <div className="col-span-full flex justify-center order-3 my-6 md:my-8">
-                    <Pagination pageSize={6} items={ListaBusqueda} setProductosPaginados={setProductosPaginados} />
+                    <Pagination pageSize={6} items={ListaBusqueda} setProductosPaginados={setProductosPaginados} onPageChange={scrollToProductosSection} />
                 </div>
             </div>
         </section>

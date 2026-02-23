@@ -8,8 +8,9 @@ import CotizaSection from "@/components/organisms/productos/detalle/CotizaSectio
 import Popup from '@/components/molecules/Popup';
 import { useProductos } from "@/hooks/useProductos";
 import { sourceData } from "@/data/popup/sourceData";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Producto } from '@/types/admin/producto';
+import { imageProductoSlots } from '@/types/admin/producto';
 
 interface ProductClientProps {
     initialProduct?: Producto | null;
@@ -36,46 +37,51 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
         return <div className="flex justify-center items-center h-screen">URL no válida</div>;
     }
 
+    const imgHero = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.HERO);
+    const imgSpecs = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.SPECS);
+    const imgBene = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.BENEFITS);
+    const imgPopups = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.POPUPS);
+
     return (
         <>
             {isLoading && !displayProducto && <div className="flex justify-center items-center h-screen">Cargando producto...</div>}
 
             {
                 displayProducto && (
-                    <main>
+                    <>
                         <HeroSection
                             productName={displayProducto?.name || ""}
-                            backgroundImage={displayProducto?.gallery[0]?.url || ""}
-                            imageTitle={displayProducto?.gallery[0]?.title || `${displayProducto.name} - Yuntas Publicidad`}
-                            imageAlt={displayProducto.gallery[0]?.alt || `${displayProducto.name} - Yuntas Publicidad`}
+                            backgroundImage={imgHero?.url || ""}
+                            imageTitle={imgHero?.title || `${displayProducto.name} - Yuntas Publicidad`}
+                            imageAlt={imgHero?.alt || `${displayProducto.name} - Yuntas Publicidad`}
                         />
                         <ListaDetalleSection
                             text="ESPECIFICACIONES"
                             listItems={displayProducto?.specifications || []}
-                            imageSrc={displayProducto?.gallery[1]?.url || ""}
-                            imageTitle={displayProducto?.gallery[1]?.title || "Especificaciones del producto"}
-                            imageAlt={displayProducto?.gallery[1]?.alt || "Especificaciones del producto"}
+                            imageSrc={imgSpecs?.url || ""}
+                            imageTitle={imgSpecs?.title || "Especificaciones del producto"}
+                            imageAlt={imgSpecs?.alt || "Especificaciones del producto"}
                         />
                         <InformacionSection info={displayProducto?.description || ""} />
                         <ListaDetalleSection
                             text="BENEFICIOS"
                             listItems={displayProducto?.benefits || []}
-                            imageSrc={displayProducto?.gallery[2]?.url || ""}
-                            imageTitle={displayProducto?.gallery[2]?.title || "Beneficios del producto"}
-                            imageAlt={displayProducto?.gallery[2]?.alt || "Beneficios del producto"}
+                            imageSrc={imgBene?.url || ""}
+                            imageTitle={imgBene?.title || "Beneficios del producto"}
+                            imageAlt={imgBene?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
                         <CotizaSection />
                         <Popup
-                            imgSrc={displayProducto?.gallery[3]?.url || ""}
-                            imgTitle={displayProducto?.gallery[3]?.title || "Cotiza tu producto"}
-                            imgAlt={displayProducto?.gallery[3]?.alt || "Cotiza tu producto"}
+                            imgSrc={imgPopups?.url || ""}
+                            imgTitle={imgPopups?.title || "Cotiza tu producto"}
+                            imgAlt={imgPopups?.alt || "Cotiza tu producto"}
                             title="¡Tu marca brillando como se merece!"
                             buttonText="Explorar opciones"
                             productId={displayProducto?.id}
                             sourceId={sourceData.PRODUCTO_DETALLE} // source id para "Producto detalle"
                         />
-                    </main>
+                    </>
                 )
             }
 

@@ -25,3 +25,11 @@ export interface UserServiceResponse<T = null> {
     message?: string;
     data?: T;
 }
+
+export interface UserExport {
+    ID: number;
+    Nombre: string;
+    Email: string;
+    Rol: string;
+    "Fecha de Creación": string;
+}

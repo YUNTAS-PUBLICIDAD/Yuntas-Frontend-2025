@@ -1,122 +1,86 @@
-export interface BlogInput {
-  titulo: string;
-  subtitulo?: string;
-  contenido?: string;
-  url_video?: string;
+import { Producto } from "./producto";
 
-  etiqueta: {
-    meta_titulo?: string;
-    meta_descripcion?: string;
-  };
+type ImageBlogSlot = "Hero" | "Desc" | "Benefits" | "Testimonial";
 
-  imagen_principal: File | null;
-  imagen_principal_alt: string;
-
-  imagenes?: File[];
-  imagenes_alts: string[];
-  categorias?:categoria[]
-  imagen_principal_url?: string | null;
-  imagenes_urls?: string[];
-  product: number | null; // Puede ser null si no tiene producto
-  parrafos?: string[];
-  beneficios?: string[];
-  bloques?: BlogBloque[];
-}
-export interface ProductoBlog { // Agregado porque ahora sí lo devuelves
-  id: number;
-  name: string;
-  slug: string | null;
-}
-interface categoria{
-  id:number;
-  name:string;
-  slug:string;
+interface ImagenBlog {
+    url: string | null;
+    alt: string | null;
+    title: string | null;
 }
 
-export interface PaginationLinks {
-  first: string | null;
-  last: string | null;
-  prev: string | null;
-  next: string | null;
-}
-
-export interface PaginationMeta {
-  current_page: number;
-  from: number | null;
-  last_page: number;
-  per_page: number;
-  to: number | null;
-  total: number;
-  path: string;
-}
-
-
-export interface BlogActionResponse<T = null> {
-  success: boolean;
-  message?: string;
-  data?: {
-    data?:T
-  };
-  meta?: PaginationMeta;
-  links?: PaginationLinks;
-}
-export interface BlogListResponseBySlug<T=null> {
-  success: boolean;
-  message?: string;
-  data?: Blog
+interface Galeria {
+    url: string;
+    alt: string | null;
+    title: string | null;
+    slot: ImageBlogSlot;
 }
 
 export interface Blog {
-  id: number;
-  title: string;
-  slug: string;
-  categories:categoria[]
-  cover_subtitle: string | null;
-  content: string | null;
-  created_at: string;
-  video_url: string | null;
-  content_blocks:unknown[]
-  meta_title: string | null;
-  meta_description?: string | null;
-
-  main_image: BlogImagen | null;
-  product: ProductoBlog | null;
-  paragraphs: string[];
-  benefits: string[];
-  gallery: BlogImagen[];
+	id: number;
+	title: string;
+	slug: string;
+	hero_title: string;
+	cover_subtitle: string;
+	video_url: string;
+	meta_title: string;
+	meta_description: string;
+	product: Pick<Producto, "id" | "name"> | null;
+	product_name: string;
+	main_image: ImagenBlog;
+	gallery: Galeria[];
+	description: string;
+	testimonial: string;
+	benefits: string[];
+	created_at: string;
 }
 
-export interface BlogImagen {
-  url: string;
-  alt: string | null;
+export interface BlogInput {
+	title: string;
+	slug: string;
+	hero_title: string;
+	cover_subtitle: string;
+	video_url?: string;
+
+	meta_title: string;
+	meta_description: string;
+
+	main_image: File | string | null;
+    main_image_title: string;
+    main_image_alt: string;
+
+	gallery: Array<{
+        slot: ImageBlogSlot;
+        image: File | string;
+        title: string;
+        alt: string;
+    }>;
+
+	description: string;
+	testimonial: string;
+	benefits: string[];
+
+	product_id: string;
 }
 
-export interface BlogBloque {
-  title: string;
-  content: string;
+export interface BlogServiceResponse<T = null> {
+	success: boolean;
+	message?: string;
+	data?: T;
 }
+
 export interface BlogExport {
-  ID: string | number;
-  Título: string;
-  Subtítulo: string;
-  "Meta Título": string;
-  Fecha: string;
-  "Cant. Párrafos": number;
-  "Cant. Imágenes": number;
+	ID: string | number;
+	Título: string;
+	Subtítulo: string;
+	"Meta Título": string;
+	Fecha: string;
+	"Cant. Párrafos": number;
+	"Cant. Imágenes": number;
 }
 
-export type BlogView = Blog | BlogStatic;
-export type BlogStatic = {
-  id: number;
-  slug: string;
-  title: string;
-  cover_subtitle?: string;
-  content: string;
-  categories: string[];
-  benefits?: string[];
-  opinion?: string;
-  video_url?: string;
-  main_image: {
-    url: string;
-  };
-};
+export const imageBlogSlots = {
+	HERO: "Hero",
+	DESC: "Desc",
+	BENEFITS: "Benefits",
+	TESTIMONIAL: "Testimonial"
+} as const;

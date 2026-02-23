@@ -9,15 +9,21 @@ interface ExportOption {
 }
 
 interface ExportDropdownProps {
-    options: ExportOption[];
-    label?: string;
-    className?: string;
+  options: {
+    label: string;
+    onClick: () => void;
+  }[];
+  label?: string;
+  className?: string;
+  buttonClassName?: string; // 👈 NUEVO
 }
+
 
 export default function ExportDropdown({
     options,
     label = "EXPORTAR",
-    className
+    className,
+    buttonClassName, 
 }: ExportDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,9 +49,23 @@ export default function ExportDropdown({
         <div className="relative" ref={dropdownRef}>
             {/* Botón principal */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center justify-center gap-1 px-3 py-1 bg-[#203565] dark:bg-[#293296] text-white font-semibold text-xs sm:text-sm md:text-base rounded-[10px] !h-[32px] hover:opacity-90 transition-all ${className ?? "w-auto"}`}
-            >
+            onClick={() => setIsOpen(!isOpen)}
+            className={`
+              flex items-center justify-center gap-2
+              bg-[#203565]
+              dark:bg-[#293296]
+              text-white
+              font-semibold
+              text-sm
+              rounded-[10px]
+              hover:opacity-90
+              transition-all
+              ${buttonClassName ?? "px-4 h-[40px]"}
+              ${className ?? "w-auto"}
+            `}
+          >
+
+
                 {label}
                 <FaChevronDown
                     className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}

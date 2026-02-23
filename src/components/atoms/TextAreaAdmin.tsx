@@ -9,6 +9,8 @@ interface TextareaAdminProps {
     maxLength?: number;
     rows?: number;
     disabled?: boolean;
+    textareaRef?: React.Ref<HTMLTextAreaElement>;
+    showLabel?: boolean;
 }
 
 export default function TextareaAdmin({
@@ -21,13 +23,17 @@ export default function TextareaAdmin({
     required = false,
     maxLength,
     rows = 4,
-    disabled = false
+    disabled = false,
+    textareaRef,
+    showLabel = true
 }: TextareaAdminProps) {
     return (
         <div className="flex flex-col gap-1">
-            <label htmlFor={name} className="text-[#203565] font-medium">
-                {label} {required && <span className="text-red-500">*</span>}
-            </label>
+            {showLabel && (
+                <label htmlFor={name} className="text-[#203565] font-medium">
+                    {label} {required && <span className="text-red-500">*</span>}
+                </label>
+            )}
             <textarea
                 id={name}
                 name={name}
@@ -38,6 +44,7 @@ export default function TextareaAdmin({
                 maxLength={maxLength}
                 rows={rows}
                 disabled={disabled}
+                ref={textareaRef}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all resize-none disabled:opacity-50"
             />
             {helperText && (

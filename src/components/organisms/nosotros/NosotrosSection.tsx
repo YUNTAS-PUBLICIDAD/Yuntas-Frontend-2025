@@ -1,5 +1,9 @@
+"use client";
+
 import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
+import { motion } from "framer-motion";
+
 const NosotrosSection = () => {
   return (
     <section
@@ -7,16 +11,31 @@ const NosotrosSection = () => {
         relative w-full h-[80vh] md:h-screen 
         flex items-center justify-start 
         pt-24 md:pt-24 overflow-hidden 
-        bg-cover bg-top bg-no-repeat 
         border-b-8 border-[#98D8DF]
       "
-      style={{ backgroundImage: `url(${imagenes.nosotros.hero.src})` }}
       aria-label="Sección Nosotros"
     >
-      {imagenes.nosotros.hero.alt && <img src={imagenes.nosotros.hero.src} alt={imagenes.nosotros.hero.alt} title={imagenes.nosotros.hero.title} className="sr-only" aria-hidden="false" />}
-      {/* Degradado Lineal */}
+
+      <motion.div
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat"
+        style={{ backgroundImage: `url(${imagenes.nosotros.hero.src})` }}
+        initial={{ scale: 1.2 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 2.5, ease: "easeOut" }}
+      />
+
+      {imagenes.nosotros.hero.alt && (
+        <img
+          src={imagenes.nosotros.hero.src}
+          alt={imagenes.nosotros.hero.alt}
+          title={imagenes.nosotros.hero.title}
+          className="sr-only"
+          aria-hidden="false"
+        />
+      )}
+
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 z-10"
         style={{
           background:
             "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
@@ -32,7 +51,6 @@ const NosotrosSection = () => {
           gap-6 md:gap-12
         "
         >
-          {/* Texto principal */}
           <div
             className="
             flex flex-col w-full 
@@ -40,6 +58,7 @@ const NosotrosSection = () => {
             items-center
             text-center
           "
+           
           >
             <Heading
               level="h1"
@@ -52,7 +71,7 @@ const NosotrosSection = () => {
             >
               NOSOTROS
             </Heading>
-          </div>
+         </div>
         </div>
       </div>
     </section>
