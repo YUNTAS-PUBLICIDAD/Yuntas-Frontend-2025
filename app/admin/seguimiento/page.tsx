@@ -15,6 +15,7 @@ import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 import SearchBar from "@/components/molecules/SearchBar";
 
+
 export default function SeguimientoPage() {
     const router = useRouter();
 
