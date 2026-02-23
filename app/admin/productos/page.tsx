@@ -121,18 +121,6 @@ export default function ProductosPage() {
         setIsAddEditModalOpen(false);
     };
 
-    const exportOptions = [
-        { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-        { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-        { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
-    ];
-
-    const exportButtonsDesktop = [
-        { label: "EXPORTAR A CSV", onClick: () => exportToCSV(productos) },
-        { label: "EXPORTAR A EXCEL", onClick: () => exportToExcel(productos) },
-        { label: "EXPORTAR A PDF", onClick: () => exportToPDF(productos) },
-    ];
-
     if (isLoading && productos.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
     }

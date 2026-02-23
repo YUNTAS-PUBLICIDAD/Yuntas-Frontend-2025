@@ -1,157 +1,165 @@
 'use client';
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useBlogs } from "@/hooks/useBlog";
 import AdminTable from "@/components/organisms/admin/AdminTable";
-
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
-import PaginationServer from "@/components/molecules/PaginationServer";
-
 import BlogImageCarousel from "@/components/molecules/admin/blog/BlogImageCarousel";
-import AddBlogModal from "@/components/organisms/admin/ModalActions/AddBlogModal";
-import UpdateBlogModal from "@/components/organisms/admin/ModalActions/UpdateBlogModal";
-import ConfirmarEleminar from "@/components/molecules/admin/blog/ConfirmarEliminar";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
-
 import { exportExcel } from "@/utils/Export/exportExcel";
 import { exportToPDF } from "@/utils/Export/ExportPDF";
 import { exportCSV } from "@/utils/Export/ExportCVS";
-import { Blog } from "@/types/admin/blog";
+import { Blog, BlogInput } from "@/types/admin/blog";
+import { useConfirm } from "@/hooks/useConfirm";
+import { showToast } from "@/utils/showToast";
+import Pagination from "@/components/molecules/Pagination";
+import Modal from "@/components/atoms/Modal";
+import BlogForm from "@/components/molecules/blog/BlogForm";
+import { useProductos } from "@/hooks/useProductos";
 
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "product", label: "PRODUCTO", render: (_: unknown, row: Blog) => row.product?.name || "null" },
-  { key: "meta_title", label: "SUBTÍTULO" },
-  {
-    key: "gallery",
-    label: "IMAGEN",
-    render: (_: unknown, row: Blog) => (
-      <BlogImageCarousel item={row.gallery} />
-    )
-  },
-  {
-    key: "created_at",
-    label: "FECHA",
-    render: (_: unknown, row: Blog) =>
-      new Date(row.created_at).toLocaleDateString(),
-  },
+    { key: "id", label: "ID" },
+    { key: "product_name", label: "PRODUCTO" },
+    { key: "title", label: "TITULO" },
+    {
+        key: "gallery",
+        label: "IMAGEN",
+        render: (_: unknown, row: Blog) => (
+            <BlogImageCarousel item={row.gallery} />
+        )
+    },
+    { key: "created_at", label: "FECHA" },
 ];
 
 export default function Blogspage() {
-  const {
-    blogs,
-    error,
-    meta,
-    links,
-    isLoading,
-    getBlogs,
-    goToNextPage,
-    goToPrevPage,
-  } = useBlogs();
+    const { blogs, getBlogs, createBlog, updateBlog, deleteBlog, error, isLoading } = useBlogs();
+    const { productos, getProductos } = useProductos();
+    const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
+    const [datosPaginados, setDatosPaginados] = useState<Blog[]>([]);
+    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
-  const [openAddModal, setOpenAddModal] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [blogSelected, setBlogSelected] = useState<Blog | null>(null);
+    const { confirm, ConfirmDialog } = useConfirm();
 
-  const router = useRouter();
+    useEffect(() => {
+        getBlogs(200);
+        getProductos(200);
+    }, [getBlogs, getProductos]);
 
-  useEffect(() => {
-    getBlogs(10);
-  }, [getBlogs]);
+    const exportOptions = useMemo(
+        () => [
+            { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
+            { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
+            { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
+        ],
+        [blogs]
+    );
 
-  const exportOptions = useMemo(
-    () => [
-      { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
-      { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
-      { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
-    ],
-    [blogs]
-  );
+    const handleCreateBlog = async (formData: BlogInput) => {
+        const result = await createBlog(formData);
+        if (result.success) {
+            handleCloseModal();
+            await getBlogs(200);
+            showToast.success("Blog creado");
+        } else {
+            showToast.error(result.message || "Error al crear el blog");
+        }
+    }
 
-  const handleEdit = (blog: Blog) => {
-    setBlogSelected(blog);
-    setOpenUpdateModal(true);
-    router.refresh();
-  };
+    const handleEditClick = (blog: Blog) => {
+        setSelectedBlog(blog);
+        setIsAddEditModalOpen(true);
+    };
 
-  const handleDelete = (blog: Blog) => {
-    setBlogSelected(blog);
-    setOpenDeleteModal(true);
-    router.refresh();
-  };
+    const handleEditBlog = async (formData: BlogInput) => {
+        if (!selectedBlog) return;
 
-  return (
-    <div>
-      {blogSelected && (
-        <ConfirmarEleminar
-          Blog={blogSelected}
-          isOpen={openDeleteModal}
-          onClose={() => setOpenDeleteModal(false)}
-          onSuccess={() => getBlogs(10)}
-        />
-      )}
+        const result = await updateBlog(selectedBlog.id!, formData);
+        if (result.success) {
+            handleCloseModal();
+            await getBlogs(200);
+            showToast.success("Blog actualizado");
+        } else {
+            showToast.error(result.message || "Error al actualizar el blog");
+        }
+    }
 
-      {blogSelected && (
-        <UpdateBlogModal
-          blog={blogSelected}
-          openModal={openUpdateModal}
-          onClose={() => setOpenUpdateModal(false)}
-          onSuccess={() => getBlogs(10)}
-        />
-      )}
+    const handleDeleteBlog = async (blog: Blog) => {
+        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este blog?" });
+        if (!confirmDelete) return;
+        const result = await deleteBlog(blog.id!);
+        if (result.success) {
+            await getBlogs(200);
+            showToast.success("Blog eliminado");
+        } else {
+            showToast.error(result.message || "Error al eliminar el blog");
+        }
+    };
 
-      <AddBlogModal
-        openModal={openAddModal}
-        onClose={() => setOpenAddModal(false)}
-        onSuccess={() => getBlogs(10)}
-      />
+    const handleCloseModal = () => {
+        setSelectedBlog(null);
+        setIsAddEditModalOpen(false);
+    };
 
-      {/* BOTONES */}
-      <div className="flex flex-wrap gap-3 mb-4 max-w-5xl mx-auto">
-        <div className="flex-1 min-w-[120px]">
-          <ActionButtonGroup
-            buttons={[
-              {
-                label: "Publicar",
-                onClick: () => setOpenAddModal(true),
-                className: "w-full h-[40px]",
-              },
-            ]}
-          />
+    if (isLoading && blogs.length === 0) {
+        return <div className="p-10 text-center animate-pulse">Cargando blogs...</div>;
+    }
+
+    return (
+        <div>
+            {/* BOTONES */}
+            <div className="flex flex-row flex-wrap gap-2 mb-4">
+                <ActionButtonGroup
+                    buttons={[{
+                        label: "Añadir Blog",
+                        onClick: () => setIsAddEditModalOpen(true),
+                    }]} />
+                <ExportDropdown
+                    label="Exportar"
+                    options={exportOptions}
+                    className="w-full"
+                    buttonClassName="px-4 h-[40px]"
+                />
+            </div>
+
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
+            )}
+
+            {/* TABLA */}
+            <AdminTable
+                minRows={10}
+                columns={columns}
+                data={datosPaginados}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteBlog}
+            />
+
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    pageSize={10}
+                    items={blogs}
+                    setProductosPaginados={setDatosPaginados}
+                />
+            </div>
+
+            {/* MODAL DE AÑADIR Y EDITAR */}
+            <Modal
+                isOpen={isAddEditModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
+                size="lg"
+            >
+                <BlogForm
+                    onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
+                    onCancel={handleCloseModal}
+                    initialData={selectedBlog}
+                    isLoading={isLoading}
+                    productos={productos}
+                />
+            </Modal>
+            <ConfirmDialog />
         </div>
-
-        <div className="flex-1 min-w-[120px]">
-          <ExportDropdown
-            label="Exportar"
-            options={exportOptions}
-            className="w-full h-[40px]"
-          />
-        </div>
-      </div>
-
-      {error && <div>{error}</div>}
-
-      <AdminTable
-        minRows={10}
-        columns={columns}
-        data={blogs}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-
-      {meta && (
-        <div className="flex justify-center my-6">
-          <PaginationServer
-            meta={meta}
-            links={links}
-            onPrevPage={goToPrevPage}
-            onNextPage={goToNextPage}
-            isLoading={isLoading}
-          />
-        </div>
-      )}
-    </div>
-  );
+    );
 }

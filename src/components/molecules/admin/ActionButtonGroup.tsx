@@ -28,7 +28,6 @@ export default function ActionButtonGroup({
     };
 
     const getBgColorByVariant = (variant?: ButtonConfig["variant"]) => {
-      // 👉 SOLO ESTE IF NUEVO
       if (variant === "info") {
           return "!bg-[#23C1DE] hover:!bg-[#1fb2cc] focus:!bg-[#23C1DE] text-white active:!bg-[#1fb2cc]";
       }

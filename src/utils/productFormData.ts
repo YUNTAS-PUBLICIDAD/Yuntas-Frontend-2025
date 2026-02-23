@@ -1,15 +1,5 @@
 import { ProductoInput } from "@/types/admin/producto";
 
-export function logFormData(formData: FormData): void {
-    formData.forEach((value, key) => {
-        if (value instanceof File) {
-            console.log(`${key}: [File] ${value.name} (${value.size} bytes)`);
-        } else {
-            console.log(`${key}: ${value}`);
-        }
-    });
-}
-
 export function buildProductoFormData(data: ProductoInput): FormData {
     const formData = new FormData();
 

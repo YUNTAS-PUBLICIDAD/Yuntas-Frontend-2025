@@ -1,14 +1,16 @@
-export interface ImagenProducto {
+type ImageProductoSlot = "Hero" | "Specs" | "Benefits" | "Popups";
+
+interface ImagenProducto {
     url: string | null;
     alt: string | null;
     title: string | null;
 }
 
-export interface Galeria {
+interface Galeria {
     url: string;
     alt: string | null;
     title: string | null;
-    slot: "Hero" | "Specs" | "Benefits" | "Popups";
+    slot: ImageProductoSlot;
 }
 
 export interface Producto {
@@ -46,7 +48,7 @@ export interface ProductoInput {
     main_image_title: string;
     main_image_alt: string;
     gallery: Array<{
-        slot: 'Hero' | 'Specs' | 'Benefits' | 'Popups';
+        slot: ImageProductoSlot;
         image: File | string;
         title: string;
         alt: string;
@@ -57,52 +59,21 @@ export interface ProductoInput {
     benefits: string[];
 }
 
-export interface ProductoExport {
-    nombre: string;
-    categorias: number;
-};
-
-// links de la paginacion
-export interface PaginationLinks {
-    first: string | null;
-    last: string | null;
-    prev: string | null;
-    next: string | null;
-}
-
-// meta de la paginacion
-export interface PaginationMeta {
-    current_page: number;
-    from: number | null;
-    last_page: number;
-    per_page: number;
-    to: number | null;
-    total: number;
-    path: string;
-}
-
-// lista de productos
-export interface ProductoListResponse {
-    success: boolean;
-    data: {
-        data: Producto[];
-        links: PaginationLinks;
-        meta: PaginationMeta;
-    };
-}
-
-//un solo producto
-export interface ProductoResponse {
-    success: boolean;
-    message?: string;
-    data: Producto;
-}
-
 // respuesta de service
 export interface ProductoServiceResponse<T = null> {
     success: boolean;
     message?: string;
     data?: T;
-    meta?: PaginationMeta;
-    links?: PaginationLinks;
 }
+
+export interface ProductoExport {
+    nombre: string;
+    categorias: number;
+};
+
+export const imageProductoSlots = {
+	HERO: "Hero",
+	SPECS: "Specs",
+	BENEFITS: "Benefits",
+	POPUPS: "Popups"
+} as const;
