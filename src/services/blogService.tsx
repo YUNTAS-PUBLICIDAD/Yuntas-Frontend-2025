@@ -9,15 +9,17 @@ function formatBlog(apiBlog: any): Blog {
     return {
         ...apiBlog,
         main_image: {
-            url: typeof apiBlog.main_image.url === "string" ? `${getImg(apiBlog.main_image.url)}` : apiBlog.main_image.url,
-            alt: apiBlog.main_image.alt,
-            title: apiBlog.main_image.title,
+            url: apiBlog.main_image?.url
+                ? (typeof apiBlog.main_image.url === "string" ? `${getImg(apiBlog.main_image.url)}` : apiBlog.main_image.url)
+                : "",
+            alt: apiBlog.main_image?.alt || "",
+            title: apiBlog.main_image?.title || "",
         },
-        gallery: apiBlog.gallery.map((img: any) => ({
+        gallery: (apiBlog.gallery || []).map((img: any) => ({
             slot: img.slot,
-            url: typeof img.url === "string" ? `${getImg(img.url)}` : img.url,
-            title: img.title,
-            alt: img.alt,
+            url: img.url ? (typeof img.url === "string" ? `${getImg(img.url)}` : img.url) : "",
+            title: img.title || "",
+            alt: img.alt || "",
         })),
         product_name: apiBlog.product?.name || "-",
         created_at: formatDate(apiBlog.created_at || ""),
