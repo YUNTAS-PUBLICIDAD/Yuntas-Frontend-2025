@@ -14,7 +14,7 @@ import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 import SearchBar from "@/components/molecules/SearchBar";
-import { FaSearch } from "react-icons/fa";
+
 
 
 export default function SeguimientoPage() {
@@ -25,7 +25,7 @@ export default function SeguimientoPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
+    
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
     const { confirm, ConfirmDialog } = useConfirm();
@@ -39,41 +39,6 @@ export default function SeguimientoPage() {
     }, [leads]);
 
     // Filtrar leads por término de búsqueda
-    const filteredLeads = useMemo(() => {
-        if (!searchTerm.trim()) return leadsFiltered;
-
-        const term = searchTerm.toLowerCase().trim();
-
-        return leadsFiltered.filter((lead) => {
-            const name = (lead.name || "").toLowerCase();
-            const email = (lead.email || "").toLowerCase();
-            const phone = (lead.phone || "").toLowerCase();
-            const product = (lead.product_name || "").toLowerCase();
-            const source = (lead.source_name || "").toLowerCase();
-            const fechaRaw = (lead.created_at || "").toLowerCase();
-            // Generar fecha en formato dd/mm/yyyy
-            let fechaFormateada = "";
-            if (fechaRaw) {
-                const dateObj = new Date(lead.created_at!);
-                if (!isNaN(dateObj.getTime())) {
-                    const day = String(dateObj.getDate()).padStart(2, '0');
-                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                    const year = dateObj.getFullYear();
-                    fechaFormateada = `${day}/${month}/${year}`;
-                }
-            }
-
-            return (
-                name.includes(term) ||
-                email.includes(term) ||
-                phone.startsWith(term) ||
-                product.includes(term) ||
-                source.includes(term) ||
-                fechaRaw.includes(term) ||
-                fechaFormateada.includes(term)
-            );
-        });
-    }, [leadsFiltered, searchTerm]);
 
     const handleEditClick = (client: Lead) => {
         setSelectedLead(client);
@@ -168,33 +133,35 @@ export default function SeguimientoPage() {
             )}
 
             {/* BUSCADOR */}
-            <div className="mb-4 flex items-center gap-4 flex-wrap">
-                <div className="relative flex-1 min-w-[250px] max-w-md">
-                    <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        placeholder="Buscar por nombre, email, teléfono, producto..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#203565] focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                    />
-                    {searchTerm && (
-                        <button
-                            onClick={() => setSearchTerm("")}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        >
-                            ✕
-                        </button>
-                    )}
-                </div>
+{!isMonitoreoMode && (
+  <div className="flex items-center justify-between mb-4 gap-4">
 
-                <div className="px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full ml-auto">
-                    <span className="text-[#203565] font-semibold">
-                        {filteredLeads.length} REGISTROS ENCONTRADOS
-                    </span>
-                </div>
-            </div>
+    <div className="flex-1">
+      <SearchBar
+        items={leads}
+        onSearch={setLeadsFiltered}
+        placeholder="Buscar por nombre, email, teléfono, producto..."
+        searchKeys={[
+          'id',
+          'name',
+          'email',
+          'phone',
+          'product_name',
+          'source_name',
+          'created_at'
+        ]}
+        getDisplayValue={(item) => `${item.id} - ${item.name}`}
+      />
+    </div>
 
+    <div className="px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full">
+      <span className="text-[#203565] font-semibold">
+        {leadsFiltered.length} REGISTROS ENCONTRADOS
+      </span>
+    </div>
+
+  </div>
+)}
             {/* BUSCADOR MONITOREO */}
             {isMonitoreoMode && (
                 <div className="mb-4">
@@ -228,7 +195,7 @@ export default function SeguimientoPage() {
             <div className="flex justify-center mt-4 w-full overflow-x-hidden">
                 <Pagination
                     pageSize={5}
-                    items={filteredLeads}
+                    items={leadsFiltered}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>
