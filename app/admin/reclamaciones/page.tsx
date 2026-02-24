@@ -103,8 +103,10 @@ useEffect(() => {
 
     // 🎯 FILTRO POR ESTADO (AUTOMÁTICO)
     if (estadoFiltro !== "todos") {
-        filtered = filtered.filter(item =>
-            item.claim_status?.name?.toLowerCase() === estadoFiltro.toLowerCase()
+        const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
+
+         filtered = filtered.filter(item =>
+          item.claim_status_id === estadoId
         );
     }
 
@@ -322,13 +324,12 @@ const filtrarPorEstado = () => {
                                 <div className="flex gap-3 items-center w-full sm:w-auto bg-gray-50 p-2 rounded-lg">
                                     <span className="text-sm font-bold text-gray-700 hidden sm:block px-2">Estado:</span>
                                     <select
-                                        value={newStatusId}
-                                        onChange={(e) => setNewStatusId(Number(e.target.value))}
-                                        className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
+                                    value={newStatusId}
+                                    onChange={(e) => setNewStatusId(Number(e.target.value))}
+                                    className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
                                     >
-                                    <option value="todos">Todos</option>
-                                    <option value="pendiente">🟡 Pendiente</option>
-                                    <option value="completo">🟢 Completo</option>
+                                    <option value={1}>🟡 Pendiente</option>
+                                    <option value={2}>🟢 Completo</option>
                                     </select>
                                     <button
                                         onClick={handleUpdateStatus}
@@ -349,4 +350,4 @@ const filtrarPorEstado = () => {
             </Modal>
         </div>
     );
-}
+} 
