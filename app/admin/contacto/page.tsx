@@ -68,7 +68,7 @@ export default function ContactoPage() {
         fullName.includes(term) ||
         district.includes(term) ||
         asunto.includes(term) ||
-        phone.includes(term) ||
+        phone.startsWith(term) ||
         fecha.includes(term)
       );
     });
