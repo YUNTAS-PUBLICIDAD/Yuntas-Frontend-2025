@@ -1,5 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { removeToken } from '@/utils/token';
+import { getToken, setToken, removeToken } from '@/utils/token';
+import { removeRole } from '@/utils/role';
+import { API_ENDPOINTS } from './endpoints';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api';
 export const WHATSAPP_SOCKET_URL = process.env.NEXT_PUBLIC_WHATSAPP_SERVICE_URL;
@@ -11,7 +13,7 @@ interface BackendError {
 }
 
 interface RetryConfig extends InternalAxiosRequestConfig {
-	_retry?: number;
+	_retry?: boolean;
 	_retryCount?: number;
 }
 
@@ -27,7 +29,36 @@ const api = axios.create({
 	}
 });
 
-//Manejar errores globales
+// ─── Request Interceptor: Adjuntar token automáticamente ───
+api.interceptors.request.use(
+	(config) => {
+		const token = getToken();
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
+		return config;
+	},
+	(error) => Promise.reject(error)
+);
+
+// ─── Response Interceptor: Refresh token en 401 ───
+let isRefreshing = false;
+let failedQueue: Array<{
+	resolve: (token: string | null) => void;
+	reject: (error: unknown) => void;
+}> = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
+	failedQueue.forEach((prom) => {
+		if (error) {
+			prom.reject(error);
+		} else {
+			prom.resolve(token);
+		}
+	});
+	failedQueue = [];
+};
+
 api.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError<BackendError>) => {
@@ -37,32 +68,77 @@ api.interceptors.response.use(
 		if (error.response) {
 			const backendError = error.response.data;
 
-			// token inválido o expirado (401)
-            if (error.response.status === 401) {
-                removeToken();
-                if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
-                    window.location.href = '/login';
-                }
-                userMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
-            }
+			// ─── Token inválido o expirado (401) → intentar refresh ───
+			if (
+				error.response.status === 401 &&
+				!config._retry &&
+				!config.url?.includes(API_ENDPOINTS.AUTH.REFRESH)
+			) {
+				// Si ya se está refrescando, encolar esta petición
+				if (isRefreshing) {
+					return new Promise((resolve, reject) => {
+						failedQueue.push({ resolve, reject });
+					})
+						.then((token) => {
+							config.headers['Authorization'] = 'Bearer ' + token;
+							return api(config);
+						})
+						.catch((err) => Promise.reject(err));
+				}
 
-			// error de validacion (422)
+				config._retry = true;
+				isRefreshing = true;
+
+				try {
+					const refreshUrl = `${BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`;
+					const response = await axios.post(refreshUrl, {}, {
+						headers: {
+							Authorization: `Bearer ${getToken()}`
+						}
+					});
+
+					const newToken = response.data.data.token;
+					setToken(newToken);
+
+					api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+					config.headers['Authorization'] = `Bearer ${newToken}`;
+
+					processQueue(null, newToken);
+					return api(config);
+				} catch (refreshError) {
+					processQueue(refreshError, null);
+					// Si el refresh falla, cerrar sesión
+					removeToken();
+					removeRole();
+					if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+						window.location.href = '/login';
+					}
+					return Promise.reject(refreshError);
+				} finally {
+					isRefreshing = false;
+				}
+			}
+
+			// error de validación (422)
 			if (error.response.status === 422 && backendError?.errors) {
 				const validationErrors = Object.entries(backendError.errors)
 					.map(([field, messages]) => `- ${field}: ${messages.join(', ')}`).join('\n');
 				userMessage = `Errores de validacion:\n${validationErrors}`;
 			}
-			// mensaje especifico del backend
+			// mensaje específico del backend
 			else if (backendError?.message) {
 				userMessage = backendError.message;
 			}
-			// error generico del backend
+			// error genérico del backend
 			else if (backendError?.error) {
 				userMessage = backendError.error;
 			}
-			// error segun codigo HTTP
+			// error según código HTTP
 			else {
 				switch (error.response.status) {
+					case 401:
+						userMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+						break;
 					case 403:
 						userMessage = 'No tienes permisos para realizar esta acción.';
 						break;
@@ -82,15 +158,15 @@ api.interceptors.response.use(
 		} else if (error.request) {
 			console.log(error);
 			console.error('Network Error Details:', {
-                url: config?.url,
-                method: config?.method,
-                baseURL: config?.baseURL,
-                headers: config?.headers,
-                timeout: config?.timeout,
-                code: error.code,
-                message: error.message,
-            });
-			
+				url: config?.url,
+				method: config?.method,
+				baseURL: config?.baseURL,
+				headers: config?.headers,
+				timeout: config?.timeout,
+				code: error.code,
+				message: error.message,
+			});
+
 			if (!config) {
 				userMessage = 'Error de conexión. No se pudo configurar la petición.';
 			} else {
