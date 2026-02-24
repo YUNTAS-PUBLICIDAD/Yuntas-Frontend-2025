@@ -8,33 +8,27 @@ const HeroSection = () => {
   return (
     <section
       className="
-        relative w-full h-[80vh] md:h-screen 
+        relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
         flex items-center justify-start 
-        pt-24 md:pt-24 overflow-hidden 
+        overflow-hidden 
         border-b-8 border-[#98D8DF]
       "
       aria-label="Sección Blog"
     >
-      
+
       <motion.div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${imagenes.blogs.hero.src})` }}
+        className="absolute inset-0"
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         transition={{ duration: 2.5, ease: "easeOut" }}
-      />
-
-      {/* SEO Image  */}
-      {imagenes.blogs.hero.alt && (
+      >
         <img
           src={imagenes.blogs.hero.src}
-          alt={imagenes.blogs.hero.alt}
+          alt={imagenes.blogs.hero.alt || "Blog"}
           title={imagenes.blogs.hero.title}
-          className="sr-only"
-          aria-hidden="false"
+          className="w-full h-full object-cover object-center"
         />
-      )}
-
+      </motion.div>
 
       <div
         className="absolute inset-0 z-10"
@@ -44,8 +38,7 @@ const HeroSection = () => {
         }}
       />
 
-      {/* Contenedor Principal */}
-      <div className="relative z-20 w-full h-full flex items-center pb-16 md:pb-20">
+      <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
           className="
           flex w-full max-w-[1600px] mx-auto 
@@ -54,7 +47,6 @@ const HeroSection = () => {
           gap-6 md:gap-12
         "
         >
-          {/* Texto principal*/}
           <div
             className="
             flex flex-col w-full 
@@ -63,7 +55,6 @@ const HeroSection = () => {
             text-center
           "
           >
-           
             <Heading
               level="h1"
               size="2xl"

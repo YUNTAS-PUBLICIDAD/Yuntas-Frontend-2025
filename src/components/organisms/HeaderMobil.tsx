@@ -55,7 +55,7 @@ const HeaderMobil = () => {
           px-6 py-4 flex justify-between items-center
           transition-all duration-300
           ${open ? "hidden" : ""}
-          bg-white text-[#04061a] shadow-md
+          ${isScrolled ? "bg-white text-[#04061a] shadow-md" : "bg-transparent text-white shadow-none"}
           ${isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "dark:bg-transparent"} 
           dark:text-white dark:shadow-none
         `}
@@ -65,7 +65,7 @@ const HeaderMobil = () => {
           aria-label="Abrir menú"
           className="text-3xl transition-colors"
         >
-          <IoMenu className="text-[#04061a] dark:text-white" />
+          <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} />
         </button>
 
         <UserSection size="md" />
