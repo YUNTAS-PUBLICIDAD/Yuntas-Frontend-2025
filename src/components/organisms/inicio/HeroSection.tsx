@@ -2,7 +2,6 @@ import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import Text from "@/components/atoms/Text";
 import { imagenes } from "@/data/imagenes";
-
 import { motion } from "framer-motion";
 
 const HeroSection = () => {
@@ -10,7 +9,6 @@ const HeroSection = () => {
     <section
       className="relative w-full h-screen flex items-center justify-start overflow-hidden pt-24 bg-cover bg-center bg-no-repeat border-b-8 border-[#6DE1E3] md:h-screen h-[80vh] md:pt-24 pt-8"
     >
-
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${imagenes.inicio.hero.src})` }}
@@ -23,23 +21,23 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black/50 md:bg-black/40 z-10" />
 
       <div className="relative z-20 w-full flex items-center md:items-end h-full pb-16 md:pb-24 px-6 md:px-12 lg:px-20">
-        <div className="flex w-full max-w-[1440px] mx-auto flex-col md:flex-row items-center md:items-end justify-between gap-12 md:gap-0">
+        <div className="flex w-full max-w-[1440px] mx-auto flex-col justify-end">
 
-          {/* COLUMNA TEXTO */}
-          <div className="flex flex-col justify-center w-full md:w-7/12 items-center md:items-start text-center md:text-left">
+          <div className="flex flex-col justify-center w-full md:w-9/12 items-center md:items-start text-center md:text-left">
 
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
+              
               <Heading
                 level="h1"
-                size="2xl"
-                className="mb-2 md:mb-4 leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+                className="mb-4 leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
               >
-                ESPECIALISTAS EN<br />
-                DISEÑAR TU ESPACIO
+                ESPECIALISTAS EN <br />
+                DISEÑAR TU <br />
+                ESPACIO
               </Heading>
             </motion.div>
 
@@ -51,28 +49,29 @@ const HeroSection = () => {
               <Text
                 variant="caption"
                 color="white"
-                className="mb-0 text-lg sm:text-xl md:text-2xl"
+                className="mb-8 text-lg sm:text-xl md:text-2xl"
               >
                 ¡Somos <span className="text-[#6DE1E3] font-bold">YUNTAS</span> Publicidad!
               </Text>
             </motion.div>
+
+            <motion.div
+              className="flex justify-center md:justify-start w-full"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, type: "spring", stiffness: 100 }}
+            >
+              <Button
+                variant="primary"
+                size="lg"
+                href="/contacto"
+                className="relative z-20 px-12 py-4 text-xl font-bold shadow-lg hover:scale-105 transition-transform"
+              >
+                CONTÁCTANOS
+              </Button>
+            </motion.div>
           </div>
 
-          <motion.div
-            className="flex w-full md:w-5/12 justify-center md:justify-end items-center md:items-end md:pb-2"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6, type: "spring", stiffness: 100 }}
-          >
-            <Button
-              variant="primary"
-              size="lg"
-              href="/contacto"
-              className="relative z-20 px-8 py-4 md:px-10 md:py-5 text-xl md:text-2xl shadow-lg hover:scale-105 transition-transform"
-            >
-              CONTÁCTANOS
-            </Button>
-          </motion.div>
         </div>
       </div>
     </section>
