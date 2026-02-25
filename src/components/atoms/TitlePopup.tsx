@@ -6,7 +6,7 @@ interface TitlePopupProps {
 
 const TitlePopup: React.FC<TitlePopupProps> = ({ children }) => (
   <h2
-    className="text-lg sm:text-3xl font-extrabold font-montserrat
+    className="text-lg sm:text-2xl font-extrabold font-montserrat
     leading-tight text-center"
     style={{ color: "#0E3F88" }}
   >
