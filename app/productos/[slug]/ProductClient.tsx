@@ -76,7 +76,7 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             imgSrc={imgPopups?.url || ""}
                             imgTitle={imgPopups?.title || "Cotiza tu producto"}
                             imgAlt={imgPopups?.alt || "Cotiza tu producto"}
-                            title="¡Tu marca brillando como se merece!"
+                            title="¡Impulsa tu negocio hoy y accedé a descuentos exclusivos!"
                             buttonText="Explorar opciones"
                             productId={displayProducto?.id}
                             sourceId={sourceData.PRODUCTO_DETALLE} // source id para "Producto detalle"
