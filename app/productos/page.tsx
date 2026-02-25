@@ -64,7 +64,7 @@ export default async function ProductosPage() {
                 imgSrc={imagenes.productos.popup.src}
                 imgTitle={imagenes.productos.popup.title}
                 imgAlt={imagenes.productos.popup.alt}
-                title="¡Tu marca brillando como se merece!"
+                title="¡Impulsa tu negocio hoy y accedé a descuentos exclusivos!"
                 buttonText="Explorar opciones"
                 sourceId={sourceData.PRODUCTOS} // source id para "Productos"
             />

@@ -18,7 +18,7 @@ export default function HomePage() {
         imgSrc={imagenes.inicio.popup.src}
         imgTitle={imagenes.inicio.popup.title}
         imgAlt={imagenes.inicio.popup.alt}
-        title="¡Un detalle que cambia todo!"
+        title="¡Agenda tu asesoría gratuita ahora!"
         buttonText="Empieza a brillar"
         sourceId={sourceData.INICIO} // source id para "Inicio"
       />
