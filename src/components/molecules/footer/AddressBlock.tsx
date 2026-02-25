@@ -12,20 +12,25 @@ const AddressBlock = () => (
     </div>
 
     {/* Sección Horario */}
-    <div className="flex flex-col gap-2">
-      <h3 className="font-semibold text-[#6DE1E3] text-xl tracking-wide">
-        Horario
-      </h3>
+<div className="flex flex-col gap-3">
+  <h3 className="font-semibold text-[#6DE1E3] text-xl tracking-wide">
+    Horario
+  </h3>
 
-      <div className="flex flex-col gap-1 text-base md:text-lg text-gray-200">
-        <p>
-          <span className="font-semibold">Lunes a Viernes:</span> 9 a.m – 5 p.m
-        </p>
-        <p>
-          <span className="font-semibold">Sábado:</span> 9 a.m – 2 p.m
-        </p>
-      </div>
+  <div className="flex flex-col gap-4 text-base md:text-lg text-gray-200">
+
+    <div className="flex flex-col">
+      <span className="font-semibold">Lunes a Viernes:</span>
+      <span className="ml-4">9:00 a.m – 5:00 p.m</span>
     </div>
+
+    <div className="flex flex-col">
+      <span className="font-semibold">Sábados:</span>
+      <span className="ml-4">9:00 a.m – 2:00 p.m</span>
+    </div>
+
+  </div>
+</div>
 
   </div>
 );
