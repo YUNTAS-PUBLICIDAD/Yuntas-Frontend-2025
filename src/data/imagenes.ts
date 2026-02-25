@@ -5,6 +5,10 @@ import inicioDetalle1 from "@/assets/inicio/innovation01.jpg";
 import inicioDetalle2 from "@/assets/inicio/innovation02.jpg";
 import inicioDetalle3 from "@/assets/inicio/burguerP.webp";
 import inicioTestimonio from "@/assets/inicio/testimonialbackground.webp";
+import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes1.png";
+import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues1.png";
+import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes2.png";
+import proyectoDespues2 from "@/assets/inicio/nuestroproyectosdespues2.png";
 import nosotrosHero from "@/assets/nosotros/nosotrosBackground.webp";
 import nosotrosDetalle from "@/assets/nosotros/negocioImagen.webp";
 import productosPopup from "@/assets/productos/popup/Productos.webp";
@@ -49,6 +53,26 @@ export const imagenes = {
             src: inicioTestimonio.src,
             alt: "Sala espaciosa con diseño moderno",
             title: "Sala espaciosa con diseño moderno"
+        },
+        proyecto1Antes: {
+            src: proyectoAntes1.src,
+            alt: "Proyecto 1 - Antes",
+            title: "Proyecto 1 - Antes"
+        },
+        proyecto1Despues: {
+            src: proyectoDespues1.src,
+            alt: "Proyecto 1 - Después",
+            title: "Proyecto 1 - Después"
+        },
+        proyecto2Antes: {
+            src: proyectoAntes2.src,
+            alt: "Proyecto 2 - Antes",
+            title: "Proyecto 2 - Antes"
+        },
+        proyecto2Despues: {
+            src: proyectoDespues2.src,
+            alt: "Proyecto 2 - Después",
+            title: "Proyecto 2 - Después"
         },
     },
     nosotros: {
