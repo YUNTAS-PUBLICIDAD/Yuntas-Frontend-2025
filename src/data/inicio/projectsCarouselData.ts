@@ -1,15 +1,29 @@
 import { imagenes } from "@/data/imagenes";
-export const projectsCarouselSlides = [
+
+export interface ProjectSlide {
+  before: { src: string; alt: string };
+  after: { src: string; alt: string };
+}
+
+export const projectsCarouselSlides: ProjectSlide[] = [
   {
-    src: imagenes.inicio.detalle3.src,
-    alt: imagenes.inicio.detalle3.alt,
+    before: {
+      src: imagenes.inicio.proyecto1Antes.src,
+      alt: imagenes.inicio.proyecto1Antes.alt,
+    },
+    after: {
+      src: imagenes.inicio.proyecto1Despues.src,
+      alt: imagenes.inicio.proyecto1Despues.alt,
+    },
   },
   {
-    src: imagenes.inicio.detalle1.src,
-    alt: imagenes.inicio.detalle1.alt,
-  },
-  {
-    src: imagenes.inicio.detalle2.src,
-    alt: imagenes.inicio.detalle2.alt,
+    before: {
+      src: imagenes.inicio.proyecto2Antes.src,
+      alt: imagenes.inicio.proyecto2Antes.alt,
+    },
+    after: {
+      src: imagenes.inicio.proyecto2Despues.src,
+      alt: imagenes.inicio.proyecto2Despues.alt,
+    },
   },
 ];
