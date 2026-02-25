@@ -1,5 +1,5 @@
 import inicioUser from "@/assets/inicio/user-1.png";
-import inicioHero from "@/assets/inicio/heroBackground.webp";
+import inicioHero from "@/assets/inicio/heroBackground.jpg";
 import inicioPopup from "@/assets/inicio/Popup/yuleLove.webp";
 import inicioDetalle1 from "@/assets/inicio/innovation01.webp";
 import inicioDetalle2 from "@/assets/inicio/innovation02.webp";
