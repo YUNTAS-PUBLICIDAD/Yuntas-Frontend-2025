@@ -113,9 +113,9 @@ function SearchBar<T>({
     <div className="relative w-full">
       <form
         onSubmit={handleSubmit}
-        className='flex border-2 border-[#23C1DE] w-full items-center px-2 rounded-3xl'
+        className='flex w-full items-center px-2 rounded-3xl border-2 border-[#23C1DE] bg-white overflow-hidden'
         onKeyDown={handleKeyDown}
-      >
+        >
         <Icon className='bg-white'>
           <FaSearch className='text-gray-500' />
         </Icon>
