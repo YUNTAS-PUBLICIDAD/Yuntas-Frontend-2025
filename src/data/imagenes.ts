@@ -4,7 +4,7 @@ import inicioPopup from "@/assets/inicio/Popup/yuleLove.webp";
 import inicioDetalle1 from "@/assets/inicio/innovation01.jpg";
 import inicioDetalle2 from "@/assets/inicio/innovation02.jpg";
 import inicioDetalle3 from "@/assets/inicio/burguerP.webp";
-import inicioTestimonio from "@/assets/inicio/testimonialbackground.webp";
+import inicioTestimonio from "@/assets/inicio/fondodepantalla.png";
 import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes1.png";
 import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues1.png";
 import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes2.png";
