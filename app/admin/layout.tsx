@@ -73,10 +73,10 @@ export default function AdminLayout({
         />
 
         {/* Página */}
-        <main
-          className="flex-1 py-8 px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
-          {children}
-        </main>
+      <main
+      className="flex-1 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+      {children}
+      </main>
       </div>
     </div>
   );

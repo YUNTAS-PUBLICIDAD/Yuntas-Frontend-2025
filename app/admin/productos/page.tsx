@@ -158,47 +158,38 @@ export default function ProductosPage() {
             </div>
 
 {/* Botones de Imprimir y Exportar */}
-         <div className="flex flex-row flex-wrap gap-2 mb-4">
-  
-  <ActionButtonGroup
-    className="flex-auto"
-    buttons={[
-      {
-        label: "Publicar Cambios",
-        onClick: () => handleTriggerDeploy(),
-        variant: "info",
-        className: "w-full",
-        isLoading: isDeploying,
-      },
+         <div className="grid grid-cols-3 gap-2 mb-4">
+<ActionButtonGroup
+  buttons={[{
+    label: "Publicar Cambios",
+    onClick: () => handleTriggerDeploy(),
+    variant: "info",
+    className: "w-full",
+    isLoading: isDeploying,
+  }]}
+/>
+
+<ActionButtonGroup
+  buttons={[{
+    label: "IMPRIMIR",
+    onClick: () => printTable(productos),
+    variant: "primary",
+    className: "w-[95%]",
+  }]}
+/>
+
+<div>
+  <ExportDropdown
+    className="w-[104%] -ml-4"
+    label="EXPORTAR"
+    options={[
+      { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
+      { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
+      { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
     ]}
   />
-
-  <ActionButtonGroup
-    className="flex-auto"
-    buttons={[
-      {
-        label: "IMPRIMIR",
-        onClick: () => printTable(productos),
-        variant: "primary",
-        className: "w-full",
-      },
-    ]}
-  />
-
-  <div className="flex-auto">
-    <ExportDropdown
-      className="w-full"
-      label="EXPORTAR"
-      options={[
-        { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-        { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-        { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
-      ]}
-    />
-  </div>
-
 </div>
-
+</div>
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
                     {error}
