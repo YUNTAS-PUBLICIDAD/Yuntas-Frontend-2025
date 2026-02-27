@@ -24,7 +24,11 @@ export interface Blog {
 	video_url: string;
 	meta_title: string;
 	meta_description: string;
-	product: Pick<Producto, "id" | "name"> | null;
+	product: {
+        id: number;
+        name: string;
+        slug: string; 
+    } | null;
 	product_name: string;
 	main_image: ImagenBlog;
 	gallery: Galeria[];
@@ -32,6 +36,7 @@ export interface Blog {
 	testimonial: string;
 	benefits: string[];
 	created_at: string;
+	
 }
 
 export interface BlogInput {
