@@ -60,17 +60,19 @@ function BlogDetalleContent() {
 				imageTitle={imgBene?.title || blog.title}
 				benefits={blog.benefits || []}
 			/>
+
+			{blog.video_url &&
+				<VideoSection
+					videoUrl={blog.video_url}
+				/>
+			}
 			<OpinionSection
 				testimonial={blog.testimonial}
 				imageSrc={imgTestimonial?.url || ""}
 				imageAlt={imgTestimonial?.alt || blog.title}
 				imageTitle={imgTestimonial?.title || blog.title}
 			/>
-			{blog.video_url &&
-				<VideoSection
-					videoUrl={blog.video_url}
-				/>
-			}
+			
 		</>
 	);
 }
