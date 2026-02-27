@@ -132,64 +132,85 @@ export default function ProductosPage() {
     }
 
     return (
-        <div className="p-2 md:p-4">
-            {/* Botones de acción principales */}
-            <div className="flex flex-row flex-wrap gap-2 mb-4">
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "Añadir Producto",
-                    onClick: () => setIsAddEditModalOpen(true),
-                    variant: "tertiary",
-                    className: "w-full"
-                }]} />
+<div className="p-2 md:p-4">
 
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "Envio de Email",
-                    onClick: () => setIsEmailModalOpen(true),
-                    variant: "danger",
-                    className: "w-full"
-                }]} />
+  {/* ───────── BOTONES SUPERIORES ───────── */}
+  <div className="flex flex-col md:flex-row gap-2 mb-4">
+    
+    <div className="flex-1">
+      <ActionButtonGroup
+        buttons={[{
+          label: "Añadir Producto",
+          onClick: () => setIsAddEditModalOpen(true),
+          variant: "tertiary",
+          className: "w-full",
+        }]}
+      />
+    </div>
 
-                <ActionButtonGroup className="flex-auto" buttons={[{
-                    label: "Envio de Whatsapp",
-                    onClick: () => setIsWhatsappModalOpen(true),
-                    variant: "success",
-                    className: "w-full"
-                }]} />
-            </div>
+    <div className="flex-1">
+      <ActionButtonGroup
+        buttons={[{
+          label: "Envio de Email",
+          onClick: () => setIsEmailModalOpen(true),
+          variant: "danger",
+          className: "w-full",
+        }]}
+      />
+    </div>
 
-{/* Botones de Imprimir y Exportar */}
-         <div className="grid grid-cols-3 gap-2 mb-4">
-<ActionButtonGroup
-  buttons={[{
-    label: "Publicar Cambios",
-    onClick: () => handleTriggerDeploy(),
-    variant: "info",
-    className: "w-full",
-    isLoading: isDeploying,
-  }]}
-/>
+    <div className="flex-1">
+      <ActionButtonGroup
+        buttons={[{
+          label: "Envio de Whatsapp",
+          onClick: () => setIsWhatsappModalOpen(true),
+          variant: "success",
+          className: "w-full",
+        }]}
+      />
+    </div>
 
-<ActionButtonGroup
-  buttons={[{
-    label: "IMPRIMIR",
-    onClick: () => printTable(productos),
-    variant: "primary",
-    className: "w-[95%]",
-  }]}
-/>
+  </div>
 
-<div>
-  <ExportDropdown
-    className="w-[104%] -ml-4"
-    label="EXPORTAR"
-    options={[
-      { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-      { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-      { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
-    ]}
-  />
-</div>
-</div>
+  {/* ───────── BOTONES INFERIORES ───────── */}
+  <div className="flex flex-col md:flex-row gap-2 mb-4">
+
+    <div className="flex-1">
+      <ActionButtonGroup
+        buttons={[{
+          label: "Publicar Cambios",
+          onClick: () => handleTriggerDeploy(),
+          variant: "info",
+          className: "w-full",
+          isLoading: isDeploying,
+        }]}
+      />
+    </div>
+
+    <div className="flex-1">
+      <ActionButtonGroup
+        buttons={[{
+          label: "IMPRIMIR",
+          onClick: () => printTable(productos),
+          variant: "primary",
+          className: "w-full",
+        }]}
+      />
+    </div>
+
+    <div className="flex-1">
+      <ExportDropdown
+        className="w-full"
+        label="EXPORTAR"
+        options={[
+          { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
+          { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
+          { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
+        ]}
+      />
+    </div>
+
+  </div>
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
                     {error}
