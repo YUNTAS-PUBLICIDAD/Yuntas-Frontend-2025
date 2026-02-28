@@ -14,9 +14,9 @@ interface TestimonialCardProps {
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, date, stars = 5, image }) => (
-  <div className="bg-[#f2f2f2] rounded-[3rem] shadow-xl pt-16 pb-8 px-8 flex flex-col items-center w-full max-w-[340px] min-h-[440px] relative border border-white/50">
+  <div className="bg-white/80 rounded-[3rem] shadow-2xl pt-16 pb-10 px-8 flex flex-col items-center w-full max-w-[340px] min-h-[320px] relative border border-white/30">
     {/* Avatar / Character Icon Container */}
-    <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[#203565] border-4 border-[#f2f2f2] shadow-xl flex items-center justify-center overflow-hidden z-20">
+    <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[#203565] border-4 border-white/80 shadow-xl flex items-center justify-center overflow-hidden z-20">
       {image ? (
         <img src={image} alt={name} className="w-full h-full object-cover" />
       ) : (
@@ -29,7 +29,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, 
     </div>
 
     {/* User Name */}
-    <Text className="font-black text-center mb-1 mt-8 uppercase tracking-tight text-xl text-[#000]">
+    <Text className="font-black text-center mb-1 mt-8 uppercase tracking-tight text-xl text-black">
       {name}
     </Text>
 
@@ -42,7 +42,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, 
 
     {/* Testimonial Text with support for bold formatting */}
     <div
-      className="text-center mb-8 px-2 text-[15px] leading-[1.4] text-[#1a1a1a] flex-grow font-medium"
+      className="text-center mb-5 px-2 text-[15px] leading-[1.4] text-[#1a1a1a] font-medium"
       dangerouslySetInnerHTML={{ __html: text }}
     />
 
@@ -50,7 +50,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, 
     <Button
       variant="primary"
       size="sm"
-      className="rounded-full px-10 py-3 text-sm font-black uppercase tracking-widest hover:scale-110 active:scale-95 transition-all shadow-md bg-[#23C1DE]"
+      className="rounded-full px-10 py-3 text-sm font-black uppercase tracking-widest hover:scale-110 active:scale-95 transition-all shadow-md !bg-[#5ec7ca] !text-black"
     >
       VER TRABAJO
     </Button>
