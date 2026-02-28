@@ -65,10 +65,11 @@ export default function ContactoPage() {
   return (
     <div>
       
-      {/* Filtro de búsqueda */}
-<div className="flex items-center justify-between mb-4 gap-4">
+{/* Filtro de búsqueda */}
+<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
 
-  <div className="flex-1">
+  {/* Buscador */}
+  <div className="w-full md:flex-1">
     <SearchBar
       items={tableData}
       onSearch={setPaginatedData}
@@ -78,14 +79,14 @@ export default function ContactoPage() {
     />
   </div>
 
-  <div className="px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full">
+  {/* Registros encontrados */}
+  <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
     <span className="text-[#203565] font-semibold">
       {paginatedData.length} REGISTROS ENCONTRADOS
     </span>
   </div>
 
 </div>
-        
       {selectedContacto && (
         <ViewContactoModal
           contacto={selectedContacto}
