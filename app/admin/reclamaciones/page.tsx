@@ -220,9 +220,7 @@ const filtrarPorEstado = () => {
         <div className="p-2 md:p-4">
             <div className="flex gap-3 mb-4 items-center">
 </div>
-<div className="flex items-center justify-between mb-4 gap-4">
-
-    {/* Buscador estilo Seguimiento */}
+<div className="flex items-center mb-4 gap-4">
     <div className="flex-1">
         <SearchBar
             items={tableData}
