@@ -8,31 +8,27 @@ const NosotrosSection = () => {
   return (
     <section
       className="
-        relative w-full h-[80vh] md:h-screen 
+        relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
         flex items-center justify-start 
-        pt-24 md:pt-24 overflow-hidden 
+        overflow-hidden 
         border-b-8 border-[#98D8DF]
       "
       aria-label="Sección Nosotros"
     >
 
       <motion.div
-        className="absolute inset-0 bg-cover bg-top bg-no-repeat"
-        style={{ backgroundImage: `url(${imagenes.nosotros.hero.src})` }}
+        className="absolute inset-0"
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         transition={{ duration: 2.5, ease: "easeOut" }}
-      />
-
-      {imagenes.nosotros.hero.alt && (
+      >
         <img
           src={imagenes.nosotros.hero.src}
-          alt={imagenes.nosotros.hero.alt}
+          alt={imagenes.nosotros.hero.alt || "Nosotros"}
           title={imagenes.nosotros.hero.title}
-          className="sr-only"
-          aria-hidden="false"
+          className="w-full h-full object-cover object-center"
         />
-      )}
+      </motion.div>
 
       <div
         className="absolute inset-0 z-10"
@@ -42,7 +38,7 @@ const NosotrosSection = () => {
         }}
       />
 
-      <div className="relative z-20 w-full h-full flex items-center pb-16 md:pb-20">
+      <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
           className="
           flex w-full max-w-[1600px] mx-auto 

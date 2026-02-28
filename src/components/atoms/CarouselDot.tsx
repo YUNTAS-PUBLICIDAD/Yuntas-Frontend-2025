@@ -7,7 +7,10 @@ interface CarouselDotProps {
 
 const CarouselDot: React.FC<CarouselDotProps> = ({ active, onClick }) => (
   <button
-    className={`w-4 h-4 rounded-full mx-2 border-2 border-white bg-white transition-all duration-200 ${active ? "bg-cyan-400 border-cyan-400" : "opacity-60"}`}
+    className={`h-3 rounded-full transition-all duration-300 shadow-md ${active
+        ? "w-10 bg-[#20838f] shadow-[#20838f]/30"
+        : "w-3 bg-gray-400 hover:bg-[#60c4c4] opacity-50"
+      }`}
     onClick={onClick}
     aria-label="Ir al slide"
   />

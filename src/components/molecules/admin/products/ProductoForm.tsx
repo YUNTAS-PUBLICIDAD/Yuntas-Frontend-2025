@@ -69,7 +69,6 @@ const GALLERY_SLOTS = [
 
 export default function ProductForm({ onSubmit, onCancel, isLoading = false, initialData = null }: ProductFormProps) {
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
-
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
 
     // Cargar datos iniciales para editar

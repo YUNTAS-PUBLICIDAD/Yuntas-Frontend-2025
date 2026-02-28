@@ -16,6 +16,7 @@ import Pagination from "@/components/molecules/Pagination";
 import Modal from "@/components/atoms/Modal";
 import BlogForm from "@/components/molecules/blog/BlogForm";
 import { useProductos } from "@/hooks/useProductos";
+import SearchBar from "@/components/molecules/SearchBar";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -34,6 +35,9 @@ const columns = [
 export default function Blogspage() {
     const { blogs, getBlogs, createBlog, updateBlog, deleteBlog, error, isLoading } = useBlogs();
     const { productos, getProductos } = useProductos();
+
+    // --- ESTADOS NUEVOS ---
+    const [blogsFiltrados, setBlogsFiltrados] = useState<Blog[]>([]);
     const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
     const [datosPaginados, setDatosPaginados] = useState<Blog[]>([]);
     const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
@@ -45,14 +49,19 @@ export default function Blogspage() {
         getProductos(200);
     }, [getBlogs, getProductos]);
 
+    useEffect(() => {
+    setBlogsFiltrados(blogs);
+    }, [blogs]);
+
+
     const exportOptions = useMemo(
         () => [
-            { label: "Exportar a CSV", onClick: () => exportCSV(blogs) },
-            { label: "Exportar a Excel", onClick: () => exportExcel(blogs) },
-            { label: "Exportar a PDF", onClick: () => exportToPDF(blogs) },
+        { label: "Exportar a CSV", onClick: () => exportCSV(blogsFiltrados) },
+        { label: "Exportar a Excel", onClick: () => exportExcel(blogsFiltrados) },
+        { label: "Exportar a PDF", onClick: () => exportToPDF(blogsFiltrados) },
         ],
-        [blogs]
-    );
+        [blogsFiltrados]
+        );
 
     const handleCreateBlog = async (formData: BlogInput) => {
         const result = await createBlog(formData);
@@ -106,20 +115,52 @@ export default function Blogspage() {
 
     return (
         <div>
-            {/* BOTONES */}
-            <div className="flex flex-row flex-wrap gap-2 mb-4">
-                <ActionButtonGroup
-                    buttons={[{
-                        label: "Añadir Blog",
-                        onClick: () => setIsAddEditModalOpen(true),
-                    }]} />
-                <ExportDropdown
-                    label="Exportar"
-                    options={exportOptions}
-                    className="w-full"
-                    buttonClassName="px-4 h-[40px]"
-                />
-            </div>
+
+            {/* BARRA DE HERRAMIENTAS: BOTONES + BUSCADOR */}
+   {/* BARRA SUPERIOR */}
+<div className="flex flex-col gap-4 mb-6">
+
+  {/* FILA 1: BUSCADOR + BOTONES */}
+  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+
+    {/* BUSCADOR MÁS LARGO */}
+    <div className="w-full md:w-[60%]">
+      <SearchBar
+        items={blogs}
+        onSearch={setBlogsFiltrados}
+        placeholder="Buscar por título o producto..."
+        searchKeys={['id', 'title', 'product_name']}
+        getDisplayValue={(item) => `${item.id} - ${item.title}`}
+      />
+    </div>
+
+{/* BOTONES ESQUINA DERECHA */}
+<div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+
+  <div className="w-full md:w-auto">
+    <ActionButtonGroup
+      buttons={[{
+        label: "Añadir Blog",
+        onClick: () => setIsAddEditModalOpen(true),
+        className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+      }]}
+    />
+  </div>
+
+  <div className="w-full md:w-auto">
+    <ExportDropdown
+      label="Exportar"
+      options={exportOptions}
+      className="w-full md:w-auto h-[42px]"
+      buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+    />
+  </div>
+
+</div>
+
+  </div>
+
+</div>
 
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
@@ -139,7 +180,7 @@ export default function Blogspage() {
             <div className="flex justify-center mt-4">
                 <Pagination
                     pageSize={10}
-                    items={blogs}
+                    items={blogsFiltrados} // Cambiado de 'blogs' a 'filteredBlogs'
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>

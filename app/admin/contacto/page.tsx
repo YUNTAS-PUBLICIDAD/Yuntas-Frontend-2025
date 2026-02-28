@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useContactos } from "@/hooks/useContactos";
 import { Contacto } from "@/types/admin/contacto";
 
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import Loader from "@/components/atoms/Loader";
 import ViewContactoModal from "@/components/organisms/admin/ModalActions/ViewContactoModal";
-
+import SearchBar from "@/components/molecules/SearchBar";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -44,12 +44,19 @@ export default function ContactoPage() {
  
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedContacto, setSelectedContacto] = useState<Contacto | null>(null);
+  const [tableData, setTableData] = useState<Contacto[]>([]);
+  const [paginatedData, setPaginatedData] = useState<Contacto[]>([]);
 
   useEffect(() => {
     getContactos(20); 
   }, [getContactos]);
 
+  useEffect(() => {
+  setTableData(contactos);
+  setPaginatedData(contactos);
+}, [contactos]);
   
+
   const handleView = (contacto: Contacto) => {
     setSelectedContacto(contacto);
     setOpenViewModal(true);
@@ -58,6 +65,28 @@ export default function ContactoPage() {
   return (
     <div>
       
+{/* Filtro de búsqueda */}
+<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+
+  {/* Buscador */}
+  <div className="w-full md:flex-1">
+    <SearchBar
+      items={tableData}
+      onSearch={setPaginatedData}
+      placeholder="Buscar por nombre, distrito o asunto..."
+      searchKeys={['first_name', 'last_name', 'district', 'request_detail', 'phone']}
+      getDisplayValue={(item) => `${item.first_name} ${item.last_name}`}
+    />
+  </div>
+
+  {/* Registros encontrados */}
+  <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+    <span className="text-[#203565] font-semibold">
+      {paginatedData.length} REGISTROS ENCONTRADOS
+    </span>
+  </div>
+
+</div>
       {selectedContacto && (
         <ViewContactoModal
           contacto={selectedContacto}
@@ -82,7 +111,7 @@ export default function ContactoPage() {
           <AdminTable
             minRows={10}
             columns={columns}
-            data={contactos}
+            data={paginatedData}
             
             onEdit={handleView} 
             

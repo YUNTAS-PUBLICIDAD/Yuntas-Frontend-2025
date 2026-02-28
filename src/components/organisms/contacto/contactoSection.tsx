@@ -8,33 +8,27 @@ const ContactoSection = () => {
   return (
     <section
       className="
-        relative w-full h-[60vh] md:h-[80vh] 
+        relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
         flex items-center justify-start 
         overflow-hidden 
-        border-b-[12px] border-[#98D8DF]
+        border-b-8 border-[#98D8DF]
       "
       aria-label="Sección Contacto"
     >
 
       <motion.div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${imagenes.contacto.hero.src})` }}
+        className="absolute inset-0"
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         transition={{ duration: 2.5, ease: "easeOut" }}
-      />
-
-      {/* Imagen SEO */}
-      {imagenes.contacto.hero.alt && (
-        <img 
-          src={imagenes.contacto.hero.src} 
-          alt={imagenes.contacto.hero.alt} 
-          title={imagenes.contacto.hero.title} 
-          className="sr-only" 
-          aria-hidden="false" 
+      >
+        <img
+          src={imagenes.contacto.hero.src}
+          alt={imagenes.contacto.hero.alt || "Contacto"}
+          title={imagenes.contacto.hero.title}
+          className="w-full h-full object-cover object-center"
         />
-      )}
-
+      </motion.div>
 
       <div
         className="absolute inset-0 z-10"
@@ -44,7 +38,7 @@ const ContactoSection = () => {
         }}
       />
 
-      <div className="relative z-20 w-full h-full flex items-center pb-16 md:pb-20">
+      <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
           className="
           flex w-full max-w-[1600px] mx-auto 
@@ -53,7 +47,6 @@ const ContactoSection = () => {
           gap-6 md:gap-12
         "
         >
-         {/* Texto principal */}
           <div
             className="
             flex flex-col w-full 
@@ -68,7 +61,7 @@ const ContactoSection = () => {
               className="
                 mb-4 leading-tight 
                 drop-shadow-[0_2px_2px_#28BEDA] 
-                text-3xl sm:text-4xl md:text-6xl lg:text-7xl
+                text-5xl sm:text-6xl md:text-7xl
               "
             >
               CONTACTO

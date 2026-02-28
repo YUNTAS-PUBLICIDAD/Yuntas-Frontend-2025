@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Modal from "@/components/atoms/Modal";
 import { showToast } from "@/utils/showToast";
 import { useProductos } from "@/hooks/useProductos";
 import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
+import SearchBar from "@/components/molecules/SearchBar";
+
 const columns = [
     { key: "id", label: "ID" },
     { key: "fecha", label: "FECHA" },
@@ -24,20 +26,42 @@ const formatDate = (dateString?: string) => {
     });
 };
 
+const ESTADO_OPTIONS = [
+    { value: "todos",     label: "👤 Todos los estados" },
+    { value: "pendiente", label: "🟡 Pendiente" },
+    { value: "completo",  label: "🟢 Completo" },
+];
+
 export default function ReclamacionesPage() {
-    const [reclamos, setReclamos] = useState<any[]>([]);
-    const [tableData, setTableData] = useState<any[]>([]);
-    const [paginatedData, setPaginatedData] = useState<any[]>([]);
+    const [estadoFiltro, setEstadoFiltro]     = useState("todos");
+    const [dropdownOpen, setDropdownOpen]     = useState(false);
+    const dropdownRef                         = useRef<HTMLDivElement>(null);
+
+    const [searchTerm, setSearchTerm]         = useState("");
+    const [reclamos, setReclamos]             = useState<any[]>([]);
+    const [tableData, setTableData]           = useState<any[]>([]);
+    const [paginatedData, setPaginatedData]   = useState<any[]>([]);
 
     const { productos, getProductos } = useProductos();
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading]               = useState(true);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const [selectedReclamo, setSelectedReclamo] = useState<any | null>(null);
-    const [newStatusId, setNewStatusId] = useState<number>(1);
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [selectedReclamo, setSelectedReclamo]     = useState<any | null>(null);
+    const [newStatusId, setNewStatusId]             = useState<number>(1);
+    const [isUpdating, setIsUpdating]               = useState(false);
 
-    // Carga inicial
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+  
     useEffect(() => {
         const init = async () => {
             await Promise.all([fetchReclamos(), getProductos(200)]);
@@ -52,24 +76,20 @@ export default function ReclamacionesPage() {
         return productoEncontrado ? productoEncontrado.name : `Producto ID: ${id}`;
     };
 
-
+ 
     useEffect(() => {
         if (reclamos.length > 0) {
             const formatted = reclamos.map(item => {
                 const isCompleto = item.claim_status_id === 2;
                 return {
                     ...item,
-
-
                     fecha: formatDate(item.purchase_date || item.created_at),
                     cliente: `${item.first_name} ${item.last_name}`,
                     documento: `${item.document_number} (${item.document_type_id === 1 ? 'DNI' : 'Pasaporte'})`,
                     producto: getProductName(item.product_id),
                     monto: item.claimed_amount ? `S/. ${item.claimed_amount}` : '-',
-
-
                     estado_visual: (
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${isCompleto ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wide ${isCompleto ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                             {isCompleto ? 'Completo' : 'Pendiente'}
                         </span>
                     )
@@ -80,6 +100,28 @@ export default function ReclamacionesPage() {
             setTableData([]);
         }
     }, [reclamos, productos]);
+
+
+    useEffect(() => {
+        let filtered = tableData;
+
+        if (searchTerm.trim() !== "") {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(item =>
+                item.id?.toString().includes(term) ||
+                item.cliente?.toLowerCase().includes(term) ||
+                item.documento?.toLowerCase().includes(term) ||
+                item.producto?.toLowerCase().includes(term)
+            );
+        }
+
+        if (estadoFiltro !== "todos") {
+            const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
+            filtered = filtered.filter(item => item.claim_status_id === estadoId);
+        }
+
+        setPaginatedData(filtered);
+    }, [searchTerm, estadoFiltro, tableData]);
 
 
     const fetchReclamos = async () => {
@@ -117,14 +159,10 @@ export default function ReclamacionesPage() {
                 body: JSON.stringify({ status_id: newStatusId }),
             });
             if (!res.ok) throw new Error("Error al actualizar estado");
-
             showToast.success("Estado actualizado correctamente");
-
-            setReclamos(prev => prev.map(r => {
-                if (r.id === selectedReclamo.id) return { ...r, claim_status_id: newStatusId };
-                return r;
-            }));
-
+            setReclamos(prev => prev.map(r =>
+                r.id === selectedReclamo.id ? { ...r, claim_status_id: newStatusId } : r
+            ));
             setIsDetailModalOpen(false);
         } catch (error: any) {
             showToast.error(error.message);
@@ -133,17 +171,86 @@ export default function ReclamacionesPage() {
         }
     };
 
-    if (loading) return <div className="p-10 text-center animate-pulse">Cargando datos...</div>;
+    if (loading) return (
+        <div className="p-10 text-center animate-pulse text-sm text-gray-500">
+            Cargando datos...
+        </div>
+    );
+
+    const selectedLabel = ESTADO_OPTIONS.find(o => o.value === estadoFiltro)?.label ?? "";
 
     return (
-        <div className="p-2 md:p-4">
-          
-            <AdminTable
-                columns={columns}
-                data={paginatedData}
-                minRows={5}
-                onEdit={onViewDetail}
-            />
+        <div className="p-2 md:p-4 w-full max-w-full overflow-hidden">
+
+           
+            <div className="flex flex-col md:flex-row gap-3 mb-4 w-full">
+
+            
+                <div className="w-full md:flex-1">
+                    <SearchBar
+                        items={tableData}
+                        onSearch={setPaginatedData}
+                        placeholder="Buscar cliente, documento..."
+                        searchKeys={['id', 'cliente', 'documento', 'producto']}
+                        getDisplayValue={(item) => `${item.id} - ${item.cliente}`}
+                    />
+                </div>
+
+               
+                <div className="w-full md:w-56 relative" ref={dropdownRef}>
+
+                    {/* Botón que muestra la opción seleccionada */}
+                    <button
+                        type="button"
+                        onClick={() => setDropdownOpen(prev => !prev)}
+                        className="w-full h-[42px] px-4 rounded-full border border-[#23C1DE] bg-white
+                                   text-gray-700 text-sm font-medium flex items-center justify-between
+                                   focus:ring-2 focus:ring-[#23C1DE] outline-none cursor-pointer shadow-sm"
+                    >
+                        <span>{selectedLabel}</span>
+                        <svg
+                            className={`w-4 h-4 text-[#23C1DE] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
+                            fill="none" viewBox="0 0 20 20"
+                        >
+                            <path stroke="currentColor" strokeLinecap="round"
+                                strokeLinejoin="round" strokeWidth="2" d="M6 8l4 4 4-4"/>
+                        </svg>
+                    </button>
+
+                   
+                    {dropdownOpen && (
+                        <ul className="absolute z-50 mt-1 left-0 right-0 bg-white border border-[#23C1DE]
+                                       rounded-2xl shadow-lg overflow-hidden">
+                            {ESTADO_OPTIONS.map(opt => (
+                                <li
+                                    key={opt.value}
+                                    onClick={() => {
+                                        setEstadoFiltro(opt.value);
+                                        setDropdownOpen(false);
+                                    }}
+                                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors
+                                        ${estadoFiltro === opt.value
+                                            ? 'bg-[#d0f3fa] font-bold text-[#23C1DE]'
+                                            : 'text-gray-700 hover:bg-[#e8f9fc]'
+                                        }`}
+                                >
+                                    {opt.label}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </div>
+
+           
+            <div className="w-full overflow-x-auto text-sm">
+                <AdminTable
+                    columns={columns}
+                    data={paginatedData}
+                    minRows={5}
+                    onEdit={onViewDetail}
+                />
+            </div>
 
             <div className="flex justify-center mt-4">
                 <Pagination
@@ -213,12 +320,12 @@ export default function ReclamacionesPage() {
                                 <div className="flex gap-3 items-center w-full sm:w-auto bg-gray-50 p-2 rounded-lg">
                                     <span className="text-sm font-bold text-gray-700 hidden sm:block px-2">Estado:</span>
                                     <select
-                                        value={newStatusId}
-                                        onChange={(e) => setNewStatusId(Number(e.target.value))}
-                                        className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
+                                    value={newStatusId}
+                                    onChange={(e) => setNewStatusId(Number(e.target.value))}
+                                    className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
                                     >
-                                        <option value={1}>🟡 Pendiente</option>
-                                        <option value={2}>🟢 Completo</option>
+                                    <option value={1}>🟡 Pendiente</option>
+                                    <option value={2}>🟢 Completo</option>
                                     </select>
                                     <button
                                         onClick={handleUpdateStatus}
@@ -239,4 +346,4 @@ export default function ReclamacionesPage() {
             </Modal>
         </div>
     );
-}
+} 

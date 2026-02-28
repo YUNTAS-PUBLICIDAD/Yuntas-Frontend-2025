@@ -1,26 +1,121 @@
 import React from "react";
-import InfoCard from "@/components/molecules/InfoCard";
 import SectionImage from "@/components/atoms/SectionImage";
 import { imagenes } from "@/data/imagenes";
 
+// --- ICONOS ---
+
+// Icono de Ojo 
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#006D77" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+// Icono de Lupa 
+const SearchIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#006D77" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.3-4.3" />
+  </svg>
+);
+
+// Icono Signo Mayor (>) 
+const ChevronRightCircle = () => (
+  <div className="bg-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m9 18 6-6-6-6"/>
+    </svg>
+  </div>
+);
+
+// Icono Signo Menor (<) 
+const ChevronLeftCircle = () => (
+  <div className="bg-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m15 18-6-6 6-6"/>
+    </svg>
+  </div>
+);
+
+
+// --- COMPONENTES ---
+
+const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: any }) => {
+  return (
+    <div className="flex items-center w-full max-w-3xl">
+      {/* Círculo del icono */}
+      <div className="flex-shrink-0 relative z-10 bg-[#B2EBF2] w-24 h-24 rounded-full flex items-center justify-center shadow-md">
+        <Icon />
+      </div>
+      
+      {/* Texto */}
+      <div className="bg-[#E0F7FA] -ml-8 pl-10 pr-8 py-4 rounded-r-full rounded-l-none flex-grow h-20 flex items-center">
+        <p className="text-gray-800 font-semibold text-base md:text-lg leading-tight">
+          {text}
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const InnovacionSection: React.FC = () => {
   return (
-    <section className="w-full py-12 px-4 md:px-0 bg-white">
-      <div className="flex flex-col md:flex-row gap-12">
-        {/* Bloque 1: InfoCard arriba, Imagen abajo */}
-        <div className="flex flex-col items-center gap-8 md:w-1/2">
-          <InfoCard text="Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos" className="max-w-2xl w-full py-12 px-10 text-2xl font-bold" />
-          <div className="w-full flex justify-start">
-              <SectionImage src={imagenes.inicio.detalle2.src} alt={imagenes.inicio.detalle2.alt} className="max-w-[56rem] w-full rounded-tr-3xl rounded-br-3xl" />
+    <section className="w-full py-16 px-4 md:px-8 lg:px-12 bg-white">
+      <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
+        
+        
+        <div className="flex flex-col items-center gap-6 w-full md:w-1/2">
+          
+          <div className="relative w-full rounded-3xl overflow-hidden shadow-lg group">
+           
+             <div className="absolute top-8 left-0 z-10 bg-black text-white py-2 px-5 rounded-r-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
+                <ChevronRightCircle />
+                <span className="mt-0.5">BARRAS DE PIXCEL</span>
+             </div>
+
+            
+             <div className="w-full aspect-[3/2]">
+                <SectionImage 
+                    src={imagenes.inicio.detalle1.src} 
+                    alt={imagenes.inicio.detalle1.alt} 
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
+                />
+             </div>
           </div>
+          
+          <CustomInfoCard 
+            icon={EyeIcon}
+            text="Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos"
+          />
         </div>
-        {/* Bloque 2: Imagen arriba, InfoCard abajo */}
-        <div className="flex flex-col items-center gap-8 md:w-1/2">
-          <div className="w-full flex justify-end">
-              <SectionImage src={imagenes.inicio.detalle1.src} alt={imagenes.inicio.detalle1.alt} className="max-w-[56rem] w-full rounded-tl-3xl rounded-bl-3xl" />
+
+     
+        <div className="flex flex-col items-center gap-6 w-full md:w-1/2">
+          
+          <div className="relative w-full rounded-3xl overflow-hidden shadow-lg group">
+              
+              <div className="absolute top-8 right-0 z-10 bg-black text-white py-2 px-5 rounded-l-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
+                <span className="mt-0.5">LETREROS NEÓN</span>
+                <ChevronLeftCircle />
+              </div>
+
+            
+              <div className="w-full aspect-[3/2]">
+                  <SectionImage 
+                    src={imagenes.inicio.detalle2.src} 
+                    alt={imagenes.inicio.detalle2.alt} 
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
+                  />
+              </div>
           </div>
-          <InfoCard text="Aprende cómo esta tecnología transforma el ambiente y optimiza el consumo energético" className="max-w-2xl w-full py-12 px-10 text-2xl font-bold" />
+
+          <CustomInfoCard 
+            icon={SearchIcon}
+            text="Aprende cómo esta tecnología transforma el ambiente y optimiza el consumo energético"
+          />
         </div>
+
       </div>
     </section>
   );

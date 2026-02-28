@@ -1,24 +1,75 @@
+"use client";
+
 import React from 'react';
 import Heading from '@/components/atoms/Heading';
 import { imagenes } from "@/data/imagenes";
+import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
     <section
-        className='relative w-full h-screen flex items-center justify-center
-      overflow-hidden pt-24 bg-cover bg-center bg-no-repeat  px-8 md:px-0 text-center
-       md:h-screen md:pt-24 '
-        style={{ backgroundImage: `url('${imagenes.reclamaciones.hero.src}')` }}
+      className="
+        relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
+        flex items-center justify-start 
+        overflow-hidden 
+        border-b-8 border-[#98D8DF]
+      "
+      aria-label="Sección Reclamaciones"
+    >
+
+      <motion.div
+        className="absolute inset-0"
+        initial={{ scale: 1.2 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 2.5, ease: "easeOut" }}
       >
-      {imagenes.reclamaciones.hero.alt && <img src={imagenes.reclamaciones.hero.src} alt={imagenes.reclamaciones.hero.alt} title={imagenes.reclamaciones.hero.title} className="sr-only" aria-hidden="false" />}
-      <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
-      <Heading
-        level="h1"
-        size="2xl"
-        className="leading-tight md:text-7xl text-5xl sm:text-6xl drop-shadow-[0_2px_2px_#28BEDA]"
-      >
-        Reclamaciones
-      </Heading>
+        <img
+          src={imagenes.reclamaciones.hero.src}
+          alt={imagenes.reclamaciones.hero.alt || "Reclamaciones"}
+          title={imagenes.reclamaciones.hero.title}
+          className="w-full h-full object-cover object-center"
+        />
+      </motion.div>
+
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
+        }}
+      />
+
+      <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
+        <div
+          className="
+          flex w-full max-w-[1600px] mx-auto 
+          flex-col md:flex-row 
+          items-center md:items-center
+          gap-6 md:gap-12
+        "
+        >
+          <div
+            className="
+            flex flex-col w-full 
+            justify-center 
+            items-center
+            text-center
+          "
+          >
+            <Heading
+              level="h1"
+              size="2xl"
+              className="
+                mb-4 leading-tight 
+                drop-shadow-[0_2px_2px_#28BEDA] 
+                text-5xl sm:text-6xl md:text-7xl
+              "
+            >
+              RECLAMACIONES
+            </Heading>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

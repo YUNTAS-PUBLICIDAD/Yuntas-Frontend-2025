@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { LeadInput, Lead } from "@/types/admin/lead";
 
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
@@ -15,6 +15,8 @@ import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 import SearchBar from "@/components/molecules/SearchBar";
 
+
+
 export default function SeguimientoPage() {
     const router = useRouter();
 
@@ -23,6 +25,7 @@ export default function SeguimientoPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+    
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
     const { confirm, ConfirmDialog } = useConfirm();
@@ -34,6 +37,8 @@ export default function SeguimientoPage() {
     useEffect(() => {
         setLeadsFiltered(leads);
     }, [leads]);
+
+    // Filtrar leads por término de búsqueda
 
     const handleEditClick = (client: Lead) => {
         setSelectedLead(client);
@@ -127,7 +132,37 @@ export default function SeguimientoPage() {
                 </div>
             )}
 
-            {/* BUSCADOR*/}
+            {/* BUSCADOR */}
+{!isMonitoreoMode && (
+  <div className="flex items-center justify-between mb-4 gap-4">
+
+    <div className="flex-1">
+      <SearchBar
+        items={leads}
+        onSearch={setLeadsFiltered}
+        placeholder="Buscar por nombre, email, teléfono, producto..."
+        searchKeys={[
+          'id',
+          'name',
+          'email',
+          'phone',
+          'product_name',
+          'source_name',
+          'created_at'
+        ]}
+        getDisplayValue={(item) => `${item.id} - ${item.name}`}
+      />
+    </div>
+
+    <div className="px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full">
+      <span className="text-[#203565] font-semibold">
+        {leadsFiltered.length} REGISTROS ENCONTRADOS
+      </span>
+    </div>
+
+  </div>
+)}
+            {/* BUSCADOR MONITOREO */}
             {isMonitoreoMode && (
                 <div className="mb-4">
                     <SearchBar
