@@ -134,25 +134,29 @@ export default function Blogspage() {
       />
     </div>
 
-    {/* BOTONES ESQUINA DERECHA */}
-    <div className="flex gap-3">
+{/* BOTONES ESQUINA DERECHA */}
+<div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
 
-      <ActionButtonGroup
-        buttons={[{
-          label: "Añadir Blog",
-          onClick: () => setIsAddEditModalOpen(true),
-          className: "px-6 h-[42px] text-sm font-semibold"
-        }]}
-      />
+  <div className="w-full md:w-auto">
+    <ActionButtonGroup
+      buttons={[{
+        label: "Añadir Blog",
+        onClick: () => setIsAddEditModalOpen(true),
+        className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+      }]}
+    />
+  </div>
 
-      <ExportDropdown
-        label="Exportar"
-        options={exportOptions}
-        className="h-[42px]"
-        buttonClassName="px-6 h-[42px] text-sm font-semibold"
-      />
+  <div className="w-full md:w-auto">
+    <ExportDropdown
+      label="Exportar"
+      options={exportOptions}
+      className="w-full md:w-auto h-[42px]"
+      buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+    />
+  </div>
 
-    </div>
+</div>
 
   </div>
 
