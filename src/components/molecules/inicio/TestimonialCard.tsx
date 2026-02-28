@@ -2,45 +2,58 @@ import React from "react";
 import Icon from "@/components/atoms/Icon";
 import Text from "@/components/atoms/Text";
 import { FaStar } from "react-icons/fa";
+import Button from "@/components/atoms/Button";
 
 interface TestimonialCardProps {
   name: string;
   initial: string;
-  text: React.ReactNode;
+  text: string;
   date: string;
   stars?: number;
+  image?: string; // Placeholder for character image
 }
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, date, stars = 5 }) => (
- <div className="bg-white rounded-[50px] shadow-lg pt-16 pb-6 px-8 
-flex flex-col justify-between items-center 
-w-full max-w-sm h-[420px] relative">
-    <Icon size="2xl" bgColor="bg-blue-900" className="absolute -top-12 left-1/2 -translate-x-1/2 text-white text-4xl font-bold shadow-lg">
-      <span>{initial}</span>
-    </Icon>
-<div className="flex flex-col items-center">
-  <Text className="font-extrabold text-3xl text-black text-center mt-8 mb-3">
-    {name}
-  </Text>
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, date, stars = 5, image }) => (
+  <div className="bg-white/80 rounded-[3rem] shadow-2xl pt-16 pb-10 px-8 flex flex-col items-center w-full max-w-[340px] min-h-[320px] relative border border-white/30">
+    {/* Avatar / Character Icon Container */}
+    <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[#203565] border-4 border-white/80 shadow-xl flex items-center justify-center overflow-hidden z-20">
+      {image ? (
+        <img src={image} alt={name} className="w-full h-full object-cover" />
+      ) : (
+        /* 
+           TODO: Replace with character icons when available.
+           Currently using initials as fallback.
+        */
+        <span className="text-white text-4xl font-black">{initial}</span>
+      )}
+    </div>
 
-  <div className="flex gap-2 mb-3 justify-center">
-    {Array.from({ length: stars }).map((_, i) => (
-      <Icon key={i} size="md" bgColor="bg-transparent" className="text-yellow-400">
-        <FaStar />
-      </Icon>
-    ))}
-  </div>
+    {/* User Name */}
+    <Text className="font-black text-center mb-1 mt-8 uppercase tracking-tight text-xl text-black">
+      {name}
+    </Text>
 
-  <Text variant="body" className="text-center px-2 text-base">
-    {text}
-  </Text>
-</div>
+    {/* Stars */}
+    <div className="flex gap-1 mb-4 justify-center">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <FaStar key={i} className="text-[#FFC107] text-2xl drop-shadow-sm" />
+      ))}
+    </div>
 
-<button
-  className="bg-teal-400 hover:bg-teal-500 text-black font-semibold px-6 py-2 rounded-full transition duration-300"
->
-  VER TRABAJO
-</button>
+    {/* Testimonial Text with support for bold formatting */}
+    <div
+      className="text-center mb-5 px-2 text-[15px] leading-[1.4] text-[#1a1a1a] font-medium"
+      dangerouslySetInnerHTML={{ __html: text }}
+    />
+
+    {/* Action Button */}
+    <Button
+      variant="primary"
+      size="sm"
+      className="rounded-full px-10 py-3 text-sm font-black uppercase tracking-widest hover:scale-110 active:scale-95 transition-all shadow-md !bg-[#5ec7ca] !text-black"
+    >
+      VER TRABAJO
+    </Button>
   </div>
 );
 
