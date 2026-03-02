@@ -71,11 +71,12 @@ const TestimonialsSection: React.FC = () => {
               className="testimonials-swiper !pb-20"
             >
               {testimonialsData.map((t, idx) => (
-                <SwiperSlide key={idx} className="flex justify-center pt-12 px-2">
-                  <div className="flex justify-center w-full">
+                <SwiperSlide key={idx} className="!h-auto flex pt-12 px-2 pb-4">
+                  <div className="flex justify-center w-full h-full">
                     <TestimonialCard
                       {...t}
-                    // image={t.image} // Placeholder for when images are added to data
+                      image={t.image}
+                      className="h-full"
                     />
                   </div>
                 </SwiperSlide>
