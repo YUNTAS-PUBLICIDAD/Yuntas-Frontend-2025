@@ -46,11 +46,32 @@ export default function AdminLayout({
     <div
       className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
       {/* ───────────────── TOP BAR (solo móvil) ───────────────── */}
-      <div
-        className="flex items-center justify-between h-16 px-6 bg-white dark:bg-transparent border-b border-gray-20 dark:border-white/10 md:hidden">
-        {/* Hamburguesa */}
-        {/* Usuario */}
-      </div>
+<div
+  className="sticky top-0 z-50 flex items-center justify-between h-16 px-6 
+  bg-white dark:bg-[#141A3F] border-b border-gray-200 
+  md:hidden"
+>
+  {/* Hamburguesa */}
+  <button onClick={() => setSidebarOpen(true)}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-6 h-6 text-[#141A3F] dark:text-white"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 6h16M4 12h16M4 18h16"
+      />
+    </svg>
+  </button>
+
+  {/* Usuario (placeholder opcional) */}
+  <div />
+</div>
 
       {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
       <Encabezado variant="azul">{title}</Encabezado>
