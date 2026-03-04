@@ -5,11 +5,12 @@ import { usePathname } from "next/navigation";
 
 type NavMenuProps = {
   size?: "sm" | "md" | "lg";
-  variant?:"mobile"|"desktop"
+variant?: "mobile" | "desktop" | "footer";
 };
 const variantMap = {
-  mobile: "flex flex-col gap-y-4 w-full text-white", 
-  desktop: "flex flex-row gap-x-10 items-center"
+  mobile: "flex flex-col gap-y-4 w-full text-white",
+desktop: "flex flex-row gap-x-10 items-center uppercase",
+ footer: "flex flex-col gap-y-1 items-start text-white lowercase capitalize"
 };
 export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps) {
   const pathname = usePathname(); 
@@ -22,23 +23,77 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
       : "text-lg";
 
   return (
-    <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
-      <MenuItem href="/" active={pathname === "/"} color={variant==='mobile'? "text-white":""}>INICIO</MenuItem>
+   <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
+  
+{variant === "footer" && (
+  <h3 className="text-[#6de1e3] font-semibold mb-4 px-4 text-xl">
+    Enlaces
+  </h3>
+)}
+<MenuItem 
+  href="/" 
+  active={variant !== "footer" && pathname === "/"} 
+  color={
+    variant === "mobile"
+      ? "text-white"
+      : variant === "footer"
+      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+      : ""
+  }>
+  Inicio
+</MenuItem>
 
-      <MenuItem href="/nosotros" active={pathname === "/nosotros"} color={variant==='mobile'? "text-white":""}>
-        NOSOTROS
-      </MenuItem>
-      
-      <MenuItem href="/productos" active={pathname.startsWith("/productos")} color={variant==='mobile'? "text-white":""}>
-        PRODUCTOS
-      </MenuItem>
-      
-      <MenuItem href="/blog" active={pathname.startsWith("/blog")} color={variant==='mobile'? "text-white":""}>
-        BLOG
-      </MenuItem>
-      <MenuItem href="/contacto" active={pathname === "/contacto"} color={variant==='mobile'? "text-white":""}>
-        CONTACTO
-      </MenuItem>
+<MenuItem 
+  href="/nosotros" 
+  active={variant !== "footer" && pathname === "/nosotros"} 
+  color={
+    variant === "mobile"
+      ? "text-white"
+      : variant === "footer"
+      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+      : ""
+  }>
+  Nosotros
+</MenuItem>
+
+<MenuItem 
+  href="/productos" 
+  active={variant !== "footer" && pathname.startsWith("/productos")} 
+  color={
+    variant === "mobile"
+      ? "text-white"
+      : variant === "footer"
+      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+      : ""
+  }>
+  Productos
+</MenuItem>
+
+<MenuItem 
+  href="/blog" 
+  active={variant !== "footer" && pathname.startsWith("/blog")} 
+  color={
+    variant === "mobile"
+      ? "text-white"
+      : variant === "footer"
+      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+      : ""
+  }>
+  Blog
+</MenuItem>
+
+<MenuItem 
+  href="/contacto" 
+  active={variant !== "footer" && pathname === "/contacto"} 
+  color={
+    variant === "mobile"
+      ? "text-white"
+      : variant === "footer"
+      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+      : ""
+  }>
+  Contacto
+</MenuItem>
     </nav>
   );
 }

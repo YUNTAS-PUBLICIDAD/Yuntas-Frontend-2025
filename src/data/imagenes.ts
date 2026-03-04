@@ -1,4 +1,8 @@
 import inicioUser from "@/assets/inicio/user-1.png";
+import opinion1 from "@/assets/inicio/opinion1.png";
+import opinion2 from "@/assets/inicio/opinion2.png";
+import opinion3 from "@/assets/inicio/opinion3.png";
+
 import inicioHero from "@/assets/inicio/heroBackground.jpg";
 import inicioPopup from "@/assets/inicio/Popup/yuleLove.webp";
 import inicioDetalle1 from "@/assets/inicio/innovation01.jpg";
@@ -74,6 +78,23 @@ export const imagenes = {
             alt: "Proyecto 2 - Después",
             title: "Proyecto 2 - Después"
         },
+        opiniones: {
+            persona1: {
+                src: opinion1.src,
+                alt: "Opinión de Carlos Mendoza",
+                title: "Opinión de Carlos Mendoza"
+            },
+            persona2: {
+                src: opinion2.src,
+                alt: "Opinión de Andrea Ramos",
+                title: "Opinión de Andrea Ramos"
+            },
+            persona3: {
+                src: opinion3.src,
+                alt: "Opinión de Luis Palacios",
+                title: "Opinión de Luis Palacios"
+            }
+        }
     },
     nosotros: {
         hero: {
