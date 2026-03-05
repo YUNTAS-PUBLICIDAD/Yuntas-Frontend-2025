@@ -18,6 +18,7 @@ const HeaderMobil = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith('/admin');
+  if (isAdminPath) return null;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -45,6 +46,7 @@ const HeaderMobil = () => {
     await logout();
     setOpen(false);
   };
+
 
   return (
     <>

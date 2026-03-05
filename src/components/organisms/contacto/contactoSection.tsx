@@ -27,6 +27,7 @@ const ContactoSection = () => {
           alt={imagenes.contacto.hero.alt || "Contacto"}
           title={imagenes.contacto.hero.title}
           className="w-full h-full object-cover object-center"
+           fetchPriority="high"
         />
       </motion.div>
 
