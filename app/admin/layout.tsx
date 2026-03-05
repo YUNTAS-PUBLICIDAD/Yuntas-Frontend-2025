@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import SidebarSection from "@/components/organisms/admin/SidebarSection";
@@ -43,8 +43,7 @@ export default function AdminLayout({
   const title = titleMap[key] ?? "Panel de Administración";
 
   return (
-    <div
-      className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
       {/* ───────────────── TOP BAR (solo móvil) ───────────────── */}
 <div
   className="sticky top-0 z-50 flex items-center justify-between h-16 px-6 
@@ -77,8 +76,7 @@ export default function AdminLayout({
       <Encabezado variant="azul">{title}</Encabezado>
 
       {/* ───────────────── CONTENIDO ───────────────── */}
-      <div
-        className="flex flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+      <div className="flex flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
         {/* Overlay móvil */}
         {sidebarOpen && (
           <div
@@ -94,10 +92,9 @@ export default function AdminLayout({
         />
 
         {/* Página */}
-      <main
-      className="flex-1 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
-      {children}
-      </main>
+        <main className="flex-1 min-w-0 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+          {children}
+        </main>
       </div>
     </div>
   );
