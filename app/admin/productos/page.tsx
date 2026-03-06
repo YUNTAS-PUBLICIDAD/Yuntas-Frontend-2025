@@ -17,16 +17,7 @@ import WhatsappFormWithTabs from "@/components/molecules/admin/products/Whatsapp
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/SearchBar";
-
-// Icono para el estado vacío
-const SearchXIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.3-4.3"></path>
-        <path d="m13.5 8.5-5 5"></path>
-        <path d="m8.5 8.5 5 5"></path>
-    </svg>
-);
+import { SearchXIcon, PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -152,6 +143,7 @@ export default function ProductosPage() {
                             onClick: () => setIsAddEditModalOpen(true),
                             variant: "tertiary",
                             className: "w-full",
+                            icon: <PlusIcon />,
                         }]}
                     />
                 </div>
@@ -163,6 +155,7 @@ export default function ProductosPage() {
                             onClick: () => setIsEmailModalOpen(true),
                             variant: "danger",
                             className: "w-full",
+                            icon: <MailIcon />,
                         }]}
                     />
                 </div>
@@ -174,6 +167,7 @@ export default function ProductosPage() {
                             onClick: () => setIsWhatsappModalOpen(true),
                             variant: "success",
                             className: "w-full",
+                            icon: <WhatsappIcon />,
                         }]}
                     />
                 </div>
@@ -191,6 +185,7 @@ export default function ProductosPage() {
                             variant: "info",
                             className: "w-full",
                             isLoading: isDeploying,
+                            icon: <RocketIcon />,
                         }]}
                     />
                 </div>
@@ -202,6 +197,7 @@ export default function ProductosPage() {
                             onClick: () => printTable(productos),
                             variant: "primary",
                             className: "w-full",
+                            icon: <PrinterIcon />,
                         }]}
                     />
                 </div>
