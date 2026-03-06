@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { IoMenu, IoClose } from "react-icons/io5";
 import NavMenuMobil from "../molecules/header/NavMenuMobil";
@@ -18,7 +17,6 @@ const HeaderMobil = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith('/admin');
-  if (isAdminPath) return null;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -46,7 +44,6 @@ const HeaderMobil = () => {
     await logout();
     setOpen(false);
   };
-
 
   return (
     <>
@@ -86,7 +83,7 @@ const HeaderMobil = () => {
       {/* ───────────── DRAWER ───────────── */}
       <div
         className={`
-          md:hidden fixed inset-0 z-40 flex flex-col
+          md:hidden fixed inset-0 z-100 flex flex-col
           transform transition-transform duration-500 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
 
