@@ -40,6 +40,8 @@ const HeaderMobil = () => {
     };
   }, []);
 
+  if (isAdminPath) return null;
+
   const handleLogout = async () => {
     await logout();
     setOpen(false);
@@ -112,7 +114,7 @@ const HeaderMobil = () => {
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-      {/* Dark Mode Switch */}
+          {/* Dark Mode Switch */}
           {isAdmin && (
             <>
               <div className="flex items-center justify-between">

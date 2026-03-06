@@ -8,10 +8,10 @@ const ContactoSection = () => {
   return (
     <section
       className="
-        relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
+        relative w-full h-[40vh] md:h-[50vh]
         flex items-center justify-start 
         overflow-hidden 
-        border-b-8 border-[#98D8DF]
+        border-b-4 border-[#98D8DF]
       "
       aria-label="Sección Contacto"
     >

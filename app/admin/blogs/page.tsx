@@ -50,18 +50,18 @@ export default function Blogspage() {
     }, [getBlogs, getProductos]);
 
     useEffect(() => {
-    setBlogsFiltrados(blogs);
+        setBlogsFiltrados(blogs);
     }, [blogs]);
 
 
     const exportOptions = useMemo(
         () => [
-        { label: "Exportar a CSV", onClick: () => exportCSV(blogsFiltrados) },
-        { label: "Exportar a Excel", onClick: () => exportExcel(blogsFiltrados) },
-        { label: "Exportar a PDF", onClick: () => exportToPDF(blogsFiltrados) },
+            { label: "Exportar a CSV", onClick: () => exportCSV(blogsFiltrados) },
+            { label: "Exportar a Excel", onClick: () => exportExcel(blogsFiltrados) },
+            { label: "Exportar a PDF", onClick: () => exportToPDF(blogsFiltrados) },
         ],
         [blogsFiltrados]
-        );
+    );
 
     const handleCreateBlog = async (formData: BlogInput) => {
         const result = await createBlog(formData);
@@ -109,98 +109,87 @@ export default function Blogspage() {
         setIsAddEditModalOpen(false);
     };
 
-    if (isLoading && blogs.length === 0) {
-        return <div className="p-10 text-center animate-pulse">Cargando blogs...</div>;
-    }
-
     return (
-        <div>
+        <div className="p-2 md:p-4">
+            {isLoading && blogs.length === 0 ? (
+                <div className="p-10 text-center animate-pulse">Cargando blogs...</div>
+            ) : blogs.length === 0 ? (
+                <div className="p-10 text-center">No se encontraron blogs.</div>
+            ) : (
+                <>
+                    {/* BARRA SUPERIOR */}
+                    <div className="flex flex-col gap-4 mb-6">
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div className="w-full md:w-[60%]">
+                                <SearchBar
+                                    items={blogs}
+                                    onSearch={setBlogsFiltrados}
+                                    placeholder="Buscar por título o producto..."
+                                    searchKeys={['id', 'title', 'product_name']}
+                                    getDisplayValue={(item) => `${item.id} - ${item.title}`}
+                                />
+                            </div>
+                            <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                                <div className="w-full md:w-auto">
+                                    <ActionButtonGroup
+                                        buttons={[{
+                                            label: "Añadir Blog",
+                                            onClick: () => setIsAddEditModalOpen(true),
+                                            className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+                                        }]}
+                                    />
+                                </div>
+                                <div className="w-full md:w-auto">
+                                    <ExportDropdown
+                                        label="Exportar"
+                                        options={exportOptions}
+                                        className="w-full md:w-auto h-[42px]"
+                                        buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            {/* BARRA DE HERRAMIENTAS: BOTONES + BUSCADOR */}
-   {/* BARRA SUPERIOR */}
-<div className="flex flex-col gap-4 mb-6">
+                    {error && (
+                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                            {error}
+                        </div>
+                    )}
 
-  {/* FILA 1: BUSCADOR + BOTONES */}
-  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <AdminTable
+                        minRows={10}
+                        columns={columns}
+                        data={datosPaginados}
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteBlog}
+                    />
 
-    {/* BUSCADOR MÁS LARGO */}
-    <div className="w-full md:w-[60%]">
-      <SearchBar
-        items={blogs}
-        onSearch={setBlogsFiltrados}
-        placeholder="Buscar por título o producto..."
-        searchKeys={['id', 'title', 'product_name']}
-        getDisplayValue={(item) => `${item.id} - ${item.title}`}
-      />
-    </div>
+                    <div className="flex justify-center mt-4">
+                        <Pagination
+                            pageSize={10}
+                            items={blogsFiltrados}
+                            setProductosPaginados={setDatosPaginados}
+                        />
+                    </div>
 
-{/* BOTONES ESQUINA DERECHA */}
-<div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-
-  <div className="w-full md:w-auto">
-    <ActionButtonGroup
-      buttons={[{
-        label: "Añadir Blog",
-        onClick: () => setIsAddEditModalOpen(true),
-        className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
-      }]}
-    />
-  </div>
-
-  <div className="w-full md:w-auto">
-    <ExportDropdown
-      label="Exportar"
-      options={exportOptions}
-      className="w-full md:w-auto h-[42px]"
-      buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
-    />
-  </div>
-
-</div>
-
-  </div>
-
-</div>
-
-            {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
-                    {error}
-                </div>
+                    <Modal
+                        isOpen={isAddEditModalOpen}
+                        onClose={handleCloseModal}
+                        title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
+                        size="lg"
+                    >
+                        <BlogForm
+                            onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
+                            onCancel={handleCloseModal}
+                            initialData={selectedBlog}
+                            isLoading={isLoading}
+                            productos={productos}
+                        />
+                    </Modal>
+                    <ConfirmDialog />
+                </>
             )}
-
-            {/* TABLA */}
-            <AdminTable
-                minRows={10}
-                columns={columns}
-                data={datosPaginados}
-                onEdit={handleEditClick}
-                onDelete={handleDeleteBlog}
-            />
-
-            <div className="flex justify-center mt-4">
-                <Pagination
-                    pageSize={10}
-                    items={blogsFiltrados} // Cambiado de 'blogs' a 'filteredBlogs'
-                    setProductosPaginados={setDatosPaginados}
-                />
-            </div>
-
-            {/* MODAL DE AÑADIR Y EDITAR */}
-            <Modal
-                isOpen={isAddEditModalOpen}
-                onClose={handleCloseModal}
-                title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
-                size="lg"
-            >
-                <BlogForm
-                    onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
-                    onCancel={handleCloseModal}
-                    initialData={selectedBlog}
-                    isLoading={isLoading}
-                    productos={productos}
-                />
-            </Modal>
-            <ConfirmDialog />
         </div>
     );
 }
