@@ -14,6 +14,7 @@ import { exportTablePDF } from "@/utils/Export/exportTablePDF";
 import { User, UserInput } from "@/types/admin/user";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
+import { PrinterIcon, PlusIcon } from "@/components/atoms/icons";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -115,6 +116,7 @@ export default function UsuariosPage() {
                                     exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
                                 variant: "primary",
                                 className: "w-full h-[40px]",
+                                icon: <PrinterIcon />,
                             },
                         ]}
                     />
@@ -129,6 +131,7 @@ export default function UsuariosPage() {
                                 onClick: () => setIsModalOpen(true),
                                 variant: "tertiary",
                                 className: "w-full h-[40px]",
+                                icon: <PlusIcon />,
                             },
                         ]}
                     />
