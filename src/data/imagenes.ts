@@ -1,4 +1,5 @@
 import inicioUser from "@/assets/inicio/user-1.png";
+
 // import opinion1 from "@/assets/inicio/opinion1.png";
 // import opinion2 from "@/assets/inicio/opinion2.png";
 // import opinion3 from "@/assets/inicio/opinion3.png";
@@ -7,26 +8,50 @@ import opinion2 from "@/assets/inicio/opinion02.webp";
 import opinion3 from "@/assets/inicio/opinion03.webp";
 
 // import inicioHero from "@/assets/inicio/heroBackground.jpg";
-import inicioHero from "@/assets/inicio/heroBackground0.jpg";
+import inicioHero from "@/assets/inicio/heroBackground0.webp";
+
 import inicioPopup from "@/assets/inicio/Popup/yuleLove.webp";
+
 // import inicioDetalle1 from "@/assets/inicio/innovation01.jpg";
 import inicioDetalle1 from "@/assets/inicio/innovation001.webp";
+
 // import inicioDetalle2 from "@/assets/inicio/innovation02.jpg";
 import inicioDetalle2 from "@/assets/inicio/innovation002.webp";
 import inicioDetalle3 from "@/assets/inicio/burguerP.webp";
-import inicioTestimonio from "@/assets/inicio/fondodepantalla.png";
-import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes1.png";
+
+// import inicioTestimonio from "@/assets/inicio/fondodepantalla.png";
+import inicioTestimonio from "@/assets/inicio/fondodepantalla01.png";
+
+// import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes1.png";
+import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes01.png";
+
 // import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues1.png";
 import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues01.png";
-import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes2.png";
+
+// import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes2.png";
+import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes02.png";
 import proyectoDespues2 from "@/assets/inicio/nuestroproyectosdespues2.png";
-import nosotrosHero from "@/assets/nosotros/nosotrosBackground.webp";
-import nosotrosDetalle from "@/assets/nosotros/negocioImagen.webp";
+
+
+// import nosotrosHero from "@/assets/nosotros/nosotrosBackground.webp";
+import nosotrosHero from "@/assets/nosotros/nosotrosBackground0.webp";
+// import nosotrosDetalle from "@/assets/nosotros/negocioImagen.webp";
+import nosotrosDetalle from "@/assets/nosotros/negocioImagen0.webp";
+
+
 import productosPopup from "@/assets/productos/popup/Productos.webp";
-import productosHero from "@/assets/productos/heroBackground.png";
-import blogsHero from "@/assets/blog/heroBackground.png";
+// import productosHero from "@/assets/productos/heroBackground.png";
+import productosHero from "@/assets/productos/heroBackground.webp";
+
+
+
+// import blogsHero from "@/assets/blog/heroBackground.png";
+import blogsHero from "@/assets/blog/heroBackground0.webp";
+
+
 import contactoHero from "@/assets/contacto/contactoBackground.webp";
 import reclamacionesHero from "@/assets/Reclamaciones/herobackground.png";
+
 
 export const imagenes = {
     inicio: {
