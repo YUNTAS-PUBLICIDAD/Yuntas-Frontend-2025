@@ -2,9 +2,9 @@ import inicioUser from "@/assets/inicio/user-1.png";
 // import opinion1 from "@/assets/inicio/opinion1.png";
 // import opinion2 from "@/assets/inicio/opinion2.png";
 // import opinion3 from "@/assets/inicio/opinion3.png";
-import opinion1 from "@/assets/inicio/opinion01.png";
-import opinion2 from "@/assets/inicio/opinion02.png";
-import opinion3 from "@/assets/inicio/opinion03.png";
+import opinion1 from "@/assets/inicio/opinion01.webp";
+import opinion2 from "@/assets/inicio/opinion02.webp";
+import opinion3 from "@/assets/inicio/opinion03.webp";
 
 // import inicioHero from "@/assets/inicio/heroBackground.jpg";
 import inicioHero from "@/assets/inicio/heroBackground0.jpg";
