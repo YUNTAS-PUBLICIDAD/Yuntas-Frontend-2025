@@ -8,10 +8,10 @@ const NosotrosSection = () => {
   return (
     <section
       className="
-        relative w-full h-[35vh] sm:h-[40vh] md:h-screen
-        flex items-center justify-start
-        overflow-hidden
-        border-b-8 border-[#98D8DF]
+        relative w-full h-[40vh] md:h-[50vh]
+        flex items-center justify-start 
+        overflow-hidden 
+        border-b-4 border-[#98D8DF]
       "
       aria-label="Sección Nosotros"
     >
@@ -55,11 +55,12 @@ const NosotrosSection = () => {
         >
           <div
             className="
-              flex flex-col w-full
-              justify-center
-              items-center
-              text-center
-            "
+            flex flex-col w-full 
+            justify-center 
+            items-center
+            text-center
+          "
+
           >
             <Heading
               level="h1"
