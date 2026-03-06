@@ -18,7 +18,6 @@ const HeaderMobil = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith('/admin');
-  if (isAdminPath) return null;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -41,6 +40,8 @@ const HeaderMobil = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  if (isAdminPath) return null;
 
   const handleLogout = async () => {
     await logout();
@@ -115,7 +116,7 @@ const HeaderMobil = () => {
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-      {/* Dark Mode Switch */}
+          {/* Dark Mode Switch */}
           {isAdmin && (
             <>
               <div className="flex items-center justify-between">
