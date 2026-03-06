@@ -18,6 +18,16 @@ import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/SearchBar";
 
+// Icono para el estado vacío
+const SearchXIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+        <path d="m13.5 8.5-5 5"></path>
+        <path d="m8.5 8.5 5 5"></path>
+    </svg>
+);
+
 const columns = [
     { key: "id", label: "ID" },
     { key: "name", label: "NOMBRE" },
@@ -47,25 +57,23 @@ export default function ProductosPage() {
     }, [getProductos]);
 
     useEffect(() => {
-    setProductosFiltrados(productos);
-}, [productos]);
+        setProductosFiltrados(productos);
+    }, [productos]);
 
     useEffect(() => {
         const modalParam = searchParams.get('modal');
         const tabParam = searchParams.get('tab'); 
 
         if (modalParam === 'whatsapp') {
-            
-            if (tabParam) {
+
+          if (tabParam) {
                 setWhatsappInitialTab(tabParam);
             } else {
                 setWhatsappInitialTab("conexion");
             }
 
-       
+
             setIsWhatsappModalOpen(true);
-            
-            // Limpia la URL para que si recarga la página no se vuelva a abrir solo
             router.replace('/admin/productos', { scroll: false });
         }
     }, [searchParams]);
@@ -132,129 +140,153 @@ export default function ProductosPage() {
     }
 
     return (
-<div className="p-2 md:p-4">
+        <div className="p-2 md:p-4">
 
-  {/* ───────── BOTONES SUPERIORES ───────── */}
-  <div className="flex flex-col md:flex-row gap-2 mb-4">
-    
-    <div className="flex-1">
-      <ActionButtonGroup
-        buttons={[{
-          label: "Añadir Producto",
-          onClick: () => setIsAddEditModalOpen(true),
-          variant: "tertiary",
-          className: "w-full",
-        }]}
-      />
-    </div>
+            {/* ───────── BOTONES SUPERIORES ───────── */}
+            <div className="flex flex-col md:flex-row gap-2 mb-4">
 
-    <div className="flex-1">
-      <ActionButtonGroup
-        buttons={[{
-          label: "Envio de Email",
-          onClick: () => setIsEmailModalOpen(true),
-          variant: "danger",
-          className: "w-full",
-        }]}
-      />
-    </div>
+                <div className="flex-1">
+                    <ActionButtonGroup
+                        buttons={[{
+                            label: "Añadir Producto",
+                            onClick: () => setIsAddEditModalOpen(true),
+                            variant: "tertiary",
+                            className: "w-full",
+                        }]}
+                    />
+                </div>
 
-    <div className="flex-1">
-      <ActionButtonGroup
-        buttons={[{
-          label: "Envio de Whatsapp",
-          onClick: () => setIsWhatsappModalOpen(true),
-          variant: "success",
-          className: "w-full",
-        }]}
-      />
-    </div>
+                <div className="flex-1">
+                    <ActionButtonGroup
+                        buttons={[{
+                            label: "Envio de Email",
+                            onClick: () => setIsEmailModalOpen(true),
+                            variant: "danger",
+                            className: "w-full",
+                        }]}
+                    />
+                </div>
 
-  </div>
+                <div className="flex-1">
+                    <ActionButtonGroup
+                        buttons={[{
+                            label: "Envio de Whatsapp",
+                            onClick: () => setIsWhatsappModalOpen(true),
+                            variant: "success",
+                            className: "w-full",
+                        }]}
+                    />
+                </div>
 
-  {/* ───────── BOTONES INFERIORES ───────── */}
-  <div className="flex flex-col md:flex-row gap-2 mb-4">
+            </div>
 
-    <div className="flex-1">
-      <ActionButtonGroup
-        buttons={[{
-          label: "Publicar Cambios",
-          onClick: () => handleTriggerDeploy(),
-          variant: "info",
-          className: "w-full",
-          isLoading: isDeploying,
-        }]}
-      />
-    </div>
+            {/* ───────── BOTONES INFERIORES ───────── */}
+            <div className="flex flex-col md:flex-row gap-2 mb-4">
 
-    <div className="flex-1">
-      <ActionButtonGroup
-        buttons={[{
-          label: "IMPRIMIR",
-          onClick: () => printTable(productos),
-          variant: "primary",
-          className: "w-full",
-        }]}
-      />
-    </div>
+                <div className="flex-1">
+                    <ActionButtonGroup
+                        buttons={[{
+                            label: "Publicar Cambios",
+                            onClick: () => handleTriggerDeploy(),
+                            variant: "info",
+                            className: "w-full",
+                            isLoading: isDeploying,
+                        }]}
+                    />
+                </div>
 
-    <div className="flex-1">
-      <ExportDropdown
-        className="w-full"
-        label="EXPORTAR"
-        options={[
-          { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-          { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-          { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
-        ]}
-      />
-    </div>
+                <div className="flex-1">
+                    <ActionButtonGroup
+                        buttons={[{
+                            label: "IMPRIMIR",
+                            onClick: () => printTable(productos),
+                            variant: "primary",
+                            className: "w-full",
+                        }]}
+                    />
+                </div>
 
-  </div>
+                <div className="flex-1">
+                    <ExportDropdown
+                        className="w-full"
+                        label="EXPORTAR"
+                        options={[
+                            { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
+                            { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
+                            { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
+                        ]}
+                    />
+                </div>
+
+            </div>
+
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
                     {error}
                 </div>
             )}
-{/* BUSCADOR */}
-<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
 
-  {/* Buscador */}
-  <div className="w-full md:flex-1 md:max-w-3xl">
-    <SearchBar
-      items={productos}
-      onSearch={setProductosFiltrados}
-      placeholder="Buscar por ID, nombre o sección..."
-      searchKeys={['id', 'name', 'category_name']}
-      getDisplayValue={(item) => `${item.id} - ${item.name}`}
-    />
-  </div>
+            {/* BUSCADOR */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
 
-  {/* Registros encontrados */}
-  <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-    <span className="text-[#203565] font-semibold">
-      {productosFiltrados.length} REGISTROS ENCONTRADOS
-    </span>
-  </div>
+                {/* Buscador */}
+                <div className="w-full md:flex-1 md:max-w-3xl">
+                    <SearchBar
+                        items={productos}
+                        onSearch={setProductosFiltrados}
+                        placeholder="Buscar por ID, nombre o sección..."
+                        searchKeys={['id', 'name', 'category_name']}
+                        getDisplayValue={(item) => `${item.id} - ${item.name}`}
+                    />
+                </div>
 
-</div>
-
-            {/* TABLA */}
-            <AdminTable
-                columns={columns}
-                data={datosPaginados}
-                minRows={5}
-                onEdit={handleEditClick}
-                onDelete={handleDeleteProducto}
-            />
-
-            <div className="flex justify-center mt-4">
-            <Pagination
-             pageSize={10}
-            items={productosFiltrados}
-            setProductosPaginados={setDatosPaginados}
-            />
+                {/* Registros encontrados */}
+                <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+                    <span className="text-[#203565] font-semibold">
+                        {productosFiltrados.length} REGISTROS ENCONTRADOS
+                    </span>
+                </div>
             </div>
+
+            {/* ───────── TABLA O MENSAJE DE NO RESULTADOS ───────── */}
+            {productosFiltrados.length > 0 ? (
+                <>
+                    {/* TABLA */}
+                    <AdminTable
+                        columns={columns}
+                        data={datosPaginados}
+                        minRows={5}
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteProducto}
+                    />
+
+                    <div className="flex justify-center mt-4">
+                        <Pagination
+                            pageSize={10}
+                            items={productosFiltrados}
+                            setProductosPaginados={setDatosPaginados}
+                        />
+                    </div>
+                </>
+            ) : (
+                /* MENSAJE DE NO RESULTADOS */
+                <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
+                    <SearchXIcon />
+                    <h3 className="text-lg font-medium text-gray-900">No se encontraron productos</h3>
+                    <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
+                        No hay resultados que coincidan con tu búsqueda. Intenta con otras palabras, el ID del producto o revisa la ortografía.
+                    </p>
+                    <button 
+                        onClick={() => {
+                            setProductosFiltrados(productos);
+                            
+                        }}
+                        className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
+                    >
+                        Ver todos los productos
+                    </button>
+                </div>
+            )}
 
             {/* MODAL DE AÑADIR Y EDITAR */}
             <Modal
