@@ -14,6 +14,7 @@ import { exportTablePDF } from "@/utils/Export/exportTablePDF";
 import { User, UserInput } from "@/types/admin/user";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
+import { PrinterIcon, PlusIcon } from "@/components/atoms/icons";
 
 const columns = [
     { key: "id", label: "ID" },

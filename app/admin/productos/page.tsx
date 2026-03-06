@@ -17,6 +17,7 @@ import WhatsappFormWithTabs from "@/components/molecules/admin/products/Whatsapp
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/SearchBar";
+import { SearchXIcon, PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
 
 const columns = [
   { key: "id", label: "ID" },
