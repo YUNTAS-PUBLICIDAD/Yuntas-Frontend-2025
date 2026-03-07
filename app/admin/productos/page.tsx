@@ -156,6 +156,7 @@ export default function ProductosPage() {
                   onClick: () => setIsAddEditModalOpen(true),
                   variant: "tertiary",
                   className: "w-full",
+                  icon: <PlusIcon />,
                 }]}
               />
             </div>
@@ -167,6 +168,7 @@ export default function ProductosPage() {
                   onClick: () => setIsEmailModalOpen(true),
                   variant: "danger",
                   className: "w-full",
+                  icon: <MailIcon />,
                 }]}
               />
             </div>
@@ -178,6 +180,7 @@ export default function ProductosPage() {
                   onClick: () => setIsWhatsappModalOpen(true),
                   variant: "success",
                   className: "w-full",
+                  icon: <WhatsappIcon />,
                 }]}
               />
             </div>
@@ -195,6 +198,7 @@ export default function ProductosPage() {
                   variant: "info",
                   className: "w-full",
                   isLoading: isDeploying,
+                  icon: <RocketIcon />,
                 }]}
               />
             </div>
@@ -206,6 +210,7 @@ export default function ProductosPage() {
                   onClick: () => printTable(productos),
                   variant: "primary",
                   className: "w-full",
+                  icon: <PrinterIcon />,
                 }]}
               />
             </div>
