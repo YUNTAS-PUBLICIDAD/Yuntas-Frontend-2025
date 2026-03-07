@@ -40,15 +40,15 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
       )}
 
 
-      <aside
-        className="
-                hidden lg:flex
-                sticky top-0 h-full min-h-fit w-72 flex-col
-                border-r border-gray-300
-                bg-white dark:bg-[#141A3F]
-                transition-colors duration-300
-            "
-      >
+<aside
+  className="
+    hidden lg:flex
+    sticky top-0 h-full min-h-fit w-72 flex-col
+    border-r border-gray-300
+    bg-white dark:bg-[#141A3F]
+    transition-colors duration-300
+  "
+>
         <h2
           className="
                     text-center font-semibold text-2xl py-8 px-6
