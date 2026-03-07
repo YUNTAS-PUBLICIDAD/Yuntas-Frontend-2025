@@ -111,52 +111,52 @@ export default function Blogspage() {
 
     return (
         <div className="p-2 md:p-4">
-            {isLoading && blogs.length === 0 ? (
-                <div className="p-10 text-center animate-pulse">Cargando blogs...</div>
-            ) : blogs.length === 0 ? (
-                <div className="p-10 text-center">No se encontraron blogs.</div>
-            ) : (
-                <>
-                    {/* BARRA SUPERIOR */}
-                    <div className="flex flex-col gap-4 mb-6">
-                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <div className="w-full md:w-[60%]">
-                                <SearchBar
-                                    items={blogs}
-                                    onSearch={setBlogsFiltrados}
-                                    placeholder="Buscar por título o producto..."
-                                    searchKeys={['id', 'title', 'product_name']}
-                                    getDisplayValue={(item) => `${item.id} - ${item.title}`}
-                                />
-                            </div>
-                            <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-                                <div className="w-full md:w-auto">
-                                    <ActionButtonGroup
-                                        buttons={[{
-                                            label: "Añadir Blog",
-                                            onClick: () => setIsAddEditModalOpen(true),
-                                            className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
-                                        }]}
-                                    />
-                                </div>
-                                <div className="w-full md:w-auto">
-                                    <ExportDropdown
-                                        label="Exportar"
-                                        options={exportOptions}
-                                        className="w-full md:w-auto h-[42px]"
-                                        buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
-                                    />
-                                </div>
-                            </div>
+            {/* BARRA SUPERIOR */}
+            <div className="flex flex-col gap-4 mb-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div className="w-full md:w-[60%]">
+                        <SearchBar
+                            items={blogs}
+                            onSearch={setBlogsFiltrados}
+                            placeholder="Buscar por título o producto..."
+                            searchKeys={['id', 'title', 'product_name']}
+                            getDisplayValue={(item) => `${item.id} - ${item.title}`}
+                        />
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                        <div className="w-full md:w-auto">
+                            <ActionButtonGroup
+                                buttons={[{
+                                    label: "Añadir Blog",
+                                    onClick: () => setIsAddEditModalOpen(true),
+                                    className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+                                }]}
+                            />
+                        </div>
+                        <div className="w-full md:w-auto">
+                            <ExportDropdown
+                                label="Exportar"
+                                options={exportOptions}
+                                className="w-full md:w-auto h-[42px]"
+                                buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+                            />
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
-                            {error}
-                        </div>
-                    )}
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
+            )}
 
+            {isLoading ? (
+                <div className="p-10 text-center animate-pulse dark:text-[#23C1DE]">Cargando blogs...</div>
+            ) : blogs.length === 0 ? (
+                <div className="p-10 text-center dark:text-[#23C1DE]">No se encontraron blogs.</div>
+            ) : (
+                <>
                     <AdminTable
                         minRows={10}
                         columns={columns}
@@ -172,24 +172,24 @@ export default function Blogspage() {
                             setProductosPaginados={setDatosPaginados}
                         />
                     </div>
-
-                    <Modal
-                        isOpen={isAddEditModalOpen}
-                        onClose={handleCloseModal}
-                        title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
-                        size="lg"
-                    >
-                        <BlogForm
-                            onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
-                            onCancel={handleCloseModal}
-                            initialData={selectedBlog}
-                            isLoading={isLoading}
-                            productos={productos}
-                        />
-                    </Modal>
-                    <ConfirmDialog />
                 </>
             )}
+
+            <Modal
+                isOpen={isAddEditModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
+                size="lg"
+            >
+                <BlogForm
+                    onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
+                    onCancel={handleCloseModal}
+                    initialData={selectedBlog}
+                    isLoading={isLoading}
+                    productos={productos}
+                />
+            </Modal>
+            <ConfirmDialog />
         </div>
     );
 }
