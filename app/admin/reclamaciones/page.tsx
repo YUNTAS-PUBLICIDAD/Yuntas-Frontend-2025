@@ -9,6 +9,16 @@ import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
 import SearchBar from "@/components/molecules/SearchBar";
 
+// Icono para el estado vacío
+const SearchXIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+        <path d="m13.5 8.5-5 5"></path>
+        <path d="m8.5 8.5 5 5"></path>
+    </svg>
+);
+
 const columns = [
     { key: "id", label: "ID" },
     { key: "fecha", label: "FECHA" },
@@ -37,7 +47,8 @@ export default function ReclamacionesPage() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState(""); 
+    
     const [reclamos, setReclamos] = useState<any[]>([]);
     const [tableData, setTableData] = useState<any[]>([]);
     const [paginatedData, setPaginatedData] = useState<any[]>([]);
@@ -92,12 +103,17 @@ export default function ReclamacionesPage() {
                         <span className={`px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wide ${isCompleto ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                             {isCompleto ? 'Completo' : 'Pendiente'}
                         </span>
-                    )
+                    ),
+                    
+                    claim_status_id: item.claim_status_id 
                 };
             });
             setTableData(formatted);
+            // Inicializamos paginatedData con todo
+            setPaginatedData(formatted);
         } else {
             setTableData([]);
+            setPaginatedData([]);
         }
     }, [reclamos, productos]);
 
@@ -105,6 +121,7 @@ export default function ReclamacionesPage() {
     useEffect(() => {
         let filtered = tableData;
 
+        // Filtrado por texto 
         if (searchTerm.trim() !== "") {
             const term = searchTerm.toLowerCase();
             filtered = filtered.filter(item =>
@@ -115,6 +132,7 @@ export default function ReclamacionesPage() {
             );
         }
 
+        //  Filtrado por Estado
         if (estadoFiltro !== "todos") {
             const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
             filtered = filtered.filter(item => item.claim_status_id === estadoId);
@@ -182,16 +200,29 @@ export default function ReclamacionesPage() {
             ) : (
                 <>
                     <div className="flex flex-col md:flex-row gap-3 mb-4 w-full">
+                        
+                        {/* 1. BUSCADOR */}
                         <div className="w-full md:flex-1">
                             <SearchBar
                                 items={tableData}
-                                onSearch={setPaginatedData}
+                               
+                                onSearch={(filteredItems) => {
+                                    
+                                    if (estadoFiltro !== "todos") {
+                                         const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
+                                         const combined = filteredItems.filter((item: any) => item.claim_status_id === estadoId);
+                                         setPaginatedData(combined);
+                                    } else {
+                                        setPaginatedData(filteredItems);
+                                    }
+                                }}
                                 placeholder="Buscar cliente, documento..."
                                 searchKeys={['id', 'cliente', 'documento', 'producto']}
                                 getDisplayValue={(item) => `${item.id} - ${item.cliente}`}
                             />
                         </div>
 
+                        {/* 2. DROPDOWN DE FILTRO */}
                         <div className="w-full md:w-56 relative" ref={dropdownRef}>
                             <button
                                 type="button"
@@ -234,22 +265,46 @@ export default function ReclamacionesPage() {
                         </div>
                     </div>
 
-                    <div className="w-full overflow-x-auto text-sm">
-                        <AdminTable
-                            columns={columns}
-                            data={paginatedData}
-                            minRows={5}
-                            onEdit={onViewDetail}
-                        />
-                    </div>
+                    {/*TABLA O MENSAJE VACÍO */}
+                    {paginatedData.length > 0 ? (
+                        <>
+                            <div className="w-full overflow-x-auto text-sm">
+                                <AdminTable
+                                    columns={columns}
+                                    data={paginatedData}
+                                    minRows={5}
+                                    onEdit={onViewDetail}
+                                />
+                            </div>
 
-                    <div className="flex justify-center mt-4">
-                        <Pagination
-                            pageSize={10}
-                            items={tableData}
-                            setProductosPaginados={setPaginatedData}
-                        />
-                    </div>
+                            <div className="flex justify-center mt-4">
+                                <Pagination
+                                    pageSize={10}
+                                    items={tableData} 
+                                    setProductosPaginados={setPaginatedData}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        /* MENSAJE DE NO RESULTADOS */
+                        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
+                            <SearchXIcon />
+                            <h3 className="text-lg font-medium text-gray-900">No se encontraron reclamaciones</h3>
+                            <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
+                                No hay resultados que coincidan con tu búsqueda o filtro seleccionado.
+                            </p>
+                            <button
+                                onClick={() => {
+                                    setEstadoFiltro("todos");
+                                    // Forzamos reseteo visual mostrando todo
+                                    setPaginatedData(tableData);
+                                }}
+                                className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
+                            >
+                                Ver todas las reclamaciones
+                            </button>
+                        </div>
+                    )}
 
                     <Modal
                         isOpen={isDetailModalOpen}
