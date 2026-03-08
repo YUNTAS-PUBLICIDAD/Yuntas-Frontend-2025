@@ -119,13 +119,17 @@ export default function Blogspage() {
         setIsAddEditModalOpen(false);
     };
 
+    // Loading inicial de toda la página
     if (isLoading && blogs.length === 0) {
         return <div className="p-10 text-center animate-pulse">Cargando blogs...</div>;
     }
 
     return (
-        <div>
-
+        <div className="p-2 md:p-4">
+            
+            {/* 
+              
+            */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
 
                 {/* GRUPO DE BOTONES */}
@@ -198,6 +202,7 @@ export default function Blogspage() {
                     </div>
                 </>
             ) : (
+                /* MENSAJE DE NO RESULTADOS */
                 <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
                     <SearchXIcon />
                     <h3 className="text-lg font-medium text-gray-900">No se encontraron blogs</h3>
@@ -231,4 +236,4 @@ export default function Blogspage() {
             <ConfirmDialog />
         </div>
     );
-}   
+}

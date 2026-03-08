@@ -8,25 +8,31 @@ const NosotrosSection = () => {
   return (
     <section
       className="
-        relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
+        relative w-full h-[40vh] md:h-[50vh]
         flex items-center justify-start 
         overflow-hidden 
-        border-b-8 border-[#98D8DF]
+        border-b-4 border-[#98D8DF]
       "
       aria-label="Sección Nosotros"
     >
-
       <motion.div
         className="absolute inset-0"
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         transition={{ duration: 2.5, ease: "easeOut" }}
+        aria-hidden="true"
       >
         <img
           src={imagenes.nosotros.hero.src}
           alt={imagenes.nosotros.hero.alt || "Nosotros"}
           title={imagenes.nosotros.hero.title}
           className="w-full h-full object-cover object-center"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          width="2560"
+          height="1100"
+          draggable={false}
         />
       </motion.div>
 
@@ -41,11 +47,11 @@ const NosotrosSection = () => {
       <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
           className="
-          flex w-full max-w-[1600px] mx-auto 
-          flex-col md:flex-row 
-          items-center md:items-center
-          gap-6 md:gap-12
-        "
+            flex w-full max-w-[1600px] mx-auto
+            flex-col md:flex-row
+            items-center
+            gap-6 md:gap-12
+          "
         >
           <div
             className="
@@ -54,20 +60,20 @@ const NosotrosSection = () => {
             items-center
             text-center
           "
-           
+
           >
             <Heading
               level="h1"
               size="2xl"
               className="
-                mb-4 leading-tight 
-                drop-shadow-[0_2px_2px_#28BEDA] 
+                mb-4 leading-tight
+                drop-shadow-[0_2px_2px_#28BEDA]
                 text-5xl sm:text-6xl md:text-7xl
               "
             >
               NOSOTROS
             </Heading>
-         </div>
+          </div>
         </div>
       </div>
     </section>

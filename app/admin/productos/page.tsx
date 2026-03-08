@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation"; 
+import { useSearchParams, useRouter } from "next/navigation";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
@@ -17,318 +17,300 @@ import WhatsappFormWithTabs from "@/components/molecules/admin/products/Whatsapp
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/SearchBar";
-
-// Icono para el estado vacío
-const SearchXIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.3-4.3"></path>
-        <path d="m13.5 8.5-5 5"></path>
-        <path d="m8.5 8.5 5 5"></path>
-    </svg>
-);
+import { SearchXIcon, PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
 
 const columns = [
-    { key: "id", label: "ID" },
-    { key: "name", label: "NOMBRE" },
-    { key: "category_name", label: "SECCIÓN" },
-    { key: "price", label: "PRECIO" },
+  { key: "id", label: "ID" },
+  { key: "name", label: "NOMBRE" },
+  { key: "category_name", label: "SECCIÓN" },
+  { key: "price", label: "PRECIO" },
 ];
 
 export default function ProductosPage() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
-    const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
-    const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
-    const [productosFiltrados, setProductosFiltrados] = useState<Producto[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
+  const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
+  const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
+  const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
+  const [productosFiltrados, setProductosFiltrados] = useState<Producto[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
 
-    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-    const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
-    const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
-    const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
-    const { confirm, ConfirmDialog } = useConfirm();
-    const { isLoading: isDeploying, triggerDeploy } = useDeploy();
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
+  const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+  const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
+  const { confirm, ConfirmDialog } = useConfirm();
+  const { isLoading: isDeploying, triggerDeploy } = useDeploy();
 
-    useEffect(() => {
-        getProductos(200);
-    }, [getProductos]);
+  useEffect(() => {
+    getProductos(200);
+  }, [getProductos]);
 
-    useEffect(() => {
-        setProductosFiltrados(productos);
-    }, [productos]);
+  useEffect(() => {
+    setProductosFiltrados(productos);
+  }, [productos]);
 
-    useEffect(() => {
-        const modalParam = searchParams.get('modal');
-        const tabParam = searchParams.get('tab'); 
+  useEffect(() => {
+    const modalParam = searchParams.get('modal');
+    const tabParam = searchParams.get('tab');
 
-        if (modalParam === 'whatsapp') {
+    if (modalParam === 'whatsapp') {
 
-          if (tabParam) {
-                setWhatsappInitialTab(tabParam);
-            } else {
-                setWhatsappInitialTab("conexion");
-            }
+      if (tabParam) {
+        setWhatsappInitialTab(tabParam);
+      } else {
+        setWhatsappInitialTab("conexion");
+      }
 
 
-            setIsWhatsappModalOpen(true);
-            router.replace('/admin/productos', { scroll: false });
-        }
-    }, [searchParams]);
+      setIsWhatsappModalOpen(true);
 
-    const handleCreateProducto = async (formData: ProductoInput) => {
-        const result = await createProducto(formData);
-        if (result.success) {
-            handleCloseModal();
-            await getProductos(200);
-            showToast.success("Producto creado");
-        } else {
-            showToast.error(result.message || "Error al crear el producto");
-        }
+      // Limpia la URL para que si recarga la página no se vuelva a abrir solo
+      router.replace('/admin/productos', { scroll: false });
     }
+  }, [searchParams]);
 
-    const handleEditClick = (producto: Producto) => {
-        setSelectedProduct(producto);
-        setIsAddEditModalOpen(true);
-    };
-
-    const handleEditProducto = async (formData: ProductoInput) => {
-        if (!selectedProduct) return;
-
-        const result = await updateProducto(selectedProduct.id!, formData);
-        if (result.success) {
-            handleCloseModal();
-            await getProductos(200);
-            showToast.success("Producto actualizado");
-        } else {
-            showToast.error(result.message || "Error al actualizar el producto");
-        }
+  const handleCreateProducto = async (formData: ProductoInput) => {
+    const result = await createProducto(formData);
+    if (result.success) {
+      handleCloseModal();
+      await getProductos(200);
+      showToast.success("Producto creado");
+      setTimeout(() => {
+        showToast.info("Recuerda publicar los cambios para que se reflejen en la web", { duration: 3000 });
+      }, 100);
+    } else {
+      showToast.error(result.message || "Error al crear el producto");
     }
+  }
 
-    const handleDeleteProducto = async (producto: Producto) => {
-        const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este producto?" });
-        if (!confirmDelete) return;
-        const result = await deleteProducto(producto.id!);
-        if (result.success) {
-            await getProductos(200);
-            showToast.success("Producto eliminado");
-        } else {
-            showToast.error(result.message || "Error al eliminar el producto");
-        }
-    };
+  const handleEditClick = (producto: Producto) => {
+    setSelectedProduct(producto);
+    setIsAddEditModalOpen(true);
+  };
 
-    const handleTriggerDeploy = async () => {
-        const confirmDeploy = await confirm({ message: "¿Estás seguro de que deseas publicar los cambios?" });
-        if (!confirmDeploy) return; 
-        const result = await triggerDeploy();
-        if (result.success) {
-            showToast.success(result.message || "Despliegue iniciado");
-        } else {
-            showToast.error(result.message || "Error al iniciar el despliegue");
-        }   
-    };
+  const handleEditProducto = async (formData: ProductoInput) => {
+    if (!selectedProduct) return;
 
-    const handleCloseModal = () => {
-        setSelectedProduct(null);
-        setIsAddEditModalOpen(false);
-    };
-
-    if (isLoading && productos.length === 0) {
-        return <div className="p-10 text-center animate-pulse">Cargando productos...</div>;
+    const result = await updateProducto(selectedProduct.id!, formData);
+    if (result.success) {
+      handleCloseModal();
+      await getProductos(200);
+      showToast.success("Producto actualizado");
+      setTimeout(() => {
+        showToast.info("Recuerda publicar los cambios para que se reflejen en la web", { duration: 3000 });
+      }, 100);
+    } else {
+      showToast.error(result.message || "Error al actualizar el producto");
     }
+  }
 
-    return (
-        <div className="p-2 md:p-4">
+  const handleDeleteProducto = async (producto: Producto) => {
+    const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este producto?" });
+    if (!confirmDelete) return;
+    const result = await deleteProducto(producto.id!);
+    if (result.success) {
+      await getProductos(200);
+      showToast.success("Producto eliminado");
+      setTimeout(() => {
+        showToast.info("Recuerda publicar los cambios para que se reflejen en la web", { duration: 3000 });
+      }, 100);
+    } else {
+      showToast.error(result.message || "Error al eliminar el producto");
+    }
+  };
 
-            {/* ───────── BOTONES SUPERIORES ───────── */}
-            <div className="flex flex-col md:flex-row gap-2 mb-4">
+  const handleTriggerDeploy = async () => {
+    const confirmDeploy = await confirm({ message: "¿Estás seguro de que deseas publicar los cambios?" });
+    if (!confirmDeploy) return;
+    const result = await triggerDeploy();
+    if (result.success) {
+      showToast.success(result.message || "Despliegue iniciado");
+    } else {
+      showToast.error(result.message || "Error al iniciar el despliegue");
+    }
+  };
 
-                <div className="flex-1">
-                    <ActionButtonGroup
-                        buttons={[{
-                            label: "Añadir Producto",
-                            onClick: () => setIsAddEditModalOpen(true),
-                            variant: "tertiary",
-                            className: "w-full",
-                        }]}
-                    />
-                </div>
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+    setIsAddEditModalOpen(false);
+  };
 
-                <div className="flex-1">
-                    <ActionButtonGroup
-                        buttons={[{
-                            label: "Envio de Email",
-                            onClick: () => setIsEmailModalOpen(true),
-                            variant: "danger",
-                            className: "w-full",
-                        }]}
-                    />
-                </div>
+  return (
+    <div className="p-2 md:p-4">
+      {isLoading && productos.length === 0 ? (
+        <div className="p-10 text-center animate-pulse">Cargando productos...</div>
+      ) : productos.length === 0 ? (
+        <div className="p-10 text-center">No se encontraron productos.</div>
+      ) : (
+        <>
 
-                <div className="flex-1">
-                    <ActionButtonGroup
-                        buttons={[{
-                            label: "Envio de Whatsapp",
-                            onClick: () => setIsWhatsappModalOpen(true),
-                            variant: "success",
-                            className: "w-full",
-                        }]}
-                    />
-                </div>
+          {/* ───────── BOTONES SUPERIORES ───────── */}
+          <div className="flex flex-col md:flex-row gap-2 mb-4">
 
+            <div className="flex-1">
+              <ActionButtonGroup
+                buttons={[{
+                  label: "Añadir Producto",
+                  onClick: () => setIsAddEditModalOpen(true),
+                  variant: "tertiary",
+                  className: "w-full",
+                }]}
+              />
             </div>
 
-            {/* ───────── BOTONES INFERIORES ───────── */}
-            <div className="flex flex-col md:flex-row gap-2 mb-4">
-
-                <div className="flex-1">
-                    <ActionButtonGroup
-                        buttons={[{
-                            label: "Publicar Cambios",
-                            onClick: () => handleTriggerDeploy(),
-                            variant: "info",
-                            className: "w-full",
-                            isLoading: isDeploying,
-                        }]}
-                    />
-                </div>
-
-                <div className="flex-1">
-                    <ActionButtonGroup
-                        buttons={[{
-                            label: "IMPRIMIR",
-                            onClick: () => printTable(productos),
-                            variant: "primary",
-                            className: "w-full",
-                        }]}
-                    />
-                </div>
-
-                <div className="flex-1">
-                    <ExportDropdown
-                        className="w-full"
-                        label="EXPORTAR"
-                        options={[
-                            { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-                            { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-                            { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
-                        ]}
-                    />
-                </div>
-
+            <div className="flex-1">
+              <ActionButtonGroup
+                buttons={[{
+                  label: "Envio de Email",
+                  onClick: () => setIsEmailModalOpen(true),
+                  variant: "danger",
+                  className: "w-full",
+                }]}
+              />
             </div>
 
-            {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
-                    {error}
-                </div>
-            )}
-
-            {/* BUSCADOR */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
-
-                {/* Buscador */}
-                <div className="w-full md:flex-1 md:max-w-3xl">
-                    <SearchBar
-                        items={productos}
-                        onSearch={setProductosFiltrados}
-                        placeholder="Buscar por ID, nombre o sección..."
-                        searchKeys={['id', 'name', 'category_name']}
-                        getDisplayValue={(item) => `${item.id} - ${item.name}`}
-                    />
-                </div>
-
-                {/* Registros encontrados */}
-                <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-                    <span className="text-[#203565] font-semibold">
-                        {productosFiltrados.length} REGISTROS ENCONTRADOS
-                    </span>
-                </div>
+            <div className="flex-1">
+              <ActionButtonGroup
+                buttons={[{
+                  label: "Envio de Whatsapp",
+                  onClick: () => setIsWhatsappModalOpen(true),
+                  variant: "success",
+                  className: "w-full",
+                }]}
+              />
             </div>
 
-            {/* ───────── TABLA O MENSAJE DE NO RESULTADOS ───────── */}
-            {productosFiltrados.length > 0 ? (
-                <>
-                    {/* TABLA */}
-                    <AdminTable
-                        columns={columns}
-                        data={datosPaginados}
-                        minRows={5}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteProducto}
-                    />
+          </div>
 
-                    <div className="flex justify-center mt-4">
-                        <Pagination
-                            pageSize={10}
-                            items={productosFiltrados}
-                            setProductosPaginados={setDatosPaginados}
-                        />
-                    </div>
-                </>
-            ) : (
-                /* MENSAJE DE NO RESULTADOS */
-                <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
-                    <SearchXIcon />
-                    <h3 className="text-lg font-medium text-gray-900">No se encontraron productos</h3>
-                    <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
-                        No hay resultados que coincidan con tu búsqueda. Intenta con otras palabras, el ID del producto o revisa la ortografía.
-                    </p>
-                    <button 
-                        onClick={() => {
-                            setProductosFiltrados(productos);
-                            
-                        }}
-                        className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
-                    >
-                        Ver todos los productos
-                    </button>
-                </div>
-            )}
+          {/* ───────── BOTONES INFERIORES ───────── */}
+          <div className="flex flex-col md:flex-row gap-2 mb-4">
 
-            {/* MODAL DE AÑADIR Y EDITAR */}
-            <Modal
-                isOpen={isAddEditModalOpen}
-                onClose={handleCloseModal}
-                title={!selectedProduct ? "Añadir Producto" : "Editar Producto"}
-                size="lg"
-            >
-                <ProductForm
-                    onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
-                    onCancel={handleCloseModal}
-                    initialData={selectedProduct}
-                    isLoading={isLoading}
-                />
-            </Modal>
-            <ConfirmDialog />
+            <div className="flex-1">
+              <ActionButtonGroup
+                buttons={[{
+                  label: "Publicar Cambios",
+                  onClick: () => handleTriggerDeploy(),
+                  variant: "info",
+                  className: "w-full",
+                  isLoading: isDeploying,
+                }]}
+              />
+            </div>
 
-            {/* MODAL PARA CAMPAÑA A TRAVES DE EMAIL */}
-            <Modal
-                isOpen={isEmailModalOpen}
-                onClose={() => setIsEmailModalOpen(false)}
-                title="Envio de Emails"
-                size="lg"
-            >
-                <SendEmailForm
-                    products={productos}
-                    onClose={() => setIsEmailModalOpen(false)}
-                />
-            </Modal>
+            <div className="flex-1">
+              <ActionButtonGroup
+                buttons={[{
+                  label: "IMPRIMIR",
+                  onClick: () => printTable(productos),
+                  variant: "primary",
+                  className: "w-full",
+                }]}
+              />
+            </div>
 
-            <Modal
-                isOpen={isWhatsappModalOpen}
-                onClose={() => setIsWhatsappModalOpen(false)}
-                title="Envio de Whatsapp"
-                size="lg"
-            >
-                <WhatsappFormWithTabs
-                    products={productos}
-                    onClose={() => setIsWhatsappModalOpen(false)}
-                    initialTab={whatsappInitialTab} 
-                />
-            </Modal>
-        </div>
-    )
+            <div className="flex-1">
+              <ExportDropdown
+                className="w-full"
+                label="EXPORTAR"
+                options={[
+                  { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
+                  { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
+                  { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
+                ]}
+              />
+            </div>
+
+          </div>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+              {error}
+            </div>
+          )}
+          {/* BUSCADOR */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+
+            {/* Buscador */}
+            <div className="w-full md:flex-1 md:max-w-3xl">
+              <SearchBar
+                items={productos}
+                onSearch={setProductosFiltrados}
+                placeholder="Buscar por ID, nombre o sección..."
+                searchKeys={['id', 'name', 'category_name']}
+                getDisplayValue={(item) => `${item.id} - ${item.name}`}
+              />
+            </div>
+
+            {/* Registros encontrados */}
+            <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+              <span className="text-[#203565] font-semibold">
+                {productosFiltrados.length} REGISTROS ENCONTRADOS
+              </span>
+            </div>
+
+          </div>
+
+          {/* TABLA */}
+          <AdminTable
+            columns={columns}
+            data={datosPaginados}
+            minRows={5}
+            onEdit={handleEditClick}
+            onDelete={handleDeleteProducto}
+          />
+
+          <div className="flex justify-center mt-4">
+            <Pagination
+              pageSize={10}
+              items={productosFiltrados}
+              setProductosPaginados={setDatosPaginados}
+            />
+          </div>
+
+          {/* MODAL DE AÑADIR Y EDITAR */}
+          <Modal
+            isOpen={isAddEditModalOpen}
+            onClose={handleCloseModal}
+            title={!selectedProduct ? "Añadir Producto" : "Editar Producto"}
+            size="lg"
+          >
+            <ProductForm
+              onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
+              onCancel={handleCloseModal}
+              initialData={selectedProduct}
+              isLoading={isLoading}
+            />
+          </Modal>
+          <ConfirmDialog />
+
+          {/* MODAL PARA CAMPAÑA A TRAVES DE EMAIL */}
+          <Modal
+            isOpen={isEmailModalOpen}
+            onClose={() => setIsEmailModalOpen(false)}
+            title="Envio de Emails"
+            size="lg"
+          >
+            <SendEmailForm
+              products={productos}
+              onClose={() => setIsEmailModalOpen(false)}
+            />
+          </Modal>
+
+          <Modal
+            isOpen={isWhatsappModalOpen}
+            onClose={() => setIsWhatsappModalOpen(false)}
+            title="Envio de Whatsapp"
+            size="lg"
+          >
+            <WhatsappFormWithTabs
+              products={productos}
+              onClose={() => setIsWhatsappModalOpen(false)}
+              initialTab={whatsappInitialTab}
+            />
+          </Modal>
+        </>
+      )}
+    </div>
+  )
 }

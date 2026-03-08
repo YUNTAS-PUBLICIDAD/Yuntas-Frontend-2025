@@ -35,17 +35,20 @@ export const useConfirm = () => {
     resolvePromise?.(false);
   };
 
+  // Definimos las props requeridas por el componente Confirm
+  const confirmProps = {
+    isOpen,
+    title: options.title,
+    message: options.message,
+    confirmText: options.confirmText,
+    cancelText: options.cancelText,
+    variant: options.variant,
+    onConfirm: handleConfirm,
+    onCancel: handleCancel,
+  };
+
   const ConfirmDialog = () => (
-    <Confirm
-      isOpen={isOpen}
-      title={options.title}
-      message={options.message}
-      confirmText={options.confirmText}
-      cancelText={options.cancelText}
-      variant={options.variant}
-      onConfirm={handleConfirm}
-      onCancel={handleCancel}
-    />
+    <Confirm {...confirmProps} />
   );
 
   return { confirm, ConfirmDialog };
