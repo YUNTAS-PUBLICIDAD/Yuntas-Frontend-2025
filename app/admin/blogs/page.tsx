@@ -18,6 +18,16 @@ import BlogForm from "@/components/molecules/blog/BlogForm";
 import { useProductos } from "@/hooks/useProductos";
 import SearchBar from "@/components/molecules/SearchBar";
 
+// Icono para el estado vacío
+const SearchXIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+        <path d="m13.5 8.5-5 5"></path>
+        <path d="m8.5 8.5 5 5"></path>
+    </svg>
+);
+
 const columns = [
     { key: "id", label: "ID" },
     { key: "product_name", label: "PRODUCTO" },
@@ -109,54 +119,72 @@ export default function Blogspage() {
         setIsAddEditModalOpen(false);
     };
 
+    // Loading inicial de toda la página
+    if (isLoading && blogs.length === 0) {
+        return <div className="p-10 text-center animate-pulse">Cargando blogs...</div>;
+    }
+
     return (
         <div className="p-2 md:p-4">
-            {isLoading && blogs.length === 0 ? (
-                <div className="p-10 text-center animate-pulse">Cargando blogs...</div>
-            ) : blogs.length === 0 ? (
-                <div className="p-10 text-center">No se encontraron blogs.</div>
-            ) : (
-                <>
-                    {/* BARRA SUPERIOR */}
-                    <div className="flex flex-col gap-4 mb-6">
-                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                            <div className="w-full md:w-[60%]">
-                                <SearchBar
-                                    items={blogs}
-                                    onSearch={setBlogsFiltrados}
-                                    placeholder="Buscar por título o producto..."
-                                    searchKeys={['id', 'title', 'product_name']}
-                                    getDisplayValue={(item) => `${item.id} - ${item.title}`}
-                                />
-                            </div>
-                            <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-                                <div className="w-full md:w-auto">
-                                    <ActionButtonGroup
-                                        buttons={[{
-                                            label: "Añadir Blog",
-                                            onClick: () => setIsAddEditModalOpen(true),
-                                            className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
-                                        }]}
-                                    />
-                                </div>
-                                <div className="w-full md:w-auto">
-                                    <ExportDropdown
-                                        label="Exportar"
-                                        options={exportOptions}
-                                        className="w-full md:w-auto h-[42px]"
-                                        buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+            
+            {/* 
+              
+            */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+
+                {/* GRUPO DE BOTONES */}
+                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <div className="w-full md:w-auto">
+                        <ActionButtonGroup
+                            buttons={[{
+                                label: "Añadir Blog",
+                                onClick: () => setIsAddEditModalOpen(true),
+                                className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+                            }]}
+                        />
                     </div>
 
-                    {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
-                            {error}
-                        </div>
-                    )}
+                    <div className="w-full md:w-auto">
+                        <ExportDropdown
+                            label="Exportar"
+                            options={exportOptions}
+                            className="w-full md:w-auto h-[42px]"
+                            buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
+                        />
+                    </div>
+                </div>
 
+                {/*  BUSCADOR  */}
+                <div className="w-full md:flex-1">
+                    <SearchBar
+                        items={blogs}
+                        onSearch={setBlogsFiltrados}
+                        placeholder="Buscar por título o producto..."
+                        searchKeys={['id', 'title', 'product_name']}
+                        getDisplayValue={(item) => `${item.id} - ${item.title}`}
+                    />
+                </div>
+
+                {/* CONTADOR  */}
+                <div className="w-full md:w-auto">
+                    <div className="w-full md:min-w-[240px] px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+                        <span className="text-[#203565] font-semibold text-sm whitespace-nowrap">
+                            {blogsFiltrados.length} REGISTROS ENCONTRADOS
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
+            )}
+
+            {/* TABLA O MENSAJE VACÍO */}
+            {blogsFiltrados.length > 0 ? (
+                <>
                     <AdminTable
                         minRows={10}
                         columns={columns}
@@ -172,24 +200,40 @@ export default function Blogspage() {
                             setProductosPaginados={setDatosPaginados}
                         />
                     </div>
-
-                    <Modal
-                        isOpen={isAddEditModalOpen}
-                        onClose={handleCloseModal}
-                        title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
-                        size="lg"
-                    >
-                        <BlogForm
-                            onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
-                            onCancel={handleCloseModal}
-                            initialData={selectedBlog}
-                            isLoading={isLoading}
-                            productos={productos}
-                        />
-                    </Modal>
-                    <ConfirmDialog />
                 </>
+            ) : (
+                /* MENSAJE DE NO RESULTADOS */
+                <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
+                    <SearchXIcon />
+                    <h3 className="text-lg font-medium text-gray-900">No se encontraron blogs</h3>
+                    <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
+                        No hay resultados para tu búsqueda. Intenta con otro título, producto o revisa la ortografía.
+                    </p>
+                    <button
+                        onClick={() => setBlogsFiltrados(blogs)}
+                        className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
+                    >
+                        Ver todos los blogs
+                    </button>
+                </div>
             )}
+
+            {/* MODAL DE AÑADIR Y EDITAR */}
+            <Modal
+                isOpen={isAddEditModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedBlog ? "Añadir Blog" : "Editar Blog"}
+                size="lg"
+            >
+                <BlogForm
+                    onSubmit={!selectedBlog ? handleCreateBlog : handleEditBlog}
+                    onCancel={handleCloseModal}
+                    initialData={selectedBlog}
+                    isLoading={isLoading}
+                    productos={productos}
+                />
+            </Modal>
+            <ConfirmDialog />
         </div>
     );
 }
