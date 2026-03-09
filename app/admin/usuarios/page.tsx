@@ -116,6 +116,7 @@ export default function UsuariosPage() {
                                             exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
                                         variant: "primary",
                                         className: "w-full h-[40px]",
+                                        icon: <PrinterIcon />,
                                     },
                                 ]}
                             />
@@ -130,6 +131,7 @@ export default function UsuariosPage() {
                                         onClick: () => setIsModalOpen(true),
                                         variant: "tertiary",
                                         className: "w-full h-[40px]",
+                                        icon: <PlusIcon />,
                                     },
                                 ]}
                             />

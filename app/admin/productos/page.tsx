@@ -139,12 +139,12 @@ export default function ProductosPage() {
 
   return (
     <div className="p-2 md:p-4">
-      {isLoading && productos.length === 0 ? (
+      {/* {isLoading && productos.length === 0 ? (
         <div className="p-10 text-center animate-pulse">Cargando productos...</div>
       ) : productos.length === 0 ? (
         <div className="p-10 text-center">No se encontraron productos.</div>
-      ) : (
-        <>
+      ) : ( */}
+        {/* <> */}
 
           {/* ───────── BOTONES SUPERIORES ───────── */}
           <div className="flex flex-col md:flex-row gap-2 mb-4">
@@ -156,6 +156,7 @@ export default function ProductosPage() {
                   onClick: () => setIsAddEditModalOpen(true),
                   variant: "tertiary",
                   className: "w-full",
+                  icon: <PlusIcon />,
                 }]}
               />
             </div>
@@ -167,6 +168,7 @@ export default function ProductosPage() {
                   onClick: () => setIsEmailModalOpen(true),
                   variant: "danger",
                   className: "w-full",
+                  icon: <MailIcon />,
                 }]}
               />
             </div>
@@ -178,6 +180,7 @@ export default function ProductosPage() {
                   onClick: () => setIsWhatsappModalOpen(true),
                   variant: "success",
                   className: "w-full",
+                  icon: <WhatsappIcon />,
                 }]}
               />
             </div>
@@ -195,6 +198,7 @@ export default function ProductosPage() {
                   variant: "info",
                   className: "w-full",
                   isLoading: isDeploying,
+                  icon: <RocketIcon />,
                 }]}
               />
             </div>
@@ -206,6 +210,7 @@ export default function ProductosPage() {
                   onClick: () => printTable(productos),
                   variant: "primary",
                   className: "w-full",
+                  icon: <PrinterIcon />,
                 }]}
               />
             </div>
@@ -251,14 +256,30 @@ export default function ProductosPage() {
 
           </div>
 
-          {/* TABLA */}
-          <AdminTable
-            columns={columns}
-            data={datosPaginados}
-            minRows={5}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteProducto}
-          />
+          {
+            isLoading && productos.length === 0 ? (
+              <div className="p-10 text-center animate-pulse">
+                Cargando productos...
+              </div>
+            ): productosFiltrados.length === 0 ? (
+              <div className="p-10 text-center dark:text-gray-300">
+                No se encontraron productos.
+              </div>
+            ): 
+            (<>
+            
+            {/* TABLA */}
+            <AdminTable
+              columns={columns}
+              data={datosPaginados}
+              minRows={5}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteProducto}
+            />
+            </>
+            )
+          }
+
 
           <div className="flex justify-center mt-4">
             <Pagination
@@ -278,6 +299,7 @@ export default function ProductosPage() {
             <ProductForm
               onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
               onCancel={handleCloseModal}
+              confirm={confirm}
               initialData={selectedProduct}
               isLoading={isLoading}
             />
@@ -309,8 +331,8 @@ export default function ProductosPage() {
               initialTab={whatsappInitialTab}
             />
           </Modal>
-        </>
-      )}
+        {/* </> */}
+      {/* )} */}
     </div>
   )
 }
