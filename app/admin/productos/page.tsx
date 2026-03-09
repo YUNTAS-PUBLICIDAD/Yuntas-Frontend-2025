@@ -139,12 +139,12 @@ export default function ProductosPage() {
 
   return (
     <div className="p-2 md:p-4">
-      {isLoading && productos.length === 0 ? (
+      {/* {isLoading && productos.length === 0 ? (
         <div className="p-10 text-center animate-pulse">Cargando productos...</div>
       ) : productos.length === 0 ? (
         <div className="p-10 text-center">No se encontraron productos.</div>
-      ) : (
-        <>
+      ) : ( */}
+        {/* <> */}
 
           {/* ───────── BOTONES SUPERIORES ───────── */}
           <div className="flex flex-col md:flex-row gap-2 mb-4">
@@ -256,14 +256,30 @@ export default function ProductosPage() {
 
           </div>
 
-          {/* TABLA */}
-          <AdminTable
-            columns={columns}
-            data={datosPaginados}
-            minRows={5}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteProducto}
-          />
+          {
+            isLoading && productos.length === 0 ? (
+              <div className="p-10 text-center animate-pulse">
+                Cargando productos...
+              </div>
+            ): productosFiltrados.length === 0 ? (
+              <div className="p-10 text-center dark:text-gray-300">
+                No se encontraron productos.
+              </div>
+            ): 
+            (<>
+            
+            {/* TABLA */}
+            <AdminTable
+              columns={columns}
+              data={datosPaginados}
+              minRows={5}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteProducto}
+            />
+            </>
+            )
+          }
+
 
           <div className="flex justify-center mt-4">
             <Pagination
@@ -314,8 +330,8 @@ export default function ProductosPage() {
               initialTab={whatsappInitialTab}
             />
           </Modal>
-        </>
-      )}
+        {/* </> */}
+      {/* )} */}
     </div>
   )
 }
