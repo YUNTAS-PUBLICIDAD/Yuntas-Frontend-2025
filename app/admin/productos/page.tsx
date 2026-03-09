@@ -42,6 +42,7 @@ export default function ProductosPage() {
   const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
   const { confirm, ConfirmDialog } = useConfirm();
   const { isLoading: isDeploying, triggerDeploy } = useDeploy();
+  const [formCloseHandler, setFormCloseHandler] = useState<null | (() => Promise<void>)>(null)
 
   useEffect(() => {
     getProductos(200);
@@ -135,16 +136,11 @@ export default function ProductosPage() {
   const handleCloseModal = () => {
     setSelectedProduct(null);
     setIsAddEditModalOpen(false);
+    setFormCloseHandler(null);
   };
 
   return (
     <div className="p-2 md:p-4">
-      {/* {isLoading && productos.length === 0 ? (
-        <div className="p-10 text-center animate-pulse">Cargando productos...</div>
-      ) : productos.length === 0 ? (
-        <div className="p-10 text-center">No se encontraron productos.</div>
-      ) : ( */}
-        {/* <> */}
 
           {/* ───────── BOTONES SUPERIORES ───────── */}
           <div className="flex flex-col md:flex-row gap-2 mb-4">
@@ -292,7 +288,16 @@ export default function ProductosPage() {
           {/* MODAL DE AÑADIR Y EDITAR */}
           <Modal
             isOpen={isAddEditModalOpen}
-            onClose={handleCloseModal}
+            // onClose={handleCloseModal}
+            onClose={ async () => {
+              // console.log("Modal onClose triggered");
+              // console.log("formCloseHandler:", formCloseHandler);
+              if (formCloseHandler) {
+               await formCloseHandler() ;
+              }else {
+                handleCloseModal();
+              }
+            }}
             title={!selectedProduct ? "Añadir Producto" : "Editar Producto"}
             size="lg"
           >
@@ -302,6 +307,7 @@ export default function ProductosPage() {
               confirm={confirm}
               initialData={selectedProduct}
               isLoading={isLoading}
+              registerCloseHandler={(fn) => setFormCloseHandler(() => fn)}
             />
           </Modal>
           <ConfirmDialog />
@@ -331,8 +337,6 @@ export default function ProductosPage() {
               initialTab={whatsappInitialTab}
             />
           </Modal>
-        {/* </> */}
-      {/* )} */}
     </div>
   )
 }
