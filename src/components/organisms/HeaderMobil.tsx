@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { IoMenu, IoClose } from "react-icons/io5";
 import NavMenuMobil from "../molecules/header/NavMenuMobil";
@@ -41,13 +40,10 @@ const HeaderMobil = () => {
     };
   }, []);
 
-  if (isAdminPath) return null;
-
   const handleLogout = async () => {
     await logout();
     setOpen(false);
   };
-
 
   return (
     <>
@@ -70,8 +66,6 @@ const HeaderMobil = () => {
         >
           <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} />
         </button>
-
-        <UserSection size="md" />
       </header>
 
       {/* ───────────── OVERLAY ───────────── */}
@@ -88,7 +82,7 @@ const HeaderMobil = () => {
       <div
         className={`
           md:hidden fixed inset-0 z-40 flex flex-col
-          transform transition-transform duration-500 ease-in-out
+         transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
 
           bg-white text-[#04061a]
@@ -102,13 +96,12 @@ const HeaderMobil = () => {
           onClick={() => setOpen(false)}
           aria-label="Cerrar menú"
           className="
-            absolute top-4 right-4 text-3xl
-            text-[#04061a] hover:text-red-700
-            dark:text-white
+            absolute top-4 right-4 z-50 text-4xl font-bold
+            text-[#04061a] dark:text-white
             transition-colors
           "
         >
-          <IoClose />
+          ×
         </button>
 
         <nav className="pt-16 px-6 flex-1 overflow-y-auto">
@@ -145,7 +138,6 @@ const HeaderMobil = () => {
 
           {/* ───────────── SECCIÓN DE USUARIO/LOGIN ───────────── */}
           <div className="flex items-center gap-3">
-            <UserSection size="md" />
             <div>
               <p className="text-sm font-bold">BIENVENIDO</p>
               <p className="text-xs opacity-60">
