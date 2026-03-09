@@ -29,6 +29,8 @@ interface AdminTableProps<T = any> {
     onEdit?: (item: T) => void;
     isLoading?: boolean;
     emptyMessage?: string;
+    onResetSearch?: () => void;   // Función para limpiar búsqueda
+    resetSearchText?: string;     // Texto del botón ("Ver todos los...")
 }
 
 export default function AdminTable({
@@ -39,7 +41,9 @@ export default function AdminTable({
     onApprove,
     onEdit,
     isLoading = false,
-    emptyMessage = "No se encontraron registros"
+    emptyMessage = "No se encontraron registros",
+    onResetSearch,
+    resetSearchText = "Ver todos"
 }: AdminTableProps) {
 
     const { enabledActions, rows } = useAdminTable({
@@ -65,6 +69,14 @@ export default function AdminTable({
                 <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
                     No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
                 </p>
+                {onResetSearch && (
+                    <button
+                        onClick={onResetSearch}
+                        className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
+                    >
+                        {resetSearchText}
+                    </button>
+                )}
             </div>
         );
     }

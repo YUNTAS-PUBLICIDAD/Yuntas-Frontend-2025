@@ -191,6 +191,9 @@ export default function SeguimientoPage() {
                         onEdit={handleEditClick}
                         onDelete={handleDeleteLead}
                         isLoading={isLoading}
+                        emptyMessage="No se encontraron seguimientos"
+                        resetSearchText="Ver todos los seguimientos"
+                        onResetSearch={() => setLeadsFiltered(leads)}
                     />
                 )}
             </div>
