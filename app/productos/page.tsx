@@ -56,6 +56,8 @@ export default async function ProductosPage() {
     const result = await getProductosService(100);
     const productos = result.success && result.data ? result.data : [];
 
+    
+
     return (
         <main>
             <HeroSection />
