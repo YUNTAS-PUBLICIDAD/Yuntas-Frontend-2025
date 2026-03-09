@@ -14,6 +14,7 @@ import { showToast } from '@/utils/showToast'
 interface ProductFormProps {
     onSubmit: (data: ProductoInput) => void;
     onCancel: () => void;
+    confirm: (options:any) => Promise<boolean>;
     isLoading?: boolean;
     initialData?: Producto | null;
 }
@@ -67,14 +68,16 @@ const GALLERY_SLOTS = [
     },
 ] as const;
 
-export default function ProductForm({ onSubmit, onCancel, isLoading = false, initialData = null }: ProductFormProps) {
+export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null }: ProductFormProps) {
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
+    const [initialFormState, setInitialFormState] = useState<ProductoInput>(defaultFormData);
 
     // Cargar datos iniciales para editar
     useEffect(() => {
         if (initialData) {
-            setFormData({
+            // setFormData({
+            const mappedData = {
                 name: initialData.name,
                 slug: initialData.slug,
                 price: initialData.price,
@@ -100,7 +103,14 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 categories: initialData.category_name ? [initialData.category_name] : [],
                 specifications: initialData.specifications?.length > 0 ? initialData.specifications : [""],
                 benefits: initialData.benefits?.length > 0 ? initialData.benefits : [""],
-            });
+              };
+              setFormData(mappedData);
+              setInitialFormState(mappedData);
+              
+            // });
+        }else {
+          setFormData(defaultFormData);
+          setInitialFormState(defaultFormData);
         }
     }, [initialData]);
 
@@ -117,6 +127,7 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
+      // setIsDirty(true);
         setFormData(prev => {
             const existing = prev.gallery.find(item => item.slot === slot); // buscar si ya hay una imagen en ese slot
             const filteredGallery = prev.gallery.filter(item => item.slot !== slot); // se elimna imagen existente de ese slot si hay
@@ -220,8 +231,12 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
         onSubmit(formData);
     };
 
+
+    const normalize = (obj:any) => JSON.stringify(obj);
+const hasChanges = normalize(formData) !== normalize(initialFormState);
+
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto" noValidate>
 
             {/* Seccion datos para Dashboard */}
             <FormSection title="Datos para Dashboard (Gestión Interna)">
@@ -327,7 +342,10 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                 <InputListDinamica
                     label="Keywords"
                     items={formData.keywords}
-                    onChange={(keywords) => setFormData(prev => ({ ...prev, keywords }))}
+                    onChange={
+                      (keywords) =>{
+                      //  markDirty();
+                        setFormData(prev => ({ ...prev, keywords }))}}
                     placeholder="ej: letreros para negocio"
                     addButtonText="+ Agregar keyword"
                     helperText="Palabras clave relevantes para que los buscadores encuentren el producto."
@@ -454,7 +472,20 @@ export default function ProductForm({ onSubmit, onCancel, isLoading = false, ini
                     variant="tertiary"
                     size="md"
                     className="flex-1"
-                    onClick={onCancel}
+                    onClick={async () => {
+                      if (!hasChanges) {
+                       onCancel();
+                       return;
+                      }
+
+                      const confirmClose = await confirm({
+                        message: "Tienes cambios sin guardar. ¿Deseas cerrar y perder los datos?"
+                      });
+
+                      if (confirmClose) {
+                       onCancel();
+                      }
+                    }}
                     disabled={isLoading}
                 >
                     Cancelar

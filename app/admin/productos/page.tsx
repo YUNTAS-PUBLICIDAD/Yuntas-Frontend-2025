@@ -299,6 +299,7 @@ export default function ProductosPage() {
             <ProductForm
               onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
               onCancel={handleCloseModal}
+              confirm={confirm}
               initialData={selectedProduct}
               isLoading={isLoading}
             />
