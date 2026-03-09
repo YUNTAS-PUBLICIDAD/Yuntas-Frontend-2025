@@ -192,6 +192,9 @@ export default function SeguimientoPage() {
                 {isMonitoreoMode ? (
                     <MonitoreoTable
                         data={datosPaginados}
+                        emptyMessage="No se encontraron registros de monitoreo"
+                        resetSearchText="Ver todos los registros"
+                        onResetSearch={() => setLeadsFiltered(leads)}
                     />
                 ) : (
                     <AdminTable
