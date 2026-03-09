@@ -17,6 +17,7 @@ interface AdminTableProps<T = any> {
     onDelete?: (item: T) => void;
     onApprove?: (item: T) => void;
     onEdit?: (item: T) => void;
+    isLoading?: boolean;
 }
 
 export default function AdminTable({
@@ -25,7 +26,8 @@ export default function AdminTable({
     minRows = 5,
     onDelete,
     onApprove,
-    onEdit
+    onEdit,
+    isLoading = false
 }: AdminTableProps) {
 
     const { enabledActions, rows } = useAdminTable({
@@ -56,7 +58,21 @@ export default function AdminTable({
                 </thead>
 
                 <tbody>
-                    {rows.map((row, index) => {
+                    { /* Lógica de Carga */}
+                    { isLoading ? (
+                        <tr>
+                            <td 
+                                colSpan={columns.length + (role === "admin" ? 1 : 0)} 
+                                className="py-10 text-center text-[#0D1030] font-semibold bg-[#F4F4F2] dark:bg-white rounded-lg"
+                            >
+                                <div className="flex justify-center items-center gap-2">
+                                    <span className="animate-spin text-2xl">⏳</span>
+                                    Cargando información...
+                                </div>
+                            </td>
+                        </tr>
+                    ) : (
+                    rows.map((row, index) => { 
                         const isEmpty = row._empty === true;
 
                         return (
@@ -88,13 +104,19 @@ export default function AdminTable({
                                 </td>}
                             </tr>
                         );
-                    })}
+                        })
+                    )}
                 </tbody>
             </table>
 
             {/* MÓVIL: Tarjetas responsive */}
             <div className="lg:hidden flex flex-col gap-6">
-                {rows.map((row, index) => {
+                {isLoading ? (
+                    <div className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 text-center font-semibold text-[#0D1030]">
+                        ⏳ Cargando información...
+                    </div>
+                ) : (
+                rows.map((row, index) => {
                     const isEmpty = row._empty === true;
 
                     if (isEmpty) return null;
@@ -131,7 +153,8 @@ export default function AdminTable({
                             </div>}
                         </div>
                     );
-                })}
+                })
+            )}
             </div>
         </div>
     );
