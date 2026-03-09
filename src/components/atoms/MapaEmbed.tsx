@@ -22,7 +22,9 @@ const MapaEmbed: React.FC<MapaEmbedProps> = ({
       className={`rounded-3xl ${className}`}
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-    ></iframe>
+      style={{ border: 0 }}
+      allowFullScreen
+    />
   );
 };
 

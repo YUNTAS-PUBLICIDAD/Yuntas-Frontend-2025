@@ -19,6 +19,15 @@ const SearchXIcon = () => (
     </svg>
 );
 
+// Icono para el estado de error
+const AlertCircleIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400 mb-2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+);
+
 const columns = [
     { key: "id", label: "ID" },
     { key: "fecha", label: "FECHA" },
@@ -56,6 +65,7 @@ export default function ReclamacionesPage() {
     const { productos, getProductos } = useProductos();
 
     const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedReclamo, setSelectedReclamo] = useState<any | null>(null);
     const [newStatusId, setNewStatusId] = useState<number>(1);
@@ -143,6 +153,7 @@ export default function ReclamacionesPage() {
 
 
     const fetchReclamos = async () => {
+        setFetchError(false);
         try {
             const token = getToken();
             if (!token) return;
@@ -154,7 +165,14 @@ export default function ReclamacionesPage() {
             setReclamos(Array.isArray(json.data) ? json.data : json.data?.data || []);
         } catch (e) {
             console.error(e);
+            setFetchError(true);
         }
+    };
+
+    const handleRetry = async () => {
+        setLoading(true);
+        await Promise.all([fetchReclamos(), getProductos(200)]);
+        setLoading(false);
     };
 
     const onViewDetail = (reclamo: any) => {
@@ -196,6 +214,20 @@ export default function ReclamacionesPage() {
             {loading ? (
                 <div className="p-10 text-center animate-pulse text-sm text-gray-500">
                     Cargando datos...
+                </div>
+            ) : fetchError ? (
+                <div className="flex flex-col items-center justify-center py-16 px-4 bg-red-50 border-2 border-dashed border-red-200 rounded-lg mt-4">
+                    <AlertCircleIcon />
+                    <h3 className="text-lg font-semibold text-red-700">Error al cargar las reclamaciones</h3>
+                    <p className="text-red-500 text-sm mt-1 text-center max-w-sm">
+                        No se pudo conectar con el servidor. Verifica tu conexión e intenta de nuevo.
+                    </p>
+                    <button
+                        onClick={handleRetry}
+                        className="mt-5 px-6 py-2 bg-[#23C1DE] hover:bg-[#1faac4] text-white text-sm font-bold rounded-full shadow transition-transform active:scale-95"
+                    >
+                        Reintentar carga
+                    </button>
                 </div>
             ) : (
                 <>
