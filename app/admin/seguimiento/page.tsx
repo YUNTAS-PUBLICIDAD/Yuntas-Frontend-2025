@@ -190,6 +190,7 @@ export default function SeguimientoPage() {
                         columns={columns}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteLead}
+                        isLoading={isLoading}
                     />
                 )}
             </div>
