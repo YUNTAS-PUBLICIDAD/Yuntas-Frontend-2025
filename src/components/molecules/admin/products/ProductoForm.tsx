@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Button from "@/components/atoms/Button";
 import Loader from "@/components/atoms/Loader";
 import InputAdmin from "@/components/atoms/InputAdmin";
@@ -17,6 +17,7 @@ interface ProductFormProps {
     confirm: (options:any) => Promise<boolean>;
     isLoading?: boolean;
     initialData?: Producto | null;
+    registerCloseHandler?: (fn: ()=> Promise<void>) => void;
 }
 
 const defaultFormData: ProductoInput = {
@@ -68,10 +69,54 @@ const GALLERY_SLOTS = [
     },
 ] as const;
 
-export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null }: ProductFormProps) {
+export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null, registerCloseHandler }: ProductFormProps) {
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
     const [initialFormState, setInitialFormState] = useState<ProductoInput>(defaultFormData);
+
+    const normalize = (obj:any) => JSON.stringify(obj);
+    
+    const handleAttemptClose = useCallback( async () => {
+        // console.log("handleAttempClose START");
+    const hasChanges = normalize(formData) !== normalize(initialFormState);
+    // console.log("hasChanges:", hasChanges);
+    if (!hasChanges) {
+      // console.log("No changes -> closing");
+     onCancel();
+     return;
+    }
+  
+    // console.log("Calling confirm dialog");
+  
+    const confirmClose = await confirm({
+      message: "Tienes cambios sin guardar. ¿Deseas cerrar y perder los datos?"
+    }
+    );
+  
+    // console.log("confirm result:", confirmClose);
+  
+    if (confirmClose) {
+      // console.log("User confirmed close");
+     onCancel()
+    }
+
+      // console.log("User canceled close");
+    
+  }, [formData, initialFormState, confirm, onCancel]) 
+
+  const closeHandlerRef = useRef(handleAttemptClose);
+
+  useEffect(() => {
+    closeHandlerRef.current = handleAttemptClose; 
+  });
+  
+  useEffect(() => {
+      if (registerCloseHandler) {
+      //  registerCloseHandler(handleAttemptClose) 
+      registerCloseHandler(() => closeHandlerRef.current());
+      } 
+}, [])
+    
 
     // Cargar datos iniciales para editar
     useEffect(() => {
@@ -232,8 +277,7 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
     };
 
 
-    const normalize = (obj:any) => JSON.stringify(obj);
-const hasChanges = normalize(formData) !== normalize(initialFormState);
+
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto" noValidate>
@@ -472,20 +516,7 @@ const hasChanges = normalize(formData) !== normalize(initialFormState);
                     variant="tertiary"
                     size="md"
                     className="flex-1"
-                    onClick={async () => {
-                      if (!hasChanges) {
-                       onCancel();
-                       return;
-                      }
-
-                      const confirmClose = await confirm({
-                        message: "Tienes cambios sin guardar. ¿Deseas cerrar y perder los datos?"
-                      });
-
-                      if (confirmClose) {
-                       onCancel();
-                      }
-                    }}
+                    onClick={handleAttemptClose}
                     disabled={isLoading}
                 >
                     Cancelar
