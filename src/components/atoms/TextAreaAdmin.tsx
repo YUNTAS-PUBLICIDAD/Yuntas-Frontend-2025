@@ -11,6 +11,7 @@ interface TextareaAdminProps {
     disabled?: boolean;
     textareaRef?: React.Ref<HTMLTextAreaElement>;
     showLabel?: boolean;
+    error?: string;
 }
 
 export default function TextareaAdmin({
@@ -25,7 +26,8 @@ export default function TextareaAdmin({
     rows = 4,
     disabled = false,
     textareaRef,
-    showLabel = true
+    showLabel = true,
+    error
 }: TextareaAdminProps) {
     return (
         <div className="flex flex-col gap-1">
@@ -45,11 +47,28 @@ export default function TextareaAdmin({
                 rows={rows}
                 disabled={disabled}
                 ref={textareaRef}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all resize-none disabled:opacity-50"
+                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all resize-none disabled:opacity-50 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus:border-transparent"}`}
             />
-            {helperText && (
+            {/* {helperText && (
                 <span className="text-gray-500 text-sm">{helperText}</span>
-            )}
+            )} */}
+            {
+              error ? (
+                <span className="text-red-500 text-sm">
+                  {
+                    error
+                  }
+                </span>
+              ): (
+                helperText && (
+                  <span className="text-gray-500 text-sm">
+                    {
+                      helperText
+                    }
+                  </span>
+                )
+              )
+            }
         </div>
     );
 }

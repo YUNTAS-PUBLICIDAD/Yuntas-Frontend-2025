@@ -9,6 +9,7 @@ interface InputAdminProps {
     required?: boolean;
     maxLength?: number;
     disabled?: boolean;
+    error?: string;
 }
 
 export default function InputAdmin({
@@ -21,7 +22,8 @@ export default function InputAdmin({
     helperText,
     required = false,
     maxLength,
-    disabled = false
+    disabled = false,
+    error
 }: InputAdminProps) {
     return (
         <div className="flex flex-col gap-1 flex-1">
@@ -38,11 +40,25 @@ export default function InputAdmin({
                 required={required}
                 maxLength={maxLength}
                 disabled={disabled}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all disabled:opacity-50"
+                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all disabled:opacity-50 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus: border-transparent"}`}
+            
             />
-            {helperText && (
+            {/* {helperText && (
                 <span className="text-gray-500 text-sm">{helperText}</span>
-            )}
+            )} */}
+            {
+              error ? (
+                <span className="text-red-500 text-sm">{error}</span>
+              ): (
+                helperText && (
+                  <span className="text-gray-500 text-sm">
+                    {
+                      helperText
+                    }
+                  </span>
+                )
+              )
+            }
         </div>
     );
 }

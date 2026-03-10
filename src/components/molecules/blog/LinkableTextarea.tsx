@@ -20,6 +20,7 @@ interface LinkableTextareaProps {
     rows?: number;
     required?: boolean;
     productos: Producto[];
+    error?: string;
 }
 
 type LinkModalType = "custom" | "product";
@@ -81,7 +82,8 @@ export default function LinkableTextarea({
     helperText,
     rows = 6,
     required = false,
-    productos
+    productos,
+    error
 }: LinkableTextareaProps) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -155,6 +157,8 @@ export default function LinkableTextarea({
         insertMarkerAtSelection("product", selectedProduct.slug);
     };
 
+    
+
     return (
         <div className="flex flex-col gap-2">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-gray-200 pb-2">
@@ -177,6 +181,8 @@ export default function LinkableTextarea({
                 required={required}
                 textareaRef={textareaRef}
                 showLabel={false}
+                error={error}
+                
             />
 
             <Modal
