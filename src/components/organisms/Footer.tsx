@@ -9,41 +9,37 @@ export default function Footer() {
   return (
     <footer className="bg-[#04041C] text-white pt-16 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
-{/* GRID PRINCIPAL */}
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
+        
+        {/* GRID PRINCIPAL: Pasamos a 12 columnas para un control exacto de los anchos */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
 
-{/* Logo + Menú vertical */}
-<div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-16">
+          {/* 1. Logo (Ocupa 3 columnas) */}
+          <div className="flex flex-col items-center lg:items-start lg:col-span-3 w-full">
+            <LogoBlock />
+            <div className="md:hidden mt-8">
+              <SocialLinks />
+            </div>
+          </div>
 
-  {/* Logo */}
-  <LogoBlock />
-{/* Menú vertical solo desktop */}
-<div className="hidden lg:block lg:ml-12 lg:pl-10 lg:border-l lg:border-l-2">
-  <NavMenu size="sm" variant="footer" />
-</div>
+          {/* 2. Enlaces (Ocupa 3 columnas. Ya no está agrupado con el logo, por eso se mueve a la izquierda) */}
+          <div className="hidden lg:block lg:col-span-3 w-full">
+            <NavMenu size="sm" variant="footer" />
+          </div>
 
-    {/* Redes solo en mobile */}
-    <div className="md:hidden">
-      <SocialLinks />
-    </div>
+          {/* 3. Dirección y Horario (Ocupa 4 columnas para que el texto largo no asfixie a Contacto) */}
+          <div className="lg:col-span-4 w-full">
+            <AddressBlock />
+          </div>
 
-  </div>
+          {/* 4. Contacto (Ocupa 2 columnas) */}
+          <div className="flex flex-col gap-6 lg:col-span-2 w-full">
+            <ContactBlock />
+          </div>
 
-  {/* Dirección y Horario */}
- <div className="lg:ml-6">
-    <AddressBlock />
-  </div>
-
-  {/* Contacto */}
-  <div className="flex flex-col gap-6 lg:ml-6">
-    <ContactBlock />
-  </div>
-
-</div>
-
+        </div>
 
         {/* Enlaces legales abajo */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-0 items-center mt-14 text-base text-white">
+        <div className="flex flex-col md:flex-row justify-evenly items-center mt-14 text-base text-white w-full">
           <LegalLinksBlock />
         </div>
 
