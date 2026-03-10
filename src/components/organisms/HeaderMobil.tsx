@@ -10,6 +10,7 @@ import SwitchMode from '@/components/molecules/admin/SwitchMode';
 import useAuth from '@/hooks/useAuth';
 import { getToken } from '@/utils/token';
 import { getRole } from '@/utils/role';
+import { LuLamp } from 'react-icons/lu';
 
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
@@ -46,6 +47,22 @@ const HeaderMobil = () => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (open) {
+     document.body.style.overflow = "hidden" ;
+    }else {
+      document.body.style.overflow = "auto"
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    }
+  }, [open])
+ 
+  const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#04061a]" : "bg-transparent text-white shadow-none";
+
+  const adminBg = isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "";
+
   return (
     <>
       {/* ───────────── HEADER ───────────── */}
@@ -54,9 +71,9 @@ const HeaderMobil = () => {
           md:hidden fixed top-0 left-0 right-0 z-50
           px-6 py-4 flex justify-between items-center
           transition-all duration-300
-          ${open ? "hidden" : ""}
-          ${isScrolled ? "bg-white text-[#04061a] shadow-md" : "bg-transparent text-white shadow-none"}
-          ${isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "dark:bg-transparent"} 
+          ${open ? "opacity-0 pointer-events-none" : "opacity-100"}
+          ${headerBg}
+          ${adminBg}
           dark:text-white dark:shadow-none
         `}
       >
@@ -67,6 +84,9 @@ const HeaderMobil = () => {
         >
           <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} />
         </button>
+
+        {/* ICONO USER / ADMIN */}
+        <UserSection size='md'/>
       </header>
 
       {/* ───────────── OVERLAY ───────────── */}
