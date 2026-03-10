@@ -62,6 +62,8 @@ const HeaderMobil = () => {
 
   const adminBg = isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "";
 
+  const iconColor = isAdminPath ? "text-[#04061a]" : isScrolled ? "text-[#04061a]" : "text-white";
+
   return (
     <>
       {/* ───────────── HEADER ───────────── */}
@@ -81,7 +83,8 @@ const HeaderMobil = () => {
           aria-label="Abrir menú"
           className="text-3xl transition-colors"
         >
-          <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} />
+          {/* <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} /> */}
+          <IoMenu className={`${iconColor} dark:text-white`}/>
         </button>
 
         {/* ICONO USER / ADMIN */}
