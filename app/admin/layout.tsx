@@ -43,7 +43,7 @@ export default function AdminLayout({
   const title = titleMap[key] ?? "Panel de Administración";
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
+    <div className="flex pt-16 md:pt-0 flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
       {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
       <Encabezado variant="azul">{title}</Encabezado>
 
