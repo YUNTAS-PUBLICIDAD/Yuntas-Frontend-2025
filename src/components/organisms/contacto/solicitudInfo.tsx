@@ -82,7 +82,10 @@ const SolicitudInfo: React.FC = () => {
                 required 
                 name="message" 
                 value={formData.message} 
-                onChange={handleInputChange} 
+                onChange={handleInputChange}
+                minLength={10}
+                maxLength={500}
+                showCounter
               />
             </div>
 
