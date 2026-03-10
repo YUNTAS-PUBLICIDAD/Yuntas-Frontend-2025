@@ -3,6 +3,8 @@ import { forwardRef } from "react";
 interface InputTextProps {
     placeholder?: string;
     type?: string;
+    inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+    pattern?: string;
     className?: string;
     name?: string;
     value?: string;
@@ -14,6 +16,8 @@ interface InputTextProps {
 const InputText = forwardRef<HTMLInputElement, InputTextProps>(({
     placeholder,
     type = "text",
+    inputMode,
+    pattern,
     className = "",
     name,
     value,
@@ -25,6 +29,8 @@ const InputText = forwardRef<HTMLInputElement, InputTextProps>(({
         <input
             ref={ref}
             type={type}
+            inputMode={inputMode}
+            pattern={pattern}
             name={name}
             value={value}
             onChange={onChange}

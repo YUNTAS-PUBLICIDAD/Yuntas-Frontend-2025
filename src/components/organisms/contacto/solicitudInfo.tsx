@@ -46,7 +46,9 @@ const SolicitudInfo: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
               <InputText 
-                type="number" 
+                type="tel" 
+                inputMode="numeric" 
+                pattern="[0-9]*" 
                 placeholder="Teléfono" 
                 className="w-full rounded-2xl shadow-sm border-none focus:ring-offset-2" 
                 name="phone" 
@@ -80,7 +82,10 @@ const SolicitudInfo: React.FC = () => {
                 required 
                 name="message" 
                 value={formData.message} 
-                onChange={handleInputChange} 
+                onChange={handleInputChange}
+                minLength={10}
+                maxLength={500}
+                showCounter
               />
             </div>
 
