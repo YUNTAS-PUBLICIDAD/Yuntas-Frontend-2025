@@ -69,7 +69,7 @@ export default function MonitoreoTable({
       <table className="w-full block lg:table border-separate border-spacing-y-4 lg:border-spacing-y-2">
         {/* HEADER solo desktop */}
         <thead className="hidden lg:table-header-group">
-          <tr className="bg-[#0D1030]">
+          <tr className="bg-[#0D1030] dark:bg-[#293296]">
             {columns.map((col) => (
               <th
                 key={col.key}
