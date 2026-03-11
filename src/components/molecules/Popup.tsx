@@ -10,6 +10,7 @@ import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
 import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
 import { showToast } from "@/utils/showToast";
+import { usePathname } from "next/navigation";
 
 interface PopupProps {
     delay?: number;
@@ -38,6 +39,7 @@ const Popup = ({
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
     const popupTriggered = useRef(false);
+    const pathname = usePathname()
 
     const [formData, setFormData] = useState<LeadInput>({
         name: "",
@@ -53,12 +55,18 @@ const Popup = ({
 
     const closeModal = () => {
       popupTriggered.current = true;
-      sessionStorage.setItem('popup_seen', "true");
-        setClosing(true);
-        setTimeout(() => {
-            setShow(false);
-            setClosing(false);
-        }, 100);
+      setClosing(true);
+      // sessionStorage.setItem('popup_seen', "true");
+      //   setClosing(true);
+      //   setTimeout(() => {
+      //       setShow(false);
+      //       setClosing(false);
+      //   }, 100);
+
+      setTimeout(() => {
+       setShow(false);
+       setClosing(false);
+      }, 100);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -103,50 +111,20 @@ const Popup = ({
 
     };
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => setShow(true), delay);
-    //     return () => clearTimeout(timer);
-    // }, [delay]);
-
     useEffect(() => {
-      const seen = sessionStorage.getItem("popup_seen");
-      if (seen)  return;
+      popupTriggered.current = false;
+      setShow(false);
+      const timer = setTimeout(() => {
+       if (popupTriggered.current) return;
 
-      const showPopup = () => {
-        // if (show) return;
-        if (popupTriggered.current) return;
+       if(document.visibilityState !== "visible") return;
 
-        popupTriggered.current = true;
-        setShow(true);
-        sessionStorage.setItem("popup_seen", "true");
-      };
-
-      const handleMouseLeave = (e:MouseEvent) => {
-        if (window.innerWidth > 768 && e.clientY <= 10) {
-         showPopup();
-        }
-      }
-
-      const handleScroll = () => {
-        const scrollTop = window.scrollY;
-        const height = document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = scrollTop / height;
-
-        if (window.innerWidth <= 768 && scrolled > 0.6) {
-          showPopup();
-          window.removeEventListener("scroll", handleScroll);
-        }
-      };
-
-      document.addEventListener("mouseout", handleMouseLeave);
-      window.addEventListener("scroll", handleScroll);
-    
-      return () => {
-        document.removeEventListener("mouseout", handleMouseLeave);
-        window.removeEventListener("scroll", handleScroll);
-      }
-    }, [])
-    
+       popupTriggered.current = true;
+       setShow(true);
+      }, delay);
+ 
+        return () => clearTimeout(timer);
+    }, [delay, pathname]);
 
     if (!show) return null;
 
