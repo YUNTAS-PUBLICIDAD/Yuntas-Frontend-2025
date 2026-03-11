@@ -2,8 +2,8 @@ const AddressBlock = () => (
   <div className="flex flex-col gap-8 text-center md:text-left items-center md:items-start">
     
     {/* Sección Dirección */}
-    <div className="flex flex-col gap-2">
-      <h3 className="font-semibold text-[#6DE1E3] text-xl tracking-wide">
+    <div className="flex flex-col gap-4 w-full">
+      <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
         Dirección
       </h3>
       <p className="text-base md:text-lg text-gray-200">
@@ -12,8 +12,8 @@ const AddressBlock = () => (
     </div>
 
     {/* Sección Horario */}
-<div className="flex flex-col gap-3">
-  <h3 className="font-semibold text-[#6DE1E3] text-xl tracking-wide">
+<div className="flex flex-col gap-4">
+  <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
     Horario
   </h3>
 
