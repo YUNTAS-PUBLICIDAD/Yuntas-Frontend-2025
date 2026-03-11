@@ -45,11 +45,11 @@ export default function Modal({
         lg: "max-w-4xl"
     };
 
-    const bgClass = className.includes("bg-") ? "" : "bg-white";
+    const bgClass = className.includes("bg-") ? "" : "bg-white dark:bg-[#141A3F]";
     const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#203565]";
     const closeBtnClass = className.includes("text-white")
         ? "text-white hover:text-gray-200"
-        : "text-gray-400 hover:text-gray-600";
+        : "text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300";
 
     return (
         <div
@@ -61,8 +61,8 @@ export default function Modal({
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
-                        <h2 className={`text-xl font-bold ${textTitleClass}`}>
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20 dark:border-gray-700">
+                        <h2 className={`text-xl font-bold ${textTitleClass} dark:text-white`}>
                             {title}
                         </h2>
                         <button
@@ -74,7 +74,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-6 pt-0 overflow-y-auto">
+                <div className="p-6 pt-0 overflow-y-auto dark:text-gray-200">
                     {children}
                 </div>
             </div>
