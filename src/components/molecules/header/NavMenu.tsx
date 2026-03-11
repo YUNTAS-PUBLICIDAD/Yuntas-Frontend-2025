@@ -9,8 +9,8 @@ variant?: "mobile" | "desktop" | "footer";
 };
 const variantMap = {
   mobile: "flex flex-col gap-y-4 w-full text-white",
-desktop: "flex flex-row gap-x-10 items-center uppercase",
- footer: "flex flex-col gap-y-1 items-start text-white lowercase capitalize"
+  desktop: "flex flex-row gap-x-10 items-center uppercase",
+  footer: "flex flex-col gap-y-6 items-start text-white capitalize"
 };
 export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps) {
   const pathname = usePathname(); 
@@ -26,7 +26,7 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
    <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
   
 {variant === "footer" && (
-  <h3 className="text-[#6de1e3] font-semibold mb-4 px-4 text-xl">
+  <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
     Enlaces
   </h3>
 )}
