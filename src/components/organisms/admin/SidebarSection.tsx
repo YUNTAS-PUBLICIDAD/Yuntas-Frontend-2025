@@ -40,15 +40,15 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
       )}
 
 
-      <aside
-        className="
-                hidden lg:flex
-                sticky top-0 h-full min-h-fit w-72 flex-col
-                border-r border-gray-300
-                bg-white dark:bg-[#141A3F]
-                transition-colors duration-300
-            "
-      >
+<aside
+  className="
+    hidden lg:flex
+    sticky top-0 h-full min-h-fit w-72 flex-col
+    border-r border-gray-300
+    bg-white dark:bg-[#141A3F]
+    transition-colors duration-300
+  "
+>
         <h2
           className="
                     text-center font-semibold text-2xl py-8 px-6
@@ -74,7 +74,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-12 items-center py-16 bg-[#F4F4F2] dark:bg-[#0D1030] text-[#203565] dark:text-white">
+        <div className="flex flex-col gap-12 items-center py-16 bg-white dark:bg-[#141A3F] text-[#203565] dark:text-white">
           <div className="flex flex-col items-center text-xl">
             <div className="mb-4 p-3 rounded-full shadow-sm">
               <UserSection size="lg" enableDarkMode />
@@ -87,7 +87,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
             size="sm"
             onClick={logout}
             disabled={isLoading}
-            className="dark:bg-white dark:text-[#0D1030]"
+            className="dark:bg-[#293296] dark:text-white"
           >
             {isLoading ? (
               <div className="flex items-center gap-2">

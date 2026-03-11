@@ -133,45 +133,57 @@ export default function SeguimientoPage() {
             )}
 
             {/* BUSCADOR */}
-{!isMonitoreoMode && (
-  <div className="flex items-center justify-between mb-4 gap-4">
 
-    <div className="flex-1">
-      <SearchBar
-        items={leads}
-        onSearch={setLeadsFiltered}
-        placeholder="Buscar por nombre, email, teléfono, producto..."
-        searchKeys={[
-          'id',
-          'name',
-          'email',
-          'phone',
-          'product_name',
-          'source_name',
-          'created_at'
-        ]}
-        getDisplayValue={(item) => `${item.id} - ${item.name}`}
-      />
-    </div>
+            {!isMonitoreoMode && (
+                <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                    
+                   
+                    <div className="w-full md:flex-1">
+                        <SearchBar
+                            items={leads}
+                            onSearch={setLeadsFiltered}
+                            placeholder="Buscar por nombre, email, teléfono, producto..."
+                            searchKeys={[
+                                'id',
+                                'name',
+                                'email',
+                                'phone',
+                                'product_name',
+                                'source_name',
+                                'created_at'
+                            ]}
+                            getDisplayValue={(item) => `${item.id} - ${item.name}`}
+                        />
+                    </div>
 
-    <div className="px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full">
-      <span className="text-[#203565] font-semibold">
-        {leadsFiltered.length} REGISTROS ENCONTRADOS
-      </span>
-    </div>
+                   
+                    <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+                        <span className="text-[#203565] font-semibold text-sm md:text-base">
+                            {leadsFiltered.length} REGISTROS ENCONTRADOS
+                        </span>
+                    </div>
 
-  </div>
-)}
+                </div>
+            )}
             {/* BUSCADOR MONITOREO */}
             {isMonitoreoMode && (
-                <div className="mb-4">
-                    <SearchBar
+                <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+
+                    <div className="w-full md:flex-1">
+                        <SearchBar
                         items={leads}
                         onSearch={setLeadsFiltered}
                         placeholder="Buscar por ID o Nombre..."
                         searchKeys={['id', 'name']}
                         getDisplayValue={(item) => `${item.id} - ${item.name}`}
-                    />
+                        />
+                   </div>
+                   {/*Contador para Monitoreo */}
+                   <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+                        <span className="text-[#203565] font-semibold text-sm md:text-base">
+                            {leadsFiltered.length} REGISTROS ENCONTRADOS
+                        </span>
+                    </div>
                 </div>
             )}
 
@@ -180,6 +192,9 @@ export default function SeguimientoPage() {
                 {isMonitoreoMode ? (
                     <MonitoreoTable
                         data={datosPaginados}
+                        emptyMessage="No se encontraron registros de monitoreo"
+                        resetSearchText="Ver todos los registros"
+                        onResetSearch={() => setLeadsFiltered(leads)}
                     />
                 ) : (
                     <AdminTable
@@ -187,6 +202,10 @@ export default function SeguimientoPage() {
                         columns={columns}
                         onEdit={handleEditClick}
                         onDelete={handleDeleteLead}
+                        isLoading={isLoading}
+                        emptyMessage="No se encontraron seguimientos"
+                        resetSearchText="Ver todos los seguimientos"
+                        onResetSearch={() => setLeadsFiltered(leads)}
                     />
                 )}
             </div>

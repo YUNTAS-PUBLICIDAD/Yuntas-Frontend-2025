@@ -38,6 +38,7 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
                 phone: initialData.phone || "",
                 email: initialData.email || "",
                 product_id: initialData.product_id || 0,
+                source_id: initialData.source_id || 4,
             });
         }
     }, [initialData]);

@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { IoMenu, IoClose } from "react-icons/io5";
 import NavMenuMobil from "../molecules/header/NavMenuMobil";
@@ -10,6 +9,7 @@ import SwitchMode from '@/components/molecules/admin/SwitchMode';
 import useAuth from '@/hooks/useAuth';
 import { getToken } from '@/utils/token';
 import { getRole } from '@/utils/role';
+import { LuLamp } from 'react-icons/lu';
 
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
@@ -46,6 +46,24 @@ const HeaderMobil = () => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (open) {
+     document.body.style.overflow = "hidden" ;
+    }else {
+      document.body.style.overflow = "auto"
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    }
+  }, [open])
+ 
+  const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#04061a]" : "bg-transparent text-white shadow-none";
+
+  const adminBg = isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "";
+
+  const iconColor = isAdminPath ? "text-[#04061a]" : isScrolled ? "text-[#04061a]" : "text-white";
+
   return (
     <>
       {/* ───────────── HEADER ───────────── */}
@@ -54,9 +72,9 @@ const HeaderMobil = () => {
           md:hidden fixed top-0 left-0 right-0 z-50
           px-6 py-4 flex justify-between items-center
           transition-all duration-300
-          ${open ? "hidden" : ""}
-          ${isScrolled ? "bg-white text-[#04061a] shadow-md" : "bg-transparent text-white shadow-none"}
-          ${isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "dark:bg-transparent"} 
+          ${open ? "opacity-0 pointer-events-none" : "opacity-100"}
+          ${headerBg}
+          ${adminBg}
           dark:text-white dark:shadow-none
         `}
       >
@@ -65,10 +83,12 @@ const HeaderMobil = () => {
           aria-label="Abrir menú"
           className="text-3xl transition-colors"
         >
-          <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} />
+          {/* <IoMenu className={`${isScrolled ? "text-[#04061a]" : "text-white"} dark:text-white`} /> */}
+          <IoMenu className={`${iconColor} dark:text-white`}/>
         </button>
 
-        <UserSection size="md" />
+        {/* ICONO USER / ADMIN */}
+        <UserSection size='md'/>
       </header>
 
       {/* ───────────── OVERLAY ───────────── */}
@@ -85,7 +105,7 @@ const HeaderMobil = () => {
       <div
         className={`
           md:hidden fixed inset-0 z-40 flex flex-col
-          transform transition-transform duration-500 ease-in-out
+         transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
 
           bg-white text-[#04061a]
@@ -99,13 +119,12 @@ const HeaderMobil = () => {
           onClick={() => setOpen(false)}
           aria-label="Cerrar menú"
           className="
-            absolute top-4 right-4 text-3xl
-            text-[#04061a] hover:text-red-700
-            dark:text-white
+            absolute top-4 right-4 z-50 text-4xl font-bold
+            text-[#04061a] dark:text-white
             transition-colors
           "
         >
-          <IoClose />
+          ×
         </button>
 
         <nav className="pt-16 px-6 flex-1 overflow-y-auto">
@@ -113,7 +132,7 @@ const HeaderMobil = () => {
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
-      {/* Dark Mode Switch */}
+          {/* Dark Mode Switch */}
           {isAdmin && (
             <>
               <div className="flex items-center justify-between">
@@ -142,7 +161,6 @@ const HeaderMobil = () => {
 
           {/* ───────────── SECCIÓN DE USUARIO/LOGIN ───────────── */}
           <div className="flex items-center gap-3">
-            <UserSection size="md" />
             <div>
               <p className="text-sm font-bold">BIENVENIDO</p>
               <p className="text-xs opacity-60">

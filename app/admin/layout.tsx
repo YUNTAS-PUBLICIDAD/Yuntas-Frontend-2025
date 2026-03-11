@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import SidebarSection from "@/components/organisms/admin/SidebarSection";
@@ -43,40 +43,22 @@ export default function AdminLayout({
   const title = titleMap[key] ?? "Panel de Administración";
 
   return (
-    <div
-      className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
-      {/* ───────────────── TOP BAR (solo móvil) ───────────────── */}
-      <div
-        className="flex items-center justify-between h-16 px-6 bg-white dark:bg-transparent border-b border-gray-20 dark:border-white/10 md:hidden">
-        {/* Hamburguesa */}
-        {/* Usuario */}
-      </div>
-
+    <div className="flex pt-16 md:pt-0 flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
       {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
       <Encabezado variant="azul">{title}</Encabezado>
 
       {/* ───────────────── CONTENIDO ───────────────── */}
-      <div
-        className="flex flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
-        {/* Overlay móvil */}
-        {sidebarOpen && (
-          <div
-            onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 bg-black/50 z-30 md:hidden"
-          />
-        )}
-
+      <div className="flex flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
         {/* Sidebar */}
         <SidebarSection
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+          isOpen={false}
+          onClose={() => {}}
         />
 
         {/* Página */}
-      <main
-      className="flex-1 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
-      {children}
-      </main>
+        <main className="flex-1 min-w-0 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+          {children}
+        </main>
       </div>
     </div>
   );

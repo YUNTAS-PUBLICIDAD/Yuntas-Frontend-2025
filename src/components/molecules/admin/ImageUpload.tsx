@@ -16,6 +16,7 @@ interface ImageUploadProps {
     onRemove?: () => void;
     showTitleInput?: boolean;
     showAltInput?: boolean;
+    error?: string;
 }
 
 export default function ImageUpload({
@@ -31,9 +32,10 @@ export default function ImageUpload({
     onRemove,
     showTitleInput = true,
     showAltInput = true,
+    error
 }: ImageUploadProps) {
     const [preview, setPreview] = useState<string | null>(currentImage || null);
-    const [error, setError] = useState<string | null>(null);
+    const [internalError, setInternalError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -46,7 +48,8 @@ export default function ImageUpload({
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        setError(null);
+        // setError(null);
+        setInternalError(null);
 
         if (!file) {
             setPreview(null);
@@ -56,13 +59,15 @@ export default function ImageUpload({
 
         // validamos el tamaño. Tiene que ser menor a 2MB
         if (file.size > 2 * 1024 * 1024) {
-            setError("La imagen debe pesar menos de 2 MB");
+            // setError("La imagen debe pesar menos de 2 MB");
+            setInternalError("La imagen debe pesa menos de 2 MB")
             return;
         }
 
         // validamos el tipo de archivo webp
         if (file.type !== "image/webp") {
-            setError("El archivo debe ser una imagen en formato WEBP");
+            // setError("El archivo debe ser una imagen en formato WEBP");
+            setInternalError("EL archivo debe ser una imagen formato WEBP")
             return;
         }
 
@@ -130,9 +135,14 @@ export default function ImageUpload({
                 )}
             </div>
 
-            {error && (
+            {/* {error && (
                 <span className="text-red-500 text-sm">{error}</span>
-            )}
+            )} */}
+            {(error || internalError) && (
+    <span className="text-red-500 text-sm">
+        {error || internalError}
+    </span>
+)}
 
             <span className="text-gray-500 text-xs">Cada imagen debe pesar menos de 2 MB.</span>
             <span className="text-gray-500 text-xs">Cada imagen debe subirse en formato WEBP.</span>

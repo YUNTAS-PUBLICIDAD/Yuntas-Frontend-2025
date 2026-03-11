@@ -85,4 +85,21 @@ export const showToast = {
             },
         });
     },
+
+    info: (message: string, options?: ToastOptions) => {
+        toast(message, {
+            position: options?.position || defaultPosition,
+            duration: options?.duration || 3000,
+            style: {
+                ...baseStyle,
+                backgroundColor: '#e3f2fd',
+                borderColor: '#2196f3',
+                color: '#0d47a1',
+            },
+            iconTheme: {
+                primary: '#2196f3',
+                secondary: '#e3f2fd',
+            },
+        });
+    },
 };

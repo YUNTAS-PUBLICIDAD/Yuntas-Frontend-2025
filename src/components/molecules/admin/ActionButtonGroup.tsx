@@ -1,4 +1,5 @@
 import ActionButton from "@/components/atoms/ActionButton";
+import { ReactNode } from "react";
 
 interface ButtonConfig {
     label: string;
@@ -7,6 +8,7 @@ interface ButtonConfig {
     className?: string; // Permitir override por botón
     bgColor?: string;
     isLoading?: boolean;
+    icon?: ReactNode;
 }
 
 interface ActionButtonGroupProps {
@@ -48,6 +50,7 @@ export default function ActionButtonGroup({
                     bgColor={button.bgColor ?? getBgColorByVariant(button.variant)}
                     className={button.className }
                     isLoading={button.isLoading ?? false}
+                    icon={button.icon}
                 >
                     {button.label}
                 </ActionButton>

@@ -1,4 +1,5 @@
 import Button from "@/components/atoms/Button";
+import { ReactNode } from "react";
 
 interface ActionButtonProps {
     children: string;
@@ -7,6 +8,7 @@ interface ActionButtonProps {
     className?: string;
     bgColor?: string;
     isLoading?: boolean;
+    icon?: ReactNode;
 }
 
 export default function ActionButton({
@@ -15,7 +17,8 @@ export default function ActionButton({
     variant = "primary",
     bgColor,
     className,
-    isLoading = false
+    isLoading = false,
+    icon
 }: ActionButtonProps) {
 
     const finalClasses = bgColor ?? "";
@@ -28,9 +31,12 @@ export default function ActionButton({
             className={`py-1 !px-3 sm:!px-4 !rounded-[10px] ${className ?? "w-full sm:w-auto"} ${finalClasses}`}
             disabled={isLoading}
         >
-            <p className="font-semibold text-xs sm:text-sm md:text-base">
-                {children}
-            </p>
+            <span className="flex items-center justify-center gap-2">
+                {icon && <span className="flex-shrink-0">{icon}</span>}
+                <p className="font-semibold text-xs sm:text-sm md:text-base">
+                    {children}
+                </p>
+            </span>
         </Button>
     );
 }

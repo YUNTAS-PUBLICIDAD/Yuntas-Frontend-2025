@@ -11,6 +11,7 @@ interface InputListDinamicaProps {
     helperText?: string;
     addButtonText?: string;
     required?: boolean;
+    error?: string;
 }
 
 export default function InputListDinamica({
@@ -20,7 +21,8 @@ export default function InputListDinamica({
     placeholder = "",
     helperText,
     addButtonText = "+ Agregar",
-    required = false
+    required = false,
+    error
 }: InputListDinamicaProps) {
 
     useEffect(() => {
@@ -87,6 +89,10 @@ export default function InputListDinamica({
             {helperText && (
                 <span className="text-gray-500 text-sm">{helperText}</span>
             )}
+
+            {error && (
+    <span className="text-red-500 text-sm">{error}</span>
+)}
         </div>
     );
 }

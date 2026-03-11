@@ -71,9 +71,87 @@ const GALLERY_SLOTS = [
     },
 ] as const;
 
+type FormErrors = Partial<Record<keyof BlogInput, string>>;
+type GallerySlot = typeof GALLERY_SLOTS[number]["value"];
+
 export default function BlogForm({ onSubmit, onCancel, isLoading = false, initialData = null, productos }: BlogFormProps) {
     const [formData, setFormData] = useState<BlogInput>(defaultFormData);
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
+    const [errors, setErrors] = useState<FormErrors>({});
+
+    const validate = () => {
+      // const newErrors: Record<string, string> = {};
+      const newErrors: FormErrors = {};
+
+      if (!formData.title.trim()) {
+       newErrors.title = "El titulo es obligatorio";
+      }
+
+      if (!formData.slug.trim()) {
+       newErrors.slug = "El slug es obligatorio" ;
+      }
+
+      if (!formData.cover_subtitle.trim()) {
+       newErrors.cover_subtitle = "El subtitulo es obligatorio";
+      }
+
+      if (!formData.product_id) {
+       newErrors.product_id = "Debe seleccionar un producto" 
+      }
+
+      if (!formData.description.trim()) {
+       newErrors.description = "La descripción es obligatoria" ;
+      }
+
+      if (!formData.testimonial.trim()) {
+       newErrors.testimonial = "El testimonio es obligatorio" ;
+      }
+
+      if (!formData.meta_title.trim()) {
+       newErrors.meta_title = "El meta título es obligatorio" ;
+      }
+
+      if (!formData.meta_description.trim()) {
+       newErrors.meta_description = "La meta description es obligatoria" ;
+      }
+
+      if (formData.benefits.length !== 3) {
+       newErrors.benefits = "Debe haber exactamente 3 beneficios";
+      }else if (formData.benefits.some(b => !b.trim())){
+        newErrors.benefits = "Los beneficios no pueden estar vacíos";
+      }
+
+      if (!formData.main_image) {
+        newErrors.main_image = "La imagen principal es obligatoria";
+      }
+
+      const missingSlots = GALLERY_SLOTS.filter(({value}) => !formData.gallery.some(item => item.slot === value));
+
+      if (missingSlots.length > 0) {
+       newErrors.gallery = "Todas las imágenes de la galería son obligatorias";
+      }
+const emptyImages = formData.gallery.filter(
+ item => !item.image || (typeof item.image === "string" && item.image.trim() === "")
+);
+
+if (emptyImages.length > 0) {
+ newErrors.gallery = "Todas las imágenes deben contener un archivo válido";
+}
+
+if (formData.video_url) {
+  try {
+  const url = new URL(formData.video_url) 
+  if (!["http:", "https:"].includes(url.protocol)) {
+   newErrors.video_url = "URL inválida" ;
+  }
+  } catch (error) {
+   newErrors.video_url = "URL inválida" 
+  }
+}
+      setErrors(newErrors);
+
+      return Object.keys(newErrors).length === 0;
+    }
 
     // Cargar datos iniciales para editar
     useEffect(() => {
@@ -118,10 +196,21 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
         }
 
         setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => {
+          const copy = {...prev};
+          delete copy[name as keyof BlogInput];
+          return copy;
+        })
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
-        setFormData(prev => {
+     setErrors(prev => {
+      const copy = {...prev};
+      delete copy.gallery;
+      return copy;
+     })   
+      
+      setFormData(prev => {
             const existing = prev.gallery.find(item => item.slot === slot); // buscar si ya hay una imagen en ese slot
             const filteredGallery = prev.gallery.filter(item => item.slot !== slot); // se elimna imagen existente de ese slot si hay
             return {
@@ -129,7 +218,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                 gallery: [
                     ...filteredGallery,
                     {
-                        slot: slot as any,
+                        slot: slot as GallerySlot,
                         image: file,
                         title: existing?.title || "", // conservar title y alt si ya existen
                         alt: existing?.alt || "",
@@ -187,6 +276,11 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!validate()) {
+         showToast.warning("Revisa los campos del formulario");
+         return;
+        }
+
         // imagen principal obligatoria
         if (!formData.main_image) {
             showToast.warning("La imagen principal es requerida");
@@ -194,37 +288,51 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
         }
 
         // imagenes de galeria obligatorias
-        const missingSlots = GALLERY_SLOTS.filter(
-            ({ value }) => !formData.gallery.some(item => item.slot === value)
-        );
-        if (missingSlots.length > 0) {
-            showToast.warning(`Faltan imágenes para: ${missingSlots.map(s => s.label).join(", ")}`);
-            return;
-        }
+        // const missingSlots = GALLERY_SLOTS.filter(
+        //     { value } => !formData.gallery.some(item => item.slot === value)
+        // );
 
-        const emptyImages = formData.gallery.filter(
-            item => !item.image || (typeof item.image === 'string' && item.image.trim() === '')
-        );
-        if (emptyImages.length > 0) {
-            showToast.warning("Todas las imágenes de galería son requeridas");
-            return;
-        }
+        // if (missingSlots.length > 0) {
+        //     showToast.warning(`Faltan imágenes para: ${missingSlots.map(s => s.label).join(", ")}`);
+        //     return;
+        // }
+
+        // const emptyImages = formData.gallery.filter(
+        //     item => !item.image || (typeof item.image === 'string' && item.image.trim() === '')
+        // );
+        // if (emptyImages.length > 0) {
+        //     showToast.warning("Todas las imágenes de galería son requeridas");
+        //     return;
+        // }
 
         // beneficios obligatorios
-        const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
-        if (hasEmptyBenefits) {
-            showToast.warning("Los beneficios no pueden estar vacios");
-            return;
-        }
-        if (formData.benefits.length !== 3) {
-            showToast.warning("Debe haber exactamente 3 beneficios");
-            return;
-        }
+        // const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
+        // if (hasEmptyBenefits) {
+        //     showToast.warning("Los beneficios no pueden estar vacios");
+        //     return;
+        // }
+        // if (formData.benefits.length !== 3) {
+        //     showToast.warning("Debe haber exactamente 3 beneficios");
+        //     return;
+        // }
         onSubmit(formData);
     };
 
+    const updateField = (field: keyof BlogInput, value: string) => {
+  setFormData(prev => ({
+    ...prev,
+    [field]: value
+  }));
+
+  setErrors(prev => {
+    const copy = { ...prev };
+    delete copy[field];
+    return copy;
+  });
+};
+
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
 
             {/* Informacion */}
             <FormSection title="Información Principal">
@@ -237,6 +345,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                         placeholder="Ej. Letreros Neón LED: Guía Completa"
                         helperText="Máx. 150 caracteres (letras, números y espacios)."
                         maxLength={150}
+                        error={errors.title}
                         required
                     />
 
@@ -248,6 +357,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                         placeholder="Ej: Descubre cómo los letreros de neón LED pueden..."
                         helperText="Máx. 150 caracteres (letras, números y espacios)."
                         maxLength={150}
+                        error={errors.cover_subtitle}
                         required
                     />
                 </div>
@@ -261,6 +371,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                         placeholder="ej: letreros-neon-led-guia-completa"
                         helperText="Solo palabras en minúscula separadas por guiones. Sin espacios ni tildes. Máx. 160 caracteres."
                         maxLength={160}
+                        error={errors.slug}
                         required
                     />
 
@@ -270,6 +381,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                         value={formData.product_id || ""}
                         onChange={handleInputChange}
                         options={productos}
+                        error={errors.product_id}
                         required
                     />
                 </div>
@@ -289,24 +401,28 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     label="Introducción del Blog"
                     name="description"
                     value={formData.description || ""}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
+                    // onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
+                    onValueChange={(value) => updateField("description", value)}
                     placeholder="Los pisos LED se han convertido en una herramienta ..."
                     helperText="Desarrollo completo del blog."
                     rows={6}
                     required
                     productos={productos}
+                    error={errors.description}
                 />
 
                 <LinkableTextarea
                     label="Testimonio"
                     name="testimonial"
                     value={formData.testimonial || ""}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, testimonial: value }))}
+                    // onValueChange={(value) => setFormData(prev => ({ ...prev, testimonial: value }))}
+                    onValueChange={(value) => updateField("testimonial", value)}
                     placeholder="Ej: “Gracias a Yuntas, nuestro negocio ha ganado una visibilidad increíble...”"
                     helperText="Desarrollo completo del testimonio."
                     rows={6}
                     required
                     productos={productos}
+                    error={errors.testimonial}
                 />
 
                 <InputAdmin
@@ -317,6 +433,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     placeholder="Ej: https://www.youtube.com/watch?v=..."
                     helperText="Máx. 150 caracteres (letras, números y espacios)."
                     maxLength={150}
+                    error={errors.video_url}
                 />
             </FormSection>
 
@@ -330,6 +447,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     helperText="Máx. 70 caracteres (letras, números y espacios)."
                     maxLength={70}
                     required
+                    error={errors.meta_title}
                 />
 
                 <TextareaAdmin
@@ -342,6 +460,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     maxLength={160}
                     rows={2}
                     required
+                    error={errors.meta_description}
                 />
             </FormSection>
 
@@ -350,10 +469,19 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                 <InputListDinamica
                     label="Beneficios"
                     items={formData.benefits}
-                    onChange={(benefits) => setFormData(prev => ({ ...prev, benefits }))}
+                    onChange={
+                      (benefits) =>{ setFormData(prev => ({ ...prev, benefits }));
+                    setErrors(prev => {
+                      const copy = {...prev};
+                      delete copy.benefits;
+                      return copy;
+                    }) 
+                    }
+                  }
                     placeholder="Ej: Aumenta la visibilidad de tu negocio"
                     addButtonText="+ Agregar beneficio"
                     required
+                    error={errors.benefits}
                 />
             </FormSection>
 
@@ -366,13 +494,21 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                     altValue={formData.main_image_alt}
                     onTitleChange={(title) => setFormData(prev => ({ ...prev, main_image_title: title }))}
                     onAltChange={(alt) => setFormData(prev => ({ ...prev, main_image_alt: alt }))}
-                    onFileChange={(file) => setFormData(prev => ({ ...prev, main_image: file }))}
+                    onFileChange={
+                      (file) => { setFormData(prev => ({ ...prev, main_image: file }));
+                   setErrors(prev => {
+                    const copy = {...prev};
+                    delete copy.main_image;
+                    return copy;
+                   }) 
+                    }}
                     currentImage={
                         typeof formData.main_image === "string" && formData.main_image
                             ? formData.main_image
                             : null
                     }
                     required
+                    error={errors.main_image}
                 />
             </FormSection>
 
@@ -423,6 +559,7 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
                                         ? () => handleRemoveGalleryImage(value)
                                         : undefined
                                 }
+                                error={errors.gallery}
                             />
                         );
                     })}
