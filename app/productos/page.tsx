@@ -1,5 +1,5 @@
 import HeroSection from "@/components/organisms/productos/HeroSection";
-import Popup from "@/components/molecules/Popup";
+//import Popup from "@/components/molecules/Popup";
 import { getProductosService } from "@/services/productosService";
 import { sourceData } from "@/data/popup/sourceData";
 import { ProductList } from "./ProductList";
@@ -62,6 +62,10 @@ export default async function ProductosPage() {
         <main>
             <HeroSection />
             <ProductList initialProductos={productos} />
+
+             {/* 
+               Se oculta el Popup temporalmente a petición para mejorar la navegación.
+               Descomentar estas líneas y la importación arriba cuando se vuelva a necesitar.
             <Popup
                 imgSrc={imagenes.productos.popup.src}
                 imgTitle={imagenes.productos.popup.title}
@@ -70,6 +74,8 @@ export default async function ProductosPage() {
                 buttonText="Explorar opciones"
                 sourceId={sourceData.PRODUCTOS} // source id para "Productos"
             />
+
+                */}
         </main>
     );
 } 
