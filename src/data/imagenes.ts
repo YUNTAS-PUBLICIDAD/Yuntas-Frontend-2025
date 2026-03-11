@@ -20,13 +20,13 @@ import inicioDetalle2 from "@/assets/inicio/innovation002.webp";
 import inicioDetalle3 from "@/assets/inicio/burguerP.webp";
 
 // import inicioTestimonio from "@/assets/inicio/fondodepantalla.png";
-import inicioTestimonio from "@/assets/inicio/fondodepantalla01.png";
+import inicioTestimonio from "@/assets/inicio/fondodepantalla01.webp";
 
 // import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes1.png";
 import proyectoAntes1 from "@/assets/inicio/nuestroproyectosantes01.png";
 
 // import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues1.png";
-import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues01.png";
+import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues01.webp";
 
 // import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes2.png";
 import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes02.png";

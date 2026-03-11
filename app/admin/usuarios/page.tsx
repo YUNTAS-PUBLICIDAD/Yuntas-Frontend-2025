@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
+import ViewUserModal from "@/components/organisms/admin/ModalActions/ViewUserModal";
 import { showToast } from "@/utils/showToast";
 import UserForm from "@/components/molecules/admin/users/UserForm";
 import { useUsers } from "@/hooks/useUsers";
@@ -27,6 +28,7 @@ const columns = [
 export default function UsuariosPage() {
     const [datosPaginados, setDatosPaginados] = useState<User[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const { confirm, ConfirmDialog } = useConfirm();
     const { users, getUsers, createUser, updateUser, deleteUser, isLoading, error } = useUsers();
@@ -47,6 +49,11 @@ export default function UsuariosPage() {
     };
 
     const handleEditClick = (usuario: User) => {
+        setSelectedUser(usuario);
+        setOpenViewModal(true);
+    };
+
+    const handleOpenEditModal = (usuario: User) => {
         setSelectedUser(usuario);
         setIsModalOpen(true);
     };
@@ -80,6 +87,11 @@ export default function UsuariosPage() {
     const handleCloseModal = () => {
         setSelectedUser(null);
         setIsModalOpen(false);
+    };
+
+    const handleCloseViewModal = () => {
+        setSelectedUser(null);
+        setOpenViewModal(false);
     };
 
     const exportOptions = [
@@ -159,6 +171,15 @@ export default function UsuariosPage() {
                             setProductosPaginados={setDatosPaginados}
                         />
                     </div>
+
+                    {selectedUser && (
+                        <ViewUserModal
+                            user={selectedUser}
+                            isOpen={openViewModal}
+                            onClose={handleCloseViewModal}
+                            onEdit={handleOpenEditModal}
+                        />
+                    )}
 
                     <Modal
                         isOpen={isModalOpen}
