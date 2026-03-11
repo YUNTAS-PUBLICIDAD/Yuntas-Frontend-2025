@@ -97,9 +97,9 @@ export default function UsuariosPage() {
             ) : (
                 <>
                     {/* BOTONES */}
-                    <div className="flex flex-wrap gap-3 mb-4 no-print max-w-5xl mx-auto">
+                    <div className="flex flex-wrap gap-3 mb-4 no-print">
                         {/* EXPORTAR */}
-                        <div className="flex-1 min-w-[120px]">
+                        <div className="flex-1 min-w-[140px]">
                             <ExportDropdown
                                 className="w-full h-[40px]"
                                 options={exportOptions}
@@ -107,7 +107,7 @@ export default function UsuariosPage() {
                         </div>
 
                         {/* IMPRIMIR */}
-                        <div className="flex-1 min-w-[120px]">
+                        <div className="flex-1 min-w-[140px]">
                             <ActionButtonGroup
                                 buttons={[
                                     {
@@ -123,7 +123,7 @@ export default function UsuariosPage() {
                         </div>
 
                         {/* AGREGAR */}
-                        <div className="flex-1 min-w-[120px]">
+                        <div className="flex-1 min-w-[140px]">
                             <ActionButtonGroup
                                 buttons={[
                                     {
