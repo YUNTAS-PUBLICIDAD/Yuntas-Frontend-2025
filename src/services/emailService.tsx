@@ -60,10 +60,6 @@ export async function saveEmailPlantillaService(emailData: EmailFormInput): Prom
         for (let paso = 0; paso < emailData.sections.length; paso++) {
             const formData = buildEmailFormData(emailData.producto_id,emailData.sections[paso],paso);
 
-        if (emailData.asunto) {
-                formData.append("asunto", emailData.asunto);
-            }
-
             await api.post(API_ENDPOINTS.ADMIN.CAMPANA.EMAILS.SAVE, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,

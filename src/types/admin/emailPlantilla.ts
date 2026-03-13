@@ -2,7 +2,6 @@ export interface emailPlantilla {
     id: number;
     producto_id: number;
     paso: number;
-    asunto?: string;
     titulo: string;
     parrafo1: string;
     imagen_principal: string | null;
@@ -22,7 +21,6 @@ export interface EmailSectionInput {
 
 export interface EmailFormInput {
     producto_id: string;
-    asunto?: string
     sections: EmailSectionInput[];
 }
 

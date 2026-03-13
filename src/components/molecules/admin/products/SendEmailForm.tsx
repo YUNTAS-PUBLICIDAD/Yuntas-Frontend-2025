@@ -22,7 +22,6 @@ interface SendEmailFormProps {
 
 const defaultFormData: EmailFormInput = {
     producto_id: "",
-    asunto: "",
     sections: [
         createEmptySection(),
         createEmptySection(),
@@ -77,7 +76,6 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
         const parsedSections = parseEmailPlantillaData(emailPlantillas);
         setFormData(prev => ({
             ...prev,
-            asunto: emailPlantillas[0]?.asunto || "",
             sections: parsedSections
         }));
     }, [emailPlantillas]);
@@ -161,8 +159,6 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
     const validateForm = (): string | null => {
         if (!formData.producto_id) return "Selecciona un producto";
 
-        if (!formData.asunto?.trim()) return "El asunto del correo es obligatorio"
-
         const completeSections = formData.sections.filter(section => !isSectionEmpty(section));
         if (completeSections.length === 0) {
             return "Debes completar al menos una sección";
@@ -215,7 +211,6 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
 
         const dataToSave: EmailFormInput = {
             producto_id: formData.producto_id,
-            asunto: formData.asunto,
             sections: sectionsToSave
         };
 
@@ -308,16 +303,6 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
                     onChange={(e) => setFormData(prev => ({ ...prev, producto_id: e.target.value }))}
                     required
                     options={products}
-                />
-                <InputAdmin
-                    label="Asunto del Correo"
-                    name="asunto"
-                    value={formData.asunto || ""}
-                    onChange={(e) => setFormData(prev => ({ ...prev, asunto: e.target.value }))}
-                    placeholder="Ej. ¡Tenemos excelentes noticias para tu marca!"
-                    helperText="Este es el texto que el cliente verá en su bandeja de entrada."
-                    maxLength={100}
-                    required
                 />
             </FormSection>
 
