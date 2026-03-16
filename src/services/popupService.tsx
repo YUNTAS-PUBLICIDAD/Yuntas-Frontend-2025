@@ -37,7 +37,7 @@ export const savePopupService = async (popupData: Popup, isUpdating: boolean = f
 
     if (isUpdating && popupData.id) {
       // TRUCO LARAVEL: Para enviar archivos en un Update, se usa POST con _method=PUT
-      formData.append('_method', 'PUT');
+      formData.append('_method', 'PATCH');
       response = await api.post(API_ENDPOINTS.ADMIN.POPUPS.UPDATE(popupData.id), formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
