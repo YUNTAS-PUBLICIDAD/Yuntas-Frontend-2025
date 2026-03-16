@@ -144,15 +144,26 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Retardo en segundos <span className="text-red-500">*</span></label>
-                <input 
-                  type="number" min="0" max="60"
-                  value={delaySeconds}
+                <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                  Retardo al aparecer <span className="text-red-500">*</span>
+                </label>
+                <select 
+                  value={delaySeconds} 
                   onChange={(e) => setDelaySeconds(e.target.value)}
                   disabled={!active}
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed" 
-                />
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed"
+                >
+                  <option value="0">0 segundos (Inmediato)</option>
+                  <option value="1">1 segundo</option>
+                  <option value="2">2 segundos</option>
+                  <option value="3">3 segundos (Recomendado)</option>
+                  <option value="4">4 segundos</option>
+                  <option value="5">5 segundos</option>
+                  <option value="6">6 segundos</option>
+                  <option value="7">7 segundos</option>
+                  <option value="8">8 segundos (Máximo)</option>
+                </select>
               </div>
             </div>
 
