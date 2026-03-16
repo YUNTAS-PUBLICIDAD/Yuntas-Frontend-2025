@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
   { label: "Usuarios", href: "/admin/usuarios" },
   { label: "Reclamaciones", href: "/admin/reclamaciones" },
   { label: "Contacto", href: "/admin/contacto" },
+  { label: "Pop-ups", href: "/admin/popups" },
 ];
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {

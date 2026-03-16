@@ -65,7 +65,13 @@ export const API_ENDPOINTS = {
         REQUEST_QR: '/admin/whatsapp-campanas/pedir-qr',
         RESET_SESSION: '/admin/whatsapp-campanas/reset',
         SEND_CAMPANA: '/admin/whatsapp-campanas/enviar-campana',
-      }
+      },
+    },
+    POPUPS: {
+      GET_ALL: '/admin/popups',
+      CREATE: '/admin/popups',
+      UPDATE: (id: number) => `/admin/popups/${id}`,
+      DELETE: (id: number) => `/admin/popups/${id}`,
     },
 
     CATEGORIES: {
