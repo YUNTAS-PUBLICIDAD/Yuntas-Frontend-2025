@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
     WHATSAPP: {
       SEND_ONE: '/whatsapp-popup/enviar',
     },
+    PUBLIC: (page: string) => `/popup?page=${page}`,
   },
 
   // ADMINISTRACIÓN (Tablas y Gestión)

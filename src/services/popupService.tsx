@@ -53,3 +53,12 @@ export const savePopupService = async (popupData: Popup, isUpdating: boolean = f
     return { success: false, message: error.message };
   }
 };
+
+export const getPublicPopupService = async (page: string): Promise<PopupServiceResponse<Popup | null>> => {
+  try {
+    const response = await api.get(API_ENDPOINTS.POPUP.PUBLIC(page));
+    return { success: true, data: response.data };
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+};
