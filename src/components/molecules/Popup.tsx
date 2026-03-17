@@ -19,6 +19,7 @@ interface PopupProps {
     imgAlt: string;
     title: string;
     buttonText: string;
+    buttonColor?: string;
     productId?: number;
     sourceId?: number;
 }
@@ -30,6 +31,7 @@ const Popup = ({
     imgAlt,
     title,
     buttonText,
+    buttonColor = "#30029c",
     productId,
     sourceId = 1,
 }: PopupProps) => {
@@ -147,6 +149,7 @@ const Popup = ({
                         handleSubmit={handleSubmit}
                         buttonText={buttonText}
                         isSubmitting={isWhatsappSending || isEmailSending}
+                        buttonColor={buttonColor}
                     />
                 </div>
             </PopupContainer>

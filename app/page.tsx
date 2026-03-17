@@ -61,6 +61,7 @@ export default function HomePage() {
             imgAlt={dynamicPopup.image_alt || ""}
             title={dynamicPopup.title}
             buttonText={dynamicPopup.button_text}
+            buttonColor={dynamicPopup.button_color || "#6DE1E3"}
             sourceId={sourceData.INICIO}
             // Multiplica por 1000 para pasar de segundos a milisegundos
             delay={(dynamicPopup.delay_seconds || 5) * 1000} 

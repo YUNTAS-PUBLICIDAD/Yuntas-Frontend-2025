@@ -3,6 +3,7 @@ export interface Popup {
   slug?: string;
   title: string;
   button_text: string;
+  button_color?: string;
   image?: File | string | null; // File cuando se sube, string cuando llega del backend
   image_alt: string;
   image_title?: string;

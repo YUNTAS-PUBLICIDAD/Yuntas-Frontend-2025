@@ -15,6 +15,7 @@ interface PopupFormProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   buttonText: string;
   isSubmitting: boolean;
+  buttonColor?: string;
 }
 
 const PopupForm: React.FC<PopupFormProps> = ({
@@ -24,6 +25,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
   handleSubmit,
   buttonText,
   isSubmitting,
+  buttonColor = "#310eb3",
 }) => (
   <form
     onSubmit={handleSubmit}
@@ -55,6 +57,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
     <div>
       <ButtonPrimary
         disabled={isSubmitting}
+        style={{ backgroundColor: buttonColor }}
         className="font-montserrat font-semibold text-md pt-[5px] pr-[10px] pb-[5px] pl-[10px] rounded-lg transition-all disabled:opacity-50 mt-2 sm:mt-3"
       >
         {isSubmitting ? "Enviando..." : buttonText}
