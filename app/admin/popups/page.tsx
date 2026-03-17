@@ -6,6 +6,7 @@ import { Popup } from '@/types/admin/popup';
 import { showToast } from '@/utils/showToast';
 import PopupForm from '@/components/molecules/admin/popups/PopupConfigForm'; 
 import EmailConfigForm from './EmailConfigForm'; 
+import WhatsappConfigForm from './WhatsappConfigForm';
 
 export default function PopupsConfigPage() {
   const { popups, getPopups, savePopup, isLoading, isSaving } = usePopups();
@@ -98,12 +99,9 @@ export default function PopupsConfigPage() {
         <EmailConfigForm />
       )}
 
-      {/* 3. Contenido de la pestaña WHATSAPP (Dejado preparado para después) */}
+      {/* 3. Contenido de la pestaña WHATSAPP */}
       {activeTab === 'whatsapp' && (
-        <div className="py-10 text-center text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
-          <p className="text-lg mb-2">Configuración de WhatsApp</p>
-          <p className="text-sm">Próximamente implementado.</p>
-        </div>
+        <WhatsappConfigForm />
       )}
 
     </div>
