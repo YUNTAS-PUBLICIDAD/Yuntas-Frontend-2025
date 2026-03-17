@@ -11,6 +11,9 @@ import { getPublicPopupService } from "@/services/popupService";
 import { Popup as PopupType } from "@/types/admin/popup"
 
 
+const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
+
+
 export default function HomePage() {
   const [dynamicPopup, setDynamicPopup] = useState<PopupType | null>(null);
   const [isLoadingPopup, setIsLoadingPopup] = useState(true);
@@ -37,6 +40,7 @@ export default function HomePage() {
     fetchPopup();
   }, []);
 
+
   return (
     <main>
       <HeroSection />
@@ -48,7 +52,11 @@ export default function HomePage() {
         dynamicPopup ? (
           // POPUP DINÁMICO
           <Popup
-            imgSrc={dynamicPopup.image_url || ""}
+            imgSrc={
+              typeof dynamicPopup.image === 'string' 
+                ? `${BACKEND_URL}${dynamicPopup.image.startsWith('/') ? '' : '/'}${dynamicPopup.image}` 
+                : ""
+            }
             imgTitle={dynamicPopup.image_title || ""}
             imgAlt={dynamicPopup.image_alt || ""}
             title={dynamicPopup.title}
