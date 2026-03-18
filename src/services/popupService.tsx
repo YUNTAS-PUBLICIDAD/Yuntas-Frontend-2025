@@ -17,6 +17,7 @@ export const savePopupService = async (popupData: Popup, isUpdating: boolean = f
     // Mapear los datos al FormData
     formData.append('title', popupData.title);
     formData.append('button_text', popupData.button_text);
+    formData.append('button_color', popupData.button_color || '#6DE1E3');
     formData.append('image_alt', popupData.image_alt || '');
     if (popupData.image_title) formData.append('image_title', popupData.image_title);
     formData.append('page_target', popupData.page_target);
