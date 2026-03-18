@@ -122,13 +122,13 @@ export default function WhatsappConfigForm() {
     }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-    showToast.success('Configuracion de WhatsApp guardada localmente');
+    showToast.success('Configuración de WhatsApp guardada localmente');
   };
 
   const handleReset = () => {
     localStorage.removeItem(STORAGE_KEY);
     setFormData(defaultConfig);
-    showToast.info('Se restauro la configuracion por defecto');
+    showToast.info('Se restauro la configuración por defecto');
   };
 
   return (
@@ -136,10 +136,10 @@ export default function WhatsappConfigForm() {
       <div className="w-full md:w-1/2 space-y-6">
         <div>
           <h2 className="text-xl font-bold text-[#203565] dark:text-white mb-1">
-            Configuracion de WhatsApp
+            Configuración de WhatsApp
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-            Esta interfaz guarda la configuracion en tu navegador (localStorage).
+            Personaliza el mensaje de bienvenida enviada a los usuarios por WhatsApp.
           </p>
         </div>
 
