@@ -5,6 +5,8 @@ import Button from "@/components/atoms/Button";
 import { Popup } from '@/types/admin/popup';
 import { showToast } from '@/utils/showToast';
 
+const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
+
 interface PopupConfigFormProps {
   initialData?: Popup | null;
   onSubmit: (data: Popup) => Promise<void>;
@@ -14,7 +16,7 @@ interface PopupConfigFormProps {
 
 export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSaving }: PopupConfigFormProps) {
   // --- ESTADOS MAPEADOS AL MODELO ---
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
   const [title, setTitle] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonColor, setButtonColor] = useState('#6DE1E3');
@@ -33,7 +35,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   // Llenar el formulario si estamos editando (initialData)
   useEffect(() => {
     if (initialData) {
-      setActive(initialData.active ?? true);
+      setActive(initialData.active !== undefined ? initialData.active : false);
       setTitle(initialData.title || '');
       setButtonText(initialData.button_text || '');
       setPageTarget(initialData.page_target || 'all');
@@ -42,13 +44,18 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setImageTitle(initialData.image_title || '');
       setButtonColor(initialData.button_color || '#6DE1E3');
       
-      if (initialData.image_url) setImgSrc(initialData.image_url);
+      if (initialData.image_url) {
+        setImgSrc(initialData.image_url);
+      } else if (typeof initialData.image === 'string') {
+        const cleanPath = initialData.image.startsWith('/') ? initialData.image : `/${initialData.image}`;
+        setImgSrc(`${BACKEND_URL}${cleanPath}`); 
+      }
 
       if (initialData.start_date) setStartDate(initialData.start_date.substring(0, 16));
       if (initialData.end_date) setEndDate(initialData.end_date.substring(0, 16));
     } else {
       // Si es un nuevo popup, limpiamos los campos (por si se re-abre el modal)
-      setActive(true);
+      setActive(false);
       setTitle('');
       setButtonText('');
       setPageTarget('all');
@@ -158,14 +165,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                   disabled={!active}
                   className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed"
                 >
-                  <option value="0">0 segundos (Inmediato)</option>
-                  <option value="1">1 segundo</option>
-                  <option value="2">2 segundos</option>
-                  <option value="3">3 segundos (Recomendado)</option>
-                  <option value="4">4 segundos</option>
-                  <option value="5">5 segundos</option>
-                  <option value="6">6 segundos</option>
-                  <option value="7">7 segundos</option>
+                  <option value="3">3 segundos</option>
+                  <option value="5">5 segundos (Recomendado)</option>
                   <option value="8">8 segundos (Máximo)</option>
                 </select>
               </div>
@@ -237,7 +238,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
           {/* IMAGEN */}
           <div className={`bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
-            <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300">Imagen <span className="text-red-500">*</span></h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300">Imagen <span className="text-red-500">*</span></h3>
+              {/* MENSAJE DE INFORMACION SOBRE LA CARGA DE IMAGEN*/}
+              {initialData?.image && !imageFile && (
+                <span className="text-xs text-green-600 font-semibold bg-green-100 px-2 py-1 rounded">Imagen actual cargada</span>
+              )}
+            </div>
             
             <input 
               type="file" accept="image/*" onChange={handleImageChange} disabled={!active}
