@@ -62,10 +62,10 @@ const renderWhatsappMessage = (message: string, variables: MessageVariables) => 
 
   return lines.map((line, index) => {
     if (!line.trim()) {
-      return <div key={`line-${index}`} className="h-3" />;
+      return <span key={`line-${index}`} className="block">&nbsp;</span>;
     }
 
-    return <p key={`line-${index}`}>{renderBoldSegments(line)}</p>;
+    return <span key={`line-${index}`} className="block">{renderBoldSegments(line)}</span>;
   });
 };
 
@@ -284,7 +284,7 @@ export default function WhatsappConfigForm() {
                     </div>
                   )}
 
-                  <div className="px-2 pb-1 text-[0.92rem] text-[#111b21] leading-relaxed space-y-3">
+                  <div className="px-2 pb-1 text-[0.92rem] text-[#111b21] leading-relaxed">
                     {renderWhatsappMessage(formData.message, previewVariables)}
                     {!formData.message.trim() && <p>Sin mensaje configurado.</p>}
                   </div>
