@@ -68,7 +68,21 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
   const [whatsapp, setWhatsapp] = useState({
     id: undefined as number | undefined,
     channel: 'whatsapp' as const,
-    content: '👋 ¡Bienvenido(a) a *Yuntas Publicidad*!\n\nHola *{{nombre}}*, gracias por escribirnos.',
+    content: `👋 ¡Bienvenido(a) a *Yuntas Publicidad*!
+
+Hola, *{{nombre}}*, gracias por visitarnos y mostrar interés en nuestros servicios.
+
+🎯 *Somos tu aliado en publicidad*
+Nos especializamos en soluciones publicitarias personalizadas que ayudan a destacar tu marca.
+
+📌 *Podemos apoyarte con:*
+• Productos publicitarios personalizados
+• Cotizaciones sin compromiso
+
+En breve te enviamos información detallada 📩
+Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
+
+✨ *Yuntas Publicidad*`,
     imageUrl: '',
     imageFile: null as File | null,
     variables: ['nombre'],
@@ -79,8 +93,22 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
   const [email, setEmail] = useState({
     id: undefined as number | undefined,
     channel: 'email' as const,
-    subject: 'Bienvenido(a) a Yuntas Publicidad ✨',
-    content: 'Gracias por contactarnos.\n\nEn Yuntas Publicidad te ayudamos a destacar con productos publicitarios personalizados.',
+    subject: '¡Bienvenido(a) a Yuntas Publicidad! ✨',
+    content: `Hola {{nombre}},
+
+¡Bienvenido(a) a Yuntas Publicidad! Gracias por visitarnos y mostrar interés en nuestros servicios.
+
+🎯 Somos tu aliado en publicidad
+Nos especializamos en soluciones publicitarias personalizadas que ayudan a destacar tu marca.
+
+📌 Podemos apoyarte con:
+• Productos publicitarios personalizados
+• Cotizaciones sin compromiso
+
+En breve te enviamos información detallada 📩
+Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este correo! 😊
+
+✨ Yuntas Publicidad`,
     imageUrl: '', 
     imageFile: null as File | null, 
     variables: ['nombre'],
@@ -201,7 +229,7 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
   return (
     <div className="flex flex-col gap-10 mt-4 animate-fade-in relative pb-24">
       
-      {/* --- CABECERA MAESTRA --- */}
+      {/* --- CABECERA MAESTRA CON SELECTOR --- */}
       <div className="bg-white dark:bg-[#141A3F] p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
         
         <div className="w-full md:w-1/3 flex flex-col gap-1">
@@ -307,7 +335,8 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
                     </div>
                   )}
                   <div className="px-2 pb-1 pt-1 text-[0.95rem] text-[#111b21] leading-relaxed whitespace-pre-wrap">
-                    {renderWhatsappMessage(whatsapp.content, { nombre: 'Juan Pérez', producto_nombre: 'Producto X', descripcion: 'Descripción de prueba' })}
+                    {/*TEXTO LIMPIO SOLO CON NOMBRE */}
+                    {renderWhatsappMessage(whatsapp.content, { nombre: 'Juan Pérez' })}
                     {!whatsapp.content.trim() && <p className="text-gray-400 italic text-sm">Sin mensaje configurado.</p>}
                   </div>
                   <div className="text-[0.65rem] text-[#667781] text-right mt-1 mr-2 mb-1">1:03 p.m.</div>
@@ -396,7 +425,8 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
                 </div>
               )}
               <div className="space-y-4 text-[15px] whitespace-pre-wrap">
-                {replaceDynamicTags(email.content, { nombre: 'Juan Pérez', producto_nombre: 'Producto X', descripcion: 'Descripción de prueba' })}
+                {/*TEXTO LIMPIO SOLO CON NOMBRE */}
+                {replaceDynamicTags(email.content, { nombre: 'Juan Pérez' })}
                 {!email.content.trim() && <p className="text-gray-400 italic text-center mt-10">El cuerpo del correo está vacío.</p>}
               </div>
             </div>
