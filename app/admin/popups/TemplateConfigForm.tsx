@@ -68,6 +68,8 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
     id: undefined as number | undefined,
     channel: 'whatsapp' as const,
     content: '👋 ¡Bienvenido(a) a *Yuntas Publicidad*!\n\nHola *{{nombre}}*, gracias por escribirnos.',
+    imageUrl: '',
+    imageFile: null as File | null,
     variables: ['nombre'],
     active: true,
   });
@@ -102,6 +104,8 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
           content: waContent.content,
           variables: waContent.variables || ['nombre'],
           active: waContent.active,
+          imageUrl: waContent.image_url ? `${process.env.NEXT_PUBLIC_URL || "http://localhost:8000"}${waContent.image_url.startsWith('/') ? '' : '/'}${waContent.image_url}` : '',
+          imageFile: null,
         });
       }
 
@@ -129,6 +133,17 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
     }
   };
 
+  const handleWhatsappImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setWhatsapp({ ...whatsapp, imageFile: file, imageUrl: URL.createObjectURL(file) });
+    }
+  };
+
+  const clearWhatsappImage = () => {
+    setWhatsapp({ ...whatsapp, imageFile: null, imageUrl: '' });
+  };
+
   const clearEmailImage = () => {
     setEmail({ ...email, imageFile: null, imageUrl: '' });
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -150,6 +165,7 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
         content: whatsapp.content,
         variables: whatsapp.variables,
         active: whatsapp.active,
+        image: whatsapp.imageFile
       });
     }
 
@@ -241,6 +257,19 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
                     </label>
                 </div>
                 <div className={!whatsapp.active ? 'opacity-50 pointer-events-none' : ''}>
+
+                  <div className="mb-4">
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Imagen Adjunta (Opcional)</label>
+                    <div className="flex items-center gap-2">
+                      <input type="file" accept="image/*" onChange={handleWhatsappImageChange} id="wa-file-input" className="hidden" />
+                      <button type="button" onClick={() => document.getElementById('wa-file-input')?.click()} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-xs font-bold whitespace-nowrap">Subir Imagen</button>
+                      {(whatsapp.imageUrl || whatsapp.imageFile) && (
+                         <button type="button" onClick={clearWhatsappImage} className="px-3 py-2 bg-red-100 text-red-600 rounded-md text-xs font-bold">Quitar</button>
+                      )}
+                      <span className="text-xs text-gray-400 truncate">{whatsapp.imageFile ? whatsapp.imageFile.name : (whatsapp.imageUrl ? 'Imagen guardada' : 'Ninguna imagen')}</span>
+                    </div>
+                  </div>
+
                   <label className="block text-xs font-medium text-gray-500 mb-1">Cuerpo del mensaje</label>
                   <textarea
                     value={whatsapp.content}
@@ -328,6 +357,12 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
 
                     <div className="self-start max-w-[85%] mt-2 relative">
                       <div className="bg-white rounded-lg rounded-tl-none p-1 shadow-sm relative before:content-[''] before:absolute before:top-0 before:-left-2 before:border-t-[10px] before:border-t-white before:border-l-[10px] before:border-l-transparent">
+                        {/* IMAGEN DEL PREVIEW DE WHATSAPP */}
+                        {whatsapp.imageUrl && (
+                          <div className="w-full rounded-md mb-2 overflow-hidden bg-[#edeae4]">
+                            <img src={whatsapp.imageUrl} alt="Preview WA" className="w-full h-full object-cover max-h-40" />
+                          </div>
+                        )}
                         <div className="px-2 pb-1 pt-1 text-[0.92rem] text-[#111b21] leading-relaxed">
                           {renderWhatsappMessage(whatsapp.content, { nombre: 'Juan Pérez' })}
                           {!whatsapp.content.trim() && <p className="text-gray-400 italic">Sin mensaje configurado.</p>}
