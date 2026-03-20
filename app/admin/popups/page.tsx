@@ -2,50 +2,71 @@
 
 import React, { useEffect, useState } from 'react'; 
 import { usePopups } from '@/hooks/usePopups';
+import { useTemplates } from '@/hooks/useTemplates';
 import { Popup } from '@/types/admin/popup';
+import { Template } from '@/types/admin/template';
 import { showToast } from '@/utils/showToast';
 import PopupForm from '@/components/molecules/admin/popups/PopupConfigForm'; 
-import EmailConfigForm from './EmailConfigForm'; 
+import TemplateConfigForm from './TemplateConfigForm';
 
 export default function PopupsConfigPage() {
-  const { popups, getPopups, savePopup, isLoading, isSaving } = usePopups();
+  // Hook de Popups
+  const { popups, getPopups, savePopup, isLoading: isLoadingPopups, isSaving: isSavingPopup } = usePopups();
+  
+  // Hook DE TEMPLATES
+  const { templates, getTemplates, saveTemplate, isLoading: isLoadingTemplates, isSaving: isSavingTemplate } = useTemplates();
   
   const [activeTab, setActiveTab] = useState('popup');
 
-  // Cargar los datos al entrar a la página
+  // Cargar los datos de ambos servicios al entrar a la página
   useEffect(() => {
     getPopups();
-  }, [getPopups]);
+    getTemplates();
+  }, [getPopups, getTemplates]);
 
-  // La función que le pasara al formulario para que sepa qué hacer al dar clic en "Guardar"
-  const handleSave = async (popupData: Popup) => {
+  // Función para guardar POPUPS
+  const handleSavePopup = async (popupData: Popup) => {
     const isUpdating = !!popupData.id;
     const result = await savePopup(popupData, isUpdating);
 
     if (result.success) {
       showToast.success(isUpdating ? "Popup actualizado correctamente" : "Popup guardado exitosamente");
-      getPopups(); // Recarga la data para que traiga la imagen guardada de Laravel
+      getPopups(); 
     } else {
-      showToast.error(result.message || "Error al guardar");
+      showToast.error(result.message || "Error al guardar el popup");
     }
   };
 
-  //Pantalla de carga
-  if (isLoading && !popups.length) {
+  //Función para guardar templates
+  const handleSaveTemplate = async (templateData: Template) => {
+    const isUpdating = !!templateData.id;
+    const result = await saveTemplate(templateData, isUpdating);
+
+    if (result.success) {
+      showToast.success(isUpdating ? "Plantillas actualizadas correctamente" : "Plantillas guardadas exitosamente");
+      getTemplates(); // Recarga para obtener las nuevas URLs de las imágenes desde Laravel
+    } else {
+      showToast.error(result.message || "Error al guardar las plantillas");
+    }
+  };
+
+  // Pantalla de carga unificada
+  if ((isLoadingPopups && !popups.length) || (isLoadingTemplates && !templates.length)) {
     return <div className="p-10 text-center animate-pulse text-[#203565]">Cargando configuración...</div>;
   }
 
-  // Por ahora, se asume estamos editando el primer popup de la base de datos
+  // Por ahora, se asume que se edita el primero de la base de datos
   const currentPopup = popups.length > 0 ? popups[0] : null;
+  const currentTemplate = templates.length > 0 ? templates[0] : null;
 
   return (
     <div className="p-2 md:p-4">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#203565] dark:text-white">Configuración de Pop-ups</h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">Administra el diseño y las reglas de visualización.</p>
+        <h1 className="text-2xl font-bold text-[#203565] dark:text-white">Configuración de Captación</h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">Administra el diseño del popup y las plantillas automáticas de seguimiento.</p>
       </div>
 
-      {/* pestañas */}
+      {/* PESTAÑAS */}
       <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700 mb-8">
         <button
           onClick={() => setActiveTab('popup')}
@@ -59,51 +80,41 @@ export default function PopupsConfigPage() {
         </button>
         
         <button
-          onClick={() => setActiveTab('email')}
+          onClick={() => setActiveTab('plantillas')}
           className={`py-3 flex items-center gap-2 border-b-2 font-bold text-sm transition-colors ${
-            activeTab === 'email'
+            activeTab === 'plantillas'
               ? 'border-[#203565] text-[#203565] dark:border-white dark:text-white'
               : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
         >
-          <span className="text-lg">✉</span> EMAIL
-        </button>
-
-        <button
-          onClick={() => setActiveTab('whatsapp')}
-          className={`py-3 flex items-center gap-2 border-b-2 font-bold text-sm transition-colors ${
-            activeTab === 'whatsapp'
-              ? 'border-[#203565] text-[#203565] dark:border-white dark:text-white'
-              : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
-        >
-          <span className="text-lg">💬</span> WHATSAPP
+          <span className="text-lg">📄</span> PLANTILLAS (Email & WA)
         </button>
       </div>
 
+      {/* RENDERIZADO POPUP */}
       {activeTab === 'popup' && (
         <PopupForm 
           initialData={currentPopup} 
-          onSubmit={handleSave} 
+          onSubmit={handleSavePopup}
           onCancel={() => {
             getPopups();
             showToast.info("Se restauraron los datos originales");
           }}
-          isSaving={isSaving}
+          isSaving={isSavingPopup}
         />
       )}
 
-      {/* 2. Contenido de la pestaña EMAIL */}
-      {activeTab === 'email' && (
-        <EmailConfigForm />
-      )}
-
-      {/* 3. Contenido de la pestaña WHATSAPP (Dejado preparado para después) */}
-      {activeTab === 'whatsapp' && (
-        <div className="py-10 text-center text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
-          <p className="text-lg mb-2">Configuración de WhatsApp</p>
-          <p className="text-sm">Próximamente implementado.</p>
-        </div>
+      {/*RENDERIZADO TEMPLATE */}
+      {activeTab === 'plantillas' && (
+        <TemplateConfigForm 
+          initialData={currentTemplate}
+          onSubmit={handleSaveTemplate}
+          onCancel={() => {
+            getTemplates();
+            showToast.info("Se restauraron los datos originales");
+          }}
+          isSaving={isSavingTemplate}
+        />
       )}
 
     </div>
