@@ -16,6 +16,7 @@ export default function PopupsConfigPage() {
   // Hook DE TEMPLATES
   const { templates, getTemplates, saveTemplate, isLoading: isLoadingTemplates, isSaving: isSavingTemplate } = useTemplates();
   
+  // ESTADO PARA LOS TABS PRINCIPALES
   const [activeTab, setActiveTab] = useState('popup');
 
   // Cargar los datos de ambos servicios al entrar a la página
@@ -37,14 +38,14 @@ export default function PopupsConfigPage() {
     }
   };
 
-  //Función para guardar templates
+  // Función para guardar templates
   const handleSaveTemplate = async (templateData: Template) => {
     const isUpdating = !!templateData.id;
     const result = await saveTemplate(templateData, isUpdating);
 
     if (result.success) {
       showToast.success(isUpdating ? "Plantillas actualizadas correctamente" : "Plantillas guardadas exitosamente");
-      getTemplates(); // Recarga para obtener las nuevas URLs de las imágenes desde Laravel
+      getTemplates(); // Recarga para obtener las nuevas URLs de las imágenes
     } else {
       showToast.error(result.message || "Error al guardar las plantillas");
     }
@@ -60,13 +61,13 @@ export default function PopupsConfigPage() {
   const currentTemplate = templates.length > 0 ? templates[0] : null;
 
   return (
-    <div className="p-2 md:p-4">
+    <div className="p-2 md:p-4 max-w-7xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#203565] dark:text-white">Configuración de Captación</h1>
         <p className="text-gray-500 dark:text-gray-400 text-sm">Administra el diseño del popup y las plantillas automáticas de seguimiento.</p>
       </div>
 
-      {/* PESTAÑAS */}
+      {/* TABS PRINCIPALES */}
       <div className="flex space-x-8 border-b border-gray-200 dark:border-gray-700 mb-8">
         <button
           onClick={() => setActiveTab('popup')}
@@ -87,7 +88,7 @@ export default function PopupsConfigPage() {
               : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
         >
-          <span className="text-lg">📄</span> PLANTILLAS (Email & WA)
+          <span className="text-lg">📄</span> PLANTILLAS
         </button>
       </div>
 
@@ -104,7 +105,7 @@ export default function PopupsConfigPage() {
         />
       )}
 
-      {/*RENDERIZADO TEMPLATE */}
+      {/* RENDERIZADO TEMPLATE (Sin tabs internos) */}
       {activeTab === 'plantillas' && (
         <TemplateConfigForm 
           initialData={currentTemplate}
