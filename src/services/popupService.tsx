@@ -13,37 +13,44 @@ export const getPopupsService = async (): Promise<PopupServiceResponse<Popup[]>>
 export const savePopupService = async (popupData: Popup, isUpdating: boolean = false): Promise<PopupServiceResponse<Popup>> => {
   try {
     const formData = new FormData();
+
+    if (popupData.lead_source_id) formData.append('lead_source_id', String(popupData.lead_source_id));
     
-    // Mapear los datos al FormData
     formData.append('title', popupData.title);
     formData.append('button_text', popupData.button_text);
     formData.append('button_color', popupData.button_color || '#6DE1E3');
-    formData.append('image_alt', popupData.image_alt || '');
-    if (popupData.image_title) formData.append('image_title', popupData.image_title);
     formData.append('page_target', popupData.page_target);
     formData.append('delay_seconds', String(popupData.delay_seconds));
     formData.append('priority', String(popupData.priority));
     
-    // Booleanos y fechas
     formData.append('active', popupData.active ? '1' : '0');
     if (popupData.start_date) formData.append('start_date', popupData.start_date);
     if (popupData.end_date) formData.append('end_date', popupData.end_date);
 
-    // Adjuntar imagen solo si es un archivo nuevo
-    if (popupData.image instanceof File) {
-      formData.append('image', popupData.image);
+    // MAPEAMOS EL ARREGLO DE IMÁGENES EXACTAMENTE COMO LO PIDE EL BACKEND
+    if (popupData.images && popupData.images.length > 0) {
+      popupData.images.forEach((img, index) => {
+        formData.append(`images[${index}][device]`, img.device);
+        formData.append(`images[${index}][slot]`, img.slot);
+        
+        if (img.alt) formData.append(`images[${index}][alt]`, img.alt);
+        if (img.title) formData.append(`images[${index}][title]`, img.title);
+        
+        // Adjuntamos el archivo físico si el usuario subió uno
+        if (img.file instanceof File) {
+          formData.append(`images[${index}][file]`, img.file);
+        }
+      });
     }
 
     let response;
 
     if (isUpdating && popupData.id) {
-      // TRUCO LARAVEL: Para enviar archivos en un Update, se usa POST con _method=PUT
       formData.append('_method', 'PATCH');
       response = await api.post(API_ENDPOINTS.ADMIN.POPUPS.UPDATE(popupData.id), formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
     } else {
-      // Creación normal
       response = await api.post(API_ENDPOINTS.ADMIN.POPUPS.CREATE, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
