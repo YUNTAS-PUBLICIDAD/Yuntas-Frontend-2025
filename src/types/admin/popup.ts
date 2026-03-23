@@ -18,8 +18,8 @@ export interface Popup {
   page_target: string;
   delay_seconds: number;
   priority: number;
-  start_date?: string | null;
-  end_date?: string | null;
+  //start_date?: string | null;
+  //end_date?: string | null;
   active: boolean;
   images?: PopupImage[]; //arreglo de imágenes
 }
