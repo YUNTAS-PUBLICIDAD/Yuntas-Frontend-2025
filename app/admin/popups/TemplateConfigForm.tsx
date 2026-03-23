@@ -1,12 +1,17 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { showToast } from '@/utils/showToast';
 import { Template, TemplateContent } from '@/types/admin/template';
 import {
   FaArrowLeft, FaUser, FaStore, FaPhone, FaEllipsisVertical, FaLock, 
   FaRegFaceSmile, FaPaperclip, FaCamera, FaMicrophone
 } from 'react-icons/fa6';
+
+// IMPORTACIÓN DINÁMICA DE REACT QUILL
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import 'react-quill/dist/quill.snow.css'; // Estilos del editor
 
 // --- ENUM DE FUENTES DE LEADS ---
 export const sourceData = {
@@ -18,6 +23,7 @@ export const sourceData = {
 
 // --- UTILIDADES DE VISTA PREVIA ---
 const replaceDynamicTags = (text: string, variables: Record<string, string>): string => {
+  if (!text) return '';
   return text.replace(/\{\{([^{}]+)\}\}/g, (_, rawKey: string) => {
     const key = rawKey.trim();
     return variables[key] ?? `{{${key}}}`;
@@ -64,7 +70,7 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
     active: true,
   });
 
-  // 2. ESTADO WHATSAPP
+  // 2. ESTADO WHATSAPP (Sigue usando texto plano)
   const [whatsapp, setWhatsapp] = useState({
     id: undefined as number | undefined,
     channel: 'whatsapp' as const,
@@ -89,26 +95,12 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
     active: true,
   });
 
-  // 3. ESTADO EMAIL
+  // 3. ESTADO EMAIL (Ahora almacenará HTML)
   const [email, setEmail] = useState({
     id: undefined as number | undefined,
     channel: 'email' as const,
     subject: '¡Bienvenido(a) a Yuntas Publicidad! ✨',
-    content: `Hola {{nombre}},
-
-¡Bienvenido(a) a Yuntas Publicidad! Gracias por visitarnos y mostrar interés en nuestros servicios.
-
-🎯 Somos tu aliado en publicidad
-Nos especializamos en soluciones publicitarias personalizadas que ayudan a destacar tu marca.
-
-📌 Podemos apoyarte con:
-• Productos publicitarios personalizados
-• Cotizaciones sin compromiso
-
-En breve te enviamos información detallada 📩
-Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este correo! 😊
-
-✨ Yuntas Publicidad`,
+    content: `<p>Hola {{nombre}},</p><br><p>¡Bienvenido(a) a <strong>Yuntas Publicidad</strong>! Gracias por visitarnos y mostrar interés en nuestros servicios.</p><br><p>🎯 Somos tu aliado en publicidad</p><p>Nos especializamos en soluciones publicitarias personalizadas que ayudan a destacar tu marca.</p><br><p>📌 Podemos apoyarte con:</p><ul><li>Productos publicitarios personalizados</li><li>Cotizaciones sin compromiso</li></ul><br><p>En breve te enviamos información detallada 📩</p><p>Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este correo! 😊</p><br><p>✨ Yuntas Publicidad</p>`,
     imageUrl: '', 
     imageFile: null as File | null, 
     variables: ['nombre'],
@@ -198,7 +190,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este corr
       });
     }
 
-    if (email.content.trim()) {
+    if (email.content.trim() && email.content !== '<p><br></p>') {
       contents.push({
         id: email.id,
         channel: email.channel,
@@ -224,6 +216,17 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este corr
     };
 
     await onSubmit(payload);
+  };
+
+  // Configuración de los botones del editor
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ],
   };
 
   return (
@@ -335,7 +338,6 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este corr
                     </div>
                   )}
                   <div className="px-2 pb-1 pt-1 text-[0.95rem] text-[#111b21] leading-relaxed whitespace-pre-wrap">
-                    {/*TEXTO LIMPIO SOLO CON NOMBRE */}
                     {renderWhatsappMessage(whatsapp.content, { nombre: 'Juan Pérez' })}
                     {!whatsapp.content.trim() && <p className="text-gray-400 italic text-sm">Sin mensaje configurado.</p>}
                   </div>
@@ -390,9 +392,18 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este corr
               </div>
             </div>
 
+            {/* EDITOR DE TEXTO ENRIQUECIDO PARA EL CORREO */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cuerpo del correo</label>
-              <textarea value={email.content} onChange={(e) => setEmail({...email, content: e.target.value})} rows={8} className="w-full p-3 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#203565] resize-none dark:bg-gray-800 dark:text-white" />
+              <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+                <ReactQuill 
+                  theme="snow" 
+                  value={email.content} 
+                  onChange={(content) => setEmail({...email, content})} 
+                  modules={modules}
+                  className="h-48 pb-10 text-black dark:text-white"
+                />
+              </div>
               <p className="text-xs text-gray-500 mt-2 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
                 Usa <code className="text-[#203565] font-bold">{`{{nombre}}`}</code> para el nombre del cliente.
               </p>
@@ -424,11 +435,16 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este corr
                   {email.imageUrl && imageError ? '[Error al cargar imagen]' : 'No se ha adjuntado imagen'}
                 </div>
               )}
-              <div className="space-y-4 text-[15px] whitespace-pre-wrap">
-                {/*TEXTO LIMPIO SOLO CON NOMBRE */}
-                {replaceDynamicTags(email.content, { nombre: 'Juan Pérez' })}
-                {!email.content.trim() && <p className="text-gray-400 italic text-center mt-10">El cuerpo del correo está vacío.</p>}
-              </div>
+              
+              {/* RENDERIZADO DEL HTML PARA LA VISTA PREVIA */}
+              <div 
+                className="space-y-4 text-[15px] prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ 
+                  __html: email.content.trim() === '' || email.content === '<p><br></p>' 
+                    ? '<p class="text-gray-400 italic text-center mt-10">El cuerpo del correo está vacío.</p>' 
+                    : replaceDynamicTags(email.content, { nombre: 'Juan Pérez' }) 
+                }}
+              />
             </div>
           </div>
         </div>
