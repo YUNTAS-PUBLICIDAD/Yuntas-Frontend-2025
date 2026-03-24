@@ -73,6 +73,7 @@ export const API_ENDPOINTS = {
       CREATE: '/admin/popups',
       UPDATE: (id: number) => `/admin/popups/${id}`,
       DELETE: (id: number) => `/admin/popups/${id}`,
+      UPDATE_IMAGES: (id: number) => `/admin/popup-images/${id}`,
     },
     TEMPLATES: {
       GET_ALL: '/admin/templates',

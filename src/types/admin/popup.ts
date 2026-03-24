@@ -1,19 +1,27 @@
+export interface PopupImage {
+  id?: number;
+  image?: string; // URL o path desde el backend
+  file?: File; // Archivo físico cuando lo subimos desde React
+  device: 'desktop' | 'mobile';
+  slot: 'left' | 'right' | 'center';
+  alt?: string;
+  title?: string;
+}
+
 export interface Popup {
   id?: number;
+  lead_source_id?: number;
   slug?: string;
   title: string;
   button_text: string;
   button_color?: string;
-  image?: File | string | null; // File cuando se sube, string cuando llega del backend
-  image_alt: string;
-  image_title?: string;
   page_target: string;
   delay_seconds: number;
   priority: number;
-  start_date?: string | null;
-  end_date?: string | null;
+  //start_date?: string | null;
+  //end_date?: string | null;
   active: boolean;
-  image_url?: string; // Atributo virtual de Laravel (asset)
+  images?: PopupImage[]; //arreglo de imágenes
 }
 
 export interface PopupServiceResponse<T = any> {

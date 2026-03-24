@@ -10,9 +10,7 @@ import { imagenes } from "@/data/imagenes";
 import { getPublicPopupService } from "@/services/popupService";
 import { Popup as PopupType } from "@/types/admin/popup"
 
-
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
-
 
 export default function HomePage() {
   const [dynamicPopup, setDynamicPopup] = useState<PopupType | null>(null);
@@ -40,6 +38,14 @@ export default function HomePage() {
     fetchPopup();
   }, []);
 
+  // Extraemos la información de la imagen de escritorio ANTES de renderizar
+  // Así evitamos ensuciar el JSX 
+  const desktopLeftImg = dynamicPopup?.images?.find(img => img.device === 'desktop' && img.slot === 'left');
+  const popupImgSrc = desktopLeftImg?.image 
+    ? `${BACKEND_URL}${desktopLeftImg.image.startsWith('/') ? '' : '/'}${desktopLeftImg.image}`
+    : "";
+  const popupImgAlt = desktopLeftImg?.alt || "";
+  const popupImgTitle = desktopLeftImg?.title || "";
 
   return (
     <main>
@@ -52,13 +58,9 @@ export default function HomePage() {
         dynamicPopup ? (
           // POPUP DINÁMICO
           <Popup
-            imgSrc={
-              typeof dynamicPopup.image === 'string' 
-                ? `${BACKEND_URL}${dynamicPopup.image.startsWith('/') ? '' : '/'}${dynamicPopup.image}` 
-                : ""
-            }
-            imgTitle={dynamicPopup.image_title || ""}
-            imgAlt={dynamicPopup.image_alt || ""}
+            imgSrc={popupImgSrc}
+            imgTitle={popupImgTitle}
+            imgAlt={popupImgAlt}
             title={dynamicPopup.title}
             buttonText={dynamicPopup.button_text}
             buttonColor={dynamicPopup.button_color || "#6DE1E3"}
