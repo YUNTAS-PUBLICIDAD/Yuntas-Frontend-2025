@@ -258,7 +258,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         </div>
       </div>
 
-      {/* COLUMNA DERECHA: LA VISTA PREVIA (Idéntica, no la cambié para no alargar) */}
+      {/* COLUMNA DERECHA: LA VISTA PREVIA */}
       <div className="lg:col-span-5 bg-gray-100 dark:bg-[#0D1030] p-6 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden">
         <div className="absolute top-4 left-4 z-20 flex gap-2">
           <span className="bg-white text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">
@@ -279,8 +279,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         {previewMode === 'desktop' ? (
             <div className={`bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden relative z-10 transition-opacity duration-300 flex flex-row border-[6px] border-white ${active ? 'opacity-100' : 'opacity-40 grayscale-[50%]'}`}>
                 <button type="button" className="absolute top-3 right-3 text-gray-400 hover:text-black font-bold text-lg px-2 z-20 bg-white/80 rounded-full h-8 w-8 flex items-center justify-center">✕</button>
-                <div className="w-1/2 bg-[#5EC8C6] flex items-center justify-center relative overflow-hidden p-6 rounded-l-xl">
-                    {desktopImgSrc ? ( <img src={desktopImgSrc} alt="Vista previa" className="w-full h-auto object-contain drop-shadow-2xl" /> ) : ( <span className="text-white font-medium text-sm text-center px-4">[Imagen Izquierda]</span> )}
+                <div className="w-1/2 flex items-center justify-center relative overflow-hidden rounded-l-xl">
+                    {desktopImgSrc ? ( <img src={desktopImgSrc} alt="Vista previa" className="w-full h-full object-cover" /> ) : ( <span className="text-gray-400 font-medium text-sm text-center px-4">[Imagen Izquierda]</span> )}
                 </div>
                 <div className="w-1/2 p-8 flex flex-col justify-center gap-4 bg-white relative">
                     {textImgSrc ? ( <img src={textImgSrc} alt="Texto Gigante" className="w-full h-auto object-contain max-h-32 mb-2" /> ) : ( <h4 className="text-[26px] font-extrabold text-gray-400 text-center uppercase leading-none tracking-tight">{title || 'TU INVERSIÓN...'}</h4> )}
