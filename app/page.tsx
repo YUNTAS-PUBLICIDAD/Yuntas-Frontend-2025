@@ -4,7 +4,9 @@ import HeroSection from "@/components/organisms/inicio/HeroSection";
 import InnovacionSection from "@/components/organisms/inicio/InnovacionSection";
 import ProjectsCarousel from "@/components/organisms/inicio/ProjectsCarousel";
 import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSection";
-import Popup from "@/components/molecules/Popup";
+
+import DynamicPopup from "@/components/molecules/DynamicPopup"; 
+
 import { sourceData } from "@/data/popup/sourceData";
 import { imagenes } from "@/data/imagenes";
 import { getPublicPopupService } from "@/services/popupService";
@@ -35,12 +37,10 @@ export default function HomePage() {
     fetchPopup();
   }, []);
 
-  // Función auxiliar para armar la URL de la imagen
   const getImgUrl = (imgObj: any) => {
     return imgObj?.image ? `${BACKEND_URL}${imgObj.image.startsWith('/') ? '' : '/'}${imgObj.image}` : "";
   };
 
-  // Extraemos las 3 imágenes
   const desktopLeftImg = dynamicPopup?.images?.find(img => img.device === 'desktop' && img.slot === 'left');
   const desktopRightImg = dynamicPopup?.images?.find(img => img.device === 'desktop' && img.slot === 'right');
   const mobileCenterImg = dynamicPopup?.images?.find(img => img.device === 'mobile' && img.slot === 'center');
@@ -54,8 +54,8 @@ export default function HomePage() {
       
       {!isLoadingPopup && (
         dynamicPopup ? (
-          // POPUP DINÁMICO
-          <Popup
+          // EL NUEVO COMPONENTE DYNAMIC POPUP
+          <DynamicPopup
             desktopImgSrc={getImgUrl(desktopLeftImg)}
             textImgSrc={getImgUrl(desktopRightImg)}
             mobileImgSrc={getImgUrl(mobileCenterImg)}
@@ -67,8 +67,7 @@ export default function HomePage() {
             delay={(dynamicPopup.delay_seconds || 5) * 1000} 
           />
         ) : (
-          // POPUP ESTÁTICO (Fallback)
-          <Popup
+          <DynamicPopup
             desktopImgSrc={imagenes.inicio.popup.src}
             textImgSrc=""
             mobileImgSrc={imagenes.inicio.popup.src}
