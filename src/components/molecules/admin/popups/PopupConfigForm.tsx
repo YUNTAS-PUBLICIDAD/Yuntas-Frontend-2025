@@ -282,7 +282,6 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                     {desktopImgSrc ? ( <img src={desktopImgSrc} alt="Vista previa" className="w-full h-full object-cover" /> ) : ( <span className="text-gray-400 font-medium text-sm text-center px-4">[Imagen Izquierda]</span> )}
                 </div>
                 <div className="w-1/2 p-8 flex flex-col justify-center gap-4 bg-white relative">
-                    {/* 👇 MODIFICADO: Ajuste de CSS para la imagen de texto (se quitó max-h-32 y se puso w-full para forzar el ancho máximo disponible) 👇 */}
                     {textImgSrc ? ( <img src={textImgSrc} alt="Texto Gigante" className="w-full object-contain mb-2" /> ) : ( <h4 className="text-[26px] font-extrabold text-gray-400 text-center uppercase leading-none tracking-tight">{title || 'TU INVERSIÓN...'}</h4> )}
                     <div className="flex flex-col gap-2 w-full max-w-[200px] mx-auto mt-2">
                         <div className="h-8 bg-gray-100 rounded-full border border-gray-200 w-full flex items-center px-4 text-xs text-gray-500">Nombre</div>
