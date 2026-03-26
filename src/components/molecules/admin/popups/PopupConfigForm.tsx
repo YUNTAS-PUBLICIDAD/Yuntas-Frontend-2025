@@ -114,7 +114,6 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       return;
     }
 
-    // AHORA MANDAMOS EL ID DE CADA IMAGEN
     const imagesArray: PopupImage[] = [
       { id: desktopImageId, device: 'desktop', slot: 'left', file: desktopImageFile || undefined, alt: imageAlt, title: imageTitle },
       { id: textImageId, device: 'desktop', slot: 'right', file: textImageFile || undefined, alt: 'Texto banner', title: 'Texto promocional' },
@@ -235,14 +234,14 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">2. Imagen de Texto (Escritorio - Lado Derecho)</label>
               <input type="file" accept="image/*" onChange={handleTextImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong>600x200 px</strong> (Formato Horizontal tipo Logo)</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong>400x200 px</strong> (Formato Horizontal)</span>
             </div>
 
             {/* Imagen Móvil */}
             <div className="flex flex-col gap-1 border-t dark:border-gray-600 pt-4 mt-2">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">3. Imagen Principal (Versión Móvil)</label>
               <input type="file" accept="image/*" onChange={handleMobileImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong>600x400 px</strong> (Formato Apaisado)</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong>600x600 px o 600x800 px</strong> (Flyer unificado con texto)</span>
             </div>
           </div>
 
@@ -258,7 +257,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         </div>
       </div>
 
-      {/* COLUMNA DERECHA: LA VISTA PREVIA */}
+      {/* COLUMNA DERECHA: VISTA PREVIA */}
       <div className="lg:col-span-5 bg-gray-100 dark:bg-[#0D1030] p-6 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden">
         <div className="absolute top-4 left-4 z-20 flex gap-2">
           <span className="bg-white text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">
@@ -283,7 +282,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                     {desktopImgSrc ? ( <img src={desktopImgSrc} alt="Vista previa" className="w-full h-full object-cover" /> ) : ( <span className="text-gray-400 font-medium text-sm text-center px-4">[Imagen Izquierda]</span> )}
                 </div>
                 <div className="w-1/2 p-8 flex flex-col justify-center gap-4 bg-white relative">
-                    {textImgSrc ? ( <img src={textImgSrc} alt="Texto Gigante" className="w-full h-auto object-contain max-h-32 mb-2" /> ) : ( <h4 className="text-[26px] font-extrabold text-gray-400 text-center uppercase leading-none tracking-tight">{title || 'TU INVERSIÓN...'}</h4> )}
+                    {textImgSrc ? ( <img src={textImgSrc} alt="Texto Gigante" className="w-full object-contain mb-2" /> ) : ( <h4 className="text-[26px] font-extrabold text-gray-400 text-center uppercase leading-none tracking-tight">{title || 'TU INVERSIÓN...'}</h4> )}
                     <div className="flex flex-col gap-2 w-full max-w-[200px] mx-auto mt-2">
                         <div className="h-8 bg-gray-100 rounded-full border border-gray-200 w-full flex items-center px-4 text-xs text-gray-500">Nombre</div>
                         <div className="h-8 bg-gray-100 rounded-full border border-gray-200 w-full flex items-center px-4 text-xs text-gray-500">Teléfono</div>
@@ -295,11 +294,21 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         ) : (
             <div className={`bg-white w-[280px] rounded-[2rem] shadow-2xl overflow-hidden relative z-10 transition-opacity duration-300 border-[8px] border-black ${active ? 'opacity-100' : 'opacity-40 grayscale-[50%]'}`}>
                 <button type="button" className="absolute top-3 right-3 text-gray-400 hover:text-black font-bold text-lg px-2 z-20 bg-white/80 rounded-full h-8 w-8 flex items-center justify-center">✕</button>
-                <div className="h-48 bg-gray-200 flex items-center justify-center relative overflow-hidden rounded-bl-[3rem] shadow-sm">
-                    {mobileImgSrc || desktopImgSrc ? ( <img src={mobileImgSrc || desktopImgSrc} alt="Vista previa móvil" className="w-full h-full object-cover" /> ) : ( <span className="text-gray-500 font-medium text-sm text-center px-4">[Imagen Móvil]</span> )}
+                
+                {/*IMAGEN MÓVIL */}
+                <div className="w-full relative overflow-hidden bg-gray-50">
+                    {mobileImgSrc || desktopImgSrc ? ( 
+                        <img src={mobileImgSrc || desktopImgSrc} alt="Vista previa móvil" className="w-full h-auto object-contain" /> 
+                    ) : ( 
+                        <div className="h-48 bg-gray-200 flex items-center justify-center"><span className="text-gray-500 font-medium text-sm text-center px-4">[Imagen Móvil]</span></div> 
+                    )}
                 </div>
+                
                 <div className="p-6 text-center flex flex-col gap-3 bg-white">
-                    <h4 className="text-lg font-bold text-gray-600 text-left leading-tight">{title || 'Tu inversión en maquinaria...'}</h4>
+                    {/*Se oculta el texo si hay una imágen en móvil */}
+                    {!mobileImgSrc && (
+                        <h4 className="text-lg font-bold text-gray-600 text-left leading-tight mb-2">{title || 'Tu inversión en maquinaria...'}</h4>
+                    )}
                     <div className="flex flex-col gap-2 mt-1">
                         <div className="h-9 bg-gray-100 rounded-lg border border-gray-200 w-full flex items-center px-3 text-xs text-gray-500">Nombre</div>
                         <div className="h-9 bg-gray-100 rounded-lg border border-gray-200 w-full flex items-center px-3 text-xs text-gray-500">Teléfono</div>
