@@ -67,7 +67,7 @@ const DesktopPopupComposition = ({
                     </div>
                 )}
 
-                <div className="absolute bottom-0 left-0 right-0 h-[35%] px-5 pb-5 pt-3 bg-white/95 backdrop-blur-[1px]">
+                <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 bg-white/95 backdrop-blur-[1px]">
                     <PopupForm
                         formData={formData}
                         errors={errors}
@@ -99,7 +99,7 @@ const MobilePopupComposition = ({
     const finalMobileImg = mobileImgSrc || desktopImgSrc;
 
     return (
-        <div className="md:hidden w-[247px] h-[459px] relative overflow-hidden rounded-[2rem] bg-white">
+        <div className="md:hidden w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white">
             <img src={finalMobileImg} alt={imgAlt} className="absolute inset-0 w-full h-full object-cover" />
 
             {!mobileImgSrc && (
