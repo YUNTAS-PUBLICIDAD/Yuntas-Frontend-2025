@@ -34,6 +34,11 @@ export const API_ENDPOINTS = {
     },
     PUBLIC: (page: string) => `/popup?page=${page}`,
   },
+  
+  CHATBOT: {
+    SEND: '/chatbot/message',
+    HISTORY: (id: string) => `/chatbot/history/${id}`,
+  },
 
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
