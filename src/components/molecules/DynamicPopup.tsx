@@ -1,4 +1,3 @@
-// Archivo: src/components/molecules/DynamicPopup.tsx
 'use client'
 
 import { useState, useEffect, useRef } from "react";
@@ -131,26 +130,26 @@ const DynamicPopup = ({
             >
                 <CloseButton onClick={closeModal} className="absolute top-2 right-2 md:top-3 md:right-3 z-50" />
 
-                {/* 📱 IMAGEN MÓVIL */}
-                <div className="md:hidden h-48 bg-gray-200 flex items-center justify-center relative overflow-hidden rounded-bl-[3rem] shadow-sm">
+                {/*IMAGEN MÓVIL */}
+                <div className="md:hidden w-full relative overflow-hidden bg-gray-50">
                     {finalMobileImg && (
-                        <img src={finalMobileImg} alt={imgAlt} className="w-full h-full object-cover" />
+                        <img src={finalMobileImg} alt={imgAlt} className="w-full h-auto object-contain" />
                     )}
                 </div>
 
-                {/* 🖥️ IMAGEN ESCRITORIO (Sin fondo azul, ocupa todo el espacio) */}
+                {/* IMAGEN ESCRITORIO */}
                 <div className="hidden md:flex w-1/2 items-center justify-center relative overflow-hidden rounded-l-xl">
                     {desktopImgSrc && (
                         <img src={desktopImgSrc} alt={imgAlt} className="w-full h-full object-cover" />
                     )}
                 </div>
 
-                {/* 📝 SECCIÓN DERECHA: TEXTOS Y FORMULARIO */}
+                {/* SECCIÓN DERECHA: TEXTOS Y FORMULARIO */}
                 <div className="p-6 md:w-1/2 md:p-8 flex flex-col justify-center gap-4 bg-white relative text-center">
                     
                     <div className="mb-2">
+                        {/* TEXTO/IMAGEN ESCRITORIO */}
                         <div className="hidden md:block">
-                            {/* Imagen de texto ajustada */}
                             {textImgSrc ? (
                                 <img src={textImgSrc} alt="Banner promocional" className="w-full object-contain mx-auto mb-2" />
                             ) : (
@@ -160,10 +159,13 @@ const DynamicPopup = ({
                             )}
                         </div>
 
+                        {/* TEXTO MÓVIL */}
                         <div className="md:hidden">
-                            <h4 className="text-lg font-bold text-gray-600 leading-tight">
-                                {title}
-                            </h4>
+                            {!mobileImgSrc && (
+                                <h4 className="text-lg font-bold text-gray-600 leading-tight mb-2">
+                                    {title}
+                                </h4>
+                            )}
                         </div>
                     </div>
 
