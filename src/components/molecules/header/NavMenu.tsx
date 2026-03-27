@@ -8,9 +8,9 @@ type NavMenuProps = {
 variant?: "mobile" | "desktop" | "footer";
 };
 const variantMap = {
-  mobile: "flex flex-col gap-y-4 w-full text-white",
-desktop: "flex flex-row gap-x-10 items-center uppercase",
- footer: "flex flex-col gap-y-1 items-start text-white lowercase capitalize"
+  mobile: "flex flex-col gap-y-8 w-full px-4 pt-4",
+  desktop: "flex flex-row gap-x-10 items-center uppercase",
+  footer: "flex flex-col gap-y-6 items-start text-white capitalize"
 };
 export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps) {
   const pathname = usePathname(); 
@@ -26,7 +26,7 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
    <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
   
 {variant === "footer" && (
-  <h3 className="text-[#6de1e3] font-semibold mb-4 px-4 text-xl">
+  <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
     Enlaces
   </h3>
 )}
@@ -35,10 +35,11 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   active={variant !== "footer" && pathname === "/"} 
   color={
     variant === "mobile"
-      ? "text-white"
-      : variant === "footer"
-      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
-      : ""
+          // color oscuro, letras mayúsculas separadas y el mismo padding (px-4 py-2) para que no se aplaste
+          ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
+          : variant === "footer"
+          ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+          : ""
   }>
   Inicio
 </MenuItem>
@@ -48,10 +49,10 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   active={variant !== "footer" && pathname === "/nosotros"} 
   color={
     variant === "mobile"
-      ? "text-white"
-      : variant === "footer"
-      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
-      : ""
+          ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
+          : variant === "footer"
+          ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+          : ""
   }>
   Nosotros
 </MenuItem>
@@ -61,10 +62,10 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   active={variant !== "footer" && pathname.startsWith("/productos")} 
   color={
     variant === "mobile"
-      ? "text-white"
-      : variant === "footer"
-      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
-      : ""
+          ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
+          : variant === "footer"
+          ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+          : ""
   }>
   Productos
 </MenuItem>
@@ -73,11 +74,11 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   href="/blog" 
   active={variant !== "footer" && pathname.startsWith("/blog")} 
   color={
-    variant === "mobile"
-      ? "text-white"
-      : variant === "footer"
-      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
-      : ""
+   variant === "mobile"
+          ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
+          : variant === "footer"
+          ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+          : ""
   }>
   Blog
 </MenuItem>
@@ -86,11 +87,11 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   href="/contacto" 
   active={variant !== "footer" && pathname === "/contacto"} 
   color={
-    variant === "mobile"
-      ? "text-white"
-      : variant === "footer"
-      ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
-      : ""
+   variant === "mobile"
+          ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
+          : variant === "footer"
+          ? "text-white hover:text-[#6de1e3] transition-colors duration-300"
+          : ""
   }>
   Contacto
 </MenuItem>

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 interface ActionButtonProps {
     children: string;
     onClick?: () => void;
-    variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
+    variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger" | "info";
     className?: string;
     bgColor?: string;
     isLoading?: boolean;

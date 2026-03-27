@@ -32,6 +32,12 @@ export const API_ENDPOINTS = {
     WHATSAPP: {
       SEND_ONE: '/whatsapp-popup/enviar',
     },
+    PUBLIC: (page: string) => `/popup?page=${page}`,
+  },
+  
+  CHATBOT: {
+    SEND: '/chatbot/message',
+    HISTORY: (id: string) => `/chatbot/history/${id}`,
   },
 
   // ADMINISTRACIÓN (Tablas y Gestión)
@@ -65,9 +71,22 @@ export const API_ENDPOINTS = {
         REQUEST_QR: '/admin/whatsapp-campanas/pedir-qr',
         RESET_SESSION: '/admin/whatsapp-campanas/reset',
         SEND_CAMPANA: '/admin/whatsapp-campanas/enviar-campana',
-      }
+      },
     },
-
+    POPUPS: {
+      GET_ALL: '/admin/popups',
+      CREATE: '/admin/popups',
+      UPDATE: (id: number) => `/admin/popups/${id}`,
+      DELETE: (id: number) => `/admin/popups/${id}`,
+      UPDATE_IMAGES: (id: number) => `/admin/popup-images/${id}`,
+    },
+    TEMPLATES: {
+      GET_ALL: '/admin/templates',
+      GET_ONE: (id: number) => `/admin/templates/${id}`,
+      CREATE: '/admin/templates',
+      UPDATE: (id: number) => `/admin/templates/${id}`,
+      DELETE: (id: number) => `/admin/templates/${id}`,
+    },
     CATEGORIES: {
       GET_ALL: '/admin/categorias',
       CREATE: '/admin/categorias',

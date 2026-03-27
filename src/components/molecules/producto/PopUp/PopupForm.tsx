@@ -15,6 +15,7 @@ interface PopupFormProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   buttonText: string;
   isSubmitting: boolean;
+  buttonColor?: string;
 }
 
 const PopupForm: React.FC<PopupFormProps> = ({
@@ -24,14 +25,16 @@ const PopupForm: React.FC<PopupFormProps> = ({
   handleSubmit,
   buttonText,
   isSubmitting,
+  buttonColor = "#310eb3",
 }) => (
   <form
     onSubmit={handleSubmit}
-    className="space-y-3 flex flex-col items-center"
+    className="space-y-2 flex flex-col items-center"
   >
     <InputField
       placeholder="Nombre"
       value={formData.name}
+      className="text-xs"
       error={errors.name}
       onChange={(e) => handleChange("name", e.target.value)}
     />
@@ -40,6 +43,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       placeholder="Teléfono"
       maxLength={9}
       value={formData.phone}
+      className="text-xs"
       error={errors.phone}
       onChange={(e) => handleChange("phone", e.target.value)}
     />
@@ -48,6 +52,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       placeholder="Correo"
       type="email"
       value={formData.email}
+      className="text-xs"
       error={errors.email}
       onChange={(e) => handleChange("email", e.target.value)}
     />
@@ -55,7 +60,8 @@ const PopupForm: React.FC<PopupFormProps> = ({
     <div>
       <ButtonPrimary
         disabled={isSubmitting}
-        className="font-montserrat font-semibold text-md pt-[5px] pr-[10px] pb-[5px] pl-[10px] rounded-lg transition-all disabled:opacity-50 mt-2 sm:mt-3"
+        style={{ backgroundColor: buttonColor }}
+        className="font-montserrat font-semibold text-sm pt-[5px] pr-[10px] pb-[5px] pl-[10px] rounded-lg transition-all disabled:opacity-50 mt-2 sm:mt-3"
       >
         {isSubmitting ? "Enviando..." : buttonText}
       </ButtonPrimary>

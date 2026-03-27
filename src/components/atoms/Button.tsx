@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger";
+  variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger" | "info";
   size?: "sm" | "md" | "lg";
   href?: string;
   className?: string;
@@ -26,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
     outline: "border-2 border-white text-white hover:bg-white hover:text-[#0B0B1F]",
     success: "bg-[#008236] text-white hover:bg-[#006622]",
     danger: "bg-[#DC3545] text-white hover:bg-[#C82333]",
+    info: "bg-[#23C1DE] text-white hover:bg-[#1fb2cc]"
   };
 
   const sizeClasses = {

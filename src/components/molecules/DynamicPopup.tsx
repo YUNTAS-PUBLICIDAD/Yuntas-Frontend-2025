@@ -3,19 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
 import { useEmail } from "@/hooks/useEmail";
-import PopupContainer from "@/components/atoms/PopContainer";
-import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
-import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
-import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
-import CloseButton from "@/components/atoms/CloseButton";
+import PopupRenderer from "@/components/molecules/PopupRenderer";
 import { LeadInput } from "@/types/admin/lead";
 import { showToast } from "@/utils/showToast";
 import { usePathname } from "next/navigation";
 
-interface PopupProps {
+interface DynamicPopupProps {
     delay?: number;
-    imgSrc: string;
-    imgTitle?: string;
+    desktopImgSrc: string;
+    textImgSrc?: string;
+    mobileImgSrc?: string;
     imgAlt: string;
     title: string;
     buttonText: string;
@@ -24,24 +21,24 @@ interface PopupProps {
     sourceId?: number;
 }
 
-const Popup = ({
+const DynamicPopup = ({
     delay = 5000,
-    imgSrc,
-    imgTitle,
+    desktopImgSrc,
+    textImgSrc,
+    mobileImgSrc,
     imgAlt,
     title,
     buttonText,
-    buttonColor = "#30029c",
+    buttonColor = "#6DE1E3",
     productId,
     sourceId = 1,
-}: PopupProps) => {
+}: DynamicPopupProps) => {
     const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
     const { sendEmail, isActivating: isEmailSending } = useEmail();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
-    const modalRef = useRef<HTMLDivElement | null>(null);
     const popupTriggered = useRef(false);
-    const pathname = usePathname()
+    const pathname = usePathname();
 
     const [formData, setFormData] = useState<LeadInput>({
         name: "",
@@ -58,31 +55,26 @@ const Popup = ({
     const closeModal = () => {
       popupTriggered.current = true;
       setClosing(true);
-      // sessionStorage.setItem('popup_seen', "true");
-      //   setClosing(true);
-      //   setTimeout(() => {
-      //       setShow(false);
-      //       setClosing(false);
-      //   }, 100);
-
       setTimeout(() => {
        setShow(false);
        setClosing(false);
-      }, 100);
+      }, 300);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
+        // Se limpia los errores
         setErrors({});
 
-        const newErrors: Record<string, string> = {};
-        if (!formData.name) newErrors.name = "El nombre es obligatorio";
-        if (!formData.phone?.trim()) newErrors.phone = "El teléfono es obligatorio";
-        if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
-        if (formData.phone?.trim().length !== 9) newErrors.phone = "El teléfono debe tener 9 dígitos";
+        // Se valida usando Toast en lugar de textos debajo de los inputs
+        if (!formData.name || !formData.phone?.trim() || !formData.email.trim()) {
+            showToast.warning("Por favor, completa todos los campos obligatorios.");
+            return;
+        }
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (formData.phone?.trim().length !== 9) {
+            showToast.warning("El teléfono debe tener exactamente 9 dígitos.");
             return;
         }
 
@@ -96,21 +88,18 @@ const Popup = ({
 
         const whatsappResult = await sendWhatsapp(leadData);
         if (!whatsappResult.success) {
-            setErrors({ general: whatsappResult.message || "Error al enviar el WhatsApp" });
             showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
             return;
         }
 
         const emailResult = await sendEmail(leadData);
         if (!emailResult.success) {
-            setErrors({ general: emailResult.message || "Error al enviar el email" });
             showToast.error(emailResult.message || "Error al enviar el email");
             return;
         }
         
         closeModal();
         showToast.success("¡Gracias! Nos pondremos en contacto contigo pronto.");
-
     };
 
     useEffect(() => {
@@ -118,7 +107,6 @@ const Popup = ({
       setShow(false);
       const timer = setTimeout(() => {
        if (popupTriggered.current) return;
-
        if(document.visibilityState !== "visible") return;
 
        popupTriggered.current = true;
@@ -131,30 +119,24 @@ const Popup = ({
     if (!show) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <PopupContainer closing={closing} ref={modalRef}>
-                <CloseButton
-                    onClick={closeModal}
-                    className="absolute top-4 right-4 z-50"
-                />
-
-                <PopupImage  src={imgSrc} title={imgTitle} alt={imgAlt} />
-
-                <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
-                    <PopupHeader title={title} />
-                    <PopupForm
-                        formData={formData}
-                        errors={errors}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        buttonText={buttonText}
-                        isSubmitting={isWhatsappSending || isEmailSending}
-                        buttonColor={buttonColor}
-                    />
-                </div>
-            </PopupContainer>
-        </div>
+        <PopupRenderer
+            isOpen={show}
+            closing={closing}
+            onClose={closeModal}
+            desktopImgSrc={desktopImgSrc}
+            textImgSrc={textImgSrc}
+            mobileImgSrc={mobileImgSrc}
+            imgAlt={imgAlt}
+            title={title}
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            buttonText={buttonText}
+            buttonColor={buttonColor}
+            isSubmitting={isWhatsappSending || isEmailSending}
+        />
     );
 };
 
-export default Popup;
+export default DynamicPopup;
