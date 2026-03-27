@@ -70,7 +70,7 @@ export default function TemplateConfigForm({ initialData, onSubmit, onCancel, is
     active: true,
   });
 
-  // 2. ESTADO WHATSAPP (Sigue usando texto plano)
+  // 2. ESTADO WHATSAPP
   const [whatsapp, setWhatsapp] = useState({
     id: undefined as number | undefined,
     channel: 'whatsapp' as const,
@@ -232,24 +232,10 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
   return (
     <div className="flex flex-col gap-10 mt-4 animate-fade-in relative pb-24">
       
-      {/* --- CABECERA MAESTRA CON SELECTOR --- */}
+      {/* --- CABECERA MAESTRA--- */}
       <div className="bg-white dark:bg-[#141A3F] p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
         
-        <div className="w-full md:w-1/3 flex flex-col gap-1">
-          <label className="text-xs font-bold text-gray-500 uppercase">Origen del Lead (Página)</label>
-          <select 
-            value={template.lead_source_id}
-            onChange={(e) => setTemplate({ ...template, lead_source_id: Number(e.target.value) })}
-            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent dark:text-white outline-none focus:border-[#203565]"
-          >
-            <option value={sourceData.INICIO}>Inicio</option>
-            <option value={sourceData.PRODUCTOS}>Productos</option>
-            <option value={sourceData.PRODUCTO_DETALLE}>Producto Detalle</option>
-            <option value={sourceData.ADMINISTRACION}>Administración</option>
-          </select>
-        </div>
-
-        <div className="w-full md:w-1/3 flex flex-col gap-1">
+        <div className="w-full md:w-1/2 flex flex-col gap-1">
           <label className="text-xs font-bold text-gray-500 uppercase">Nombre Interno de Plantilla</label>
           <input 
             type="text" 
@@ -260,7 +246,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
           />
         </div>
 
-        <div className="w-full md:w-1/3 flex items-center justify-end gap-3">
+        <div className="w-full md:w-1/2 flex items-center justify-end gap-3">
            <span className="text-sm font-semibold dark:text-gray-300">Template Activo:</span>
            <button
               type="button"
