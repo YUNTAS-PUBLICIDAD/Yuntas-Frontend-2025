@@ -63,16 +63,18 @@ const DynamicPopup = ({
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
+        // Se limpia los errores
         setErrors({});
 
-        const newErrors: Record<string, string> = {};
-        if (!formData.name) newErrors.name = "El nombre es obligatorio";
-        if (!formData.phone?.trim()) newErrors.phone = "El teléfono es obligatorio";
-        if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
-        if (formData.phone?.trim().length !== 9) newErrors.phone = "El teléfono debe tener 9 dígitos";
+        // Se valida usando Toast en lugar de textos debajo de los inputs
+        if (!formData.name || !formData.phone?.trim() || !formData.email.trim()) {
+            showToast.warning("Por favor, completa todos los campos obligatorios.");
+            return;
+        }
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (formData.phone?.trim().length !== 9) {
+            showToast.warning("El teléfono debe tener exactamente 9 dígitos.");
             return;
         }
 
@@ -86,14 +88,12 @@ const DynamicPopup = ({
 
         const whatsappResult = await sendWhatsapp(leadData);
         if (!whatsappResult.success) {
-            setErrors({ general: whatsappResult.message || "Error al enviar el WhatsApp" });
             showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
             return;
         }
 
         const emailResult = await sendEmail(leadData);
         if (!emailResult.success) {
-            setErrors({ general: emailResult.message || "Error al enviar el email" });
             showToast.error(emailResult.message || "Error al enviar el email");
             return;
         }
