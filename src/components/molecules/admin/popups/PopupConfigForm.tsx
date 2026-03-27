@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from "@/components/atoms/Button";
+import PopupRenderer from '@/components/molecules/PopupRenderer';
 import { Popup, PopupImage } from '@/types/admin/popup';
+import { LeadInput } from '@/types/admin/lead';
 import { showToast } from '@/utils/showToast';
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
@@ -38,6 +40,18 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
 
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
+  const [previewScale, setPreviewScale] = useState(1);
+  const [previewFormData, setPreviewFormData] = useState<LeadInput>({
+    name: '',
+    phone: '',
+    email: '',
+    source_id: 1,
+  });
+  const previewCanvasRef = useRef<HTMLDivElement>(null);
+
+  const popupBaseSize = previewMode === 'desktop'
+    ? { width: 650, height: 350 }
+    : { width: 350, height: 536 };
 
   useEffect(() => {
     if (initialData) {
@@ -135,6 +149,45 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
     await onSubmit(popupData);
   };
+
+  const handlePreviewChange = (field: string, value: string) => {
+    setPreviewFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePreviewSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    const canvas = previewCanvasRef.current;
+    if (!canvas) return;
+
+    const calculateScale = () => {
+      const bounds = canvas.getBoundingClientRect();
+      const availableWidth = Math.max(bounds.width - 8, 0);
+      const availableHeight = Math.max(bounds.height - 8, 0);
+
+      if (!availableWidth || !availableHeight) {
+        setPreviewScale(1);
+        return;
+      }
+
+      const nextScale = Math.min(
+        availableWidth / popupBaseSize.width,
+        availableHeight / popupBaseSize.height,
+        1
+      );
+
+      setPreviewScale(nextScale);
+    };
+
+    calculateScale();
+
+    const observer = new ResizeObserver(calculateScale);
+    observer.observe(canvas);
+
+    return () => observer.disconnect();
+  }, [popupBaseSize.height, popupBaseSize.width]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -258,7 +311,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       </div>
 
       {/* COLUMNA DERECHA: VISTA PREVIA */}
-      <div className="lg:col-span-5 bg-gray-100 dark:bg-[#0D1030] p-6 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden">
+      <div className="lg:col-span-5 bg-gray-100 dark:bg-[#0D1030] p-6 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center min-h-[500px] relative overflow-hidden">
         <div className="absolute top-4 left-4 z-20 flex gap-2">
           <span className="bg-white text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">
             {pageTarget} ({delaySeconds}s)
@@ -273,51 +326,42 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         <div className="flex gap-2 mb-6 relative z-20 mt-8">
             <button type="button" onClick={() => setPreviewMode('desktop')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'desktop' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>🖥️ Escritorio</button>
             <button type="button" onClick={() => setPreviewMode('mobile')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>📱 Móvil</button>
+            {/* <span className="bg-white text-gray-700 text-xs font-bold px-3 py-2 rounded-lg shadow-sm">
+              Escala: {Math.round(previewScale * 100)}%
+            </span> */}
         </div>
 
-        {previewMode === 'desktop' ? (
-            <div className={`bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden relative z-10 transition-opacity duration-300 flex flex-row border-[6px] border-white ${active ? 'opacity-100' : 'opacity-40 grayscale-[50%]'}`}>
-                <button type="button" className="absolute top-3 right-3 text-gray-400 hover:text-black font-bold text-lg px-2 z-20 bg-white/80 rounded-full h-8 w-8 flex items-center justify-center">✕</button>
-                <div className="w-1/2 flex items-center justify-center relative overflow-hidden rounded-l-xl">
-                    {desktopImgSrc ? ( <img src={desktopImgSrc} alt="Vista previa" className="w-full h-full object-cover" /> ) : ( <span className="text-gray-400 font-medium text-sm text-center px-4">[Imagen Izquierda]</span> )}
-                </div>
-                <div className="w-1/2 p-8 flex flex-col justify-center gap-4 bg-white relative">
-                    {textImgSrc ? ( <img src={textImgSrc} alt="Texto Gigante" className="w-full object-contain mb-2" /> ) : ( <h4 className="text-[26px] font-extrabold text-gray-400 text-center uppercase leading-none tracking-tight">{title || 'TU INVERSIÓN...'}</h4> )}
-                    <div className="flex flex-col gap-2 w-full max-w-[200px] mx-auto mt-2">
-                        <div className="h-8 bg-gray-100 rounded-full border border-gray-200 w-full flex items-center px-4 text-xs text-gray-500">Nombre</div>
-                        <div className="h-8 bg-gray-100 rounded-full border border-gray-200 w-full flex items-center px-4 text-xs text-gray-500">Teléfono</div>
-                        <div className="h-8 bg-gray-100 rounded-full border border-gray-200 w-full flex items-center px-4 text-xs text-gray-500">Correo</div>
-                        <button type="button" style={{ backgroundColor: buttonColor }} className="w-max mx-auto px-6 py-2 mt-2 rounded-full font-extrabold text-white text-xs uppercase shadow-md transition-all">{buttonText || 'CONOCER MÁS'}</button>
-                    </div>
-                </div>
-            </div>
-        ) : (
-            <div className={`bg-white w-[280px] rounded-[2rem] shadow-2xl overflow-hidden relative z-10 transition-opacity duration-300 border-[8px] border-black ${active ? 'opacity-100' : 'opacity-40 grayscale-[50%]'}`}>
-                <button type="button" className="absolute top-3 right-3 text-gray-400 hover:text-black font-bold text-lg px-2 z-20 bg-white/80 rounded-full h-8 w-8 flex items-center justify-center">✕</button>
-                
-                {/*IMAGEN MÓVIL */}
-                <div className="w-full relative overflow-hidden bg-gray-50">
-                    {mobileImgSrc || desktopImgSrc ? ( 
-                        <img src={mobileImgSrc || desktopImgSrc} alt="Vista previa móvil" className="w-full h-auto object-contain" /> 
-                    ) : ( 
-                        <div className="h-48 bg-gray-200 flex items-center justify-center"><span className="text-gray-500 font-medium text-sm text-center px-4">[Imagen Móvil]</span></div> 
-                    )}
-                </div>
-                
-                <div className="p-6 text-center flex flex-col gap-3 bg-white">
-                    {/*Se oculta el texo si hay una imágen en móvil */}
-                    {!mobileImgSrc && (
-                        <h4 className="text-lg font-bold text-gray-600 text-left leading-tight mb-2">{title || 'Tu inversión en maquinaria...'}</h4>
-                    )}
-                    <div className="flex flex-col gap-2 mt-1">
-                        <div className="h-9 bg-gray-100 rounded-lg border border-gray-200 w-full flex items-center px-3 text-xs text-gray-500">Nombre</div>
-                        <div className="h-9 bg-gray-100 rounded-lg border border-gray-200 w-full flex items-center px-3 text-xs text-gray-500">Teléfono</div>
-                        <div className="h-9 bg-gray-100 rounded-lg border border-gray-200 w-full flex items-center px-3 text-xs text-gray-500">Correo</div>
-                    </div>
-                    <button type="button" style={{ backgroundColor: buttonColor }} className="w-full py-2.5 rounded-xl font-extrabold mt-2 text-white text-sm uppercase shadow-md transition-all">{buttonText || 'CONOCER MÁS'}</button>
-                </div>
-            </div>
-        )}
+        <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-hidden">
+          <div
+            style={{
+              width: popupBaseSize.width,
+              height: popupBaseSize.height,
+              transform: `scale(${previewScale})`,
+              transformOrigin: 'center center',
+            }}
+          >
+            <PopupRenderer
+              isOpen
+              withBackdrop={false}
+              wrapperClassName="p-0"
+              previewDevice={previewMode}
+              muted={!active}
+              onClose={() => {}}
+              desktopImgSrc={desktopImgSrc}
+              textImgSrc={textImgSrc}
+              mobileImgSrc={mobileImgSrc}
+              imgAlt={imageAlt || 'Vista previa popup'}
+              title={title || 'Tu inversión en maquinaria...'}
+              formData={previewFormData}
+              errors={{}}
+              handleChange={handlePreviewChange}
+              handleSubmit={handlePreviewSubmit}
+              buttonText={buttonText || 'CONOCER MÁS'}
+              buttonColor={buttonColor}
+              isSubmitting={false}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
