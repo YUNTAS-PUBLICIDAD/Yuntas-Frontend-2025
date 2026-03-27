@@ -22,6 +22,107 @@ interface DynamicPopupProps {
     sourceId?: number;
 }
 
+interface PopupLayoutProps {
+    desktopImgSrc: string;
+    textImgSrc?: string;
+    mobileImgSrc?: string;
+    imgAlt: string;
+    title: string;
+    formData: LeadInput;
+    errors: Record<string, string>;
+    handleChange: (field: string, value: string) => void;
+    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    buttonText: string;
+    buttonColor: string;
+    isSubmitting: boolean;
+}
+
+const DesktopPopupComposition = ({
+    desktopImgSrc,
+    textImgSrc,
+    imgAlt,
+    title,
+    formData,
+    errors,
+    handleChange,
+    handleSubmit,
+    buttonText,
+    buttonColor,
+    isSubmitting,
+}: PopupLayoutProps) => {
+    return (
+        <div className="hidden md:grid md:grid-cols-[271px_335px] md:w-[606px] md:h-[479px]">
+            <div className="w-[271px] h-[479px] overflow-hidden">
+                <img src={desktopImgSrc} alt={imgAlt} className="w-full h-full object-cover" />
+            </div>
+
+            <div className="w-[335px] h-[479px] relative overflow-hidden">
+                {textImgSrc ? (
+                    <img src={textImgSrc} alt="Banner promocional" className="absolute inset-0 w-full h-full object-cover" />
+                ) : (
+                    <div className="absolute inset-0 flex items-start justify-center pt-10 px-6">
+                        <h4 className="text-[26px] font-extrabold text-gray-400 uppercase leading-none tracking-tight text-center">
+                            {title}
+                        </h4>
+                    </div>
+                )}
+
+                <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 bg-white/95 backdrop-blur-[1px]">
+                    <PopupForm
+                        formData={formData}
+                        errors={errors}
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        buttonText={buttonText}
+                        isSubmitting={isSubmitting}
+                        buttonColor={buttonColor}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const MobilePopupComposition = ({
+    desktopImgSrc,
+    mobileImgSrc,
+    imgAlt,
+    title,
+    formData,
+    errors,
+    handleChange,
+    handleSubmit,
+    buttonText,
+    buttonColor,
+    isSubmitting,
+}: PopupLayoutProps) => {
+    const finalMobileImg = mobileImgSrc || desktopImgSrc;
+
+    return (
+        <div className="md:hidden w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white">
+            <img src={finalMobileImg} alt={imgAlt} className="absolute inset-0 w-full h-full object-cover" />
+
+            {!mobileImgSrc && (
+                <div className="absolute top-6 left-4 right-4 h-[65%] flex items-start justify-center text-center">
+                    <h4 className="text-lg font-bold text-gray-600 leading-tight">{title}</h4>
+                </div>
+            )}
+
+            <div className="absolute bottom-0 left-0 right-0 h-[35%] px-4 pb-4 pt-2 bg-white/95 backdrop-blur-[1px]">
+                <PopupForm
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    buttonText={buttonText}
+                    isSubmitting={isSubmitting}
+                    buttonColor={buttonColor}
+                />
+            </div>
+        </div>
+    );
+};
+
 const DynamicPopup = ({
     delay = 5000,
     desktopImgSrc,
@@ -119,68 +220,43 @@ const DynamicPopup = ({
 
     if (!show) return null;
 
-    const finalMobileImg = mobileImgSrc || desktopImgSrc;
-
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 transition-opacity duration-300 backdrop-blur-sm">
             
             <div className={`relative bg-white shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${closing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'} 
-                w-[300px] rounded-[2rem] border-[6px] border-white 
-                md:w-full md:max-w-2xl md:rounded-2xl md:flex md:flex-row md:border-8`}
+                rounded-[2rem] border-[6px] border-white md:rounded-2xl md:border-8`}
             >
                 <CloseButton onClick={closeModal} className="absolute top-2 right-2 md:top-3 md:right-3 z-50" />
 
-                {/*IMAGEN MÓVIL */}
-                <div className="md:hidden w-full relative overflow-hidden bg-gray-50">
-                    {finalMobileImg && (
-                        <img src={finalMobileImg} alt={imgAlt} className="w-full h-auto object-contain" />
-                    )}
-                </div>
+                <DesktopPopupComposition
+                    desktopImgSrc={desktopImgSrc}
+                    textImgSrc={textImgSrc}
+                    mobileImgSrc={mobileImgSrc}
+                    imgAlt={imgAlt}
+                    title={title}
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    buttonText={buttonText}
+                    buttonColor={buttonColor}
+                    isSubmitting={isWhatsappSending || isEmailSending}
+                />
 
-                {/* IMAGEN ESCRITORIO */}
-                <div className="hidden md:flex w-1/2 items-center justify-center relative overflow-hidden rounded-l-xl">
-                    {desktopImgSrc && (
-                        <img src={desktopImgSrc} alt={imgAlt} className="w-full h-full object-cover" />
-                    )}
-                </div>
-
-                {/* SECCIÓN DERECHA: TEXTOS Y FORMULARIO */}
-                <div className="p-6 md:w-1/2 md:p-8 flex flex-col justify-center gap-4 bg-white relative text-center">
-                    
-                    <div className="mb-2">
-                        {/* TEXTO/IMAGEN ESCRITORIO */}
-                        <div className="hidden md:block">
-                            {textImgSrc ? (
-                                <img src={textImgSrc} alt="Banner promocional" className="w-full object-contain mx-auto mb-2" />
-                            ) : (
-                                <h4 className="text-[26px] font-extrabold text-gray-400 uppercase leading-none tracking-tight">
-                                    {title}
-                                </h4>
-                            )}
-                        </div>
-
-                        {/* TEXTO MÓVIL */}
-                        <div className="md:hidden">
-                            {!mobileImgSrc && (
-                                <h4 className="text-lg font-bold text-gray-600 leading-tight mb-2">
-                                    {title}
-                                </h4>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="w-full md:max-w-[260px] mx-auto flex flex-col gap-2">
-                        <PopupForm
-                            formData={formData}
-                            errors={errors}
-                            handleChange={handleChange}
-                            handleSubmit={handleSubmit}
-                            buttonText={buttonText}
-                            isSubmitting={isWhatsappSending || isEmailSending}
-                            buttonColor={buttonColor}
-                        />
-                    </div>
-                </div>
+                <MobilePopupComposition
+                    desktopImgSrc={desktopImgSrc}
+                    textImgSrc={textImgSrc}
+                    mobileImgSrc={mobileImgSrc}
+                    imgAlt={imgAlt}
+                    title={title}
+                    formData={formData}
+                    errors={errors}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    buttonText={buttonText}
+                    buttonColor={buttonColor}
+                    isSubmitting={isWhatsappSending || isEmailSending}
+                />
 
             </div>
         </div>
