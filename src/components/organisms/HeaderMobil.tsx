@@ -94,7 +94,7 @@ const HeaderMobil = () => {
       {/* ───────────── OVERLAY ───────────── */}
       <div
         className={`
-          fixed inset-0 z-30 bg-black/40
+          fixed inset-0 z-[150] bg-black/40
           transition-opacity duration-300
           ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `}
@@ -104,7 +104,7 @@ const HeaderMobil = () => {
       {/* ───────────── DRAWER ───────────── */}
       <div
         className={`
-          md:hidden fixed inset-0 z-40 flex flex-col
+          md:hidden fixed inset-0 z-[200] flex flex-col
          transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
 
