@@ -198,8 +198,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* ESTADO */}
           <div className="flex items-center justify-between bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-gray-800 dark:text-white">Estado (active) <span className="text-red-500">*</span></span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">Activar o desactivar este popup</span>
+              <span className="text-sm font-bold text-gray-800 dark:text-white">Estado del Anuncio <span className="text-red-500">*</span></span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Activa para que los clientes vean este anuncio en la web.</span>
             </div>
             <button
               type="button"
@@ -212,7 +212,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
           {/* REGLAS DE VISUALIZACIÓN */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
-            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">Reglas de Visualización</h3>
+            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">¿Dónde y cuándo aparecerá?</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
@@ -223,32 +223,50 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                   <option value="productos">Productos</option>
                   <option value="contacto">Contacto</option>
                 </select>
+                <span className="text-[10px] text-gray-500">¿En qué sección de la web quieres mostrarlo?</span>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Retardo al aparecer <span className="text-red-500">*</span></label>
+                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Tiempo de aparición <span className="text-red-500">*</span></label>
                 <select value={delaySeconds} onChange={(e) => setDelaySeconds(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="3">3 segundos</option>
-                  <option value="5">5 segundos (Recomendado)</option>
-                  <option value="8">8 segundos (Máximo)</option>
+                  <option value="3">Rápido (3 segundos)</option>
+                  <option value="5">Recomendado (5 segundos)</option>
+                  <option value="8">Lento (8 segundos)</option>
                 </select>
+                <span className="text-[10px] text-gray-500">Tiempo de espera antes de que salte a la pantalla.</span>
               </div>
             </div>
           </div>
 
           {/* TEXTOS */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
-            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">Textos del Pop-up</h3>
+            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">Textos y Llamados a la acción</h3>
             
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Título <span className="text-red-500">*</span></label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed" />
+              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Mensaje Principal del Pop-up <span className="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)} 
+                placeholder="Ej: ¡Lleva tu marca al siguiente nivel!"
+                disabled={!active} 
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400" 
+              />
+              <span className="text-[10px] text-gray-500">Este texto aparecerá en grande arriba del formulario.</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Texto del Botón <span className="text-red-500">*</span></label>
-                <input type="text" value={buttonText} onChange={(e) => setButtonText(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed" />
+                <input 
+                  type="text" 
+                  value={buttonText} 
+                  onChange={(e) => setButtonText(e.target.value)} 
+                  placeholder="Ej: SOLICITAR COTIZACIÓN"
+                  disabled={!active} 
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400" 
+                />
+                <span className="text-[10px] text-gray-500">Lo que leerá el cliente para hacer clic.</span>
               </div>
 
               <div className="flex flex-col gap-1">
@@ -257,44 +275,61 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                   <input type="color" value={buttonColor} onChange={(e) => setButtonColor(e.target.value)} disabled={!active} className="h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1 disabled:cursor-not-allowed" />
                   <span className="text-sm font-mono text-gray-500 dark:text-gray-400">{buttonColor}</span>
                 </div>
+                <span className="text-[10px] text-gray-500">Selecciona un color llamativo.</span>
               </div>
             </div>
           </div>
 
           {/* LAS 3 IMÁGENES */}
           <div className={`bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
-            <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 pb-1">Carga de Imágenes <span className="text-red-500">*</span></h3>
+            <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 pb-1">Fotos y Flyers <span className="text-red-500">*</span></h3>
             
             {/* Imagen Principal (Escritorio) */}
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Imagen Principal (Escritorio - Lado Izquierdo)</label>
+              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Foto Principal (Para Computadoras - Lado Izquierdo)</label>
               <input type="file" accept="image/*" onChange={handleDesktopImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong>271x479 px</strong> (Formato Vertical)</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Sube una foto atractiva (Tamaño ideal: <strong>271x479 px</strong>) para la mitad izquierda.</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b dark:border-gray-600 pb-4 mt-2">
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Alt de imagen <span className="text-red-500">*</span></label>
-                <input type="text" value={imageAlt} onChange={(e) => setImageAlt(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500" />
+                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Texto descriptivo de la foto <span className="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  value={imageAlt} 
+                  onChange={(e) => setImageAlt(e.target.value)} 
+                  placeholder="Ej: Foto de letrero luminoso"
+                  disabled={!active} 
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400" 
+                />
+                <span className="text-[10px] text-gray-500">Ayuda a Google a saber qué hay en la foto (SEO).</span>
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Título hover</label>
-                <input type="text" value={imageTitle} onChange={(e) => setImageTitle(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500" />
+                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Texto al pasar el mouse (Opcional)</label>
+                <input 
+                  type="text" 
+                  value={imageTitle} 
+                  onChange={(e) => setImageTitle(e.target.value)} 
+                  placeholder="Ej: Clic para ver trabajos"
+                  disabled={!active} 
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400" 
+                />
+                <span className="text-[10px] text-gray-500">Se muestra cuando el cliente pone el cursor sobre la foto.</span>
               </div>
             </div>
 
             {/* Imagen Texto (Escritorio) */}
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">2. Imagen de Texto (Escritorio - Lado Derecho)</label>
+              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">2. Diseño Promocional (Para Computadoras - Lado Derecho)</label>
               <input type="file" accept="image/*" onChange={handleTextImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong>335x479 px</strong> (Formato Horizontal)</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Flyer u oferta (Tamaño ideal: <strong>335x479 px</strong>). Va encima del formulario.</span>
             </div>
 
             {/* Imagen Móvil */}
             <div className="flex flex-col gap-1 border-t dark:border-gray-600 pt-4 mt-2">
-              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">3. Imagen Principal (Versión Móvil)</label>
+              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">3. Flyer Unificado (Para Celulares)</label>
               <input type="file" accept="image/*" onChange={handleMobileImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Tamaño recomendado: <strong> 260x520 px</strong> (Flyer unificado con texto)</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Diseño vertical completo para pantallas pequeñas (Tamaño ideal: <strong>260x520 px</strong>).</span>
             </div>
           </div>
 
@@ -304,7 +339,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               Cancelar
             </Button>
             <Button size="md" variant="primary" className="w-full" onClick={handleSave} disabled={isSaving}>
-              {isSaving ? 'Guardando...' : (initialData ? 'Actualizar Pop-up' : 'Crear Pop-up')}
+              {isSaving ? 'Guardando...' : (initialData ? 'Actualizar Anuncio' : 'Crear Anuncio')}
             </Button>
           </div>
         </div>
@@ -324,11 +359,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         </div>
 
         <div className="flex gap-2 mb-6 relative z-20 mt-8">
-            <button type="button" onClick={() => setPreviewMode('desktop')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'desktop' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>🖥️ Escritorio</button>
-            <button type="button" onClick={() => setPreviewMode('mobile')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>📱 Móvil</button>
-            {/* <span className="bg-white text-gray-700 text-xs font-bold px-3 py-2 rounded-lg shadow-sm">
-              Escala: {Math.round(previewScale * 100)}%
-            </span> */}
+            <button type="button" onClick={() => setPreviewMode('desktop')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'desktop' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>🖥️ Vista en PC</button>
+            <button type="button" onClick={() => setPreviewMode('mobile')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>📱 Vista en Celular</button>
         </div>
 
         <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-hidden">
@@ -351,7 +383,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               textImgSrc={textImgSrc}
               mobileImgSrc={mobileImgSrc}
               imgAlt={imageAlt || 'Vista previa popup'}
-              title={title || 'Tu inversión en maquinaria...'}
+              title={title || '¡Tu inversión en maquinaria!'}
               formData={previewFormData}
               errors={{}}
               handleChange={handlePreviewChange}
