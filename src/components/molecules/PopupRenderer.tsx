@@ -115,7 +115,7 @@ const MobilePopupComposition = ({
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 h-[35%] px-4 pb-4 pt-2 bg-white/95 backdrop-blur-[1px]">
+      <div className="absolute bottom-0 left-0 right-0 h-[35%] px-4 pb-4 pt-2 backdrop-blur-[1px]">
         <PopupForm
           formData={formData}
           errors={errors}
