@@ -67,7 +67,7 @@ const DesktopPopupComposition = ({
           </div>
         )}
 
-        <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 bg-white/95 backdrop-blur-[1px]">
+        <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 backdrop-blur-[1px]">
           <PopupForm
             formData={formData}
             errors={errors}
