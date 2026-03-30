@@ -57,7 +57,7 @@ export default function NavMenuMobil({
       { label: "USUARIOS", href: "/admin/usuarios" },
       { label: "RECLAMACIONES", href: "/admin/reclamaciones" },
       { label: "CONTACTO", href: "/admin/contacto" },
-      { label: "POPUPS", href: "/admin/popups" },
+      { label: "POP-UPS", href: "/admin/popups" },
     ];
 
     return (
