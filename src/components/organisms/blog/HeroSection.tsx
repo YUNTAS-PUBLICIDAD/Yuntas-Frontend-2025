@@ -2,6 +2,7 @@
 
 import { imagenes } from "@/data/imagenes";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 
@@ -27,10 +28,10 @@ const HeroSection = () => {
       {/* Top Image Section - Height reduced */}
       <section
         className="
-          relative w-full 
+          relative w-full
           h-[40vh] md:h-[50vh]
-          flex items-center justify-center 
-          overflow-hidden 
+          flex items-center justify-center
+          overflow-hidden
           border-b-4 border-[#98D8DF]
         "
         aria-label="Imagen de portada Blog"
@@ -39,22 +40,30 @@ const HeroSection = () => {
           className="absolute inset-0"
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 2, ease: "easeOut" }}
+          transition={{ duration: 1, ease: "easeOut" }}
         >
-          <img
+          {/*<img
             src={imagenes.blogs.hero.src}
             alt={imagenes.blogs.hero.alt || "Portada Blog"}
             title={imagenes.blogs.hero.title}
             className="w-full h-full object-cover object-center"
+          />*/}
+          <Image src={imagenes.blogs.hero.src}
+          alt={imagenes.blogs.hero.alt || "Portada Blog"}
+          fill
+          priority
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center"
           />
         </motion.div>
 
         {/* Overlay */}
         <div
-          className="absolute inset-0 z-10"
-          style={{
-            background: "rgba(0,0,0,0.3)",
-          }}
+          className="absolute inset-0 bg-black/30 z-10"
+          // style={{
+          //   background: "rgba(0,0,0,0.3)",
+          // }}
         />
 
         {/* Blog Title & Phrases */}
@@ -74,9 +83,9 @@ const HeroSection = () => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="
                     absolute
-                    text-white 
-                    text-base sm:text-xl md:text-2xl 
-                    font-light 
+                    text-white
+                    text-base sm:text-xl md:text-2xl
+                    font-light
                     tracking-wide
                     drop-shadow-lg
                   "
