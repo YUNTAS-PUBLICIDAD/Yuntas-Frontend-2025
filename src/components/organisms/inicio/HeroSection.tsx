@@ -23,6 +23,8 @@ const HeroSection = () => {
           fill
           priority
           className="object-cover"
+          /* optimización para vista móvil*/
+          sizes="(max-width: 768px) 100vw, 100vw"
         />
       </motion.div>
 
