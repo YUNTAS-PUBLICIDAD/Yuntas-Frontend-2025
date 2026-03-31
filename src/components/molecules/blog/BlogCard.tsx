@@ -1,4 +1,5 @@
 import Text from '@/components/atoms/Text'
+import Image from 'next/image'
 
 type BlogCardProps = {
 	imgUrl: string,
@@ -12,12 +13,16 @@ const BlogCard = ({ imgUrl, imgAlt, imgTitle, productName, blogTitle }: BlogCard
 	return (
 		<div className="group block w-full h-full max-w-[420px] mx-auto bg-white rounded-[2rem] shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100">
 			<div className='relative w-full aspect-[16/10] overflow-hidden'>
-				<img
+				{/*<img
 					src={imgUrl}
 					alt={imgAlt}
 					title={imgTitle}
 					className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-110'
-				/>
+				/>*/}
+
+				<Image
+				quality={70}
+				src={imgUrl} alt={imgAlt} title={imgTitle} fill className='object-cover transition-transform duration-700 group-hover:scale-110' sizes="(max-with:768px) 100vw, (max-width:1200px) 50vw,33vw "/>
 				<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 			</div>
 
