@@ -1,3 +1,4 @@
+'use client';
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import Text from "@/components/atoms/Text";
