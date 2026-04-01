@@ -15,6 +15,7 @@ const SectionImage: React.FC<SectionImageProps> = ({ src, title, alt, className 
   if (typeof src === "string") {
     return (
       <Image 
+        quality={70}
         src={src} 
         alt={alt} 
         title={title || alt} 

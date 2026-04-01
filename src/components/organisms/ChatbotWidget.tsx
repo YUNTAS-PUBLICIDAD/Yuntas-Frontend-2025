@@ -126,6 +126,8 @@ export default function ChatbotWidget() {
         >
           <span className='absolute -inset-1 rounded-full bg-blue-400 opacity-50 animate-ping pointer-events-none'></span>
           <Image 
+            quality={70}
+            priority
             src={"/images/chatbot.png"} 
             alt='Abrir chat' 
             fill 

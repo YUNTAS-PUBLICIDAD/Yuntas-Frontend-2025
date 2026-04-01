@@ -18,6 +18,7 @@ const HeroSection = () => {
         transition={{ duration: 2.5, ease: "easeOut" }}
       >
         <Image
+          quality={70}
           src={imagenes.inicio.hero.src}
           alt={imagenes.inicio.hero.alt || "Hero Yuntas Publicidad"}
           title={imagenes.inicio.hero.title}
