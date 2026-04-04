@@ -1,9 +1,10 @@
 "use client";
 
 import { imagenes } from "@/data/imagenes";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
+// import { FaSearch } from "react-icons/fa";
 
 const HeroSection = () => {
   const frases = [
@@ -27,34 +28,44 @@ const HeroSection = () => {
       {/* Top Image Section - Height reduced */}
       <section
         className="
-          relative w-full 
+          relative w-full
           h-[40vh] md:h-[50vh]
-          flex items-center justify-center 
-          overflow-hidden 
+          flex items-center justify-center
+          overflow-hidden
           border-b-4 border-[#98D8DF]
         "
         aria-label="Imagen de portada Blog"
       >
-        <motion.div
+        <div className="absolute inset-0 scale-110 animate-slowZoom">
+        {/*<motion.div
           className="absolute inset-0"
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 2, ease: "easeOut" }}
-        >
-          <img
+          transition={{ duration: 1, ease: "easeOut" }}
+        >*/}
+          {/*<img
             src={imagenes.blogs.hero.src}
             alt={imagenes.blogs.hero.alt || "Portada Blog"}
             title={imagenes.blogs.hero.title}
             className="w-full h-full object-cover object-center"
+          />*/}
+          <Image src={imagenes.blogs.hero.src}
+          alt={imagenes.blogs.hero.alt || "Portada Blog"}
+          fill
+          priority
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center"
           />
-        </motion.div>
+        {/*</motion.div>*/}
+      </div>
 
         {/* Overlay */}
         <div
-          className="absolute inset-0 z-10"
-          style={{
-            background: "rgba(0,0,0,0.3)",
-          }}
+          className="absolute inset-0 bg-black/30 z-10"
+          // style={{
+          //   background: "rgba(0,0,0,0.3)",
+          // }}
         />
 
         {/* Blog Title & Phrases */}
@@ -65,7 +76,7 @@ const HeroSection = () => {
 
           {/* Carrusel de Frases */}
           <div className="h-[60px] sm:h-[100px] mt-6 relative w-full flex justify-center items-center">
-            <AnimatePresence mode="wait">
+            {/*<AnimatePresence mode="wait">
               <motion.p
                 key={frases[index]}
                 initial={{ y: 20, opacity: 0 }}
@@ -74,16 +85,22 @@ const HeroSection = () => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="
                     absolute
-                    text-white 
-                    text-base sm:text-xl md:text-2xl 
-                    font-light 
+                    text-white
+                    text-base sm:text-xl md:text-2xl
+                    font-light
                     tracking-wide
                     drop-shadow-lg
                   "
               >
                 {frases[index]}
               </motion.p>
-            </AnimatePresence>
+            </AnimatePresence>*/}
+            {
+              frases.map((frase, i) => (
+               <p key={i} className={`absolute text-white text-base sm:text-xl md:text-2xl  font-light tracking-wide drop-shadown-lg transition-all duration-500 ease-in-out ${
+               i === index ? "opacity-100 translate-y-0": "opacity-0 translate-y-4" }`}>{frase}</p>
+              ))
+            }
           </div>
         </div>
       </section>
