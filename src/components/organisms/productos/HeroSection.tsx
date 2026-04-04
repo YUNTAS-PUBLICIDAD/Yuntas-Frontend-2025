@@ -1,8 +1,6 @@
-"use client";
-
 import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
-import { motion } from "framer-motion";
+import Image from "next/image";
 
 const HeroSection = () => {
   return (
@@ -15,20 +13,18 @@ const HeroSection = () => {
       "
       aria-label="Sección Productos"
     >
-
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.2 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 2.5, ease: "easeOut" }}
-      >
-        <img
+      <div className="absolute inset-0 animate-zoom-out-bg">
+        <Image
           src={imagenes.productos.hero.src}
           alt={imagenes.productos.hero.alt || "Productos"}
           title={imagenes.productos.hero.title}
-          className="w-full h-full object-cover object-center"
+          fill
+          priority
+          quality={80}
+          className="object-cover object-center"
+          sizes="100vw"
         />
-      </motion.div>
+      </div>
 
       <div
         className="absolute inset-0 z-10"
