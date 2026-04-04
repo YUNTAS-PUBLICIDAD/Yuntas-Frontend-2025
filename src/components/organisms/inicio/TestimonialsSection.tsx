@@ -11,6 +11,7 @@ import { Pagination, Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
+import './TestimonialsSection.css';
 
 const TestimonialsSection: React.FC = () => {
   const router = useRouter();
@@ -83,21 +84,6 @@ const TestimonialsSection: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        .testimonials-swiper .swiper-pagination-bullet {
-          background: #fff !important;
-          opacity: 0.5;
-          width: 12px;
-          height: 12px;
-        }
-        .testimonials-swiper .swiper-pagination-bullet-active {
-          background: #23C1DE !important;
-          opacity: 1;
-          width: 14px;
-          height: 14px;
-        }
-      `}</style>
     </section>
   );
 };
