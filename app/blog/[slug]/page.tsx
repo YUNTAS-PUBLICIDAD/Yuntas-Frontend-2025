@@ -5,8 +5,16 @@ import OpinionSection from "@/components/organisms/blog/blogId/OpinionSection";
 import VideoSection from "@/components/organisms/blog/blogId/VideoSection";
 import { notFound } from 'next/navigation';
 import { Blog, imageBlogSlots } from "@/types/admin/blog";
-import { getBlogBySlugService } from "@/services/blogService";
+import { getBlogBySlugService, getBlogsService } from "@/services/blogService";
 import HeroSection from "@/components/molecules/HeroSection";
+
+export async function generateStaticParams(){
+  const res = await getBlogsService(100);
+  if(!res.success || !res.data) return [];
+  return res.data.map((blog) => ({
+    slug: blog.slug
+  }));
+}
 
 export async function getBlogBySlug(slug: string): Promise<Blog|null>{
   const response = await getBlogBySlugService(slug);
