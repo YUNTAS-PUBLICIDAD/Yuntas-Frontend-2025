@@ -1,4 +1,4 @@
-import HeroPage from '@/components/molecules/HeroPage';
+import HeroPage from '@/components/molecules/HeroSection';
 
 interface HeroSectionProps {
     productName: string;
