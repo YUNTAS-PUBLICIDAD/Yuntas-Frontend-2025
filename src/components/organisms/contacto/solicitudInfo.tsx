@@ -93,7 +93,7 @@ const SolicitudInfo: React.FC = () => {
               <PrimaryButton
                 type="submit"
                 disabled={isLoading}
-                className="shadow-lg hover:shadow-[#1D2C5E]/30 transform transition-all active:scale-95"
+                className="shadow-lg hover:shadow-none hover:bg-[#4FD3EA] hover:text-[#1D2C5E] transform transition-all active:scale-95"
               >
                 {isLoading ? "ENVIANDO..." : "ENVIAR MENSAJE"}
               </PrimaryButton>
