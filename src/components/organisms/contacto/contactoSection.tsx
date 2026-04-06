@@ -20,7 +20,7 @@ const ContactoSection = () => {
         className="absolute inset-0"
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 2.5, ease: "easeOut" }}
+        transition={{ duration: 1, ease: "easeOut" }}
       >
         <img
           src={imagenes.contacto.hero.src}
