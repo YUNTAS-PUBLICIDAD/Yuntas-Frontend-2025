@@ -47,7 +47,8 @@ const BlogSection = ({ blogs }: { blogs: Blog[] }) => {
 					{blogPaginado.map(blog => (
 						<Link
 							key={blog.slug}
-							href={`/blog/detalle?slug=${blog.slug}`}
+							// href={`/blog/detalle?slug=${blog.slug}`}
+							href={`/blog/${blog.slug}`}
 							className='block group'
 						>
 							<BlogCard

@@ -1,43 +1,60 @@
-'use client';
 
-import HeroPage from "@/components/molecules/HeroPage";
 import DescripcionSection from "@/components/organisms/blog/blogId/DescripcionSection";
 import BeneficiosSection from "@/components/organisms/blog/blogId/BeneficiosSection";
 import OpinionSection from "@/components/organisms/blog/blogId/OpinionSection";
 import VideoSection from "@/components/organisms/blog/blogId/VideoSection";
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect } from "react";
-import { useBlogs } from "@/hooks/useBlog";
-import { imageBlogSlots } from "@/types/admin/blog";
+import { notFound } from 'next/navigation';
+import { Blog, imageBlogSlots } from "@/types/admin/blog";
+import { getBlogBySlugService, getBlogsService } from "@/services/blogService";
+import HeroSection from "@/components/molecules/HeroSection";
 
-function BlogDetalleContent() {
-    const searchParams = useSearchParams();
-    const slug = searchParams.get('slug');
-    const { getBlogBySlug, blog, isLoading, error } = useBlogs();
+export async function generateStaticParams(){
+  const res = await getBlogsService(100);
+  if(!res.success || !res.data) return [];
+  return res.data.map((blog) => ({
+    slug: blog.slug
+  }));
+}
 
-    useEffect(() => {
-        if (slug) {
-            getBlogBySlug(slug);
-        }
-    }, [slug, getBlogBySlug]);
+export async function getBlogBySlug(slug: string): Promise<Blog|null>{
+  const response = await getBlogBySlugService(slug);
 
-    // 1. PRIMERO: ¿Está cargando?
-    if (isLoading) {
-        return <div className="flex justify-center items-center h-screen">Cargando blog...</div>;
-    }
+  if(!response.success || !response.data) return null;
 
-    // 2. SEGUNDO: ¿Hubo error?
-    if (error) {
-        return <div className="flex justify-center items-center h-screen">Error: {error}</div>;
-    }
+  return response.data;
+}
+// export async function getBlogBySlug(slug: string){
+//   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+//   if(!baseUrl){
+//     throw new Error("API URL no definida");
+//   }
+//   const res = await fetch(`${baseUrl}/blogs/${slug}`, {
+//     next: {revalidate: 60}
+//   })
 
-    // 3. TERCERO: ¿Llegó vacío?
-    if (!blog) {
-        return <div className="flex justify-center items-center h-screen">No se encontró el blog.</div>;
-    }
+//   if(!res.ok) return null;
+//   // const data = await res.json();
+//   // return data;
+//   const json = await res.json();
+//   console.log(json);
+//   return json.data;
+// }
 
-    // --- A partir de aquí, TypeScript sabe que 'blog' existe 100% ---
-    
+type PageProps = {
+  params: {
+    slug: string
+  }
+}
+
+ export default async function Page({params}: PageProps) {
+   if(!params?.slug){
+     notFound();
+   }
+   const blog = await getBlogBySlug(params.slug);
+   if(!blog) {
+     notFound();
+   }
+
     const calculatedSlug = blog.product?.slug || blog.product?.name
         ?.toLowerCase()
         .normalize("NFD")
@@ -53,7 +70,7 @@ function BlogDetalleContent() {
 
     return (
         <>
-            <HeroPage
+            <HeroSection
                 url={imgHero?.url || ""}
                 imageAlt={imgHero?.alt || blog.title}
                 imageTitle={imgHero?.title || blog.title}
@@ -73,7 +90,7 @@ function BlogDetalleContent() {
                 imageAlt={imgBene?.alt || blog.title}
                 imageTitle={imgBene?.title || blog.title}
                 benefits={blog.benefits || []}
-                productSlug={calculatedSlug} 
+                productSlug={calculatedSlug}
             />
 			{blog.video_url &&
                 <VideoSection
@@ -86,15 +103,7 @@ function BlogDetalleContent() {
                 imageAlt={imgTestimonial?.alt || blog.title}
                 imageTitle={imgTestimonial?.title || blog.title}
             />
-            
+
         </>
     );
-}
-
-export default function BlogDetallePage() {
-    return (
-        <Suspense fallback={<div>Cargando blog...</div>}>
-            <BlogDetalleContent />
-        </Suspense>
-    )
 }
