@@ -31,7 +31,7 @@ export default function ChatbotWidget() {
     //Se usa sessionStorage para que se borre el chat al cerrar la pestaña
     let storedSession = sessionStorage.getItem("chatbot_session");
     const saved = sessionStorage.getItem("chatbot_messages");
-    
+
     if (saved) {
       setMessages(JSON.parse(saved));
     } else {
@@ -51,7 +51,7 @@ export default function ChatbotWidget() {
   async function loadHistory(id: string) {
     const res = await getChatHistoryService(id);
     if (res.success && res.data && res.data.length > 0) {
-      // setMessages(res.data); 
+      // setMessages(res.data);
     }
   }
 
@@ -65,7 +65,7 @@ export default function ChatbotWidget() {
       sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
       return updated;
     });
-    
+
     setInput("");
     setTyping(true);
 
@@ -81,15 +81,15 @@ export default function ChatbotWidget() {
 
       const latestMessages = res.data.messages;
       if (latestMessages && latestMessages.length > 0) {
-        
+
         const botMessages = latestMessages.filter((m: any) => m.sender === 'bot' || m.role === 'bot');
 
         if (botMessages.length > 0) {
-          const backendBotMsg = botMessages[botMessages.length - 1]; 
-          
+          const backendBotMsg = botMessages[botMessages.length - 1];
+
           const botMessage: ChatMessage = {
             role: "bot",
-            text: backendBotMsg.message_text || backendBotMsg.text, 
+            text: backendBotMsg.message_text || backendBotMsg.text,
             type: backendBotMsg.metadata?.type || backendBotMsg.type,
             products: backendBotMsg.metadata?.products || backendBotMsg.products,
             blogs: backendBotMsg.metadata?.blogs || backendBotMsg.blogs,
@@ -117,20 +117,20 @@ export default function ChatbotWidget() {
 
   return (
     <div className="fixed bottom-40 right-10 z-[100]">
-      
+
       {!open && (
-        <button 
+        <button
           onClick={() => setOpen(true)}
           className='relative w-16 h-16 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
           aria-label="Abrir chat"
         >
           <span className='absolute -inset-1 rounded-full bg-blue-400 opacity-50 animate-ping pointer-events-none'></span>
-          <Image 
+          <Image
             quality={70}
             priority
-            src={"/images/chatbot.png"} 
-            alt='Abrir chat' 
-            fill 
+            src={"/images/chatbot.png"}
+            alt='Abrir chat'
+            fill
             className='relative rounded-full object-cover group-hover:scale-105 transition-transform duration-200 pointer-events-none'
           />
         </button>
@@ -138,7 +138,7 @@ export default function ChatbotWidget() {
 
       {open && (
         <div className="w-80 h-[450px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
-          
+
           <div className="bg-[#203565] text-white p-4 flex justify-between items-center">
             <div className='flex items-center gap-3'>
               <div className="relative">
@@ -155,7 +155,7 @@ export default function ChatbotWidget() {
                 <p className="text-[10px] text-blue-200">En línea</p>
               </div>
             </div>
-            
+
             <div className="flex gap-3">
                {/* Botón para resetear chat */}
                <button onClick={resetChat} title="Reiniciar chat" className="text-white/70 hover:text-white transition-colors text-sm">↺</button>
@@ -163,41 +163,41 @@ export default function ChatbotWidget() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-100">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} gap-2`}>
-                
+
                 {m.role === "bot" && (
                   <div className='w-6 h-6 relative flex-shrink-0 mt-1'>
                     <Image alt='bot' fill className='rounded-full object-cover shadow-sm' src="/images/chatbot.png"/>
                   </div>
                 )}
-                
+
                 <div className='flex flex-col gap-2 max-w-[75%]'>
                   {m.text && (
                     <div className={`relative px-4 py-2.5 text-sm shadow-sm whitespace-pre-wrap leading-relaxed
-                      ${m.role === "user" 
-                        ? "bg-[#6DE1E3] text-gray-900 rounded-2xl rounded-tr-sm" 
-                        : "bg-white border border-gray-100 text-gray-700 rounded-2xl rounded-tl-sm"
+                      ${m.role === "user"
+                        ? "bg-[#203565] text-white rounded-2xl rounded-tr-sm"
+                        : "bg-white border border-gray-200 text-gray-700 rounded-2xl rounded-tl-sm"
                       }`}
                     >
                       {m.text}
                     </div>
                   )}
 
-                  {m.type === "quick" && (
+                  {/*{m.type === "quick" && (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {['Productos', 'Cotizar', 'Contacto'].map(action => (
-                         <button 
-                           key={action} 
-                           onClick={() => sendMessage(action === 'Productos' ? 'servicios' : action.toLowerCase())} 
+                         <button
+                           key={action}
+                           onClick={() => sendMessage(action === 'Productos' ? 'servicios' : action.toLowerCase())}
                            className="bg-white border border-[#203565]/20 text-[#203565] hover:bg-[#203565] hover:text-white px-3 py-1.5 rounded-full text-xs font-semibold transition-colors shadow-sm"
                          >
                            {action}
                          </button>
                       ))}
                     </div>
-                  )}
+                  )}*/}
 
                   {m.type === "products" && m.products && (
                     <div className="flex flex-col gap-2 mt-1">
