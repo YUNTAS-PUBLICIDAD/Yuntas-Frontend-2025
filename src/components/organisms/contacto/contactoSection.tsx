@@ -2,7 +2,6 @@
 
 import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 const ContactoSection = () => {
@@ -17,12 +16,7 @@ const ContactoSection = () => {
       aria-label="Sección Contacto"
     >
 
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.2 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      >
+      <div className="absolute inset-0 scale-110 animate-slowZoom">
         <Image
           src={imagenes.contacto.hero.src}
           alt={imagenes.contacto.hero.alt || "Contacto"}
@@ -32,7 +26,7 @@ const ContactoSection = () => {
           sizes="100vw"
           className="object-cover object-center"
         />
-      </motion.div>
+      </div>
 
       <div
         className="absolute inset-0 z-10"
