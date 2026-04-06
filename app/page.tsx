@@ -4,7 +4,7 @@ import ProjectsCarousel from "@/components/organisms/inicio/ProjectsCarousel";
 import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSection";
 import ChatbotWidget from "@/components/organisms/ChatbotWidget";
 
-import DynamicPopup from "@/components/molecules/DynamicPopup"; 
+import DynamicPopup from "@/components/molecules/DynamicPopup";
 
 import { sourceData } from "@/data/popup/sourceData";
 import { imagenes } from "@/data/imagenes";
@@ -47,7 +47,7 @@ export const metadata = {
 
 // Se agregó  'async' a la función principal
 export default async function HomePage() {
-  
+
   //nueva variable para almacenar el popup, sin usar 'useState'
   let dynamicPopup: PopupType | null = null;
 
@@ -75,7 +75,7 @@ export default async function HomePage() {
       <InnovacionSection />
       <ProjectsCarousel />
       <TestimonialsSection />
-      
+
       {/* Ya no se valida si está cargando (!isLoadingPopup) */}
       {dynamicPopup ? (
         // EL NUEVO COMPONENTE DYNAMIC POPUP
@@ -88,7 +88,7 @@ export default async function HomePage() {
           buttonText={dynamicPopup.button_text}
           buttonColor={dynamicPopup.button_color || "#6DE1E3"}
           sourceId={sourceData.INICIO}
-          delay={(dynamicPopup.delay_seconds || 5) * 1000} 
+          delay={(dynamicPopup.delay_seconds || 5) * 1000}
         />
       ) : (
         <DynamicPopup
