@@ -158,7 +158,7 @@ export default function ChatbotWidget() {
   }
 
   return (
-    <div className="fixed bottom-40 right-10 z-[100]">
+    <div className="fixed bottom-7 right-10 z-[100]">
 
       {!open && (
         <button
