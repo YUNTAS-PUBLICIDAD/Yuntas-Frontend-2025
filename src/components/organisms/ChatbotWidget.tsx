@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { FaWhatsapp } from 'react-icons/fa';
 import { ChatMessage } from '@/types/chatbot';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
+import { usePathname } from "next/navigation";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
 
@@ -41,6 +42,8 @@ function getWhatsappUrl(productName: string){
   return `http://wa.me/${phone}?text=${text}`
 }
 
+
+
 function getImageUrl(url?: string) {
   if (!url) return "";
   if (url.startsWith("http")) return url;
@@ -55,6 +58,8 @@ export default function ChatbotWidget() {
 
   const sessionId = useRef<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     //Limpieza de localStorage antiguo
@@ -147,6 +152,10 @@ export default function ChatbotWidget() {
     sessionId.current = "";
     setMessages([{ role: "bot", text: "Hola 👋 ¿Qué deseas hacer?", type: "quick" }]);
   };
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-40 right-10 z-[100]">

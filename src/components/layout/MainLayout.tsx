@@ -4,6 +4,7 @@ import Footer from "@/components/organisms/Footer";
 import HeaderMobil from "../organisms/HeaderMobil";
 
 import { FloatingSocialBar } from "@/components/atoms/FloatingSocialBar";
+import ChatbotWidget from "@/components/organisms/ChatbotWidget";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,6 +17,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       </main>
 
       <FloatingSocialBar />
+
+      <ChatbotWidget />
 
       <Footer />
     </div>
