@@ -2,7 +2,9 @@ export interface ChatbotProduct {
   id: number;
   slug: string;
   name: string;
-  images?: { url: string }[];
+  // images?: { url: string }[];
+  image?: string | null;
+  price: number
 }
 
 export interface ChatbotBlog {
