@@ -3,7 +3,7 @@ import Header from "@/components/organisms/Header";
 import Footer from "@/components/organisms/Footer";
 import HeaderMobil from "../organisms/HeaderMobil";
 
-import { FloatingWhatsApp } from "@/components/atoms/FloatingWhatsApp";
+import { FloatingSocialBar } from "@/components/atoms/FloatingSocialBar";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +15,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
 
-      <FloatingWhatsApp />
+      <FloatingSocialBar />
 
       <Footer />
     </div>
