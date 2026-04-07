@@ -274,9 +274,9 @@ export default function ChatbotWidget() {
                     <div className="flex flex-col gap-2 mt-1">
                       {m.products?.map((p) => (
                         <a key={p.id} href={`/productos/${p.slug}`} className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-2 hover:shadow-md transition-shadow">
-                          {p.images?.[0]?.url && (
+                          {/*{p.images?.[0]?.url && (
                             <img src={getImageUrl(p.images[0].url)} className="w-10 h-10 object-cover rounded-md" alt={p.name} />
-                          )}
+                          )}*/}
                           <p className="text-xs font-semibold text-gray-700 leading-tight">{p.name}</p>
                         </a>
                       ))}
