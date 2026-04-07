@@ -8,6 +8,39 @@ import { getChatHistoryService, sendChatMessageService } from '@/services/chatbo
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
 
+function renderCTA(message: ChatMessage){
+  switch(message.type){
+    case 'whatsapp':
+      return (
+        <a
+                  href={message.whatsapp_url || getWhatsappUrl("asesor")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-lg py-2 text-xs font-bold"
+                >
+                  Hablar con asesor <FaWhatsapp />
+                </a>
+              );
+        case "contact_page":
+        return (
+                <a
+                  href={message.url}
+                  className="flex items-center justify-center gap-2 bg-[#203565] text-white rounded-lg py-2 text-xs font-bold"
+                >
+                  Ir a contacto
+                </a>
+              );
+          default:
+            return null;
+  }
+}
+
+function getWhatsappUrl(productName: string){
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const text = encodeURIComponent(`Hola, estoy interesado en ${productName}`);
+  return `http://wa.me/${phone}?text=${text}`
+}
+
 function getImageUrl(url?: string) {
   if (!url) return "";
   if (url.startsWith("http")) return url;
@@ -199,15 +232,40 @@ export default function ChatbotWidget() {
                     </div>
                   )}*/}
 
+                  {
+                    renderCTA(m)
+                  }
+
                   {m.type === "products" && m.products && (
                     <div className="flex flex-col gap-2 mt-1">
                       {m.products.map((p) => (
-                        <a key={p.id} href={`/productos/${p.slug}`} className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-2 hover:shadow-md transition-shadow">
-                          {p.images?.[0]?.url && (
+                        <div className='bg-white border border-gray-100 rounded-xl p-2'>
+                        <a key={p.id} href={`/productos/${p.slug}`} className="flex items-center gap-3 ">
+                          {/*{p.images?.[0]?.url && (
                             <img src={getImageUrl(p.images[0].url)} className='w-12 h-12 object-cover rounded-lg' alt={p.name} />
                           )}
-                          <p className="font-semibold text-xs text-gray-700 leading-tight">{p.name}</p>
+                          <p className="font-semibold text-xs text-gray-700 leading-tight">{p.name}</p>*/}
+                          {
+                            p.image && (
+                            <img src={getImageUrl(p.image)} className='w-14 h-14 object-cover rounded-lg' alt={p.name}/>
+                            )
+                          }
+
+                          <div className='flex flex-col flex-1'>
+                            <p className='font-semibold text-sm text-gray-800 leading-tight'>
+                              {p.name}
+                            </p>
+                            <span className='text-xs text-gray-500'>
+                            S/ {p.price}
+                            </span>
+                          </div>
                         </a>
+                        {/*CTA*/}
+                        <a href={getWhatsappUrl(p.name)} target='_blank' rel='noopener noreferrer' className='mt-2 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 active:scale-[0.98]'>
+                        <FaWhatsapp className='text-sm'/>
+                        Cotizar
+                        </a>
+                        </div>
                       ))}
                     </div>
                   )}
