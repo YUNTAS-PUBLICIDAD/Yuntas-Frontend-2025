@@ -165,8 +165,7 @@ export default function ChatbotWidget() {
           onClick={() => setOpen(true)}
           className='relative w-16 h-16 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
           aria-label="Abrir chat"
-        >
-          <span className='absolute -inset-1 rounded-full bg-blue-400 opacity-50 animate-ping pointer-events-none'></span>
+        > 
           <Image
             quality={70}
             priority
