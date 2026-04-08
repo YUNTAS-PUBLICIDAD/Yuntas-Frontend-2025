@@ -1,6 +1,7 @@
 import React from 'react'
 import Heading from '../atoms/Heading'
 import DividerLine from '../atoms/DividerLine';
+import Image from 'next/image';
 
 const posicionesText = {
   medio: "justify-center",
@@ -8,7 +9,7 @@ const posicionesText = {
   derecha: "justify-end ",
 };
 
-type HeroPageProps = {
+type HeroSectionProps = {
   url: any;
   text: string;
   position: keyof typeof posicionesText;
@@ -16,18 +17,19 @@ type HeroPageProps = {
   imageAlt?: string;
 };
 
-const HeroPage = ({ url, text, position = "medio", imageTitle, imageAlt }: HeroPageProps) => {
+const HeroSection = ({ url, text, position = "medio", imageTitle, imageAlt }: HeroSectionProps) => {
   return (
     <section
-      className={`relative w-full h-screen flex flex-col ${posicionesText[position]} 
-      overflow-hidden pt-24 bg-cover bg-center bg-no-repeat text-center
-      md:h-screen h-[80vh] md:pt-24`}
-      style={{ backgroundImage: `url(${url})` }}
+      className={`relative w-full h-[80vh] md:h-screen flex flex-col ${posicionesText[position]}
+      overflow-hidden pt-24 text-center md:pt-24`}
     >
-      {imageAlt && <img src={url} alt={imageAlt} title={imageTitle} className="sr-only" aria-hidden="false" />}
-      
+      <Image src={url} alt={imageAlt || text} title={imageTitle} fill priority sizes='100vw' className='object-cover object-center'/>
+      {/*// {imageAlt && <img src={url} alt={imageAlt} title={imageTitle} className="sr-only" aria-hidden="false" />}*/}
+
+      {/*Overlay*/}
       <div className="absolute inset-0 bg-black/30 md:bg-black/40" />
-      
+
+      {/*Contenido*/}
       <div className="relative z-10 container mx-auto px-4 flex-grow flex flex-col justify-center items-center">
         <div className="max-w-5xl">
             <Heading
@@ -40,6 +42,7 @@ const HeroPage = ({ url, text, position = "medio", imageTitle, imageAlt }: HeroP
         </div>
       </div>
 
+      {/*Divider*/}
       <div className="absolute bottom-0 left-0 w-full z-20">
         <DividerLine />
       </div>
@@ -48,4 +51,4 @@ const HeroPage = ({ url, text, position = "medio", imageTitle, imageAlt }: HeroP
   );
 };
 
-export default HeroPage;
+export default HeroSection;

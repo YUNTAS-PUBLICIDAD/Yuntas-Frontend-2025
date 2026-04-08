@@ -27,7 +27,7 @@ export interface Blog {
 	product: {
         id: number;
         name: string;
-        slug: string; 
+        slug: string;
     } | null;
 	product_name: string;
 	main_image: ImagenBlog;
@@ -36,7 +36,7 @@ export interface Blog {
 	testimonial: string;
 	benefits: string[];
 	created_at: string;
-	
+
 }
 
 export interface BlogInput {
@@ -44,7 +44,7 @@ export interface BlogInput {
 	slug: string;
 	hero_title: string;
 	cover_subtitle: string;
-	video_url?: string;
+	video_url?: string | null;
 
 	meta_title: string;
 	meta_description: string;

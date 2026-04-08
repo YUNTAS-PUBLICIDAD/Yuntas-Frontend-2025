@@ -24,7 +24,7 @@
     padding: 0;
     background: white;
   }
-  
+
   td:last-child, th:last-child {
       display: none !important;
   }
@@ -71,6 +71,35 @@
     }
   }
 
+  @keyframes fadeInUp {
+      from {
+          opacity: 0;
+          transform: translateY(10px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+
+  }
+
+  .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out both;
+  }
+
+  @keyframes slowZoom {
+      from {
+          transform: scale(1.1);
+      }
+      to {
+          transform: scale(1);
+      }
+  }
+
+  .animate-slowZoom {
+      animation: slowZoom 2s ease-out forwards;
+  }
+
   .triangle-animate {
     opacity: 0;
     transform-origin: center;
@@ -82,5 +111,48 @@
     opacity: 0;
     animation: exclamationAnimation 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     animation-delay: 250ms;
+  }
+
+  /* ---ANIMACIONES PARA EL HERO SECTION --- */
+  
+  /* Efecto de la imagen de fondo achicándose (escala de 1.2 a 1) */
+  @keyframes zoomOutBg {
+    0% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* Efecto de aparecer desde abajo (distancia larga para el título) */
+  @keyframes fadeInUpLarge {
+    0% { opacity: 0; transform: translateY(50px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Efecto de aparecer desde abajo (distancia corta para subtítulo y botón) */
+  @keyframes fadeInUpSmall {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Clases utilitarias que usaremos en el HTML */
+  .animate-zoom-out-bg {
+    animation: zoomOutBg 2.5s ease-out forwards;
+  }
+
+  .animate-fade-up-1 {
+    opacity: 0;
+    animation: fadeInUpLarge 0.8s ease-out forwards;
+  }
+
+  .animate-fade-up-2 {
+    opacity: 0;
+    animation: fadeInUpSmall 0.8s ease-out forwards;
+    animation-delay: 400ms; /* El delay: 0.4 que tenías */
+  }
+
+  .animate-fade-up-3 {
+    opacity: 0;
+    /* Usamos cubic-bezier para simular matemáticamente el type: "spring" */
+    animation: fadeInUpSmall 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: 600ms;
   }
 }

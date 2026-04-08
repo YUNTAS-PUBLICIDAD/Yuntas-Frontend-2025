@@ -75,7 +75,7 @@ const InnovacionSection: React.FC = () => {
              </div>
 
             
-             <div className="w-full aspect-[3/2]">
+             <div className=" relative w-full aspect-[3/2]">
                 <SectionImage 
                     src={imagenes.inicio.detalle1.src} 
                     alt={imagenes.inicio.detalle1.alt} 
@@ -101,7 +101,7 @@ const InnovacionSection: React.FC = () => {
               </div>
 
             
-              <div className="w-full aspect-[3/2]">
+              <div className=" relative w-full aspect-[3/2]">
                   <SectionImage 
                     src={imagenes.inicio.detalle2.src} 
                     alt={imagenes.inicio.detalle2.alt} 

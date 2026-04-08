@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Icon from "@/components/atoms/Icon";
 import Text from "@/components/atoms/Text";
 import { FaStar } from "react-icons/fa";
@@ -19,10 +20,12 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, 
     {/* Avatar / Character Icon Container */}
     <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[#203565] border-4 border-white shadow-[0_8px_20px_rgba(0,0,0,0.15)] flex items-center justify-center overflow-hidden z-20">
       {image ? (
-        <img
+        <Image
           src={image}
           alt={name}
-          className="w-full h-full object-cover rounded-full transform scale-[1.05]"
+          fill
+          sizes="120px"
+          className="object-cover rounded-full transform scale-[1.05]"
         />
       ) : (
         <span className="text-white text-4xl font-black">{initial}</span>

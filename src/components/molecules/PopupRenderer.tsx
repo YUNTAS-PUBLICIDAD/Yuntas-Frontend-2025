@@ -49,25 +49,30 @@ const DesktopPopupComposition = ({
   return (
     <div className={forceVisible ? "grid grid-cols-[271px_335px] w-[606px] h-[479px]" : "hidden md:grid md:grid-cols-[271px_335px] md:w-[606px] md:h-[479px]"}>
       <div className="w-[271px] h-[479px] overflow-hidden bg-gray-100 flex items-center justify-center">
-        {desktopImgSrc ? (
-          <img src={desktopImgSrc} alt={imgAlt} className="w-full h-full object-cover" />
-        ) : (
-          <span className="text-gray-400 font-medium text-sm text-center px-4">[Imagen Izquierda]</span>
-        )}
+        <img 
+          src={desktopImgSrc || '/images/placeholder.png'} 
+          alt={imgAlt || "Imagen de muestra"} 
+          className={`w-full h-full ${desktopImgSrc ? 'object-cover' : 'object-contain p-4 opacity-40'}`} 
+        />
       </div>
 
       <div className="w-[335px] h-[479px] relative overflow-hidden bg-white">
-        {textImgSrc ? (
-          <img src={textImgSrc} alt="Banner promocional" className="absolute inset-0 w-full h-full object-cover" />
-        ) : (
-          <div className="absolute inset-0 flex items-start justify-center pt-10 px-6">
-            <h4 className="text-[26px] font-extrabold text-gray-400 uppercase leading-none tracking-tight text-center">
+        <img 
+          src={textImgSrc || '/images/placeholder.png'} 
+          alt="Banner promocional" 
+          className={`absolute inset-0 w-full h-full ${textImgSrc ? 'object-cover' : 'object-contain p-6 opacity-20'}`} 
+        />
+        
+        {/* Se muestra el título si no hay flyer subido */}
+        {!textImgSrc && (
+          <div className="absolute inset-0 flex items-start justify-center pt-10 px-6 z-10">
+            <h4 className="text-[26px] font-extrabold text-gray-700 uppercase leading-none tracking-tight text-center">
               {title}
             </h4>
           </div>
         )}
 
-        <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 bg-white/95 backdrop-blur-[1px]">
+        <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 backdrop-blur-[1px] z-20">
           <PopupForm
             formData={formData}
             errors={errors}
@@ -97,25 +102,26 @@ const MobilePopupComposition = ({
   isSubmitting,
   forceVisible = false,
 }: PopupLayoutProps) => {
-  const finalMobileImg = mobileImgSrc || desktopImgSrc;
+  
+  const finalMobileImg = mobileImgSrc || desktopImgSrc || '/images/placeholder.png';
+  const isPlaceholder = !mobileImgSrc && !desktopImgSrc;
 
   return (
     <div className={forceVisible ? "w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white" : "md:hidden w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white"}>
-      {finalMobileImg ? (
-        <img src={finalMobileImg} alt={imgAlt} className="absolute inset-0 w-full h-full object-cover" />
-      ) : (
-        <div className="absolute inset-0 bg-gray-200 flex items-center justify-center px-4 text-center">
-          <span className="text-gray-500 font-medium text-sm">[Imagen Móvil]</span>
+      
+      <img 
+        src={finalMobileImg} 
+        alt={imgAlt || "Imagen móvil"} 
+        className={`absolute inset-0 w-full h-full ${!isPlaceholder ? 'object-cover' : 'object-contain p-6 opacity-20'}`} 
+      />
+
+      {isPlaceholder && (
+        <div className="absolute top-6 left-4 right-4 h-[65%] flex items-start justify-center text-center z-10">
+          <h4 className="text-xl font-bold text-gray-700 leading-tight">{title}</h4>
         </div>
       )}
 
-      {!mobileImgSrc && (
-        <div className="absolute top-6 left-4 right-4 h-[65%] flex items-start justify-center text-center">
-          <h4 className="text-lg font-bold text-gray-600 leading-tight">{title}</h4>
-        </div>
-      )}
-
-      <div className="absolute bottom-0 left-0 right-0 h-[35%] px-4 pb-4 pt-2 bg-white/95 backdrop-blur-[1px]">
+      <div className="absolute bottom-0 left-0 right-0 h-[35%] px-4 pb-4 pt-2 backdrop-blur-[1px] z-20">
         <PopupForm
           formData={formData}
           errors={errors}

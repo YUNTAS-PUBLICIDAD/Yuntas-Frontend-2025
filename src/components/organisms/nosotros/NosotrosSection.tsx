@@ -2,7 +2,7 @@
 
 import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
-import { motion } from "framer-motion";
+import Image from "next/image";
 
 const NosotrosSection = () => {
   return (
@@ -15,26 +15,18 @@ const NosotrosSection = () => {
       "
       aria-label="Sección Nosotros"
     >
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.2 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 2.5, ease: "easeOut" }}
-        aria-hidden="true"
-      >
-        <img
+      <div className="absolute inset-0 scale-110 animate-slowZoom">
+        <Image
           src={imagenes.nosotros.hero.src}
           alt={imagenes.nosotros.hero.alt || "Nosotros"}
-          title={imagenes.nosotros.hero.title}
-          className="w-full h-full object-cover object-center"
-          fetchPriority="high"
-          loading="eager"
-          decoding="async"
-          width="2560"
-          height="1100"
-          draggable={false}
+          fill
+          priority
+          quality={70}
+          sizes="100vw"
+          className="object-cover object-center"
         />
-      </motion.div>
+
+      </div>
 
       <div
         className="absolute inset-0 z-10"
