@@ -191,7 +191,7 @@ export default function ChatbotWidget() {
   }
 
   return (
-    <div className="fixed bottom-7 right-10 z-[100]">
+    <div className="fixed bottom-7 right-4 z-[100]">
 
       {!open && (
         <div className="relative flex flex-col items-end">
