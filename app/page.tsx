@@ -2,7 +2,6 @@ import HeroSection from "@/components/organisms/inicio/HeroSection";
 import InnovacionSection from "@/components/organisms/inicio/InnovacionSection";
 import ProjectsCarousel from "@/components/organisms/inicio/ProjectsCarousel";
 import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSection";
-import ChatbotWidget from "@/components/organisms/ChatbotWidget";
 
 import DynamicPopup from "@/components/molecules/DynamicPopup";
 
@@ -101,7 +100,6 @@ export default async function HomePage() {
           sourceId={sourceData.INICIO}
         />
       )}
-      <ChatbotWidget />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { FaWhatsapp } from 'react-icons/fa';
 import { ChatMessage } from '@/types/chatbot';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
+import { usePathname } from "next/navigation";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
 
@@ -13,31 +14,37 @@ function renderCTA(message: ChatMessage){
     case 'whatsapp':
       return (
         <a
-                  href={message.whatsapp_url || getWhatsappUrl("asesor")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-lg py-2 text-xs font-bold"
-                >
-                  Hablar con asesor <FaWhatsapp />
-                </a>
-              );
-        case "contact_page":
-        return (
-                <a
-                  href={message.url}
-                  className="flex items-center justify-center gap-2 bg-[#203565] text-white rounded-lg py-2 text-xs font-bold"
-                >
-                  Ir a contacto
-                </a>
-              );
-          default:
-            return null;
+          href={message.whatsapp_url || getAdviserWhatsappUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-lg py-2 text-xs font-bold"
+        >
+          Hablar con asesor <FaWhatsapp />
+        </a>
+      );
+    case "contact_page":
+      return (
+        <a
+          href={message.url}
+          className="flex items-center justify-center gap-2 bg-[#203565] text-white rounded-lg py-2 text-xs font-bold"
+        >
+          Ir a contacto
+        </a>
+      );
+    default:
+      return null;
   }
 }
 
 function getWhatsappUrl(productName: string){
   const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const text = encodeURIComponent(`Hola, estoy interesado en ${productName}`);
+  return `http://wa.me/${phone}?text=${text}`
+}
+
+function getAdviserWhatsappUrl(){
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const text = encodeURIComponent(`Hola Yuntas, quisiera conversar con un asesor comercial para que me brinde más información, por favor.`);
   return `http://wa.me/${phone}?text=${text}`
 }
 
@@ -53,20 +60,26 @@ export default function ChatbotWidget() {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
 
+  // Estados para la burbuja de atracción
+  const [showBubble, setShowBubble] = useState(false);
+  const [bubbleState, setBubbleState] = useState<'typing' | 'text'>('typing');
+  const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
+
   const sessionId = useRef<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const pathname = usePathname();
+
   useEffect(() => {
-    //Limpieza de localStorage antiguo
     localStorage.removeItem("chatbot_session");
     localStorage.removeItem("chatbot_messages");
 
-    //Se usa sessionStorage para que se borre el chat al cerrar la pestaña
     let storedSession = sessionStorage.getItem("chatbot_session");
     const saved = sessionStorage.getItem("chatbot_messages");
 
     if (saved) {
       setMessages(JSON.parse(saved));
+      setHasOpenedOnce(true); // Si ya chateó, no se molesta al usuario con la burbuja
     } else {
       setMessages([{ role: "bot", text: "Hola 👋 ¿Qué deseas hacer?", type: "quick" }]);
     }
@@ -80,6 +93,26 @@ export default function ChatbotWidget() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
+
+  // Lógica de la burbuja llamativa
+  useEffect(() => {
+    if (!hasOpenedOnce && !open) {
+      // 1. Espera 2 segundos al entrar a la página
+      const initialTimer = setTimeout(() => {
+        setShowBubble(true);
+        setBubbleState('typing');
+
+        // 2. A los 2 segundos de "escribir", cambia por el texto real
+        const textTimer = setTimeout(() => {
+          setBubbleState('text');
+        }, 2000);
+
+        return () => clearTimeout(textTimer);
+      }, 2000);
+
+      return () => clearTimeout(initialTimer);
+    }
+  }, [hasOpenedOnce, open]);
 
   async function loadHistory(id: string) {
     const res = await getChatHistoryService(id);
@@ -140,7 +173,6 @@ export default function ChatbotWidget() {
     }
   }
 
-  // Función para reiniciar el chat manualmente
   const resetChat = () => {
     sessionStorage.removeItem("chatbot_session");
     sessionStorage.removeItem("chatbot_messages");
@@ -148,25 +180,54 @@ export default function ChatbotWidget() {
     setMessages([{ role: "bot", text: "Hola 👋 ¿Qué deseas hacer?", type: "quick" }]);
   };
 
+  const handleOpenChat = () => {
+    setOpen(true);
+    setHasOpenedOnce(true);
+    setShowBubble(false); // Se oculta la burbuja cuando el usuario abre el chat
+  };
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
-    <div className="fixed bottom-40 right-10 z-[100]">
+    <div className="fixed bottom-7 right-10 z-[100]">
 
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className='relative w-16 h-16 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
-          aria-label="Abrir chat"
-        >
-          <span className='absolute -inset-1 rounded-full bg-blue-400 opacity-50 animate-ping pointer-events-none'></span>
-          <Image
-            quality={70}
-            priority
-            src={"/images/chatbot.png"}
-            alt='Abrir chat'
-            fill
-            className='relative rounded-full object-cover group-hover:scale-105 transition-transform duration-200 pointer-events-none'
-          />
-        </button>
+        <div className="relative flex flex-col items-end">
+          
+          {/* NUEVA BURBUJA DE ATRACCIÓN */}
+          {showBubble && (
+            <div className="absolute bottom-full mb-3 right-12 bg-white border border-gray-200 px-4 py-2.5 rounded-2xl rounded-br-sm shadow-xl z-10 animate-fade-in origin-bottom-right transition-all cursor-pointer" onClick={handleOpenChat}>
+              {bubbleState === 'typing' ? (
+                <div className="flex gap-1.5 items-center h-5 px-2">
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+                </div>
+              ) : (
+                <p className="text-sm font-bold text-gray-700 whitespace-nowrap drop-shadow-sm">
+                  ¡Hola! ¿Cotizamos tu proyecto? 👋
+                </p>
+              )}
+            </div>
+          )}
+
+          <button
+            onClick={handleOpenChat}
+            className='relative w-16 h-16 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
+            aria-label="Abrir chat"
+          > 
+            <Image
+              quality={70}
+              priority
+              src={"/images/chatbot.png"}
+              alt='Abrir chat'
+              fill
+              className='relative rounded-full object-cover group-hover:scale-105 transition-transform duration-200 pointer-events-none'
+            />
+          </button>
+        </div>
       )}
 
       {open && (
@@ -190,7 +251,6 @@ export default function ChatbotWidget() {
             </div>
 
             <div className="flex gap-3">
-               {/* Botón para resetear chat */}
                <button onClick={resetChat} title="Reiniciar chat" className="text-white/70 hover:text-white transition-colors text-sm">↺</button>
                <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition-colors">✕</button>
             </div>
@@ -218,20 +278,6 @@ export default function ChatbotWidget() {
                     </div>
                   )}
 
-                  {/*{m.type === "quick" && (
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {['Productos', 'Cotizar', 'Contacto'].map(action => (
-                         <button
-                           key={action}
-                           onClick={() => sendMessage(action === 'Productos' ? 'servicios' : action.toLowerCase())}
-                           className="bg-white border border-[#203565]/20 text-[#203565] hover:bg-[#203565] hover:text-white px-3 py-1.5 rounded-full text-xs font-semibold transition-colors shadow-sm"
-                         >
-                           {action}
-                         </button>
-                      ))}
-                    </div>
-                  )}*/}
-
                   {
                     renderCTA(m)
                   }
@@ -239,12 +285,8 @@ export default function ChatbotWidget() {
                   {m.type === "products" && m.products && (
                     <div className="flex flex-col gap-2 mt-1">
                       {m.products.map((p) => (
-                        <div className='bg-white border border-gray-100 rounded-xl p-2'>
-                        <a key={p.id} href={`/productos/${p.slug}`} className="flex items-center gap-3 ">
-                          {/*{p.images?.[0]?.url && (
-                            <img src={getImageUrl(p.images[0].url)} className='w-12 h-12 object-cover rounded-lg' alt={p.name} />
-                          )}
-                          <p className="font-semibold text-xs text-gray-700 leading-tight">{p.name}</p>*/}
+                        <div key={p.id} className='bg-white border border-gray-100 rounded-xl p-2'>
+                        <a href={`/productos/${p.slug}`} className="flex items-center gap-3 ">
                           {
                             p.image && (
                             <img src={getImageUrl(p.image)} className='w-14 h-14 object-cover rounded-lg' alt={p.name}/>
@@ -274,9 +316,6 @@ export default function ChatbotWidget() {
                     <div className="flex flex-col gap-2 mt-1">
                       {m.products?.map((p) => (
                         <a key={p.id} href={`/productos/${p.slug}`} className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-2 hover:shadow-md transition-shadow">
-                          {/*{p.images?.[0]?.url && (
-                            <img src={getImageUrl(p.images[0].url)} className="w-10 h-10 object-cover rounded-md" alt={p.name} />
-                          )}*/}
                           <p className="text-xs font-semibold text-gray-700 leading-tight">{p.name}</p>
                         </a>
                       ))}
