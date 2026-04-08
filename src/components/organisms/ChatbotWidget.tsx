@@ -198,7 +198,7 @@ export default function ChatbotWidget() {
           
           {/* NUEVA BURBUJA DE ATRACCIÓN */}
           {showBubble && (
-            <div className="absolute bottom-full mb-3 right-12 bg-white border border-gray-200 px-4 py-2.5 rounded-2xl rounded-br-sm shadow-xl z-10 animate-fade-in origin-bottom-right transition-all cursor-pointer" onClick={handleOpenChat}>
+            <div className="absolute bottom-full mb-1 right-16 bg-white border border-gray-200 px-4 py-2.5 rounded-2xl rounded-br-sm shadow-xl z-10 animate-fade-in origin-bottom-right transition-all cursor-pointer" onClick={handleOpenChat}>
               {bubbleState === 'typing' ? (
                 <div className="flex gap-1.5 items-center h-5 px-2">
                   <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
@@ -215,13 +215,13 @@ export default function ChatbotWidget() {
 
           <button
             onClick={handleOpenChat}
-            className='relative w-16 h-16 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
+            className='relative w-20 h-20 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
             aria-label="Abrir chat"
           > 
             <Image
               quality={70}
               priority
-              src={"/images/chatbot.png"}
+              src={"/images/chatbot.webp"}
               alt='Abrir chat'
               fill
               className='relative rounded-full object-cover group-hover:scale-105 transition-transform duration-200 pointer-events-none'
@@ -237,7 +237,7 @@ export default function ChatbotWidget() {
             <div className='flex items-center gap-3'>
               <div className="relative">
                 <div className='w-8 h-8 relative'>
-                    <Image alt='bot avatar' fill className='rounded-full object-cover bg-white p-0.5' src="/images/chatbot.png"/>
+                    <Image alt='bot avatar' fill className='rounded-full object-cover bg-white p-0.5' src="/images/chatbot.webp"/>
                 </div>
                 <span className='absolute bottom-0 right-0 flex h-2.5 w-2.5'>
                   <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'></span>
@@ -262,7 +262,7 @@ export default function ChatbotWidget() {
 
                 {m.role === "bot" && (
                   <div className='w-6 h-6 relative flex-shrink-0 mt-1'>
-                    <Image alt='bot' fill className='rounded-full object-cover shadow-sm' src="/images/chatbot.png"/>
+                    <Image alt='bot' fill className='rounded-full object-cover shadow-sm' src="/images/chatbot.webp"/>
                   </div>
                 )}
 
