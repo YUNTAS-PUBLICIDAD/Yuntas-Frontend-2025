@@ -13,7 +13,7 @@ const variantMap = {
   footer: "flex flex-col gap-y-6 items-start text-white capitalize"
 };
 export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps) {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
   const sizeClass =
     size === "sm"
@@ -24,15 +24,15 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
 
   return (
    <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
-  
+
 {variant === "footer" && (
   <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
     Enlaces
   </h3>
 )}
-<MenuItem 
-  href="/" 
-  active={variant !== "footer" && pathname === "/"} 
+<MenuItem
+  href="/"
+  active={variant !== "footer" && pathname === "/"}
   color={
     variant === "mobile"
           // color oscuro, letras mayúsculas separadas y el mismo padding (px-4 py-2) para que no se aplaste
@@ -44,9 +44,9 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   Inicio
 </MenuItem>
 
-<MenuItem 
-  href="/nosotros" 
-  active={variant !== "footer" && pathname === "/nosotros"} 
+<MenuItem
+  href="/nosotros"
+  active={variant !== "footer" && pathname.startsWith("/nosotros")}
   color={
     variant === "mobile"
           ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
@@ -57,9 +57,9 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   Nosotros
 </MenuItem>
 
-<MenuItem 
-  href="/productos" 
-  active={variant !== "footer" && pathname.startsWith("/productos")} 
+<MenuItem
+  href="/productos"
+  active={variant !== "footer" && pathname.startsWith("/productos")}
   color={
     variant === "mobile"
           ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
@@ -70,9 +70,9 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   Productos
 </MenuItem>
 
-<MenuItem 
-  href="/blog" 
-  active={variant !== "footer" && pathname.startsWith("/blog")} 
+<MenuItem
+  href="/blog"
+  active={variant !== "footer" && pathname.startsWith("/blog")}
   color={
    variant === "mobile"
           ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"
@@ -83,9 +83,9 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
   Blog
 </MenuItem>
 
-<MenuItem 
-  href="/contacto" 
-  active={variant !== "footer" && pathname === "/contacto"} 
+<MenuItem
+  href="/contacto"
+  active={variant !== "footer" && pathname.startsWith("/contacto")}
   color={
    variant === "mobile"
           ? "text-[#04041C] uppercase tracking-widest px-4 py-2 hover:text-blue-700"

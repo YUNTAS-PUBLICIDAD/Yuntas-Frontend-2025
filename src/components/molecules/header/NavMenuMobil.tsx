@@ -39,7 +39,7 @@ export default function NavMenuMobil({
       setIsAdmin(Boolean(getToken() && getRole()));
     };
 
-    checkAuth(); 
+    checkAuth();
 
     window.addEventListener('auth-change', checkAuth);
 
@@ -77,10 +77,11 @@ export default function NavMenuMobil({
           >
             <span className="font-bold">INICIO</span>
           </MenuItem>
-          
+
           <MenuItem
             href="/nosotros"
-            active={pathname === "/nosotros"}
+            // active={pathname === "/nosotros"}
+            active={pathname.startsWith("/nosotros")}
             color="text-[#04061a] dark:text-white"
           >
             <span className="font-bold">NOSOTROS</span>
@@ -105,7 +106,8 @@ export default function NavMenuMobil({
 
           <MenuItem
             href="/contacto"
-            active={pathname === "/contacto"}
+            // active={pathname === "/contacto"}
+            active={pathname.startsWith("/contacto")}
             color="text-[#04061a] dark:text-white"
           >
             <span className="font-bold">CONTACTO</span>
