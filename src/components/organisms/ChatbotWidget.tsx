@@ -215,7 +215,7 @@ export default function ChatbotWidget() {
 
           <button
             onClick={handleOpenChat}
-            className='relative w-20 h-20 cursor-pointer block rounded-full focus:outline-none border-none group shadow-xl'
+            className='relative w-20 h-20 cursor-pointer block rounded-full focus:outline-none border-none group'
             aria-label="Abrir chat"
           > 
             <Image
