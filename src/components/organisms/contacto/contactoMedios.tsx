@@ -7,7 +7,6 @@ const ContactoMedios: React.FC = () => {
     <section className="w-full">
       {/* ENCABEZADO CELESTE */}
       <div className="w-full bg-white py-6 px-6 md:px-16 text-center">
-        {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para escalado gradual en dispositivos */}
         <TextTitulo
           variant="caption"
           className="text-[#203565] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl"
@@ -35,11 +34,11 @@ const ContactoMedios: React.FC = () => {
                   <valor.icon className="text-white size-10 md:size-12" />
                 </div>
 
-                {/* Texto */}
-                <p className="flex flex-col text-[#203565] text-center text-lg">
-                  <span className="font-extrabold text-xl mb-1">{valor.bold}</span>
-                  <span className="opacity-90">{valor.light}</span>
+                <p className="flex flex-col text-[#203565] text-center text-lg w-full px-2">
+                  <span className="font-extrabold text-lg md:text-xl mb-1 break-all">{valor.bold}</span>
+                  <span className="opacity-90 break-words">{valor.light}</span>
                 </p>
+
               </div>
             );
           })}
