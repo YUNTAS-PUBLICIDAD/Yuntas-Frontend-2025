@@ -8,7 +8,7 @@ import ChatbotWidget from "@/components/organisms/ChatbotWidget";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative overflow-hidden">
       <Header />
       <HeaderMobil />
 
