@@ -27,7 +27,9 @@ export const metadata: Metadata = {
   creator: "Yuntas Publicidad",
   publisher: "Yuntas Publicidad",
   icons: {
-    icon: "/icon.svg",
+    icon: {
+      url: "/icon.svg",
+      type: "image/svg+xml",},
   },
   openGraph: {
     type: "website",
