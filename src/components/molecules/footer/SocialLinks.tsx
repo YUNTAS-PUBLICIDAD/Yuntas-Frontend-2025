@@ -3,16 +3,16 @@ import Icon from "@/components/atoms/Icon";
 import { FaInstagram, FaFacebook, FaTiktok, FaYoutube } from "react-icons/fa";
 
 const SocialLinks = () => {
-    
-    const customSize = 40; 
+
+    const customSize = 40;
 
     return (
-        <div className="flex gap-4 justify-center md:justify-start">
+        <div className="flex gap-4 justify-center md:justify-start flex-wrap">
             <Icon
                 href="https://www.instagram.com/yuntaspublicidad/"
                 target="_blank"
                 label="Instagram"
-                size={customSize} 
+                size={customSize}
                 bgColor="bg-transparent"
             >
                 <FaInstagram className="text-2xl text-white" />

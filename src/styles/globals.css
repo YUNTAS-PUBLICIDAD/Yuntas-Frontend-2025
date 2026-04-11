@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/**{
+    outline: 1px solid red;
+}*/
+
+/*body {
+    outline: 3px solid blue;
+}
+
+#root, div {
+    outline: 1px solid red;
+}*/
+
+/*html, body {
+    overflow-x: auto;
+}*/
+
 /* estilo para popup inicio-desktop */
 @media (min-width: 640px) {
   .clip-vase {
