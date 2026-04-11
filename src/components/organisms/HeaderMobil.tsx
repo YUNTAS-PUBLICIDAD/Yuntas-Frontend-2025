@@ -57,7 +57,7 @@ const HeaderMobil = () => {
       document.body.style.overflow = "auto";
     }
   }, [open])
- 
+
   const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#04061a]" : "bg-transparent text-white shadow-none";
 
   const adminBg = isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "";
@@ -69,7 +69,7 @@ const HeaderMobil = () => {
       {/* ───────────── HEADER ───────────── */}
       <header
         className={`
-          md:hidden fixed top-0 left-0 right-0 z-50
+          lg:hidden fixed top-0 left-0 right-0 z-50
           px-6 py-4 flex justify-between items-center
           transition-all duration-300
           ${open ? "opacity-0 pointer-events-none" : "opacity-100"}
@@ -104,7 +104,7 @@ const HeaderMobil = () => {
       {/* ───────────── DRAWER ───────────── */}
       <div
         className={`
-          md:hidden fixed inset-0 z-[200] flex flex-col
+          lg:hidden fixed inset-0 z-[200] flex flex-col
          transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
 

@@ -128,7 +128,8 @@ export default function NavMenuMobil({
               <div key={item.href} className="py-1">
                 <MenuItem
                   href={item.href}
-                  active={pathname === item.href}
+                  // active={pathname === item.href}
+                  active={pathname.startsWith(item.href)}
                   color="text-[#04061a] dark:text-white"
                 >
                   <span className="text-xs font-bold tracking-wide uppercase">
