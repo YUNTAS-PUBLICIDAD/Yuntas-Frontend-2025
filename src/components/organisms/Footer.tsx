@@ -9,13 +9,15 @@ export default function Footer() {
   return (
     <footer className="bg-[#04041C] text-white pt-16 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* GRID PRINCIPAL: Pasamos a 12 columnas para un control exacto de los anchos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
 
-          {/* 1. Logo (Ocupa 3 columnas) */}
-          <div className="flex flex-col items-center lg:items-start lg:col-span-3 w-full">
+          {/* 1. Logo (Ocupa 2 columnas) */}
+          <div className="flex flex-col items-center lg:items-start lg:col-span-2 w-full min-w-0">
+            <div className="max-w-[180px] md:max-w-[220px] lg:max-w-[240px] w-full">
             <LogoBlock />
+            </div>
             <div className="md:hidden mt-8">
               <SocialLinks />
             </div>
@@ -32,7 +34,7 @@ export default function Footer() {
           </div>
 
           {/* 4. Contacto (Ocupa 2 columnas) */}
-          <div className="flex flex-col gap-6 lg:col-span-2 w-full">
+          <div className="flex flex-col gap-6 lg:col-span-3 w-full min-w-0">
             <ContactBlock />
           </div>
 
