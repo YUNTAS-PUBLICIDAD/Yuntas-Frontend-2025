@@ -7,7 +7,8 @@ import { ChatMessage } from '@/types/chatbot';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
 import { usePathname } from "next/navigation";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
+// const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
+const BASE_URL = process.env.NEXT_PUBLIC_URL || "";
 
 function renderCTA(message: ChatMessage){
   switch(message.type){
@@ -51,7 +52,8 @@ function getAdviserWhatsappUrl(){
 function getImageUrl(url?: string) {
   if (!url) return "";
   if (url.startsWith("http")) return url;
-  return `${API_BASE}${url}`;
+  // return `${API_BASE}${url}`;
+  return `${BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
 export default function ChatbotWidget() {
@@ -195,7 +197,7 @@ export default function ChatbotWidget() {
 
       {!open && (
         <div className="relative flex flex-col items-end">
-          
+
           {/* NUEVA BURBUJA DE ATRACCIÓN */}
           {showBubble && (
             <div className="absolute bottom-full mb-1 right-16 bg-white border border-gray-200 px-4 py-2.5 rounded-2xl rounded-br-sm shadow-xl z-10 animate-fade-in origin-bottom-right transition-all cursor-pointer" onClick={handleOpenChat}>
@@ -217,14 +219,14 @@ export default function ChatbotWidget() {
             onClick={handleOpenChat}
             className='relative w-20 h-20 cursor-pointer block rounded-full focus:outline-none border-none group'
             aria-label="Abrir chat"
-          > 
+          >
             <Image
               quality={70}
               priority
               src={"/images/chatbot.webp"}
               alt='Abrir chat'
               fill
-              className='relative rounded-full object-cover group-hover:scale-105 transition-transform duration-200 pointer-events-none'
+              className='animate-bot-life relative rounded-full object-cover group-hover:scale-105 transition-transform duration-200 pointer-events-none'
             />
           </button>
         </div>
