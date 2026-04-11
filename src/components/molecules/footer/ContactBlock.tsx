@@ -15,7 +15,7 @@ const ContactBlock = () => (
 
     <div className="flex items-center gap-2">
       <MdEmail className="text-2xl text-white" />
-      <span className="text-lg">yuntasproducciones@gmail.com</span>
+      <span className="text-lg break-all">yuntasproducciones@gmail.com</span>
     </div>
 
     {/* Desktop Social Links */}

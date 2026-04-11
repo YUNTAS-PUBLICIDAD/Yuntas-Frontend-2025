@@ -69,7 +69,16 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body>
         <MainLayout>{children}</MainLayout>
-        <Toaster />
+        <Toaster containerStyle={{
+          inset: 0
+        }} toastOptions={
+          {
+            style: {
+              marginTop: '16px',
+              marginRight: '16px'
+            }
+          }
+        }/>
       </body>
     </html>
   );
