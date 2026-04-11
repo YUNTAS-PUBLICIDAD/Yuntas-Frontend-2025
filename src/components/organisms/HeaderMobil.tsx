@@ -70,7 +70,7 @@ const HeaderMobil = () => {
       <header
         className={`
           lg:hidden fixed top-0 left-0 right-0 z-50
-          px-6 py-4 flex justify-between items-center
+          px-6 h-16 flex justify-between items-center
           transition-all duration-300
           ${open ? "opacity-0 pointer-events-none" : "opacity-100"}
           ${headerBg}
@@ -88,7 +88,7 @@ const HeaderMobil = () => {
         </button>
 
         {/* ICONO USER / ADMIN */}
-        <UserSection size='md'/>
+        <UserSection size='lg'/>
       </header>
 
       {/* ───────────── OVERLAY ───────────── */}
