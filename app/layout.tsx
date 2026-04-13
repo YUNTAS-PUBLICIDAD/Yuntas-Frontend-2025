@@ -58,6 +58,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://yuntaspublicidad.com",
   },
+  verification: {
+    google: "MDSNKTrlAObt-GvUOEpxGnSJfRCFk7fgBlyOKmFi-T8",
+  },
 };
 
 export default function RootLayout({
