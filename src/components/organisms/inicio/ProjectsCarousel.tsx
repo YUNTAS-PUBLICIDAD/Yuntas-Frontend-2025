@@ -27,7 +27,7 @@ const ProjectsCarousel: React.FC = () => {
         </div>
         <Link
           href="/contacto"
-          className="bg-[#60c4c4] hover:bg-[#50b4b4] text-white font-bold text-sm md:text-base lg:text-lg px-6 py-2 rounded-full shadow-md transition-all duration-300 hover:scale-105 uppercase tracking-wide whitespace-nowrap"
+          className=" text-white font-bold text-sm md:text-base lg:text-lg px-6 py-2 rounded-full bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_8px_25px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 uppercase tracking-wide whitespace-nowrap"
         >
           CONTÁCTANOS
         </Link>
