@@ -4,6 +4,8 @@ import LegalLinksBlock from "@/components/molecules/footer/LegalLinksBlock";
 import ContactBlock from "@/components/molecules/footer/ContactBlock";
 import SocialLinks from "@/components/molecules/footer/SocialLinks";
 import NavMenu from "@/components/molecules/header/NavMenu";
+import MenuItem from "../atoms/MenuItem";
+import NavMenuFooter from "../molecules/footer/NavMenuFooter";
 
 export default function Footer() {
   return (
@@ -25,7 +27,8 @@ export default function Footer() {
 
           {/* 2. Enlaces (Ocupa 3 columnas. Ya no está agrupado con el logo, por eso se mueve a la izquierda) */}
           <div className="hidden lg:block lg:col-span-3 w-full">
-            <NavMenu size="sm" variant="footer" />
+            {/*<NavMenu size="sm" variant="footer" />*/}
+            <NavMenuFooter/>
           </div>
 
           {/* 3. Dirección y Horario (Ocupa 4 columnas para que el texto largo no asfixie a Contacto) */}

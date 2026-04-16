@@ -4,13 +4,13 @@ import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
 import Image from "next/image";
 
-const ContactoSection = () => {
+const HeroSection = () => {
   return (
     <section
       className="
         relative w-full h-[40vh] md:h-[50vh]
-        flex items-center justify-start 
-        overflow-hidden 
+        flex items-center justify-start
+        overflow-hidden
         border-b-4 border-[#98D8DF]
       "
       aria-label="Sección Contacto"
@@ -39,16 +39,16 @@ const ContactoSection = () => {
       <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
           className="
-          flex w-full max-w-[1600px] mx-auto 
-          flex-col md:flex-row 
+          flex w-full max-w-[1600px] mx-auto
+          flex-col md:flex-row
           items-center md:items-center
           gap-6 md:gap-12
         "
         >
           <div
             className="
-            flex flex-col w-full 
-            justify-center 
+            flex flex-col w-full
+            justify-center
             items-center
             text-center
           "
@@ -57,8 +57,8 @@ const ContactoSection = () => {
               level="h1"
               size="2xl"
               className="
-                mb-4 leading-tight 
-                drop-shadow-[0_2px_2px_#28BEDA] 
+                mb-4 leading-tight
+                drop-shadow-[0_2px_2px_#28BEDA]
                 text-5xl sm:text-6xl md:text-7xl
               "
             >
@@ -71,4 +71,4 @@ const ContactoSection = () => {
   );
 };
 
-export default ContactoSection;
+export default HeroSection;

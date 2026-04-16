@@ -6,13 +6,14 @@ import { usePathname } from "next/navigation";
 type NavMenuProps = {
   size?: "sm" | "md" | "lg";
 variant?: "mobile" | "desktop" | "footer";
+scrolled: boolean;
 };
 const variantMap = {
   mobile: "flex flex-col gap-y-8 w-full px-4 pt-4",
   desktop: "flex flex-row gap-x-10 items-center uppercase",
   footer: "flex flex-col gap-y-6 items-start text-white capitalize"
 };
-export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps) {
+export default function NavMenu({ size = "md" ,variant="desktop", scrolled = false}: NavMenuProps) {
   const pathname = usePathname();
 
   const sizeClass =
@@ -22,8 +23,13 @@ export default function NavMenu({ size = "md" ,variant="desktop"}: NavMenuProps)
       ? "text-xl"
       : "text-lg";
 
+  // Color base según estado
+  const baseColor = scrolled ? "text-gray-800 hover:text-[#6DE1E3]" : "text-white/90 hover:text-white";
+
+  const activeColor = scrolled ? "text-[#0f172a]" : "text-white";
+
   return (
-   <nav className={`${variantMap[variant]} ${sizeClass} font-medium`}>
+   <nav className={ ` ${variantMap[variant]} ${sizeClass} font-medium`}>
 
 {variant === "footer" && (
   <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
