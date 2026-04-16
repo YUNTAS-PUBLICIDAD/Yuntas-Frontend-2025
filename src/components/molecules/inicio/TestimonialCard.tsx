@@ -4,6 +4,7 @@ import Icon from "@/components/atoms/Icon";
 import Text from "@/components/atoms/Text";
 import { FaStar } from "react-icons/fa";
 import Button from "@/components/atoms/Button";
+import { Span } from "next/dist/trace";
 
 interface TestimonialCardProps {
   name: string;
@@ -16,7 +17,7 @@ interface TestimonialCardProps {
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, date, stars = 5, image, className = "" }) => (
-  <div className={`bg-white/80 rounded-[3rem] shadow-2xl pt-16 pb-10 px-8 flex flex-col items-center w-full max-w-[340px] relative border border-white/30 ${className}`}>
+  <div className={`bg-white/95 backdrop-blur-md rounded-2xl shadow-xl  pt-16 pb-10 px-8 flex flex-col items-center w-full max-w-[340px] relative border border-gray-100 ${className}`}>
     {/* Avatar / Character Icon Container */}
     <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[#203565] border-4 border-white shadow-[0_8px_20px_rgba(0,0,0,0.15)] flex items-center justify-center overflow-hidden z-20">
       {image ? (
@@ -42,25 +43,33 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, 
       {/* Stars */}
       <div className="flex gap-1 mb-4 justify-center">
         {Array.from({ length: 5 }).map((_, i) => (
-          <FaStar key={i} className="text-[#FFC107] text-2xl drop-shadow-sm" />
+          <FaStar key={i} className="text-yellow-400 text-base opacity-90 drop-shadow-sm" />
         ))}
       </div>
 
       {/* Testimonial Text with support for bold formatting */}
+      {/* Texto */}
       <div
-        className="text-center mb-8 px-2 text-[15px] leading-[1.4] text-[#1a1a1a] font-medium"
+        className="text-center text-sm leading-relaxed mb-8 px-2 font-normal text-gray-900 "
         dangerouslySetInnerHTML={{ __html: text }}
       />
+      {date && (
+        <div className="mt-4">
+          <span className="text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1 rounded-full">
+            {date}
+          </span>
+        </div>
+      )}
     </div>
 
     {/* Action Button - Pulled to bottom by flex-1 above */}
-    <Button
+    {/*<Button
       variant="primary"
       size="sm"
       className="rounded-full px-10 py-3 text-sm font-black uppercase tracking-widest hover:scale-110 active:scale-95 transition-all shadow-md !bg-[#5ec7ca] !text-black mt-auto"
     >
       VER TRABAJO
-    </Button>
+    </Button>*/}
   </div>
 );
 
