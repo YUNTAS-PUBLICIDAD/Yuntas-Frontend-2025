@@ -17,36 +17,45 @@ const TestimonialsSection: React.FC = () => {
   const router = useRouter();
 
   return (
-    <section className="w-full bg-white py-0 px-0">
-      
+    <section className="w-full bg-white">
+
+      {/*HEADER*/}
       <div className="w-full bg-[#20838f] flex flex-col items-start justify-center px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b-2 border-white">
         <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase">
           TU OPINIÓN
         </h2>
-        <p className="text-white text-xs md:text-sm lg:text-base font-bold italic uppercase tracking-wider">
+        <p className="text-white text-sm md:text-base font-bold italic uppercase tracking-wide">
           GUÍA NUESTRAS DECISIONES !
         </p>
       </div>
 
-      
+
       <div className="w-full h-6 bg-[#afe3e3]"></div>
 
-      {/* Main Section with Background Image */}
-      <div className="relative w-full flex flex-col items-center justify-center px-4 md:px-12 py-10 mb-20">
-        <div
-          className="w-full rounded-[2.5rem] md:rounded-[4rem] overflow-visible relative flex items-center justify-center pb-24 md:pb-32 shadow-2xl"
-          style={{
-            backgroundImage: `url(${imagenes.inicio.testimonio.src})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            minHeight: '650px'
-          }}
-        >
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/20 rounded-[2.5rem] md:rounded-[4rem]" />
+      {/*SECTION*/}
+      <div className="w-full flex flex-col items-center justify-center px-4 md:px-12 py-16">
 
-          <div className="relative w-full max-w-[1400px] py-16 z-10 px-4">
+        {/* WRAPPER PADRE */}
+
+        <div className="relative w-full max-w-[1400px]">
+
+         {/*CONTENEDOR CON BLUR */}
+         <div className="relative rounded-[2.5rem] md:rounded-[4rem] overflow-hidden">
+           {/*Fondo blur*/}
+          <div className="absolute inset-0 scale-110 blur-xl" style={
+            {
+              backgroundImage: `url(${imagenes.inicio.testimonio.src})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }
+          }/>
+
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/40" />
+
+          {/*Contenido*/}
+          <div className="relative py-16 z-10 px-4">
             <Swiper
               modules={[Pagination, Autoplay]}
               spaceBetween={30}
@@ -70,8 +79,9 @@ const TestimonialsSection: React.FC = () => {
               ))}
             </Swiper>
           </div>
+        </div>
 
-          {/* Floating "COTIZAR AHORA" Button */}
+        {/*BOTON FLOTANTE*/}
           <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 flex justify-center z-20 w-full px-4">
             <Button
               variant="primary"
@@ -82,7 +92,7 @@ const TestimonialsSection: React.FC = () => {
               COTIZAR AHORA
             </Button>
           </div>
-        </div>
+          </div>
       </div>
     </section>
   );
