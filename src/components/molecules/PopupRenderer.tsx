@@ -49,20 +49,20 @@ const DesktopPopupComposition = ({
   return (
     <div className={forceVisible ? "grid grid-cols-[271px_335px] w-[606px] h-[479px]" : "hidden md:grid md:grid-cols-[271px_335px] md:w-[606px] md:h-[479px]"}>
       <div className="w-[271px] h-[479px] overflow-hidden bg-gray-100 flex items-center justify-center">
-        <img 
-          src={desktopImgSrc || '/images/placeholder.png'} 
-          alt={imgAlt || "Imagen de muestra"} 
-          className={`w-full h-full ${desktopImgSrc ? 'object-cover' : 'object-contain p-4 opacity-40'}`} 
+        <img
+          src={desktopImgSrc || '/images/placeholder.png'}
+          alt={imgAlt || "Imagen de muestra"}
+          className={`w-full h-full ${desktopImgSrc ? 'object-cover' : 'object-contain p-4 opacity-40'}`}
         />
       </div>
 
       <div className="w-[335px] h-[479px] relative overflow-hidden bg-white">
-        <img 
-          src={textImgSrc || '/images/placeholder.png'} 
-          alt="Banner promocional" 
-          className={`absolute inset-0 w-full h-full ${textImgSrc ? 'object-cover' : 'object-contain p-6 opacity-20'}`} 
+        <img
+          src={textImgSrc || '/images/placeholder.png'}
+          alt="Banner promocional"
+          className={`absolute inset-0 w-full h-full ${textImgSrc ? 'object-cover' : 'object-contain p-6 opacity-20'}`}
         />
-        
+
         {/* Se muestra el título si no hay flyer subido */}
         {!textImgSrc && (
           <div className="absolute inset-0 flex items-start justify-center pt-10 px-6 z-10">
@@ -102,17 +102,17 @@ const MobilePopupComposition = ({
   isSubmitting,
   forceVisible = false,
 }: PopupLayoutProps) => {
-  
+
   const finalMobileImg = mobileImgSrc || desktopImgSrc || '/images/placeholder.png';
   const isPlaceholder = !mobileImgSrc && !desktopImgSrc;
 
   return (
     <div className={forceVisible ? "w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white" : "md:hidden w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white"}>
-      
-      <img 
-        src={finalMobileImg} 
-        alt={imgAlt || "Imagen móvil"} 
-        className={`absolute inset-0 w-full h-full ${!isPlaceholder ? 'object-cover' : 'object-contain p-6 opacity-20'}`} 
+
+      <img
+        src={finalMobileImg}
+        alt={imgAlt || "Imagen móvil"}
+        className={`absolute inset-0 w-full h-full ${!isPlaceholder ? 'object-cover' : 'object-contain p-6 opacity-20'}`}
       />
 
       {isPlaceholder && (
@@ -171,7 +171,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
     >
       <div
         style={popupStyle}
-        className={`relative bg-white shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform ${closing ? "opacity-0 scale-95" : "opacity-100 scale-100"} ${muted ? "opacity-40 grayscale-[50%]" : "opacity-100"} rounded-[2rem] border-[6px] border-white md:rounded-2xl md:border-8 ${popupClassName}`}
+        className={`relative bg-white/95 backdrop-blur-md shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform ${closing ? "opacity-0 scale-95" : "opacity-100 scale-100"} ${muted ? "opacity-40 grayscale-[50%]" : "opacity-100"} rounded-xl ${popupClassName}`}
       >
         {showCloseButton && (
           <CloseButton onClick={onClose} className="absolute top-2 right-2 md:top-3 md:right-3 z-50" />
