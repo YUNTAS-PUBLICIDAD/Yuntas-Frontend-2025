@@ -18,16 +18,17 @@ function renderCTA(message: ChatMessage){
           href={message.whatsapp_url || getAdviserWhatsappUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-lg py-2 text-xs font-bold"
+          className="group flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97] rounded-lg py-2 text-xs font-bold"
         >
-          Hablar con asesor <FaWhatsapp />
+          <FaWhatsapp className='text-base group:scale-110 transition-transform'/>
+          Hablar con asesor
         </a>
       );
     case "contact_page":
       return (
         <a
           href={message.url}
-          className="flex items-center justify-center gap-2 bg-[#203565] text-white rounded-lg py-2 text-xs font-bold"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#203565] to-[#1e3a8a] text-white rounded-xl py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
         >
           Ir a contacto
         </a>
@@ -291,29 +292,42 @@ export default function ChatbotWidget() {
                   {m.type === "products" && m.products && (
                     <div className="flex flex-col gap-2 mt-1">
                       {m.products.map((p) => (
-                        <div key={p.id} className='bg-white border border-gray-100 rounded-xl p-2'>
-                        <a href={`/productos/${p.slug}`} className="flex items-center gap-3 ">
-                          {
-                            p.image && (
-                            <img src={getImageUrl(p.image)} className='w-14 h-14 object-cover rounded-lg' alt={p.name}/>
-                            )
-                          }
+                        <div
+                           key={p.id}
+                           className="bg-white border border-gray-200 rounded-2xl overflow-hidden
+                           shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                         >
+                           {/* IMAGE GRANDE */}
+                           {p.image && (
+                             <a href={`/productos/${p.slug}`} className="block relative w-full h-36 overflow-hidden">
+                               <img
+                                 src={getImageUrl(p.image)}
+                                 alt={p.name}
+                                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                               />
 
-                          <div className='flex flex-col flex-1'>
-                            <p className='font-semibold text-sm text-gray-800 leading-tight'>
-                              {p.name}
-                            </p>
-                            <span className='text-xs text-gray-500'>
-                            S/ {p.price}
-                            </span>
-                          </div>
-                        </a>
+                               {/* overlay sutil pro */}
+                               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                             </a>
+                            )}
+
+                           {/* CONTENT */}
+                              <div className="p-3 flex flex-col gap-2">
+                                <p className="text-sm font-semibold text-gray-800 leading-tight line-clamp-2">
+                                  {p.name}
+                                </p>
+
+                                <span className="text-base font-bold text-[#203565]">
+                                  S/ {p.price}
+                                </span>
+
                         {/*CTA*/}
-                        <a href={getWhatsappUrl(p.name)} target='_blank' rel='noopener noreferrer' className='mt-2 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 active:scale-[0.98]'>
-                        <FaWhatsapp className='text-sm'/>
+                        <a href={getWhatsappUrl(p.name)} target='_blank' rel='noopener noreferrer' className='mt-2 flex items-center  justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]'>
+                        <FaWhatsapp className='text-base'/>
                         Cotizar
                         </a>
                         </div>
+                         </div>
                       ))}
                     </div>
                   )}
