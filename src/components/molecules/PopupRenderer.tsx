@@ -47,7 +47,7 @@ const DesktopPopupComposition = ({
   forceVisible = false,
 }: PopupLayoutProps) => {
   return (
-    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-[45%_55%] w-[95vw] max-w-[720px] h-[520px] rounded-2xl overflow-hidden`}>
+    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-[317px_355px] w-[672px] h-[520px] rounded-2xl overflow-hidden`}>
       {/* LEFT IMAGE */}
       <div className="relative w-full h-full">
         <img
