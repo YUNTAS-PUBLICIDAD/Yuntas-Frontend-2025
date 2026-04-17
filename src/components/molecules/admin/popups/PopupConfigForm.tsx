@@ -50,7 +50,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const previewCanvasRef = useRef<HTMLDivElement>(null);
 
   const popupBaseSize = previewMode === 'desktop'
-    ? { width: 650, height: 350 }
+    ? { width: 672, height: 532 }
     : { width: 350, height: 536 };
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setDelaySeconds('5');
       setImageAlt('');
       setImageTitle('');
-      
+
       setDesktopImageId(undefined); setDesktopImgSrc(''); setDesktopImageFile(null);
       setTextImageId(undefined); setTextImgSrc(''); setTextImageFile(null);
       setMobileImageId(undefined); setMobileImgSrc(''); setMobileImageFile(null);
@@ -144,7 +144,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
       active,
-      images: imagesArray 
+      images: imagesArray
     };
 
     await onSubmit(popupData);
@@ -175,7 +175,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       const nextScale = Math.min(
         availableWidth / popupBaseSize.width,
         availableHeight / popupBaseSize.height,
-        1
+        0.8
       );
 
       setPreviewScale(nextScale);
@@ -213,7 +213,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* REGLAS DE VISUALIZACIÓN */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">¿Dónde y cuándo aparecerá?</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Página destino <span className="text-red-500">*</span></label>
@@ -241,16 +241,16 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* TEXTOS */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">Textos y Llamados a la acción</h3>
-            
+
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Mensaje Principal del Pop-up <span className="text-red-500">*</span></label>
-              <input 
-                type="text" 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder="Ej: ¡Lleva tu marca al siguiente nivel!"
-                disabled={!active} 
-                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400" 
+                disabled={!active}
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400"
               />
               <span className="text-[10px] text-gray-500">Este texto aparecerá en grande arriba del formulario.</span>
             </div>
@@ -258,13 +258,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Texto del Botón <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  value={buttonText} 
-                  onChange={(e) => setButtonText(e.target.value)} 
+                <input
+                  type="text"
+                  value={buttonText}
+                  onChange={(e) => setButtonText(e.target.value)}
                   placeholder="Ej: SOLICITAR COTIZACIÓN"
-                  disabled={!active} 
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400" 
+                  disabled={!active}
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400"
                 />
                 <span className="text-[10px] text-gray-500">Lo que leerá el cliente para hacer clic.</span>
               </div>
@@ -283,7 +283,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* LAS 3 IMÁGENES */}
           <div className={`bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 pb-1">Fotos y Flyers <span className="text-red-500">*</span></h3>
-            
+
             {/* Imagen Principal (Escritorio) */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Foto Principal (Para Computadoras - Lado Izquierdo)</label>
@@ -294,25 +294,25 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b dark:border-gray-600 pb-4 mt-2">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Texto descriptivo de la foto <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  value={imageAlt} 
-                  onChange={(e) => setImageAlt(e.target.value)} 
+                <input
+                  type="text"
+                  value={imageAlt}
+                  onChange={(e) => setImageAlt(e.target.value)}
                   placeholder="Ej: Foto de letrero luminoso"
-                  disabled={!active} 
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400" 
+                  disabled={!active}
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400"
                 />
                 <span className="text-[10px] text-gray-500">Ayuda a Google a saber qué hay en la foto (SEO).</span>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Texto al pasar el mouse (Opcional)</label>
-                <input 
-                  type="text" 
-                  value={imageTitle} 
-                  onChange={(e) => setImageTitle(e.target.value)} 
+                <input
+                  type="text"
+                  value={imageTitle}
+                  onChange={(e) => setImageTitle(e.target.value)}
                   placeholder="Ej: Clic para ver trabajos"
-                  disabled={!active} 
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400" 
+                  disabled={!active}
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400"
                 />
                 <span className="text-[10px] text-gray-500">Se muestra cuando el cliente pone el cursor sobre la foto.</span>
               </div>
@@ -363,7 +363,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <button type="button" onClick={() => setPreviewMode('mobile')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>📱 Vista en Celular</button>
         </div>
 
-        <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-hidden">
+        <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-visible">
           <div
             style={{
               width: popupBaseSize.width,
@@ -375,7 +375,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <PopupRenderer
               isOpen
               withBackdrop={false}
-              wrapperClassName="p-0"
+              wrapperClassName="!p-0 !w-auto !h-auto"
               previewDevice={previewMode}
               muted={!active}
               onClose={() => {}}
