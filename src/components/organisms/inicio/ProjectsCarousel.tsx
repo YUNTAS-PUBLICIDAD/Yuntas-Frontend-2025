@@ -16,7 +16,17 @@ const ProjectsCarousel: React.FC = () => {
   return (
     <section className="w-full bg-[#f0f0f0] pb-2">
       {/* Header Bar - Más compacto */}
-      <div className="w-full bg-[#20838f] flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b-2 border-white">
+      {/* HEADER */}
+        <div className="relative w-full overflow-hidden">
+
+          {/* Fondo SOLO del header */}
+          <div className="absolute inset-0 bg-[#0a1a3a]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
+
+          {/* Contenido */}
+          <div className="relative flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/10">
+
         <div className="text-left mb-2 sm:mb-0">
           <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase">
             NUESTROS PROYECTOS
@@ -31,10 +41,11 @@ const ProjectsCarousel: React.FC = () => {
         >
           CONTÁCTANOS
         </Link>
+          </div>
       </div>
 
       {/* Light Teal Separator Bar - Más delgada */}
-      <div className="w-full h-6 bg-[#afe3e3] mb-4"></div>
+      <div className="w-full h-px bg-gradient-to-r from-transparent  via-[#6DE1E3]/60 to-transparent my-6"></div>
 
       {/* Carousel Area - Altura ajustada */}
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
