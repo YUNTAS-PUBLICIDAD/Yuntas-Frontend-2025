@@ -18,16 +18,17 @@ function renderCTA(message: ChatMessage){
           href={message.whatsapp_url || getAdviserWhatsappUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-lg py-2 text-xs font-bold"
+          className="group flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97] rounded-lg py-2 text-xs font-bold"
         >
-          Hablar con asesor <FaWhatsapp />
+          <FaWhatsapp className='text-base group:scale-110 transition-transform'/>
+          Hablar con asesor
         </a>
       );
     case "contact_page":
       return (
         <a
           href={message.url}
-          className="flex items-center justify-center gap-2 bg-[#203565] text-white rounded-lg py-2 text-xs font-bold"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#203565] to-[#1e3a8a] text-white rounded-xl py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
         >
           Ir a contacto
         </a>
@@ -233,14 +234,18 @@ export default function ChatbotWidget() {
       )}
 
       {open && (
-        <div className="w-80 h-[450px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
+        <div className="w-[380px] h-[600px] sm:w-[420px] sm:h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
 
-          <div className="bg-[#203565] text-white p-4 flex justify-between items-center">
-            <div className='flex items-center gap-3'>
+          <div className="relative  text-white p-4 flex justify-between items-center bg-gradient-to-br from-[#1e3a8a] via-[#203565] to-[#0f172a]">
+
+            {/*Glow sutil*/}
+            <div className='absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.25), transparent_60%)]'></div>
+           <div className='flex items-center gap-3 relative z-10'>
               <div className="relative">
-                <div className='w-8 h-8 relative'>
+                <div className='w-9 h-9 relative'>
                     <Image alt='bot avatar' fill className='rounded-full object-cover bg-white p-0.5' src="/images/chatbot.webp"/>
                 </div>
+                {/* status mejorado */}
                 <span className='absolute bottom-0 right-0 flex h-2.5 w-2.5'>
                   <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'></span>
                   <span className='relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 border border-white'></span>
@@ -248,13 +253,13 @@ export default function ChatbotWidget() {
               </div>
               <div>
                 <h3 className="font-bold text-sm leading-tight">Asistente Yuntas</h3>
-                <p className="text-[10px] text-blue-200">En línea</p>
+                <p className="text-[11px] text-blue-200/80">En línea</p>
               </div>
             </div>
 
-            <div className="flex gap-3">
-               <button onClick={resetChat} title="Reiniciar chat" className="text-white/70 hover:text-white transition-colors text-sm">↺</button>
-               <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition-colors">✕</button>
+            <div className="flex gap-3 relative z-10">
+               <button onClick={resetChat} title="Reiniciar chat" className="text-white/70 hover:text-white transition text-sm">↺</button>
+               <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">✕</button>
             </div>
           </div>
 
@@ -287,29 +292,42 @@ export default function ChatbotWidget() {
                   {m.type === "products" && m.products && (
                     <div className="flex flex-col gap-2 mt-1">
                       {m.products.map((p) => (
-                        <div key={p.id} className='bg-white border border-gray-100 rounded-xl p-2'>
-                        <a href={`/productos/${p.slug}`} className="flex items-center gap-3 ">
-                          {
-                            p.image && (
-                            <img src={getImageUrl(p.image)} className='w-14 h-14 object-cover rounded-lg' alt={p.name}/>
-                            )
-                          }
+                        <div
+                           key={p.id}
+                           className="bg-white border border-gray-200 rounded-2xl overflow-hidden
+                           shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                         >
+                           {/* IMAGE GRANDE */}
+                           {p.image && (
+                             <a href={`/productos/${p.slug}`} className="block relative w-full h-36 overflow-hidden">
+                               <img
+                                 src={getImageUrl(p.image)}
+                                 alt={p.name}
+                                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                               />
 
-                          <div className='flex flex-col flex-1'>
-                            <p className='font-semibold text-sm text-gray-800 leading-tight'>
-                              {p.name}
-                            </p>
-                            <span className='text-xs text-gray-500'>
-                            S/ {p.price}
-                            </span>
-                          </div>
-                        </a>
+                               {/* overlay sutil pro */}
+                               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                             </a>
+                            )}
+
+                           {/* CONTENT */}
+                              <div className="p-3 flex flex-col gap-2">
+                                <p className="text-sm font-semibold text-gray-800 leading-tight line-clamp-2">
+                                  {p.name}
+                                </p>
+
+                                <span className="text-base font-bold text-[#203565]">
+                                  S/ {p.price}
+                                </span>
+
                         {/*CTA*/}
-                        <a href={getWhatsappUrl(p.name)} target='_blank' rel='noopener noreferrer' className='mt-2 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold py-1.5 rounded-lg transition-all duration-200 active:scale-[0.98]'>
-                        <FaWhatsapp className='text-sm'/>
+                        <a href={getWhatsappUrl(p.name)} target='_blank' rel='noopener noreferrer' className='mt-2 flex items-center  justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]'>
+                        <FaWhatsapp className='text-base'/>
                         Cotizar
                         </a>
                         </div>
+                         </div>
                       ))}
                     </div>
                   )}

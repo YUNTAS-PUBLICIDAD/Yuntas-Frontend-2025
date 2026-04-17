@@ -47,32 +47,49 @@ const DesktopPopupComposition = ({
   forceVisible = false,
 }: PopupLayoutProps) => {
   return (
-    <div className={forceVisible ? "grid grid-cols-[271px_335px] w-[606px] h-[479px]" : "hidden md:grid md:grid-cols-[271px_335px] md:w-[606px] md:h-[479px]"}>
-      <div className="w-[271px] h-[479px] overflow-hidden bg-gray-100 flex items-center justify-center">
+    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-[317px_355px] w-[672px] h-[520px] rounded-2xl overflow-hidden`}>
+      {/* LEFT IMAGE */}
+      <div className="relative w-full h-full">
         <img
           src={desktopImgSrc || '/images/placeholder.png'}
           alt={imgAlt || "Imagen de muestra"}
-          className={`w-full h-full ${desktopImgSrc ? 'object-cover' : 'object-contain p-4 opacity-40'}`}
+          className="w-full h-full object-cover"
+          // className={`w-full h-full ${desktopImgSrc ? 'object-cover' : 'object-contain p-4 opacity-40'}`}
         />
+        {/*overlay sutil marca*/}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
       </div>
 
-      <div className="w-[335px] h-[479px] relative overflow-hidden bg-white">
+      {/* RIGHT CONTENT*/}
+      <div className="relative w-full h-full">
+        {/*Imagen de fondo*/}
         <img
           src={textImgSrc || '/images/placeholder.png'}
           alt="Banner promocional"
-          className={`absolute inset-0 w-full h-full ${textImgSrc ? 'object-cover' : 'object-contain p-6 opacity-20'}`}
+          // className={`absolute inset-0 w-full h-full ${textImgSrc ? 'object-cover' : 'object-contain p-6 opacity-20'}`}
+          className="absolute inset-0 w-full h-full object-cover"
         />
 
-        {/* Se muestra el título si no hay flyer subido */}
-        {!textImgSrc && (
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
+        {/*Capa profesional*/}
+        <div className="relative w-full h-full flex flex-col justify-end p-6">
+
+        {/*{!textImgSrc && (
           <div className="absolute inset-0 flex items-start justify-center pt-10 px-6 z-10">
             <h4 className="text-[26px] font-extrabold text-gray-700 uppercase leading-none tracking-tight text-center">
               {title}
             </h4>
           </div>
-        )}
+        )}*/}
+        {/*TITLE*/}
+        {/*<div>
+          <h4 className="text-xl md:text-2xl font-black text-gray-800 uppercase leading-tight">
+            {title}
+          </h4>
+           <div className="w-12 h-[3px] bg-[#6DE1E3] mt-2 rounded-full" />
+        </div>*/}
 
-        <div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 backdrop-blur-[1px] z-20">
+        {/*<div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 backdrop-blur-[1px] z-20">*/}
           <PopupForm
             formData={formData}
             errors={errors}
@@ -82,7 +99,9 @@ const DesktopPopupComposition = ({
             isSubmitting={isSubmitting}
             buttonColor={buttonColor}
           />
+        {/*</div>*/}
         </div>
+        {/*Titulo opcional*/}
       </div>
     </div>
   );
@@ -107,13 +126,14 @@ const MobilePopupComposition = ({
   const isPlaceholder = !mobileImgSrc && !desktopImgSrc;
 
   return (
-    <div className={forceVisible ? "w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white" : "md:hidden w-[260px] h-[520px] relative overflow-hidden rounded-[2rem] bg-white"}>
+    <div className={forceVisible ? "w-[90vw] max-w-[340px] h-[600px] relative overflow-hidden rounded-[2rem]" : "md:hidden w-[90vw] max-w-[340px] h-[600px] relative overflow-hidden rounded-[2rem]"}>
 
       <img
         src={finalMobileImg}
         alt={imgAlt || "Imagen móvil"}
-        className={`absolute inset-0 w-full h-full ${!isPlaceholder ? 'object-cover' : 'object-contain p-6 opacity-20'}`}
+        className={`absolute inset-0 w-full h-full object-cover`}
       />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
 
       {isPlaceholder && (
         <div className="absolute top-6 left-4 right-4 h-[65%] flex items-start justify-center text-center z-10">
@@ -121,7 +141,8 @@ const MobilePopupComposition = ({
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 h-[35%] px-4 pb-4 pt-2 backdrop-blur-[1px] z-20">
+      <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-3  z-20">
+        <div className="bg-black/40 backdrop-blur-md rounded-xl p-3">
         <PopupForm
           formData={formData}
           errors={errors}
@@ -131,6 +152,7 @@ const MobilePopupComposition = ({
           isSubmitting={isSubmitting}
           buttonColor={buttonColor}
         />
+        </div>
       </div>
     </div>
   );
@@ -165,13 +187,24 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
   return (
     <div
       className={withBackdrop
-        ? "fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 transition-opacity duration-300 backdrop-blur-sm"
+        ? `fixed inset-0  flex items-center justify-center z-50 p-4  backdrop-blur-sm transition-opacity duration-300 ease-out ${closing ? "opacity-0" : "opacity-100"} bg-black/50`
         : `w-full h-full flex items-center justify-center p-4 ${wrapperClassName}`
       }
     >
       <div
         style={popupStyle}
-        className={`relative bg-white/95 backdrop-blur-md shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform ${closing ? "opacity-0 scale-95" : "opacity-100 scale-100"} ${muted ? "opacity-40 grayscale-[50%]" : "opacity-100"} rounded-xl ${popupClassName}`}
+        // className={`relative bg-transparent shadow-lg overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.92,1,0.36,1)] transform ${closing ? "opacity-0 translate-y-6 scale-[0.96]" : "opacity-100 translate-y-0 scale-100"} ${muted ? "opacity-40 grayscale-[50%]" : "opacity-100"} rounded-xl ${popupClassName}`}
+        className={`
+          relative bg-transparent shadow-xl overflow-hidden rounded-xl will-change-transform
+          transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+
+          ${closing
+            ? "opacity-0 translate-y-8 scale-95"
+            : "opacity-100 translate-y-0 scale-100"}
+
+          ${muted ? "opacity-40 grayscale-[50%]" : ""}
+          ${popupClassName}
+        `}
       >
         {showCloseButton && (
           <CloseButton onClick={onClose} className="absolute top-2 right-2 md:top-3 md:right-3 z-50" />

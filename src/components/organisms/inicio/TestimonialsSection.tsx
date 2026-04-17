@@ -20,7 +20,20 @@ const TestimonialsSection: React.FC = () => {
     <section className="w-full bg-white">
 
       {/*HEADER*/}
-      <div className="w-full bg-[#20838f] flex flex-col items-start justify-center px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b-2 border-white">
+      {/*<div className="w-full bg-[#20838f] flex flex-col items-start justify-center px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b-2 border-white">*/}
+
+      {/* HEADER */}
+        <div className="relative w-full overflow-hidden">
+
+          {/* Fondo SOLO del header */}
+          <div className="absolute inset-0 bg-[#0a1a3a]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
+
+          <div className="relative flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/5 backdrop-blur-sm">
+
+        <div className="text-left mb-2 sm:mb-0">
+          {/* Contenido */}
         <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase">
           TU OPINIÓN
         </h2>
@@ -28,9 +41,11 @@ const TestimonialsSection: React.FC = () => {
           GUÍA NUESTRAS DECISIONES !
         </p>
       </div>
+          </div>
+        </div>
 
-
-      <div className="w-full h-6 bg-[#afe3e3]"></div>
+{/*
+      <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#6DE1E3]/70 to-transparent my-6"></div>*/}
 
       {/*SECTION*/}
       <div className="w-full flex flex-col items-center justify-center px-4 md:px-12 py-16">
@@ -86,7 +101,7 @@ const TestimonialsSection: React.FC = () => {
             <Button
               variant="primary"
               size="lg"
-              className="px-12 md:px-20 py-4 md:py-5 text-xl md:text-2xl rounded-2xl shadow-[0_10px_30px_rgba(35,193,222,0.4)] font-black tracking-widest uppercase hover:scale-110 active:scale-95 transition-all"
+              className="px-12 md:px-20 py-4 md:py-5 text-xl md:text-2xl rounded-2xl bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.35)] hover:shadow-[0_15px_40px_rgba(109,255,227,0.5)] font-black tracking-widest uppercase hover:scale-110 active:scale-95 transition-all duration-300"
               onClick={() => router.push('/contacto')}
             >
               COTIZAR AHORA

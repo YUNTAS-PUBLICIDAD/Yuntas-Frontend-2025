@@ -7,7 +7,7 @@ import Image from "next/image";
 const HeroSection = () => {
   return (
     <section
-      className="relative w-full h-[85vh] flex items-center justify-start overflow-hidden border-b-8 border-[#6DE1E3] md:h-screen"
+      className="relative w-full h-[85vh] flex items-center justify-start overflow-hidden md:h-screen"
     >
       {/* Fondo */}
       <div className="absolute inset-0 animate-zoom-out-bg">
@@ -88,16 +88,27 @@ const HeroSection = () => {
             {/*</div>*/}
 
             {/* CTA */}
-            <div className=" reveal delay-3 mt-8 flex items-center gap-4">
+            <div className=" reveal delay-3 mt-8 flex flex-wrap items-center gap-x-4 gap-y-6">
               <Button
                 variant="primary"
                 size="lg"
                 href="/contacto"
-                className="relative z-20 px-12 py-4 text-xl font-bold shadow-lg hover:scale-105 transition-transform"
+                className="relative z-20 px-12 py-4 text-xl font-semibold text-white rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 hover:shadow-[0_15px_40px_rgba(109,225,227,0.5)] active:scale-95"
               >
                 {/*CONTÁCTANOS*/}
-                Cotizar ahora
+                {/*Cotizar ahora*/}
+                Contáctanos
               </Button>
+
+              <a href="https://wa.me/51912849782" target="_blank" rel="noopener noreferrer" className="group relative inline-flex rounded-xl p-[1.5px]">
+                {/*Borde degradado*/}
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#22c55e] to-[#0ea5b7] opacity-80 group-hover:opacity-100 transition">
+                </span>
+                  {/* Contenido */}
+                  <span className="relative px-10 py-4 rounded-xl bg-[#0a1a3a]/80 backdrop-blur-md text-white font-semibold text-lg flex items-center gap-2 transition-all duration-300 group-hover:bg-[#0a1a3a]">
+                    Cotizar ahora
+                  </span>
+              </a>
             </div>
 
           </div>
