@@ -10,6 +10,7 @@ import Loader from "@/components/atoms/Loader";
 interface NavItem {
   label: string;
   href: string;
+  icon: LucideIcon;
 }
 
 interface SidebarProps {
@@ -59,10 +60,13 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
           Administración
         </h2>
 
-        <nav className="flex-1 px-12 text-xl text-[#203565] dark:text-white">
+        <nav className="flex-1 px-6 pb-6 text-[#203565] dark:text-white border-y border-gray-200 dark:border-white/10">
+          <p className="px-3 pt-6 pb-4 text-xs font-semibold tracking-[0.2em] uppercase text-[#5A6B93] dark:text-white/60">
+            Navegación
+          </p>
           <NavList
             items={navItems}
-            className="border-l border-gray-300 dark:border-white/30"
+            className="text-base"
           />
         </nav>
 
