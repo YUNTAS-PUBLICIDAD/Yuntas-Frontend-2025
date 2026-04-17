@@ -233,14 +233,18 @@ export default function ChatbotWidget() {
       )}
 
       {open && (
-        <div className="w-80 h-[450px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
+        <div className="w-[380px] h-[600px] sm:w-[420px] sm:h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
 
-          <div className="bg-[#203565] text-white p-4 flex justify-between items-center">
-            <div className='flex items-center gap-3'>
+          <div className="relative  text-white p-4 flex justify-between items-center bg-gradient-to-br from-[#1e3a8a] via-[#203565] to-[#0f172a]">
+
+            {/*Glow sutil*/}
+            <div className='absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.25), transparent_60%)]'></div>
+           <div className='flex items-center gap-3 relative z-10'>
               <div className="relative">
-                <div className='w-8 h-8 relative'>
+                <div className='w-9 h-9 relative'>
                     <Image alt='bot avatar' fill className='rounded-full object-cover bg-white p-0.5' src="/images/chatbot.webp"/>
                 </div>
+                {/* status mejorado */}
                 <span className='absolute bottom-0 right-0 flex h-2.5 w-2.5'>
                   <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'></span>
                   <span className='relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 border border-white'></span>
@@ -248,13 +252,13 @@ export default function ChatbotWidget() {
               </div>
               <div>
                 <h3 className="font-bold text-sm leading-tight">Asistente Yuntas</h3>
-                <p className="text-[10px] text-blue-200">En línea</p>
+                <p className="text-[11px] text-blue-200/80">En línea</p>
               </div>
             </div>
 
-            <div className="flex gap-3">
-               <button onClick={resetChat} title="Reiniciar chat" className="text-white/70 hover:text-white transition-colors text-sm">↺</button>
-               <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition-colors">✕</button>
+            <div className="flex gap-3 relative z-10">
+               <button onClick={resetChat} title="Reiniciar chat" className="text-white/70 hover:text-white transition text-sm">↺</button>
+               <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">✕</button>
             </div>
           </div>
 
