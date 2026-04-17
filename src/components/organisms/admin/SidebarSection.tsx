@@ -6,10 +6,21 @@ import Button from "@/components/atoms/Button";
 import NavList from "@/components/molecules/admin/NavList";
 import UserSection from "@/components/molecules/header/UserSection";
 import Loader from "@/components/atoms/Loader";
+import {
+  BellRing,
+  ClipboardList,
+  FileText,
+  Megaphone,
+  MessageSquare,
+  Package,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 
 interface NavItem {
   label: string;
   href: string;
+  icon: LucideIcon;
 }
 
 interface SidebarProps {
@@ -19,13 +30,13 @@ interface SidebarProps {
 
 const navItems: NavItem[] = [
   //{ label: "Inicio", href: "/admin" },
-  { label: "Seguimiento", href: "/admin/seguimiento" },
-  { label: "Blogs", href: "/admin/blogs" },
-  { label: "Productos", href: "/admin/productos" },
-  { label: "Usuarios", href: "/admin/usuarios" },
-  { label: "Reclamaciones", href: "/admin/reclamaciones" },
-  { label: "Contacto", href: "/admin/contacto" },
-  { label: "Pop-ups", href: "/admin/popups" },
+  { label: "Seguimiento", href: "/admin/seguimiento", icon: ClipboardList },
+  { label: "Blogs", href: "/admin/blogs", icon: FileText },
+  { label: "Productos", href: "/admin/productos", icon: Package },
+  { label: "Usuarios", href: "/admin/usuarios", icon: Users },
+  { label: "Reclamaciones", href: "/admin/reclamaciones", icon: BellRing },
+  { label: "Contacto", href: "/admin/contacto", icon: MessageSquare },
+  { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
 ];
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
@@ -59,14 +70,17 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
           Administración
         </h2>
 
-        <nav className="flex-1 px-12 text-xl text-[#203565] dark:text-white">
+        <nav className="flex-1 px-6 pb-6 text-[#203565] dark:text-white border-y border-gray-200 dark:border-white/10">
+          <p className="px-3 pt-6 pb-4 text-xs font-semibold tracking-[0.2em] uppercase text-[#5A6B93] dark:text-white/60">
+            Navegación
+          </p>
           <NavList
             items={navItems}
-            className="border-l border-gray-300 dark:border-white/30"
+            className="text-base"
           />
         </nav>
 
-        <div className="flex justify-center my-8">
+        <div className="flex justify-center my-6">
           <Button size="sm" className="dark:bg-[#293296] dark:text-white">
             <div className="flex items-center gap-3 -mx-2">
               <SwitchMode />
@@ -75,30 +89,36 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-12 items-center py-16 bg-white dark:bg-[#141A3F] text-[#203565] dark:text-white">
-          <div className="flex flex-col items-center text-xl">
-            <div className="mb-4 p-3 rounded-full shadow-sm">
-              <UserSection size="lg" enableDarkMode />
-            </div>
-            <p className="font-bold">Bienvenido</p>
-            <p className="font-medium">Administrador</p>
-          </div>
-
-          <Button
-            size="sm"
-            onClick={logout}
-            disabled={isLoading}
-            className="dark:bg-[#293296] dark:text-white"
-          >
-            {isLoading ? (
-              <div className="flex items-center gap-2">
-                <Loader size="sm" color="border-white" />
-                <span className="font-semibold text-xl">Cerrando...</span>
+        <div className="border-t border-gray-200 dark:border-white/10 p-4 bg-white dark:bg-[#141A3F]">
+          <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-3 text-[#203565] dark:text-white">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="rounded-full shadow-sm shrink-0">
+                <UserSection size="sm" enableDarkMode />
               </div>
-            ) : (
-              <span className="font-semibold text-xl">Cerrar Sesión</span>
-            )}
-          </Button>
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-[#5A6B93] dark:text-white/60 leading-none">
+                  Bienvenido
+                </p>
+                <p className="text-sm font-semibold truncate">Administrador</p>
+              </div>
+            </div>
+
+            <Button
+              size="sm"
+              onClick={logout}
+              disabled={isLoading}
+              className="mt-3 w-full bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white px-3"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader size="sm" color="border-white" />
+                  <span className="font-semibold text-sm">Cerrando...</span>
+                </div>
+              ) : (
+                <span className="font-semibold text-sm">Cerrar Sesión</span>
+              )}
+            </Button>
+          </div>
         </div>
       </aside>
     </>

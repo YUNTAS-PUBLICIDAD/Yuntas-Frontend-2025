@@ -6,6 +6,10 @@ import Encabezado from "@/components/molecules/Encabezado";
 import { useTokenValidation } from "@/hooks/useTokenValidation";
 import Loader from "@/components/atoms/Loader";
 import { useSelectedLayoutSegment } from "next/navigation";
+import HeaderAdmin from "@/components/organisms/admin/HeaderAdmin";
+import HeaderMobil from "@/components/organisms/HeaderMobil";
+import AdminBreadcrumbs from "@/components/molecules/admin/AdminBreadcrumbs";
+import { adminSections, getAdminSectionKey } from "@/config/adminSections";
 
 export default function AdminLayout({
   children,
@@ -30,25 +34,22 @@ export default function AdminLayout({
     );
   }
 
-  const titleMap: Record<string, string> = {
-    blogs: "Blogs",
-    productos: "Productos",
-    usuarios: "Usuarios",
-    reclamaciones: "Reclamaciones",
-    seguimiento: "Seguimiento",
-    contacto: "Contacto",
-  };
-
-  const key = segment ?? "seguimiento";
-  const title = titleMap[key] ?? "Panel de Administración";
+  const key = getAdminSectionKey(segment);
+  const title = adminSections[key].label;
 
   return (
-    <div className="flex pt-16 md:pt-0 flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
       {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
-      <Encabezado variant="azul">{title}</Encabezado>
+      {/* <Encabezado variant="azul">{title}</Encabezado> */}
+
+      {/* ───────────────── HEADER DESKTOP ───────────────── */}
+      <HeaderAdmin className="text-black" />
+
+      {/* ───────────────── HEADER MOBILE ───────────────── */}
+      <HeaderMobil />
 
       {/* ───────────────── CONTENIDO ───────────────── */}
-      <div className="flex flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+      <div className="flex pt-16 md:pt-24 flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
         {/* Sidebar */}
         <SidebarSection
           isOpen={false}
@@ -57,6 +58,10 @@ export default function AdminLayout({
 
         {/* Página */}
         <main className="flex-1 min-w-0 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+          <AdminBreadcrumbs />
+          <h1 className="mb-6 text-2xl font-bold text-[#0D1030] dark:text-white md:text-3xl">
+            {title}
+          </h1>
           {children}
         </main>
       </div>

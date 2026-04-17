@@ -2,10 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import NavItem from "@/components/atoms/NavItem";
+import { type LucideIcon } from "lucide-react";
 
 interface NavListItem {
     label: string;
     href: string;
+    icon: LucideIcon;
 }
 
 interface NavListProps {
@@ -23,7 +25,8 @@ export default function NavList({ items, className = "" }: NavListProps) {
                     key={item.href}
                     label={item.label}
                     href={item.href}
-                    isActive={pathname === item.href}
+                    icon={item.icon}
+                    isActive={pathname === item.href || pathname.startsWith(`${item.href}/`)}
                 />
             ))}
         </ul>
