@@ -72,6 +72,8 @@ export const savePopupService = async (popupData: Popup, isUpdating: boolean = f
       formData.append('delay_seconds', String(popupData.delay_seconds));
       formData.append('priority', String(popupData.priority));
       formData.append('active', popupData.active ? '1' : '0');
+      // product_id
+      if (popupData.product_id) formData.append('product_id', String(popupData.product_id));
 
       // Mapeamos el arreglo de imágenes
       if (popupData.images && popupData.images.length > 0) {
