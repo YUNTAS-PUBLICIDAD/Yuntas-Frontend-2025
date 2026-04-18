@@ -6,6 +6,7 @@ export const adminSections = {
   reclamaciones: { label: "Reclamaciones", href: "/admin/reclamaciones" },
   contacto: { label: "Contacto", href: "/admin/contacto" },
   popups: { label: "Pop-ups", href: "/admin/popups" },
+  templates: {label: "Plantillas", href: "/admin/templates"}
 } as const;
 
 export type AdminSectionKey = keyof typeof adminSections;

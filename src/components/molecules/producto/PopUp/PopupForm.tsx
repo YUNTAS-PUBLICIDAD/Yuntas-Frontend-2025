@@ -58,10 +58,15 @@ const PopupForm: React.FC<PopupFormProps> = ({
     />
     {errors.general && (<div className="text-red-500 text-sm">{errors.general}</div>)}
     <div className="flex justify-center ">
+      {/*bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7]*/}
       <ButtonPrimary
         disabled={isSubmitting}
-        style={{ backgroundColor: buttonColor }}
-        className="py-3 px-4 rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_25px_rgba(109,225,227,0.4)] hover:scale-[1.02] active:scale-[1.02] font-bold text-sm tracking-wide transition-all disabled:opacity-50 mt-2 sm:mt-3"
+        // style={{ backgroundColor: buttonColor }}
+        style={{
+            backgroundColor: buttonColor,
+            boxShadow: `0 10px 25px ${buttonColor}66`
+          }}
+        className="py-3 px-4 rounded-xl shadow-[0_10px_25px_rgba(109,225,227,0.4)] hover:scale-[1.02] active:scale-[1.02] font-bold text-sm tracking-wide transition-all disabled:opacity-50 mt-2 sm:mt-3"
       >
         {isSubmitting ? "Enviando..." : buttonText}
       </ButtonPrimary>

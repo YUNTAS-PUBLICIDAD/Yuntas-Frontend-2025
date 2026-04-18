@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { showToast } from '@/utils/showToast';
 import { Template, TemplateContent } from '@/types/admin/template';
 import {
-  FaArrowLeft, FaUser, FaStore, FaPhone, FaEllipsisVertical, FaLock, 
+  FaArrowLeft, FaUser, FaStore, FaPhone, FaEllipsisVertical, FaLock,
   FaRegFaceSmile, FaPaperclip, FaCamera, FaMicrophone
 } from 'react-icons/fa6';
 
@@ -52,21 +52,21 @@ const renderWhatsappMessage = (message: string, variables: Record<string, string
 interface TemplateConfigFormProps {
   initialData?: Template | null;
   onSubmit: (data: Template) => Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
   isSaving?: boolean;
 }
 
 export default function TemplateConfigForm({ initialData, onSubmit, onCancel, isSaving }: TemplateConfigFormProps) {
   const emailFileInputRef = useRef<HTMLInputElement>(null);
   const waFileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [imageError, setImageError] = useState(false);
 
   // 1. ESTADO MAESTRO
   const [template, setTemplate] = useState({
     id: undefined as number | undefined,
     name: 'Template Inicio',
-    lead_source_id: sourceData.INICIO, 
+    lead_source_id: sourceData.INICIO,
     active: true,
   });
 
@@ -101,8 +101,8 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
     channel: 'email' as const,
     subject: '¡Bienvenido(a) a Yuntas Publicidad! ✨',
     content: `<p>Hola {{nombre}},</p><br><p>¡Bienvenido(a) a <strong>Yuntas Publicidad</strong>! Gracias por visitarnos y mostrar interés en nuestros servicios.</p><br><p>🎯 Somos tu aliado en publicidad</p><p>Nos especializamos en soluciones publicitarias personalizadas que ayudan a destacar tu marca.</p><br><p>📌 Podemos apoyarte con:</p><ul><li>Productos publicitarios personalizados</li><li>Cotizaciones sin compromiso</li></ul><br><p>En breve te enviamos información detallada 📩</p><p>Estamos aquí para resolver todas tus dudas. ¡No dudes en responder a este correo! 😊</p><br><p>✨ Yuntas Publicidad</p>`,
-    imageUrl: '', 
-    imageFile: null as File | null, 
+    imageUrl: '',
+    imageFile: null as File | null,
     variables: ['nombre'],
     active: true,
   });
@@ -198,7 +198,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
         content: email.content,
         variables: email.variables,
         active: email.active,
-        image: email.imageFile 
+        image: email.imageFile
       });
     }
 
@@ -231,15 +231,15 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
 
   return (
     <div className="flex flex-col gap-10 mt-4 animate-fade-in relative pb-24">
-      
+
       {/* --- CABECERA MAESTRA--- */}
       <div className="bg-white dark:bg-[#141A3F] p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
-        
+
         <div className="w-full md:w-1/2 flex flex-col gap-1">
           <label className="text-xs font-bold text-gray-500 uppercase">Nombre Interno de Plantilla</label>
-          <input 
-            type="text" 
-            value={template.name} 
+          <input
+            type="text"
+            value={template.name}
             onChange={(e) => setTemplate({ ...template, name: e.target.value })}
             className="w-full font-bold text-lg bg-transparent border-b border-gray-300 focus:border-[#203565] outline-none pb-1 dark:text-white"
             placeholder="Ej: Template Inicio"
@@ -260,7 +260,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
 
       {/* --- GRID DE CONTENIDO (WhatsApp) --- */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        
+
         {/* FORMULARIO WHATSAPP */}
         <div className="bg-white dark:bg-[#141A3F] p-6 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden h-full">
           <div className="absolute top-0 left-0 w-1 h-full bg-[#00a884]"></div>
@@ -271,7 +271,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                   <input type="checkbox" checked={whatsapp.active} onChange={(e) => setWhatsapp({...whatsapp, active: e.target.checked})} className="accent-[#00a884] w-4 h-4" />
               </label>
           </div>
-          
+
           <div className={`transition-opacity ${!whatsapp.active ? 'opacity-50 pointer-events-none' : ''}`}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Imagen Adjunta (Opcional)</label>
@@ -348,7 +348,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
 
       {/* --- GRID DE CONTENIDO (Email) --- */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start border-t border-gray-200 dark:border-gray-800 pt-8">
-        
+
         {/* FORMULARIO EMAIL */}
         <div className="bg-white dark:bg-[#141A3F] p-6 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden h-full">
           <div className="absolute top-0 left-0 w-1 h-full bg-[#203565]"></div>
@@ -359,7 +359,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                   <input type="checkbox" checked={email.active} onChange={(e) => setEmail({...email, active: e.target.checked})} className="accent-[#203565] w-4 h-4" />
               </label>
           </div>
-          
+
           <div className={`space-y-5 transition-opacity ${!email.active ? 'opacity-50 pointer-events-none' : ''}`}>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Asunto</label>
@@ -382,10 +382,10 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cuerpo del correo</label>
               <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
-                <ReactQuill 
-                  theme="snow" 
-                  value={email.content} 
-                  onChange={(content) => setEmail({...email, content})} 
+                <ReactQuill
+                  theme="snow"
+                  value={email.content}
+                  onChange={(content) => setEmail({...email, content})}
                   modules={modules}
                   className="h-48 pb-10 text-black dark:text-white"
                 />
@@ -421,14 +421,14 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                   {email.imageUrl && imageError ? '[Error al cargar imagen]' : 'No se ha adjuntado imagen'}
                 </div>
               )}
-              
+
               {/* RENDERIZADO DEL HTML PARA LA VISTA PREVIA */}
-              <div 
+              <div
                 className="space-y-4 text-[15px] prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ 
-                  __html: email.content.trim() === '' || email.content === '<p><br></p>' 
-                    ? '<p class="text-gray-400 italic text-center mt-10">El cuerpo del correo está vacío.</p>' 
-                    : replaceDynamicTags(email.content, { nombre: 'Juan Pérez' }) 
+                dangerouslySetInnerHTML={{
+                  __html: email.content.trim() === '' || email.content === '<p><br></p>'
+                    ? '<p class="text-gray-400 italic text-center mt-10">El cuerpo del correo está vacío.</p>'
+                    : replaceDynamicTags(email.content, { nombre: 'Juan Pérez' })
                 }}
               />
             </div>

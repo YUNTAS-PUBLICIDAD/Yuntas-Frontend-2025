@@ -20,6 +20,7 @@ export interface Popup {
   priority: number;
   //start_date?: string | null;
   //end_date?: string | null;
+  product_id: any;
   active: boolean;
   images?: PopupImage[]; //arreglo de imágenes
 }

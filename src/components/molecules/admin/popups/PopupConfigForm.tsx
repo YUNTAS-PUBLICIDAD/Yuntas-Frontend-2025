@@ -6,6 +6,8 @@ import PopupRenderer from '@/components/molecules/PopupRenderer';
 import { Popup, PopupImage } from '@/types/admin/popup';
 import { LeadInput } from '@/types/admin/lead';
 import { showToast } from '@/utils/showToast';
+import { api, API_ENDPOINTS } from '@/config';
+import { sourceData } from '@/data/popup/sourceData';
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
@@ -14,14 +16,15 @@ interface PopupConfigFormProps {
   onSubmit: (data: Popup) => Promise<void>;
   onCancel: () => void;
   isSaving?: boolean;
+  pageTarget: "inicio" | "product-detail";
 }
 
-export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSaving }: PopupConfigFormProps) {
+export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSaving, pageTarget }: PopupConfigFormProps) {
   const [active, setActive] = useState(false);
   const [title, setTitle] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonColor, setButtonColor] = useState('#6DE1E3');
-  const [pageTarget, setPageTarget] = useState('all');
+  // const [pageTarget, setPageTarget] = useState('all');
   const [delaySeconds, setDelaySeconds] = useState('5');
 
   // Estados para las 3 imágenes Y SUS IDs
@@ -39,6 +42,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImgSrc, setMobileImgSrc] = useState('');
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
 
+  const [products, setProducts] = useState<{id: number; name:string}[]>([]);
+  const [productId, setProductId] = useState<number | null>(null);
+
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
   const [previewFormData, setPreviewFormData] = useState<LeadInput>({
@@ -54,11 +60,34 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     : { width: 350, height: 536 };
 
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+       const res = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL) ;
+       console.log('RAW RESPONSE:', res);
+       console.log('DATA:', res.data);
+       console.log('DATA.DATA', res.data?.data);
+       // setProducts(res.data.data || []);
+       const fetched = res.data?.data?.data;
+       if(Array.isArray(fetched)){
+         setProducts(fetched);
+       }else {
+         console.warn('Products no es array:', fetched);
+         setProducts([]);
+       }
+      }catch(err){
+        console.error('Error cargando productos', err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
     if (initialData) {
       setActive(initialData.active !== undefined ? initialData.active : false);
       setTitle(initialData.title || '');
       setButtonText(initialData.button_text || '');
-      setPageTarget(initialData.page_target || 'all');
+      // setPageTarget(initialData.page_target || 'inicio');
+      // pageTarget;
       setDelaySeconds(initialData.delay_seconds?.toString() || '5');
       setButtonColor(initialData.button_color || '#6DE1E3');
 
@@ -86,7 +115,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setActive(false);
       setTitle('');
       setButtonText('');
-      setPageTarget('all');
+      // setPageTarget('inicio');
+      // pageTarget;
       setDelaySeconds('5');
       setImageAlt('');
       setImageTitle('');
@@ -118,7 +148,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   };
 
   const handleSave = async () => {
-    if (!title || !buttonText || !imageAlt || !pageTarget || !delaySeconds) {
+    if (!title || !buttonText || !imageAlt || !delaySeconds) {
       showToast.warning("Por favor completa todos los campos obligatorios (*)");
       return;
     }
@@ -128,16 +158,39 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       return;
     }
 
+    if(pageTarget === "product-detail" && !productId){
+      showToast.warning("Debes seleccionar un producto");
+      return;
+    }
+
+    console.log("PRODUCT ID FRONT:", productId);
+    console.log("PAGE TARGET:", pageTarget);
+
     const imagesArray: PopupImage[] = [
       { id: desktopImageId, device: 'desktop', slot: 'left', file: desktopImageFile || undefined, alt: imageAlt, title: imageTitle },
       { id: textImageId, device: 'desktop', slot: 'right', file: textImageFile || undefined, alt: 'Texto banner', title: 'Texto promocional' },
       { id: mobileImageId, device: 'mobile', slot: 'center', file: mobileImageFile || undefined, alt: imageAlt, title: imageTitle },
     ];
 
+    const getSourceId = (pageTarget: string) => {
+      switch(pageTarget){
+        case "inicio":
+          return sourceData.INICIO;
+        case "product-detail":
+          return sourceData.PRODUCTO_DETALLE;
+        default:
+         return sourceData.INICIO;
+      }
+    }
+
     const popupData: Popup = {
       id: initialData?.id,
       title,
-      lead_source_id: 1,
+      // product_id: initialData?.product_id,
+      // product_id: pageTarget === "product-detail" ? productId! : null,
+      product_id: pageTarget === "product-detail" ? productId ?? undefined : undefined,
+      // lead_source_id: 1,
+      lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
       button_color: buttonColor,
       page_target: pageTarget,
@@ -147,7 +200,17 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       images: imagesArray
     };
 
-    await onSubmit(popupData);
+    console.log('PAYLOAD FINAL:', popupData);
+
+    try {
+
+   const res = await onSubmit(popupData);
+   showToast.success?.('Popup guardado correctamente');
+    console.log('SUBMIT OK:', res);
+    }catch(err){
+     console.error('SUBMIT FAIL:', err);
+     showToast.error('ERROR guardando popup')
+    }
   };
 
   const handlePreviewChange = (field: string, value: string) => {
@@ -210,21 +273,39 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             </button>
           </div>
 
+          {
+            pageTarget === 'product-detail' && (
+          <div className='flex flex-col gap-1'>
+            <label className='text-xs font-semibold text-gray-700 dark:tex-gray-300'>
+              Producto asociado <span className='text-red-500'>*</span>
+            </label>
+            <select value={productId ?? ''} onChange={(e) => {
+              const value = e.target.value;
+              setProductId( value ? Number(e.target.value) : null)}} disabled={!active} className='w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline' name="" id="">
+              <option value="">Selecciona un producto</option>
+              {
+                products.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {
+                      p.name
+                    }
+                  </option>
+                ))
+              }
+            </select>
+          </div>
+            )
+          }
+
           {/* REGLAS DE VISUALIZACIÓN */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">¿Dónde y cuándo aparecerá?</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
+              {/*<div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Página destino <span className="text-red-500">*</span></label>
-                <select value={pageTarget} onChange={(e) => setPageTarget(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="all">Todas las páginas</option>
-                  <option value="inicio">Inicio</option>
-                  <option value="productos">Productos</option>
-                  <option value="contacto">Contacto</option>
-                </select>
                 <span className="text-[10px] text-gray-500">¿En qué sección de la web quieres mostrarlo?</span>
-              </div>
+              </div>*/}
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Tiempo de aparición <span className="text-red-500">*</span></label>

@@ -37,6 +37,9 @@ const navItems: NavItem[] = [
   { label: "Reclamaciones", href: "/admin/reclamaciones", icon: BellRing },
   { label: "Contacto", href: "/admin/contacto", icon: MessageSquare },
   { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
+  {
+    label: "Plantillas", href: "/admin/templates", icon: FileText
+  }
 ];
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
