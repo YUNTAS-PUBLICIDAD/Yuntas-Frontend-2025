@@ -188,7 +188,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       title,
       // product_id: initialData?.product_id,
       // product_id: pageTarget === "product-detail" ? productId! : null,
-      product_id: pageTarget ?? undefined,
+      product_id: pageTarget === "product-detail" ? productId ?? undefined : undefined,
       // lead_source_id: 1,
       lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
