@@ -12,16 +12,17 @@ export const getPopupsService = async (): Promise<PopupServiceResponse<Popup[]>>
 
 export const savePopupService = async (popupData: Popup, isUpdating: boolean = false): Promise<PopupServiceResponse<Popup>> => {
   try {
-    
+
     if (isUpdating && popupData.id) {
       // 1. Actualizamos datos principales
       const popupFormData = new FormData();
-      popupFormData.append('_method', 'PATCH'); 
+      popupFormData.append('_method', 'PATCH');
       if (popupData.lead_source_id) popupFormData.append('lead_source_id', String(popupData.lead_source_id));
       popupFormData.append('title', popupData.title);
       popupFormData.append('button_text', popupData.button_text);
       popupFormData.append('button_color', popupData.button_color || '#6DE1E3');
       popupFormData.append('page_target', popupData.page_target);
+      popupFormData.append('product_id', popupData.product_id !== undefined && popupData.product_id !== null ? String(popupData.product_id) : '');
       popupFormData.append('delay_seconds', String(popupData.delay_seconds));
       popupFormData.append('priority', String(popupData.priority));
       popupFormData.append('active', popupData.active ? '1' : '0');
@@ -40,10 +41,10 @@ export const savePopupService = async (popupData: Popup, isUpdating: boolean = f
           imgForm.append('_method', 'PATCH'); // Requerido por Laravel
           imgForm.append('device', img.device);
           imgForm.append('slot', img.slot);
-          
+
           if (img.alt) imgForm.append('alt', img.alt);
           if (img.title) imgForm.append('title', img.title);
-          
+
           // Solo adjuntamos el archivo si subiste uno nuevo
           if (img.file instanceof File) {
             imgForm.append('file', img.file);
@@ -73,17 +74,18 @@ export const savePopupService = async (popupData: Popup, isUpdating: boolean = f
       formData.append('priority', String(popupData.priority));
       formData.append('active', popupData.active ? '1' : '0');
       // product_id
-      if (popupData.product_id) formData.append('product_id', String(popupData.product_id));
+      // if (popupData.product_id) formData.append('product_id', String(popupData.product_id));
+      if (popupData.product_id !== undefined && popupData.product_id !== null) formData.append('product_id', String(popupData.product_id));
 
       // Mapeamos el arreglo de imágenes
       if (popupData.images && popupData.images.length > 0) {
         popupData.images.forEach((img, index) => {
           formData.append(`images[${index}][device]`, img.device);
           formData.append(`images[${index}][slot]`, img.slot);
-          
+
           if (img.alt) formData.append(`images[${index}][alt]`, img.alt);
           if (img.title) formData.append(`images[${index}][title]`, img.title);
-          
+
           if (img.file instanceof File) {
             formData.append(`images[${index}][file]`, img.file);
           }
