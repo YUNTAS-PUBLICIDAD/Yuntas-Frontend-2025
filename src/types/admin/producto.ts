@@ -1,4 +1,6 @@
-type ImageProductoSlot = "Hero" | "Specs" | "Benefits" | "Popups";
+// type ImageProductoSlot = "Hero" | "Specs" | "Benefits" | "Popups";
+
+export type ImageProductoSlot = "Hero" | "Specs" | "Benefits" | "PopupLeft" | "PopupRight" | "PopupMobile";
 
 interface ImagenProducto {
     url: string | null;
@@ -75,5 +77,8 @@ export const imageProductoSlots = {
 	HERO: "Hero",
 	SPECS: "Specs",
 	BENEFITS: "Benefits",
-	POPUPS: "Popups"
+	// POPUPS: "Popups"
+	POPUP_LEFT: 'PopupLeft',
+	POPUP_RIGHT: 'PopupRight',
+	POPUP_MOBILE: 'PopupMobile'
 } as const;
