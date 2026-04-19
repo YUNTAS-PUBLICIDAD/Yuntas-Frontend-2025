@@ -30,3 +30,9 @@ export interface PopupServiceResponse<T = any> {
   message?: string;
   data?: T;
 }
+
+export interface PopupImageData {
+  url: string;
+  alt?: string | null;
+  title?: string | null;
+}
