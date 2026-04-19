@@ -8,6 +8,7 @@ import { LeadInput } from '@/types/admin/lead';
 import { showToast } from '@/utils/showToast';
 import { api, API_ENDPOINTS } from '@/config';
 import { sourceData } from '@/data/popup/sourceData';
+import { PopupView } from '../../producto/PopUp/PopupView';
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
@@ -453,7 +454,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               transformOrigin: 'center center',
             }}
           >
-            <PopupRenderer
+            {/*<PopupRenderer
               isOpen
               withBackdrop={false}
               wrapperClassName="!p-0 !w-auto !h-auto"
@@ -472,7 +473,56 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               buttonText={buttonText || 'CONOCER MÁS'}
               buttonColor={buttonColor}
               isSubmitting={false}
-            />
+            />*/}
+
+            {pageTarget === "product-detail" ? (
+              <PopupView
+                isMobile={previewMode === "mobile"}
+                leftImage={
+                  desktopImgSrc
+                    ? { url: desktopImgSrc, alt: imageAlt, title: imageTitle }
+                    : undefined
+                }
+                rightImage={
+                  textImgSrc
+                    ? { url: textImgSrc, alt: "Texto banner", title: "Texto promocional" }
+                    : undefined
+                }
+                mobileImage={
+                  mobileImgSrc
+                    ? { url: mobileImgSrc, alt: imageAlt, title: imageTitle }
+                    : undefined
+                }
+                formData={previewFormData}
+                errors={{}}
+                handleChange={handlePreviewChange}
+                handleSubmit={handlePreviewSubmit}
+                buttonText={buttonText || "CONOCER MÁS"}
+                buttonColor={buttonColor}
+                isSubmitting={false}
+              />
+            ) : (
+              <PopupRenderer
+                isOpen
+                withBackdrop={false}
+                wrapperClassName="!p-0 !w-auto !h-auto"
+                previewDevice={previewMode}
+                muted={!active}
+                onClose={() => {}}
+                desktopImgSrc={desktopImgSrc}
+                textImgSrc={textImgSrc}
+                mobileImgSrc={mobileImgSrc}
+                imgAlt={imageAlt || "Vista previa popup"}
+                title={title || "¡Tu inversión en maquinaria!"}
+                formData={previewFormData}
+                errors={{}}
+                handleChange={handlePreviewChange}
+                handleSubmit={handlePreviewSubmit}
+                buttonText={buttonText || "CONOCER MÁS"}
+                buttonColor={buttonColor}
+                isSubmitting={false}
+              />
+            )}
           </div>
         </div>
       </div>
