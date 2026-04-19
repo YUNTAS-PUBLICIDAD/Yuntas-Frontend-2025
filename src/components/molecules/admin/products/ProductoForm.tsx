@@ -61,12 +61,30 @@ const GALLERY_SLOTS = [
         size: '1000 x 1000 px',
         desc: 'Formato cuadrado o vertical (4:5).'
     },
+    // {
+    //     value: 'Popups',
+    //     label: 'Popup',
+    //     size: '800 x 800 px',
+    //     desc: 'Formato cuadrado.'
+    // },
     {
-        value: 'Popups',
-        label: 'Popup',
-        size: '800 x 800 px',
-        desc: 'Formato cuadrado.'
+      value: 'PopupLeft',
+      label: 'Popup Izquierda',
+      size: '800 x 800 px',
+      desc: 'Popup lado izquierdo (desktop).'
     },
+    {
+     value: 'PopupRight' ,
+     label: 'Popup Derecha',
+     size: '800 x 800 px',
+     desc: 'Popup lado derecha (desktop)'
+    },
+    {
+      value: 'PopupMobile',
+      label: 'Popup Mobile',
+      size: '600 x 800 px',
+      desc: 'Popup optimizado para móvil'
+    }
 ] as const;
 
 export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null, registerCloseHandler }: ProductFormProps) {
@@ -75,7 +93,7 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
     const [initialFormState, setInitialFormState] = useState<ProductoInput>(defaultFormData);
 
     const normalize = (obj:any) => JSON.stringify(obj);
-    
+
     const handleAttemptClose = useCallback( async () => {
         // console.log("handleAttempClose START");
     const hasChanges = normalize(formData) !== normalize(initialFormState);
@@ -85,38 +103,38 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
      onCancel();
      return;
     }
-  
+
     // console.log("Calling confirm dialog");
-  
+
     const confirmClose = await confirm({
       message: "Tienes cambios sin guardar. ¿Deseas cerrar y perder los datos?"
     }
     );
-  
+
     // console.log("confirm result:", confirmClose);
-  
+
     if (confirmClose) {
       // console.log("User confirmed close");
      onCancel()
     }
 
       // console.log("User canceled close");
-    
-  }, [formData, initialFormState, confirm, onCancel]) 
+
+  }, [formData, initialFormState, confirm, onCancel])
 
   const closeHandlerRef = useRef(handleAttemptClose);
 
   useEffect(() => {
-    closeHandlerRef.current = handleAttemptClose; 
+    closeHandlerRef.current = handleAttemptClose;
   });
-  
+
   useEffect(() => {
       if (registerCloseHandler) {
-      //  registerCloseHandler(handleAttemptClose) 
+      //  registerCloseHandler(handleAttemptClose)
       registerCloseHandler(() => closeHandlerRef.current());
-      } 
+      }
 }, [])
-    
+
 
     // Cargar datos iniciales para editar
     useEffect(() => {
@@ -151,7 +169,7 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
               };
               setFormData(mappedData);
               setInitialFormState(mappedData);
-              
+
             // });
         }else {
           setFormData(defaultFormData);
