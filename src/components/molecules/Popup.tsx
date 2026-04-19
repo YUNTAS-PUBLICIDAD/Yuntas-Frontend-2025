@@ -30,7 +30,7 @@ interface PopupProps {
     // imgSrc: string;
     // imgTitle?: string;
     // imgAlt: string;
-    // title: string;
+    title: string;
     buttonText: string;
     buttonColor?: string;
     productId?: number;
@@ -45,7 +45,7 @@ const Popup = ({
     leftImage,
     rightImage,
     mobileImage,
-    // title,
+    title,
     buttonText,
     buttonColor = "#30029c",
     productId,
