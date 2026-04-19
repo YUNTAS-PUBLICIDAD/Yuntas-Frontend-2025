@@ -4,20 +4,33 @@ import { useState, useEffect, useRef } from "react";
 import { useWhatsapp } from "@/hooks/useWhatsapp";
 import { useEmail } from "@/hooks/useEmail";
 import PopupContainer from "@/components/atoms/PopContainer";
-import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
-import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
-import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
+// import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
+// import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
+// import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
 import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
 import { showToast } from "@/utils/showToast";
 import { usePathname } from "next/navigation";
+import { PopupView } from "./producto/PopUp/PopupView";
+import { PopupImageData } from "@/types/admin/popup";
+// import { PopupImage } from "@/types/admin/popup";
+
+// interface PopupImageData {
+//   url: string;
+//   title?: string | null;
+//   alt?: string | null;
+// }
 
 interface PopupProps {
     delay?: number;
-    imgSrc: string;
-    imgTitle?: string;
-    imgAlt: string;
-    title: string;
+    isMobile?: boolean;
+    leftImage?: PopupImageData;
+    rightImage?: PopupImageData;
+    mobileImage?: PopupImageData;
+    // imgSrc: string;
+    // imgTitle?: string;
+    // imgAlt: string;
+    // title: string;
     buttonText: string;
     buttonColor?: string;
     productId?: number;
@@ -26,14 +39,18 @@ interface PopupProps {
 
 const Popup = ({
     delay = 5000,
-    imgSrc,
-    imgTitle,
-    imgAlt,
-    title,
+    // imgSrc,
+    // imgTitle,
+    // imgAlt,
+    leftImage,
+    rightImage,
+    mobileImage,
+    // title,
     buttonText,
     buttonColor = "#30029c",
     productId,
     sourceId = 1,
+    isMobile
 }: PopupProps) => {
     const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
     const { sendEmail, isActivating: isEmailSending } = useEmail();
@@ -107,7 +124,7 @@ const Popup = ({
             showToast.error(emailResult.message || "Error al enviar el email");
             return;
         }
-        
+
         closeModal();
         showToast.success("¡Gracias! Nos pondremos en contacto contigo pronto.");
 
@@ -124,11 +141,13 @@ const Popup = ({
        popupTriggered.current = true;
        setShow(true);
       }, delay);
- 
+
         return () => clearTimeout(timer);
     }, [delay, pathname]);
 
     if (!show) return null;
+
+    // const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
     return (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
@@ -138,20 +157,8 @@ const Popup = ({
                     className="absolute top-4 right-4 z-50"
                 />
 
-                <PopupImage  src={imgSrc} title={imgTitle} alt={imgAlt} />
+                <PopupView isMobile={isMobile} leftImage={leftImage} rightImage={rightImage} mobileImage={mobileImage} formData={formData} errors={errors} handleChange={handleChange} handleSubmit={handleSubmit} buttonText={buttonText} buttonColor={buttonColor} isSubmitting={isWhatsappSending || isEmailSending}/>
 
-                <div className="w-full sm:w-[40%] p-4 flex flex-col justify-center">
-                    <PopupHeader title={title} />
-                    <PopupForm
-                        formData={formData}
-                        errors={errors}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        buttonText={buttonText}
-                        isSubmitting={isWhatsappSending || isEmailSending}
-                        buttonColor={buttonColor}
-                    />
-                </div>
             </PopupContainer>
         </div>
     );
