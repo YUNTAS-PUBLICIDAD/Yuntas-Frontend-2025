@@ -4,13 +4,13 @@ import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
 import Image from "next/image";
 
-const NosotrosSection = () => {
+const HeroSection = () => {
   return (
     <section
       className="
-        relative w-full h-[40vh] md:h-[50vh]
-        flex items-center justify-start 
-        overflow-hidden 
+        relative w-full h-[50vh] md:h-[60vh]
+        flex items-center justify-start
+        overflow-hidden
         border-b-4 border-[#98D8DF]
       "
       aria-label="Sección Nosotros"
@@ -25,18 +25,23 @@ const NosotrosSection = () => {
           sizes="100vw"
           className="object-cover object-center"
         />
-
       </div>
 
-      <div
+      {/*Overlay*/}
+      <div className="absolute inset-0 z-10">
+          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a]/90 via-[#04061a]/70 to-transparent" />
+        </div>
+
+      {/*<div
         className="absolute inset-0 z-10"
         style={{
           background:
             "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
         }}
-      />
+      />*/}
 
-      <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
+      {/*<div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
           className="
             flex w-full max-w-[1600px] mx-auto
@@ -44,11 +49,12 @@ const NosotrosSection = () => {
             items-center
             gap-6 md:gap-12
           "
-        >
+        >*/}
+      {/*Content*/}
           <div
             className="
-            flex flex-col w-full 
-            justify-center 
+             relative z-20 flex flex-col w-full h-full px-6
+            justify-center
             items-center
             text-center
           "
@@ -65,11 +71,11 @@ const NosotrosSection = () => {
             >
               NOSOTROS
             </Heading>
-          </div>
-        </div>
+          {/*</div>*/}
+        {/*</div>*/}
       </div>
     </section>
   );
 };
 
-export default NosotrosSection;
+export default HeroSection;

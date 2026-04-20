@@ -69,7 +69,7 @@ const HeaderMobil = () => {
       {/* ───────────── HEADER ───────────── */}
       <header
         className={`
-          lg:hidden fixed top-0 left-0 right-0 z-50
+          md:hidden fixed top-0 left-0 right-0 z-50
           px-6 h-16 flex justify-between items-center
           transition-all duration-300
           ${open ? "opacity-0 pointer-events-none" : "opacity-100"}
@@ -104,7 +104,7 @@ const HeaderMobil = () => {
       {/* ───────────── DRAWER ───────────── */}
       <div
         className={`
-          lg:hidden fixed inset-0 z-[200] flex flex-col
+          md:hidden fixed inset-0 z-[200] flex flex-col
          transform transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}
 
@@ -128,7 +128,7 @@ const HeaderMobil = () => {
         </button>
 
         <nav className="pt-16 px-6 flex-1 overflow-y-auto">
-          <NavMenuMobil size="md" variant="mobile" />
+          <NavMenuMobil />
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 

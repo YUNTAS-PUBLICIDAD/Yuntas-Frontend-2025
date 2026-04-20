@@ -4,17 +4,34 @@ interface MenuItemProps {
   href: string;
   children: React.ReactNode;
   active?: boolean;
-  color?:string;
+  baseColor?: string;
+  activeColor?: string;
+  // color?:string;
   className?: string;
 }
 
-export default function MenuItem({ href, children, active, color = 'text-gray-800', className = "" }: MenuItemProps) {
+export default function MenuItem({
+  href,
+  children,
+  active,
+  // color = 'text-gray-800',
+  activeColor,
+  baseColor,
+  className = "" }: MenuItemProps) {
  return (
     <Link
       href={href}
-      className={`block transition duration-300 ${active ? "text-blue-600 font-bold px-4 py-2" : `${color} px-4 py-2 hover:text-blue-700`} ${className}`}
+      className={`group relative px-2 py-1 transition-all duration-300 ${active ? activeColor : baseColor} ${className} ${active ? "md:bg-transparent bg-black/5 md:dark:bg-transparent dark:bg-white/10 font-bold" : ""}`}
     >
       {children}
+      {/*Underline solo dekstop*/}
+      <span
+              className={`
+                hidden md:block absolute left-0 -bottom-1 h-[2px] w-full bg-[#6DE1E3]
+                transition-transform duration-300
+                ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}
+              `}
+            />
     </Link>
   );
 }

@@ -16,7 +16,7 @@ const AdminMenuMobil = ({ isOpen = false, onToggle }: Props) => {
   return (
     <button
       onClick={onToggle}
-      className={`w-full flex items-center justify-between px-4 py-2 font-medium uppercase tracking-wider transition ${isAdminActive
+      className={`w-full flex items-center justify-between px-2 py-1 font-medium uppercase tracking-wider transition ${isAdminActive
         ? "text-[#04061a] dark:text-white font-bold"
         : "text-[#04061a] dark:text-white"
         }`}

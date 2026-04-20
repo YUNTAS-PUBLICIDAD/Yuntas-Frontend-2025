@@ -29,12 +29,12 @@ const PopupForm: React.FC<PopupFormProps> = ({
 }) => (
   <form
     onSubmit={handleSubmit}
-    className="space-y-2 flex flex-col items-center"
+    className="w-full space-y-3"
   >
     <InputField
       placeholder="Nombre"
       value={formData.name}
-      className="text-xs"
+      className="text-xs w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition "
       error={errors.name}
       onChange={(e) => handleChange("name", e.target.value)}
     />
@@ -43,7 +43,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       placeholder="Teléfono"
       maxLength={9}
       value={formData.phone}
-      className="text-xs"
+      className="text-xs w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
       error={errors.phone}
       onChange={(e) => handleChange("phone", e.target.value)}
     />
@@ -52,16 +52,21 @@ const PopupForm: React.FC<PopupFormProps> = ({
       placeholder="Correo"
       type="email"
       value={formData.email}
-      className="text-xs"
+      className="text-xs w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
       error={errors.email}
       onChange={(e) => handleChange("email", e.target.value)}
     />
     {errors.general && (<div className="text-red-500 text-sm">{errors.general}</div>)}
-    <div>
+    <div className="flex justify-center ">
+      {/*bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7]*/}
       <ButtonPrimary
         disabled={isSubmitting}
-        style={{ backgroundColor: buttonColor }}
-        className="font-montserrat font-semibold text-sm pt-[5px] pr-[10px] pb-[5px] pl-[10px] rounded-lg transition-all disabled:opacity-50 mt-2 sm:mt-3"
+        // style={{ backgroundColor: buttonColor }}
+        style={{
+            backgroundColor: buttonColor,
+            boxShadow: `0 10px 25px ${buttonColor}66`
+          }}
+        className="py-3 px-4 rounded-xl shadow-[0_10px_25px_rgba(109,225,227,0.4)] hover:scale-[1.02] active:scale-[1.02] font-bold text-sm tracking-wide transition-all disabled:opacity-50 mt-2 sm:mt-3"
       >
         {isSubmitting ? "Enviando..." : buttonText}
       </ButtonPrimary>

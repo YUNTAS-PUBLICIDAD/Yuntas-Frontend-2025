@@ -1,12 +1,12 @@
 import ContactoMedios from "@/components/organisms/contacto/contactoMedios";
-import ContactoSection from "@/components/organisms/contacto/contactoSection";
+import HeroSection from "@/components/organisms/contacto/HeroSection";
 import SolicitudInfo from "@/components/organisms/contacto/solicitudInfo";
 import UbicacionContacto from "@/components/organisms/contacto/ubicacionContacto";
 
 export default function ContactoPage() {
   return (
     <main className="">
-      <ContactoSection />
+      <HeroSection />
       <ContactoMedios />
       <SolicitudInfo />
       <UbicacionContacto />

@@ -6,6 +6,9 @@ import PopupRenderer from '@/components/molecules/PopupRenderer';
 import { Popup, PopupImage } from '@/types/admin/popup';
 import { LeadInput } from '@/types/admin/lead';
 import { showToast } from '@/utils/showToast';
+import { api, API_ENDPOINTS } from '@/config';
+import { sourceData } from '@/data/popup/sourceData';
+import { PopupView } from '../../producto/PopUp/PopupView';
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
@@ -14,14 +17,15 @@ interface PopupConfigFormProps {
   onSubmit: (data: Popup) => Promise<void>;
   onCancel: () => void;
   isSaving?: boolean;
+  pageTarget: "inicio" | "product-detail";
 }
 
-export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSaving }: PopupConfigFormProps) {
+export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSaving, pageTarget }: PopupConfigFormProps) {
   const [active, setActive] = useState(false);
   const [title, setTitle] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonColor, setButtonColor] = useState('#6DE1E3');
-  const [pageTarget, setPageTarget] = useState('all');
+  // const [pageTarget, setPageTarget] = useState('all');
   const [delaySeconds, setDelaySeconds] = useState('5');
 
   // Estados para las 3 imágenes Y SUS IDs
@@ -39,6 +43,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImgSrc, setMobileImgSrc] = useState('');
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
 
+  const [products, setProducts] = useState<{id: number; name:string}[]>([]);
+  // const [productId, setProductId] = useState<number | null>(null);
+
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
   const [previewFormData, setPreviewFormData] = useState<LeadInput>({
@@ -50,15 +57,38 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const previewCanvasRef = useRef<HTMLDivElement>(null);
 
   const popupBaseSize = previewMode === 'desktop'
-    ? { width: 650, height: 350 }
+    ? { width: 672, height: 532 }
     : { width: 350, height: 536 };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+       const res = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL) ;
+       console.log('RAW RESPONSE:', res);
+       console.log('DATA:', res.data);
+       console.log('DATA.DATA', res.data?.data);
+       // setProducts(res.data.data || []);
+       const fetched = res.data?.data?.data;
+       if(Array.isArray(fetched)){
+         setProducts(fetched);
+       }else {
+         console.warn('Products no es array:', fetched);
+         setProducts([]);
+       }
+      }catch(err){
+        console.error('Error cargando productos', err);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     if (initialData) {
       setActive(initialData.active !== undefined ? initialData.active : false);
       setTitle(initialData.title || '');
       setButtonText(initialData.button_text || '');
-      setPageTarget(initialData.page_target || 'all');
+      // setPageTarget(initialData.page_target || 'inicio');
+      // pageTarget;
       setDelaySeconds(initialData.delay_seconds?.toString() || '5');
       setButtonColor(initialData.button_color || '#6DE1E3');
 
@@ -86,11 +116,12 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setActive(false);
       setTitle('');
       setButtonText('');
-      setPageTarget('all');
+      // setPageTarget('inicio');
+      // pageTarget;
       setDelaySeconds('5');
       setImageAlt('');
       setImageTitle('');
-      
+
       setDesktopImageId(undefined); setDesktopImgSrc(''); setDesktopImageFile(null);
       setTextImageId(undefined); setTextImgSrc(''); setTextImageFile(null);
       setMobileImageId(undefined); setMobileImgSrc(''); setMobileImageFile(null);
@@ -118,15 +149,23 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   };
 
   const handleSave = async () => {
-    if (!title || !buttonText || !imageAlt || !pageTarget || !delaySeconds) {
-      showToast.warning("Por favor completa todos los campos obligatorios (*)");
-      return;
-    }
+    // if (!title || !buttonText  || !delaySeconds || (pageTarget === "product-detail" && !imageAlt)) {
+    //   showToast.warning("Por favor completa todos los campos obligatorios (*)");
+    //   return;
+    // }
 
-    if (!initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
+    if (pageTarget !== "product-detail" && !initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
       showToast.warning("Debes subir las 3 imágenes (Desktop, Texto y Móvil) para crear el popup.");
       return;
     }
+
+    // if(pageTarget === "product-detail" && !productId){
+    //   showToast.warning("Debes seleccionar un producto");
+    //   return;
+    // }
+
+    // console.log("PRODUCT ID FRONT:", productId);
+    console.log("PAGE TARGET:", pageTarget);
 
     const imagesArray: PopupImage[] = [
       { id: desktopImageId, device: 'desktop', slot: 'left', file: desktopImageFile || undefined, alt: imageAlt, title: imageTitle },
@@ -134,20 +173,45 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       { id: mobileImageId, device: 'mobile', slot: 'center', file: mobileImageFile || undefined, alt: imageAlt, title: imageTitle },
     ];
 
+    const getSourceId = (pageTarget: string) => {
+      switch(pageTarget){
+        case "inicio":
+          return sourceData.INICIO;
+        case "product-detail":
+          return sourceData.PRODUCTO_DETALLE;
+        default:
+         return sourceData.INICIO;
+      }
+    }
+
     const popupData: Popup = {
       id: initialData?.id,
       title,
-      lead_source_id: 1,
+      // product_id: initialData?.product_id,
+      // product_id: pageTarget === "product-detail" ? productId! : null,
+      // product_id: pageTarget === "product-detail" ? productId : null,
+      // lead_source_id: 1,
+      lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
       button_color: buttonColor,
       page_target: pageTarget,
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
       active,
-      images: imagesArray 
+      images:  pageTarget === "product-detail" ? [] : imagesArray
     };
 
-    await onSubmit(popupData);
+    console.log('PAYLOAD FINAL:', popupData);
+
+    try {
+
+   const res = await onSubmit(popupData);
+   showToast.success?.('Popup guardado correctamente');
+    console.log('SUBMIT OK:', res);
+    }catch(err){
+     console.error('SUBMIT FAIL:', err);
+     showToast.error('ERROR guardando popup')
+    }
   };
 
   const handlePreviewChange = (field: string, value: string) => {
@@ -175,7 +239,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       const nextScale = Math.min(
         availableWidth / popupBaseSize.width,
         availableHeight / popupBaseSize.height,
-        1
+        0.8
       );
 
       setPreviewScale(nextScale);
@@ -210,28 +274,50 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             </button>
           </div>
 
+          {
+          //   pageTarget === 'product-detail' && (
+          // <div className='flex flex-col gap-1'>
+          //   <label className='text-xs font-semibold text-gray-700 dark:tex-gray-300'>
+          //     Producto asociado <span className='text-red-500'>*</span>
+          //   </label>
+          //   <select value={productId ?? ''} onChange={(e) => {
+          //     const value = e.target.value;
+          //     setProductId( value ? Number(e.target.value) : null)}} disabled={!active} className='w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline' name="" id="">
+          //     <option value="">Selecciona un producto</option>
+          //     {
+          //       products.map((p) => (
+          //         <option key={p.id} value={p.id}>
+          //           {
+          //             p.name
+          //           }
+          //         </option>
+          //       ))
+          //     }
+          //   </select>
+          // </div>
+          //   )
+          }
+
           {/* REGLAS DE VISUALIZACIÓN */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">¿Dónde y cuándo aparecerá?</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
+              {/*<div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Página destino <span className="text-red-500">*</span></label>
-                <select value={pageTarget} onChange={(e) => setPageTarget(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="all">Todas las páginas</option>
-                  <option value="inicio">Inicio</option>
-                  <option value="productos">Productos</option>
-                  <option value="contacto">Contacto</option>
-                </select>
                 <span className="text-[10px] text-gray-500">¿En qué sección de la web quieres mostrarlo?</span>
-              </div>
+              </div>*/}
 
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Tiempo de aparición <span className="text-red-500">*</span></label>
                 <select value={delaySeconds} onChange={(e) => setDelaySeconds(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="3">Rápido (3 segundos)</option>
-                  <option value="5">Recomendado (5 segundos)</option>
-                  <option value="8">Lento (8 segundos)</option>
+                  <option value="3">3s - Muy inmediato</option>
+                  <option value="5">5s - Rápido</option>
+                  <option value="8">8s - Normal</option>
+                  <option value="12">12s - Usuario explorando</option>
+                  <option value="20">20s - Lectura en progreso</option>
+                  <option value="30">30s - Alta intención</option>
+                  <option value="60">60s - Usuario muy activo</option>
                 </select>
                 <span className="text-[10px] text-gray-500">Tiempo de espera antes de que salte a la pantalla.</span>
               </div>
@@ -241,16 +327,16 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* TEXTOS */}
           <div className={`flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700 pb-1">Textos y Llamados a la acción</h3>
-            
+
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Mensaje Principal del Pop-up <span className="text-red-500">*</span></label>
-              <input 
-                type="text" 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder="Ej: ¡Lleva tu marca al siguiente nivel!"
-                disabled={!active} 
-                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400" 
+                disabled={!active}
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400"
               />
               <span className="text-[10px] text-gray-500">Este texto aparecerá en grande arriba del formulario.</span>
             </div>
@@ -258,13 +344,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Texto del Botón <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  value={buttonText} 
-                  onChange={(e) => setButtonText(e.target.value)} 
+                <input
+                  type="text"
+                  value={buttonText}
+                  onChange={(e) => setButtonText(e.target.value)}
                   placeholder="Ej: SOLICITAR COTIZACIÓN"
-                  disabled={!active} 
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400" 
+                  disabled={!active}
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed placeholder-gray-400"
                 />
                 <span className="text-[10px] text-gray-500">Lo que leerá el cliente para hacer clic.</span>
               </div>
@@ -281,9 +367,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           </div>
 
           {/* LAS 3 IMÁGENES */}
+
+          {
+            pageTarget !== "product-detail" && (
+
           <div className={`bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 pb-1">Fotos y Flyers <span className="text-red-500">*</span></h3>
-            
+
             {/* Imagen Principal (Escritorio) */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Foto Principal (Para Computadoras - Lado Izquierdo)</label>
@@ -294,25 +384,25 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b dark:border-gray-600 pb-4 mt-2">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Texto descriptivo de la foto <span className="text-red-500">*</span></label>
-                <input 
-                  type="text" 
-                  value={imageAlt} 
-                  onChange={(e) => setImageAlt(e.target.value)} 
+                <input
+                  type="text"
+                  value={imageAlt}
+                  onChange={(e) => setImageAlt(e.target.value)}
                   placeholder="Ej: Foto de letrero luminoso"
-                  disabled={!active} 
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400" 
+                  disabled={!active}
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400"
                 />
                 <span className="text-[10px] text-gray-500">Ayuda a Google a saber qué hay en la foto (SEO).</span>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Texto al pasar el mouse (Opcional)</label>
-                <input 
-                  type="text" 
-                  value={imageTitle} 
-                  onChange={(e) => setImageTitle(e.target.value)} 
+                <input
+                  type="text"
+                  value={imageTitle}
+                  onChange={(e) => setImageTitle(e.target.value)}
                   placeholder="Ej: Clic para ver trabajos"
-                  disabled={!active} 
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400" 
+                  disabled={!active}
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-transparent dark:text-white outline-none focus:border-blue-500 placeholder-gray-400"
                 />
                 <span className="text-[10px] text-gray-500">Se muestra cuando el cliente pone el cursor sobre la foto.</span>
               </div>
@@ -332,6 +422,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Diseño vertical completo para pantallas pequeñas (Tamaño ideal: <strong>260x520 px</strong>).</span>
             </div>
           </div>
+            )
+          }
 
           {/* BOTONES ACCIÓN */}
           <div className="pt-2 flex flex-col md:flex-row gap-3">
@@ -363,7 +455,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <button type="button" onClick={() => setPreviewMode('mobile')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>📱 Vista en Celular</button>
         </div>
 
-        <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-hidden">
+        <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-visible">
           <div
             style={{
               width: popupBaseSize.width,
@@ -372,10 +464,10 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               transformOrigin: 'center center',
             }}
           >
-            <PopupRenderer
+            {/*<PopupRenderer
               isOpen
               withBackdrop={false}
-              wrapperClassName="p-0"
+              wrapperClassName="!p-0 !w-auto !h-auto"
               previewDevice={previewMode}
               muted={!active}
               onClose={() => {}}
@@ -391,7 +483,33 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               buttonText={buttonText || 'CONOCER MÁS'}
               buttonColor={buttonColor}
               isSubmitting={false}
-            />
+            />*/}
+
+            {pageTarget !== "product-detail" && (
+
+              <PopupRenderer
+                isOpen
+                withBackdrop={false}
+                wrapperClassName="!p-0 !w-auto !h-auto"
+                previewDevice={previewMode}
+                muted={!active}
+                onClose={() => {}}
+                desktopImgSrc={desktopImgSrc}
+                textImgSrc={textImgSrc}
+                mobileImgSrc={mobileImgSrc}
+                imgAlt={imageAlt || "Vista previa popup"}
+                title={title || "¡Tu inversión en maquinaria!"}
+                formData={previewFormData}
+                errors={{}}
+                handleChange={handlePreviewChange}
+                handleSubmit={handlePreviewSubmit}
+                buttonText={buttonText || "CONOCER MÁS"}
+                buttonColor={buttonColor}
+                isSubmitting={false}
+              />
+            )}
+
+
           </div>
         </div>
       </div>
