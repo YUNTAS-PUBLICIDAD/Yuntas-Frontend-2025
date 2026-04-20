@@ -47,7 +47,7 @@ const DesktopPopupComposition = ({
   forceVisible = false,
 }: PopupLayoutProps) => {
   return (
-    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-[317px_355px] w-[672px] h-[520px] rounded-2xl overflow-hidden`}>
+    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-[271px_335px] w-[606px] h-[479px] rounded-2xl overflow-hidden`}>
       {/* LEFT IMAGE */}
       <div className="relative w-full h-full">
         <img
@@ -141,8 +141,7 @@ const MobilePopupComposition = ({
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-3  z-20">
-        <div className="bg-black/40 backdrop-blur-md rounded-xl p-3">
+      <div className="absolute bottom-0 left-0 right-0 px-8 pb-4 pt-3  z-20">
         <PopupForm
           formData={formData}
           errors={errors}
@@ -152,7 +151,6 @@ const MobilePopupComposition = ({
           isSubmitting={isSubmitting}
           buttonColor={buttonColor}
         />
-        </div>
       </div>
     </div>
   );
