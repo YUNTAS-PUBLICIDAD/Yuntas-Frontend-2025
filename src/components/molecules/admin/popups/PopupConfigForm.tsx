@@ -315,6 +315,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                   <option value="5">5s - Rápido</option>
                   <option value="8">8s - Normal</option>
                   <option value="12">12s - Relajado</option>
+                  <option value="20">20s - Usuario leyendo</option>
                   <option value="30">30s - Alto engagement</option>
                   <option value="60">60s - Muy tardío</option>
                 </select>
