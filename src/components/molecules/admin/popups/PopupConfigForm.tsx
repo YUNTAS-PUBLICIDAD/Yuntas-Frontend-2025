@@ -149,12 +149,12 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   };
 
   const handleSave = async () => {
-    if (!title || !buttonText || !imageAlt || !delaySeconds) {
-      showToast.warning("Por favor completa todos los campos obligatorios (*)");
-      return;
-    }
+    // if (!title || !buttonText  || !delaySeconds || (pageTarget === "product-detail" && !imageAlt)) {
+    //   showToast.warning("Por favor completa todos los campos obligatorios (*)");
+    //   return;
+    // }
 
-    if (!initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
+    if (pageTarget !== "product-detail" && !initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
       showToast.warning("Debes subir las 3 imágenes (Desktop, Texto y Móvil) para crear el popup.");
       return;
     }
@@ -198,7 +198,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
       active,
-      images: imagesArray
+      images:  pageTarget === "product-detail" ? [] : imagesArray
     };
 
     console.log('PAYLOAD FINAL:', popupData);
@@ -311,13 +311,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Tiempo de aparición <span className="text-red-500">*</span></label>
                 <select value={delaySeconds} onChange={(e) => setDelaySeconds(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="3">3s - Muy rápido</option>
+                  <option value="3">3s - Muy inmediato</option>
                   <option value="5">5s - Rápido</option>
                   <option value="8">8s - Normal</option>
-                  <option value="12">12s - Relajado</option>
-                  <option value="20">20s - Usuario leyendo</option>
-                  <option value="30">30s - Alto engagement</option>
-                  <option value="60">60s - Muy tardío</option>
+                  <option value="12">12s - Usuario explorando</option>
+                  <option value="20">20s - Lectura en progreso</option>
+                  <option value="30">30s - Alta intención</option>
+                  <option value="60">60s - Usuario muy activo</option>
                 </select>
                 <span className="text-[10px] text-gray-500">Tiempo de espera antes de que salte a la pantalla.</span>
               </div>
@@ -367,6 +367,10 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           </div>
 
           {/* LAS 3 IMÁGENES */}
+
+          {
+            pageTarget !== "product-detail" && (
+
           <div className={`bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 pb-1">Fotos y Flyers <span className="text-red-500">*</span></h3>
 
@@ -418,6 +422,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Diseño vertical completo para pantallas pequeñas (Tamaño ideal: <strong>260x520 px</strong>).</span>
             </div>
           </div>
+            )
+          }
 
           {/* BOTONES ACCIÓN */}
           <div className="pt-2 flex flex-col md:flex-row gap-3">
@@ -479,33 +485,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               isSubmitting={false}
             />*/}
 
-            {pageTarget === "product-detail" ? (
-              <PopupView
-                isMobile={previewMode === "mobile"}
-                leftImage={
-                  desktopImgSrc
-                    ? { url: desktopImgSrc, alt: imageAlt, title: imageTitle }
-                    : undefined
-                }
-                rightImage={
-                  textImgSrc
-                    ? { url: textImgSrc, alt: "Texto banner", title: "Texto promocional" }
-                    : undefined
-                }
-                mobileImage={
-                  mobileImgSrc
-                    ? { url: mobileImgSrc, alt: imageAlt, title: imageTitle }
-                    : undefined
-                }
-                formData={previewFormData}
-                errors={{}}
-                handleChange={handlePreviewChange}
-                handleSubmit={handlePreviewSubmit}
-                buttonText={buttonText || "CONOCER MÁS"}
-                buttonColor={buttonColor}
-                isSubmitting={false}
-              />
-            ) : (
+            {pageTarget !== "product-detail" && (
+
               <PopupRenderer
                 isOpen
                 withBackdrop={false}
@@ -527,6 +508,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 isSubmitting={false}
               />
             )}
+
+
           </div>
         </div>
       </div>
