@@ -8,6 +8,7 @@ import { LeadInput } from '@/types/admin/lead';
 import { showToast } from '@/utils/showToast';
 import { api, API_ENDPOINTS } from '@/config';
 import { sourceData } from '@/data/popup/sourceData';
+import { PopupView } from '../../producto/PopUp/PopupView';
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
@@ -43,7 +44,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
 
   const [products, setProducts] = useState<{id: number; name:string}[]>([]);
-  const [productId, setProductId] = useState<number | null>(null);
+  // const [productId, setProductId] = useState<number | null>(null);
 
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
@@ -148,22 +149,22 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   };
 
   const handleSave = async () => {
-    if (!title || !buttonText || !imageAlt || !delaySeconds) {
-      showToast.warning("Por favor completa todos los campos obligatorios (*)");
-      return;
-    }
+    // if (!title || !buttonText  || !delaySeconds || (pageTarget === "product-detail" && !imageAlt)) {
+    //   showToast.warning("Por favor completa todos los campos obligatorios (*)");
+    //   return;
+    // }
 
-    if (!initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
+    if (pageTarget !== "product-detail" && !initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
       showToast.warning("Debes subir las 3 imágenes (Desktop, Texto y Móvil) para crear el popup.");
       return;
     }
 
-    if(pageTarget === "product-detail" && !productId){
-      showToast.warning("Debes seleccionar un producto");
-      return;
-    }
+    // if(pageTarget === "product-detail" && !productId){
+    //   showToast.warning("Debes seleccionar un producto");
+    //   return;
+    // }
 
-    console.log("PRODUCT ID FRONT:", productId);
+    // console.log("PRODUCT ID FRONT:", productId);
     console.log("PAGE TARGET:", pageTarget);
 
     const imagesArray: PopupImage[] = [
@@ -188,7 +189,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       title,
       // product_id: initialData?.product_id,
       // product_id: pageTarget === "product-detail" ? productId! : null,
-      product_id: pageTarget === "product-detail" ? productId : undefined,
+      // product_id: pageTarget === "product-detail" ? productId : null,
       // lead_source_id: 1,
       lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
@@ -197,7 +198,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
       active,
-      images: imagesArray
+      images:  pageTarget === "product-detail" ? [] : imagesArray
     };
 
     console.log('PAYLOAD FINAL:', popupData);
@@ -274,27 +275,27 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           </div>
 
           {
-            pageTarget === 'product-detail' && (
-          <div className='flex flex-col gap-1'>
-            <label className='text-xs font-semibold text-gray-700 dark:tex-gray-300'>
-              Producto asociado <span className='text-red-500'>*</span>
-            </label>
-            <select value={productId ?? ''} onChange={(e) => {
-              const value = e.target.value;
-              setProductId( value ? Number(e.target.value) : null)}} disabled={!active} className='w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline' name="" id="">
-              <option value="">Selecciona un producto</option>
-              {
-                products.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {
-                      p.name
-                    }
-                  </option>
-                ))
-              }
-            </select>
-          </div>
-            )
+          //   pageTarget === 'product-detail' && (
+          // <div className='flex flex-col gap-1'>
+          //   <label className='text-xs font-semibold text-gray-700 dark:tex-gray-300'>
+          //     Producto asociado <span className='text-red-500'>*</span>
+          //   </label>
+          //   <select value={productId ?? ''} onChange={(e) => {
+          //     const value = e.target.value;
+          //     setProductId( value ? Number(e.target.value) : null)}} disabled={!active} className='w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline' name="" id="">
+          //     <option value="">Selecciona un producto</option>
+          //     {
+          //       products.map((p) => (
+          //         <option key={p.id} value={p.id}>
+          //           {
+          //             p.name
+          //           }
+          //         </option>
+          //       ))
+          //     }
+          //   </select>
+          // </div>
+          //   )
           }
 
           {/* REGLAS DE VISUALIZACIÓN */}
@@ -310,9 +311,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Tiempo de aparición <span className="text-red-500">*</span></label>
                 <select value={delaySeconds} onChange={(e) => setDelaySeconds(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="3">Rápido (3 segundos)</option>
-                  <option value="5">Recomendado (5 segundos)</option>
-                  <option value="8">Lento (8 segundos)</option>
+                  <option value="3">3s - Muy inmediato</option>
+                  <option value="5">5s - Rápido</option>
+                  <option value="8">8s - Normal</option>
+                  <option value="12">12s - Usuario explorando</option>
+                  <option value="20">20s - Lectura en progreso</option>
+                  <option value="30">30s - Alta intención</option>
+                  <option value="60">60s - Usuario muy activo</option>
                 </select>
                 <span className="text-[10px] text-gray-500">Tiempo de espera antes de que salte a la pantalla.</span>
               </div>
@@ -362,6 +367,10 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           </div>
 
           {/* LAS 3 IMÁGENES */}
+
+          {
+            pageTarget !== "product-detail" && (
+
           <div className={`bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col gap-4 ${!active ? 'opacity-50' : ''}`}>
             <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 pb-1">Fotos y Flyers <span className="text-red-500">*</span></h3>
 
@@ -413,6 +422,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Diseño vertical completo para pantallas pequeñas (Tamaño ideal: <strong>260x520 px</strong>).</span>
             </div>
           </div>
+            )
+          }
 
           {/* BOTONES ACCIÓN */}
           <div className="pt-2 flex flex-col md:flex-row gap-3">
@@ -453,7 +464,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               transformOrigin: 'center center',
             }}
           >
-            <PopupRenderer
+            {/*<PopupRenderer
               isOpen
               withBackdrop={false}
               wrapperClassName="!p-0 !w-auto !h-auto"
@@ -472,7 +483,33 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               buttonText={buttonText || 'CONOCER MÁS'}
               buttonColor={buttonColor}
               isSubmitting={false}
-            />
+            />*/}
+
+            {pageTarget !== "product-detail" && (
+
+              <PopupRenderer
+                isOpen
+                withBackdrop={false}
+                wrapperClassName="!p-0 !w-auto !h-auto"
+                previewDevice={previewMode}
+                muted={!active}
+                onClose={() => {}}
+                desktopImgSrc={desktopImgSrc}
+                textImgSrc={textImgSrc}
+                mobileImgSrc={mobileImgSrc}
+                imgAlt={imageAlt || "Vista previa popup"}
+                title={title || "¡Tu inversión en maquinaria!"}
+                formData={previewFormData}
+                errors={{}}
+                handleChange={handlePreviewChange}
+                handleSubmit={handlePreviewSubmit}
+                buttonText={buttonText || "CONOCER MÁS"}
+                buttonColor={buttonColor}
+                isSubmitting={false}
+              />
+            )}
+
+
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import PopupConfigForm from "@/components/molecules/admin/popups/PopupConfigForm";
 import { usePopups } from "@/hooks/usePopups"
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type TabType = "inicio" | "product-detail";
 
@@ -15,6 +15,11 @@ export default function PopupsPage(){
     getPopups();
   }, []);
 
+  useEffect(() => {
+    console.log("TAB:", tab);
+    console.log("POPUPS:", popups.map(p => p.page_target));
+  }, [tab, popups]);
+
   const handleSave = async (data:any) => {
     const isUpdate = !!data.id;
     await savePopup(data, isUpdate);
@@ -22,6 +27,10 @@ export default function PopupsPage(){
   };
 
   const currentPopup = popups.find((p) => p.page_target === tab) || null;
+  //
+  // const currentPopup = useMemo(() => {
+  //   return popups.find(p => p.page_target === tab) ?? null;
+  // }, [popups, tab]);
 
   return (
     <div className="flex flex-col gap-4">
