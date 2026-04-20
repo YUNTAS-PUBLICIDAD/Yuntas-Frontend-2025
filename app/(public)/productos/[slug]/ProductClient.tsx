@@ -11,6 +11,8 @@ import { sourceData } from "@/data/popup/sourceData";
 import { useEffect, useState } from "react";
 import { ImageProductoSlot, Producto } from '@/types/admin/producto';
 import { imageProductoSlots } from '@/types/admin/producto';
+import { getPopupsService, getPublicPopupService } from '@/services/popupService';
+import { Popup as PopupConfig } from '@/types/admin/popup';
 
 interface ProductClientProps {
     initialProduct?: Producto | null;
@@ -25,6 +27,7 @@ const popupSlots = [
 export function ProductClient({ initialProduct }: ProductClientProps) {
     const params = useParams();
     const [isMobile, setIsMobile] = useState(false);
+    const [popup, setPopup] = useState<PopupConfig | null>(null);
     useEffect(() => {
       const check = () => setIsMobile(window.innerWidth < 768);
       check();
@@ -45,6 +48,17 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
             getProductoBySlug(slug);
         }
     }, [slug, getProductoBySlug, initialProduct]);
+
+    useEffect(() => {
+      const fetchPopup = async () => {
+        const res = await getPublicPopupService('product-detail');
+
+        if(res.success){
+          setPopup(res.data || null)
+        }
+      };
+      fetchPopup();
+    }, []);
 
     if (!slug && !displayProducto) {
         return <div className="flex justify-center items-center h-screen">URL no válida</div>;
@@ -121,8 +135,10 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             // imgTitle={popupMobile?.title || "Cotiza tu producto"}
                             // imgAlt={popupMobile?.alt || "Cotiza tu producto"}
                             mobileImage={popupMobile}
-                            title="¡Tu marca brillando como se merece!"
-                            buttonText="Explorar opciones"
+                            title={popup?.title ??"¡Tu marca brillando como se merece!"}
+                            buttonText={popup?.button_text ?? "Explorar opciones"}
+                            buttonColor={popup?.button_color}
+                            delay={(popup?.delay_seconds ?? 3)* 1000}
                             productId={displayProducto?.id}
                             sourceId={sourceData.PRODUCTO_DETALLE} // source id para "Producto detalle"
                         />
@@ -134,8 +150,10 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                               // imgAlt={popupMobile?.alt || "Cotiza tu producto"}
                               leftImage={popupLeft}
                               rightImage={popupRight}
-                              title="¡Tu marca brillando como se merece!"
-                              buttonText="Explorar opciones"
+                              title={ popup?.title ?? "¡Tu marca brillando como se merece!"}
+                              buttonColor={popup?.button_color}
+                              delay={(popup?.delay_seconds ?? 3) * 1000}
+                              buttonText={popup?.button_text ?? "Explorar opciones"}
                               productId={displayProducto?.id}
                               sourceId={sourceData.PRODUCTO_DETALLE} // source id para "Producto detalle"
 
