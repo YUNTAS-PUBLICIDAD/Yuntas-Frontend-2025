@@ -82,6 +82,17 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     fetchProducts();
   }, []);
 
+  const validateWebp = (file: File): boolean => {
+    const isWebpMime = file.type === "image/webp";
+    const isWebpExt = file.name.toLowerCase().endsWith(".webp");
+
+    if(!isWebpMime || !isWebpExt){
+      showToast.error("Solo se permiten imágenes en formato WEBP.");
+      return false;
+    }
+    return true;
+  }
+
   useEffect(() => {
     if (initialData) {
       setActive(initialData.active !== undefined ? initialData.active : false);
@@ -130,22 +141,54 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   }, [initialData]);
 
   const handleDesktopImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setDesktopImageFile(e.target.files[0]);
-      setDesktopImgSrc(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // if (e.target.files?.[0]) {
+    //   setDesktopImageFile(e.target.files[0]);
+    //   setDesktopImgSrc(URL.createObjectURL(e.target.files[0]));
+    // }
+
+    if(!validateWebp(file)){
+      e.target.value = "";
+      return;
     }
+    setDesktopImageFile(file);
+    setDesktopImgSrc(URL.createObjectURL(file));
   };
   const handleTextImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setTextImageFile(e.target.files[0]);
-      setTextImgSrc(URL.createObjectURL(e.target.files[0]));
+    const file = e.target.files?.[0];
+    if(!file) return;
+
+    // if (e.target.files?.[0]) {
+    //   setTextImageFile(e.target.files[0]);
+    //   setTextImgSrc(URL.createObjectURL(e.target.files[0]));
+    // }
+
+    if(!validateWebp(file)){
+      e.target.value = "";
+    return;
     }
+    setTextImageFile(file);
+    setTextImgSrc(URL.createObjectURL(file));
+
   };
   const handleMobileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setMobileImageFile(e.target.files[0]);
-      setMobileImgSrc(URL.createObjectURL(e.target.files[0]));
-    }
+    const file = e.target.files?.[0];
+
+   if(!file)  return;
+
+   if(!validateWebp(file)){
+     e.target.value = "";
+     return;
+   }
+
+    // if (e.target.files?.[0]) {
+    //   setMobileImageFile(e.target.files[0]);
+    //   setMobileImgSrc(URL.createObjectURL(e.target.files[0]));
+    // }
+
+    setMobileImageFile(file);
+    setMobileImgSrc(URL.createObjectURL(file));
   };
 
   const handleSave = async () => {
@@ -153,6 +196,14 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     //   showToast.warning("Por favor completa todos los campos obligatorios (*)");
     //   return;
     // }
+
+    const allFiles = [desktopImageFile, textImageFile, mobileImageFile];
+
+    for(const file of allFiles){
+      if(file && !validateWebp(file)){
+        return;
+      }
+    }
 
     if (pageTarget !== "product-detail" && !initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
       showToast.warning("Debes subir las 3 imágenes (Desktop, Texto y Móvil) para crear el popup.");
@@ -377,8 +428,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             {/* Imagen Principal (Escritorio) */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Foto Principal (Para Computadoras - Lado Izquierdo)</label>
-              <input type="file" accept="image/*" onChange={handleDesktopImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Sube una foto atractiva (Tamaño ideal: <strong>271x479 px</strong>) para la mitad izquierda.</span>
+              <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>271x479 px</strong>) para la mitad izquierda.</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b dark:border-gray-600 pb-4 mt-2">
@@ -411,15 +462,15 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             {/* Imagen Texto (Escritorio) */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">2. Diseño Promocional (Para Computadoras - Lado Derecho)</label>
-              <input type="file" accept="image/*" onChange={handleTextImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Flyer u oferta (Tamaño ideal: <strong>335x479 px</strong>). Va encima del formulario.</span>
+              <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>335x479 px</strong>). Va encima del formulario.</span>
             </div>
 
             {/* Imagen Móvil */}
             <div className="flex flex-col gap-1 border-t dark:border-gray-600 pt-4 mt-2">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">3. Flyer Unificado (Para Celulares)</label>
-              <input type="file" accept="image/*" onChange={handleMobileImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Diseño vertical completo para pantallas pequeñas (Tamaño ideal: <strong>260x520 px</strong>).</span>
+              <input type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>260x520 px</strong>).</span>
             </div>
           </div>
             )
