@@ -44,7 +44,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
 
   const [products, setProducts] = useState<{id: number; name:string}[]>([]);
-  const [productId, setProductId] = useState<number | null>(null);
+  // const [productId, setProductId] = useState<number | null>(null);
 
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
@@ -159,12 +159,12 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       return;
     }
 
-    if(pageTarget === "product-detail" && !productId){
-      showToast.warning("Debes seleccionar un producto");
-      return;
-    }
+    // if(pageTarget === "product-detail" && !productId){
+    //   showToast.warning("Debes seleccionar un producto");
+    //   return;
+    // }
 
-    console.log("PRODUCT ID FRONT:", productId);
+    // console.log("PRODUCT ID FRONT:", productId);
     console.log("PAGE TARGET:", pageTarget);
 
     const imagesArray: PopupImage[] = [
@@ -189,7 +189,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       title,
       // product_id: initialData?.product_id,
       // product_id: pageTarget === "product-detail" ? productId! : null,
-      product_id: pageTarget === "product-detail" ? productId : null,
+      // product_id: pageTarget === "product-detail" ? productId : null,
       // lead_source_id: 1,
       lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
@@ -275,27 +275,27 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           </div>
 
           {
-            pageTarget === 'product-detail' && (
-          <div className='flex flex-col gap-1'>
-            <label className='text-xs font-semibold text-gray-700 dark:tex-gray-300'>
-              Producto asociado <span className='text-red-500'>*</span>
-            </label>
-            <select value={productId ?? ''} onChange={(e) => {
-              const value = e.target.value;
-              setProductId( value ? Number(e.target.value) : null)}} disabled={!active} className='w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline' name="" id="">
-              <option value="">Selecciona un producto</option>
-              {
-                products.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {
-                      p.name
-                    }
-                  </option>
-                ))
-              }
-            </select>
-          </div>
-            )
+          //   pageTarget === 'product-detail' && (
+          // <div className='flex flex-col gap-1'>
+          //   <label className='text-xs font-semibold text-gray-700 dark:tex-gray-300'>
+          //     Producto asociado <span className='text-red-500'>*</span>
+          //   </label>
+          //   <select value={productId ?? ''} onChange={(e) => {
+          //     const value = e.target.value;
+          //     setProductId( value ? Number(e.target.value) : null)}} disabled={!active} className='w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline' name="" id="">
+          //     <option value="">Selecciona un producto</option>
+          //     {
+          //       products.map((p) => (
+          //         <option key={p.id} value={p.id}>
+          //           {
+          //             p.name
+          //           }
+          //         </option>
+          //       ))
+          //     }
+          //   </select>
+          // </div>
+          //   )
           }
 
           {/* REGLAS DE VISUALIZACIÓN */}
