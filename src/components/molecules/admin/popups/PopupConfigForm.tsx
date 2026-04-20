@@ -311,9 +311,12 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Tiempo de aparición <span className="text-red-500">*</span></label>
                 <select value={delaySeconds} onChange={(e) => setDelaySeconds(e.target.value)} disabled={!active} className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-transparent dark:text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed">
-                  <option value="3">Rápido (3 segundos)</option>
-                  <option value="5">Recomendado (5 segundos)</option>
-                  <option value="8">Lento (8 segundos)</option>
+                  <option value="3">3s - Muy rápido</option>
+                  <option value="5">5s - Rápido</option>
+                  <option value="8">8s - Normal</option>
+                  <option value="12">12s - Relajado</option>
+                  <option value="30">30s - Alto engagement</option>
+                  <option value="60">60s - Muy tardío</option>
                 </select>
                 <span className="text-[10px] text-gray-500">Tiempo de espera antes de que salte a la pantalla.</span>
               </div>
