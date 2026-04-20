@@ -4,7 +4,7 @@ import { imagenes } from "@/data/imagenes";
 
 const NegocioSection: React.FC = () => {
   return (
-    <section className="w-full border-b-8 border-[#98D8DF]">
+    <section className="w-full">
       {/* ENCABEZADO CELESTE */}
       <div className="w-full bg-[#18879B] py-6 px-6 md:px-16 text-center">
         <Text
