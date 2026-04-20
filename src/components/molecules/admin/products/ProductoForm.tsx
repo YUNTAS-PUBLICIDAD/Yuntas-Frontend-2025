@@ -70,19 +70,19 @@ const GALLERY_SLOTS = [
     {
       value: 'PopupLeft',
       label: 'Popup Izquierda',
-      size: '800 x 800 px',
+      size: '336 x 535 px',
       desc: 'Popup lado izquierdo (desktop).'
     },
     {
      value: 'PopupRight' ,
      label: 'Popup Derecha',
-     size: '800 x 800 px',
+     size: '336 x 535 px',
      desc: 'Popup lado derecha (desktop)'
     },
     {
       value: 'PopupMobile',
       label: 'Popup Mobile',
-      size: '600 x 800 px',
+      size: '284 x 535 px',
       desc: 'Popup optimizado para móvil'
     }
 ] as const;
