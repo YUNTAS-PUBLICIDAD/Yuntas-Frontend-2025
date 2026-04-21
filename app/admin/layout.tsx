@@ -19,7 +19,7 @@ export default function AdminLayout({
   const { isLoading } = useTokenValidation();
   const segment = useSelectedLayoutSegment();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -38,26 +38,25 @@ export default function AdminLayout({
   const title = adminSections[key].label;
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
-      {/* ───────────────── ENCABEZADO AZUL ───────────────── */}
-      {/* <Encabezado variant="azul">{title}</Encabezado> */}
+    <div className="flex min-h-screen bg-white dark:bg-[#141A3F] transition-colors duration-300">
 
-      {/* ───────────────── HEADER DESKTOP ───────────────── */}
-      <HeaderAdmin className="text-black" />
+      {/* ───────────────── SIDEBAR (desktop) ───────────────── */}
+      <SidebarSection
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      {/* ───────────────── HEADER MOBILE ───────────────── */}
-      <HeaderMobil />
+      {/* ───────────────── COLUMNA DERECHA ───────────────── */}
+      <div className="flex flex-col flex-1 min-w-0">
 
-      {/* ───────────────── CONTENIDO ───────────────── */}
-      <div className="flex pt-16 md:pt-24 flex-1 bg-white dark:bg-[#141A3F] transition-colors duration-300">
-        {/* Sidebar */}
-        <SidebarSection
-          isOpen={false}
-          onClose={() => {}}
-        />
+        {/* HEADER DESKTOP */}
+        <HeaderAdmin className="text-black" />
 
-        {/* Página */}
-        <main className="flex-1 min-w-0 py-6 px-4 md:py-8 md:px-8 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+        {/* HEADER MOBILE */}
+        <HeaderMobil />
+
+        {/* CONTENIDO */}
+        <main className="flex-1 py-6 px-4 md:py-8 md:px-8 pt-20 md:pt-6 bg-white dark:bg-[#141A3F] transition-colors duration-300">
           <AdminBreadcrumbs />
           <h1 className="mb-6 text-2xl font-bold text-[#0D1030] dark:text-white md:text-3xl">
             {title}
