@@ -68,7 +68,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
 >
         <div className="flex flex-col items-center gap-2 py-8 px-6 border-b border-gray-200 dark:border-white/10">
         <Link href="/">
-          <Logo src="/logo.svg" size="xl" alt="Yuntas Publicidad" />
+          <Logo src="/logo.svg" darkSrc="/logo-white.png" size="xl" alt="Yuntas Publicidad" />
         </Link>
         <span className="text-base font-semibold tracking-widest uppercase text-[#5A6B93] dark:text-white/70">
           Administración
