@@ -47,7 +47,7 @@ export default function AdminLayout({
       />
 
       {/* ───────────────── COLUMNA DERECHA ───────────────── */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex flex-col flex-1 min-w-0 lg:ml-72">
 
         {/* HEADER DESKTOP */}
         <HeaderAdmin className="text-black" />
