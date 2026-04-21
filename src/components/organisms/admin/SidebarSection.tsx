@@ -6,6 +6,8 @@ import Button from "@/components/atoms/Button";
 import NavList from "@/components/molecules/admin/NavList";
 import UserSection from "@/components/molecules/header/UserSection";
 import Loader from "@/components/atoms/Loader";
+import Link from "next/link";
+import Logo from "@/components/atoms/Logo";
 import {
   BellRing,
   ClipboardList,
@@ -64,19 +66,16 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
     transition-colors duration-300
   "
 >
-        <h2
-          className="
-                    text-center font-semibold text-2xl py-8 px-6
-                    text-[#0D1030] dark:text-white
-                "
-        >
+        <div className="flex flex-col items-center gap-2 py-8 px-6 border-b border-gray-200 dark:border-white/10">
+        <Link href="/">
+          <Logo src="/logo.svg" size="xl" alt="Yuntas Publicidad" />
+        </Link>
+        <span className="text-base font-semibold tracking-widest uppercase text-[#5A6B93] dark:text-white/70">
           Administración
-        </h2>
+        </span>
+      </div>
 
-        <nav className="flex-1 px-6 pb-6 text-[#203565] dark:text-white border-y border-gray-200 dark:border-white/10">
-          <p className="px-3 pt-6 pb-4 text-xs font-semibold tracking-[0.2em] uppercase text-[#5A6B93] dark:text-white/60">
-            Navegación
-          </p>
+        <nav className="flex-1 px-6 pb-6 text-[#203565] dark:text-white mt-4">
           <NavList
             items={navItems}
             className="text-base"
