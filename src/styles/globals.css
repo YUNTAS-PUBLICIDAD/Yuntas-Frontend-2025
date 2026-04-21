@@ -47,6 +47,17 @@
 }
 
 @layer utilities {
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
   @keyframes heartbeat {
     0% { transform: scale(1); }
     14% { transform: scale(1.1); }

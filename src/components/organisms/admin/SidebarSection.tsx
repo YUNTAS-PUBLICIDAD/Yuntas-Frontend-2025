@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import SwitchMode from "@/components/molecules/admin/SwitchMode";
 import Button from "@/components/atoms/Button";
@@ -46,6 +47,32 @@ const navItems: NavItem[] = [
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
   const { logout, isLoading } = useAuth();
+  const navRef = useRef<HTMLElement | null>(null);
+  const [showTopFade, setShowTopFade] = useState(false);
+  const [showBottomFade, setShowBottomFade] = useState(true);
+
+  const updateFadeState = () => {
+    const navElement = navRef.current;
+
+    if (!navElement) return;
+
+    const { scrollTop, clientHeight, scrollHeight } = navElement;
+    const threshold = 6;
+
+    setShowTopFade(scrollTop > threshold);
+    setShowBottomFade(scrollTop + clientHeight < scrollHeight - threshold);
+  };
+
+  useEffect(() => {
+    updateFadeState();
+
+    const onResize = () => updateFadeState();
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   return (
     <>
@@ -60,7 +87,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
 <aside
   className="
     hidden lg:flex
-    sticky top-0 h-full min-h-fit w-72 flex-col
+    fixed top-0 left-0 h-screen w-72 flex-col
     border-r border-gray-300
     bg-white dark:bg-[#141A3F]
     transition-colors duration-300
@@ -68,19 +95,33 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
 >
         <div className="flex flex-col items-center gap-2 py-8 px-6 border-b border-gray-200 dark:border-white/10">
         <Link href="/">
-          <Logo src="/logo.svg" size="xl" alt="Yuntas Publicidad" />
+          <Logo src="/logo.svg" darkSrc="/logo-white.png" size="xl" alt="Yuntas Publicidad" />
         </Link>
         <span className="text-base font-semibold tracking-widest uppercase text-[#5A6B93] dark:text-white/70">
           Administración
         </span>
       </div>
 
-        <nav className="flex-1 px-6 pb-6 text-[#203565] dark:text-white mt-4">
-          <NavList
-            items={navItems}
-            className="text-base"
-          />
-        </nav>
+        <div className="relative flex-1 min-h-0 px-6 pb-6 mt-4">
+          <nav
+            ref={navRef}
+            onScroll={updateFadeState}
+            className="h-full overflow-y-auto scrollbar-hidden text-[#203565] dark:text-white"
+          >
+            <NavList
+              items={navItems}
+              className="text-base"
+            />
+          </nav>
+
+          {showTopFade && (
+            <div className="pointer-events-none absolute left-6 right-6 top-0 h-6 bg-gradient-to-b from-white to-transparent dark:from-[#141A3F]" />
+          )}
+
+          {showBottomFade && (
+            <div className="pointer-events-none absolute left-6 right-6 bottom-6 h-6 bg-gradient-to-t from-white to-transparent dark:from-[#141A3F]" />
+          )}
+        </div>
 
         <div className="flex justify-center my-6">
           <Button size="sm" className="dark:bg-[#293296] dark:text-white">
