@@ -20,7 +20,7 @@ const buildBasePopupForm = (popupData: Popup) => {
   formData.append("title", popupData.title);
   formData.append("button_text", popupData.button_text);
   formData.append("button_color", popupData.button_color || "#6DE1E3");
-  formData.append("button_text_color", popupData.button_text_color || "#FFFFFF");
+  formData.append("button_text_color", popupData.button_text_color ?? "#FFFFFF");
   formData.append("page_target", popupData.page_target);
   formData.append("delay_seconds", String(popupData.delay_seconds));
   formData.append("priority", String(popupData.priority));
