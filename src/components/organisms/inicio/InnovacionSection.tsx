@@ -32,17 +32,20 @@ const ChevronLeftCircle = () => (
   </div>
 );
 
-const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: any }) => {
+const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: React.ComponentType }) => {
   return (
-    <div className="flex items-center w-full max-w-3xl">
+    <div className="group relative flex w-full max-w-3xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-0">
+      <div className="absolute -inset-1 rounded-3xl sm:rounded-full bg-gradient-to-r from-[#6DE1E3]/20 via-transparent to-[#0ea5b7]/20 blur-md opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
       {/* Círculo del icono */}
-      <div className="flex-shrink-0 relative z-10 bg-[#B2EBF2] w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center shadow-md">
+      <div className="flex-shrink-0 relative z-10 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-[#D8F8FB] via-[#BDEEF5] to-[#8DDBE6] border border-white/80 shadow-[0_12px_30px_rgba(13,110,119,0.18)] transition-transform duration-300 group-hover:-translate-y-0.5">
         <Icon />
       </div>
 
       {/* Texto */}
-      <div className="bg-[#E0F7FA] -ml-7 md:-ml-8 pl-10 md:pl-12 pr-5 md:pr-8 py-3 md:py-4 rounded-r-full flex-grow min-h-16 md:h-20 flex items-center">
-        <p className="text-gray-800 font-semibold text-sm md:text-lg leading-tight">
+      <div className="relative w-full overflow-hidden sm:-ml-6 lg:-ml-8 pl-5 sm:pl-10 lg:pl-12 pr-4 sm:pr-6 lg:pr-8 py-3 md:py-4 rounded-3xl sm:rounded-r-full sm:rounded-l-none flex-grow min-h-[4.5rem] sm:min-h-16 md:min-h-[5rem] flex items-center border border-[#8EDCE5]/70 bg-gradient-to-r from-[#F2FCFD] via-[#E8FAFC] to-[#DFF6FA] shadow-[0_10px_24px_rgba(14,82,95,0.10)] transition-all duration-300 group-hover:shadow-[0_14px_30px_rgba(14,82,95,0.16)]">
+        <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#24A8B8] to-[#0E7B8A]" />
+        <p className="text-[#12424A] font-semibold text-sm md:text-base lg:text-lg leading-snug pr-1">
           {text}
         </p>
       </div>
@@ -78,7 +81,7 @@ const InnovacionSection: React.FC = () => {
         </div>
 
         {/* ── COLUMNA DERECHA ── */}
-        <div className="flex flex-col items-center gap-6 w-full md:w-1/2">
+        <div className="flex flex-col items-center gap-6 w-full lg:w-1/2">
           <div className="relative w-full rounded-3xl overflow-hidden shadow-lg group">
             <div className="absolute top-8 right-0 z-10 bg-black text-white py-2 px-5 rounded-l-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
               <span className="mt-0.5">LETREROS NEÓN</span>
