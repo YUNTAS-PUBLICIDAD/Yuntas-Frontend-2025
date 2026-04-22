@@ -6,24 +6,24 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getToken } from "@/utils/token";
 
-
 export default function LoginPage() {
     const router = useRouter();
 
     useEffect(() => {
         const token = getToken();
-
         if (token) {
             router.replace("/admin/seguimiento");
         }
     }, [router]);
 
     return (
-        <main className="min-h-screen relative md:grid md:grid-cols-2">
+        <main className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center gap-3 py-10">
+            {/* Fondo full screen */}
             <HeroSection />
 
-            <div className="absolute inset-2 flex top-40 items-center justify-center
-                    md:bg-gray-200 md:static md:flex md:items-center md:justify-center">
+        
+            {/* Form flotante */}
+            <div className="relative z-10 w-full px-5 md:px-0 md:w-[520px] lg:w-[580px]">
                 <FormSection />
             </div>
         </main>
