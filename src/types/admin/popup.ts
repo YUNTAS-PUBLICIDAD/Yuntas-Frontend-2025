@@ -14,6 +14,7 @@ export interface Popup {
   slug?: string;
   title: string;
   button_text: string;
+  button_text_color?: string;
   button_color?: string;
   page_target: string;
   delay_seconds: number;

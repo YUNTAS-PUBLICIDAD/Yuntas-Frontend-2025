@@ -42,6 +42,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageId, setMobileImageId] = useState<number | undefined>(undefined);
   const [mobileImgSrc, setMobileImgSrc] = useState('');
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
+  const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
 
   const [products, setProducts] = useState<{id: number; name:string}[]>([]);
   // const [productId, setProductId] = useState<number | null>(null);
@@ -93,11 +94,15 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     return true;
   }
 
+  const initializedRef = useRef(false);
+
   useEffect(() => {
-    if (initialData) {
+    // Evita que se ejecute multiples veces y pise el estado
+    if (!initialData || initializedRef.current)  return;
       setActive(initialData.active !== undefined ? initialData.active : false);
       setTitle(initialData.title || '');
       setButtonText(initialData.button_text || '');
+      setButtonTextColor(initialData.button_text_color || '#FFFFFF');
       // setPageTarget(initialData.page_target || 'inicio');
       // pageTarget;
       setDelaySeconds(initialData.delay_seconds?.toString() || '5');
@@ -123,21 +128,22 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           if (mCenter.image) setMobileImgSrc(`${BACKEND_URL}${mCenter.image.startsWith('/') ? '' : '/'}${mCenter.image}`);
         }
       }
-    } else {
-      setActive(false);
-      setTitle('');
-      setButtonText('');
+    // } else {
+    //   setActive(false);
+    //   setTitle('');
+    //   setButtonText('');
+    //   setButtonTextColor('#FFFFFF');
       // setPageTarget('inicio');
       // pageTarget;
-      setDelaySeconds('5');
-      setImageAlt('');
-      setImageTitle('');
+      // setDelaySeconds('5');
+      // setImageAlt('');
+      // setImageTitle('');
 
-      setDesktopImageId(undefined); setDesktopImgSrc(''); setDesktopImageFile(null);
-      setTextImageId(undefined); setTextImgSrc(''); setTextImageFile(null);
-      setMobileImageId(undefined); setMobileImgSrc(''); setMobileImageFile(null);
-      setButtonColor('#6DE1E3');
-    }
+    //   setDesktopImageId(undefined); setDesktopImgSrc(''); setDesktopImageFile(null);
+    //   setTextImageId(undefined); setTextImgSrc(''); setTextImageFile(null);
+    //   setMobileImageId(undefined); setMobileImgSrc(''); setMobileImageFile(null);
+    //   setButtonColor('#6DE1E3');
+    // }
   }, [initialData]);
 
   const handleDesktopImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,6 +251,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
       button_color: buttonColor,
+      button_text_color: buttonTextColor,
       page_target: pageTarget,
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
@@ -253,9 +260,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     };
 
     console.log('PAYLOAD FINAL:', popupData);
+    console.log("ANTES DE ENVIAR:", popupData.button_text_color);
 
     try {
-
    const res = await onSubmit(popupData);
    showToast.success?.('Popup guardado correctamente');
     console.log('SUBMIT OK:', res);
@@ -414,6 +421,20 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 </div>
                 <span className="text-[10px] text-gray-500">Selecciona un color llamativo.</span>
               </div>
+
+              <div className='flex flex-col gap-1'>
+                <label className='text-xs font-semibold text-gray-700 dark:text-gray-300' htmlFor="">
+                  Color del texto del Botón
+                </label>
+                <div className='flex items-center gap-3'>
+                  <input type="color" onChange={(e) =>{
+                   console.log("CAMBIANDO A:", e.target.value);
+                    setButtonTextColor(e.target.value)}} disabled={!active} className='h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1' value={buttonTextColor} />
+                  <span className='text-sm font-mono text-gray-500'>
+                    {buttonTextColor}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -557,6 +578,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 buttonText={buttonText || "CONOCER MÁS"}
                 buttonColor={buttonColor}
                 isSubmitting={false}
+                buttonTextColor={buttonTextColor}
               />
             )}
 

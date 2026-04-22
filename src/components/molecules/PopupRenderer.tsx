@@ -14,9 +14,11 @@ interface PopupLayoutProps {
   handleChange: (field: string, value: string) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
   buttonText: string;
+  buttonTextColor: string;
   buttonColor: string;
   isSubmitting: boolean;
   forceVisible?: boolean;
+
 }
 
 interface PopupRendererProps extends Omit<PopupLayoutProps, "forceVisible"> {
@@ -43,11 +45,12 @@ const DesktopPopupComposition = ({
   handleSubmit,
   buttonText,
   buttonColor,
+  buttonTextColor,
   isSubmitting,
   forceVisible = false,
 }: PopupLayoutProps) => {
   return (
-    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-[271px_335px] w-[606px] h-[479px] rounded-2xl overflow-hidden`}>
+    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-2 w-[672px] aspect-[672/535] rounded-2xl overflow-hidden`}>
       {/* LEFT IMAGE */}
       <div className="relative w-full h-full">
         <img
@@ -98,6 +101,7 @@ const DesktopPopupComposition = ({
             buttonText={buttonText}
             isSubmitting={isSubmitting}
             buttonColor={buttonColor}
+            buttonTextColor={buttonTextColor}
           />
         {/*</div>*/}
         </div>
@@ -118,6 +122,7 @@ const MobilePopupComposition = ({
   handleSubmit,
   buttonText,
   buttonColor,
+  buttonTextColor,
   isSubmitting,
   forceVisible = false,
 }: PopupLayoutProps) => {
@@ -126,7 +131,7 @@ const MobilePopupComposition = ({
   const isPlaceholder = !mobileImgSrc && !desktopImgSrc;
 
   return (
-    <div className={forceVisible ? "w-[90vw] max-w-[340px] h-[600px] relative overflow-hidden rounded-[2rem]" : "md:hidden w-[90vw] max-w-[340px] h-[600px] relative overflow-hidden rounded-[2rem]"}>
+    <div className={`${forceVisible ? "" : "md:hidden"} w-[90vw] max-w-[320px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]"}`}>
 
       <img
         src={finalMobileImg}
@@ -150,6 +155,7 @@ const MobilePopupComposition = ({
           buttonText={buttonText}
           isSubmitting={isSubmitting}
           buttonColor={buttonColor}
+          buttonTextColor={buttonTextColor}
         />
       </div>
     </div>
@@ -178,6 +184,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
   handleSubmit,
   buttonText,
   buttonColor,
+  buttonTextColor,
   isSubmitting,
 }) => {
   if (!isOpen) return null;
@@ -223,6 +230,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
             buttonColor={buttonColor}
             isSubmitting={isSubmitting}
             forceVisible={previewDevice === "desktop"}
+            buttonTextColor={buttonTextColor}
           />
         )}
 
@@ -241,6 +249,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
             buttonColor={buttonColor}
             isSubmitting={isSubmitting}
             forceVisible={previewDevice === "mobile"}
+            buttonTextColor={buttonTextColor}
           />
         )}
       </div>
