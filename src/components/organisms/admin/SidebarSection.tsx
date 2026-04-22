@@ -13,6 +13,7 @@ import {
   BellRing,
   ClipboardList,
   FileText,
+  LayoutDashboard,
   Megaphone,
   MessageSquare,
   Package,
@@ -32,7 +33,7 @@ interface SidebarProps {
 }
 
 const navItems: NavItem[] = [
-  //{ label: "Inicio", href: "/admin" },
+  { label: "General", href: "/admin", icon: LayoutDashboard },
   { label: "Seguimiento", href: "/admin/seguimiento", icon: ClipboardList },
   { label: "Blogs", href: "/admin/blogs", icon: FileText },
   { label: "Productos", href: "/admin/productos", icon: Package },
