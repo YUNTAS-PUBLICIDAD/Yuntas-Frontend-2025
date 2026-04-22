@@ -18,6 +18,13 @@ interface NavListProps {
 export default function NavList({ items, className = "" }: NavListProps) {
     const pathname = usePathname().replace(/\/+$/, "");
 
+    const isActive = (href: string) => {
+        const cleanHref = href.replace(/\/+$/, "");
+        
+        if (cleanHref === "/admin") return pathname === "/admin";
+        return pathname === cleanHref || pathname.startsWith(`${cleanHref}/`);
+    };
+
     return (
         <ul className={`flex flex-col gap-2 ${className}`}>
             {items.map((item) => (
@@ -26,7 +33,7 @@ export default function NavList({ items, className = "" }: NavListProps) {
                     label={item.label}
                     href={item.href}
                     icon={item.icon}
-                    isActive={pathname === item.href || pathname.startsWith(`${item.href}/`)}
+                    isActive={isActive(item.href)}
                 />
             ))}
         </ul>
