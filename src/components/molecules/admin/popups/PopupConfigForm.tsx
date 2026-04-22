@@ -42,6 +42,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageId, setMobileImageId] = useState<number | undefined>(undefined);
   const [mobileImgSrc, setMobileImgSrc] = useState('');
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
+  const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
 
   const [products, setProducts] = useState<{id: number; name:string}[]>([]);
   // const [productId, setProductId] = useState<number | null>(null);
@@ -98,6 +99,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setActive(initialData.active !== undefined ? initialData.active : false);
       setTitle(initialData.title || '');
       setButtonText(initialData.button_text || '');
+      setButtonTextColor(initialData.button_text_color || '#FFFFFF');
       // setPageTarget(initialData.page_target || 'inicio');
       // pageTarget;
       setDelaySeconds(initialData.delay_seconds?.toString() || '5');
@@ -127,6 +129,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setActive(false);
       setTitle('');
       setButtonText('');
+      setButtonTextColor('#FFFFFF');
       // setPageTarget('inicio');
       // pageTarget;
       setDelaySeconds('5');
@@ -245,6 +248,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       lead_source_id: getSourceId(pageTarget),
       button_text: buttonText,
       button_color: buttonColor,
+      button_text_color: buttonTextColor,
       page_target: pageTarget,
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
@@ -414,6 +418,18 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 </div>
                 <span className="text-[10px] text-gray-500">Selecciona un color llamativo.</span>
               </div>
+
+              <div className='flex flex-col gap-1'>
+                <label className='text-xs font-semibold text-gray-700 dark:text-gray-300' htmlFor="">
+                  Color del texto del Botón
+                </label>
+                <div className='flex items-center gap-3'>
+                  <input type="color" onChange={(e) => setButtonTextColor(e.target.value)} disabled={!active} className='h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1' value={buttonTextColor} />
+                  <span className='text-sm font-mono text-gray-500'>
+                    {buttonTextColor}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -557,6 +573,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 buttonText={buttonText || "CONOCER MÁS"}
                 buttonColor={buttonColor}
                 isSubmitting={false}
+                buttonTextColor={buttonTextColor}
               />
             )}
 
