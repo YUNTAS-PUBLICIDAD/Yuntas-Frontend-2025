@@ -94,8 +94,11 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     return true;
   }
 
+  const initializedRef = useRef(false);
+
   useEffect(() => {
-    if (initialData) {
+    // Evita que se ejecute multiples veces y pise el estado
+    if (!initialData || initializedRef.current)  return;
       setActive(initialData.active !== undefined ? initialData.active : false);
       setTitle(initialData.title || '');
       setButtonText(initialData.button_text || '');
@@ -125,22 +128,22 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           if (mCenter.image) setMobileImgSrc(`${BACKEND_URL}${mCenter.image.startsWith('/') ? '' : '/'}${mCenter.image}`);
         }
       }
-    } else {
-      setActive(false);
-      setTitle('');
-      setButtonText('');
-      setButtonTextColor('#FFFFFF');
+    // } else {
+    //   setActive(false);
+    //   setTitle('');
+    //   setButtonText('');
+    //   setButtonTextColor('#FFFFFF');
       // setPageTarget('inicio');
       // pageTarget;
-      setDelaySeconds('5');
-      setImageAlt('');
-      setImageTitle('');
+      // setDelaySeconds('5');
+      // setImageAlt('');
+      // setImageTitle('');
 
-      setDesktopImageId(undefined); setDesktopImgSrc(''); setDesktopImageFile(null);
-      setTextImageId(undefined); setTextImgSrc(''); setTextImageFile(null);
-      setMobileImageId(undefined); setMobileImgSrc(''); setMobileImageFile(null);
-      setButtonColor('#6DE1E3');
-    }
+    //   setDesktopImageId(undefined); setDesktopImgSrc(''); setDesktopImageFile(null);
+    //   setTextImageId(undefined); setTextImgSrc(''); setTextImageFile(null);
+    //   setMobileImageId(undefined); setMobileImgSrc(''); setMobileImageFile(null);
+    //   setButtonColor('#6DE1E3');
+    // }
   }, [initialData]);
 
   const handleDesktopImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -257,9 +260,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     };
 
     console.log('PAYLOAD FINAL:', popupData);
+    console.log("ANTES DE ENVIAR:", popupData.button_text_color);
 
     try {
-
    const res = await onSubmit(popupData);
    showToast.success?.('Popup guardado correctamente');
     console.log('SUBMIT OK:', res);
@@ -424,7 +427,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                   Color del texto del Botón
                 </label>
                 <div className='flex items-center gap-3'>
-                  <input type="color" onChange={(e) => setButtonTextColor(e.target.value)} disabled={!active} className='h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1' value={buttonTextColor} />
+                  <input type="color" onChange={(e) =>{
+                   console.log("CAMBIANDO A:", e.target.value);
+                    setButtonTextColor(e.target.value)}} disabled={!active} className='h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1' value={buttonTextColor} />
                   <span className='text-sm font-mono text-gray-500'>
                     {buttonTextColor}
                   </span>
