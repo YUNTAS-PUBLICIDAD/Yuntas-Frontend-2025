@@ -5,19 +5,21 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/productos/',
+          '/productos/*',
+          '/blog/',
+          '/blog/*',
+          '/nosotros/',
+          '/contacto/',
+          '/'
+        ],
         disallow: [
           '/api/',
           '/admin/',
-          '/_next/',
-          '/private/',
+          '/login/'
         ],
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/api/', '/admin/'],
-      },
+      }
     ],
     sitemap: 'https://yuntaspublicidad.com/sitemap.xml',
   }
