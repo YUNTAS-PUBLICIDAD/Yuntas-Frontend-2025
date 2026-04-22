@@ -33,6 +33,76 @@ interface AdminTableProps<T = any> {
     resetSearchText?: string;     // Texto del botón ("Ver todos los...")
 }
 
+function DesktopTableSkeleton({
+    columnsCount,
+    includeActions,
+    rows = 5
+}: {
+    columnsCount: number;
+    includeActions: boolean;
+    rows?: number;
+}) {
+    return (
+        <>
+            {Array.from({ length: rows }).map((_, rowIndex) => (
+                <tr key={`desktop-skeleton-${rowIndex}`}>
+                    {Array.from({ length: columnsCount }).map((__, colIndex) => (
+                        <td
+                            key={`desktop-skeleton-${rowIndex}-${colIndex}`}
+                            className="py-3 px-4 bg-[#F4F4F2] dark:bg-white first:rounded-l-lg"
+                        >
+                            <div className="h-4 w-full max-w-[9rem] mx-auto rounded bg-gray-200 animate-pulse" />
+                        </td>
+                    ))}
+                    {includeActions && (
+                        <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-white rounded-r-lg">
+                            <div className="flex justify-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
+                                <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
+                            </div>
+                        </td>
+                    )}
+                </tr>
+            ))}
+        </>
+    );
+}
+
+function MobileCardSkeleton({
+    rows = 3,
+    includeActions
+}: {
+    rows?: number;
+    includeActions: boolean;
+}) {
+    return (
+        <>
+            {Array.from({ length: rows }).map((_, index) => (
+                <div
+                    key={`mobile-skeleton-${index}`}
+                    className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 shadow-sm"
+                >
+                    <div className="flex flex-col items-center text-center space-y-3">
+                        <div className="h-3 w-24 rounded bg-gray-200 animate-pulse" />
+                        <div className="h-4 w-40 rounded bg-gray-200 animate-pulse" />
+                        <div className="h-3 w-24 rounded bg-gray-200 animate-pulse" />
+                        <div className="h-4 w-32 rounded bg-gray-200 animate-pulse" />
+                        <div className="h-3 w-24 rounded bg-gray-200 animate-pulse" />
+                        <div className="h-4 w-44 rounded bg-gray-200 animate-pulse" />
+                    </div>
+
+                    {includeActions && (
+                        <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
+                            <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
+                            <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
+                        </div>
+                    )}
+                </div>
+            ))}
+        </>
+    );
+}
+
 export default function AdminTable({
     columns,
     data,
@@ -101,17 +171,11 @@ export default function AdminTable({
                 <tbody>
                     { /* Lógica de Carga */}
                     { isLoading ? (
-                        <tr>
-                            <td 
-                                colSpan={columns.length + (role === "admin" ? 1 : 0)} 
-                                className="py-10 text-center text-[#0D1030] font-semibold bg-[#F4F4F2] dark:bg-white rounded-lg"
-                            >
-                                <div className="flex justify-center items-center gap-2">
-                                    <span className="animate-spin text-2xl">⏳</span>
-                                    Cargando información...
-                                </div>
-                            </td>
-                        </tr>
+                        <DesktopTableSkeleton
+                            columnsCount={columns.length}
+                            includeActions={role === "admin"}
+                            rows={minRows}
+                        />
                     ) : (
                     rows.map((row, index) => { 
                         const isEmpty = row._empty === true;
@@ -153,9 +217,10 @@ export default function AdminTable({
             {/* MÓVIL: Tarjetas responsive */}
             <div className="lg:hidden flex flex-col gap-6">
                 {isLoading ? (
-                    <div className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 text-center font-semibold text-[#0D1030]">
-                        ⏳ Cargando información...
-                    </div>
+                    <MobileCardSkeleton
+                        rows={Math.max(2, Math.min(minRows, 4))}
+                        includeActions={role === "admin"}
+                    />
                 ) : (
                 rows.map((row, index) => {
                     const isEmpty = row._empty === true;
