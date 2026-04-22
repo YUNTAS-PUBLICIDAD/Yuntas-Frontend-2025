@@ -34,18 +34,18 @@ const ChevronLeftCircle = () => (
 
 const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: React.ComponentType }) => {
   return (
-    <div className="group relative flex w-full max-w-3xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-0">
+    <div className="group relative flex w-full max-w-3xl flex-row items-center gap-0">
       <div className="absolute -inset-1 rounded-3xl sm:rounded-full bg-gradient-to-r from-[#6DE1E3]/20 via-transparent to-[#0ea5b7]/20 blur-md opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       {/* Círculo del icono */}
-      <div className="flex-shrink-0 relative z-10 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-[#D8F8FB] via-[#BDEEF5] to-[#8DDBE6] border border-white/80 shadow-[0_12px_30px_rgba(13,110,119,0.18)] transition-transform duration-300 group-hover:-translate-y-0.5">
+      <div className="flex-shrink-0 relative z-10 w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-[#D8F8FB] via-[#BDEEF5] to-[#8DDBE6] border border-white/80 shadow-[0_12px_30px_rgba(13,110,119,0.18)] transition-transform duration-300 group-hover:-translate-y-0.5">
         <Icon />
       </div>
 
       {/* Texto */}
-      <div className="relative w-full overflow-hidden sm:-ml-6 lg:-ml-8 pl-5 sm:pl-10 lg:pl-12 pr-4 sm:pr-6 lg:pr-8 py-3 md:py-4 rounded-3xl sm:rounded-r-full sm:rounded-l-none flex-grow min-h-[4.5rem] sm:min-h-16 md:min-h-[5rem] flex items-center border border-[#8EDCE5]/70 bg-gradient-to-r from-[#F2FCFD] via-[#E8FAFC] to-[#DFF6FA] shadow-[0_10px_24px_rgba(14,82,95,0.10)] transition-all duration-300 group-hover:shadow-[0_14px_30px_rgba(14,82,95,0.16)]">
+      <div className="relative w-full overflow-hidden -ml-4 sm:-ml-6 lg:-ml-8 pl-4 sm:pl-10 lg:pl-12 pr-3 sm:pr-6 lg:pr-8 py-2 sm:py-3 md:py-4 rounded-full flex-grow min-h-14 sm:min-h-16 md:min-h-[5rem] flex items-center border border-[#8EDCE5]/70 bg-gradient-to-r from-[#F2FCFD] via-[#E8FAFC] to-[#DFF6FA] shadow-[0_10px_24px_rgba(14,82,95,0.10)] transition-all duration-300 group-hover:shadow-[0_14px_30px_rgba(14,82,95,0.16)]">
         <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#24A8B8] to-[#0E7B8A]" />
-        <p className="text-[#12424A] font-semibold text-sm md:text-base lg:text-lg leading-snug pr-1">
+        <p className="text-[#12424A] font-semibold text-xs sm:text-sm md:text-base lg:text-lg leading-snug pr-1">
           {text}
         </p>
       </div>
@@ -56,10 +56,10 @@ const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: React.Compon
 const InnovacionSection: React.FC = () => {
   return (
     <section className="w-full py-16 px-4 md:px-8 lg:px-12 bg-white">
-      <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
+      <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
 
         {/* ── COLUMNA IZQUIERDA ── */}
-        <div className="flex flex-col items-center gap-6 w-full md:w-1/2">
+        <div className="flex flex-col items-center gap-6 w-full lg:w-1/2">
           <div className="relative w-full rounded-3xl overflow-hidden shadow-lg group">
             <div className="absolute top-8 left-0 z-10 bg-black text-white py-2 px-5 rounded-r-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
               <ChevronRightCircle />
