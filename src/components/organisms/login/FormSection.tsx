@@ -43,7 +43,7 @@ export default function FormSection() {
                 <span className="text-white/50 md:text-s tracking-[0.3em] uppercase mb-1">Bienvenido a</span>
                 <h1 className="text-white font-bold text-2xl md:text-2xl leading-tight drop-shadow-[0_0_12px_rgba(0,0,0,0.9)]">
                     Yuntas{" "}
-                    <span className="text-cyan-300">Producciones</span>
+                    <span className="text-[#6DE1E3]">Producciones</span>
                 </h1>
                 {/* Línea decorativa */}
                 <div className="mt-2 flex items-center gap-2">
@@ -94,7 +94,7 @@ export default function FormSection() {
 
                 <Button
                     type="submit"
-                    className="uppercase flex items-center justify-center gap-2 rounded-xl font-semibold tracking-wider px-18 mt-1"
+                    className="uppercase flex items-center justify-center gap-2 rounded-xl font-semibold tracking-wider px-20 mt-2 bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] hover:scale-105 hover:shadow-[0_15px_40px_rgba(109,225,227,0.5)] active:scale-95 transition-all duration-300"
                     disabled={isLoading}
                 >
                     {isLoading ? (
