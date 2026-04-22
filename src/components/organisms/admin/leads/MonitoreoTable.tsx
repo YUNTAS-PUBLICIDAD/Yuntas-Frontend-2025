@@ -15,6 +15,7 @@ const SearchXIcon = () => (
 interface MonitoreoTableProps<T = any> {
   data: T[];
   minRows?: number;
+  isLoading?: boolean;
   emptyMessage?: string;
   onResetSearch?: () => void;
   resetSearchText?: string;
@@ -36,6 +37,7 @@ const columns = [
 export default function MonitoreoTable({
   data,
   minRows = 5,
+  isLoading = false,
   emptyMessage = "No se encontraron registros",
   onResetSearch,
   resetSearchText = "Ver todos",
@@ -44,7 +46,7 @@ export default function MonitoreoTable({
 
   const isDataEmpty = data.length === 0;
 
-  if (isDataEmpty) {
+  if (!isLoading && isDataEmpty) {
       return (
           <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4 w-full">
               <SearchXIcon />
@@ -82,7 +84,23 @@ export default function MonitoreoTable({
         </thead>
 
         <tbody className="block lg:table-row-group">
-          {rows.map((row, index) => {
+          {isLoading
+            ? Array.from({ length: minRows }).map((_, index) => (
+                <tr
+                  key={`monitor-desktop-skeleton-${index}`}
+                  className="hidden lg:table-row mb-4 lg:mb-0 rounded-lg overflow-hidden"
+                >
+                  {columns.map((col) => (
+                    <td
+                      key={`${col.key}-${index}`}
+                      className="py-3 px-4 bg-[#F4F4F2] dark:bg-white first:rounded-l-lg last:rounded-r-lg"
+                    >
+                      <div className="h-4 w-full max-w-[7rem] mx-auto rounded bg-gray-200 animate-pulse" />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            : rows.map((row, index) => {
             const isEmpty = row._empty === true;
 
             return (
@@ -127,6 +145,26 @@ export default function MonitoreoTable({
           })}
         </tbody>
       </table>
+
+      {isLoading && (
+        <div className="lg:hidden flex flex-col gap-6">
+          {Array.from({ length: Math.max(2, Math.min(minRows, 4)) }).map((_, index) => (
+            <div
+              key={`monitor-mobile-skeleton-${index}`}
+              className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 shadow-sm"
+            >
+              <div className="space-y-3">
+                {Array.from({ length: 5 }).map((__, lineIndex) => (
+                  <div key={`line-${lineIndex}`} className="flex justify-between items-center gap-4">
+                    <div className="h-3 w-24 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-4 w-20 rounded bg-gray-200 animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
