@@ -270,7 +270,17 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
       contents: contents
     };
 
+    try{
     await onSubmit(payload);
+
+    showToast.success(template.id ? "Template actualizado correctamente" : "Template crado correctamente");
+
+    }catch (error){
+      console.error(error);
+      showToast.error("Error al guardar el template");
+    }
+
+
   };
 
   // Configuración de los botones del editor
