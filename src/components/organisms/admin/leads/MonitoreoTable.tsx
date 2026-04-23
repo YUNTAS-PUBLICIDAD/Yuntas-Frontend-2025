@@ -48,16 +48,16 @@ export default function MonitoreoTable({
 
   if (!isLoading && isDataEmpty) {
       return (
-          <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4 w-full">
+        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 dark:bg-[#1C2347] border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
               <SearchXIcon />
-              <h3 className="text-lg font-medium text-gray-900">{emptyMessage}</h3>
-              <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
+          <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
                   No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
               </p>
               {onResetSearch && (
                   <button
                       onClick={onResetSearch}
-                      className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
+              className="mt-4 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
                   >
                       {resetSearchText}
                   </button>
@@ -93,9 +93,9 @@ export default function MonitoreoTable({
                   {columns.map((col) => (
                     <td
                       key={`${col.key}-${index}`}
-                      className="py-3 px-4 bg-[#F4F4F2] dark:bg-white first:rounded-l-lg last:rounded-r-lg"
+                      className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#1C2347] first:rounded-l-lg last:rounded-r-lg"
                     >
-                      <div className="h-4 w-full max-w-[7rem] mx-auto rounded bg-gray-200 animate-pulse" />
+                      <div className="h-4 w-full max-w-[7rem] mx-auto rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
                     </td>
                   ))}
                 </tr>
@@ -122,19 +122,19 @@ export default function MonitoreoTable({
                       key={col.key}
                       className={`flex justify-between items-center lg:table-cell
                                             py-2 lg:py-3 px-4 lg:px-3 text-center
-                                            bg-[#F4F4F2] dark:bg-white
+                                            bg-[#F4F4F2] dark:bg-[#1C2347]
                                             first:rounded-l-lg
                                             last:rounded-r-lg
-                                            ${col.key === "id" ? "font-bold text-[#0D1030]" : "text-[#0D1030]"}
+                                            ${col.key === "id" ? "font-bold text-[#0D1030] dark:text-white" : "text-[#0D1030] dark:text-white"}
                                             ${isCount ? "font-semibold" : ""}
-                                            ${isDate ? "text-sm text-gray-600" : ""}
+                                            ${isDate ? "text-sm text-gray-600 dark:text-gray-300" : ""}
                                         `}
                     >
-                      <span className="lg:hidden font-black uppercase text-xs text-[#0D1030]">
+                      <span className="lg:hidden font-black uppercase text-xs text-[#0D1030] dark:text-gray-200">
                         {col.label}:
                       </span>
 
-                      <span className="text-right lg:text-center ml-4 text-[#0D1030]">
+                      <span className="text-right lg:text-center ml-4 text-[#0D1030] dark:text-white">
                         {isEmpty ? "" : row[col.key]}
                       </span>
                     </td>
@@ -151,13 +151,13 @@ export default function MonitoreoTable({
           {Array.from({ length: Math.max(2, Math.min(minRows, 4)) }).map((_, index) => (
             <div
               key={`monitor-mobile-skeleton-${index}`}
-              className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 shadow-sm"
+              className="bg-white dark:bg-[#1C2347] border-2 border-[#0D1030] dark:border-white/10 rounded-[1.5rem] p-6 shadow-sm transition-colors duration-300"
             >
               <div className="space-y-3">
                 {Array.from({ length: 5 }).map((__, lineIndex) => (
                   <div key={`line-${lineIndex}`} className="flex justify-between items-center gap-4">
-                    <div className="h-3 w-24 rounded bg-gray-200 animate-pulse" />
-                    <div className="h-4 w-20 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-3 w-24 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                    <div className="h-4 w-20 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
                   </div>
                 ))}
               </div>

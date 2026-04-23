@@ -52,6 +52,7 @@ const TableActions = <T,>({
             {/* Eliminar */}
             {actions.includes("delete") && (
                 <IconButton
+                    className="dark:text-red-500 dark:hover:text-red-600"
                     variant="delete"
                     onClick={() => onDelete?.(item)}
                     tooltip="Eliminar"
