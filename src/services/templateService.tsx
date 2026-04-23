@@ -22,7 +22,7 @@ export const getTemplateByIdService = async (id: number): Promise<TemplateServic
 export const saveTemplateService = async (templateData: Template, isUpdating: boolean = false): Promise<TemplateServiceResponse<Template>> => {
   try {
     const formData = new FormData();
-    
+
     // Mapear los datos principales del Template
     formData.append('lead_source_id', String(templateData.lead_source_id));
     formData.append('name', templateData.name);
@@ -34,21 +34,39 @@ export const saveTemplateService = async (templateData: Template, isUpdating: bo
       if (isUpdating && content.id) {
         formData.append(`contents[${index}][id]`, String(content.id));
       }
-      
+
       formData.append(`contents[${index}][channel]`, content.channel);
       formData.append(`contents[${index}][content]`, content.content);
       formData.append(`contents[${index}][active]`, content.active ? '1' : '0');
-      
+
       if (content.subject) {
         formData.append(`contents[${index}][subject]`, content.subject);
       }
 
-      // Enviar las variables (ej: ['nombre'])
+      // VARIABLES
       content.variables?.forEach((variable, varIndex) => {
         formData.append(`contents[${index}][variables][${varIndex}]`, variable);
       });
 
-      // Adjuntar imagen solo si es un archivo nuevo
+      content.buttons?.forEach((button, btnIndex) => {
+        if(isUpdating && button.id){
+          formData.append(`contents[${index}][buttons][${btnIndex}][id]`, String(button.id));
+        }
+
+        formData.append(`contents[${index}][buttons][${btnIndex}][text]`, button.text);
+            formData.append(`contents[${index}][buttons][${btnIndex}][type]`, button.type);
+            formData.append(`contents[${index}][buttons][${btnIndex}][active]`, button.active ? '1' : '0');
+            formData.append(`contents[${index}][buttons][${btnIndex}][order]`, String(button.order ?? btnIndex));
+
+            Object.entries(button.payload || {}).forEach(([key, value]) => {
+              formData.append(
+                `contents[${index}][buttons][${btnIndex}][payload][${key}]`,
+                String(value)
+              );
+            });
+      });
+
+      // IMAGEN
       if (content.image instanceof File) {
         if (isUpdating) {
            // En actualización, Laravel (según el backend) espera 'contents_0_image'

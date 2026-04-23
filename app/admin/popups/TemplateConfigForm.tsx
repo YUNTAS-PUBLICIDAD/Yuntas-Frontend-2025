@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { showToast } from '@/utils/showToast';
-import { Template, TemplateContent } from '@/types/admin/template';
+import { Template, TemplateButton, TemplateContent } from '@/types/admin/template';
 import {
   FaArrowLeft, FaUser, FaStore, FaPhone, FaEllipsisVertical, FaLock,
   FaRegFaceSmile, FaPaperclip, FaCamera, FaMicrophone
@@ -105,6 +105,15 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
     imageFile: null as File | null,
     variables: ['nombre'],
     active: true,
+
+    buttons: [] as {
+      id?: number;
+      text: string;
+      type: 'url';
+      payload: {url: string};
+      order: number;
+      active: boolean;
+      }[]
   });
 
   // Cargar datos iniciales si existen
@@ -141,6 +150,18 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
           imageFile: null,
           variables: emContent.variables || ['nombre'],
           active: emContent.active,
+          buttons: (emContent.buttons || [])
+            .filter((btn): btn is Extract<TemplateButton, { type: 'url' }> => btn.type === 'url')
+            .map((btn, i) => ({
+              id: btn.id,
+              text: btn.text,
+              type: 'url', // 👈 fuerza el literal correcto
+              payload: {
+                url: btn.payload?.url || ''
+              },
+              order: btn.order ?? i,
+              active: btn.active ?? true
+            }))
         });
       }
     }
@@ -171,6 +192,47 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
     if (emailFileInputRef.current) emailFileInputRef.current.value = '';
   };
 
+  const MAX_BUTTONS = 3;
+
+  const addEmailButton = () => {
+
+   if(email.buttons.length >= MAX_BUTTONS) {
+     showToast.warning(`Máximo ${MAX_BUTTONS} botones permitidos`);
+     return;
+   }
+
+    setEmail(prev => ({
+      ...prev,
+      buttons: [
+        ...prev.buttons,
+        {
+          text: 'Nuevo botón',
+          type: 'url',
+          payload: {url: ''},
+          order: prev.buttons.length,
+          active: true
+        }
+      ]
+    }));
+  }
+
+  const updateEmailButton = (index: number, field: string, value: any) => {
+    const updated = [...email.buttons];
+
+    if(field === 'url'){
+      updated[index].payload.url = value;
+    }else {
+      (updated[index] as any)[field] = value;
+    }
+
+    setEmail({...email, buttons: updated});
+  };
+
+  const removeEmailButton = (index: number) => {
+    const updated = email.buttons.filter((_, i) => i !== index);
+    setEmail({...email, buttons: updated});
+  }
+
   const handleSave = async () => {
     if (!template.name.trim()) {
       showToast.warning("El nombre de la plantilla es obligatorio.");
@@ -198,7 +260,8 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
         content: email.content,
         variables: email.variables,
         active: email.active,
-        image: email.imageFile
+        image: email.imageFile,
+        buttons: email.buttons
       });
     }
 
@@ -215,7 +278,17 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
       contents: contents
     };
 
+    try{
     await onSubmit(payload);
+
+    showToast.success(template.id ? "Template actualizado correctamente" : "Template crado correctamente");
+
+    }catch (error){
+      console.error(error);
+      showToast.error("Error al guardar el template");
+    }
+
+
   };
 
   // Configuración de los botones del editor
@@ -393,6 +466,67 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
               <p className="text-xs text-gray-500 mt-2 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
                 Usa <code className="text-[#203565] font-bold">{`{{nombre}}`}</code> para el nombre del cliente.
               </p>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Botones (CTA)
+                </label>
+
+                <button
+                  type="button"
+                  onClick={addEmailButton}
+                  disabled={email.buttons.length >= 3}
+                  className={`text-xs px-3 py-1 bg-[#203565] text-white ${email.buttons.length >= 3 ? "bg-gray-400 cursor-not-allowed" : "bg-[#203565] hover:bg-[#1a2b52]"}  rounded-md`}
+                >
+                  + Agregar botón
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {email.buttons.map((btn, index) => (
+                  <div key={index} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-800">
+
+                    {/* TEXTO */}
+                    <input
+                      type="text"
+                      value={btn.text}
+                      onChange={(e) => updateEmailButton(index, 'text', e.target.value)}
+                      placeholder="Texto del botón"
+                      className="w-full mb-2 p-2 border rounded"
+                    />
+
+                    {/* URL */}
+                    <input
+                      type="text"
+                      value={btn.payload.url}
+                      onChange={(e) => updateEmailButton(index, 'url', e.target.value)}
+                      placeholder="https://..."
+                      className="w-full mb-2 p-2 border rounded"
+                    />
+
+                    {/* ACTIVO */}
+                    <label className="flex items-center gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        checked={btn.active}
+                        onChange={(e) => updateEmailButton(index, 'active', e.target.checked)}
+                      />
+                      Activo
+                    </label>
+
+                    {/* ELIMINAR */}
+                    <button
+                      type="button"
+                      onClick={() => removeEmailButton(index)}
+                      className="text-red-500 text-xs mt-2"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
