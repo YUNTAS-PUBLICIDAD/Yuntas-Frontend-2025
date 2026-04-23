@@ -192,7 +192,15 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
     if (emailFileInputRef.current) emailFileInputRef.current.value = '';
   };
 
+  const MAX_BUTTONS = 3;
+
   const addEmailButton = () => {
+
+   if(email.buttons.length >= MAX_BUTTONS) {
+     showToast.warning(`Máximo ${MAX_BUTTONS} botones permitidos`);
+     return;
+   }
+
     setEmail(prev => ({
       ...prev,
       buttons: [
@@ -469,7 +477,8 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                 <button
                   type="button"
                   onClick={addEmailButton}
-                  className="text-xs px-3 py-1 bg-[#203565] text-white rounded-md"
+                  disabled={email.buttons.length >= 3}
+                  className={`text-xs px-3 py-1 bg-[#203565] text-white ${email.buttons.length >= 3 ? "bg-gray-400 cursor-not-allowed" : "bg-[#203565] hover:bg-[#1a2b52]"}  rounded-md`}
                 >
                   + Agregar botón
                 </button>
