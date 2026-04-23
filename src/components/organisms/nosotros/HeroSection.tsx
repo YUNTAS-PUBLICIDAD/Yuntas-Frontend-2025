@@ -25,7 +25,7 @@ const HeroSection = () => {
   return (
     <section
       className="
-        relative w-full h-[40vh] md:h-[50vh]
+        relative w-full h-[40vh] md:h-[60vh]
         flex items-center justify-start
         overflow-hidden
       "
