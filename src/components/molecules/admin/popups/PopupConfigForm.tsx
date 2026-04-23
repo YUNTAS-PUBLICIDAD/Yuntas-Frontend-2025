@@ -450,7 +450,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Foto Principal (Para Computadoras - Lado Izquierdo)</label>
               <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>271x479 px</strong>) para la mitad izquierda.</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>336x535 px</strong>) para la mitad izquierda.</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b dark:border-gray-600 pb-4 mt-2">
@@ -484,7 +484,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">2. Diseño Promocional (Para Computadoras - Lado Derecho)</label>
               <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>335x479 px</strong>). Va encima del formulario.</span>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>336x535 px</strong>). Va encima del formulario.</span>
             </div>
 
             {/* Imagen Móvil */}
