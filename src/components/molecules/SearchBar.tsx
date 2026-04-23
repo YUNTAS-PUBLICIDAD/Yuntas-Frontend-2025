@@ -144,7 +144,7 @@ function SearchBar<T>({
               onMouseEnter={() => setActiveIndex(index)}
               className={`
                 p-2 rounded-xl cursor-pointer transition-colors
-                ${index === activeIndex ? "bg-gray-200 dark:bg-white/10" : "hover:bg-gray-100 dark:hover:bg-white/5"}
+                ${index === activeIndex ? "bg-gray-200 dark:bg-white/10" : "hover:bg-gray-100 dark:text-white dark:hover:bg-white/5 dark:hover:text-white"}
               `}
             >
               {getDisplayValue(item)}
