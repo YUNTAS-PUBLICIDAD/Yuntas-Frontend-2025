@@ -70,7 +70,7 @@ export const saveTemplateService = async (templateData: Template, isUpdating: bo
       if (content.image instanceof File) {
         if (isUpdating) {
            // En actualización, Laravel (según el backend) espera 'contents_0_image'
-           formData.append(`contents_${index}_image`, content.image);
+           formData.append(`contents[${index}][image]`, content.image);
         } else {
            // En creación, espera 'contents[0][image]'
            formData.append(`contents[${index}][image]`, content.image);
