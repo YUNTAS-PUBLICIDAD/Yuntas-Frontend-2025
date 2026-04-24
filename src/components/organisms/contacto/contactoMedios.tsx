@@ -6,13 +6,12 @@ const ContactoMedios: React.FC = () => {
   return (
     <section className="w-full">
       {/* ENCABEZADO CELESTE */}
-      <div className="w-full bg-white py-6 px-6 md:px-16 text-center">
-        {/* Ajuste responsive del título - agregado sm:text-2xl lg:text-4xl para escalado gradual en dispositivos */}
+      <div className="w-full bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f] py-4 md:py-5 px-6 md:px-12 text-center shadow-2xl">
         <TextTitulo
           variant="caption"
-          className="text-[#203565] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+          className="text-white font-black text-2xl sm:text-3xl md:text-4xl tracking-tight uppercase"
         >
-          <span className="font-semibold">CONOCE NUESTROS MEDIOS DE</span>
+          <span className="font-black">CONOCE NUESTROS MEDIOS DE</span>
           <br />
           CONTACTO
         </TextTitulo>
