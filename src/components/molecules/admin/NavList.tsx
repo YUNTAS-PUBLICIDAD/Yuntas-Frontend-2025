@@ -20,13 +20,13 @@ export default function NavList({ items, className = "" }: NavListProps) {
 
     const isActive = (href: string) => {
         const cleanHref = href.replace(/\/+$/, "");
-        
+
         if (cleanHref === "/admin") return pathname === "/admin";
         return pathname === cleanHref || pathname.startsWith(`${cleanHref}/`);
     };
 
     return (
-        <ul className={`flex flex-col gap-2 ${className}`}>
+        <ul className={`flex flex-col gap-1 ${className}`}>
             {items.map((item) => (
                 <NavItem
                     key={item.href}
