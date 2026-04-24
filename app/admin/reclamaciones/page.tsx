@@ -251,7 +251,7 @@ export default function ReclamacionesPage() {
                             <button
                                 type="button"
                                 onClick={() => setDropdownOpen(prev => !prev)}
-                                className="w-full h-[42px] px-4 rounded-full border border-[#23C1DE] bg-white
+                                className="w-full h-[42px] px-4 rounded-full border border-[#23C1DE] bg-white dark:bg-[#1C2347] dark:text-white
                                            text-gray-700 text-sm font-medium flex items-center justify-between
                                            focus:ring-2 focus:ring-[#23C1DE] outline-none cursor-pointer shadow-sm"
                             >
@@ -266,8 +266,7 @@ export default function ReclamacionesPage() {
                             </button>
 
                             {dropdownOpen && (
-                                <ul className="absolute z-50 mt-1 left-0 right-0 bg-white border border-[#23C1DE]
-                                               rounded-2xl shadow-lg overflow-hidden">
+                                <ul className="absolute z-50 mt-1 left-0 right-0 bg-white border border-[#23C1DE] dark:bg-[#1C2347] dark:border-[#6DE1E3] rounded-2xl shadow-lg overflow-hidden">
                                     {ESTADO_OPTIONS.map(opt => (
                                         <li
                                             key={opt.value}
@@ -278,7 +277,7 @@ export default function ReclamacionesPage() {
                                             className={`px-4 py-2.5 text-sm cursor-pointer transition-colors
                                                 ${estadoFiltro === opt.value
                                                     ? 'bg-[#d0f3fa] font-bold text-[#23C1DE]'
-                                                    : 'text-gray-700 hover:bg-[#e8f9fc]'
+                                                    : 'text-gray-700 dark:text-white hover:bg-[#e8f9fc]'
                                                 }`}
                                         >
                                             {opt.label}
