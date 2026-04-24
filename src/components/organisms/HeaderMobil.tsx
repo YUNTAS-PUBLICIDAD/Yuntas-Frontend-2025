@@ -128,7 +128,7 @@ const HeaderMobil = () => {
         </button>
 
         <nav className="pt-16 px-6 flex-1 overflow-y-auto">
-          <NavMenuMobil />
+        <NavMenuMobil onClose={() => setOpen(false)} />
 
           <hr className="my-6 border-[#04061a]/30 dark:border-white" />
 
