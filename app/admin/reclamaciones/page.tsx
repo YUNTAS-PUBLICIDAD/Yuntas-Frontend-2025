@@ -9,16 +9,6 @@ import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
 import SearchBar from "@/components/molecules/SearchBar";
 
-// Icono para el estado vacío
-const SearchXIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.3-4.3"></path>
-        <path d="m13.5 8.5-5 5"></path>
-        <path d="m8.5 8.5 5 5"></path>
-    </svg>
-);
-
 // Icono para el estado de error
 const AlertCircleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400 mb-2">
@@ -175,6 +165,12 @@ export default function ReclamacionesPage() {
         setLoading(false);
     };
 
+    const handleResetFilters = () => {
+        setEstadoFiltro("todos");
+        setSearchTerm("");
+        setPaginatedData(tableData);
+    };
+
     const onViewDetail = (reclamo: any) => {
         setSelectedReclamo(reclamo);
         setNewStatusId(reclamo.claim_status_id);
@@ -211,11 +207,7 @@ export default function ReclamacionesPage() {
 
     return (
         <div className="p-2 md:p-4 w-full max-w-full overflow-hidden">
-            {loading ? (
-                <div className="p-10 text-center animate-pulse text-sm text-gray-500">
-                    Cargando datos...
-                </div>
-            ) : fetchError ? (
+            {fetchError ? (
                 <div className="flex flex-col items-center justify-center py-16 px-4 bg-red-50 border-2 border-dashed border-red-200 rounded-lg mt-4">
                     <AlertCircleIcon />
                     <h3 className="text-lg font-semibold text-red-700">Error al cargar las reclamaciones</h3>
@@ -259,7 +251,7 @@ export default function ReclamacionesPage() {
                             <button
                                 type="button"
                                 onClick={() => setDropdownOpen(prev => !prev)}
-                                className="w-full h-[42px] px-4 rounded-full border border-[#23C1DE] bg-white
+                                className="w-full h-[42px] px-4 rounded-full border border-[#23C1DE] bg-white dark:bg-[#1C2347] dark:text-white
                                            text-gray-700 text-sm font-medium flex items-center justify-between
                                            focus:ring-2 focus:ring-[#23C1DE] outline-none cursor-pointer shadow-sm"
                             >
@@ -274,8 +266,7 @@ export default function ReclamacionesPage() {
                             </button>
 
                             {dropdownOpen && (
-                                <ul className="absolute z-50 mt-1 left-0 right-0 bg-white border border-[#23C1DE]
-                                               rounded-2xl shadow-lg overflow-hidden">
+                                <ul className="absolute z-50 mt-1 left-0 right-0 bg-white border border-[#23C1DE] dark:bg-[#1C2347] dark:border-[#6DE1E3] rounded-2xl shadow-lg overflow-hidden">
                                     {ESTADO_OPTIONS.map(opt => (
                                         <li
                                             key={opt.value}
@@ -286,7 +277,7 @@ export default function ReclamacionesPage() {
                                             className={`px-4 py-2.5 text-sm cursor-pointer transition-colors
                                                 ${estadoFiltro === opt.value
                                                     ? 'bg-[#d0f3fa] font-bold text-[#23C1DE]'
-                                                    : 'text-gray-700 hover:bg-[#e8f9fc]'
+                                                    : 'text-gray-700 dark:text-white hover:bg-[#e8f9fc]'
                                                 }`}
                                         >
                                             {opt.label}
@@ -297,44 +288,26 @@ export default function ReclamacionesPage() {
                         </div>
                     </div>
 
-                    {/*TABLA O MENSAJE VACÍO */}
-                    {paginatedData.length > 0 ? (
-                        <>
-                            <div className="w-full overflow-x-auto text-sm">
-                                <AdminTable
-                                    columns={columns}
-                                    data={paginatedData}
-                                    minRows={5}
-                                    onEdit={onViewDetail}
-                                />
-                            </div>
+                    <div className="w-full overflow-x-auto text-sm">
+                        <AdminTable
+                            columns={columns}
+                            data={paginatedData}
+                            minRows={5}
+                            onEdit={onViewDetail}
+                            isLoading={loading && reclamos.length === 0}
+                            emptyMessage="No se encontraron reclamaciones"
+                            onResetSearch={handleResetFilters}
+                            resetSearchText="Ver todas las reclamaciones"
+                        />
+                    </div>
 
-                            <div className="flex justify-center mt-4">
-                                <Pagination
-                                    pageSize={10}
-                                    items={tableData} 
-                                    setProductosPaginados={setPaginatedData}
-                                />
-                            </div>
-                        </>
-                    ) : (
-                        /* MENSAJE DE NO RESULTADOS */
-                        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
-                            <SearchXIcon />
-                            <h3 className="text-lg font-medium text-gray-900">No se encontraron reclamaciones</h3>
-                            <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
-                                No hay resultados que coincidan con tu búsqueda o filtro seleccionado.
-                            </p>
-                            <button
-                                onClick={() => {
-                                    setEstadoFiltro("todos");
-                                    // Forzamos reseteo visual mostrando todo
-                                    setPaginatedData(tableData);
-                                }}
-                                className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
-                            >
-                                Ver todas las reclamaciones
-                            </button>
+                    {!loading && paginatedData.length > 0 && (
+                        <div className="flex justify-center mt-4">
+                            <Pagination
+                                pageSize={10}
+                                items={tableData}
+                                setProductosPaginados={setPaginatedData}
+                            />
                         </div>
                     )}
 
