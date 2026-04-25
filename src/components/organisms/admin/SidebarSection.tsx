@@ -41,7 +41,7 @@ const navItems: NavItem[] = [
   { label: "Contacto", href: "/admin/contacto", icon: MessageSquare },
   { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
   { label: "Plantillas", href: "/admin/templates", icon: FileText },
-  { label: "Configuracion",       href: "/admin/configuracion",     icon: Settings   },
+  //{ label: "Configuracion",       href: "/admin/configuracion",     icon: Settings   },
 ];
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
