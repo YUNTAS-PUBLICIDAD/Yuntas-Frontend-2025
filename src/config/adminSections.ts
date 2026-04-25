@@ -8,7 +8,7 @@ export const adminSections = {
   contacto: { label: "Contacto", href: "/admin/contacto" },
   popups: { label: "Pop-ups", href: "/admin/popups" },
   templates: { label: "Plantillas", href: "/admin/templates" },
-  chatbot: { label: "Chatbot", href: "/admin/chatbot" },
+  configuracion: { label: "Configuracion", href: "/admin/configuracion" },
 } as const;
 
 export type AdminSectionKey = keyof typeof adminSections;

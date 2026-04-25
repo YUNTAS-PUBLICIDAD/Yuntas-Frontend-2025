@@ -6,7 +6,7 @@ import {
   Palette, MessageSquare, Settings2, Power,
 } from "lucide-react";
 
-interface ChatbotConfig {
+interface ConfiguracionConfig {
   isActive: boolean;
   primaryColor: string;
   secondaryColor: string;
@@ -100,10 +100,10 @@ function Divider() {
 }
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export default function ChatbotForm() {
+export default function ConfiguracionForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(true);
-  const [config, setConfig] = useState<ChatbotConfig>({
+  const [config, setConfig] = useState<ConfiguracionConfig>({
     isActive: true,
     primaryColor: "#3D5BC9",
     secondaryColor: "#3D5BC9",
