@@ -113,11 +113,11 @@ function SearchBar<T>({
     <div className="relative w-full">
       <form
         onSubmit={handleSubmit}
-        className='flex w-full items-center px-2 rounded-3xl border-2 border-[#23C1DE] bg-white overflow-hidden'
+        className='flex w-full items-center px-2 rounded-3xl border-2 border-[#23C1DE] bg-white dark:bg-[#141A3F] dark:border-[#6DE1E3] overflow-hidden transition-colors duration-300'
         onKeyDown={handleKeyDown}
         >
-        <Icon className='bg-white'>
-          <FaSearch className='text-gray-500' />
+        <Icon className='bg-white dark:bg-[#1C2347]'>
+          <FaSearch className='text-gray-500 dark:text-gray-300' />
         </Icon>
 
         <InputSearch
@@ -126,6 +126,7 @@ function SearchBar<T>({
           placeholder={placeholder}
           onFocus={() => busqueda.length > 0 && setShowAutocomplete(true)}
           onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+          className="bg-transparent text-[#0D1030] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
         />
 
         <Button type="submit" size='sm' className='font-normal tracking-wider'>
@@ -135,15 +136,15 @@ function SearchBar<T>({
 
       {/* Autocompletado */}
       {showAutocomplete && filteredItems.length > 0 && (
-        <ul className="absolute top-full left-0 w-full bg-white border border-gray-200 shadow-lg rounded-2xl p-2 mt-1 max-h-60 overflow-auto z-[9999]">
+        <ul className="absolute top-full left-0 w-full bg-white dark:bg-[#1C2347] border border-gray-200 dark:border-white/10 shadow-lg rounded-2xl p-2 mt-1 max-h-60 overflow-auto z-[9999] transition-colors duration-300">
           {filteredItems.map((item, index) => (
             <li
               key={index}
               onClick={() => handleSelectItem(item)}
               onMouseEnter={() => setActiveIndex(index)}
               className={`
-                p-2 rounded-xl cursor-pointer transition-colors
-                ${index === activeIndex ? "bg-gray-200" : "hover:bg-gray-100"}
+                p-2 rounded-xl cursor-pointer transition-colors dark:text-white
+                ${index === activeIndex ? "bg-gray-200  dark:bg-white/10" : "hover:bg-gray-100 dark:hover:bg-white/5 dark:hover:text-white"}
               `}
             >
               {getDisplayValue(item)}
@@ -154,7 +155,7 @@ function SearchBar<T>({
 
       {/* Alerta de no resultados */}
       {hasNoResults && noResultsMessage && (
-        <div className="absolute top-full left-0 w-full px-4 py-2 mt-1 text-sm text-red-500 font-medium animate-fade-in">
+        <div className="absolute top-full left-0 w-full px-4 py-2 mt-1 text-sm text-red-500 dark:text-red-300 font-medium animate-fade-in">
           {noResultsMessage}
         </div>
       )}

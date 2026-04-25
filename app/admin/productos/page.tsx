@@ -16,7 +16,7 @@ import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
 import WhatsappFormWithTabs from "@/components/molecules/admin/products/WhatsappFormWithTabs";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
-import SearchBar from "@/components/molecules/SearchBar";
+import SearchBar from "@/components/molecules/admin/SearchBar";
 import { PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
 
 const columns = [

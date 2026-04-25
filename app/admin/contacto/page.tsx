@@ -7,7 +7,7 @@ import { Contacto } from "@/types/admin/contacto";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import Loader from "@/components/atoms/Loader";
 import ViewContactoModal from "@/components/organisms/admin/ModalActions/ViewContactoModal";
-import SearchBar from "@/components/molecules/SearchBar";
+import SearchBar from "@/components/molecules/admin/SearchBar";
 
 const columns = [
   { key: "id", label: "ID" },

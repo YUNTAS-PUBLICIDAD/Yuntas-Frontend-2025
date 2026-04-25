@@ -7,7 +7,7 @@ import { useProductos } from "@/hooks/useProductos";
 import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
-import SearchBar from "@/components/molecules/SearchBar";
+import SearchBar from "@/components/molecules/admin/SearchBar";
 
 // Icono para el estado de error
 const AlertCircleIcon = () => (

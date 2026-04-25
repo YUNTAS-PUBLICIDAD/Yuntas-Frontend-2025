@@ -16,7 +16,7 @@ import Pagination from "@/components/molecules/Pagination";
 import Modal from "@/components/atoms/Modal";
 import BlogForm from "@/components/molecules/blog/BlogForm";
 import { useProductos } from "@/hooks/useProductos";
-import SearchBar from "@/components/molecules/SearchBar";
+import SearchBar from "@/components/molecules/admin/SearchBar";
 
 const columns = [
     { key: "id", label: "ID" },
