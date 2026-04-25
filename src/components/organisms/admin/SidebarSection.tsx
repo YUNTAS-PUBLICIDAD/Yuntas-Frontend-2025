@@ -13,6 +13,7 @@ import {
   FileText,
   LayoutDashboard,
   Megaphone,
+  MessageCircle,
   MessageSquare,
   Package,
   Users,
@@ -40,6 +41,7 @@ const navItems: NavItem[] = [
   { label: "Contacto", href: "/admin/contacto", icon: MessageSquare },
   { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
   { label: "Plantillas", href: "/admin/templates", icon: FileText },
+  { label: "Chatbot",       href: "/admin/chatbot",     icon: MessageCircle   },
 ];
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
@@ -104,13 +106,13 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Cerrar Sesión */}
-        <div className="px-6 pb-10 pt-1">
+        <div className="px-6 pb-4 pt-1">
           <button
             onClick={logout}
             disabled={isLoading}
             className="
               w-full flex items-center justify-center gap-3
-              px-4 py-4 rounded-[20px]
+              px-4 py-3 rounded-[20px]
               bg-[#EF4444] hover:bg-red-500
               text-white font-semibold text-base
               transition-all duration-200
