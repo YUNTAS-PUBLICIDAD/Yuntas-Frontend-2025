@@ -131,7 +131,7 @@ const MobilePopupComposition = ({
   const isPlaceholder = !mobileImgSrc && !desktopImgSrc;
 
   return (
-    <div className={`${forceVisible ? "" : "md:hidden"} w-[90vw] max-w-[320px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]"}`}>
+    <div className={`${forceVisible ? "" : "md:hidden"} w-[90vw] max-w-[320px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]`}>
 
       <img
         src={finalMobileImg}

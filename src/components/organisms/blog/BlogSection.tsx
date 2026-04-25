@@ -22,13 +22,16 @@ const BlogSection = ({ blogs }: { blogs: Blog[] }) => {
 	}, [query, blogs])
 
 	return (
-		<section className='py-6 md:py-10 relative'>
-			<Banner color="bg-[#18879B]" className='flex flex-col gap-5 md:gap-10 lg:gap-20 px-4 sm:px-8 md:px-10 lg:px-20 md:flex-row md:items-center relative z-20'>
-				<Text variant='h2' color='white' className='font-bold max-w-xl'>
-					Descubre más sobre nuestros Productos
+		<section className='pt-0 pb-6 md:pb-10 relative'>
+			<Banner size='small' color="bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" className='!h-auto flex flex-col gap-4 md:gap-6 px-6 md:px-12 lg:px-20 py-3 md:py-4 md:grid md:grid-cols-2 md:items-center relative z-20'>
+				<Text variant='h2'
+	            	className='text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase text-center md:justify-self-end md:pr-4 lg:pr-6 md:max-w-xl'>
+					Descubre más sobre 
+					<br />
+					nuestros Productos
 				</Text>
 
-				<div className="relative w-full md:flex-1 md:max-w-md z-50">
+				<div className="relative w-full md:max-w-md md:w-[340px] lg:w-[380px] md:justify-self-center md:-translate-x-8 lg:-translate-x-10 z-50">
 					<SearchBar
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}

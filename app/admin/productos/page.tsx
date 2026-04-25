@@ -16,8 +16,8 @@ import SendEmailForm from "@/components/molecules/admin/products/SendEmailForm";
 import WhatsappFormWithTabs from "@/components/molecules/admin/products/WhatsappFormWithTabs";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
-import SearchBar from "@/components/molecules/SearchBar";
-import { SearchXIcon, PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
+import SearchBar from "@/components/molecules/admin/SearchBar";
+import { PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -231,30 +231,30 @@ export default function ProductosPage() {
           />
         </div>
 
-        <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-          <span className="text-[#203565] font-semibold text-sm whitespace-nowrap uppercase">
+        <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center">
+          <span className="text-[#203565] dark:text-white font-semibold text-sm whitespace-nowrap uppercase">
             {productosFiltrados.length} REGISTROS ENCONTRADOS
           </span>
         </div>
       </div>
 
       {/* ───────── CONTENIDO PRINCIPAL (TABLA O VACÍO) ───────── */}
-      {isLoading && productos.length === 0 ? (
-        <div className="p-10 text-center animate-pulse">
-          Cargando productos...
-        </div>
-      ) : productosFiltrados.length > 0 ? (
-        <>
-          {/* TABLA DE DATOS */}
-          <AdminTable
-            columns={columns}
-            data={datosPaginados}
-            minRows={5}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteProducto}
-          />
-          
-          {/* PAGINACIÓN */}
+      <>
+        {/* TABLA DE DATOS */}
+        <AdminTable
+          columns={columns}
+          data={datosPaginados}
+          minRows={5}
+          onEdit={handleEditClick}
+          onDelete={handleDeleteProducto}
+          isLoading={isLoading && productos.length === 0}
+          emptyMessage="No se encontraron productos"
+          onResetSearch={() => setProductosFiltrados(productos)}
+          resetSearchText="Ver todos los productos"
+        />
+
+        {/* PAGINACIÓN */}
+        {!isLoading && productosFiltrados.length > 0 && (
           <div className="flex justify-center mt-4">
             <Pagination
               pageSize={10}
@@ -262,23 +262,8 @@ export default function ProductosPage() {
               setProductosPaginados={setDatosPaginados}
             />
           </div>
-        </>
-      ) : (
-        /* ───────── MENSAJE DE NO RESULTADO ───────── */
-        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
-          <SearchXIcon />
-          <h3 className="text-lg font-medium text-gray-900">No se encontraron productos</h3>
-          <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
-            No hay resultados para tu búsqueda. Intenta con otro nombre, ID, sección o revisa la ortografía.
-          </p>
-          <button
-            onClick={() => setProductosFiltrados(productos)}
-            className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
-          >
-            Ver todos los productos
-          </button>
-        </div>
-      )}
+        )}
+      </>
 
       {/* ───────── MODALES ───────── */}
       <Modal

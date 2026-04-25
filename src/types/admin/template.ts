@@ -1,3 +1,30 @@
+// export interface TemplateButton {
+//   id?: number;
+//   text: string;
+//   type: 'url' | 'quick_reply';
+//   payload: Record<string,any>;
+//   order?: number;
+//   active?: boolean;
+// }
+
+export type TemplateButton =
+  | {
+      id?: number;
+      text: string;
+      type: 'url';
+      payload: { url: string };
+      order?: number;
+      active?: boolean;
+    }
+  | {
+      id?: number;
+      text: string;
+      type: 'quick_reply';
+      payload: Record<string, any>;
+      order?: number;
+      active?: boolean;
+    };
+
 export interface TemplateContent {
   id?: number;
   template_id?: number;
@@ -8,6 +35,7 @@ export interface TemplateContent {
   image?: File | null; // Propiedad frontend para enviar archivos nuevos
   variables: string[];
   active: boolean;
+  buttons?: TemplateButton[];
 }
 
 export interface Template {

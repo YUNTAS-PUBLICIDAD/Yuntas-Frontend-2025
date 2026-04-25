@@ -24,7 +24,8 @@ export function useAuth(): UseAuthReturn {
         const result = await loginService(credentials);
 
         if (result.success) {
-            router.replace("/admin/seguimiento");
+            router.replace("/admin");
+
         } else {
             setError(result.message || "Error al iniciar sesión");
         }

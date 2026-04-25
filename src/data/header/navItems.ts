@@ -7,6 +7,7 @@ export const NAV_ITEMS = [
 ];
 
 export const ADMIN_ITEMS = [
+  { label: "GENERAL", href: "/admin" },
   { label: "SEGUIMIENTO", href: "/admin/seguimiento" },
   { label: "BLOGS", href: "/admin/blogs" },
   { label: "PRODUCTOS", href: "/admin/productos" },
@@ -14,4 +15,5 @@ export const ADMIN_ITEMS = [
   { label: "RECLAMACIONES", href: "/admin/reclamaciones" },
   { label: "CONTACTO", href: "/admin/contacto" },
   { label: "POP-UPS", href: "/admin/popups" },
+  { label: "PLANTILLAS", href: "/admin/templates" },
 ];

@@ -3,11 +3,30 @@
 import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { showToast } from '@/utils/showToast';
-import { Template, TemplateContent } from '@/types/admin/template';
+import { Template, TemplateButton, TemplateContent } from '@/types/admin/template';
 import {
   FaArrowLeft, FaUser, FaStore, FaPhone, FaEllipsisVertical, FaLock,
   FaRegFaceSmile, FaPaperclip, FaCamera, FaMicrophone
 } from 'react-icons/fa6';
+
+type EmailState = {
+  id?: number;
+  channel: 'email';
+  subject: string;
+  content: string;
+  imageUrl: string;
+  imageFile: File | null;
+  variables: string[];
+  active: boolean;
+  buttons: {
+    id?: number;
+    text: string;
+    type: 'url';
+    payload: { url: string };
+    order: number;
+    active: boolean;
+  }[];
+};
 
 // IMPORTACIÓN DINÁMICA DE REACT QUILL
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -105,6 +124,15 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
     imageFile: null as File | null,
     variables: ['nombre'],
     active: true,
+
+    buttons: [] as {
+      id?: number;
+      text: string;
+      type: 'url';
+      payload: {url: string};
+      order: number;
+      active: boolean;
+      }[]
   });
 
   // Cargar datos iniciales si existen
@@ -141,6 +169,18 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
           imageFile: null,
           variables: emContent.variables || ['nombre'],
           active: emContent.active,
+          buttons: (emContent.buttons || [])
+            .filter((btn): btn is Extract<TemplateButton, { type: 'url' }> => btn.type === 'url')
+            .map((btn, i) => ({
+              id: btn.id,
+              text: btn.text,
+              type: 'url', // 👈 fuerza el literal correcto
+              payload: {
+                url: btn.payload?.url || ''
+              },
+              order: btn.order ?? i,
+              active: btn.active ?? true
+            }))
         });
       }
     }
@@ -149,7 +189,14 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
   const handleEmailImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setEmail({ ...email, imageFile: file, imageUrl: URL.createObjectURL(file) });
+      const url = URL.createObjectURL(file);
+
+      setEmail(prev => ({
+        ...prev,
+        imageFile: file,
+        imageUrl: url
+      }));
+
       setImageError(false);
     }
   };
@@ -167,9 +214,55 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
   };
 
   const clearEmailImage = () => {
-    setEmail({ ...email, imageFile: null, imageUrl: '' });
+    // setEmail({ ...email, imageFile: null, imageUrl: '' });
+    setEmail(prev => ({
+      ...prev,
+      imageFile: null,
+      imageUrl: ''
+    }))
     if (emailFileInputRef.current) emailFileInputRef.current.value = '';
   };
+
+  const MAX_BUTTONS = 3;
+
+  const addEmailButton = () => {
+
+   if(email.buttons.length >= MAX_BUTTONS) {
+     showToast.warning(`Máximo ${MAX_BUTTONS} botones permitidos`);
+     return;
+   }
+
+    setEmail(prev => ({
+      ...prev,
+      buttons: [
+        ...prev.buttons,
+        {
+          text: 'Nuevo botón',
+          type: 'url',
+          payload: {url: ''},
+          order: prev.buttons.length,
+          active: true
+        }
+      ]
+    }));
+  }
+
+  const updateEmailButton = (index: number, field: string, value: any) => {
+    const updated = [...email.buttons];
+
+    if(field === 'url'){
+      updated[index].payload.url = value;
+    }else {
+      (updated[index] as any)[field] = value;
+    }
+
+    setEmail({...email, buttons: updated});
+  };
+
+  const removeEmailButton = (index: number) => {
+    const updated = email.buttons.filter((_, i) => i !== index);
+    setEmail({...email, buttons: updated});
+  }
 
   const handleSave = async () => {
     if (!template.name.trim()) {
@@ -198,7 +291,8 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
         content: email.content,
         variables: email.variables,
         active: email.active,
-        image: email.imageFile
+        image: email.imageFile,
+        buttons: email.buttons
       });
     }
 
@@ -215,7 +309,17 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
       contents: contents
     };
 
+    try{
     await onSubmit(payload);
+
+    showToast.success(template.id ? "Template actualizado correctamente" : "Template crado correctamente");
+
+    }catch (error){
+      console.error(error);
+      showToast.error("Error al guardar el template");
+    }
+
+
   };
 
   // Configuración de los botones del editor
@@ -227,6 +331,59 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
       ['link'],
       ['clean']
     ],
+  };
+
+  const EmailPreview = ({email} : {email: EmailState}) => {
+    return (
+      <div className="w-full max-w-[420px] bg-[#f4f6f9] p-4 rounded-xl">
+        <div className="bg-white rounded-lg overflow-hidden shadow">
+
+          {/* HEADER */}
+          <div className="bg-[#0b1c3f] text-center p-5">
+            <h1 className="text-white font-bold text-lg">
+              YUNTAS PUBLICIDAD
+            </h1>
+            <p className="text-[#8fd3ff] text-xs">
+              Impulsamos tu negocio
+            </p>
+          </div>
+
+          {/* IMAGE */}
+          {email.imageUrl && (
+            <img src={email.imageUrl} className="w-full" />
+          )}
+
+          {/* CONTENT */}
+          <div
+            className="p-6 text-sm text-gray-700"
+            dangerouslySetInnerHTML={{
+              __html: replaceDynamicTags(email.content, { nombre: 'Juan Pérez' })
+            }}
+          />
+
+          {/* BUTTONS */}
+          <div className="flex flex-wrap gap-2 justify-center pb-6">
+            {email.buttons
+              .filter(b => b.active)
+              .map((b, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="bg-[#0b1c3f] text-white px-4 py-2 rounded"
+                >
+                  {b.text}
+                </a>
+            ))}
+          </div>
+
+          {/* FOOTER */}
+          <div className="bg-[#0b1c3f] text-center p-4 text-xs text-white">
+            © 2026 Yuntas Publicidad
+          </div>
+
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -363,7 +520,7 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
           <div className={`space-y-5 transition-opacity ${!email.active ? 'opacity-50 pointer-events-none' : ''}`}>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Asunto</label>
-              <input type="text" value={email.subject} onChange={(e) => setEmail({...email, subject: e.target.value})} className="w-full p-3 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#203565] dark:bg-gray-800 dark:text-white" />
+              <input type="text" value={email.subject} onChange={(e) => setEmail(prev => ({...prev, subject: e.target.value}))} className="w-full p-3 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#203565] dark:bg-gray-800 dark:text-white" />
             </div>
 
             <div>
@@ -394,46 +551,79 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                 Usa <code className="text-[#203565] font-bold">{`{{nombre}}`}</code> para el nombre del cliente.
               </p>
             </div>
-          </div>
-        </div>
 
-        {/* PREVIEW EMAIL */}
-        <div className="flex justify-center w-full">
-          <div className={`w-full max-w-[400px] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-white shadow-2xl flex flex-col h-[650px] transition-opacity ${!email.active ? 'opacity-40 grayscale-[50%]' : ''}`}>
-            <div className="p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
-              <h3 className="font-semibold text-lg text-gray-800 dark:text-white truncate">{email.subject || 'Sin asunto'}</h3>
-              <div className="flex items-center gap-3 mt-3">
-                <div className="w-10 h-10 rounded-full bg-[#203565] flex items-center justify-center text-white font-bold text-lg">Y</div>
-                <div>
-                  <p className="text-sm font-bold text-gray-800 dark:text-gray-200 leading-tight">Yuntas Publicidad</p>
-                  <p className="text-xs text-gray-500">para Juan Pérez</p>
-                </div>
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Botones (CTA)
+                </label>
+
+                <button
+                  type="button"
+                  onClick={addEmailButton}
+                  disabled={email.buttons.length >= 3}
+                  className={`text-xs px-3 py-1 bg-[#203565] text-white ${email.buttons.length >= 3 ? "bg-gray-400 cursor-not-allowed" : "bg-[#203565] hover:bg-[#1a2b52]"}  rounded-md`}
+                >
+                  + Agregar botón
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {email.buttons.map((btn, index) => (
+                  <div key={index} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-800">
+
+                    {/* TEXTO */}
+                    <input
+                      type="text"
+                      value={btn.text}
+                      onChange={(e) => updateEmailButton(index, 'text', e.target.value)}
+                      placeholder="Texto del botón"
+                      className="w-full mb-2 p-2 border rounded"
+                    />
+
+                    {/* URL */}
+                    <input
+                      type="text"
+                      value={btn.payload.url}
+                      onChange={(e) => updateEmailButton(index, 'url', e.target.value)}
+                      placeholder="https://..."
+                      className="w-full mb-2 p-2 border rounded"
+                    />
+
+                    {/* ACTIVO */}
+                    <label className="flex items-center gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        checked={btn.active}
+                        onChange={(e) => updateEmailButton(index, 'active', e.target.checked)}
+                      />
+                      Activo
+                    </label>
+
+                    {/* ELIMINAR */}
+                    <button
+                      type="button"
+                      onClick={() => removeEmailButton(index)}
+                      className="text-red-500 text-xs mt-2"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
-
-            <div className="p-6 bg-white flex-grow font-sans text-gray-800 text-sm leading-relaxed overflow-y-auto">
-              {email.imageUrl && !imageError ? (
-                <div className="mb-6 w-full flex justify-center bg-gray-50 rounded-lg border border-gray-100 overflow-hidden relative shadow-sm">
-                  <img src={email.imageUrl} alt="Banner Email" className="max-w-full h-auto max-h-48 object-cover" onError={() => setImageError(true)} />
-                </div>
-              ) : (
-                <div className="mb-6 w-full h-32 bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-400 text-xs rounded-lg">
-                  {email.imageUrl && imageError ? '[Error al cargar imagen]' : 'No se ha adjuntado imagen'}
-                </div>
-              )}
-
-              {/* RENDERIZADO DEL HTML PARA LA VISTA PREVIA */}
-              <div
-                className="space-y-4 text-[15px] prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{
-                  __html: email.content.trim() === '' || email.content === '<p><br></p>'
-                    ? '<p class="text-gray-400 italic text-center mt-10">El cuerpo del correo está vacío.</p>'
-                    : replaceDynamicTags(email.content, { nombre: 'Juan Pérez' })
-                }}
-              />
-            </div>
           </div>
         </div>
+
+              {/* RENDERIZADO DEL HTML PARA LA VISTA PREVIA */}
+
+              <div className='flex justify-center w-full'>
+                <EmailPreview email={email}/>
+              </div>
+
+            {/*</div>
+          </div>*/}
+        {/*</div>*/}
 
       </div>
 

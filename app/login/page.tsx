@@ -12,7 +12,7 @@ export default function LoginPage() {
     useEffect(() => {
         const token = getToken();
         if (token) {
-            router.replace("/admin/seguimiento");
+            router.replace("/admin");
         }
     }, [router]);
 

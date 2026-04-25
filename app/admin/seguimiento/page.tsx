@@ -13,7 +13,7 @@ import MonitoreoTable from "@/components/organisms/admin/leads/MonitoreoTable";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
-import SearchBar from "@/components/molecules/SearchBar";
+import SearchBar from "@/components/molecules/admin/SearchBar";
 
 
 
@@ -119,7 +119,7 @@ export default function SeguimientoPage() {
     ];
 
     return (
-        <div className="p-2 md:p-4">
+        <div className="p-2 md:p-4 text-[#0D1030] dark:text-white transition-colors duration-300">
 
             {/* BOTONES SUPERIORES */}
             <div className="mb-4 flex flex-row flex-wrap gap-2">
@@ -127,7 +127,7 @@ export default function SeguimientoPage() {
             </div>
 
             {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                <div className="bg-red-50 border border-red-200 text-red-600 dark:bg-red-950/30 dark:border-red-800 dark:text-red-200 px-4 py-3 rounded-lg mb-4 text-sm">
                     {error}
                 </div>
             )}
@@ -157,8 +157,8 @@ export default function SeguimientoPage() {
                     </div>
 
                    
-                    <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-                        <span className="text-[#203565] font-semibold text-sm md:text-base">
+                    <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center transition-colors duration-300">
+                        <span className="text-[#203565] dark:text-white font-semibold text-sm md:text-base">
                             {leadsFiltered.length} REGISTROS ENCONTRADOS
                         </span>
                     </div>
@@ -179,8 +179,8 @@ export default function SeguimientoPage() {
                         />
                    </div>
                    {/*Contador para Monitoreo */}
-                   <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-                        <span className="text-[#203565] font-semibold text-sm md:text-base">
+                   <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center transition-colors duration-300">
+                        <span className="text-[#203565] dark:text-white font-semibold text-sm md:text-base">
                             {leadsFiltered.length} REGISTROS ENCONTRADOS
                         </span>
                     </div>
@@ -192,6 +192,7 @@ export default function SeguimientoPage() {
                 {isMonitoreoMode ? (
                     <MonitoreoTable
                         data={datosPaginados}
+                        isLoading={isLoading}
                         emptyMessage="No se encontraron registros de monitoreo"
                         resetSearchText="Ver todos los registros"
                         onResetSearch={() => setLeadsFiltered(leads)}

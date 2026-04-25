@@ -416,7 +416,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Color del Botón</label>
                 <div className="flex items-center gap-3">
-                  <input type="color" value={buttonColor} onChange={(e) => setButtonColor(e.target.value)} disabled={!active} className="h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1 disabled:cursor-not-allowed" />
+                  <input type="color" value={buttonColor} onChange={(e) => setButtonColor(e.target.value)} disabled={!active} className="h-10 w-14 cursor-pointer rounded border dark:bg-[#203565] border-gray-300 dark:border-gray-600 p-1 disabled:cursor-not-allowed" />
                   <span className="text-sm font-mono text-gray-500 dark:text-gray-400">{buttonColor}</span>
                 </div>
                 <span className="text-[10px] text-gray-500">Selecciona un color llamativo.</span>
@@ -429,7 +429,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 <div className='flex items-center gap-3'>
                   <input type="color" onChange={(e) =>{
                    console.log("CAMBIANDO A:", e.target.value);
-                    setButtonTextColor(e.target.value)}} disabled={!active} className='h-10 w-14 cursor-pointer rounded border border-gray-300 dark:border-gray-600 p-1' value={buttonTextColor} />
+                    setButtonTextColor(e.target.value)}} disabled={!active} className='h-10 w-14 cursor-pointer rounded border border-gray-300 dark:bg-[#203565] dark:border-gray-600 p-1' value={buttonTextColor} />
                   <span className='text-sm font-mono text-gray-500'>
                     {buttonTextColor}
                   </span>
@@ -449,8 +449,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             {/* Imagen Principal (Escritorio) */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">1. Foto Principal (Para Computadoras - Lado Izquierdo)</label>
-              <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>271x479 px</strong>) para la mitad izquierda.</span>
+              <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-sm dark:text-blue-200 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:text" />
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>336x535 px</strong>) para la mitad izquierda.</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b dark:border-gray-600 pb-4 mt-2">
@@ -483,14 +483,14 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             {/* Imagen Texto (Escritorio) */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">2. Diseño Promocional (Para Computadoras - Lado Derecho)</label>
-              <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
-              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>335x479 px</strong>). Va encima del formulario.</span>
+              <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-sm dark:text-blue-200 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
+              <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>336x535 px</strong>). Va encima del formulario.</span>
             </div>
 
             {/* Imagen Móvil */}
             <div className="flex flex-col gap-1 border-t dark:border-gray-600 pt-4 mt-2">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">3. Flyer Unificado (Para Celulares)</label>
-              <input type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
+              <input type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="text-sm dark:text-blue-200 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
               <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Solo formato WEBP (optimizado para velocidad). Tamaño ideal: <strong>260x520 px</strong>).</span>
             </div>
           </div>

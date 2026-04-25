@@ -16,17 +16,7 @@ import Pagination from "@/components/molecules/Pagination";
 import Modal from "@/components/atoms/Modal";
 import BlogForm from "@/components/molecules/blog/BlogForm";
 import { useProductos } from "@/hooks/useProductos";
-import SearchBar from "@/components/molecules/SearchBar";
-
-// Icono para el estado vacío
-const SearchXIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.3-4.3"></path>
-        <path d="m13.5 8.5-5 5"></path>
-        <path d="m8.5 8.5 5 5"></path>
-    </svg>
-);
+import SearchBar from "@/components/molecules/admin/SearchBar";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -119,11 +109,6 @@ export default function Blogspage() {
         setIsAddEditModalOpen(false);
     };
 
-    // Loading inicial de toda la página
-    if (isLoading && blogs.length === 0) {
-        return <div className="p-10 text-center animate-pulse">Cargando blogs...</div>;
-    }
-
     return (
         <div className="p-2 md:p-4">
             
@@ -183,16 +168,20 @@ export default function Blogspage() {
             )}
 
             {/* TABLA O MENSAJE VACÍO */}
-            {blogsFiltrados.length > 0 ? (
-                <>
-                    <AdminTable
-                        minRows={10}
-                        columns={columns}
-                        data={datosPaginados}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteBlog}
-                    />
+            <>
+                <AdminTable
+                    minRows={10}
+                    columns={columns}
+                    data={datosPaginados}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteBlog}
+                    isLoading={isLoading && blogs.length === 0}
+                    emptyMessage="No se encontraron blogs"
+                    onResetSearch={() => setBlogsFiltrados(blogs)}
+                    resetSearchText="Ver todos los blogs"
+                />
 
+                {!isLoading && blogsFiltrados.length > 0 && (
                     <div className="flex justify-center mt-4">
                         <Pagination
                             pageSize={10}
@@ -200,23 +189,8 @@ export default function Blogspage() {
                             setProductosPaginados={setDatosPaginados}
                         />
                     </div>
-                </>
-            ) : (
-                /* MENSAJE DE NO RESULTADOS */
-                <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4">
-                    <SearchXIcon />
-                    <h3 className="text-lg font-medium text-gray-900">No se encontraron blogs</h3>
-                    <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
-                        No hay resultados para tu búsqueda. Intenta con otro título, producto o revisa la ortografía.
-                    </p>
-                    <button
-                        onClick={() => setBlogsFiltrados(blogs)}
-                        className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
-                    >
-                        Ver todos los blogs
-                    </button>
-                </div>
-            )}
+                )}
+            </>
 
             {/* MODAL DE AÑADIR Y EDITAR */}
             <Modal

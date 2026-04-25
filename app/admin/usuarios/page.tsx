@@ -90,90 +90,84 @@ export default function UsuariosPage() {
 
     return (
         <div className="p-2 md:p-4">
-            {isLoading && users.length === 0 ? (
-                <div className="p-10 text-center animate-pulse text-black dark:text-white">Cargando usuarios...</div>
-            ) : users.length === 0 ? (
-                <div className="p-10 text-center text-black dark:text-white">No se encontraron usuarios.</div>
-            ) : (
-                <>
-                    {/* BOTONES */}
-                    <div className="flex flex-wrap gap-3 mb-4 no-print">
-                        {/* EXPORTAR */}
-                        <div className="flex-1 min-w-[140px]">
-                            <ExportDropdown
-                                className="w-full h-[40px]"
-                                options={exportOptions}
-                            />
-                        </div>
-
-                        {/* IMPRIMIR */}
-                        <div className="flex-1 min-w-[140px]">
-                            <ActionButtonGroup
-                                buttons={[
-                                    {
-                                        label: "IMPRIMIR",
-                                        onClick: () =>
-                                            exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
-                                        variant: "primary",
-                                        className: "w-full h-[40px]",
-                                        icon: <PrinterIcon />,
-                                    },
-                                ]}
-                            />
-                        </div>
-
-                        {/* AGREGAR */}
-                        <div className="flex-1 min-w-[140px]">
-                            <ActionButtonGroup
-                                buttons={[
-                                    {
-                                        label: "AGREGAR USUARIO",
-                                        onClick: () => setIsModalOpen(true),
-                                        variant: "tertiary",
-                                        className: "w-full h-[40px]",
-                                        icon: <PlusIcon />,
-                                    },
-                                ]}
-                            />
-                        </div>
-                    </div>
-
-                    {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
-                            {error}
-                        </div>
-                    )}
-
-                    <AdminTable
-                        columns={columns}
-                        data={datosPaginados}
-                        minRows={5}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteUsuario}
+            {/* BOTONES */}
+            <div className="flex flex-wrap gap-3 mb-4 no-print">
+                {/* EXPORTAR */}
+                <div className="flex-1 min-w-[140px]">
+                    <ExportDropdown
+                        className="w-full h-[40px]"
+                        options={exportOptions}
                     />
+                </div>
 
-                    <div className="flex justify-center mt-4">
-                        <Pagination
-                            pageSize={10}
-                            items={users}
-                            setProductosPaginados={setDatosPaginados}
-                        />
-                    </div>
+                {/* IMPRIMIR */}
+                <div className="flex-1 min-w-[140px]">
+                    <ActionButtonGroup
+                        buttons={[
+                            {
+                                label: "IMPRIMIR",
+                                onClick: () =>
+                                    exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
+                                variant: "primary",
+                                className: "w-full h-[40px]",
+                                icon: <PrinterIcon />,
+                            },
+                        ]}
+                    />
+                </div>
 
-                    <Modal
-                        isOpen={isModalOpen}
-                        onClose={handleCloseModal}
-                        title={!selectedUser ? "Añadir Usuario" : "Editar Usuario"}
-                    >
-                        <UserForm
-                            onSubmit={!selectedUser ? handleCreateUsuario : handleEditUsuario}
-                            onCancel={handleCloseModal}
-                            isLoading={isLoading}
-                            initialData={selectedUser}
-                        />
-                    </Modal>
-                </>
+                {/* AGREGAR */}
+                <div className="flex-1 min-w-[140px]">
+                    <ActionButtonGroup
+                        buttons={[
+                            {
+                                label: "AGREGAR USUARIO",
+                                onClick: () => setIsModalOpen(true),
+                                variant: "tertiary",
+                                className: "w-full h-[40px]",
+                                icon: <PlusIcon />,
+                            },
+                        ]}
+                    />
+                </div>
+            </div>
+
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+                    {error}
+                </div>
             )}
+
+            <AdminTable
+                columns={columns}
+                data={datosPaginados}
+                minRows={5}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteUsuario}
+                isLoading={isLoading && users.length === 0}
+                emptyMessage="No se encontraron usuarios"
+            />
+
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    pageSize={10}
+                    items={users}
+                    setProductosPaginados={setDatosPaginados}
+                />
+            </div>
+
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                title={!selectedUser ? "Añadir Usuario" : "Editar Usuario"}
+            >
+                <UserForm
+                    onSubmit={!selectedUser ? handleCreateUsuario : handleEditUsuario}
+                    onCancel={handleCloseModal}
+                    isLoading={isLoading}
+                    initialData={selectedUser}
+                />
+            </Modal>
             <ConfirmDialog />
         </div>
     );

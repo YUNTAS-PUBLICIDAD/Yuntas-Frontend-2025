@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useContactos } from "@/hooks/useContactos";
 import { Contacto } from "@/types/admin/contacto";
 
 import AdminTable from "@/components/organisms/admin/AdminTable";
-import Loader from "@/components/atoms/Loader";
 import ViewContactoModal from "@/components/organisms/admin/ModalActions/ViewContactoModal";
-import SearchBar from "@/components/molecules/SearchBar";
+import SearchBar from "@/components/molecules/admin/SearchBar";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -16,10 +15,10 @@ const columns = [
     label: "CLIENTE", 
     render: (_: unknown, row: Contacto) => (
       <div className="flex flex-col">
-        <span className="font-semibold text-[#203565]">
+        <span className="font-semibold text-[#203565] dark:text-[#E8F4F8]">
           {row.first_name} {row.last_name}
         </span>
-        <span className="text-xs text-gray-500">{row.phone}</span>
+        <span className="text-xs text-gray-500 dark:text-gray-300">{row.phone}</span>
       </div>
     ) 
   },
@@ -60,6 +59,10 @@ export default function ContactoPage() {
   const handleView = (contacto: Contacto) => {
     setSelectedContacto(contacto);
     setOpenViewModal(true);
+  };
+
+  const handleResetSearch = () => {
+    setPaginatedData(tableData);
   };
 
   return (
@@ -103,21 +106,16 @@ export default function ContactoPage() {
       )}
 
      
-      {isLoading ? (
-         <div className="flex justify-center py-20">
-            <Loader size="lg" />
-         </div>
-      ) : (
-          <AdminTable
-            minRows={10}
-            columns={columns}
-            data={paginatedData}
-            
-            onEdit={handleView} 
-            
-            
-          />
-      )}
+      <AdminTable
+        minRows={10}
+        columns={columns}
+        data={paginatedData}
+        onEdit={handleView}
+        isLoading={isLoading && contactos.length === 0}
+        emptyMessage="No se encontraron contactos"
+        onResetSearch={handleResetSearch}
+        resetSearchText="Ver todos los contactos"
+      />
       
     </div>
   );

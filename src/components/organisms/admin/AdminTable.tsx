@@ -33,6 +33,76 @@ interface AdminTableProps<T = any> {
     resetSearchText?: string;     // Texto del botón ("Ver todos los...")
 }
 
+function DesktopTableSkeleton({
+    columnsCount,
+    includeActions,
+    rows = 5
+}: {
+    columnsCount: number;
+    includeActions: boolean;
+    rows?: number;
+}) {
+    return (
+        <>
+            {Array.from({ length: rows }).map((_, rowIndex) => (
+                <tr key={`desktop-skeleton-${rowIndex}`}>
+                    {Array.from({ length: columnsCount }).map((__, colIndex) => (
+                        <td
+                            key={`desktop-skeleton-${rowIndex}-${colIndex}`}
+                            className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#1C2347] first:rounded-l-lg"
+                        >
+                            <div className="h-4 w-full max-w-[9rem] mx-auto rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        </td>
+                    ))}
+                    {includeActions && (
+                        <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#1C2347] rounded-r-lg">
+                            <div className="flex justify-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-white/10 animate-pulse" />
+                                <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-white/10 animate-pulse" />
+                            </div>
+                        </td>
+                    )}
+                </tr>
+            ))}
+        </>
+    );
+}
+
+function MobileCardSkeleton({
+    rows = 3,
+    includeActions
+}: {
+    rows?: number;
+    includeActions: boolean;
+}) {
+    return (
+        <>
+            {Array.from({ length: rows }).map((_, index) => (
+                <div
+                    key={`mobile-skeleton-${index}`}
+                    className="bg-white dark:bg-[#1C2347] border-2 border-[#0D1030] dark:border-white/10 rounded-[1.5rem] p-6 shadow-sm transition-colors duration-300"
+                >
+                    <div className="flex flex-col items-center text-center space-y-3">
+                        <div className="h-3 w-24 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        <div className="h-4 w-40 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        <div className="h-3 w-24 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        <div className="h-4 w-32 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        <div className="h-3 w-24 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        <div className="h-4 w-44 rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
+                    </div>
+
+                    {includeActions && (
+                        <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-gray-100 dark:border-white/10">
+                            <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-white/10 animate-pulse" />
+                            <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-white/10 animate-pulse" />
+                        </div>
+                    )}
+                </div>
+            ))}
+        </>
+    );
+}
+
 export default function AdminTable({
     columns,
     data,
@@ -63,16 +133,16 @@ export default function AdminTable({
 
     if (!isLoading && isDataEmpty) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg mt-4 w-full">
+            <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 dark:bg-[#1C2347] border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
                 <SearchXIcon />
-                <h3 className="text-lg font-medium text-gray-900">{emptyMessage}</h3>
-                <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
+                <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
                     No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
                 </p>
                 {onResetSearch && (
                     <button
                         onClick={onResetSearch}
-                        className="mt-4 text-sm text-[#203565] font-semibold hover:underline"
+                        className="mt-4 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
                     >
                         {resetSearchText}
                     </button>
@@ -101,17 +171,11 @@ export default function AdminTable({
                 <tbody>
                     { /* Lógica de Carga */}
                     { isLoading ? (
-                        <tr>
-                            <td 
-                                colSpan={columns.length + (role === "admin" ? 1 : 0)} 
-                                className="py-10 text-center text-[#0D1030] font-semibold bg-[#F4F4F2] dark:bg-white rounded-lg"
-                            >
-                                <div className="flex justify-center items-center gap-2">
-                                    <span className="animate-spin text-2xl">⏳</span>
-                                    Cargando información...
-                                </div>
-                            </td>
-                        </tr>
+                        <DesktopTableSkeleton
+                            columnsCount={columns.length}
+                            includeActions={role === "admin"}
+                            rows={minRows}
+                        />
                     ) : (
                     rows.map((row, index) => { 
                         const isEmpty = row._empty === true;
@@ -123,17 +187,17 @@ export default function AdminTable({
                                         key={col.key}
                                         className={`
                                             py-3 px-4 text-center
-                                            bg-[#F4F4F2] dark:bg-white
+                                            bg-[#F4F4F2] dark:bg-[#1C2347]
                                             first:rounded-l-lg
                                             ${role !== "admin" ? "last:rounded-r-lg" : ""}
-                                            ${col.key === "id" ? "font-bold text-[#0D1030]" : "text-[#0D1030]"}
+                                            ${col.key === "id" ? "font-bold text-[#0D1030] dark:text-white" : "text-[#0D1030] dark:text-white"}
                                         `}
                                     >
                                         {isEmpty ? <>&nbsp;</> : col.render ? col.render(row[col.key], row) : row[col.key]}
                                     </td>
                                 ))}
 
-                                { role === "admin" && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-white rounded-r-lg">
+                                { role === "admin" && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#1C2347] rounded-r-lg">
                                     <TableActions
                                         item={row}
                                         isEmpty={isEmpty}
@@ -153,9 +217,10 @@ export default function AdminTable({
             {/* MÓVIL: Tarjetas responsive */}
             <div className="lg:hidden flex flex-col gap-6">
                 {isLoading ? (
-                    <div className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 text-center font-semibold text-[#0D1030]">
-                        ⏳ Cargando información...
-                    </div>
+                    <MobileCardSkeleton
+                        rows={Math.max(2, Math.min(minRows, 4))}
+                        includeActions={role === "admin"}
+                    />
                 ) : (
                 rows.map((row, index) => {
                     const isEmpty = row._empty === true;
@@ -165,16 +230,16 @@ export default function AdminTable({
                     return (
                         <div
                             key={row.id || index}
-                            className="bg-white border-2 border-[#0D1030] rounded-[1.5rem] p-6 shadow-sm"
+                            className="bg-white dark:bg-[#1C2347] border-2 border-[#0D1030] dark:border-white/10 rounded-[1.5rem] p-6 shadow-sm transition-colors duration-300"
                         >
                             {/* Contenido de la tarjeta - campos centrados */}
                             <div className="flex flex-col items-center text-center space-y-3">
                                 {columns.map((col) => (
                                     <div key={col.key} className="w-full">
-                                        <span className="font-bold text-[#0D1030] uppercase text-xs block mb-1">
+                                        <span className="font-bold text-[#0D1030] dark:text-gray-200 uppercase text-xs block mb-1">
                                             {col.label}
                                         </span>
-                                        <span className="text-[#23C1DE] text-sm break-all block">
+                                        <span className="text-[#23C1DE] dark:text-[#6DE1E3] text-sm break-all block">
                                             {col.render ? col.render(row[col.key], row) : row[col.key]}
                                         </span>
                                     </div>
@@ -182,7 +247,7 @@ export default function AdminTable({
                             </div>
 
                             {/* Acciones centradas al final */}
-                            {role === "admin" && <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
+                            {role === "admin" && <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-gray-100 dark:border-white/10">
                                 <TableActions
                                     item={row}
                                     isEmpty={isEmpty}

@@ -8,18 +8,36 @@ type HeroSearchSectionProps = {
 };
 const HeroSearchSection = ({ setListaProductos, allProductos }: HeroSearchSectionProps) => {
   return (
-    <section className='grid grid-cols-1 md:grid-cols-2 items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-6 md:py-10 gap-6 md:gap-4 place-items-center md:place-items-start'>
-      <Text variant='h2' color='black' className='leading-tight uppercase font-bold text-2xl sm:text-3xl lg:text-4xl tracking-wide md:tracking-wider text-center md:text-left'>
-        Descubre la selección que tenemos para ti
-      </Text>
-      <SearchBar
-        items={allProductos}
-        onSearch={setListaProductos}
-        placeholder='Buscar Producto...'
-        searchKeys={['name']}
-        getDisplayValue={(item) => item.name}
-        noResultsMessage='No se encuentra ese producto'
-      />
+    <section className='w-full'>
+      <div className='relative w-full overflow-hidden'>
+        <div className='absolute inset-0 bg-[#0a1a3a]' />
+        <div className='absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]' />
+        <div className='absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10' />
+
+        <div className='relative flex items-center justify-center px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/10 text-center'>
+          <Text
+            variant='h2'
+            className='text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase'
+          >
+            Descubre la selección que 
+            <br/>
+            tenemos para ti
+          </Text>
+        </div>
+      </div>
+
+      <div className='w-full bg-white px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-6 md:py-8 flex justify-center'>
+        <div className='w-full max-w-3xl'>
+          <SearchBar
+            items={allProductos}
+            onSearch={setListaProductos}
+            placeholder='Buscar Producto...'
+            searchKeys={['name']}
+            getDisplayValue={(item) => item.name}
+            noResultsMessage='No se encuentra ese producto'
+          />
+        </div>
+      </div>
     </section>
   )
 }
