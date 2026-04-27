@@ -1,21 +1,28 @@
 'use client';
 
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ChevronDown, ChevronUp, Upload, Bot,
   Palette, MessageSquare, Settings2, Power,
 } from "lucide-react";
+import { useSettings } from "@/hooks/useSettings";
+import { showToast } from "@/utils/showToast";
+import { ChatbotPosition } from "@/types/admin/settings";
+import { getImg } from "@/utils/getImg";
 
 interface ConfiguracionConfig {
   isActive: boolean;
   primaryColor: string;
   secondaryColor: string;
-  position: string;
+  position: ChatbotPosition;
   welcomeMessage: string;
-  showAfter: string;
-  closeAfter: string;
+  showAfterSeconds: string;
+  closeAfterSeconds: string;
   iconPreview: string | null;
+  iconFile: File | null;
 }
+
+const HEX_COLOR_REGEX = /^#[0-9A-Fa-f]{6}$/;
 
 // ─── Toggle ───────────────────────────────────────────────────────────────────
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -94,13 +101,9 @@ function BlockTitle({ icon, title, subtitle }: {
   );
 }
 
-// ─── Divider ─────────────────────────────────────────────────────────────────
-function Divider() {
-  return <div className="border-t border-gray-100 dark:border-white/5" />;
-}
-
 // ─── Main Form ────────────────────────────────────────────────────────────────
 export default function ConfiguracionForm() {
+  const { chatbot, getSettings, saveChatbotSettings, isLoading, isSaving } = useSettings();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(true);
   const [config, setConfig] = useState<ConfiguracionConfig>({
@@ -109,39 +112,105 @@ export default function ConfiguracionForm() {
     secondaryColor: "#3D5BC9",
     position: "bottom-right",
     welcomeMessage: "¡Hola! Soy el asistente virtual de Yuntas.\n¿En qué puedo ayudarte hoy?",
-    showAfter: "3s",
-    closeAfter: "5min",
+    showAfterSeconds: "3",
+    closeAfterSeconds: "300",
     iconPreview: null,
+    iconFile: null,
   });
+
+  useEffect(() => {
+    getSettings();
+  }, [getSettings]);
+
+  useEffect(() => {
+    if (!chatbot) return;
+
+    setConfig((prev) => ({
+      ...prev,
+      isActive: !!chatbot.enabled,
+      primaryColor: chatbot.primary_color || "#3D5BC9",
+      secondaryColor: chatbot.secondary_color || chatbot.primary_color || "#3D5BC9",
+      position: chatbot.position === "bottom-left" ? "bottom-left" : "bottom-right",
+      welcomeMessage: chatbot.welcome_message || "",
+      showAfterSeconds: String(chatbot.show_delay_seconds ?? 0),
+      closeAfterSeconds:
+        chatbot.auto_close_seconds === null || chatbot.auto_close_seconds === undefined
+          ? "never"
+          : String(chatbot.auto_close_seconds),
+      iconPreview: chatbot.icon || null,
+      iconFile: null,
+    }));
+  }, [chatbot]);
 
   const handleIconUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setConfig((c) => ({ ...c, iconPreview: URL.createObjectURL(file) }));
+    setConfig((c) => ({ ...c, iconPreview: URL.createObjectURL(file), iconFile: file }));
   };
 
   const positionOptions = [
     { value: "bottom-right", label: "Abajo derecha" },
     { value: "bottom-left",  label: "Abajo izquierda" },
-    { value: "top-right",    label: "Arriba derecha" },
-    { value: "top-left",     label: "Arriba izquierda" },
   ];
 
   const showAfterOptions = [
-    { value: "0s",  label: "Inmediatamente" },
-    { value: "3s",  label: "3 segundos" },
-    { value: "5s",  label: "5 segundos" },
-    { value: "10s", label: "10 segundos" },
-    { value: "30s", label: "30 segundos" },
+    { value: "0",  label: "Inmediatamente" },
+    { value: "3",  label: "3 segundos" },
+    { value: "5",  label: "5 segundos" },
+    { value: "10", label: "10 segundos" },
+    { value: "30", label: "30 segundos" },
   ];
 
   const closeAfterOptions = [
     { value: "never", label: "Nunca" },
-    { value: "1min",  label: "1 min de inactividad" },
-    { value: "5min",  label: "5 min de inactividad" },
-    { value: "10min", label: "10 min de inactividad" },
-    { value: "30min", label: "30 min de inactividad" },
+    { value: "60",    label: "1 min de inactividad" },
+    { value: "300",   label: "5 min de inactividad" },
+    { value: "600",   label: "10 min de inactividad" },
+    { value: "1800",  label: "30 min de inactividad" },
   ];
+
+  const handleSave = async () => {
+    if (!HEX_COLOR_REGEX.test(config.primaryColor)) {
+      showToast.warning("El color principal debe tener formato #RRGGBB");
+      return;
+    }
+
+    if (config.secondaryColor && !HEX_COLOR_REGEX.test(config.secondaryColor)) {
+      showToast.warning("El color secundario debe tener formato #RRGGBB");
+      return;
+    }
+
+    const showDelay = Number(config.showAfterSeconds);
+    if (Number.isNaN(showDelay) || showDelay < 0) {
+      showToast.warning("El tiempo para mostrar el chatbot debe ser un entero mayor o igual a 0");
+      return;
+    }
+
+    const autoClose = config.closeAfterSeconds === "never" ? null : Number(config.closeAfterSeconds);
+    if (autoClose !== null && (Number.isNaN(autoClose) || autoClose < 0)) {
+      showToast.warning("El tiempo de cierre automatico debe ser un entero mayor o igual a 0");
+      return;
+    }
+
+    const result = await saveChatbotSettings({
+      enabled: config.isActive,
+      primary_color: config.primaryColor,
+      secondary_color: config.secondaryColor,
+      icon: config.iconFile,
+      position: config.position,
+      welcome_message: config.welcomeMessage,
+      show_delay_seconds: showDelay,
+      auto_close_seconds: autoClose,
+    });
+
+    if (result.success) {
+      showToast.success("Configuracion del chatbot guardada correctamente");
+      await getSettings();
+      return;
+    }
+
+    showToast.error(result.message || "No se pudo guardar la configuracion");
+  };
 
   return (
     <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] shadow-sm overflow-hidden">
@@ -170,6 +239,12 @@ export default function ConfiguracionForm() {
 
       {isOpen && (
         <div className="divide-y divide-gray-100 dark:divide-white/5">
+
+          {isLoading && (
+            <div className="px-6 py-4 bg-blue-50 text-blue-700 text-sm dark:bg-blue-500/10 dark:text-blue-200">
+              Cargando configuracion actual...
+            </div>
+          )}
 
           {/* Estado */}
           <div className="px-6 py-6">
@@ -208,7 +283,7 @@ export default function ConfiguracionForm() {
                     style={{ backgroundColor: config.primaryColor }}
                   >
                     {config.iconPreview
-                      ? <img src={config.iconPreview} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
+                      ? <img src={getImg(config.iconPreview)} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
                       : <Bot className="w-7 h-7 text-white" />
                     }
                   </div>
@@ -235,7 +310,7 @@ export default function ConfiguracionForm() {
                 hint="Burbujas de mensajes del bot" />
 
               <Select label="Posición en pantalla" value={config.position}
-                onChange={(v) => setConfig((c) => ({ ...c, position: v }))}
+                onChange={(v) => setConfig((c) => ({ ...c, position: v as ChatbotPosition }))}
                 options={positionOptions} hint="Esquina donde aparece el botón flotante" />
             </div>
           </div>
@@ -270,19 +345,23 @@ export default function ConfiguracionForm() {
               subtitle="Cuándo mostrar y cuándo cerrar el chat automáticamente"
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Select label="Mostrar automáticamente" value={config.showAfter}
-                onChange={(v) => setConfig((c) => ({ ...c, showAfter: v }))}
+              <Select label="Mostrar automáticamente" value={config.showAfterSeconds}
+                onChange={(v) => setConfig((c) => ({ ...c, showAfterSeconds: v }))}
                 options={showAfterOptions} hint="Tiempo de espera antes de abrir el chat" />
-              <Select label="Cerrar automáticamente" value={config.closeAfter}
-                onChange={(v) => setConfig((c) => ({ ...c, closeAfter: v }))}
+              <Select label="Cerrar automáticamente" value={config.closeAfterSeconds}
+                onChange={(v) => setConfig((c) => ({ ...c, closeAfterSeconds: v }))}
                 options={closeAfterOptions} hint="Tiempo sin actividad para cerrar el chat" />
             </div>
           </div>
 
           {/* ── Footer / Guardar ── */}
           <div className="px-6 py-4 bg-gray-50 dark:bg-white/5 flex justify-end">
-            <button className="px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white text-sm font-semibold transition-colors shadow-sm">
-              Guardar cambios
+            <button
+              onClick={handleSave}
+              disabled={isSaving || isLoading}
+              className="px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors shadow-sm"
+            >
+              {isSaving ? "Guardando..." : "Guardar cambios"}
             </button>
           </div>
 
