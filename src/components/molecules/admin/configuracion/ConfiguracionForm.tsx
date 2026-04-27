@@ -6,6 +6,7 @@ import { showToast } from "@/utils/showToast";
 import ChatbotSettingsSection from "./ChatbotSettingsSection";
 import AppearanceSettingsSection from "./AppearanceSettingsSection";
 import { ChatbotSettingsFormConfig } from "./configuracion.types";
+import ContactoSettingsSection from "./ContactoSettingsSection";
 
 const HEX_COLOR_REGEX = /^#[0-9A-Fa-f]{6}$/;
 
@@ -113,6 +114,7 @@ export default function ConfiguracionForm() {
         onIconUpload={handleIconUpload}
       />
       <AppearanceSettingsSection />
+      <ContactoSettingsSection />
     </div>
   );
 }
