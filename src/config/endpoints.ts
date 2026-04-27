@@ -120,6 +120,9 @@ export const API_ENDPOINTS = {
     },
     DEPLOY: {
       TRIGGER: '/admin/deploy/trigger',
+    },
+    SETTINGS: {
+      CHATBOT_UPDATE: '/admin/settings/chatbot',
     }
   }
 };
