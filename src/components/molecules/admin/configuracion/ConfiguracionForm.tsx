@@ -8,6 +8,7 @@ import {
 import { useSettings } from "@/hooks/useSettings";
 import { showToast } from "@/utils/showToast";
 import { ChatbotPosition } from "@/types/admin/settings";
+import { getImg } from "@/utils/getImg";
 
 interface ConfiguracionConfig {
   isActive: boolean;
@@ -282,7 +283,7 @@ export default function ConfiguracionForm() {
                     style={{ backgroundColor: config.primaryColor }}
                   >
                     {config.iconPreview
-                      ? <img src={config.iconPreview} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
+                      ? <img src={getImg(config.iconPreview)} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
                       : <Bot className="w-7 h-7 text-white" />
                     }
                   </div>
