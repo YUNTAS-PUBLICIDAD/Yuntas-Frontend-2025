@@ -21,6 +21,8 @@ export const updateChatbotSettingsService = async (
   try {
     const formData = new FormData();
 
+    formData.append("_method", "PATCH");
+
     formData.append("enabled", chatbotData.enabled ? "1" : "0");
     formData.append("primary_color", chatbotData.primary_color);
     formData.append("secondary_color", chatbotData.secondary_color || "");
@@ -39,7 +41,7 @@ export const updateChatbotSettingsService = async (
       formData.append("icon", chatbotData.icon);
     }
 
-    const response = await api.patch(
+    const response = await api.post(
       API_ENDPOINTS.ADMIN.SETTINGS.CHATBOT_UPDATE,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
