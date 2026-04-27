@@ -40,6 +40,10 @@ export const API_ENDPOINTS = {
     HISTORY: (id: string) => `/chatbot/history/${id}`,
   },
 
+  SETTINGS: {
+    GET: '/settings',
+  },
+
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     USERS: {
