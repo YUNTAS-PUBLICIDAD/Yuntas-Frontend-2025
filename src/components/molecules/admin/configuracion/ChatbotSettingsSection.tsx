@@ -13,7 +13,7 @@ interface ChatbotSettingsSectionProps {
   isLoading: boolean;
   isSaving: boolean;
   onSave: () => void;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  fileInputRef: React.RefObject<HTMLInputElement>;
   onIconUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -127,25 +127,32 @@ export default function ChatbotSettingsSection({
   return (
     <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] shadow-sm overflow-hidden">
       <div
-        className="flex items-center justify-between px-6 py-5 cursor-pointer select-none border-b border-gray-100 dark:border-white/5"
+        className="flex items-start justify-between px-8 py-6 cursor-pointer select-none border-b border-gray-100 dark:border-white/5 hover:bg-gray-50/70 dark:hover:bg-white/5 transition-colors"
         onClick={onToggleOpen}
       >
-        <div className="flex items-center gap-3">
-          <span
-            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
-              config.isActive
-                ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
-                : "bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-white/40"
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${config.isActive ? "bg-green-500" : "bg-gray-400"}`} />
-            {config.isActive ? "Activo" : "Inactivo"}
-          </span>
-          <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Configuración del Chatbot</h2>
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
+            <Bot className="h-5 w-5 text-[#203565] dark:text-white/60" />
+          </div>
+          <div className="pt-0.5">
+            <h2 className="text-2xl font-semibold tracking-tight text-[#0D1030] dark:text-white">Configuración del Chatbot</h2>
+            <div className="mt-1 flex items-center gap-2">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  config.isActive
+                    ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                    : "bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-white/40"
+                }`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${config.isActive ? "bg-green-500" : "bg-gray-400"}`} />
+                {config.isActive ? "Activo" : "Inactivo"}
+              </span>
+            </div>
+          </div>
         </div>
-        <button className="text-gray-400 dark:text-white/40" aria-label="Expandir configuracion del chatbot">
-          {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-        </button>
+        <ChevronDown
+          className={`mt-1 h-5 w-5 text-gray-400 transition-transform duration-300 dark:text-white/40 ${isOpen ? "rotate-0" : "-rotate-90"}`}
+        />
       </div>
 
       {isOpen && (

@@ -121,11 +121,16 @@ export default function AppearanceSettingsSection() {
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
       <button
         onClick={() => setOpen((current) => !current)}
-        className="flex w-full items-start justify-between px-8 py-6 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
+        className="flex w-full items-start justify-between px-8 py-6 text-left transition-colors hover:bg-gray-50/70 dark:hover:bg-white/5"
       >
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Apariencia</h2>
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
+            <Palette className="h-5 w-5 text-[#203565] dark:text-white/60" />
+          </div>
+          <div className="pt-0.5">
+            <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Apariencia</h2>
           <p className="mt-0.5 text-sm text-gray-500 dark:text-white/50">Personaliza la identidad visual de tu empresa</p>
+          </div>
         </div>
         <ChevronDown
           className={`mt-1 h-5 w-5 text-gray-400 transition-transform duration-300 dark:text-white/40 ${open ? "rotate-0" : "-rotate-90"}`}
