@@ -1,5 +1,35 @@
 export type ChatbotPosition = 'bottom-right' | 'bottom-left';
 
+export interface SocialLink {
+  platform: string;
+  url: string;
+}
+
+export interface BusinessHours {
+  day: string;
+  start_time: string;
+  end_time: string;
+}
+
+export interface GeneralSettings {
+  company_name: string;
+  logo_light: string | null;
+  logo_dark: string | null;
+  theme: 'light' | 'dark';
+}
+
+export interface ContactSettings {
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  business_hours: BusinessHours[] | null;
+  social_links: SocialLink[] | null;
+  whatsapp_message: string | null;
+  show_in_footer: boolean;
+  show_contact_page: boolean;
+  map_url: string | null;
+}
+
 export interface ChatbotSettings {
   enabled: boolean;
   primary_color: string;
@@ -12,9 +42,28 @@ export interface ChatbotSettings {
 }
 
 export interface SettingsPayload {
-  general: Record<string, any>;
-  contact: Record<string, any>;
+  general: GeneralSettings;
+  contact: ContactSettings;
   chatbot: ChatbotSettings;
+}
+
+export interface UpdateGeneralSettingsInput {
+  company_name?: string;
+  logo_light?: File | null;
+  logo_dark?: File | null;
+  theme?: 'light' | 'dark';
+}
+
+export interface UpdateContactSettingsInput {
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  business_hours?: BusinessHours[] | null;
+  social_links?: SocialLink[] | null;
+  whatsapp_message?: string | null;
+  show_in_footer?: boolean;
+  show_contact_page?: boolean;
+  map_url?: string | null;
 }
 
 export interface UpdateChatbotSettingsInput {
