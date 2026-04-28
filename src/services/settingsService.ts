@@ -1,9 +1,13 @@
 import { api, API_ENDPOINTS } from "@/config";
 import {
   ChatbotSettings,
+  GeneralSettings,
+  ContactSettings,
   SettingsPayload,
   SettingsServiceResponse,
   UpdateChatbotSettingsInput,
+  UpdateGeneralSettingsInput,
+  UpdateContactSettingsInput,
 } from "@/types/admin/settings";
 
 export const getSettingsService = async (): Promise<SettingsServiceResponse<SettingsPayload>> => {
@@ -56,3 +60,87 @@ export const updateChatbotSettingsService = async (
     return { success: false, message: error.message };
   }
 };
+
+export const updateGeneralSettingsService = async (
+  generalData: UpdateGeneralSettingsInput
+): Promise<SettingsServiceResponse<GeneralSettings> > => {
+  try {
+    const formData = new FormData();
+
+    formData.append("_method", "PATCH");
+
+    formData.append("company_name", generalData.company_name || "");
+    formData.append("theme", generalData.theme || "light");
+
+    if (generalData.logo_light instanceof File) {
+      formData.append("logo_light", generalData.logo_light);
+    }
+
+    if (generalData.logo_dark instanceof File) {
+      formData.append("logo_dark", generalData.logo_dark);
+    }
+
+    const response = await api.post(
+      API_ENDPOINTS.ADMIN.SETTINGS.GENERAL_UPDATE,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+
+    return {
+      success: true,
+      data: response.data,
+      message: "Configuracion general actualizada exitosamente",
+    };
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+};
+
+export const updateContactSettingsService = async (
+  contactData: UpdateContactSettingsInput
+): Promise<SettingsServiceResponse<ContactSettings> > => {
+  try {
+    const formData = new FormData();
+
+    formData.append("_method", "PATCH");
+
+    formData.append("phone", contactData.phone || "");
+    formData.append("email", contactData.email || "");
+    formData.append("address", contactData.address || "");
+    formData.append("whatsapp_message", contactData.whatsapp_message || "");
+    formData.append("show_in_footer", contactData.show_in_footer ? "1" : "0");
+    formData.append("show_contact_page", contactData.show_contact_page ? "1" : "0");
+    formData.append("map_url", contactData.map_url || "");
+
+    // Para business_hours, Laravel espera array con notación de índices
+    if (contactData.business_hours && Array.isArray(contactData.business_hours)) {
+      contactData.business_hours.forEach((item, index) => {
+        formData.append(`business_hours[${index}][day]`, item.day || "");
+        formData.append(`business_hours[${index}][start_time]`, item.start_time || "");
+        formData.append(`business_hours[${index}][end_time]`, item.end_time || "");
+      });
+    }
+
+    // Para social_links, Laravel espera array con notación de índices
+    if (contactData.social_links && Array.isArray(contactData.social_links)) {
+      contactData.social_links.forEach((item, index) => {
+        formData.append(`social_links[${index}][platform]`, item.platform || "");
+        formData.append(`social_links[${index}][url]`, item.url || "");
+      });
+    }
+    
+    const response = await api.post(
+      API_ENDPOINTS.ADMIN.SETTINGS.CONTACT_UPDATE,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+
+    return {
+      success: true,
+      data: response.data,
+      message: "Configuracion de contacto actualizada exitosamente",
+    };
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+}

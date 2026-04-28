@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   ChevronDown,
   Phone,
@@ -12,8 +12,15 @@ import {
   Settings2,
   ExternalLink,
 } from "lucide-react";
+import {
+  BusinessHours,
+  ContactSettings,
+  SettingsServiceResponse,
+  SocialLink,
+  UpdateContactSettingsInput,
+} from "@/types/admin/settings";
+import { showToast } from "@/utils/showToast";
 
-// ─── Tipos ────────────────────────────────────────────────────────────────────
 interface HorarioDia {
   desde: string;
   hasta: string;
@@ -42,7 +49,158 @@ interface ContactoConfig {
   mapaUrl: string;
 }
 
-// ─── SVG Iconos ────────────────────────────────────────────────────────
+interface ContactoSettingsSectionProps {
+  contact: ContactSettings | null;
+  isLoading: boolean;
+  isSaving: boolean;
+  onSave: (
+    payload: UpdateContactSettingsInput
+  ) => Promise<SettingsServiceResponse<ContactSettings>>;
+}
+
+const DEFAULT_CONFIG: ContactoConfig = {
+  codigoPais: "+51",
+  telefono: "",
+  correo: "",
+  direccion: "",
+  horario: {
+    lunesViernes: { desde: "09:00", hasta: "18:00", cerrado: false },
+    sabado: { desde: "09:00", hasta: "13:00", cerrado: false },
+    domingo: { desde: "09:00", hasta: "13:00", cerrado: true },
+  },
+  mensajeWhatsapp: "¡Hola! 👋\nMe gustaría obtener más información.",
+  redes: { facebook: "", tiktok: "", instagram: "", youtube: "" },
+  mostrarFooter: true,
+  mostrarPaginaContacto: true,
+  mapaUrl: "",
+};
+
+const DAY_LABELS = {
+  lunesViernes: "Lunes - Viernes",
+  sabado: "Sábado",
+  domingo: "Domingo",
+} as const;
+
+const SOCIAL_PLATFORMS = ["facebook", "tiktok", "instagram", "youtube"] as const;
+
+function normalizeText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function splitPhone(phone: string | null | undefined) {
+  const trimmed = phone?.trim() || "";
+
+  if (!trimmed) {
+    return { codigoPais: "+51", telefono: "" };
+  }
+
+  const match = trimmed.match(/^(\+\d{1,4})(?:\s+(.*))?$/);
+  if (match) {
+    return {
+      codigoPais: match[1],
+      telefono: match[2] || "",
+    };
+  }
+
+  return {
+    codigoPais: "+51",
+    telefono: trimmed,
+  };
+}
+
+function mapBusinessHoursToForm(hours: BusinessHours[] | null | undefined) {
+  const getHour = (label: string, fallback: HorarioDia): HorarioDia => {
+    const found = hours?.find((item) => normalizeText(item.day) === normalizeText(label));
+
+    if (!found) {
+      return fallback;
+    }
+
+    const closed = !found.start_time || !found.end_time;
+
+    return {
+      desde: found.start_time || fallback.desde,
+      hasta: found.end_time || fallback.hasta,
+      cerrado: closed,
+    };
+  };
+
+  return {
+    lunesViernes: getHour(DAY_LABELS.lunesViernes, DEFAULT_CONFIG.horario.lunesViernes),
+    sabado: getHour(DAY_LABELS.sabado, DEFAULT_CONFIG.horario.sabado),
+    domingo: getHour(DAY_LABELS.domingo, DEFAULT_CONFIG.horario.domingo),
+  };
+}
+
+function mapSocialLinksToForm(links: SocialLink[] | null | undefined) {
+  return SOCIAL_PLATFORMS.reduce(
+    (accumulator, platform) => {
+      const found = links?.find((item) => normalizeText(item.platform) === normalizeText(platform));
+      accumulator[platform] = found?.url || "";
+      return accumulator;
+    },
+    {
+      facebook: "",
+      tiktok: "",
+      instagram: "",
+      youtube: "",
+    }
+  );
+}
+
+function mapContactToForm(contact: ContactSettings | null): ContactoConfig {
+  if (!contact) {
+    return DEFAULT_CONFIG;
+  }
+
+  const { codigoPais, telefono } = splitPhone(contact.phone);
+
+  return {
+    codigoPais,
+    telefono,
+    correo: contact.email || "",
+    direccion: contact.address || "",
+    horario: mapBusinessHoursToForm(contact.business_hours),
+    mensajeWhatsapp: contact.whatsapp_message || DEFAULT_CONFIG.mensajeWhatsapp,
+    redes: mapSocialLinksToForm(contact.social_links),
+    mostrarFooter: contact.show_in_footer,
+    mostrarPaginaContacto: contact.show_contact_page,
+    mapaUrl: contact.map_url || "",
+  };
+}
+
+function buildBusinessHoursPayload(horario: ContactoConfig["horario"]): BusinessHours[] {
+  return [
+    {
+      day: DAY_LABELS.lunesViernes,
+      start_time: horario.lunesViernes.cerrado ? "" : horario.lunesViernes.desde,
+      end_time: horario.lunesViernes.cerrado ? "" : horario.lunesViernes.hasta,
+    },
+    {
+      day: DAY_LABELS.sabado,
+      start_time: horario.sabado.cerrado ? "" : horario.sabado.desde,
+      end_time: horario.sabado.cerrado ? "" : horario.sabado.hasta,
+    },
+    {
+      day: DAY_LABELS.domingo,
+      start_time: horario.domingo.cerrado ? "" : horario.domingo.desde,
+      end_time: horario.domingo.cerrado ? "" : horario.domingo.hasta,
+    },
+  ];
+}
+
+function buildSocialLinksPayload(redes: ContactoConfig["redes"]): SocialLink[] | null {
+  const links = SOCIAL_PLATFORMS
+    .map((platform) => ({ platform, url: redes[platform].trim() }))
+    .filter((item) => item.url.length > 0);
+
+  return links.length > 0 ? links : null;
+}
+
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
@@ -73,25 +231,29 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// ─── Block Title ──────────────────────────────────────────────────────────────
-function BlockTitle({ icon, title, subtitle }: {
-  icon: React.ReactNode; title: string; subtitle: string;
+function BlockTitle({
+  icon,
+  title,
+  subtitle,
+}: {
+  icon: ReactNode;
+  title: string;
+  subtitle: string;
 }) {
   return (
-    <div className="flex items-start gap-3 mb-5">
-      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5 shrink-0 mt-0.5">
+    <div className="mb-5 flex items-start gap-3">
+      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
         {icon}
       </div>
       <div>
         <h3 className="text-base font-bold text-[#0D1030] dark:text-white">{title}</h3>
-        <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">{subtitle}</p>
+        <p className="mt-0.5 text-xs text-gray-400 dark:text-white/40">{subtitle}</p>
       </div>
     </div>
   );
 }
 
-// ─── Field wrapper ────────────────────────────────────────────────────────────
-function Field({ label, hint, children }: { label?: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label?: string; hint?: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
       {label && <label className="text-sm font-semibold text-[#0D1030] dark:text-white">{label}</label>}
@@ -101,57 +263,78 @@ function Field({ label, hint, children }: { label?: string; hint?: string; child
   );
 }
 
-// ─── Input ────────────────────────────────────────────────────────────────────
-function Input({ icon, value, onChange, placeholder, type = "text" }: {
-  icon?: React.ReactNode; value: string; onChange: (v: string) => void;
-  placeholder?: string; type?: string;
+function Input({
+  icon,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+}: {
+  icon?: ReactNode;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  type?: string;
 }) {
   return (
     <div className="relative flex items-center">
-      {icon && <span className="absolute left-3 text-gray-400 dark:text-white/30 pointer-events-none">{icon}</span>}
+      {icon && <span className="pointer-events-none absolute left-3 text-gray-400 dark:text-white/30">{icon}</span>}
       <input
-        type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
-        className={`w-full border border-gray-200 dark:border-white/10 rounded-xl py-2.5 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white placeholder-gray-300 dark:placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:focus:ring-white/20 transition-shadow ${icon ? "pl-9 pr-4" : "px-4"}`}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={`w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20 ${icon ? "pl-9 pr-4" : "px-4"}`}
       />
     </div>
   );
 }
 
-// ─── Toggle ───────────────────────────────────────────────────────────────────
-function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+function Toggle({ checked, onChange }: { checked: boolean; onChange: (value: boolean) => void }) {
   return (
     <button
       onClick={() => onChange(!checked)}
-      className={`relative w-11 h-6 rounded-full transition-colors duration-200 shrink-0 ${checked ? "bg-[#41effb]" : "bg-gray-200 dark:bg-white/10"}`}
+      className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ${checked ? "bg-[#41effb]" : "bg-gray-200 dark:bg-white/10"}`}
     >
-      <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${checked ? "translate-x-5" : "translate-x-0"}`} />
+      <span
+        className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${checked ? "translate-x-5" : "translate-x-0"}`}
+      />
     </button>
   );
 }
 
-// ─── Horario Row ──────────────────────────────────────────────────────────────
-function HorarioRow({ label, value, onChange }: {
-  label: string; value: HorarioDia; onChange: (v: HorarioDia) => void;
+function HorarioRow({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: HorarioDia;
+  onChange: (value: HorarioDia) => void;
 }) {
   return (
-    <div className="flex items-center gap-3 flex-wrap py-2.5">
-      <span className="text-sm text-[#0D1030] dark:text-white w-28 shrink-0">{label}</span>
+    <div className="flex flex-wrap items-center gap-3 py-2.5">
+      <span className="w-28 shrink-0 text-sm text-[#0D1030] dark:text-white">{label}</span>
       {value.cerrado ? (
-        <span className="text-sm text-gray-400 dark:text-white/30 italic flex-1">Cerrado</span>
+        <span className="flex-1 italic text-sm text-gray-400 dark:text-white/30">Cerrado</span>
       ) : (
-        <div className="flex items-center gap-2 flex-1">
-          <input type="time" value={value.desde}
+        <div className="flex flex-1 items-center gap-2">
+          <input
+            type="time"
+            value={value.desde}
             onChange={(e) => onChange({ ...value, desde: e.target.value })}
-            className="border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:focus:ring-white/20"
+            className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
           />
           <span className="text-sm text-gray-400 dark:text-white/30">a</span>
-          <input type="time" value={value.hasta}
+          <input
+            type="time"
+            value={value.hasta}
             onChange={(e) => onChange({ ...value, hasta: e.target.value })}
-            className="border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:focus:ring-white/20"
+            className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
           />
         </div>
       )}
-      <div className="flex items-center gap-2 ml-auto">
+      <div className="ml-auto flex items-center gap-2">
         <Toggle checked={value.cerrado} onChange={(cerrado) => onChange({ ...value, cerrado })} />
         <span className="text-xs text-gray-400 dark:text-white/30">Cerrado</span>
       </div>
@@ -159,40 +342,44 @@ function HorarioRow({ label, value, onChange }: {
   );
 }
 
-// ─── Vista previa ─────────────────────────────────────────────────────────────
 function VistaPrevia({ config }: { config: ContactoConfig }) {
-  const formatTime = (t: string) => {
-    if (!t) return "";
-    const [h, m] = t.split(":");
-    const hour = parseInt(h);
-    return `${hour > 12 ? hour - 12 : hour || 12}:${m} ${hour >= 12 ? "PM" : "AM"}`;
+  const formatTime = (time: string) => {
+    if (!time) {
+      return "";
+    }
+
+    const [hourText, minuteText] = time.split(":");
+    const hour = Number.parseInt(hourText, 10);
+    return `${hour > 12 ? hour - 12 : hour || 12}:${minuteText} ${hour >= 12 ? "PM" : "AM"}`;
   };
-  const horarioTexto = (dia: HorarioDia) =>
-    dia.cerrado ? "Cerrado" : `${formatTime(dia.desde)} – ${formatTime(dia.hasta)}`;
+
+  const horarioTexto = (dia: HorarioDia) => (dia.cerrado ? "Cerrado" : `${formatTime(dia.desde)} – ${formatTime(dia.hasta)}`);
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-widest">Vista previa</p>
-      <p className="text-xs text-gray-400 dark:text-white/30 mb-2">Así se verá en tu sitio web</p>
-      <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#0D1030]/40 p-5 space-y-4">
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-white/30">Vista previa</p>
+      <p className="mb-2 text-xs text-gray-400 dark:text-white/30">Así se verá en tu sitio web</p>
+      <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-5 dark:border-white/10 dark:bg-[#0D1030]/40">
         <h4 className="text-sm font-bold text-[#0D1030] dark:text-white">Contáctanos</h4>
 
         {config.telefono && (
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-500/10 flex items-center justify-center shrink-0">
-              <WhatsAppIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/10">
+              <WhatsAppIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
             </div>
             <div>
               <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Whatsapp</p>
-              <p className="text-xs text-gray-500 dark:text-white/40">{config.codigoPais} {config.telefono}</p>
+              <p className="text-xs text-gray-500 dark:text-white/40">
+                {config.codigoPais} {config.telefono}
+              </p>
             </div>
           </div>
         )}
 
         {config.correo && (
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-500/10 flex items-center justify-center shrink-0">
-              <Mail className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-500/10">
+              <Mail className="h-4 w-4 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Correo</p>
@@ -203,8 +390,8 @@ function VistaPrevia({ config }: { config: ContactoConfig }) {
 
         {config.direccion && (
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-500/10 flex items-center justify-center shrink-0">
-              <MapPin className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-500/10">
+              <MapPin className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
             </div>
             <div>
               <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Dirección</p>
@@ -214,20 +401,22 @@ function VistaPrevia({ config }: { config: ContactoConfig }) {
         )}
 
         <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center shrink-0">
-            <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
+            <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
             <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Horario de atención</p>
-            <p className="text-xs text-gray-500 dark:text-white/40">Lunes - Viernes: {horarioTexto(config.horario.lunesViernes)}</p>
+            <p className="text-xs text-gray-500 dark:text-white/40">
+              Lunes - Viernes: {horarioTexto(config.horario.lunesViernes)}
+            </p>
             <p className="text-xs text-gray-500 dark:text-white/40">Sábado: {horarioTexto(config.horario.sabado)}</p>
             <p className="text-xs text-gray-500 dark:text-white/40">Domingo: {horarioTexto(config.horario.domingo)}</p>
           </div>
         </div>
 
         {config.telefono && (
-          <button className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded-xl py-3 transition-colors">
-            <WhatsAppIcon className="w-4 h-4" />
+          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 text-xs font-semibold text-white transition-colors hover:bg-green-600">
+            <WhatsAppIcon className="h-4 w-4" />
             Escríbenos por WhatsApp
           </button>
         )}
@@ -236,61 +425,82 @@ function VistaPrevia({ config }: { config: ContactoConfig }) {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-export default function ContactoSettingsSection() {
+export default function ContactoSettingsSection({
+  contact,
+  isLoading,
+  isSaving,
+  onSave,
+}: ContactoSettingsSectionProps) {
   const [open, setOpen] = useState(true);
-  const [config, setConfig] = useState<ContactoConfig>({
-    codigoPais: "+51",
-    telefono: "",
-    correo: "",
-    direccion: "",
-    horario: {
-      lunesViernes: { desde: "09:00", hasta: "18:00", cerrado: false },
-      sabado: { desde: "09:00", hasta: "13:00", cerrado: false },
-      domingo: { desde: "09:00", hasta: "13:00", cerrado: true },
-    },
-    mensajeWhatsapp: "¡Hola! 👋\nMe gustaría obtener más información.",
-    redes: { facebook: "", tiktok: "", instagram: "", youtube: "" },
-    mostrarFooter: true,
-    mostrarPaginaContacto: true,
-    mapaUrl: "",
-  });
+  const [config, setConfig] = useState<ContactoConfig>(DEFAULT_CONFIG);
+
+  useEffect(() => {
+    setConfig(mapContactToForm(contact));
+  }, [contact]);
 
   const set = <K extends keyof ContactoConfig>(key: K, value: ContactoConfig[K]) =>
-    setConfig((c) => ({ ...c, [key]: value }));
+    setConfig((current) => ({ ...current, [key]: value }));
+
+  const handleSave = async () => {
+    const phone = `${config.codigoPais.trim()} ${config.telefono.trim()}`.trim();
+
+    const payload: UpdateContactSettingsInput = {
+      phone: phone || null,
+      email: config.correo.trim() || null,
+      address: config.direccion.trim() || null,
+      business_hours: buildBusinessHoursPayload(config.horario),
+      social_links: buildSocialLinksPayload(config.redes),
+      whatsapp_message: config.mensajeWhatsapp.trim() || null,
+      show_in_footer: config.mostrarFooter,
+      show_contact_page: config.mostrarPaginaContacto,
+      map_url: config.mapaUrl.trim() || null,
+    };
+
+    const result = await onSave(payload);
+
+    if (result.success) {
+      showToast.success("Configuración de contacto guardada correctamente");
+      return;
+    }
+
+    showToast.error(result.message || "No se pudo guardar la configuración de contacto");
+  };
 
   return (
-    <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] shadow-sm overflow-hidden">
-
-      {/*Header*/}
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
       <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-start justify-between px-6 py-5 text-left border-b border-gray-100 dark:border-white/5 transition-colors hover:bg-gray-50/70 dark:hover:bg-white/5"
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-start justify-between border-b border-gray-100 px-6 py-5 text-left transition-colors hover:bg-gray-50/70 dark:border-white/5 dark:hover:bg-white/5"
       >
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5">
-            <Phone className="w-4 h-4 text-[#203565] dark:text-white/60" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
+            <Phone className="h-4 w-4 text-[#203565] dark:text-white/60" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Contacto</h2>
-            <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
+            <p className="mt-0.5 text-xs text-gray-400 dark:text-white/40">
               Configura la información de contacto y canales de comunicación
             </p>
           </div>
         </div>
-        <ChevronDown className={`mt-1 w-5 h-5 text-gray-400 dark:text-white/40 transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"}`} />
+        <ChevronDown
+          className={`mt-1 h-5 w-5 text-gray-400 transition-transform duration-300 dark:text-white/40 ${open ? "rotate-180" : "rotate-0"}`}
+        />
       </button>
 
       {open && (
         <div className="divide-y divide-gray-100 dark:divide-white/5">
+          {isLoading && (
+            <div className="bg-blue-50 px-6 py-4 text-sm text-blue-700 dark:bg-blue-500/10 dark:text-blue-200">
+              Cargando configuración actual...
+            </div>
+          )}
 
-          {/* Información principal + Vista previa*/}
           <div className="px-6 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div>
                 <BlockTitle
-                  icon={<Phone className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                  icon={<Phone className="h-4 w-4 text-[#203565] dark:text-white/60" />}
                   title="Información principal"
                   subtitle="Estos datos se mostrarán en tu sitio web"
                 />
@@ -298,51 +508,68 @@ export default function ContactoSettingsSection() {
                   <Field label="Teléfono / WhatsApp" hint="Este número se usará para enlaces de WhatsApp">
                     <div className="flex gap-2">
                       <input
-                        type="text" value={config.codigoPais}
+                        type="text"
+                        value={config.codigoPais}
                         onChange={(e) => set("codigoPais", e.target.value)}
-                        className="w-20 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2.5 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:focus:ring-white/20"
+                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
                       />
                       <Input
-                        icon={<Phone className="w-4 h-4" />}
-                        value={config.telefono} onChange={(v) => set("telefono", v)}
-                        placeholder="Ej: 999 888 777" type="tel"
+                        icon={<Phone className="h-4 w-4" />}
+                        value={config.telefono}
+                        onChange={(value) => set("telefono", value)}
+                        placeholder="Ej: 999 888 777"
+                        type="tel"
                       />
                     </div>
                   </Field>
                   <Field label="Correo electrónico" hint="Este correo se mostrará como contacto personal">
-                    <Input icon={<Mail className="w-4 h-4" />} value={config.correo}
-                      onChange={(v) => set("correo", v)} placeholder="Ej: example@gmail.com" type="email" />
+                    <Input
+                      icon={<Mail className="h-4 w-4" />}
+                      value={config.correo}
+                      onChange={(value) => set("correo", value)}
+                      placeholder="Ej: example@gmail.com"
+                      type="email"
+                    />
                   </Field>
                   <Field label="Dirección" hint="Dirección de tu tienda o empresa">
-                    <Input icon={<MapPin className="w-4 h-4" />} value={config.direccion}
-                      onChange={(v) => set("direccion", v)}
-                      placeholder="Ej: Av. Los Próceres 123, Santiago de Surco, Lima, Perú" />
+                    <Input
+                      icon={<MapPin className="h-4 w-4" />}
+                      value={config.direccion}
+                      onChange={(value) => set("direccion", value)}
+                      placeholder="Ej: Av. Los Próceres 123, Santiago de Surco, Lima, Perú"
+                    />
                   </Field>
                   <Field label="Horario de atención">
-                    <div className="flex flex-col divide-y divide-gray-100 dark:divide-white/5 rounded-xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 px-3">
-                      <HorarioRow label="Lunes - Viernes" value={config.horario.lunesViernes}
-                        onChange={(v) => set("horario", { ...config.horario, lunesViernes: v })} />
-                      <HorarioRow label="Sábado" value={config.horario.sabado}
-                        onChange={(v) => set("horario", { ...config.horario, sabado: v })} />
-                      <HorarioRow label="Domingo" value={config.horario.domingo}
-                        onChange={(v) => set("horario", { ...config.horario, domingo: v })} />
+                    <div className="flex flex-col divide-y divide-gray-100 rounded-xl border border-gray-100 bg-gray-50 px-3 dark:divide-white/5 dark:border-white/5 dark:bg-white/5">
+                      <HorarioRow
+                        label="Lunes - Viernes"
+                        value={config.horario.lunesViernes}
+                        onChange={(value) => set("horario", { ...config.horario, lunesViernes: value })}
+                      />
+                      <HorarioRow
+                        label="Sábado"
+                        value={config.horario.sabado}
+                        onChange={(value) => set("horario", { ...config.horario, sabado: value })}
+                      />
+                      <HorarioRow
+                        label="Domingo"
+                        value={config.horario.domingo}
+                        onChange={(value) => set("horario", { ...config.horario, domingo: value })}
+                      />
                     </div>
                   </Field>
                 </div>
               </div>
-             
+
               <VistaPrevia config={config} />
             </div>
           </div>
 
-         
           <div className="px-6 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
-              {/* Mensaje WhatsApp */}
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div>
                 <BlockTitle
-                  icon={<MessageCircle className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                  icon={<MessageCircle className="h-4 w-4 text-[#203565] dark:text-white/60" />}
                   title="Mensaje por defecto para WhatsApp"
                   subtitle="Mensaje que se enviará automáticamente al hacer click en WhatsApp"
                 />
@@ -350,8 +577,9 @@ export default function ContactoSettingsSection() {
                   <textarea
                     value={config.mensajeWhatsapp}
                     onChange={(e) => set("mensajeWhatsapp", e.target.value)}
-                    maxLength={200} rows={4}
-                    className="w-full border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white placeholder-gray-300 dark:placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:focus:ring-white/20 resize-none transition-shadow"
+                    maxLength={200}
+                    rows={4}
+                    className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-[#0D1030] transition-shadow focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20"
                   />
                   <span className="absolute bottom-3 right-3 text-xs text-gray-400 dark:text-white/30">
                     {config.mensajeWhatsapp.length}/200
@@ -359,32 +587,36 @@ export default function ContactoSettingsSection() {
                 </div>
               </div>
 
-              {/* Opciones adicionales */}
               <div>
                 <BlockTitle
-                  icon={<Settings2 className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                  icon={<Settings2 className="h-4 w-4 text-[#203565] dark:text-white/60" />}
                   title="Opciones adicionales"
                   subtitle="Configuración extra de contacto"
                 />
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5">
+                  <div className="flex items-center justify-between gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-white/5 dark:bg-white/5">
                     <div>
                       <p className="text-sm font-semibold text-[#0D1030] dark:text-white">Mostrar en el footer</p>
-                      <p className="text-xs text-gray-400 dark:text-white/30 mt-0.5">Mostrar la información de contacto en el pie de página</p>
+                      <p className="mt-0.5 text-xs text-gray-400 dark:text-white/30">
+                        Mostrar la información de contacto en el pie de página
+                      </p>
                     </div>
-                    <Toggle checked={config.mostrarFooter} onChange={(v) => set("mostrarFooter", v)} />
+                    <Toggle checked={config.mostrarFooter} onChange={(value) => set("mostrarFooter", value)} />
                   </div>
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5">
+                  <div className="flex items-center justify-between gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-white/5 dark:bg-white/5">
                     <div>
                       <p className="text-sm font-semibold text-[#0D1030] dark:text-white">Mostrar en la página de contacto</p>
-                      <p className="text-xs text-gray-400 dark:text-white/30 mt-0.5">Habilitar la página de contacto en el sitio</p>
+                      <p className="mt-0.5 text-xs text-gray-400 dark:text-white/30">
+                        Habilitar la página de contacto en el sitio
+                      </p>
                     </div>
-                    <Toggle checked={config.mostrarPaginaContacto} onChange={(v) => set("mostrarPaginaContacto", v)} />
+                    <Toggle checked={config.mostrarPaginaContacto} onChange={(value) => set("mostrarPaginaContacto", value)} />
                   </div>
                   <Field label="Mapa de ubicación (Google Maps)" hint="Enlace de Google Maps para mostrar la ubicación">
                     <Input
-                      icon={<ExternalLink className="w-4 h-4" />}
-                      value={config.mapaUrl} onChange={(v) => set("mapaUrl", v)}
+                      icon={<ExternalLink className="h-4 w-4" />}
+                      value={config.mapaUrl}
+                      onChange={(value) => set("mapaUrl", value)}
                       placeholder="Ej: https://maps.google.com/?q=Av.+Los+Proceres"
                     />
                   </Field>
@@ -393,48 +625,57 @@ export default function ContactoSettingsSection() {
             </div>
           </div>
 
-          {/*Redes sociales*/}
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<Share2 className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Share2 className="h-4 w-4 text-[#203565] dark:text-white/60" />}
               title="Redes sociales"
               subtitle="Enlaces a tus redes sociales (opcionales)"
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+            <div className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Facebook">
-                <Input icon={<FacebookIcon className="w-4 h-4 text-[#1877F2]" />}
+                <Input
+                  icon={<FacebookIcon className="h-4 w-4 text-[#1877F2]" />}
                   value={config.redes.facebook}
-                  onChange={(v) => set("redes", { ...config.redes, facebook: v })}
-                  placeholder="Ej: https://facebook.com/tupagina" />
+                  onChange={(value) => set("redes", { ...config.redes, facebook: value })}
+                  placeholder="Ej: https://facebook.com/tupagina"
+                />
               </Field>
               <Field label="TikTok">
-                <Input icon={<TikTokIcon className="w-4 h-4 text-[#0D1030] dark:text-white" />}
+                <Input
+                  icon={<TikTokIcon className="h-4 w-4 text-[#0D1030] dark:text-white" />}
                   value={config.redes.tiktok}
-                  onChange={(v) => set("redes", { ...config.redes, tiktok: v })}
-                  placeholder="Ej: https://tiktok.com/@tuperfil" />
+                  onChange={(value) => set("redes", { ...config.redes, tiktok: value })}
+                  placeholder="Ej: https://tiktok.com/@tuperfil"
+                />
               </Field>
               <Field label="Instagram">
-                <Input icon={<InstagramIcon className="w-4 h-4 text-[#E4405F]" />}
+                <Input
+                  icon={<InstagramIcon className="h-4 w-4 text-[#E4405F]" />}
                   value={config.redes.instagram}
-                  onChange={(v) => set("redes", { ...config.redes, instagram: v })}
-                  placeholder="Ej: https://instagram.com/tuperfil" />
+                  onChange={(value) => set("redes", { ...config.redes, instagram: value })}
+                  placeholder="Ej: https://instagram.com/tuperfil"
+                />
               </Field>
               <Field label="YouTube">
-                <Input icon={<YouTubeIcon className="w-4 h-4 text-[#FF0000]" />}
+                <Input
+                  icon={<YouTubeIcon className="h-4 w-4 text-[#FF0000]" />}
                   value={config.redes.youtube}
-                  onChange={(v) => set("redes", { ...config.redes, youtube: v })}
-                  placeholder="Ej: https://youtube.com/@tucanal" />
+                  onChange={(value) => set("redes", { ...config.redes, youtube: value })}
+                  placeholder="Ej: https://youtube.com/@tucanal"
+                />
               </Field>
             </div>
           </div>
 
-          {/*Footer*/}
-          <div className="px-6 py-4 bg-gray-50 dark:bg-white/5 flex justify-end">
-            <button className="px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white text-sm font-semibold transition-colors shadow-sm">
-              Guardar cambios
+          <div className="flex justify-end bg-gray-50 px-6 py-4 dark:bg-white/5">
+            <button
+              onClick={handleSave}
+              disabled={isSaving || isLoading}
+              className="rounded-xl bg-[#203565] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#162548] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSaving ? "Guardando..." : "Guardar cambios"}
             </button>
           </div>
-
         </div>
       )}
     </div>

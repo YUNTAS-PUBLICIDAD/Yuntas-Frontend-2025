@@ -1,70 +1,126 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { ChangeEvent, DragEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type DragEvent, type ReactNode } from "react";
 import { Brush, ChevronDown, Edit3, ImageIcon, Palette, Trash2, UploadCloud } from "lucide-react";
+import { getImg } from "@/utils/getImg";
+import { showToast } from "@/utils/showToast";
+import {
+  GeneralSettings,
+  SettingsServiceResponse,
+  UpdateGeneralSettingsInput,
+} from "@/types/admin/settings";
 
+interface AppearanceSettingsSectionProps {
+  general: GeneralSettings | null;
+  isLoading: boolean;
+  isSaving: boolean;
+  onSave: (
+    payload: UpdateGeneralSettingsInput
+  ) => Promise<SettingsServiceResponse<GeneralSettings>>;
+}
 
 function BlockTitle({
   icon,
   title,
   subtitle,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   subtitle: string;
 }) {
   return (
-    <div className="flex items-start gap-3 mb-5">
-      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5 shrink-0 mt-0.5">
+    <div className="mb-5 flex items-start gap-3">
+      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
         {icon}
       </div>
       <div>
         <h3 className="text-base font-bold text-[#0D1030] dark:text-white">{title}</h3>
-        <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">{subtitle}</p>
+        <p className="mt-0.5 text-xs text-gray-400 dark:text-white/40">{subtitle}</p>
       </div>
     </div>
   );
 }
 
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  hint,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: "light" | "dark") => void;
+  options: { value: "light" | "dark"; label: string }[];
+  hint: string;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-sm font-semibold text-[#0D1030] dark:text-white">{label}</label>
+      <div className="relative w-full">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value as "light" | "dark")}
+          className="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 pr-9 text-sm text-[#0D1030] transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white"
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value} className="bg-white dark:bg-[#1C2347]">
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 shrink-0 text-gray-400" />
+      </div>
+      <p className="text-xs text-gray-400 dark:text-white/40">{hint}</p>
+    </div>
+  );
+}
 
 function UploadZone({
   label,
   file,
+  existingPreview,
   onFileChange,
   onClear,
   bgClass,
 }: {
   label: string;
   file: File | null;
+  existingPreview: string | null;
   onFileChange: (file: File) => void;
   onClear: () => void;
   bgClass: string;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(existingPreview);
 
   useEffect(() => {
     if (!file) {
-      setPreview(null);
+      setPreview(existingPreview);
       return;
     }
+
     const url = URL.createObjectURL(file);
     setPreview(url);
     return () => URL.revokeObjectURL(url);
-  }, [file]);
+  }, [existingPreview, file]);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragging(false);
+
     const dropped = e.dataTransfer.files[0];
-    if (dropped) onFileChange(dropped);
+    if (dropped) {
+      onFileChange(dropped);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
-    if (selected) onFileChange(selected);
+    if (selected) {
+      onFileChange(selected);
+    }
   };
 
   return (
@@ -73,28 +129,23 @@ function UploadZone({
 
       <div
         onClick={() => inputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
-        className={`
-          relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed
-          min-h-[140px] cursor-pointer select-none transition-all duration-200 overflow-hidden
-          ${bgClass}
-          ${dragging
-            ? "border-[#203565] dark:border-white/40"
-            : "border-gray-200 dark:border-white/10 hover:border-[#203565] dark:hover:border-white/30"
-          }
-        `}
+        className={`relative flex min-h-[140px] cursor-pointer select-none flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200 ${bgClass} ${dragging ? "border-[#203565] dark:border-white/40" : "border-gray-200 hover:border-[#203565] dark:border-white/10 dark:hover:border-white/30"}`}
       >
         {preview ? (
           <img
             src={preview}
             alt={`Vista previa ${label}`}
-            className="max-h-24 max-w-full object-contain rounded-lg p-2"
+            className="max-h-24 max-w-full rounded-lg object-contain p-2"
           />
         ) : (
-          <div className="flex flex-col items-center gap-2 py-6 px-4 text-center">
-            <UploadCloud className="w-7 h-7 text-gray-300 dark:text-white/20" />
+          <div className="flex flex-col items-center gap-2 px-4 py-6 text-center">
+            <UploadCloud className="h-7 w-7 text-gray-300 dark:text-white/20" />
             <p className="text-sm font-medium text-gray-400 dark:text-white/40">Subir imagen</p>
           </div>
         )}
@@ -112,17 +163,17 @@ function UploadZone({
       <div className="flex gap-2">
         <button
           onClick={() => inputRef.current?.click()}
-          className="flex items-center gap-1.5 text-xs font-semibold border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 text-[#0D1030] dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+          className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-[#0D1030] transition-colors hover:bg-gray-50 dark:border-white/10 dark:text-white dark:hover:bg-white/5"
         >
-          <Edit3 className="w-3.5 h-3.5" />
+          <Edit3 className="h-3.5 w-3.5" />
           Cambiar
         </button>
         <button
           onClick={onClear}
           disabled={!file}
-          className="flex items-center gap-1.5 text-xs font-semibold border border-red-200 dark:border-red-500/20 rounded-lg px-3 py-1.5 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/5 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-500/20 dark:text-red-400 dark:hover:bg-red-500/5"
         >
-          <Trash2 className="w-3.5 h-3.5" />
+          <Trash2 className="h-3.5 w-3.5" />
           Eliminar
         </button>
       </div>
@@ -130,93 +181,151 @@ function UploadZone({
   );
 }
 
-
-export default function AppearanceSettingsSection() {
+export default function AppearanceSettingsSection({
+  general,
+  isLoading,
+  isSaving,
+  onSave,
+}: AppearanceSettingsSectionProps) {
   const [open, setOpen] = useState(true);
-  const [logoClaro, setLogoClaro] = useState<File | null>(null);
-  const [logoOscuro, setLogoOscuro] = useState<File | null>(null);
-  const [empresa, setEmpresa] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [logoLight, setLogoLight] = useState<File | null>(null);
+  const [logoDark, setLogoDark] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (!general) {
+      return;
+    }
+
+    setCompanyName(general.company_name || "");
+    setTheme(general.theme || "light");
+    setLogoLight(null);
+    setLogoDark(null);
+  }, [general]);
+
+  const handleSave = async () => {
+    if (!companyName.trim()) {
+      showToast.warning("El nombre de la empresa es obligatorio");
+      return;
+    }
+
+    const result = await onSave({
+      company_name: companyName.trim(),
+      theme,
+      logo_light: logoLight,
+      logo_dark: logoDark,
+    });
+
+    if (result.success) {
+      showToast.success("Configuración de apariencia guardada correctamente");
+      return;
+    }
+
+    showToast.error(result.message || "No se pudo guardar la configuración de apariencia");
+  };
 
   return (
-    <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] shadow-sm overflow-hidden">
-
-      {/* Header */}
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
       <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-start justify-between px-6 py-5 text-left border-b border-gray-100 dark:border-white/5 transition-colors hover:bg-gray-50/70 dark:hover:bg-white/5"
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-start justify-between border-b border-gray-100 px-6 py-5 text-left transition-colors hover:bg-gray-50/70 dark:border-white/5 dark:hover:bg-white/5"
       >
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5">
-            <Palette className="w-4 h-4 text-[#203565] dark:text-white/60" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
+            <Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Apariencia</h2>
-            <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
-              Personaliza la identidad visual de tu empresa
-            </p>
+            <p className="mt-0.5 text-xs text-gray-400 dark:text-white/40">Personaliza la identidad visual de tu empresa</p>
           </div>
         </div>
         <ChevronDown
-          className={`mt-1 w-5 h-5 text-gray-400 dark:text-white/40 transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"}`}
+          className={`mt-1 h-5 w-5 text-gray-400 transition-transform duration-300 dark:text-white/40 ${open ? "rotate-180" : "rotate-0"}`}
         />
       </button>
 
       {open && (
         <div className="divide-y divide-gray-100 dark:divide-white/5">
+          {isLoading && (
+            <div className="bg-blue-50 px-6 py-4 text-sm text-blue-700 dark:bg-blue-500/10 dark:text-blue-200">
+              Cargando configuración actual...
+            </div>
+          )}
 
-          {/* Logos */}
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<ImageIcon className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<ImageIcon className="h-4 w-4 text-[#203565] dark:text-white/60" />}
               title="Logos"
               subtitle="Sube el logo para cada tema del sitio"
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <UploadZone
-                label="Logo claro (para tema claro)"
-                file={logoClaro}
-                onFileChange={setLogoClaro}
-                onClear={() => setLogoClaro(null)}
+                label="Logo claro (tema claro)"
+                file={logoLight}
+                existingPreview={general?.logo_light ? getImg(general.logo_light) : null}
+                onFileChange={setLogoLight}
+                onClear={() => setLogoLight(null)}
                 bgClass="bg-gray-50 dark:bg-white/5"
               />
               <UploadZone
-                label="Logo oscuro (para tema oscuro)"
-                file={logoOscuro}
-                onFileChange={setLogoOscuro}
-                onClear={() => setLogoOscuro(null)}
+                label="Logo oscuro (tema oscuro)"
+                file={logoDark}
+                existingPreview={general?.logo_dark ? getImg(general.logo_dark) : null}
+                onFileChange={setLogoDark}
+                onClear={() => setLogoDark(null)}
                 bgClass="bg-[#0D1030]/5 dark:bg-[#0D1030]/40"
               />
             </div>
           </div>
 
-          {/* Nombre empresa */}
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<Brush className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Brush className="h-4 w-4 text-[#203565] dark:text-white/60" />}
               title="Información de la empresa"
               subtitle="Datos que aparecen en el sitio público"
             />
-            <div className="flex flex-col gap-1.5 max-w-sm">
-              <label className="text-sm font-semibold text-[#0D1030] dark:text-white">
-                Nombre de la empresa
-              </label>
+            <div className="flex max-w-sm flex-col gap-1.5">
+              <label className="text-sm font-semibold text-[#0D1030] dark:text-white">Nombre de la empresa</label>
               <input
                 type="text"
-                value={empresa}
-                onChange={(e) => setEmpresa(e.target.value)}
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="Ej. Yuntas"
-                className="border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white placeholder-gray-300 dark:placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20"
               />
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="px-6 py-4 bg-gray-50 dark:bg-white/5 flex justify-end">
-            <button className="px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white text-sm font-semibold transition-colors shadow-sm">
-              Guardar cambios
-            </button>
+          <div className="px-6 py-6">
+            <BlockTitle
+              icon={<Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+              title="Tema"
+              subtitle="Define el tema visual principal del sitio"
+            />
+            <div className="max-w-sm">
+              <SelectField
+                label="Tema del sitio"
+                value={theme}
+                onChange={setTheme}
+                options={[
+                  { value: "light", label: "Claro" },
+                  { value: "dark", label: "Oscuro" },
+                ]}
+                hint="El backend guardará el tema predeterminado"
+              />
+            </div>
           </div>
 
+          <div className="bg-gray-50 px-6 py-4 dark:bg-white/5 flex justify-end">
+            <button
+              onClick={handleSave}
+              disabled={isSaving || isLoading}
+              className="rounded-xl bg-[#203565] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#162548] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSaving ? "Guardando..." : "Guardar cambios"}
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -122,7 +122,9 @@ export const API_ENDPOINTS = {
       TRIGGER: '/admin/deploy/trigger',
     },
     SETTINGS: {
+      GENERAL_UPDATE: '/admin/settings/general',
       CHATBOT_UPDATE: '/admin/settings/chatbot',
+      CONTACT_UPDATE: '/admin/settings/contact',
     }
   }
 };
