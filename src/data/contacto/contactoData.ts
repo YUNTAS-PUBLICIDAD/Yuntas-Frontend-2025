@@ -1,19 +1,43 @@
-import { RiMailFill, RiMapPinFill, RiWhatsappLine } from "react-icons/ri";
+import { RiMailFill, RiMapPinFill } from "react-icons/ri";
+import { FaFacebook, FaInstagram, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa";
 
-export const contactoData = [
+export const contactoInfoData = [
     {
-        light: "",
-        bold: "+51 912 849 782",
-        icon: RiWhatsappLine,
+        text: "+51 912 849 782",
+        icon: FaWhatsapp,
+        ariaLabel: "WhatsApp",
     },
     {
-        light: "M: F Lt 30",
-        bold: "Urb. Alameda la nivel",
-        icon: RiMapPinFill,
-    },
-    {
-        light: "",
-        bold: "yuntaspublicidad@gmail.com",
+        text: "yuntasproducciones@gmail.com",
         icon: RiMailFill,
+        ariaLabel: "Correo electrónico",
+    },
+    {
+        text: "Urb. Alameda La Rivera Mz F Lt 30",
+        icon: RiMapPinFill,
+        ariaLabel: "Dirección",
+    },
+];
+
+export const contactoSocialLinks = [
+    {
+        href: "https://www.instagram.com/yuntaspublicidad/",
+        label: "Instagram",
+        icon: FaInstagram,
+    },
+    {
+        href: "https://www.facebook.com/YuntasProducciones/",
+        label: "Facebook",
+        icon: FaFacebook,
+    },
+    {
+        href: "https://www.tiktok.com/@yuntaspublicidad",
+        label: "TikTok",
+        icon: FaTiktok,
+    },
+    {
+        href: "https://www.youtube.com/@yuntaspublicidad",
+        label: "YouTube",
+        icon: FaYoutube,
     },
 ];
