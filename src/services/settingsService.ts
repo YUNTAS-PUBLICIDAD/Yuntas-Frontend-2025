@@ -112,15 +112,24 @@ export const updateContactSettingsService = async (
     formData.append("show_contact_page", contactData.show_contact_page ? "1" : "0");
     formData.append("map_url", contactData.map_url || "");
 
-    // Para business_hours y social_links, backend espera array
-    if (contactData.business_hours) {
-      formData.append("business_hours", JSON.stringify(contactData.business_hours));
+    // Para business_hours, Laravel espera array con notación de índices
+    if (contactData.business_hours && Array.isArray(contactData.business_hours)) {
+      contactData.business_hours.forEach((item, index) => {
+        formData.append(`business_hours[${index}][day]`, item.day || "");
+        formData.append(`business_hours[${index}][start_time]`, item.start_time || "");
+        formData.append(`business_hours[${index}][end_time]`, item.end_time || "");
+      });
     }
-    if (contactData.social_links) {
-      formData.append("social_links", JSON.stringify(contactData.social_links));
+
+    // Para social_links, Laravel espera array con notación de índices
+    if (contactData.social_links && Array.isArray(contactData.social_links)) {
+      contactData.social_links.forEach((item, index) => {
+        formData.append(`social_links[${index}][platform]`, item.platform || "");
+        formData.append(`social_links[${index}][url]`, item.url || "");
+      });
     }
     
-    const response = await api.patch(
+    const response = await api.post(
       API_ENDPOINTS.ADMIN.SETTINGS.CONTACT_UPDATE,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }

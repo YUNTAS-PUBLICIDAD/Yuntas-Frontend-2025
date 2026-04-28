@@ -3,16 +3,26 @@
 import { useEffect, useRef, useState } from "react";
 import { useSettings } from "@/hooks/useSettings";
 import { showToast } from "@/utils/showToast";
-import ChatbotSettingsSection from "./ChatbotSettingsSection";
-import AppearanceSettingsSection from "./AppearanceSettingsSection";
-import { ChatbotSettingsFormConfig } from "./configuracion.types";
-import ContactoSettingsSection from "./ContactoSettingsSection";
+import ChatbotSettingsSection from "@/components/molecules/admin/configuracion/ChatbotSettingsSection";
+import AppearanceSettingsSection from "@/components/molecules/admin/configuracion/AppearanceSettingsSection";
+import { ChatbotSettingsFormConfig } from "@/components/molecules/admin/configuracion/configuracion.types";
+import ContactoSettingsSection from "@/components/molecules/admin/configuracion/ContactoSettingsSection";
 
 const HEX_COLOR_REGEX = /^#[0-9A-Fa-f]{6}$/;
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
 export default function ConfiguracionForm() {
-  const { chatbot, getSettings, saveChatbotSettings, isLoading, isSaving } = useSettings();
+  const {
+    general,
+    contact,
+    chatbot,
+    getSettings,
+    saveGeneralSettings,
+    saveContactSettings,
+    saveChatbotSettings,
+    isLoading,
+    isSaving,
+  } = useSettings();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isChatbotOpen, setIsChatbotOpen] = useState(true);
   const [config, setConfig] = useState<ChatbotSettingsFormConfig>({
@@ -113,8 +123,18 @@ export default function ConfiguracionForm() {
         fileInputRef={fileInputRef}
         onIconUpload={handleIconUpload}
       />
-      <AppearanceSettingsSection />
-      <ContactoSettingsSection />
+      <AppearanceSettingsSection
+        general={general}
+        isLoading={isLoading}
+        isSaving={isSaving}
+        onSave={saveGeneralSettings}
+      />
+      <ContactoSettingsSection
+        contact={contact}
+        isLoading={isLoading}
+        isSaving={isSaving}
+        onSave={saveContactSettings}
+      />
     </div>
   );
 }
