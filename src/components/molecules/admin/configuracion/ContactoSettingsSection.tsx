@@ -359,67 +359,74 @@ function VistaPrevia({ config }: { config: ContactoConfig }) {
     <div className="flex flex-col gap-2">
       <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-white/30">Vista previa</p>
       <p className="mb-2 text-xs text-gray-400 dark:text-white/30">Así se verá en tu sitio web</p>
-      <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-5 dark:border-white/10 dark:bg-[#0D1030]/40">
-        <h4 className="text-sm font-bold text-[#0D1030] dark:text-white">Contáctanos</h4>
+      
+      {/* Contenedor vertical - más delgado */}
+      <div className="mx-auto w-full max-w-sm">
+        {/* Tarjeta Azul del Nuevo Diseño */}
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-[#0D1030]/40">
+          <div className="relative overflow-hidden bg-gradient-to-b from-[#04194c] via-[#0a2f6f] to-[#2398ab] px-4 py-8 text-white min-h-96">
+            <h3 className="text-lg font-bold leading-tight">Información de Contacto</h3>
+            <p className="mt-2 text-xs text-white/90">Solicita información aquí</p>
 
-        {config.telefono && (
-          <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/10">
-              <WhatsAppIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Whatsapp</p>
-              <p className="text-xs text-gray-500 dark:text-white/40">
-                {config.codigoPais} {config.telefono}
-              </p>
-            </div>
-          </div>
-        )}
+            <div className="mt-12 space-y-6">
+              {config.telefono ? (
+                <div className="flex items-center gap-3 text-sm">
+                  <WhatsAppIcon className="h-5 w-5 text-white shrink-0" />
+                  <span>{config.codigoPais} {config.telefono}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 text-sm opacity-40">
+                  <WhatsAppIcon className="h-5 w-5 text-white shrink-0" />
+                  <span className="italic">Teléfono</span>
+                </div>
+              )}
 
-        {config.correo && (
-          <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-500/10">
-              <Mail className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Correo</p>
-              <p className="text-xs text-gray-500 dark:text-white/40">{config.correo}</p>
-            </div>
-          </div>
-        )}
+              {config.correo ? (
+                <div className="flex items-center gap-3 text-sm break-all">
+                  <Mail className="h-5 w-5 shrink-0 text-white" />
+                  <span>{config.correo}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 text-sm opacity-40">
+                  <Mail className="h-5 w-5 shrink-0 text-white" />
+                  <span className="italic">Correo</span>
+                </div>
+              )}
 
-        {config.direccion && (
-          <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-500/10">
-              <MapPin className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+              {config.direccion ? (
+                <div className="flex items-center gap-3 text-sm">
+                  <MapPin className="h-5 w-5 shrink-0 text-white" />
+                  <span>{config.direccion}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 text-sm opacity-40">
+                  <MapPin className="h-5 w-5 shrink-0 text-white" />
+                  <span className="italic">Dirección</span>
+                </div>
+              )}
             </div>
-            <div>
-              <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Dirección</p>
-              <p className="text-xs text-gray-500 dark:text-white/40">{config.direccion}</p>
-            </div>
-          </div>
-        )}
 
-        <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
-            <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-[#0D1030] dark:text-white">Horario de atención</p>
-            <p className="text-xs text-gray-500 dark:text-white/40">
-              Lunes - Viernes: {horarioTexto(config.horario.lunesViernes)}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-white/40">Sábado: {horarioTexto(config.horario.sabado)}</p>
-            <p className="text-xs text-gray-500 dark:text-white/40">Domingo: {horarioTexto(config.horario.domingo)}</p>
+            {/* Separador */}
+            <div className="my-8 h-px bg-white/20" />
+
+            {/* Horarios de Atención - Integrados en la tarjeta */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-white" />
+                <h4 className="text-sm font-bold text-white">Horario de atención</h4>
+              </div>
+              <div className="space-y-2 text-xs text-white/90">
+                <p>Lunes - Viernes: <span className="font-semibold">{horarioTexto(config.horario.lunesViernes)}</span></p>
+                <p>Sábado: <span className="font-semibold">{horarioTexto(config.horario.sabado)}</span></p>
+                <p>Domingo: <span className="font-semibold">{horarioTexto(config.horario.domingo)}</span></p>
+              </div>
+            </div>
+
+            {/* Decorativo */}
+            <div className="pointer-events-none absolute -bottom-16 right-8 h-40 w-40 rounded-full bg-white/15" />
+            <div className="pointer-events-none absolute -bottom-6 -right-8 h-48 w-48 rounded-full bg-white/15" />
           </div>
         </div>
-
-        {config.telefono && (
-          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 text-xs font-semibold text-white transition-colors hover:bg-green-600">
-            <WhatsAppIcon className="h-4 w-4" />
-            Escríbenos por WhatsApp
-          </button>
-        )}
       </div>
     </div>
   );

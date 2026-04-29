@@ -30,17 +30,31 @@ export default function SwitchMode({
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      setChecked(true);
-    }
+    const syncThemeState = () => {
+      const isDark =
+        document.documentElement.classList.contains("dark") ||
+        localStorage.getItem("theme") === "dark";
+
+      document.documentElement.classList.toggle("dark", isDark);
+      setChecked(isDark);
+    };
+
+    syncThemeState();
+
+    window.addEventListener("storage", syncThemeState);
+    window.addEventListener("themechange", syncThemeState as EventListener);
+
+    return () => {
+      window.removeEventListener("storage", syncThemeState);
+      window.removeEventListener("themechange", syncThemeState as EventListener);
+    };
   }, []);
 
   const handleChange = (nextChecked: boolean) => {
     setChecked(nextChecked);
     document.documentElement.classList.toggle("dark", nextChecked);
     localStorage.setItem("theme", nextChecked ? "dark" : "light");
+    window.dispatchEvent(new Event("themechange"));
     onToggle?.(nextChecked);
   };
 
