@@ -83,13 +83,21 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
     const safeEdges = Array.isArray(edges) ? edges : []
 
     return {
+      name: name.trim() || 'Nuevo flow', // FIX #1: nombre incluido
       nodes: safeNodes
         .filter(n => n?.id)
         .map(n => ({
           id: n.id,
-          type: n.type ?? 'custom',
+          // type: n.type ?? 'custom',
+          type: 'custom',
           position: n.position ?? { x: 0, y: 0 },
-          data: n.data ?? {},
+          // data: n.data ?? {},
+          data: {
+            type: n.data.dataType,
+            message: n.data.message,
+            metadata: n.data.metadata ?? {},
+            options: n.data.options ?? []
+          }
         })),
 
       // BUG FIX #1 (frontend side):
@@ -99,12 +107,10 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
       edges: safeEdges
         .filter(e => e?.source && e?.target)
         .map(e => ({
-          id: e.id && !e.id.startsWith('reactflow__edge')
-            ? e.id
-            : `edge-${e.source}-${e.target}`,
+          id: e.id,
           source: e.source,
           target: e.target,
-          label: (e as any).label ?? '',
+          label: (e as any).label ?? ''
         })),
     }
   }
