@@ -4,6 +4,7 @@ import { Bot, ChevronDown, ChevronUp, MessageSquare, Palette, Power, Settings2, 
 import { ChatbotPosition } from "@/types/admin/settings";
 import { getImg } from "@/utils/getImg";
 import { ChatbotSettingsFormConfig } from "./configuracion.types";
+import ChatbotPreview from "./ChatbotPreview";
 
 interface ChatbotSettingsSectionProps {
   isOpen: boolean;
@@ -185,6 +186,71 @@ export default function ChatbotSettingsSection({
               title="Apariencia"
               subtitle="Personaliza el ícono, colores y posición del widget"
             />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+              {/* Columna izquierda: controles */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="flex flex-col gap-2 sm:col-span-2">
+                  <label className="text-sm font-semibold text-[#0D1030] dark:text-white">Ícono del chatbot</label>
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-md"
+                      style={{ backgroundColor: config.primaryColor }}
+                    >
+                      {config.iconPreview ? (
+                        <img src={getImg(config.iconPreview)} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
+                      ) : (
+                        <Bot className="w-7 h-7 text-white" />
+                      )}
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center gap-2 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm font-semibold text-[#0D1030] dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                      >
+                        <Upload className="w-4 h-4" />
+                        Cambiar ícono
+                      </button>
+                      <p className="text-xs text-gray-400 dark:text-white/40 mt-1.5">PNG o SVG · 512×512px recomendado</p>
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/svg+xml"
+                      className="hidden"
+                      onChange={onIconUpload}
+                    />
+                  </div>
+                </div>
+
+                <ColorInput
+                  label="Color principal"
+                  value={config.primaryColor}
+                  onChange={(value) => setConfig((current) => ({ ...current, primaryColor: value }))}
+                  hint="Botón flotante y elementos destacados"
+                />
+
+                <ColorInput
+                  label="Color secundario"
+                  value={config.secondaryColor}
+                  onChange={(value) => setConfig((current) => ({ ...current, secondaryColor: value }))}
+                  hint="Burbujas de mensajes del bot"
+                />
+
+                <Select
+                  label="Posición en pantalla"
+                  value={config.position}
+                  onChange={(value) => setConfig((current) => ({ ...current, position: value as ChatbotPosition }))}
+                  options={positionOptions}
+                  hint="Esquina donde aparece el botón flotante"
+                />
+              </div>
+
+              {/* Columna derecha: vista previa */}
+              <ChatbotPreview config={config} />
+
+            </div>
+          
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2 md:col-span-2">
                 <label className="text-sm font-semibold text-[#0D1030] dark:text-white">Ícono del chatbot</label>
