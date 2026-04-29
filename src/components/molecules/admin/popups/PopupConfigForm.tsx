@@ -9,6 +9,7 @@ import { showToast } from '@/utils/showToast';
 import { api, API_ENDPOINTS } from '@/config';
 import { sourceData } from '@/data/popup/sourceData';
 import { PopupView } from '../../producto/PopUp/PopupView';
+import { Monitor, Save, Smartphone, X } from 'lucide-react';
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
@@ -499,10 +500,10 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
           {/* BOTONES ACCIÓN */}
           <div className="pt-2 flex flex-col md:flex-row gap-3">
-            <Button size="md" variant="secondary" className="w-full" onClick={onCancel} disabled={isSaving}>
+            <Button size="md" variant="secondary" className="w-full" onClick={onCancel} disabled={isSaving} icon={<X className="h-4 w-4" />}>
               Cancelar
             </Button>
-            <Button size="md" variant="primary" className="w-full" onClick={handleSave} disabled={isSaving}>
+            <Button size="md" variant="primary" className="w-full" onClick={handleSave} disabled={isSaving} icon={<Save className="h-4 w-4" />}>
               {isSaving ? 'Guardando...' : (initialData ? 'Actualizar Anuncio' : 'Crear Anuncio')}
             </Button>
           </div>
@@ -523,8 +524,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         </div>
 
         <div className="flex gap-2 mb-6 relative z-20 mt-8">
-            <button type="button" onClick={() => setPreviewMode('desktop')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'desktop' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>🖥️ Vista en PC</button>
-            <button type="button" onClick={() => setPreviewMode('mobile')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}>📱 Vista en Celular</button>
+          <button type="button" onClick={() => setPreviewMode('desktop')} className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'desktop' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}><Monitor className="h-4 w-4" />Vista en PC</button>
+          <button type="button" onClick={() => setPreviewMode('mobile')} className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${previewMode === 'mobile' ? 'bg-[#6DE1E3] text-gray-900 shadow-md' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}><Smartphone className="h-4 w-4" />Vista en Celular</button>
         </div>
 
         <div ref={previewCanvasRef} className="w-full flex-1 min-h-[360px] flex items-center justify-center overflow-visible">

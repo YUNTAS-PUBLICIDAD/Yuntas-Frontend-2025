@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { showToast } from '@/utils/showToast';
+import { RotateCcw, Save, Trash2, Upload } from 'lucide-react';
 import {
   FaArrowLeft,
   FaUser,
@@ -169,8 +170,9 @@ export default function WhatsappConfigForm() {
             <button 
               type="button" 
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
             >
+              <Upload className="h-4 w-4" />
               Subir Imagen
             </button>
 
@@ -178,8 +180,9 @@ export default function WhatsappConfigForm() {
               <button
                 type="button"
                 onClick={clearUploadedImage}
-                className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors text-sm font-medium whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors text-sm font-medium whitespace-nowrap"
               >
+                <Trash2 className="h-4 w-4" />
                 Quitar
               </button>
             )}
@@ -208,16 +211,18 @@ export default function WhatsappConfigForm() {
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 bg-[#203565] text-white font-medium rounded-md hover:bg-[#1a2b52] transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-2 bg-[#203565] text-white font-medium rounded-md hover:bg-[#1a2b52] transition-colors"
           >
+            <Save className="h-4 w-4" />
             Guardar configuracion
           </button>
 
           <button
             type="button"
             onClick={handleReset}
-            className="px-6 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           >
+            <RotateCcw className="h-4 w-4" />
             Restaurar
           </button>
         </div>

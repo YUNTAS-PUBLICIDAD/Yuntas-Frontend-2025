@@ -1,6 +1,7 @@
 import React from 'react';
 import { Contacto } from "@/types/admin/contacto";
 import PrimaryButton from "@/components/atoms/PrimaryButton";
+import { X } from 'lucide-react';
 
 interface Props {
   contacto: Contacto;
@@ -20,8 +21,8 @@ const ViewContactoModal: React.FC<Props> = ({ contacto, isOpen, onClose }) => {
           <h2 className="text-xl font-bold text-white">
             Detalle de Solicitud #{contacto.id}
           </h2>
-          <button onClick={onClose} className="text-white hover:text-gray-300 transition">
-            ✕
+          <button onClick={onClose} className="inline-flex items-center justify-center text-white hover:text-gray-300 transition">
+            <X className="h-5 w-5" />
           </button>
         </div>
 

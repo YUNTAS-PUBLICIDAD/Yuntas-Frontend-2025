@@ -11,6 +11,7 @@ import {
   Share2,
   Settings2,
   ExternalLink,
+  Save,
 } from "lucide-react";
 import {
   BusinessHours,
@@ -671,8 +672,9 @@ export default function ContactoSettingsSection({
             <button
               onClick={handleSave}
               disabled={isSaving || isLoading}
-              className="rounded-xl bg-[#203565] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#162548] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#203565] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#162548] disabled:cursor-not-allowed disabled:opacity-60"
             >
+              <Save className="h-4 w-4" />
               {isSaving ? "Guardando..." : "Guardar cambios"}
             </button>
           </div>

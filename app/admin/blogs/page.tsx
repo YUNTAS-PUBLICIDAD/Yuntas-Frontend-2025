@@ -17,6 +17,7 @@ import Modal from "@/components/atoms/Modal";
 import BlogForm from "@/components/molecules/blog/BlogForm";
 import { useProductos } from "@/hooks/useProductos";
 import SearchBar from "@/components/molecules/admin/SearchBar";
+import { Download, FileDown, FileSpreadsheet, FileText, Plus } from "lucide-react";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -56,9 +57,9 @@ export default function Blogspage() {
 
     const exportOptions = useMemo(
         () => [
-            { label: "Exportar a CSV", onClick: () => exportCSV(blogsFiltrados) },
-            { label: "Exportar a Excel", onClick: () => exportExcel(blogsFiltrados) },
-            { label: "Exportar a PDF", onClick: () => exportToPDF(blogsFiltrados) },
+            { label: "Exportar a CSV", onClick: () => exportCSV(blogsFiltrados), icon: <FileText className="h-4 w-4" /> },
+            { label: "Exportar a Excel", onClick: () => exportExcel(blogsFiltrados), icon: <FileSpreadsheet className="h-4 w-4" /> },
+            { label: "Exportar a PDF", onClick: () => exportToPDF(blogsFiltrados), icon: <FileDown className="h-4 w-4" /> },
         ],
         [blogsFiltrados]
     );
@@ -124,6 +125,7 @@ export default function Blogspage() {
                             buttons={[{
                                 label: "Añadir Blog",
                                 onClick: () => setIsAddEditModalOpen(true),
+                                icon: <Plus className="h-4 w-4" />,
                                 className: "w-full md:w-auto px-6 h-[42px] text-sm font-semibold"
                             }]}
                         />
@@ -132,6 +134,7 @@ export default function Blogspage() {
                     <div className="w-full md:w-auto">
                         <ExportDropdown
                             label="Exportar"
+                            icon={<Download className="h-4 w-4" />}
                             options={exportOptions}
                             className="w-full md:w-auto h-[42px]"
                             buttonClassName="w-full md:w-auto px-6 h-[42px] text-sm font-semibold"

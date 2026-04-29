@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { Save, Upload } from 'lucide-react';
 
 export default function EmailConfigForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -94,8 +95,9 @@ export default function EmailConfigForm() {
             <button 
               type="button" 
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
             >
+              <Upload className="h-4 w-4" />
               Subir Imagen
             </button>
           </div>
@@ -142,7 +144,8 @@ export default function EmailConfigForm() {
           ></textarea>
         </div>
 
-        <button className="w-full md:w-auto px-6 py-2 bg-[#203565] text-white font-medium rounded-md hover:bg-[#1a2b52] transition-colors">
+        <button className="inline-flex items-center gap-2 w-full md:w-auto px-6 py-2 bg-[#203565] text-white font-medium rounded-md hover:bg-[#1a2b52] transition-colors">
+          <Save className="h-4 w-4" />
           Guardar Configuración
         </button>
       </div>
