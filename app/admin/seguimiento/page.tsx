@@ -14,6 +14,7 @@ import AdminTable from "@/components/organisms/admin/AdminTable";
 import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 import SearchBar from "@/components/molecules/admin/SearchBar";
+import { Eye, MessageCircle, UserPlus } from "lucide-react";
 
 
 
@@ -98,13 +99,15 @@ export default function SeguimientoPage() {
                 router.push('/admin/productos?modal=whatsapp&tab=plantilla');
             },
             variant: "secondary" as const,
-            className: "flex-auto w-auto"
+            className: "flex-auto w-auto",
+            icon: <MessageCircle className="h-4 w-4" />
         },
         {
             label: "MONITOREO",
             onClick: () => setIsMonitoreoMode(!isMonitoreoMode),
             variant: (isMonitoreoMode ? "primary" : "secondary") as "primary" | "secondary",
-            className: "flex-auto w-auto"
+            className: "flex-auto w-auto",
+            icon: <Eye className="h-4 w-4" />
         }
     ];
 
@@ -227,7 +230,8 @@ export default function SeguimientoPage() {
                         {
                             label: "Añadir Cliente",
                             onClick: () => setIsModalOpen(true),
-                            variant: "tertiary"
+                            variant: "tertiary",
+                            icon: <UserPlus className="h-4 w-4" />
                         }
                     ]}
                 />

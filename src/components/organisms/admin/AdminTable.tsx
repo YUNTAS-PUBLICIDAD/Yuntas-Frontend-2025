@@ -3,6 +3,7 @@
 import TableActions from "@/components/molecules/admin/TableActions";
 import { useAdminTable } from "@/hooks/ui/admin/useAdminTable";
 import { getRole } from "@/utils/role";
+import { RotateCcw } from "lucide-react";
 
  // icono directamente para poder reusarlo
 const SearchXIcon = () => (
@@ -142,8 +143,9 @@ export default function AdminTable({
                 {onResetSearch && (
                     <button
                         onClick={onResetSearch}
-                        className="mt-4 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
+                        className="mt-4 inline-flex items-center gap-2 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
                     >
+                        <RotateCcw className="h-4 w-4" />
                         {resetSearchText}
                     </button>
                 )}

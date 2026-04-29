@@ -8,6 +8,7 @@ import {
   FaArrowLeft, FaUser, FaStore, FaPhone, FaEllipsisVertical, FaLock,
   FaRegFaceSmile, FaPaperclip, FaCamera, FaMicrophone
 } from 'react-icons/fa6';
+import { Monitor, Plus, Save, Smartphone, Trash2, Upload, X } from 'lucide-react';
 
 type EmailState = {
   id?: number;
@@ -434,9 +435,9 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Imagen Adjunta (Opcional)</label>
               <div className="flex items-center gap-3">
                 <input type="file" accept="image/*" onChange={handleWhatsappImageChange} ref={waFileInputRef} className="hidden" />
-                <button type="button" onClick={() => waFileInputRef.current?.click()} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm font-bold transition-colors">Subir Imagen</button>
+                <button type="button" onClick={() => waFileInputRef.current?.click()} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm font-bold transition-colors"><Upload className="h-4 w-4" />Subir Imagen</button>
                 {(whatsapp.imageUrl || whatsapp.imageFile) && (
-                    <button type="button" onClick={clearWhatsappImage} className="px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-md text-sm font-bold transition-colors">Quitar</button>
+                  <button type="button" onClick={clearWhatsappImage} className="inline-flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-md text-sm font-bold transition-colors"><Trash2 className="h-4 w-4" />Quitar</button>
                 )}
                 <span className="text-xs text-gray-400 truncate max-w-[150px]">{whatsapp.imageFile ? whatsapp.imageFile.name : (whatsapp.imageUrl ? 'Imagen guardada' : 'Ninguna imagen')}</span>
               </div>
@@ -527,9 +528,9 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Imagen de Cabecera</label>
               <div className="flex items-center gap-3">
                 <input type="file" accept="image/*" onChange={handleEmailImageChange} ref={emailFileInputRef} className="hidden" />
-                <button type="button" onClick={() => emailFileInputRef.current?.click()} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm font-bold transition-colors">Subir Imagen</button>
+                <button type="button" onClick={() => emailFileInputRef.current?.click()} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm font-bold transition-colors"><Upload className="h-4 w-4" />Subir Imagen</button>
                 {(email.imageUrl || email.imageFile) && (
-                    <button type="button" onClick={clearEmailImage} className="px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-md text-sm font-bold transition-colors">Quitar</button>
+                  <button type="button" onClick={clearEmailImage} className="inline-flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-md text-sm font-bold transition-colors"><Trash2 className="h-4 w-4" />Quitar</button>
                 )}
                 <span className="text-xs text-gray-400 truncate max-w-[150px]">{email.imageFile ? email.imageFile.name : (email.imageUrl ? 'Imagen guardada' : 'Ninguna imagen')}</span>
               </div>
@@ -562,9 +563,10 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                   type="button"
                   onClick={addEmailButton}
                   disabled={email.buttons.length >= 3}
-                  className={`text-xs px-3 py-1 bg-[#203565] text-white ${email.buttons.length >= 3 ? "bg-gray-400 cursor-not-allowed" : "bg-[#203565] hover:bg-[#1a2b52]"}  rounded-md`}
+                  className={`inline-flex items-center gap-2 text-xs px-3 py-1 text-white ${email.buttons.length >= 3 ? "bg-gray-400 cursor-not-allowed" : "bg-[#203565] hover:bg-[#1a2b52]"}  rounded-md`}
                 >
-                  + Agregar botón
+                  <Plus className="h-3.5 w-3.5" />
+                  Agregar botón
                 </button>
               </div>
 
@@ -604,8 +606,9 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
                     <button
                       type="button"
                       onClick={() => removeEmailButton(index)}
-                      className="text-red-500 text-xs mt-2"
+                      className="inline-flex items-center gap-1.5 text-red-500 text-xs mt-2"
                     >
+                      <Trash2 className="h-3.5 w-3.5" />
                       Eliminar
                     </button>
                   </div>
@@ -630,11 +633,13 @@ Estamos aquí para resolver todas tus dudas. ¡No dudes en escribirnos! 😊
       {/* --- BOTONES DE ACCIÓN (Sticky Flotante) --- */}
       <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-[#141A3F] border-t border-gray-200 dark:border-gray-800 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50 flex justify-center">
          <div className="w-full max-w-4xl flex gap-4">
-            <button type="button" onClick={onCancel} disabled={isSaving} className="w-1/3 py-3 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50">
+            <button type="button" onClick={onCancel} disabled={isSaving} className="inline-flex items-center justify-center gap-2 w-1/3 py-3 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50">
+              <X className="h-4 w-4" />
               Cancelar
             </button>
-            <button type="button" onClick={handleSave} disabled={isSaving} className="w-2/3 py-3 bg-[#203565] text-white font-bold rounded-lg hover:bg-[#1a2b52] transition-colors shadow-md disabled:opacity-50 flex justify-center items-center gap-2">
-              {isSaving ? 'Guardando...' : '💾 Guardar Ambas Plantillas'}
+            <button type="button" onClick={handleSave} disabled={isSaving} className="inline-flex items-center justify-center gap-2 w-2/3 py-3 bg-[#203565] text-white font-bold rounded-lg hover:bg-[#1a2b52] transition-colors shadow-md disabled:opacity-50">
+              <Save className="h-4 w-4" />
+              {isSaving ? 'Guardando...' : 'Guardar Ambas Plantillas'}
             </button>
          </div>
       </div>

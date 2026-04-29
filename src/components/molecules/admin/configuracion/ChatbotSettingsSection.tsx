@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, ChevronDown, ChevronUp, MessageSquare, Palette, Power, Settings2, Upload } from "lucide-react";
+import { Bot, ChevronDown, ChevronUp, MessageSquare, Palette, Power, Save, Settings2, Upload } from "lucide-react";
 import { ChatbotPosition } from "@/types/admin/settings";
 import { getImg } from "@/utils/getImg";
 import { ChatbotSettingsFormConfig } from "./configuracion.types";
@@ -356,8 +356,9 @@ export default function ChatbotSettingsSection({
             <button
               onClick={onSave}
               disabled={isSaving || isLoading}
-              className="px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors shadow-sm"
             >
+              <Save className="h-4 w-4" />
               {isSaving ? "Guardando..." : "Guardar cambios"}
             </button>
           </div>

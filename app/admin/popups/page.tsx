@@ -3,6 +3,7 @@
 import PopupConfigForm from "@/components/molecules/admin/popups/PopupConfigForm";
 import { usePopups } from "@/hooks/usePopups"
 import { useEffect, useMemo, useState } from "react";
+import { House, Package2 } from "lucide-react";
 
 type TabType = "inicio" | "product-detail";
 
@@ -46,23 +47,25 @@ export default function PopupsPage(){
 
                 <button
                   onClick={() => setTab("inicio")}
-                  className={`px-4 py-1.5 text-sm rounded-md transition-all font-semibold ${
+                  className={`inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-md transition-all font-semibold ${
                     tab === "inicio"
                       ? "bg-white dark:bg-[#293296] text-gray-900 dark:text-white shadow-sm"
                       : "text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white"
                   }`}
                 >
+                  <House className="h-4 w-4" />
                   Inicio
                 </button>
 
                 <button
                   onClick={() => setTab("product-detail")}
-                  className={`px-4 py-1.5 text-sm rounded-md transition-all font-semibold ${
+                  className={`inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-md transition-all font-semibold ${
                     tab === "product-detail"
                       ? "bg-white dark:bg-[#293296] text-gray-900 dark:text-white shadow-sm"
                       : "text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white"
                   }`}
                 >
+                  <Package2 className="h-4 w-4" />
                   Producto
                 </button>
 

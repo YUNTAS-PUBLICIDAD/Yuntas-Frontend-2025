@@ -15,6 +15,7 @@ import { User, UserInput } from "@/types/admin/user";
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import { PrinterIcon, PlusIcon } from "@/components/atoms/icons";
+import { Download, FileDown, FileSpreadsheet, FileText } from "lucide-react";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -83,9 +84,9 @@ export default function UsuariosPage() {
     };
 
     const exportOptions = [
-        { label: "Exportar a CSV", onClick: () => exportCSV(users, "usuarios") },
-        { label: "Exportar a Excel", onClick: () => exportExcel(users, "usuarios") },
-        { label: "Exportar a PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download") },
+        { label: "Exportar a CSV", onClick: () => exportCSV(users, "usuarios"), icon: <FileText className="h-4 w-4" /> },
+        { label: "Exportar a Excel", onClick: () => exportExcel(users, "usuarios"), icon: <FileSpreadsheet className="h-4 w-4" /> },
+        { label: "Exportar a PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download"), icon: <FileDown className="h-4 w-4" /> },
     ];
 
     return (
@@ -96,6 +97,7 @@ export default function UsuariosPage() {
                 <div className="flex-1 min-w-[140px]">
                     <ExportDropdown
                         className="w-full h-[40px]"
+                        icon={<Download className="h-4 w-4" />}
                         options={exportOptions}
                     />
                 </div>

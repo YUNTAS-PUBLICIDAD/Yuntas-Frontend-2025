@@ -1,11 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import { ReactNode } from "react";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "tertiary" | "outline" | "success" | "danger" | "info";
   size?: "sm" | "md" | "lg";
   href?: string;
   className?: string;
+  icon?: ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -15,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   href,
   className = "",
   disabled = false,
+  icon,
   ...props
 }) => {
   const baseClasses = "font-bold rounded-3xl transition-all duration-300 inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100";
@@ -37,17 +40,24 @@ const Button: React.FC<ButtonProps> = ({
 
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${disabled ? "" : "hover:scale-105"} ${className}`;
 
+  const content = (
+    <span className={icon ? "inline-flex items-center justify-center gap-2" : "inline-flex items-center justify-center"}>
+      {icon && <span className="shrink-0">{icon}</span>}
+      <span>{children}</span>
+    </span>
+  );
+
   if (href && !disabled) {
     return (
       <Link href={href} className={classes}>
-        {children}
+        {content}
       </Link>
     );
   }
 
   return (
     <button className={classes} disabled={disabled} {...props}>
-      {children}
+      {content}
     </button>
   );
 };
