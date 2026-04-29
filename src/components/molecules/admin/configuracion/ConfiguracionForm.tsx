@@ -110,6 +110,14 @@ export default function ConfiguracionForm() {
     showToast.error(result.message || "No se pudo guardar la configuracion");
   };
 
+  if (isLoading) return (
+  <div className="space-y-4">
+    <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] h-24 animate-pulse" />
+    <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] h-24 animate-pulse" />
+    <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] h-24 animate-pulse" />
+  </div>
+);
+
   return (
     <div className="space-y-4">
       <ChatbotSettingsSection
