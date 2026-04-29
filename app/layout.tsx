@@ -73,13 +73,12 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <Script
-          async
           src="https://www.googletagmanager.com/gtag/js?id=G-46BRFBSERE"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
         <Script
           id="google-analytics"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
