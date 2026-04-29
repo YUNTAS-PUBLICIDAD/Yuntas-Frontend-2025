@@ -2,6 +2,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
+import Script from "next/script";
 
 const Toaster = dynamic(
   () => import("react-hot-toast").then((mod) => mod.Toaster),
@@ -70,6 +71,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-46BRFBSERE"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-46BRFBSERE');
+            `,
+          }}
+        />
+      </head>
       <body>
         {/*<MainLayout>{children}</MainLayout>*/}
         {children}
