@@ -70,6 +70,8 @@ export default function NodeEditor({ node, updateNode, deleteNode, addOptionToNo
   }
 
   const data = node.data || {}
+  // FIX: leer dataType (no type) - misma key que useFlowBuilder y NodeCard
+  const dataType = data.dataType ?? data.type ?? "message"
   const options: Option[] = data.options || []
 
   // ── Helpers para no repetir el spread ──

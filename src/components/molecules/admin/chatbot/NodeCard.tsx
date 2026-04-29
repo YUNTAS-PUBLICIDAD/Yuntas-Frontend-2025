@@ -57,8 +57,13 @@ function OptionTypeIcon({ type }: { type: string }) {
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────
 export default function NodeCard({ data, selected }: any) {
-  const type = data?.type || "message"
-  const cfg = TYPE_CONFIG[type] || TYPE_CONFIG.message
+  // FIX: leer datatype (no type)
+  // node.type = 'custom' (tipo de componente ReactFlow)
+  // data.dataType = 'message' | 'menu'| 'action' (contenido)
+  // Fallback a data.type por compatibilidad con datos legacy en DB
+  const dataType = data?.dataType ?? data?.type ?? "message"
+  // const cfg = TYPE_CONFIG[type] || TYPE_CONFIG.message
+  const cfg = TYPE_CONFIG[dataType] || TYPE_CONFIG.message
   const Icon = cfg.Icon
   const options: any[] = data?.options || []
   const hasOptions = options.length > 0

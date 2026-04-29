@@ -10,6 +10,10 @@ import { v4 as uuid } from 'uuid'
 // =====================
 
 export interface FlowNodeData {
+  // "datatype" es el tipo de contenido del node: message | menu | action
+  // Se llama dataType para NO confundirse con node.type ('custom'),
+  // que es el tipo de componente React que ReactFlow usar para renderizar.
+  dataType: 'message' | 'menu' | 'action'
   message: string
   metadata: Record<string, unknown>
   options: FlowOption[]
@@ -19,7 +23,7 @@ export interface FlowNodeData {
 export interface FlowOption {
   id: string
   label: string
-  type: 'node' | 'link' | 'whatsapp'
+  type: 'node' | 'url'| 'link' | 'whatsapp'
   value?: string
 }
 
@@ -36,7 +40,19 @@ export function useFlowBuilder() {
   // FLOW LOAD
   // =====================
   const setFlow = (nodesData: Node<FlowNodeData>[], edgesData: Edge[]) => {
-    setNodes(nodesData ?? [])
+    // Normalizar los nodos al cargar
+    // el backend guarda el tipo de contenido en data.type (legacy).
+    // Lo migramos a data.datatype para evitar la confusion con node.type.
+    const normalized = (nodesData ?? []).map(n => ({
+      ...n,
+      type: 'custom',
+      data:  {
+        ...n.data,
+        dataType: (n.data as any).dataType ?? (n.data as any).type ?? 'message'
+      },
+    }))
+    // setNodes(nodesData ?? [])
+    setNodes(normalized as Node<FlowNodeData>[])
     setEdges(edgesData ?? [])
     setSelectedNodeId(null)
   }
@@ -61,11 +77,15 @@ export function useFlowBuilder() {
           data: {
             ...n.data,
             ...patch,
-            metadata: {
-              ...(n.data.metadata ?? {}),
-              ...(patch.metadata ?? {}),
-            },
-            options: patch.options ?? n.data.options ?? [],
+            // medatada: merge profundo (no reemplazar todo el objeto)
+            metadata: patch.metadata !== undefined ? {...(n.data.metadata ?? {}), ...patch.metadata} : n.data.metadata ?? {},
+            // options: reemplazar completo si viene, si no mantener
+            options: patch.options !== undefined ? patch.options : n.data.options ?? [],
+            // metadata: {
+            //   ...(n.data.metadata ?? {}),
+            //   ...(patch.metadata ?? {}),
+            // },
+            // options: patch.options ?? n.data.options ?? [],
           },
         }
       })
@@ -108,6 +128,7 @@ export function useFlowBuilder() {
       type: 'custom',
       position: { x: 200 + Math.random() * 100, y: 200 + Math.random() * 100 },
       data: {
+        dataType: 'message',
         message: 'Nuevo nodo',
         metadata: { waitForUser: false },
         options: [],
@@ -143,6 +164,7 @@ export function useFlowBuilder() {
       id: uuid(),
       label: 'Nueva opción',
       type: 'node',
+      value: ''
     }
     setNodes(nds =>
       nds.map(n =>
