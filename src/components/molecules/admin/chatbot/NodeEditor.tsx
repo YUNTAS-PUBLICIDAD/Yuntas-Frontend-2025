@@ -113,8 +113,10 @@ export default function NodeEditor({ node, updateNode, deleteNode, addOptionToNo
         <div className={sectionCls}>
           <SectionTitle icon={Settings} label="Tipo" />
           <select
-            value={data.type || "message"}
-            onChange={e => patch({ type: e.target.value })}
+            value={dataType}
+            onChange={e => patch({dataType: e.target.value})}
+            // value={data.type || "message"}
+            // onChange={e => patch({ type: e.target.value })}
             className={inputCls}
           >
             <option value="message">Mensaje</option>
