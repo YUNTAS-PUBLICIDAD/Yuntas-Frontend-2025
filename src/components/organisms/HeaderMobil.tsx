@@ -58,6 +58,17 @@ const HeaderMobil = () => {
     }
   }, [open])
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#04061a]" : "bg-transparent text-white shadow-none";
 
   const adminBg = isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "";
@@ -94,7 +105,7 @@ const HeaderMobil = () => {
       {/* ───────────── OVERLAY ───────────── */}
       <div
         className={`
-          fixed inset-0 z-[150] bg-black/40
+          md:hidden fixed inset-0 z-[150] bg-black/40
           transition-opacity duration-300
           ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
         `}
