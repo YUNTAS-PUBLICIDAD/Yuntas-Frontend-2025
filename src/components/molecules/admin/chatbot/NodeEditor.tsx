@@ -15,6 +15,7 @@ interface Option {
 
 interface NodeEditorProps {
   node: any
+  nodes: any[]
   updateNode: (id: string, patch: any) => void
   deleteNode: (id: string) => void
   addOptionToNode: (nodeId: string) => void
@@ -59,7 +60,7 @@ const OPTION_TYPES = [
 // ─────────────────────────────────────────
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────
-export default function NodeEditor({ node, updateNode, deleteNode, addOptionToNode }: NodeEditorProps) {
+export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOptionToNode }: NodeEditorProps) {
   if (!node) {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-2 text-gray-400 dark:text-gray-500 p-6">
@@ -207,12 +208,27 @@ export default function NodeEditor({ node, updateNode, deleteNode, addOptionToNo
 
                 {/* Valor según tipo */}
                 {opt.type === "node" && (
-                  <input
-                    value={opt.value || ""}
-                    onChange={e => updateOption(opt.id, { value: e.target.value })}
-                    placeholder="ID del nodo destino"
-                    className={inputCls}
-                  />
+                  // <input
+                  //   value={opt.value || ""}
+                  //   onChange={e => updateOption(opt.id, { value: e.target.value })}
+                  //   placeholder="ID del nodo destino"
+                  //   className={inputCls}
+                  // />
+                  <select value={opt.value || ""} onChange={e => updateOption(opt.id, {value: e.target.value})} className={inputCls}>
+                   <option value="">Seleccionar nodo</option>
+                   {
+                     nodes.filter(n => n.id !== node.id)
+                       .map(n => (
+                         <option key={n.id} value={n.id}>
+                           {/*{n.data?.message?.slice(0, 30) || `Node ${n.id}`}*/}
+                           {n.data?.message
+                               ? n.data.message.slice(0, 30)
+                               : `${n.data?.dataType ?? "node"} • ${n.id.slice(0, 6)}`
+                             }
+                         </option>
+                       ))
+                   }
+                  </select>
                 )}
                 {(opt.type === "url" || opt.type === "link") && (
                   <input
