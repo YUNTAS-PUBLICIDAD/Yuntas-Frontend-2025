@@ -16,6 +16,8 @@ interface Option {
 interface NodeEditorProps {
   node: any
   nodes: any[]
+  startNodeId: string | null
+  setStartNodeId: (id: string) => void
   updateNode: (id: string, patch: any) => void
   deleteNode: (id: string) => void
   addOptionToNode: (nodeId: string) => void
@@ -60,7 +62,7 @@ const OPTION_TYPES = [
 // ─────────────────────────────────────────
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────
-export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOptionToNode }: NodeEditorProps) {
+export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOptionToNode, startNodeId, setStartNodeId }: NodeEditorProps) {
   if (!node) {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-2 text-gray-400 dark:text-gray-500 p-6">
@@ -106,6 +108,28 @@ export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOpti
       <div className="px-5 py-4 border-b border-slate-100 dark:border-[#2f3760]">
         <h2 className="text-sm font-semibold text-gray-800 dark:text-white">Editor de nodo</h2>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-mono truncate">{node.id}</p>
+      </div>
+
+      <div className={sectionCls}>
+        <SectionTitle icon={Settings} label="Inicio del flujo" />
+
+        <button
+          onClick={() => setStartNodeId(node.id)}
+          className={`
+            w-full py-2 rounded-lg text-sm font-medium border transition
+            ${node.id === startNodeId
+              ? "bg-green-100 text-green-700 border-green-300"
+              : "bg-white dark:bg-[#272E50] border-slate-200 dark:border-[#3a4270] hover:bg-slate-50"}
+          `}
+        >
+          {node.id === startNodeId ? "Nodo inicial ✔" : "Marcar como inicio"}
+        </button>
+
+        {node.id === startNodeId && (
+          <p className="text-xs text-gray-400 mt-1">
+            Este nodo se usará si ningún trigger coincide
+          </p>
+        )}
       </div>
 
       <div className="flex-1 p-4 space-y-4">

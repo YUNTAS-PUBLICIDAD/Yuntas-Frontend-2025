@@ -81,6 +81,8 @@ interface FlowCanvasProps {
   onConnect: (p: any) => void
   onNodeClick: (e: any, n: any) => void
   onPaneClick: () => void
+  startNodeId: string | null
+  setStartNodeId: (id: string) => void
 }
 
 export default function FlowCanvas({
@@ -91,6 +93,8 @@ export default function FlowCanvas({
   onConnect,
   onNodeClick,
   onPaneClick,
+  setStartNodeId,
+  startNodeId
 }: FlowCanvasProps) {
   const { fitView } = useReactFlow()
 
@@ -123,10 +127,19 @@ export default function FlowCanvas({
     onConnect({ ...params, label, type: "custom" })
   }
 
+  const computedNodes = nodes.map(n => ({
+    ...n,
+    data:  {
+      ...n.data,
+      isStart: n.id === startNodeId
+    },
+  }))
+
   return (
     <div className="w-full h-[80vh] rounded-xl overflow-hidden border border-slate-200 dark:border-[#2f3760]">
       <ReactFlow
-        nodes={nodes}
+        // nodes={nodes}
+        nodes={computedNodes}
         edges={edges.map(e => ({ ...e, type: "custom" }))}  // forzamos custom edge siempre
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}

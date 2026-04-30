@@ -68,10 +68,12 @@ export default function NodeCard({ data, selected }: any) {
   const options: any[] = data?.options || []
   const hasOptions = options.length > 0
 
+  const isStart = data?.isStart
+
   return (
     <div
       className={`
-        w-64 rounded-xl border shadow-sm transition-all duration-150 select-none
+        relative w-64 rounded-xl border shadow-sm transition-all duration-150 select-none
         bg-white dark:bg-[#1e2548]
         ${cfg.border}
         ${selected
@@ -79,6 +81,19 @@ export default function NodeCard({ data, selected }: any) {
           : "hover:shadow-md"}
       `}
     >
+
+      {isStart && (
+        <div className="
+          absolute -top-2 -right-2
+          text-[10px] font-semibold
+          px-2 py-0.5 rounded-full
+          bg-green-500 text-white
+          shadow-md
+          z-10
+        ">
+          START
+        </div>
+      )}
       {/* ── HANDLE DE ENTRADA (arriba) ── */}
       <Handle
         type="target"

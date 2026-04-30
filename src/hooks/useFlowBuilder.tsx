@@ -35,6 +35,7 @@ export function useFlowBuilder() {
   const [nodes, setNodes] = useState<Node<FlowNodeData>[]>([])
   const [edges, setEdges] = useState<Edge[]>([])
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
+  const [startNodeId, setStartNodeId] = useState<string | null>(null)
 
   // =====================
   // FLOW LOAD
@@ -219,6 +220,8 @@ export function useFlowBuilder() {
   return {
     nodes,
     edges,
+    startNodeId,
+    setStartNodeId,
     selectedNode,
     setFlow,
     onNodesChange,
