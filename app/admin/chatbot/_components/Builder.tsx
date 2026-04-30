@@ -13,6 +13,7 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
   const [name, setName] = useState('')
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [triggers, setTriggers] = useState<any[]>([])
 
   // =========================
   // BUG FIX #2:
@@ -67,6 +68,7 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
       const data = res.data
       setName(data.name ?? '')
       setFlow(data.nodes ?? [], data.edges ?? [])
+      setTriggers(data.triggers ?? [])
     } catch (err) {
       console.error(err)
       toast.error('Error cargando flow')
@@ -110,8 +112,15 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
           id: e.id,
           source: e.source,
           target: e.target,
-          label: (e as any).label ?? ''
+          label: (e as any).label ?? '',
+          sourceHandle: e.sourceHandle ?? null
         })),
+
+      triggers: triggers.filter(t => t.node_id && t.value?.trim()).map(t => ({
+        type: t.type,
+        value: t.value,
+        node_id: t.node_id
+      }))
     }
   }
 
@@ -256,6 +265,56 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
         flex-1 + min-h-0 impide que el área desborde la pantalla en layouts de columna flex.
         */}
 
+      <div className="p-3 border-b bg-white dark:bg-[#1C2347] border-slate-200 dark:border-[#2f3760]">
+        <p className="text-xs font-semibold mb-2 text-gray-500">Triggers</p>
+
+        {triggers.map((t, i) => (
+          <div key={i} className="flex gap-2 mb-2">
+            <input
+              value={t.value}
+              onChange={e => {
+                const copy = [...triggers]
+                copy[i].value = e.target.value
+                setTriggers(copy)
+              }}
+              placeholder="Ej: hola"
+              className="px-2 py-1 text-sm border rounded w-full bg-white dark:bg-[#272E50]"
+            />
+
+            <select
+              value={t.node_id}
+              onChange={e => {
+                const copy = [...triggers]
+                copy[i].node_id = e.target.value
+                setTriggers(copy)
+              }}
+              className="px-2 py-1 text-sm border rounded"
+            >
+              {nodes.map(n => (
+                <option key={n.id} value={n.id}>
+                  {n.data?.message
+                    ? n.data.message.slice(0, 20)
+                    : `${n.data?.dataType ?? "node"} • ${n.id.slice(0, 6)}`
+                  }
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
+
+        <button
+          onClick={() =>
+            setTriggers([
+              ...triggers,
+              { type: 'keyword', value: '', node_id: nodes[0]?.id }
+            ])
+          }
+          className="text-xs text-blue-500"
+        >
+          + Agregar trigger
+        </button>
+      </div>
+
       <div className='flex flex-1 min-h-0'>
       {/* CANVAS */}
       <ReactFlowProvider>
@@ -276,6 +335,7 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
           <aside className="w-80 shrink-0 flex flex-col overflow-hidden  border-l border-slate-200 dark:border-[#2f2760] bg-white dark:bg-[#1C2347]">
             <NodeEditor
               node={selectedNode}
+              nodes={nodes}
               updateNode={updateNodeData}
               deleteNode={deleteNode}
               addOptionToNode={addOptionToNode}
