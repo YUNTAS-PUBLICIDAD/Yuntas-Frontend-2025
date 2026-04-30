@@ -1,21 +1,25 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
+import { ReactNode } from 'react';
+import { ChevronDown, Download } from 'lucide-react';
 
 interface ExportOption {
     label: string;
     onClick: () => void;
+        icon?: ReactNode;
 }
 
 interface ExportDropdownProps {
   options: {
     label: string;
     onClick: () => void;
+        icon?: ReactNode;
   }[];
   label?: string;
   className?: string;
   buttonClassName?: string; // 👈 NUEVO
+    icon?: ReactNode;
 }
 
 
@@ -24,6 +28,7 @@ export default function ExportDropdown({
     label = "EXPORTAR",
     className,
     buttonClassName, 
+    icon = <Download className="h-4 w-4" />,
 }: ExportDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -51,7 +56,7 @@ export default function ExportDropdown({
             <button
             onClick={() => setIsOpen(!isOpen)}
             className={`
-              flex items-center justify-center gap-2
+                            inline-flex items-center justify-center gap-2
               bg-[#203565]
               dark:bg-[#293296]
               text-white
@@ -66,8 +71,9 @@ export default function ExportDropdown({
           >
 
 
+                <span className="inline-flex items-center justify-center shrink-0">{icon}</span>
                 {label}
-                <FaChevronDown
+                <ChevronDown
                     className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                     size={12}
                 />
@@ -80,8 +86,9 @@ export default function ExportDropdown({
                         <button
                             key={index}
                             onClick={() => handleOptionClick(option.onClick)}
-                            className="w-full px-4 py-3 text-left text-sm text-[#0D1030] hover:bg-[#23C1DE] hover:text-white transition-colors border-b border-gray-100 last:border-b-0"
+                            className="w-full px-4 py-3 text-left text-sm text-[#0D1030] hover:bg-[#23C1DE] hover:text-white transition-colors border-b border-gray-100 last:border-b-0 flex items-center gap-2"
                         >
+                            {option.icon && <span className="shrink-0">{option.icon}</span>}
                             {option.label}
                         </button>
                     ))}

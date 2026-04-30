@@ -18,6 +18,7 @@ import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/admin/SearchBar";
 import { PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
+import { Download, FileDown, FileSpreadsheet, FileText } from "lucide-react";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -204,10 +205,11 @@ export default function ProductosPage() {
           <ExportDropdown
             className="w-full"
             label="EXPORTAR"
+            icon={<Download className="h-4 w-4" />}
             options={[
-              { label: "Exportar a CSV", onClick: () => exportToCSV(productos) },
-              { label: "Exportar a Excel", onClick: () => exportToExcel(productos) },
-              { label: "Exportar a PDF", onClick: () => exportToPDF(productos) },
+              { label: "Exportar a CSV", onClick: () => exportToCSV(productos), icon: <FileText className="h-4 w-4" /> },
+              { label: "Exportar a Excel", onClick: () => exportToExcel(productos), icon: <FileSpreadsheet className="h-4 w-4" /> },
+              { label: "Exportar a PDF", onClick: () => exportToPDF(productos), icon: <FileDown className="h-4 w-4" /> },
             ]}
           />
         </div>

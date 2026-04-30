@@ -8,6 +8,7 @@ import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
 import SearchBar from "@/components/molecules/admin/SearchBar";
+import { Check, Filter, RotateCcw } from "lucide-react";
 
 // Icono para el estado de error
 const AlertCircleIcon = () => (
@@ -216,8 +217,9 @@ export default function ReclamacionesPage() {
                     </p>
                     <button
                         onClick={handleRetry}
-                        className="mt-5 px-6 py-2 bg-[#23C1DE] hover:bg-[#1faac4] text-white text-sm font-bold rounded-full shadow transition-transform active:scale-95"
+                        className="mt-5 inline-flex items-center gap-2 px-6 py-2 bg-[#23C1DE] hover:bg-[#1faac4] text-white text-sm font-bold rounded-full shadow transition-transform active:scale-95"
                     >
+                        <RotateCcw className="h-4 w-4" />
                         Reintentar carga
                     </button>
                 </div>
@@ -255,7 +257,10 @@ export default function ReclamacionesPage() {
                                            text-gray-700 text-sm font-medium flex items-center justify-between
                                            focus:ring-2 focus:ring-[#23C1DE] outline-none cursor-pointer shadow-sm"
                             >
-                                <span>{selectedLabel}</span>
+                                <span className="inline-flex items-center gap-2">
+                                    <Filter className="h-4 w-4 text-[#23C1DE]" />
+                                    {selectedLabel}
+                                </span>
                                 <svg
                                     className={`w-4 h-4 text-[#23C1DE] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
                                     fill="none" viewBox="0 0 20 20"
@@ -380,9 +385,10 @@ export default function ReclamacionesPage() {
                                             <button
                                                 onClick={handleUpdateStatus}
                                                 disabled={isUpdating}
-                                                className={`px-5 py-2 rounded text-white font-bold shadow transition-transform active:scale-95
+                                                className={`inline-flex items-center gap-2 px-5 py-2 rounded text-white font-bold shadow transition-transform active:scale-95
                                                     ${isUpdating ? 'bg-gray-400' : 'bg-[#23C1DE] hover:bg-[#1faac4]'}`}
                                             >
+                                                <Check className="h-4 w-4" />
                                                 {isUpdating ? 'Guardando...' : 'Actualizar'}
                                             </button>
                                         </div>
