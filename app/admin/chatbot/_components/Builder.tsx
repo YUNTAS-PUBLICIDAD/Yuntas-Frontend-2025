@@ -47,6 +47,8 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
     onNodeClick,
     onPaneClick,
     addOptionToNode,
+    setStartNodeId,
+    startNodeId
   } = useFlowBuilder()
 
   const initRef = useRef(false)
@@ -69,6 +71,8 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
       setName(data.name ?? '')
       setFlow(data.nodes ?? [], data.edges ?? [])
       setTriggers(data.triggers ?? [])
+      setStartNodeId(data.start_node_uuid ?? null)
+
     } catch (err) {
       console.error(err)
       toast.error('Error cargando flow')
@@ -86,6 +90,7 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
 
     return {
       name: name.trim() || 'Nuevo flow', // FIX #1: nombre incluido
+      start_node_uuid: startNodeId,
       nodes: safeNodes
         .filter(n => n?.id)
         .map(n => ({
@@ -116,11 +121,16 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
           sourceHandle: e.sourceHandle ?? null
         })),
 
-      triggers: triggers.filter(t => t.node_id && t.value?.trim()).map(t => ({
-        type: t.type,
-        value: t.value,
-        node_id: t.node_id
-      }))
+      // triggers: triggers.filter(t => t.node_id && t.value?.trim()).map(t => ({
+      //   type: t.type,
+      //   value: t.value,
+      //   // node_id: t.node_id
+      // }))
+      triggers: triggers.filter(t => t.value?.trim())
+        .map(t => ({
+          type: t.type,
+          value: t.value
+        }))
     }
   }
 
@@ -265,54 +275,75 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
         flex-1 + min-h-0 impide que el área desborde la pantalla en layouts de columna flex.
         */}
 
-      <div className="p-3 border-b bg-white dark:bg-[#1C2347] border-slate-200 dark:border-[#2f3760]">
-        <p className="text-xs font-semibold mb-2 text-gray-500">Triggers</p>
+      <div className="p-4 border-b bg-white dark:bg-[#1C2347] border-slate-200 dark:border-[#2f3760]">
 
-        {triggers.map((t, i) => (
-          <div key={i} className="flex gap-2 mb-2">
-            <input
-              value={t.value}
-              onChange={e => {
-                const copy = [...triggers]
-                copy[i].value = e.target.value
-                setTriggers(copy)
-              }}
-              placeholder="Ej: hola"
-              className="px-2 py-1 text-sm border rounded w-full bg-white dark:bg-[#272E50]"
-            />
+        {/* HEADER */}
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold tracking-wide text-gray-500 dark:text-gray-400 uppercase">
+            Triggers
+          </p>
 
-            <select
-              value={t.node_id}
-              onChange={e => {
-                const copy = [...triggers]
-                copy[i].node_id = e.target.value
-                setTriggers(copy)
-              }}
-              className="px-2 py-1 text-sm border rounded"
+          <button
+            onClick={() =>
+              setTriggers([...triggers, { type: 'keyword', value: '' }])
+            }
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-md
+                       bg-slate-100 dark:bg-[#272E50]
+                       hover:bg-slate-200 dark:hover:bg-[#313d6b]
+                       text-gray-700 dark:text-gray-200 transition"
+          >
+            <Plus size={12} />
+            Agregar
+          </button>
+        </div>
+
+        {/* LISTA */}
+        <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+          {triggers.length === 0 && (
+            <div className="text-xs text-gray-400 dark:text-gray-500 italic">
+              Sin triggers configurados
+            </div>
+          )}
+
+          {triggers.map((t, i) => (
+            <div
+              key={i}
+              className="group flex items-center gap-2 p-2 rounded-lg
+                         border border-slate-200 dark:border-[#2f3760]
+                         bg-slate-50 dark:bg-[#151a38]
+                         hover:border-slate-300 dark:hover:border-[#3a4270]
+                         transition"
             >
-              {nodes.map(n => (
-                <option key={n.id} value={n.id}>
-                  {n.data?.message
-                    ? n.data.message.slice(0, 20)
-                    : `${n.data?.dataType ?? "node"} • ${n.id.slice(0, 6)}`
-                  }
-                </option>
-              ))}
-            </select>
-          </div>
-        ))}
+              {/* INPUT */}
+              <input
+                value={t.value}
+                onChange={e => {
+                  const copy = [...triggers]
+                  copy[i].value = e.target.value
+                  setTriggers(copy)
+                }}
+                placeholder="Ej: hola, soporte, precio..."
+                className="flex-1 bg-transparent text-sm text-gray-800 dark:text-gray-100
+                           placeholder:text-gray-400 dark:placeholder:text-gray-500
+                           focus:outline-none"
+              />
 
-        <button
-          onClick={() =>
-            setTriggers([
-              ...triggers,
-              { type: 'keyword', value: '', node_id: nodes[0]?.id }
-            ])
-          }
-          className="text-xs text-blue-500"
-        >
-          + Agregar trigger
-        </button>
+              {/* DELETE */}
+              <button
+                onClick={() => {
+                  const copy = triggers.filter((_, idx) => idx !== i)
+                  setTriggers(copy)
+                }}
+                className="opacity-60 group-hover:opacity-100
+                           text-red-400 hover:text-red-500
+                           transition"
+                title="Eliminar trigger"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className='flex flex-1 min-h-0'>
@@ -323,6 +354,8 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
             <FlowCanvas
               nodes={nodes ?? []}
               edges={edges ?? []}
+              startNodeId={startNodeId}
+              setStartNodeId={setStartNodeId}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
@@ -336,6 +369,8 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
             <NodeEditor
               node={selectedNode}
               nodes={nodes}
+              startNodeId={startNodeId}
+              setStartNodeId={setStartNodeId}
               updateNode={updateNodeData}
               deleteNode={deleteNode}
               addOptionToNode={addOptionToNode}
