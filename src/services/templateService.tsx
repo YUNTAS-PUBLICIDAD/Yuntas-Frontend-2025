@@ -43,12 +43,22 @@ export const saveTemplateService = async (templateData: Template, isUpdating: bo
         formData.append(`contents[${index}][subject]`, content.subject);
       }
 
-      // VARIABLES
-      content.variables?.forEach((variable, varIndex) => {
-        formData.append(`contents[${index}][variables][${varIndex}]`, variable);
-      });
+      // =========================
+      // VARIABLES (ARRAY SIMPLE)
+      // =========================
+      // content.variables?.forEach((variable, varIndex) => {
+      //   formData.append(`contents[${index}][variables][${varIndex}]`, variable);
+      // });
+      (
+        content.variables || []
+        ).forEach((variable, varIndex) => {
+          formData.append(
+            `contents[${index}][variables][${varIndex}]`,
+            variable
+          );
+        });
 
-      content.buttons?.forEach((button, btnIndex) => {
+     (content.buttons || []).forEach((button, btnIndex) => {
         if(isUpdating && button.id){
           formData.append(`contents[${index}][buttons][${btnIndex}][id]`, String(button.id));
         }
@@ -67,30 +77,44 @@ export const saveTemplateService = async (templateData: Template, isUpdating: bo
       });
 
       // IMAGEN
-      if (content.image instanceof File) {
-        if (isUpdating) {
-           // En actualización, Laravel (según el backend) espera 'contents_0_image'
-           formData.append(`contents[${index}][image]`, content.image);
-        } else {
-           // En creación, espera 'contents[0][image]'
-           formData.append(`contents[${index}][image]`, content.image);
-        }
-      }
-    });
+    //   if (content.image instanceof File) {
+    //     if (isUpdating) {
+    //        // En actualización, Laravel (según el backend) espera 'contents_0_image'
+    //        formData.append(`contents[${index}][image]`, content.image);
+    //     } else {
+    //        // En creación, espera 'contents[0][image]'
+    //        formData.append(`contents[${index}][image]`, content.image);
+    //     }
+    //   }
+    // });
 
+    // =========================
+    // IMAGE (IMPORTANTE: SIEMPRE IGUAL)
+    // =========================
+    if (content.image instanceof File) {
+          formData.append(
+            `contents[${index}][image]`,
+            content.image
+          );
+        }
+      });
+
+    // =========================
+    // REQUEST
+    // =========================
     let response;
 
     if (isUpdating && templateData.id) {
       // TRUCO LARAVEL: Para enviar archivos en un Update, se usa POST con _method=PUT
       formData.append('_method', 'PUT');
-      response = await api.post(API_ENDPOINTS.ADMIN.TEMPLATES.UPDATE(templateData.id), formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      response = await api.post(API_ENDPOINTS.ADMIN.TEMPLATES.UPDATE(templateData.id), formData);
     } else {
       // Creación normal
-      response = await api.post(API_ENDPOINTS.ADMIN.TEMPLATES.CREATE, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      response = await api.post(API_ENDPOINTS.ADMIN.TEMPLATES.CREATE, formData,
+      //   {
+      //   headers: { 'Content-Type': 'multipart/form-data' }
+      // }
+      );
     }
 
     return { success: true, message: 'Plantilla guardada exitosamente', data: response.data };
