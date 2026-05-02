@@ -5,6 +5,7 @@ import { contactoInfoData, contactoSocialLinks } from '@/data/contacto/contactoD
 import { useSolicitudInfo } from '@/hooks/useSolicitudInfo';
 import { useSettingsContext } from '@/providers/SettingsProvider';
 import PrimaryButton from '@/components/atoms/PrimaryButton';
+import { SocialLink } from '@/types/admin/settings';
 
 interface HorarioDia {
   day: string;
@@ -53,6 +54,33 @@ function buildWhatsappUrl(phone: string | null | undefined, message: string | nu
   return `https://wa.me/${digits}?text=${text}`;
 }
 
+function mapConfiguredSocialLinks(socialLinks: SocialLink[] | null | undefined) {
+  if (!socialLinks?.length) {
+    return [];
+  }
+
+  const defaultLinksByPlatform = new Map(
+    contactoSocialLinks.map((item) => [normalizeText(item.label), item])
+  );
+
+  return socialLinks
+    .map((item) => {
+      const platform = normalizeText(item.platform);
+      const matched = defaultLinksByPlatform.get(platform);
+      const url = item.url?.trim() || '';
+
+      if (!matched || !url) {
+        return null;
+      }
+
+      return {
+        ...matched,
+        href: url,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
+}
+
 const ContactoSplitForm = () => {
   const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
   const { contact } = useSettingsContext();
@@ -60,6 +88,8 @@ const ContactoSplitForm = () => {
   const businessHours = contact?.business_hours ?? [];
   const whatsappUrl = buildWhatsappUrl(contact?.phone ?? contactoInfoData[0].text, contact?.whatsapp_message);
   const WhatsAppIcon = contactoInfoData[0].icon;
+  const configuredSocialLinks = mapConfiguredSocialLinks(contact?.social_links);
+  const socialLinksToRender = configuredSocialLinks.length ? configuredSocialLinks : contactoSocialLinks;
 
   const getDaySchedule = (label: string) =>
     businessHours.find((item) => normalizeText(item.day) === normalizeText(label)) ?? null;
@@ -117,7 +147,7 @@ const ContactoSplitForm = () => {
                 )}
 
                 <div className="mt-12 flex items-center gap-4">
-                  {contactoSocialLinks.map((social) => {
+                  {socialLinksToRender.map((social) => {
                     const Icon = social.icon;
 
                     return (
