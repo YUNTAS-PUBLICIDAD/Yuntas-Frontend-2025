@@ -41,6 +41,18 @@ function getHorarioTexto(horario?: HorarioDia | null) {
   return `${formatTime(horario.start_time)} - ${formatTime(horario.end_time)}`;
 }
 
+function buildWhatsappUrl(phone: string | null | undefined, message: string | null | undefined) {
+  const digits = phone?.replace(/\D/g, '');
+
+  if (!digits) {
+    return null;
+  }
+
+  const text = encodeURIComponent(message?.trim() || 'Hola, me gustaría obtener más información.');
+
+  return `https://wa.me/${digits}?text=${text}`;
+}
+
 const ContactoSplitForm = () => {
   const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
   const { contact, getSettings } = useSettings();
@@ -50,6 +62,8 @@ const ContactoSplitForm = () => {
   }, [getSettings]);
 
   const businessHours = contact?.business_hours ?? [];
+  const whatsappUrl = buildWhatsappUrl(contact?.phone ?? contactoInfoData[0].text, contact?.whatsapp_message);
+  const WhatsAppIcon = contactoInfoData[0].icon;
 
   const getDaySchedule = (label: string) =>
     businessHours.find((item) => normalizeText(item.day) === normalizeText(label)) ?? null;
@@ -93,6 +107,18 @@ const ContactoSplitForm = () => {
                     <p>Domingo: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[2]))}</span></p>
                   </div>
                 </div>
+
+                {whatsappUrl && (
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-[#62c08f] px-6 py-4 text-base font-semibold text-white shadow-[0_10px_25px_rgba(98,192,143,0.22)] transition-transform duration-200 hover:scale-[1.01] hover:bg-[#56b57f]"
+                  >
+                    <WhatsAppIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                    Escríbenos por whatsapp
+                  </a>
+                )}
 
                 <div className="mt-12 flex items-center gap-4">
                   {contactoSocialLinks.map((social) => {
