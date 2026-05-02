@@ -108,7 +108,16 @@ export const API_ENDPOINTS = {
       CREATE: '/admin/templates',
       UPDATE: (id: number) => `/admin/templates/${id}`,
       DELETE: (id: number) => `/admin/templates/${id}`,
+
+      UPLOAD_IMAGE: '/admin/templates/upload-image',
+      PRODUCT_ASSETS: {
+        UPLOAD: '/admin/templates/product-assets/upload',
+        DELETE: '/admin/templates/product-assets',
+      },
+
+      GET_VARIABLES: '/admin/templates/variables',
     },
+
     CATEGORIES: {
       GET_ALL: '/admin/categorias',
       CREATE: '/admin/categorias',
