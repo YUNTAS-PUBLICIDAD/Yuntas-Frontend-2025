@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { contactoInfoData, contactoSocialLinks } from '@/data/contacto/contactoData';
 import { useSolicitudInfo } from '@/hooks/useSolicitudInfo';
-import { useSettings } from '@/hooks/useSettings';
+import { useSettingsContext } from '@/providers/SettingsProvider';
 import PrimaryButton from '@/components/atoms/PrimaryButton';
 
 interface HorarioDia {
@@ -43,11 +43,7 @@ function getHorarioTexto(horario?: HorarioDia | null) {
 
 const ContactoSplitForm = () => {
   const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
-  const { contact, getSettings } = useSettings();
-
-  useEffect(() => {
-    getSettings();
-  }, [getSettings]);
+  const { contact } = useSettingsContext();
 
   const businessHours = contact?.business_hours ?? [];
 

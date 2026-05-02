@@ -236,7 +236,7 @@ export default function AppearanceSettingsSection({
             <Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Apariencia</h2>
+            <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">General</h2>
             <p className="mt-0.5 text-xs text-gray-400 dark:text-white/40">Personaliza la identidad visual de tu empresa</p>
           </div>
         </div>
