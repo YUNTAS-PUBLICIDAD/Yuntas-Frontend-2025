@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { contactoInfoData, contactoSocialLinks } from '@/data/contacto/contactoData';
 import { useSolicitudInfo } from '@/hooks/useSolicitudInfo';
 import { useSettingsContext } from '@/providers/SettingsProvider';
@@ -81,13 +80,31 @@ function mapConfiguredSocialLinks(socialLinks: SocialLink[] | null | undefined) 
     .filter((item): item is NonNullable<typeof item> => item !== null);
 }
 
+function buildContactInfo(phone: string | null | undefined, email: string | null | undefined, address: string | null | undefined) {
+  return [
+    {
+      ...contactoInfoData[0],
+      text: phone?.trim() || contactoInfoData[0].text,
+    },
+    {
+      ...contactoInfoData[1],
+      text: email?.trim() || contactoInfoData[1].text,
+    },
+    {
+      ...contactoInfoData[2],
+      text: address?.trim() || contactoInfoData[2].text,
+    },
+  ];
+}
+
 const ContactoSplitForm = () => {
   const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
   const { contact } = useSettingsContext();
 
   const businessHours = contact?.business_hours ?? [];
+  const contactoInfoToRender = buildContactInfo(contact?.phone, contact?.email, contact?.address);
   const whatsappUrl = buildWhatsappUrl(contact?.phone ?? contactoInfoData[0].text, contact?.whatsapp_message);
-  const WhatsAppIcon = contactoInfoData[0].icon;
+  const WhatsAppIcon = contactoInfoToRender[0].icon;
   const configuredSocialLinks = mapConfiguredSocialLinks(contact?.social_links);
   const socialLinksToRender = configuredSocialLinks.length ? configuredSocialLinks : contactoSocialLinks;
 
@@ -105,7 +122,7 @@ const ContactoSplitForm = () => {
                 <p className="mt-3 text-base text-white/90 md:text-lg">Solicita información aquí</p>
 
                 <div className="mt-14 space-y-7">
-                  {contactoInfoData.map((item) => {
+                  {contactoInfoToRender.map((item) => {
                     const Icon = item.icon;
 
                     return (
