@@ -4,6 +4,7 @@ import { contactoInfoData, contactoSocialLinks } from '@/data/contacto/contactoD
 import { useSolicitudInfo } from '@/hooks/useSolicitudInfo';
 import { useSettingsContext } from '@/providers/SettingsProvider';
 import PrimaryButton from '@/components/atoms/PrimaryButton';
+import ContactInfoSkeleton from '@/components/molecules/contacto/ContactInfoSkeleton';
 import { SocialLink } from '@/types/admin/settings';
 
 interface HorarioDia {
@@ -99,7 +100,7 @@ function buildContactInfo(phone: string | null | undefined, email: string | null
 
 const ContactoSplitForm = () => {
   const { formData, handleInputChange, handleSubmit, isLoading } = useSolicitudInfo();
-  const { contact } = useSettingsContext();
+  const { contact, isLoading: isSettingsLoading } = useSettingsContext();
 
   const businessHours = contact?.business_hours ?? [];
   const contactoInfoToRender = buildContactInfo(contact?.phone, contact?.email, contact?.address);
@@ -117,69 +118,77 @@ const ContactoSplitForm = () => {
         <div className="overflow-hidden rounded-2xl border border-[#e9e9e9] bg-white shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-[460px_1fr]">
             <aside className="relative overflow-hidden bg-gradient-to-b from-[#04194c] via-[#0a2f6f] to-[#2398ab] px-7 py-10 text-white md:px-10 md:py-12">
-              <div className="mx-auto w-full max-w-sm min-h-96">
+              <div className="mx-auto w-full max-w-sm min-h-[560px]">
                 <h3 className="text-2xl font-bold leading-tight md:text-[30px]">Información de Contacto</h3>
                 <p className="mt-3 text-base text-white/90 md:text-lg">Solicita información aquí</p>
 
-                <div className="mt-14 space-y-7">
-                  {contactoInfoToRender.map((item) => {
-                    const Icon = item.icon;
+                <div className="relative mt-14 min-h-[420px]">
+                  {isSettingsLoading ? (
+                    <ContactInfoSkeleton />
+                  ) : null}
 
-                    return (
-                      <div key={item.ariaLabel} className="flex items-center gap-4 text-base md:text-lg">
-                        <Icon className="h-6 w-6 shrink-0 text-white" aria-hidden="true" />
-                        <span className="break-all">{item.text}</span>
+                  <div className={`relative z-0 ${isSettingsLoading ? 'opacity-0' : 'opacity-100'}`}>
+                    <div className="space-y-7">
+                      {contactoInfoToRender.map((item) => {
+                        const Icon = item.icon;
+
+                        return (
+                          <div key={item.ariaLabel} className="flex items-center gap-4 text-base md:text-lg">
+                            <Icon className="h-6 w-6 shrink-0 text-white" aria-hidden="true" />
+                            <span className="break-all">{item.text}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="my-8 h-px bg-white/20" />
+
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M12 8a1 1 0 011 1v3.586l2.707 2.707a1 1 0 11-1.414 1.414l-3-3A1 1 0 0111 13V9a1 1 0 011-1z" />
+                          <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" />
+                        </svg>
+                        <h4 className="text-base font-bold text-white md:text-lg">Horario de atención</h4>
                       </div>
-                    );
-                  })}
-                </div>
+                      <div className="space-y-3 text-sm leading-6 text-white/90 md:text-base">
+                        <p>Lunes - Viernes: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[0]))}</span></p>
+                        <p>Sábado: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[1]))}</span></p>
+                        <p>Domingo: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[2]))}</span></p>
+                      </div>
+                    </div>
 
-                <div className="my-8 h-px bg-white/20" />
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d="M12 8a1 1 0 011 1v3.586l2.707 2.707a1 1 0 11-1.414 1.414l-3-3A1 1 0 0111 13V9a1 1 0 011-1z" />
-                      <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" />
-                    </svg>
-                    <h4 className="text-base font-bold text-white md:text-lg">Horario de atención</h4>
-                  </div>
-                  <div className="space-y-3 text-sm leading-6 text-white/90 md:text-base">
-                    <p>Lunes - Viernes: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[0]))}</span></p>
-                    <p>Sábado: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[1]))}</span></p>
-                    <p>Domingo: <span className="font-semibold">{getHorarioTexto(getDaySchedule(DAY_LABELS[2]))}</span></p>
-                  </div>
-                </div>
-
-                {whatsappUrl && (
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-[#62c08f] px-6 py-4 text-base font-semibold text-white shadow-[0_10px_25px_rgba(98,192,143,0.22)] transition-transform duration-200 hover:scale-[1.01] hover:bg-[#56b57f]"
-                  >
-                    <WhatsAppIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                    Escríbenos por whatsapp
-                  </a>
-                )}
-
-                <div className="mt-12 flex items-center gap-4">
-                  {socialLinksToRender.map((social) => {
-                    const Icon = social.icon;
-
-                    return (
+                    {whatsappUrl && (
                       <a
-                        key={social.label}
-                        href={social.href}
-                        aria-label={social.label}
+                        href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#031733] transition-colors hover:bg-[#05244b]"
+                        className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-[#62c08f] px-6 py-4 text-base font-semibold text-white shadow-[0_10px_25px_rgba(98,192,143,0.22)] transition-transform duration-200 hover:scale-[1.01] hover:bg-[#56b57f]"
                       >
-                        <Icon className="h-5 w-5" />
+                        <WhatsAppIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                        Escríbenos por whatsapp
                       </a>
-                    );
-                  })}
+                    )}
+
+                    <div className="mt-12 flex items-center gap-4">
+                      {socialLinksToRender.map((social) => {
+                        const Icon = social.icon;
+
+                        return (
+                          <a
+                            key={social.label}
+                            href={social.href}
+                            aria-label={social.label}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#031733] transition-colors hover:bg-[#05244b]"
+                          >
+                            <Icon className="h-5 w-5" />
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="pointer-events-none absolute -bottom-20 right-12 h-44 w-44 rounded-full bg-white/15" aria-hidden="true" />
