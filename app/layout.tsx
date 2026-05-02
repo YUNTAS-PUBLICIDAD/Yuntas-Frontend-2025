@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Script from "next/script";
+import { SettingsProvider } from "@/providers/SettingsProvider";
 
 const Toaster = dynamic(
   () => import("react-hot-toast").then((mod) => mod.Toaster),
@@ -103,8 +104,10 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest?v=20260430" />
       </head>
       <body>
-        {/*<MainLayout>{children}</MainLayout>*/}
-        {children}
+        <SettingsProvider>
+          {/*<MainLayout>{children}</MainLayout>*/}
+          {children}
+        </SettingsProvider>
         <Toaster containerStyle={{
           inset: 0
         }} toastOptions={

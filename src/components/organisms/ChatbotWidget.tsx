@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { FaWhatsapp } from 'react-icons/fa';
 import { ChatMessage } from '@/types/chatbot';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
-import { getSettingsService } from '@/services/settingsService';
 import { ChatbotSettings } from '@/types/admin/settings';
 import { usePathname } from "next/navigation";
+import { useSettingsContext } from '@/providers/SettingsProvider';
 
 const BASE_URL = process.env.NEXT_PUBLIC_URL || "";
 
@@ -83,10 +83,6 @@ export default function ChatbotWidget() {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
 
-  // Settings dinámicos 
-  const [settings, setSettings] = useState<ChatbotSettings>(DEFAULT_SETTINGS);
-  const [settingsLoaded, setSettingsLoaded] = useState(false);
-
   // Burbuja de atracción y botón flotante
   const [showButton, setShowButton] = useState(false);
   const [showBubble, setShowBubble] = useState(false);
@@ -99,8 +95,13 @@ export default function ChatbotWidget() {
   const sessionId = useRef<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  
+  // Settings desde contexto global
+  const { chatbot: settings, isLoading: settingsLoading } = useSettingsContext();
+  const settingsLoaded = !settingsLoading;
+  const chatbotSettings = settings || DEFAULT_SETTINGS;
 
-  // ── Cargar settings e inicializar mensajes ────────────────────────────────
+  // ── Inicializar mensajes cuando settings estén listos ────────────────────
   useEffect(() => {
     localStorage.removeItem("chatbot_session");
     localStorage.removeItem("chatbot_messages");
@@ -113,34 +114,17 @@ export default function ChatbotWidget() {
       loadHistory(storedSession);
     }
 
-    
-    getSettingsService().then((result) => {
-      let chatbotSettings = DEFAULT_SETTINGS;
-      if (result.success && result.data?.chatbot) {
-        chatbotSettings = result.data.chatbot;
-        setSettings(chatbotSettings);
-      }
-      setSettingsLoaded(true);
+    // Esperar a que settings estén listos desde el contexto
+    if (!settingsLoaded) return;
 
-      
-      if (saved) {
-        setMessages(JSON.parse(saved));
-        setHasOpenedOnce(true);
-      } else {
-       
-        const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
-        setMessages([{ role: "bot", text: welcomeText, type: "quick" }]);
-      }
-    }).catch(() => {
-      setSettingsLoaded(true);
-      if (!saved) {
-        setMessages([{ role: "bot", text: DEFAULT_SETTINGS.welcome_message!, type: "quick" }]);
-      } else {
-        setMessages(JSON.parse(saved));
-        setHasOpenedOnce(true);
-      }
-    });
-  }, []);
+    if (saved) {
+      setMessages(JSON.parse(saved));
+      setHasOpenedOnce(true);
+    } else {
+      const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
+      setMessages([{ role: "bot", text: welcomeText, type: "quick" }]);
+    }
+  }, [settingsLoaded, chatbotSettings.welcome_message]);
 
   // Scroll automático al final en nuevos mensajes o al escribir
   useEffect(() => {
@@ -150,10 +134,10 @@ export default function ChatbotWidget() {
   // Burbuja llamativa 
   useEffect(() => {
     if (!settingsLoaded) return;
-    if (!settings.enabled) return;
+    if (!chatbotSettings.enabled) return;
     if (hasOpenedOnce || open) return;
 
-    const delayMs = (settings.show_delay_seconds ?? 3) * 1000;
+    const delayMs = (chatbotSettings.show_delay_seconds ?? 3) * 1000;
 
     const initialTimer = setTimeout(() => {
       setShowButton(true);
@@ -168,25 +152,25 @@ export default function ChatbotWidget() {
     }, delayMs);
 
     return () => clearTimeout(initialTimer);
-  }, [settingsLoaded, settings.enabled, settings.show_delay_seconds, hasOpenedOnce, open]);
+  }, [settingsLoaded, chatbotSettings.enabled, chatbotSettings.show_delay_seconds, hasOpenedOnce, open]);
 
   // ── Cierre automático por inactividad ─────────────────────────────────────
   const resetAutoCloseTimer = () => {
-    if (!settings.auto_close_seconds) return;
+    if (!chatbotSettings.auto_close_seconds) return;
     if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
     autoCloseTimerRef.current = setTimeout(() => {
       setOpen(false);
-    }, settings.auto_close_seconds * 1000);
+    }, chatbotSettings.auto_close_seconds * 1000);
   };
 
   useEffect(() => {
-    if (open && settings.auto_close_seconds) {
+    if (open && chatbotSettings.auto_close_seconds) {
       resetAutoCloseTimer();
     }
     return () => {
       if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
     };
-  }, [open, settings.auto_close_seconds]);
+  }, [open, chatbotSettings.auto_close_seconds]);
 
   async function loadHistory(id: string) {
     const res = await getChatHistoryService(id);
@@ -249,7 +233,7 @@ export default function ChatbotWidget() {
     sessionStorage.removeItem("chatbot_session");
     sessionStorage.removeItem("chatbot_messages");
     sessionId.current = "";
-    const welcomeText = settings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
+    const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
     setMessages([{ role: "bot", text: welcomeText, type: "quick" }]);
   };
 
@@ -266,12 +250,12 @@ export default function ChatbotWidget() {
   // Esperar settings antes de mostrar cualquier cosa (evita flash del ícono por defecto)
   if (!settingsLoaded) return null;
   // No renderizar si está desactivado
-  if (!settings.enabled) return null;
+  if (!chatbotSettings.enabled) return null;
 
-  const iconUrl = getChatbotIconUrl(settings.icon);
-  const primaryColor = settings.primary_color || "#203565";
-  const secondaryColor = settings.secondary_color || primaryColor;
-  const positionClass = settings.position === "bottom-left"
+  const iconUrl = getChatbotIconUrl(chatbotSettings.icon);
+  const primaryColor = chatbotSettings.primary_color || "#203565";
+  const secondaryColor = chatbotSettings.secondary_color || primaryColor;
+  const positionClass = chatbotSettings.position === "bottom-left"
     ? "fixed bottom-7 left-4 z-[100]"
     : "fixed bottom-7 right-4 z-[100]";
 

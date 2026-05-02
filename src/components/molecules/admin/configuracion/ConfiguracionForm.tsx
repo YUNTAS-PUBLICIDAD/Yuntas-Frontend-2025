@@ -120,6 +120,12 @@ export default function ConfiguracionForm() {
 
   return (
     <div className="space-y-4">
+      <AppearanceSettingsSection
+        general={general}
+        isLoading={isLoading}
+        isSaving={isSaving}
+        onSave={saveGeneralSettings}
+      />
       <ChatbotSettingsSection
         isOpen={isChatbotOpen}
         onToggleOpen={() => setIsChatbotOpen((current) => !current)}
@@ -130,12 +136,6 @@ export default function ConfiguracionForm() {
         onSave={handleSave}
         fileInputRef={fileInputRef}
         onIconUpload={handleIconUpload}
-      />
-      <AppearanceSettingsSection
-        general={general}
-        isLoading={isLoading}
-        isSaving={isSaving}
-        onSave={saveGeneralSettings}
       />
       <ContactoSettingsSection
         contact={contact}
