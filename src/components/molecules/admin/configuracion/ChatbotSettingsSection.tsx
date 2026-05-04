@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, ChevronDown, MessageSquare, Palette, Power, Save, Settings2, Upload } from "lucide-react";
+import { Bot, ChevronDown, Palette, Power, Save, Settings2, Upload } from "lucide-react";
 import { ChatbotPosition } from "@/types/admin/settings";
 import { getImg } from "@/utils/getImg";
 import { ChatbotSettingsFormConfig } from "./configuracion.types";
@@ -104,13 +104,15 @@ function BlockTitle({
   icon,
   title,
   subtitle,
+  className = "mb-5",
 }: {
   icon: React.ReactNode;
   title: string;
   subtitle: string;
+  className?: string;
 }) {
   return (
-    <div className="flex items-start gap-3 mb-5">
+    <div className={`flex items-start gap-3 ${className}`}>
       <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5 shrink-0 mt-0.5">
         {icon}
       </div>
@@ -154,8 +156,21 @@ export default function ChatbotSettingsSection({
     { value: "1800", label: "30 min de inactividad" },
   ];
 
+  const PreviewIcon = (
+    <svg
+      className="w-4 h-4 text-[#203565] dark:text-white/60"
+      fill="none" viewBox="0 0 24 24"
+      stroke="currentColor" strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round"
+        d="M15 10l4.553-2.069A1 1 0 0121 8.87V15.13a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
+      />
+    </svg>
+  );
+
   return (
     <div className="rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] shadow-sm overflow-hidden">
+      {/* Header colapsable */}
       <button
         onClick={onToggleOpen}
         className="flex w-full items-start justify-between px-6 py-5 text-left border-b border-gray-100 dark:border-white/5 transition-colors hover:bg-gray-50/70 dark:hover:bg-white/5"
@@ -179,11 +194,7 @@ export default function ChatbotSettingsSection({
                 : "bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-white/40"
             }`}
           >
-            <span
-              className={`h-1.5 w-1.5 rounded-full ${
-                config.isActive ? "bg-green-500" : "bg-gray-400"
-              }`}
-            />
+            <span className={`h-1.5 w-1.5 rounded-full ${config.isActive ? "bg-green-500" : "bg-gray-400"}`} />
             {config.isActive ? "Activo" : "Inactivo"}
           </span>
           <ChevronDown
@@ -196,14 +207,13 @@ export default function ChatbotSettingsSection({
 
       {isOpen && (
         <div className="divide-y divide-gray-100 dark:divide-white/5">
-          {/* Cargando */}
           {isLoading && (
             <div className="px-6 py-4 bg-blue-50 text-blue-700 text-sm dark:bg-blue-500/10 dark:text-blue-200">
               Cargando configuracion actual...
             </div>
           )}
 
-          {/* Estado */}
+          {/* Estado  */}
           <div className="px-6 py-6">
             <BlockTitle
               icon={<Power className="w-4 h-4 text-[#203565] dark:text-white/60" />}
@@ -212,33 +222,30 @@ export default function ChatbotSettingsSection({
             />
             <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 px-4 py-3.5">
               <div>
-                <p className="text-sm font-semibold text-[#0D1030] dark:text-white">
-                  Chatbot activo
-                </p>
+                <p className="text-sm font-semibold text-[#0D1030] dark:text-white">Chatbot activo</p>
                 <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                   Visible para todos los usuarios del sitio
                 </p>
               </div>
               <Toggle
                 checked={config.isActive}
-                onChange={() =>
-                  setConfig((current) => ({ ...current, isActive: !current.isActive }))
-                }
+                onChange={() => setConfig((current) => ({ ...current, isActive: !current.isActive }))}
               />
             </div>
           </div>
 
           {/* Apariencia */}
           <div className="px-6 py-6">
-            <BlockTitle
-              icon={<Palette className="w-4 h-4 text-[#203565] dark:text-white/60" />}
-              title="Apariencia"
-              subtitle="Personaliza el ícono, colores y posición del widget"
-            />
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Columna izquierda */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-10 items-start">
+ 
               <div className="flex flex-col gap-6">
+                <BlockTitle
+                  icon={<Palette className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                  title="Apariencia"
+                  subtitle="Personaliza el ícono, colores y posición del widget"
+                  className="mb-0" 
+                />
+
                 {/* Ícono */}
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-semibold text-[#0D1030] dark:text-white">
@@ -250,11 +257,7 @@ export default function ChatbotSettingsSection({
                       style={{ backgroundColor: config.primaryColor }}
                     >
                       {config.iconPreview ? (
-                        <img
-                          src={getImg(config.iconPreview)}
-                          alt="icon"
-                          className="w-8 h-8 rounded-xl object-cover"
-                        />
+                        <img src={getImg(config.iconPreview)} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
                       ) : (
                         <Bot className="w-7 h-7 text-white" />
                       )}
@@ -286,17 +289,13 @@ export default function ChatbotSettingsSection({
                   <ColorInput
                     label="Color principal"
                     value={config.primaryColor}
-                    onChange={(value) =>
-                      setConfig((current) => ({ ...current, primaryColor: value }))
-                    }
+                    onChange={(value) => setConfig((current) => ({ ...current, primaryColor: value }))}
                     hint="Botón flotante y elementos destacados"
                   />
                   <ColorInput
                     label="Color secundario"
                     value={config.secondaryColor}
-                    onChange={(value) =>
-                      setConfig((current) => ({ ...current, secondaryColor: value }))
-                    }
+                    onChange={(value) => setConfig((current) => ({ ...current, secondaryColor: value }))}
                     hint="Burbujas de mensajes del bot"
                   />
                 </div>
@@ -306,16 +305,13 @@ export default function ChatbotSettingsSection({
                   label="Posición en pantalla"
                   value={config.position}
                   onChange={(value) =>
-                    setConfig((current) => ({
-                      ...current,
-                      position: value as ChatbotPosition,
-                    }))
+                    setConfig((current) => ({ ...current, position: value as ChatbotPosition }))
                   }
                   options={positionOptions}
                   hint="Esquina donde aparece el botón flotante"
                 />
-                  {/* Mensaje de bienvenida */}   
 
+                {/* Mensaje de bienvenida */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-[#0D1030] dark:text-white">
                     Mensaje de bienvenida
@@ -335,12 +331,23 @@ export default function ChatbotSettingsSection({
                 </div>
               </div>
 
-              {/* Columna derecha: vista previa */}
-              <ChatbotPreview config={config} />
+              {/* Vista Previa + Widget */}
+              <div className="flex flex-col gap-6 lg:pl-4">
+                <BlockTitle
+                  icon={PreviewIcon}
+                  title="Vista previa"
+                  subtitle="Así verá el usuario el chatbot en tu sitio"
+                  className="mb-0"
+                />
+                
+                {/* Centrar el preview en móviles */}
+                <div className="flex justify-center lg:justify-start w-full">
+                  <ChatbotPreview config={config} />
+                </div>
+              </div>
+
             </div>
           </div>
-
-
 
           {/* Comportamiento */}
           <div className="px-6 py-6">
@@ -353,25 +360,21 @@ export default function ChatbotSettingsSection({
               <Select
                 label="Mostrar automáticamente"
                 value={config.showAfterSeconds}
-                onChange={(value) =>
-                  setConfig((current) => ({ ...current, showAfterSeconds: value }))
-                }
+                onChange={(value) => setConfig((current) => ({ ...current, showAfterSeconds: value }))}
                 options={showAfterOptions}
                 hint="Tiempo de espera antes de abrir el chat"
               />
               <Select
                 label="Cerrar automáticamente"
                 value={config.closeAfterSeconds}
-                onChange={(value) =>
-                  setConfig((current) => ({ ...current, closeAfterSeconds: value }))
-                }
+                onChange={(value) => setConfig((current) => ({ ...current, closeAfterSeconds: value }))}
                 options={closeAfterOptions}
                 hint="Tiempo sin actividad para cerrar el chat"
               />
             </div>
           </div>
 
-          {/* Guardar  */}
+          {/* Guardar */}
           <div className="px-6 py-4 bg-gray-50 dark:bg-white/5 flex justify-end">
             <button
               onClick={onSave}
