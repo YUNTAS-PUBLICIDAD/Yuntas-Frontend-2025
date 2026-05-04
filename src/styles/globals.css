@@ -18,6 +18,65 @@
     overflow-x: auto;
 }*/
 
+.ql-editor {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.ql-editor p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* TOOLBAR BASE */
+.ql-toolbar {
+  border-color: rgba(255,255,255,0.1);
+}
+
+/* ICONOS */
+.dark .ql-toolbar .ql-stroke {
+  stroke: #e5e7eb; /* gris claro visible */
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: #e5e7eb;
+}
+
+/* HOVER / ACTIVE */
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #ffffff;
+}
+
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-fill {
+  fill: #ffffff;
+}
+
+/* SELECT (dropdown header, size, etc) */
+.dark .ql-toolbar .ql-picker {
+  color: #e5e7eb;
+}
+
+.dark .ql-toolbar .ql-picker-options {
+  background: #1f2937; /* dark bg */
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.dark .ql-toolbar .ql-picker-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* EDITOR AREA */
+.dark .ql-container {
+  border-color: rgba(255,255,255,0.1);
+}
+
+.dark .ql-editor {
+  color: #e5e7eb;
+}
+
 /* estilo para popup inicio-desktop */
 @media (min-width: 640px) {
   .clip-vase {
