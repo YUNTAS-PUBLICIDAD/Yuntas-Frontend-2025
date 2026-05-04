@@ -9,12 +9,13 @@ interface ChatbotPreviewProps {
 }
 
 export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
-  const primaryColor = config.primaryColor || "#203565";
+  const primaryColor = config.primaryColor || "#6DE1E3";
   const secondaryColor = config.secondaryColor || primaryColor;
   const welcomeMessage = config.welcomeMessage || "Hola 👋 ¿En qué puedo ayudarte?";
 
   return (
-    <div className="w-[315px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-[#151b38]">
+   
+    <div className="w-[315px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
 
       {/* Header */}
       <div
@@ -54,7 +55,7 @@ export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
       </div>
 
       {/* Messages */}
-      <div className="bg-gray-50 dark:bg-white/5 px-3 py-4 h-[380px] flex flex-col gap-3 overflow-y-auto">
+      <div className="bg-gray-50 px-3 py-4 h-[380px] flex flex-col gap-3 overflow-y-auto">
         <div className="flex items-start gap-2">
           <div
             className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
@@ -67,11 +68,10 @@ export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
             )}
           </div>
           <div
-            className="px-3 py-2 rounded-2xl rounded-tl-sm text-xs leading-relaxed max-w-[80%] border"
+            className="px-3 py-2 rounded-2xl rounded-tl-sm text-xs leading-relaxed max-w-[80%] border text-[#374151]"
             style={{
               backgroundColor: secondaryColor + "20",
               borderColor: secondaryColor + "40",
-              color: "#374151",
             }}
           >
             {welcomeMessage}
@@ -89,9 +89,9 @@ export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
       </div>
 
       {/* Input */}
-      <div className="px-3 py-2.5 bg-white dark:bg-[#1C2347] border-t border-gray-100 dark:border-white/5 flex items-center gap-2">
-        <div className="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full px-3 py-1.5">
-          <p className="text-[11px] text-gray-400 dark:text-white/30">Escribe un mensaje...</p>
+      <div className="px-3 py-2.5 bg-white border-t border-gray-100 flex items-center gap-2">
+        <div className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5">
+          <p className="text-[11px] text-gray-400">Escribe un mensaje...</p>
         </div>
         <button
           className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"

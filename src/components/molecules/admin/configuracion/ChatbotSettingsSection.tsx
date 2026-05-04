@@ -23,7 +23,8 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
     <button
       onClick={onChange}
       className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none ${
-        checked ? "bg-blue-600" : "bg-gray-300 dark:bg-white/20"
+        
+        checked ? "bg-[#6DE1E3] dark:bg-[#6DE1E3]" : "bg-gray-300 dark:bg-white/20"
       }`}
     >
       <span
@@ -254,7 +255,8 @@ export default function ChatbotSettingsSection({
                   <div className="flex items-center gap-4">
                     <div
                       className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-md"
-                      style={{ backgroundColor: config.primaryColor }}
+                     
+                      style={{ backgroundColor: config.primaryColor || "#6DE1E3" }}
                     >
                       {config.iconPreview ? (
                         <img src={getImg(config.iconPreview)} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
@@ -379,7 +381,11 @@ export default function ChatbotSettingsSection({
             <button
               onClick={onSave}
               disabled={isSaving || isLoading}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors shadow-sm"
+          
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl 
+              bg-[#203565] hover:bg-[#162548] text-white 
+              dark:bg-white dark:text-[#203565] dark:hover:bg-white/90
+              disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
             >
               <Save className="h-4 w-4" />
               {isSaving ? "Guardando..." : "Guardar cambios"}
