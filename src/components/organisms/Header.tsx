@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import Logo from "@/components/atoms/Logo";
-import NavMenu from "@/components/molecules/header/NavMenu";
 import UserSection from "@/components/molecules/header/UserSection";
 import { useScroll } from "@/hooks/useScroll";
 import NavMenuDesktop from "../molecules/header/NavMenuDesktop";
+import { useBrandLogo } from "@/hooks/useBrandLogo";
 
 export default function Header() {
   const scrolled = useScroll(80);
+  const { logoLight, logoDark, companyName } = useBrandLogo();
   return (
     <>
       <header
@@ -18,7 +19,7 @@ export default function Header() {
         {/*<div className="flex flex-col items-center shrink-0">*/}
 
           <Link href="/" className="shrink-0" aria-label="Ir a la página de inicio">
-            <Logo src={scrolled ? "/logo.svg" : "/logo-white.png"} size="xl" alt="Yuntas Publicidad"/>
+            <Logo src={scrolled ? logoLight : logoDark} size="xl" alt={companyName} />
           </Link>
         {/*</div>*/}
 
