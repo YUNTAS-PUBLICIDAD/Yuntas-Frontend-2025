@@ -8,11 +8,13 @@ import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
 import { useAuth } from '@/hooks/useAuth';
 import { HiEye, HiEyeOff, HiArrowLeft } from "react-icons/hi";
+import { useBrandLogo } from '@/hooks/useBrandLogo';
 
 export default function FormSection() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const { logoDark, companyName } = useBrandLogo();
 
     const { login, isLoading, error } = useAuth();
 
@@ -35,7 +37,7 @@ export default function FormSection() {
         ">
             {/* Logo */}
             <div className="flex flex-col items-center w-44">
-                <Logo src="/logo.svg" size="xl" alt="Yuntas Publicidad" />
+                <Logo src={logoDark} size="xl" alt={companyName} />
             </div>
 
             {/* Título */}
