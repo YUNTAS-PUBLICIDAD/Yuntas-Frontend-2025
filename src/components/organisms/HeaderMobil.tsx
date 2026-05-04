@@ -71,7 +71,7 @@ const HeaderMobil = () => {
 
   const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#04061a]" : "bg-transparent text-white shadow-none";
 
-  const adminBg = isAdminPath && !isScrolled ? "dark:bg-[#203565]" : "";
+  const adminBg = isAdminPath ? isScrolled ? "dark:bg-[#151A3D]" : "dark:bg-[#151A3D]" : "";
 
   const iconColor = isAdminPath ? "text-[#04061a]" : isScrolled ? "text-[#04061a]" : "text-white";
 
@@ -121,7 +121,7 @@ const HeaderMobil = () => {
 
           bg-white text-[#04061a]
           dark:bg-gradient-to-b
-          dark:from-[#04061a] dark:via-[#05051a] dark:to-[#0b0b1f]
+          dark:from-[#151A31] dark:via-[#151A31] dark:to-[#060B21]
           dark:text-white
         `}
       >
