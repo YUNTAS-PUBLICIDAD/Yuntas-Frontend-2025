@@ -236,7 +236,7 @@ export default function AppearanceSettingsSection({
             <Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Apariencia</h2>
+            <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">General</h2>
             <p className="mt-0.5 text-xs text-gray-400 dark:text-white/40">Personaliza la identidad visual de tu empresa</p>
           </div>
         </div>
@@ -321,7 +321,10 @@ export default function AppearanceSettingsSection({
             <button
               onClick={handleSave}
               disabled={isSaving || isLoading}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#203565] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#162548] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl 
+              bg-[#203565] hover:bg-[#162548] text-white 
+              dark:bg-white dark:text-[#203565] dark:hover:bg-white/90
+              disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
             >
               <Save className="h-4 w-4" />
               {isSaving ? "Guardando..." : "Guardar cambios"}

@@ -7,6 +7,7 @@ import Loader from "@/components/atoms/Loader";
 import Link from "next/link";
 import Logo from "@/components/atoms/Logo";
 import { LogOut } from "lucide-react";
+import { useBrandLogo } from "@/hooks/useBrandLogo";
 import {
   BellRing,
   ClipboardList,
@@ -47,6 +48,7 @@ const navItems: NavItem[] = [
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
   const { logout, isLoading } = useAuth();
   const navRef = useRef<HTMLElement | null>(null);
+  const { logoLight, logoDark, companyName } = useBrandLogo();
   const [showTopFade, setShowTopFade] = useState(false);
   const [showBottomFade, setShowBottomFade] = useState(true);
 
@@ -80,7 +82,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         {/* Logo */}
         <div className="flex flex-col items-center gap-1 py-4 px-4 border-b border-gray-200 dark:border-white/10">
           <Link href="/">
-            <Logo src="/logo.svg" darkSrc="/logo-white.png" size="lg" alt="Yuntas Publicidad" />
+            <Logo src={logoLight} darkSrc={logoDark} size="lg" alt={companyName} />
           </Link>
           <span className="text-sm font-semibold tracking-widest uppercase text-[#5A6B93] dark:text-white/70">
             Administración
