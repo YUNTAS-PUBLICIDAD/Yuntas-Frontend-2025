@@ -1,5 +1,7 @@
+import toast from "react-hot-toast";
 import { TemplateHeader } from "./TemplateHeader";
 import { VariantsPanel } from "./VariantsPanel";
+import { useRouter } from "next/navigation";
 
 export function TemplateEditor({ editor }: any) {
   const {
@@ -8,6 +10,18 @@ export function TemplateEditor({ editor }: any) {
     removeProductAsset, uploadProductAsset,
   } = editor;
 
+  const router = useRouter();
+
+  const handleSave = async () => {
+    try {
+     await save();
+     toast.success("Template guardado correctamente");
+     router.push("/admin/templates");
+    }catch (e){
+      console.error(e);
+      toast.error("Error al guardar template")
+    }
+  }
   if (loading) {
     return (
       <div className="flex items-center gap-2 py-12 justify-center text-sm text-gray-400">
@@ -71,7 +85,8 @@ export function TemplateEditor({ editor }: any) {
           </div>
 
           <button
-            onClick={save}
+            // onClick={save}
+            onClick={handleSave}
             disabled={saving}
             className="
               w-full sm:w-auto

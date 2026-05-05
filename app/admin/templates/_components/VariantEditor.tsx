@@ -70,12 +70,23 @@ function ImagePreview({ src, onReplace, onRemove }: { src: string; onReplace: (e
 
 export function VariantEditor({
   variant, onChange, onDelete, onUpload,
-  onRemoveAsset, onUploadProduct, onRemoveProductAsset, onSelectProduct
+  onRemoveAsset, onUploadProduct, onRemoveProductAsset, onSelectProduct, variables, loading, preview
 }: any) {
   const { productos, getProductos } = useProductos();
   const isProductContext = variant.context === "PRODUCTO";
   const image = variant.assets?.find((a: any) => a.key === "image");
   const [productId, setProductId] = useState<number | null>(null);
+
+  const insertVariable = (v:string) => {
+    const tag = `{{${v}}}`;
+    onChange({
+      content: (variant.content || "") + tag
+    });
+  };
+
+  const suggested = variant.context === "PRODUCTO" ? ["producto_nombre", "descripcion"] : ["nombre", "email"];
+
+  const restVariables = variables.filter(v => !suggested.includes(v));
 
   useEffect(() => {
     if (isProductContext) getProductos(50);
@@ -176,7 +187,7 @@ export function VariantEditor({
             onChange={(e) => onChange({ content: e.target.value })}
             placeholder="Hola {{nombre}}, bienvenido…"
             className="
-              w-full px-3 py-2.5 text-sm rounded-lg resize-none min-h-[120px]
+              w-full px-3 py-2.5 text-sm rounded-lg resize-none min-h-[200px]
               border border-gray-200 dark:border-white/10
               bg-white dark:bg-transparent
               text-gray-900 dark:text-white
@@ -186,14 +197,67 @@ export function VariantEditor({
             "
           />
         )}
+
+        {/* 🔥 AQUÍ VA TU BLOQUE DE VARIABLES */}
+         <div className="mt-3">
+           <FieldLabel>Variables</FieldLabel>
+
+           {loading ? (
+             <p className="text-xs text-gray-400">Cargando variables…</p>
+           ) : (
+             <>
+               <div className="mb-2">
+                 <p className="text-[10px] text-gray-400 mb-1">Sugeridas</p>
+                 <div className="flex flex-wrap gap-2">
+                   {suggested.map(v => (
+                     <button
+                       key={v}
+                       onClick={() => insertVariable(v)}
+                       className="text-xs px-2 py-1 rounded-md border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20 transition"
+                     >
+                       {`{{${v}}}`}
+                     </button>
+                   ))}
+                 </div>
+               </div>
+
+               <div>
+                 <p className="text-[10px] text-gray-400 mb-1">Todas</p>
+                 <div className="flex flex-wrap gap-2">
+                   {restVariables.map(v => (
+                     <button
+                       key={v}
+                       onClick={() => insertVariable(v)}
+                       className="text-xs px-2 py-1 rounded-md border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/20 transition"
+                     >
+                       {`{{${v}}}`}
+                     </button>
+                   ))}
+                 </div>
+               </div>
+
+               <div className="mt-2 text-[10px] text-gray-400">
+                 {variables.slice(0, 3).map(v => (
+                   <span key={v} className="mr-2">
+                     {`{{${v}}}`} = {preview[v]}
+                   </span>
+                 ))}
+               </div>
+             </>
+           )}
+         </div>
       </div>
 
       {/* CTA row */}
-      {/*<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {
+        variant.channel === "email" && (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <FieldLabel>Botón CTA</FieldLabel>
           <input
-            placeholder="Texto del botón"
+          value={variant.ctaText ?? ""}
+          onChange={(e) => onChange({ctaText: e.target.value})}
+            placeholder="Ej: Ver producto"
             className="
               w-full h-9 px-3 text-sm rounded-lg
               border border-gray-200 dark:border-white/10
@@ -206,6 +270,8 @@ export function VariantEditor({
         <div>
           <FieldLabel>URL</FieldLabel>
           <input
+          value={variant.ctaUrl ?? ""}
+          onChange={(e) => onChange({ctaUrl: e.target.value})}
             placeholder="https://…"
             className="
               w-full h-9 px-3 text-sm rounded-lg
@@ -216,7 +282,9 @@ export function VariantEditor({
             "
           />
         </div>
-      </div>*/}
+      </div>
+        )
+      }
 
       {
         !isProductContext && (

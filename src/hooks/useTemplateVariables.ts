@@ -11,10 +11,15 @@ export const useTemplateVariables =  () => {
 
     const res = await getTemplateVariablesService();
 
-    if(res.success && res.data){
-      setVariables(res.data.variables);
-      setPreview(res.data.preview)
-    }
+    // if(res.success && res.data){
+    //   console.log("VARIABLES API:", res);
+    //   setVariables(res.variables || []);
+    //   setPreview(res.preview || [])
+    // }
+
+    console.log("VARIABLES API:", res);
+    setVariables(res?.variables ?? []);
+    setPreview(res?.preview ?? {});
 
     setLoading(false)
   }, []);

@@ -1,7 +1,8 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { VariantEditor } from "./VariantEditor";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { useTemplateVariables } from "@/hooks/useTemplateVariables";
 
 const CHANNELS = [
   { id: "whatsapp", label: "WhatsApp", dot: "bg-[#25D366]" },
@@ -10,9 +11,18 @@ const CHANNELS = [
 
 type Channel = typeof CHANNELS[number]["id"];
 
+const renderPreview = (content: string, preview: Record<string,string>) => {
+  if(!content) return content;
+
+  return content.replace(/{{(.*?)}}/g, (_, key) => {
+    return preview[key.trim()] ?? `{{${key}}}`;
+  });
+}
+
 // ─── Preview: WhatsApp ───────────────────────────────────────
-function WhatsAppPreview({ variant,productId }: { variant: any; productId?: number | null }) {
-  const body = variant?.content ?? "";
+function WhatsAppPreview({ variant,productId, preview }: { variant: any; productId?: number | null, preview: any }) {
+  // const body = variant?.content ?? "";
+  const body = renderPreview(variant?.content ?? "", preview);
   const cta  = variant?.ctaText ?? "Ver más";
   // const image = variant?.assets?.[0]?.path;
   // const image = variant?.context === "PRODUCTO" ? variant?.productAssets?.[0]?.path : variant?.assets?.[0]?.path;
@@ -56,11 +66,11 @@ function WhatsAppPreview({ variant,productId }: { variant: any; productId?: numb
             {body || <span className="text-gray-400 italic">Sin contenido…</span>}
           </p>
          {/* CTA */}
-          <div className="mt-2">
+          {/*<div className="mt-2">
         <button className="w-[calc(100%-16px)] mx-2 mb-2.5 bg-[#25D366] text-white text-[11px] font-medium py-2 rounded-lg">
         {cta}
         </button>
-          </div>
+          </div>*/}
 
           <p className="text-[9px] text-gray-400 text-right mt-1.5">10:34 AM ✓✓</p>
         </div>
@@ -73,7 +83,7 @@ function WhatsAppPreview({ variant,productId }: { variant: any; productId?: numb
 }
 
 // ─── Preview: Email ──────────────────────────────────────────
-function EmailPreview({ variant, productId }: { variant: any; productId?: number | null }) {
+function EmailPreview({ variant, productId, preview }: { variant: any; productId?: number | null, preview: any }) {
   const subject = variant?.subject ?? "(sin asunto)";
   const cta     = variant?.ctaText ?? "Ver más";
   // const image = variant?.assets?.[0]?.path;
@@ -81,6 +91,9 @@ function EmailPreview({ variant, productId }: { variant: any; productId?: number
   const image = variant?.context === "PRODUCTO"
     ? variant?.productAssets?.find(a => a.product_id === productId)?.path
     : variant?.assets?.[0]?.path;
+  const raw = variant?.content ?? "";
+
+  const body = renderPreview(raw, preview);
 
   return (
     <div className="w-full flex flex-col h-[520px] lg:h-[600px] max-w-[420px] mx-auto rounded-lg overflow-hidden border border-gray-200 bg-white" style={{fontFamily:"Arial,sans-serif"}}>
@@ -117,7 +130,7 @@ function EmailPreview({ variant, productId }: { variant: any; productId?: number
         {/*{body || <span className="text-gray-300 italic">Sin contenido…</span>}*/}
         {
           variant?.content ? (
-            <div className="prose prose-headings:font-semibold prose-h1:text-xl prose-h2:text-lg prose-h3:text-base  max-w-none" dangerouslySetInnerHTML={{__html: variant.content}}></div>
+            <div className="prose prose-headings:font-semibold prose-h1:text-xl prose-h2:text-lg prose-h3:text-base  max-w-none" dangerouslySetInnerHTML={{__html: body}}></div>
           ) : (
             <span className="text-gray-300 italic">
               Sin contenido...
@@ -126,7 +139,15 @@ function EmailPreview({ variant, productId }: { variant: any; productId?: number
         }
       </div>
       <div className="px-3.5 pb-3">
-        <div className="bg-gray-900 text-white text-[11px] font-semibold text-center py-2 rounded-md">{cta}</div>
+        {variant?.ctaUrl && (
+          <a
+            href={variant.ctaUrl}
+            target="_blank"
+            className="block text-center bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-md"
+          >
+            {cta}
+          </a>
+        )}
       </div>
       </div>
 
@@ -150,6 +171,11 @@ export function VariantsPanel({
   const [active, setActive]   = useState<Channel>("whatsapp");
   const [prevTab, setPrevTab] = useState<"whatsapp" | "email">("whatsapp");
   const [selectedProductId, setSelectedProductId]  = useState<number | null>(null)
+  const {variables, preview, getVariables, loading} = useTemplateVariables();
+
+  useEffect(() => {
+   getVariables();
+  }, [])
 
   const current = useMemo(
     () => variants.find((v: any) => v.channel === active),
@@ -235,6 +261,9 @@ export function VariantsPanel({
               onUploadProduct={(productId: number, file: File) => onUploadProduct(active, productId, file)}
               onRemoveProductAsset={onRemoveProductAsset}
               onSelectProduct={setSelectedProductId}
+              variables={variables}
+              preview={preview}
+              loading={loading}
             />
           )}
         </div>
@@ -275,9 +304,9 @@ export function VariantsPanel({
               </p>
             </div>
           ) : prevTab === "whatsapp" ? (
-            <WhatsAppPreview variant={previewVariant} productId={selectedProductId} />
+            <WhatsAppPreview variant={previewVariant} productId={selectedProductId} preview={preview} />
           ) : (
-            <EmailPreview variant={previewVariant} productId={selectedProductId} />
+            <EmailPreview variant={previewVariant} productId={selectedProductId} preview={preview}/>
           )}
         </div>
 

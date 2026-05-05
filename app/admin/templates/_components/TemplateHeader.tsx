@@ -13,7 +13,7 @@ export function TemplateHeader({ name, active, onChange }: Props) {
         <input
           value={name}
           onChange={(e) => onChange({ name: e.target.value })}
-          placeholder="Ej: Bienvenida, Promo Julio…"
+          placeholder="Ej: Bienvenida, Producto"
           className="
             h-9 px-3 text-sm rounded-lg w-full
             border border-gray-200 dark:border-white/10
