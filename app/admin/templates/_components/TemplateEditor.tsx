@@ -77,12 +77,12 @@ export function TemplateEditor({ editor }: any) {
         </div>
 
         {/* FOOTER */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between px-5 py-4 border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5">
+        <div className="flex justify-end flex-col sm:flex-row gap-3 sm:items-center px-5 py-4 border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5">
 
-          <div className="text-xs text-gray-400 flex items-center gap-2">
+          {/* <div className="text-xs text-gray-400 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
             Cambios sin guardar
-          </div>
+          </div> */}
 
           <button
             // onClick={save}
