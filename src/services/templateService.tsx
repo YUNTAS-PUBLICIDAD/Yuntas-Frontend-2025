@@ -70,3 +70,10 @@ export const deleteProductTemplateImageService = async (payload: {
 
   return data;
 };
+
+export const getTemplateVariablesService = async () => {
+  const {data} = await api.get(
+    API_ENDPOINTS.ADMIN.TEMPLATES.GET_VARIABLES
+  );
+  return data;
+}
