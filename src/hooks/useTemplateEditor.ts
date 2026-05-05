@@ -47,6 +47,8 @@ export const useTemplateEditor = (templateId?: number) => {
           variants: data.variants.map((v: any) => ({
             ...v,
             productAssets: v.product_assets || [],
+            ctaText: v.cta_text,
+            ctaUrl: v.cta_url
           })),
         });
       } finally {
@@ -118,7 +120,9 @@ export const useTemplateEditor = (templateId?: number) => {
         ...template,
         variants: template.variants.map(v => ({
           ...v,
-          product_assets: v.productAssets || []
+          product_assets: v.productAssets || [],
+          cta_text: v.ctaText || null,
+          cta_url: v.ctaUrl || null
         })),
       };
       console.log("🚀 TEMPLATE RAW:", template);
@@ -135,6 +139,8 @@ export const useTemplateEditor = (templateId?: number) => {
           variants: res.variants.map((v: any) => ({
             ...v,
             productAssets: v.product_assets || [],
+            ctaText: v.cta_text,
+            ctaUrl: v.cta_url
           }))
         })
         return res;
@@ -148,6 +154,8 @@ export const useTemplateEditor = (templateId?: number) => {
            variants: res.variants.map((v: any) => ({
              ...v,
              productAssets: v.product_assets || [], // 🔥 FIX
+             ctaText: v.cta_text,
+             ctaUrl: v.cta_url
            })),
          });
       return res;

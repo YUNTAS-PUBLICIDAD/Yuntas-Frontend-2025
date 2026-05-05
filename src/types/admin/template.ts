@@ -24,7 +24,9 @@ export type TemplateVariant = {
   variables: any[]; // luego puedes tipar mejor
   assets: TemplateAsset[];
   active: boolean;
-  productAssets?: ProductAsset[]
+  productAssets?: ProductAsset[];
+  ctaText?: string;
+  ctaUrl?: string;
 };
 
 export type TemplateAsset = {
