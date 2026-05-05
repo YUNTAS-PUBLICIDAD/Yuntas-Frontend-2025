@@ -83,7 +83,7 @@ const HeroSection = () => {
               variant="primary"
               size="lg"
               href="/contacto"
-              className="relative z-20 px-12 py-4 text-xl font-semibold text-white rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 hover:shadow-[0_15px_40px_rgba(109,225,227,0.5)] active:scale-95"
+              className="relative z-20 px-12 py-4 text-xl font-semibold uppercase tracking-[0.06em] text-white rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 hover:shadow-[0_15px_40px_rgba(109,225,227,0.5)] active:scale-95"
             >
               {/*CONTÁCTANOS*/}
                 {/*Cotizar ahora*/}
@@ -100,7 +100,7 @@ const HeroSection = () => {
               {/* Borde degradado */}
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#22c55e] to-[#0ea5b7] opacity-80 group-hover:opacity-100 transition" />
               {/* Contenido */}
-              <span className="relative px-10 py-4 rounded-[10px] bg-[#0a1a3a]/80 backdrop-blur-md text-white font-semibold text-lg flex items-center gap-2 transition-all duration-300 group-hover:bg-[#0a1a3a]">
+              <span className="relative px-10 py-4 rounded-[10px] bg-[#0a1a3a]/80 backdrop-blur-md text-white font-semibold text-lg uppercase tracking-[0.06em] flex items-center gap-2 transition-all duration-300 group-hover:bg-[#0a1a3a]">
                 Cotizar ahora
               </span>
             </a>
