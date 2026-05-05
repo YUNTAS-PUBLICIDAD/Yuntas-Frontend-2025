@@ -3,8 +3,25 @@
 import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const HeroSection = () => {
+  const subtitulos = [
+    "Cuéntanos tu proyecto y te ayudamos a dar el siguiente paso",
+    "Asesoría, cotización y seguimiento en un solo lugar",
+    "Estamos listos para responder tus dudas y necesidades",
+  ];
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % subtitulos.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [subtitulos.length]);
+
   return (
     <section
       className="
@@ -63,6 +80,19 @@ const HeroSection = () => {
             >
               CONTACTO
             </Heading>
+
+            <div className="h-[60px] sm:h-[100px] mt-4 relative w-full flex justify-center items-center">
+              {subtitulos.map((subtitulo, i) => (
+                <p
+                  key={subtitulo}
+                  className={`absolute text-white/90 text-base sm:text-xl md:text-2xl font-light tracking-wide max-w-2xl text-center transition-all duration-500 ease-in-out ${
+                    i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  }`}
+                >
+                  {subtitulo}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
       </div>
