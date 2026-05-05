@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const CHANNEL_LABELS: Record<string, string> = {
   email: "Email",
   sms: "SMS",
@@ -7,7 +9,16 @@ const CHANNEL_LABELS: Record<string, string> = {
 };
 
 export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
-  const list = templates ?? [];
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState<"all" | "active" | "draft">("all");
+
+  const list = (templates ?? []).filter((t: any) => {
+    const matchSearch = t.name?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus = status === "all" ? true : status === "active" ? t.active : !t.active;
+
+    return matchSearch && matchesStatus;
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -46,7 +57,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
       <div className="grid grid-cols-3 gap-3">
         {[
           { label: "Total", value: list.length },
-          { label: "Activos", value: list.filter((t: any) => t.status === 'active').length },
+          { label: "Activos", value: list.filter((t: any) => t.active).length },
           { label: "Variantes", value: list.reduce((acc: number, t: any) => acc + (t.variants?.length ?? 0), 0) },
         ].map(({ label, value }) => (
           <div key={label} className="bg-gray-50 dark:bg-white/5 rounded-lg px-4 py-3">
@@ -67,6 +78,8 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
           </svg>
           <input
             type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nombre…"
             className="
               w-full h-[34px] pl-[34px] pr-3 text-sm
@@ -79,16 +92,16 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
             "
           />
         </div>
-        <select className="
+        <select value={status} onChange={(e) => setStatus(e.target.value as any)} className="
           h-[34px] px-3 text-sm
           border border-gray-200 dark:border-white/10
           rounded-lg bg-white dark:bg-white/5
           text-gray-500 dark:text-gray-400
           focus:outline-none cursor-pointer
         ">
-          <option>Todos los estados</option>
-          <option>Activo</option>
-          <option>Borrador</option>
+          <option value="all">Todos</option>
+          <option value="active">Activo</option>
+          <option value="draft">Borrador</option>
         </select>
       </div>
 
@@ -153,12 +166,15 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
             <div>
               <span className={`
                 inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium
-                ${t.status === 'active'
+                ${t.active
                   ? 'bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400'
                   : 'bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-gray-400 border border-gray-200 dark:border-white/10'
                 }
               `}>
-                {t.status === 'active' ? 'Activo' : 'Borrador'}
+                {/*{t.status === 'active' ? 'Activo' : 'Borrador'}*/}
+                {
+                  t.active ? 'Activo' : 'Borrador'
+                }
               </span>
             </div>
 
