@@ -247,7 +247,7 @@ export default function ChatbotWidget() {
 
   // No renderizar en admin
   if (pathname?.startsWith("/admin")) return null;
-  // Esperar settings antes de mostrar cualquier cosa (evita flash del ícono por defecto)
+ 
   if (!settingsLoaded) return null;
   // No renderizar si está desactivado
   if (!chatbotSettings.enabled) return null;
@@ -265,7 +265,11 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className="absolute bottom-full mb-1 right-16 bg-white border border-gray-200 px-4 py-2.5 rounded-2xl rounded-br-sm shadow-xl z-10 animate-fade-in origin-bottom-right transition-all cursor-pointer"
+              className={`absolute bottom-full mb-1 bg-white border border-gray-200 px-4 py-2.5 shadow-xl z-10 animate-fade-in transition-all cursor-pointer ${
+                chatbotSettings.position === "bottom-left"
+                  ? "left-16 rounded-2xl rounded-bl-sm origin-bottom-left"
+                  : "right-16 rounded-2xl rounded-br-sm origin-bottom-right"
+              }`}
               onClick={handleOpenChat}
             >
               {bubbleState === 'typing' ? (
