@@ -84,6 +84,7 @@ function UploadZone({
   onClear,
   bgClass,
   borderClass = "border-gray-300 hover:border-gray-400",
+  isDark = false,
 }: {
   label: string;
   file: File | null;
@@ -92,37 +93,34 @@ function UploadZone({
   onClear: () => void;
   bgClass: string;
   borderClass?: string;
+  isDark?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [preview, setPreview] = useState<string | null>(existingPreview);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
 
   useEffect(() => {
     if (!file) {
-      setPreview(existingPreview);
+      setLocalPreview(null);
       return;
     }
-
     const url = URL.createObjectURL(file);
-    setPreview(url);
+    setLocalPreview(url);
     return () => URL.revokeObjectURL(url);
-  }, [existingPreview, file]);
+  }, [file]);
+
+  const preview = localPreview ?? existingPreview;
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragging(false);
-
     const dropped = e.dataTransfer.files[0];
-    if (dropped) {
-      onFileChange(dropped);
-    }
+    if (dropped) onFileChange(dropped);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
-    if (selected) {
-      onFileChange(selected);
-    }
+    if (selected) onFileChange(selected);
   };
 
   return (
@@ -131,13 +129,9 @@ function UploadZone({
 
       <div
         onClick={() => inputRef.current?.click()}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
+        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
-        
         className={`relative flex min-h-[140px] cursor-pointer select-none flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200 ${bgClass} ${dragging ? "border-[#203565]" : borderClass}`}
       >
         {preview ? (
@@ -148,8 +142,10 @@ function UploadZone({
           />
         ) : (
           <div className="flex flex-col items-center gap-2 px-4 py-6 text-center">
-            <UploadCloud className="h-7 w-7 text-gray-300 dark:text-white/20" />
-            <p className="text-sm font-medium text-gray-400 dark:text-white/40">Subir imagen</p>
+            <UploadCloud className={`h-7 w-7 ${isDark ? "text-white/30" : "text-gray-400"}`} />
+            <p className={`text-sm font-medium ${isDark ? "text-white/40" : "text-gray-500"}`}>
+              Subir imagen
+            </p>
           </div>
         )}
         <input
@@ -173,7 +169,7 @@ function UploadZone({
         </button>
         <button
           onClick={onClear}
-          disabled={!file}
+          disabled={!file && !existingPreview}
           className="flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-500/20 dark:text-red-400 dark:hover:bg-red-500/5"
         >
           <Trash2 className="h-3.5 w-3.5" />
@@ -197,10 +193,7 @@ export default function AppearanceSettingsSection({
   const [logoDark, setLogoDark] = useState<File | null>(null);
 
   useEffect(() => {
-    if (!general) {
-      return;
-    }
-
+    if (!general) return;
     setCompanyName(general.company_name || "");
     setTheme(general.theme || "light");
     setLogoLight(null);
@@ -269,8 +262,9 @@ export default function AppearanceSettingsSection({
                 existingPreview={general?.logo_light ? getImg(general.logo_light) : null}
                 onFileChange={setLogoLight}
                 onClear={() => setLogoLight(null)}
-                bgClass="!bg-white" 
+                bgClass="!bg-white"
                 borderClass="border-gray-300 hover:border-gray-400"
+                isDark={false}
               />
               <UploadZone
                 label="Logo oscuro (tema oscuro)"
@@ -278,8 +272,9 @@ export default function AppearanceSettingsSection({
                 existingPreview={general?.logo_dark ? getImg(general.logo_dark) : null}
                 onFileChange={setLogoDark}
                 onClear={() => setLogoDark(null)}
-                bgClass="!bg-[#1C2347]" 
+                bgClass="!bg-[#1C2347]"
                 borderClass="border-white/30 hover:border-white/60"
+                isDark={true}
               />
             </div>
           </div>
