@@ -14,7 +14,8 @@ type ImgProps = {
     alt?: string,
     title?: string,
     priority?: boolean,
-    quality?: number
+    quality?: number,
+    onError?: React.ReactEventHandler<HTMLImageElement>
 }
 
 const Img = ({ 
@@ -24,7 +25,8 @@ const Img = ({
     variant = 'normal', 
     classname,
     priority = false,
-    quality = 75
+    quality = 75,
+    onError
 }: ImgProps) => {
     return (
         <Image 
@@ -36,6 +38,7 @@ const Img = ({
             className={`${classname} ${ImgVariant[variant]} object-cover`}
             priority={priority}
             quality={quality}
+            onError={onError}
         />
     )
 }

@@ -16,4 +16,5 @@ export const ADMIN_ITEMS = [
   { label: "CONTACTO", href: "/admin/contacto" },
   { label: "POP-UPS", href: "/admin/popups" },
   { label: "PLANTILLAS", href: "/admin/templates" },
+  { label: "CONFIGURACION", href: "/admin/configuracion" },
 ];
