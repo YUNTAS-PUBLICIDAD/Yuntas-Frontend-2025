@@ -94,14 +94,14 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value as any)} className="
           h-[34px] px-3 text-sm
-          border border-gray-200 dark:border-white/10
-          rounded-lg bg-white dark:bg-white/5
-          text-gray-500 dark:text-gray-400
-          focus:outline-none cursor-pointer
+          border border-gray-200 dark:border-white/20
+          rounded-lg bg-white dark:bg-transparent
+          text-gray-500 dark:text-white
+          focus:outline-none cursor-pointer dark:placeholder:text-gray-400
         ">
-          <option value="all">Todos</option>
-          <option value="active">Activo</option>
-          <option value="draft">Borrador</option>
+          <option value="all" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Todos</option>
+          <option value="active" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Activo</option>
+          <option value="draft" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Borrador</option>
         </select>
       </div>
 
