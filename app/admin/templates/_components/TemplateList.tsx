@@ -24,7 +24,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
     <div className="flex flex-col gap-6">
 
       {/* HEADER */}
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col gap-4 sm:flex-row  sm:justify-between sm:items-start">
         <div>
           <p className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-1">
             Comunicaciones
@@ -39,7 +39,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
         <button
           onClick={onCreate}
           className="
-            inline-flex items-center gap-1.5
+            inline-flex items-center justify-center sm:w-auto gap-1.5
             px-4 h-9 rounded-lg text-sm font-medium
             bg-gray-900 text-white hover:bg-gray-700
             dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100
@@ -54,7 +54,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
       </div>
 
       {/* STATS */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
           { label: "Total", value: list.length },
           { label: "Activos", value: list.filter((t: any) => t.active).length },
@@ -70,7 +70,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
       </div>
 
       {/* SEARCH ROW */}
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="14" height="14" viewBox="0 0 16 16" fill="none">
             <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.2"/>
@@ -94,19 +94,21 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value as any)} className="
           h-[34px] px-3 text-sm
-          border border-gray-200 dark:border-white/10
-          rounded-lg bg-white dark:bg-white/5
-          text-gray-500 dark:text-gray-400
-          focus:outline-none cursor-pointer
+          border border-gray-200 dark:border-white/20
+          rounded-lg bg-white dark:bg-transparent
+          text-gray-500 dark:text-white
+          focus:outline-none cursor-pointer dark:placeholder:text-gray-400
         ">
-          <option value="all">Todos</option>
-          <option value="active">Activo</option>
-          <option value="draft">Borrador</option>
+          <option value="all" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Todos</option>
+          <option value="active" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Activo</option>
+          <option value="draft" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Borrador</option>
         </select>
       </div>
 
       {/* TABLE */}
-      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5">
+      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 ">
+
+        <div className="hidden md:block">
 
         {/* TABLE HEAD */}
         <div className="
@@ -267,6 +269,85 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
             </div>
           </div>
         )}
+
+        </div>
+        {/* MOBILE */}
+        <div className="md:hidden divide-y divide-gray-100 dark:divide-white/5">
+          {list.map((t: any) => (
+            <div
+              key={t.id}
+              className="p-4 flex flex-col gap-3"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {t.name}
+                  </p>
+
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    {CHANNEL_LABELS[t.channel] ?? t.channel ?? "—"}
+                  </p>
+                </div>
+
+                <span
+                  className={`
+                    shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium
+                    ${
+                      t.active
+                        ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                        : "bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-gray-400 border border-gray-200 dark:border-white/10"
+                    }
+                  `}
+                >
+                  {t.active ? "Activo" : "Borrador"}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {t.variants?.length ?? 0}{" "}
+                  {(t.variants?.length ?? 0) === 1 ? "variante" : "variantes"}
+                </p>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    title="Editar"
+                    onClick={() => onEdit(t.id)}
+                    className="
+                      w-8 h-8 flex items-center justify-center rounded-md
+                      border border-gray-200 dark:border-white/10
+                      text-gray-400 hover:text-gray-700 dark:hover:text-white
+                      hover:bg-gray-100 dark:hover:bg-white/10
+                      transition
+                    "
+                  >
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M10.5 2.5l3 3L5 14H2v-3L10.5 2.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+
+                  <button
+                    onClick={() => onDelete(t.id)}
+                    title="Eliminar"
+                    className="
+                      w-8 h-8 flex items-center justify-center rounded-md
+                      border border-gray-200 dark:border-white/10
+                      text-gray-400
+                      hover:text-red-600 dark:hover:text-red-400
+                      hover:bg-red-50 dark:hover:bg-red-500/10
+                      transition
+                    "
+                  >
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 5h10M6 5V3h4v2M5.5 5l.5 8h4l.5-8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   );

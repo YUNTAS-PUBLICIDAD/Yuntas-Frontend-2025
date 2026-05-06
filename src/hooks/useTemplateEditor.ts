@@ -282,25 +282,52 @@ const uploadProductAsset = useCallback(
 //   [template]
 // );
 
-const removeProductAsset = useCallback(
-  (channel: string, productId: number, key: string) => {
-    setTemplate(prev => {
-      const variants = prev.variants.map(v => {
-        if (v.channel !== channel) return v;
+// const removeProductAsset = useCallback(
+//   (channel: string, productId: number, key: string) => {
+//     setTemplate(prev => {
+//       const variants = prev.variants.map(v => {
+//         if (v.channel !== channel) return v;
 
-        return {
-          ...v,
-          productAssets: (v.productAssets || []).filter(
-            a => !(a.product_id === productId && a.key === key)
-          ),
-        };
+//         return {
+//           ...v,
+//           productAssets: (v.productAssets || []).filter(
+//             a => !(a.product_id === productId && a.key === key)
+//           ),
+//         };
+//       });
+
+//       return { ...prev, variants };
+//     });
+//   },
+//   []
+// );
+
+
+const removeProductAsset = useCallback(
+  async (path: string) => {
+    try {
+      await deleteProductTemplateImageService({
+        path
       });
 
-      return { ...prev, variants };
-    });
+      setTemplate(prev => {
+        const variants = prev.variants.map(v => ({
+          ...v,
+          productAssets: (v.productAssets || []).filter(
+            a => a.path !== path
+          ),
+        }));
+
+        return { ...prev, variants };
+      });
+
+    } catch (e) {
+      console.error("Error eliminando product asset", e);
+    }
   },
   []
 );
+
 
   return {
     template,

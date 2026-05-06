@@ -130,8 +130,8 @@ export function VariantEditor({
               transition-colors cursor-pointer
             "
           >
-            <option value="INICIO">Inicio</option>
-            <option value="PRODUCTO">Producto</option>
+            <option value="INICIO" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Inicio</option>
+            <option value="PRODUCTO" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Producto</option>
           </select>
         </div>
         {variant.channel === "email" && (
@@ -329,10 +329,10 @@ export function VariantEditor({
                 focus:outline-none focus:border-gray-400 transition-colors
               "
             >
-              <option value="">Seleccionar producto…</option>
-              {productos.map((p) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
+               <option value="" className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">Seleccionar producto…</option>
+               {productos.map((p) => (
+                 <option key={p.id} value={p.id} className="bg-white dark:bg-[#071024] text-gray-900 dark:text-white">{p.name}</option>
+               ))}
             </select>
           </div>
 
@@ -349,7 +349,7 @@ export function VariantEditor({
                 <ImagePreview
                   src={getImageUrl(productImage.path)}
                   onReplace={handleProductFile}
-                  onRemove={() => onRemoveProductAsset(productId, "image")}
+                  onRemove={() => onRemoveProductAsset(productImage.path)}
                 />
               )}
             </div>
