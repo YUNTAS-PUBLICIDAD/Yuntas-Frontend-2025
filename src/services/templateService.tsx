@@ -59,9 +59,10 @@ export const uploadProductTemplateImageService = async (file:File) => {
 }
 
 export const deleteProductTemplateImageService = async (payload: {
-  product_id: number;
-  variant_id: number;
-  key: string;
+  // product_id: number;
+  // variant_id: number;
+  // key: string;
+  path: string
 }) => {
   const { data } = await api.delete(
     API_ENDPOINTS.ADMIN.TEMPLATES.PRODUCT_ASSETS.DELETE,

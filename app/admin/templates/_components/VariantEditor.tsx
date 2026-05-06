@@ -349,7 +349,7 @@ export function VariantEditor({
                 <ImagePreview
                   src={getImageUrl(productImage.path)}
                   onReplace={handleProductFile}
-                  onRemove={() => onRemoveProductAsset(productId, "image")}
+                  onRemove={() => onRemoveProductAsset(productImage.path)}
                 />
               )}
             </div>
