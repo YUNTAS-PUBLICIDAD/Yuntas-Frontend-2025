@@ -83,6 +83,7 @@ function UploadZone({
   onFileChange,
   onClear,
   bgClass,
+  borderClass = "border-gray-300 hover:border-gray-400",
 }: {
   label: string;
   file: File | null;
@@ -90,6 +91,7 @@ function UploadZone({
   onFileChange: (file: File) => void;
   onClear: () => void;
   bgClass: string;
+  borderClass?: string;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -135,7 +137,8 @@ function UploadZone({
         }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
-        className={`relative flex min-h-[140px] cursor-pointer select-none flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200 ${bgClass} ${dragging ? "border-[#203565] dark:border-white/40" : "border-gray-200 hover:border-[#203565] dark:border-white/10 dark:hover:border-white/30"}`}
+        
+        className={`relative flex min-h-[140px] cursor-pointer select-none flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200 ${bgClass} ${dragging ? "border-[#203565]" : borderClass}`}
       >
         {preview ? (
           <img
@@ -266,7 +269,8 @@ export default function AppearanceSettingsSection({
                 existingPreview={general?.logo_light ? getImg(general.logo_light) : null}
                 onFileChange={setLogoLight}
                 onClear={() => setLogoLight(null)}
-                bgClass="bg-gray-50 dark:bg-white/5"
+                bgClass="!bg-white" 
+                borderClass="border-gray-300 hover:border-gray-400"
               />
               <UploadZone
                 label="Logo oscuro (tema oscuro)"
@@ -274,7 +278,8 @@ export default function AppearanceSettingsSection({
                 existingPreview={general?.logo_dark ? getImg(general.logo_dark) : null}
                 onFileChange={setLogoDark}
                 onClear={() => setLogoDark(null)}
-                bgClass="bg-[#0D1030]/5 dark:bg-[#0D1030]/40"
+                bgClass="!bg-[#1C2347]" 
+                borderClass="border-white/30 hover:border-white/60"
               />
             </div>
           </div>
