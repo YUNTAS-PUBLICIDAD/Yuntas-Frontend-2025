@@ -272,6 +272,16 @@
   .animate-bot-life {
     animation: botLifeOrganic 4s ease-in-out infinite;
   }
+  @keyframes panHorizontal {
+    0% { transform: translateX(-4%) scale(1.15); }
+    100% { transform: translateX(4%) scale(1.15); }
+  }
+
+  .animate-pan-horizontal {
+    animation: panHorizontal 10s ease-in-out infinite alternate;
+    transform-origin: center;
+    will-change: transform;
+  }
   @keyframes revealSmooth {
       0% {
           opacity: 0;
