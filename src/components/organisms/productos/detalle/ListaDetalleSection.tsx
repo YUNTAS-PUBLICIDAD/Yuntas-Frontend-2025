@@ -1,38 +1,69 @@
 import InfoCard from "@/components/molecules/InfoCard";
 import Text from "@/components/atoms/Text";
 import SectionImage from "@/components/atoms/SectionImage";
+import { MdSettings, MdStar } from "react-icons/md";
+
 type ListaDetalleSectionProps = {
 	text: string;
 	listItems: string[];
 	imageSrc: string;
-    imageTitle: string;
-    imageAlt: string;
+	imageTitle: string;
+	imageAlt: string;
 	reverse?: boolean;
 };
 
 export default function ListaDetalleSection({ text, listItems, imageSrc, imageTitle, imageAlt, reverse = false }: ListaDetalleSectionProps) {
-    return (
-        <section className="w-full py-12 px-0 md:px-24 bg-white">
-            <div className={`flex flex-row items-stretch md:items-center justify-between gap-2 md:gap-24 ${reverse ? 'flex-row-reverse' : ''}`}>
-                <div className="flex flex-col gap-4 md:gap-8 w-[55%] md:w-[40%] justify-center px-4 md:px-0">
-                    <Text variant="h2" color="text-[#203565]" className="font-bold mb-4 md:mb-12">{text}</Text>
-                    {listItems.map((item, index) => (
-                        <InfoCard
-                            key={index}
-                            text={item}
-                            className="w-full md:py-4 md:px-6 py-2 px-2"
-                        />
-                    ))}
-                </div>
-                <div className={`w-[45%] md:w-[60%] flex ${reverse ? 'justify-start' : 'justify-end'} md:justify-center items-center`}>
-                    <SectionImage
-                        src={imageSrc}
-                        alt={imageAlt}
-                        title={imageTitle}
-                        className={`aspect-square max-h-[18rem] md:min-h-0 md:max-w-[46rem] md:max-h-[38rem] object-cover md:aspect-square ${reverse ? 'rounded-r-3xl md:rounded-3xl' : 'rounded-l-3xl md:rounded-3xl'}`}
-                    />
-                </div>
-            </div>
-        </section>
-    )
+	const isBenefit = reverse;
+
+	return (
+		<section className="w-full py-20 md:py-32 bg-gradient-to-b from-[#F8FBFC] to-white relative overflow-hidden">
+			<div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#23C1DE]/8 rounded-full blur-3xl pointer-events-none" />
+			<div className="absolute bottom-40 left-0 w-[400px] h-[400px] bg-[#203565]/6 rounded-full blur-3xl pointer-events-none" />
+
+			<div className="container mx-auto px-4 md:px-8 relative z-10">
+				<div className={`flex flex-col ${reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-start gap-12 lg:gap-20`}>
+					<div className="flex-1 w-full">
+						<div className="flex items-center gap-4 mb-8">
+							<div className="w-16 h-16 rounded-2xl bg-[#23C1DE]/20 flex items-center justify-center shadow-md">
+								{isBenefit ? (
+									<MdStar className="text-3xl text-[#23C1DE]" />
+								) : (
+									<MdSettings className="text-3xl text-[#23C1DE]" />
+								)}
+							</div>
+							<div>
+								{isBenefit ? (
+								<span className="text-sm uppercase tracking-[0.25em] text-[#23C1DE] font-bold">Ventajas</span>
+							) : (
+								<span className="text-sm uppercase tracking-[0.25em] text-[#23C1DE] font-bold">Características</span>
+							)}
+								<Text variant="h2" color="text-[#203565]" className="font-bold">{text}</Text>
+							</div>
+						</div>
+
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							{listItems.map((item, index) => (
+								<InfoCard
+									key={isBenefit ? `benefit-${index}` : `spec-${index}`}
+									text={item}
+									index={index}
+									variant="default"
+									className="w-full"
+								/>
+							))}
+						</div>
+					</div>
+
+					<div className="flex-shrink-0 w-full lg:w-[45%]">
+						<SectionImage
+							src={imageSrc}
+							alt={imageAlt}
+							title={imageTitle}
+							className="w-full max-h-[500px] rounded-2xl shadow-xl"
+						/>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
 }
