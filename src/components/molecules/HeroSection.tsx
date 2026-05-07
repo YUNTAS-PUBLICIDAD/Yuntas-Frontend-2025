@@ -1,6 +1,5 @@
 import React from 'react'
 import Heading from '../atoms/Heading'
-import DividerLine from '../atoms/DividerLine';
 import Image from 'next/image';
 
 const posicionesText = {
@@ -23,7 +22,7 @@ const HeroSection = ({ url, text, position = "medio", imageTitle, imageAlt }: He
       className={`relative w-full h-[80vh] md:h-screen flex flex-col ${posicionesText[position]}
       overflow-hidden pt-24 text-center md:pt-24`}
     >
-      <Image src={url} alt={imageAlt || text} title={imageTitle} fill priority sizes='100vw' className='object-cover object-center'/>
+      <Image src={url} alt={imageAlt || text} title={imageTitle} fill priority sizes='100vw' className='object-cover object-center animate-pan-horizontal will-change-transform'/>
       {/*// {imageAlt && <img src={url} alt={imageAlt} title={imageTitle} className="sr-only" aria-hidden="false" />}*/}
 
       {/*Overlay*/}
@@ -41,12 +40,6 @@ const HeroSection = ({ url, text, position = "medio", imageTitle, imageAlt }: He
             </Heading>
         </div>
       </div>
-
-      {/*Divider*/}
-      <div className="absolute bottom-0 left-0 w-full z-20">
-        <DividerLine />
-      </div>
-
     </section>
   );
 };
