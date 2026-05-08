@@ -34,6 +34,7 @@ export default function ConfiguracionForm() {
     showAfterSeconds: "3",
     closeAfterSeconds: "300",
     iconPreview: null,
+    iconPreviewUrl: null,
     iconFile: null,
   });
 
@@ -57,6 +58,7 @@ export default function ConfiguracionForm() {
           ? "never"
           : String(chatbot.auto_close_seconds),
       iconPreview: chatbot.icon || null,
+      iconPreviewUrl: null,
       iconFile: null,
     }));
   }, [chatbot]);
@@ -64,8 +66,27 @@ export default function ConfiguracionForm() {
   const handleIconUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setConfig((c) => ({ ...c, iconPreview: URL.createObjectURL(file), iconFile: file }));
+
+    setConfig((current) => {
+      if (current.iconPreviewUrl) {
+        URL.revokeObjectURL(current.iconPreviewUrl);
+      }
+
+      return {
+        ...current,
+        iconPreviewUrl: URL.createObjectURL(file),
+        iconFile: file,
+      };
+    });
   };
+
+  useEffect(() => {
+    return () => {
+      if (config.iconPreviewUrl) {
+        URL.revokeObjectURL(config.iconPreviewUrl);
+      }
+    };
+  }, [config.iconPreviewUrl]);
 
   const handleSave = async () => {
     if (!HEX_COLOR_REGEX.test(config.primaryColor)) {

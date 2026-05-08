@@ -9,5 +9,6 @@ export interface ChatbotSettingsFormConfig {
   showAfterSeconds: string;
   closeAfterSeconds: string;
   iconPreview: string | null;
+  iconPreviewUrl: string | null;
   iconFile: File | null;
 }
