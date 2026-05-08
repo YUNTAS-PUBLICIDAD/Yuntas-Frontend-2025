@@ -72,9 +72,7 @@ function getImageUrl(url?: string) {
 function getChatbotIconUrl(icon?: string | null): string | null {
   if (!icon) return null;
   if (icon.startsWith("http")) return icon;
-  
-  const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
-  return `${backendBase}${icon.startsWith("/") ? "" : "/"}${icon}`;
+  return `${BASE_URL}${icon.startsWith("/") ? "" : "/"}${icon}`;
 }
 
 export default function ChatbotWidget() {
@@ -95,7 +93,7 @@ export default function ChatbotWidget() {
   const sessionId = useRef<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  
+
   // Settings desde contexto global
   const { chatbot: settings, isLoading: settingsLoading } = useSettingsContext();
   const settingsLoaded = !settingsLoading;
@@ -122,7 +120,7 @@ export default function ChatbotWidget() {
       setHasOpenedOnce(true);
     } else {
       const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
-      setMessages([{ role: "bot", text: welcomeText, type: "quick" }]);
+      setMessages([{ role: "bot", text: welcomeText, type: "text" }]);
     }
   }, [settingsLoaded, chatbotSettings.welcome_message]);
 
@@ -131,7 +129,7 @@ export default function ChatbotWidget() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
-  // Burbuja llamativa 
+  // Burbuja llamativa
   useEffect(() => {
     if (!settingsLoaded) return;
     if (!chatbotSettings.enabled) return;
@@ -179,13 +177,13 @@ export default function ChatbotWidget() {
     }
   }
 
-  async function sendMessage(text?: string) {
+  async function sendMessage(text?: string, visibleText?: string) {
     const messageText = text ?? input;
     if (!messageText.trim()) return;
 
     resetAutoCloseTimer();
 
-    const userMessage: ChatMessage = { role: "user", text: messageText };
+    const userMessage: ChatMessage = { role: "user", text: visibleText ?? messageText };
     setMessages((prev) => {
       const updated = [...prev, userMessage];
       sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
@@ -209,18 +207,38 @@ export default function ChatbotWidget() {
       if (latestMessages && latestMessages.length > 0) {
         const botMessages = latestMessages.filter((m: any) => m.sender === 'bot' || m.role === 'bot');
         if (botMessages.length > 0) {
-          const backendBotMsg = botMessages[botMessages.length - 1];
-          const botMessage: ChatMessage = {
+          // const backendBotMsg = botMessages[botMessages.length - 1];
+          // const botMessage: ChatMessage = {
+          //   role: "bot",
+          //   text: backendBotMsg.message_text || backendBotMsg.text,
+          //   type: backendBotMsg.metadata?.type || backendBotMsg.type,
+          //   products: backendBotMsg.metadata?.products || backendBotMsg.products,
+          //   blogs: backendBotMsg.metadata?.blogs || backendBotMsg.blogs,
+          //   url: backendBotMsg.metadata?.url || backendBotMsg.url,
+          //   whatsapp_url: backendBotMsg.metadata?.whatsapp_url || backendBotMsg.whatsapp_url,
+          // };
+          // setMessages((prev) => {
+          //   const updated = [...prev, botMessage];
+          //   sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
+          //   return updated;
+          // });
+
+          const mappedMessages: ChatMessage[] = botMessages.map((msg: any) => ({
             role: "bot",
-            text: backendBotMsg.message_text || backendBotMsg.text,
-            type: backendBotMsg.metadata?.type || backendBotMsg.type,
-            products: backendBotMsg.metadata?.products || backendBotMsg.products,
-            blogs: backendBotMsg.metadata?.blogs || backendBotMsg.blogs,
-            url: backendBotMsg.metadata?.url || backendBotMsg.url,
-            whatsapp_url: backendBotMsg.metadata?.whatsapp_url || backendBotMsg.whatsapp_url,
-          };
+            text: msg.message_text || msg.text,
+            type: msg.metadata?.type || msg.type || "text",
+            products: msg.metadata?.products || msg.products || [],
+            blogs: msg.metadata?.blogs || msg.blogs || [],
+            options: msg.metadata?.options || msg.options || [],
+            url: msg.metadata?.url || msg.url,
+            whatsapp_url: msg.metadata?.whatsapp_url || msg.whatsapp_url
+          }));
+
           setMessages((prev) => {
-            const updated = [...prev, botMessage];
+            const updated = [
+                ...prev,
+                ...mappedMessages
+            ];
             sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
             return updated;
           });
@@ -234,7 +252,7 @@ export default function ChatbotWidget() {
     sessionStorage.removeItem("chatbot_messages");
     sessionId.current = "";
     const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
-    setMessages([{ role: "bot", text: welcomeText, type: "quick" }]);
+    setMessages([{ role: "bot", text: welcomeText, type: "text" }]);
   };
 
   const handleOpenChat = () => {
@@ -247,7 +265,7 @@ export default function ChatbotWidget() {
 
   // No renderizar en admin
   if (pathname?.startsWith("/admin")) return null;
- 
+
   if (!settingsLoaded) return null;
   // No renderizar si está desactivado
   if (!chatbotSettings.enabled) return null;
@@ -405,6 +423,21 @@ export default function ChatbotWidget() {
                   )}
 
                   {renderCTA(m)}
+                  {
+                    m.type === "options" && m.options && (
+                      <div className='flex flex-wrap gap-2 mt-2'>
+                       {
+                         m.options.map((opt) => (
+                           <button key={opt.id} onClick={() => sendMessage(`__option__:${opt.id}`, opt.label)} className='px-3 py-2 rounded-xl text-xs font-semibold border border-gray-200 bg-white hover:bg-gray-50 transition'>
+                            {
+                              opt.label
+                            }
+                           </button>
+                         ))
+                       }
+                      </div>
+                    )
+                  }
 
                   {m.type === "products" && m.products && (
                     <div className="flex flex-col gap-2 mt-1">

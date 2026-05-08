@@ -1,29 +1,38 @@
 import React from "react";
 import { MdCheck } from "react-icons/md";
-import Icon from "@/components/atoms/Icon";
-import Text from "@/components/atoms/Text";
 
 interface InfoCardProps {
-  text: string;
-  className?: string;
+	text: string;
+	className?: string;
+	index?: number;
+	variant?: "default" | "accent";
 }
 
-const InfoCard: React.FC<InfoCardProps> = ({ text, className = "" }) => (
-  <div
-    className={`flex items-center gap-2 md:gap-6 rounded-lg p-1 md:p-4 w-full max-w-2xl  border-[#6DD0DB/20] shadow-lg ${className} min-h-[80px]`}
-    style={{ background: "#6DD0DB33" }}
-  >
-    <Icon size="lg" bgColor="" className="">
-      <MdCheck className="text-2xl md:text-4xl font-bold" />
-    </Icon>
-    <Text color="text-[#00031E]" variant="body" className="text-4xl font-bold break-words whitespace-pre-line">
-      <div
-            dangerouslySetInnerHTML={{
-              __html: text,
-            }}
-      />
-    </Text>
-  </div>
-);
+const InfoCard: React.FC<InfoCardProps> = ({ text, className = "", index, variant = "default" }) => {
+	return (
+		<div
+			className={`group relative flex items-start gap-4 rounded-2xl p-4 md:p-5 w-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white border border-[#23C1DE]/20 ${className}`}
+			style={{
+				boxShadow: "0 8px 30px rgba(35,193,222,0.1)",
+			}}
+		>
+			<div className="flex-shrink-0 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#23C1DE]/20 text-[#23C1DE] font-bold">
+				{index !== undefined ? (
+					<span className="text-sm md:text-base">{String(index + 1).padStart(2, "0")}</span>
+				) : (
+					<MdCheck className="text-xl md:text-2xl" />
+				)}
+			</div>
+			<div className="flex-1 pt-1">
+				<div
+					className="text-[#00031E] text-base md:text-lg font-medium break-words whitespace-pre-line leading-relaxed"
+					dangerouslySetInnerHTML={{
+						__html: text,
+					}}
+				/>
+			</div>
+		</div>
+	);
+};
 
 export default InfoCard;
