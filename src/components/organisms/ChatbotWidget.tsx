@@ -72,9 +72,7 @@ function getImageUrl(url?: string) {
 function getChatbotIconUrl(icon?: string | null): string | null {
   if (!icon) return null;
   if (icon.startsWith("http")) return icon;
-
-  const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "";
-  return `${backendBase}${icon.startsWith("/") ? "" : "/"}${icon}`;
+  return `${BASE_URL}${icon.startsWith("/") ? "" : "/"}${icon}`;
 }
 
 export default function ChatbotWidget() {
