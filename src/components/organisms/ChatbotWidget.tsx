@@ -313,12 +313,11 @@ export default function ChatbotWidget() {
               // Ícono personalizado
               <div
                 className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg animate-bot-life group-hover:scale-105 transition-transform duration-200"
-                style={{ backgroundColor: primaryColor }}
               >
                 <img
                   src={iconUrl}
                   alt="Abrir chat"
-                  className="w-12 h-12 object-contain rounded-full"
+                  className="object-contain rounded-full"
                 />
               </div>
             ) : (
@@ -355,7 +354,7 @@ export default function ChatbotWidget() {
                       className="w-9 h-9 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: `${primaryColor}33`, border: "2px solid rgba(255,255,255,0.3)" }}
                     >
-                      <img src={iconUrl} alt="bot avatar" className="w-6 h-6 object-contain rounded-full" />
+                      <img src={iconUrl} alt="bot avatar" className="w-8 h-8 object-contain rounded-full" />
                     </div>
                   ) : (
                     <Image alt="bot avatar" fill className="rounded-full object-cover bg-white p-0.5" src="/images/chatbot.webp" />
@@ -392,7 +391,7 @@ export default function ChatbotWidget() {
                         className="w-6 h-6 rounded-full flex items-center justify-center"
                         style={{ backgroundColor: primaryColor }}
                       >
-                        <img src={iconUrl} alt="bot" className="w-4 h-4 object-contain rounded-full" />
+                        <img src={iconUrl} alt="bot" className="object-contain rounded-full" />
                       </div>
                     ) : (
                       <Image alt="bot" fill className="rounded-full object-cover shadow-sm" src="/images/chatbot.webp" />

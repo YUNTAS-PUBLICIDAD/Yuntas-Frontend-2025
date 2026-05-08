@@ -136,6 +136,8 @@ export default function ChatbotSettingsSection({
   fileInputRef,
   onIconUpload,
 }: ChatbotSettingsSectionProps) {
+  const iconSrc = config.iconPreviewUrl ?? (config.iconPreview ? getImg(config.iconPreview) : "");
+
   const positionOptions = [
     { value: "bottom-right", label: "Abajo derecha" },
     { value: "bottom-left", label: "Abajo izquierda" },
@@ -160,10 +162,14 @@ export default function ChatbotSettingsSection({
   const PreviewIcon = (
     <svg
       className="w-4 h-4 text-[#203565] dark:text-white/60"
-      fill="none" viewBox="0 0 24 24"
-      stroke="currentColor" strokeWidth={2}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
     >
-      <path strokeLinecap="round" strokeLinejoin="round"
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
         d="M15 10l4.553-2.069A1 1 0 0121 8.87V15.13a1 1 0 01-1.447.9L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
       />
     </svg>
@@ -257,8 +263,8 @@ export default function ChatbotSettingsSection({
                         className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-md"
                         style={{ backgroundColor: config.primaryColor || "#6DE1E3" }}
                       >
-                        {config.iconPreview ? (
-                          <img src={getImg(config.iconPreview)} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
+                        {iconSrc ? (
+                          <img src={iconSrc} alt="icon" className="w-8 h-8 rounded-xl object-cover" />
                         ) : (
                           <Bot className="w-7 h-7 text-white" />
                         )}
