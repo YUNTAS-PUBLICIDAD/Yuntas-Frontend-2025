@@ -1,6 +1,6 @@
 "use client"
 
-import { MessageSquare, Settings, Trash2, Plus, GripVertical, Link, MessageCircle, ArrowRight } from "lucide-react"
+import { MessageSquare, Settings, Trash2, Plus, GripVertical, Link, MessageCircle, ArrowRight, List } from "lucide-react"
 import { v4 as uuid } from "uuid"
 
 // ─────────────────────────────────────────
@@ -21,6 +21,7 @@ interface NodeEditorProps {
   updateNode: (id: string, patch: any) => void
   deleteNode: (id: string) => void
   addOptionToNode: (nodeId: string) => void
+  categories: any[]
 }
 
 // ─────────────────────────────────────────
@@ -62,7 +63,7 @@ const OPTION_TYPES = [
 // ─────────────────────────────────────────
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────
-export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOptionToNode, startNodeId, setStartNodeId }: NodeEditorProps) {
+export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOptionToNode, startNodeId, setStartNodeId, categories }: NodeEditorProps) {
   if (!node) {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-2 text-gray-400 dark:text-gray-500 p-6">
@@ -110,6 +111,7 @@ export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOpti
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-mono truncate">{node.id}</p>
       </div>
 
+
       <div className={sectionCls}>
         <SectionTitle icon={Settings} label="Inicio del flujo" />
 
@@ -146,6 +148,7 @@ export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOpti
           >
             <option value="message">Mensaje</option>
             <option value="menu">Menú</option>
+            <option value="catalog">Catálogo</option>
             <option value="action">Acción</option>
           </select>
         </div>
@@ -166,7 +169,63 @@ export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOpti
           </p>
         </div>
 
+        {/* ── CATÁLOGO ── */}
+        {dataType === 'catalog' && (
+          <div className={sectionCls}>
+            <SectionTitle
+              icon={List}
+              label="Configuración catálogo"
+            />
+
+            {/*<input
+              value={data.metadata?.category_id || ""}
+              onChange={e =>
+                patch({
+                  metadata: {
+                    ...data.metadata,
+                    category_id: e.target.value
+                  }
+                })
+              }
+              placeholder="ID categoría raíz (opcional)"
+              className={inputCls}
+            />*/}
+
+            <select
+              value={data.metadata?.category_id || ""}
+              onChange={e =>
+                patch({
+                  metadata: {
+                    ...data.metadata,
+                    category_id: e.target.value || null
+                  }
+                })
+              }
+              className={inputCls}
+            >
+              <option value="">
+                Categorías principales
+              </option>
+
+              {categories.map((cat: any) => (
+                <option
+                  key={cat.id}
+                  value={cat.id}
+                >
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+
+            <p className="text-xs text-gray-400">
+              Vacío = categorías principales
+            </p>
+          </div>
+        )}
+
         {/* ── OPCIONES ── */}
+        {
+          dataType !== 'catalog' && (
         <div className={sectionCls}>
           <div className="flex items-center justify-between">
             <SectionTitle icon={GripVertical} label={`Opciones (${options.length})`} />
@@ -292,6 +351,8 @@ export default function NodeEditor({ node,nodes, updateNode, deleteNode, addOpti
             Agregar opción
           </button>
         </div>
+          )
+        }
 
         {/* ── METADATA ── */}
         <div className={sectionCls}>
