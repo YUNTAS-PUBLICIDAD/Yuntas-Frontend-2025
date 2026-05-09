@@ -14,6 +14,7 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(false)
   const [triggers, setTriggers] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
 
   // =========================
   // BUG FIX #2:
@@ -63,6 +64,10 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
     loadFlow(resolvedFlowId)
   }, [resolvedFlowId])
 
+  useEffect(() => {
+    loadCategories()
+  }, [])
+
   const loadFlow = async (id: number) => {
     setLoading(true)
     try {
@@ -78,6 +83,22 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
       toast.error('Error cargando flow')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadCategories = async () => {
+    try {
+     const res = await api.get(
+       API_ENDPOINTS.ADMIN.CATEGORIES.GET_ALL
+     )
+     console.log(res.data)
+
+     setCategories(
+       Array.isArray(res.data) ? res.data : res.data.data || []
+     )
+    }catch (err){
+      console.error(err)
+      setCategories([])
     }
   }
 
@@ -374,6 +395,7 @@ export default function Builder({ flowId: rawFlowId, onBack }: any) {
               updateNode={updateNodeData}
               deleteNode={deleteNode}
               addOptionToNode={addOptionToNode}
+              categories={categories}
             />
           </aside>
       </ReactFlowProvider>

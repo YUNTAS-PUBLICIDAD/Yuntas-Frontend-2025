@@ -34,6 +34,13 @@ const TYPE_CONFIG: Record<string, {
     headerText: "text-purple-600 dark:text-purple-300",
     border: "border-purple-200 dark:border-purple-700/50",
   },
+  catalog: {
+    label: "Catálogo",
+    Icon: List,
+    headerBg: "bg-emerald-50 dark:bg-emerald-900/30",
+    headerText: "text-emerald-600 dark:text-emerald-300",
+    border: "border-emerald-200 dark:border-emerald-700/50"
+  }
 }
 
 // ─────────────────────────────────────────

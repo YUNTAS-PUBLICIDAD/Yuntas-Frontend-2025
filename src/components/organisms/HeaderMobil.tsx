@@ -69,7 +69,7 @@ const HeaderMobil = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#04061a]" : "bg-transparent text-white shadow-none";
+  const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#151A31]" : "bg-transparent text-white shadow-none";
 
   const adminBg = isAdminPath ? isScrolled ? "dark:bg-[#151A3D]" : "dark:bg-[#151A3D]" : "";
 
