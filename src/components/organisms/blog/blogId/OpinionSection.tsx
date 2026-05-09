@@ -1,7 +1,7 @@
 import Banner from "@/components/atoms/Banner";
 import Text from "@/components/atoms/Text";
 import Img from "@/components/atoms/Img";
-import OpinionCard from "@/components/molecules/blog/OpinionCard";
+import { Quote } from "lucide-react";
 
 type OpinionSectionProps = {
 	testimonial: string;
@@ -12,41 +12,71 @@ type OpinionSectionProps = {
 
 const OpinionSection = ({ testimonial, imageSrc, imageTitle, imageAlt }: OpinionSectionProps) => {
 	return (
-		<section>
-			<Banner color="bg-[#18879B]" className="uppercase" size="small">
+		<section className="w-full relative overflow-hidden bg-gradient-to-b from-[#0a1a3a] via-[#0d2240] to-[#10284d]">
+			{/* Elementos decorativos de fondo */}
+			<div className="absolute top-0 left-0 w-96 h-96 bg-[#23C1DE]/10 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+			<div className="absolute bottom-0 right-0 w-96 h-96 bg-[#23C1DE]/6 rounded-full blur-3xl pointer-events-none translate-x-1/2 translate-y-1/2" />
+
+			{/* HEADER ESTILO BLOG */}
+			<Banner
+				size="small"
+				color="bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]"
+				className="!h-auto flex flex-col gap-4 md:gap-6 px-6 md:px-12 lg:px-20 py-3 md:py-4"
+			>
 				<Text
-					variant="banner"
-					className="font-bold text-white px-4 md:px-20 mr-auto"
+					variant="h2"
+					className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase text-center mx-auto md:max-w-2xl"
 				>
-					opinión de nuestro cliente
+					Opinión de nuestro cliente
 				</Text>
 			</Banner>
 
-			<div className="relative min-h-[500px] md:min-h-[700px] flex items-center">
-				<div className="absolute inset-0 bg-[#00031E]" />
-
-				<div
-					className="absolute inset-0 bg-cover bg-center opacity-20"
-					style={{ backgroundImage: `url(${imageSrc})` }}
-				/>
-
-				<div className="relative z-10 w-full h-full flex px-4 py-8 md:px-8 md:py-12">
-					<div className="relative z-20 w-full top-20 md:max-w-md md:ml-8 lg:ml-16 md:top-1/2 md:left-40">
-						<OpinionCard description={testimonial} />
-					</div>
-
-					<div
-						className="absolute -translate-y-1/2 right-5 top-20
-                         md:top-1/2 md:left-1/2 md:-translate-x-1/4 md:right-auto
-                         w-[400px] h-[280px]
-                         md:w-[800px] md:h-[500px] z-0"
-					>
+			{/* BLOQUE DE TESTIMONIOS */}
+			<div className="relative overflow-hidden min-h-[520px] md:min-h-[620px]">
+				{imageSrc && (
+					<div className="absolute inset-0">
 						<Img
 							src={imageSrc}
 							alt={imageAlt}
 							title={imageTitle}
-							classname="w-full h-full object-cover rounded-3xl shadow-2xl"
+							classname="w-full h-full object-cover"
 						/>
+					</div>
+				)}
+
+				<div className="absolute inset-0 bg-gradient-to-r from-[#08111f]/88 via-[#0a1a3a]/70 to-[#0a1a3a]/45" />
+				<div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/70 via-transparent to-transparent" />
+
+				<div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-8 py-14 md:py-20">
+					<div className="flex flex-col lg:flex-row items-center lg:items-center gap-8 lg:gap-10">
+						<div className="w-full lg:w-[44%] max-w-2xl">
+							<div className="relative group">
+								<div className="absolute -inset-4 bg-gradient-to-r from-[#23C1DE] to-[#18879B] rounded-3xl blur-xl opacity-0 group-hover:opacity-18 transition-opacity duration-500" />
+								<div className="relative bg-white rounded-3xl p-8 md:p-10 border border-[#E2F6F6] hover:border-[#23C1DE]/30 transition-all duration-300 shadow-2xl">
+									<Quote className="w-12 h-12 text-[#23C1DE] mb-6 opacity-80" />
+
+									<div className="text-[#00031E]/85 text-lg md:text-xl lg:text-2xl leading-relaxed font-medium mb-4 min-h-[150px] md:min-h-[180px]">
+										<div className="prose prose-invert max-w-none">
+											{testimonial}
+										</div>
+									</div>
+
+									<div className="h-1 w-12 bg-gradient-to-r from-[#23C1DE] to-transparent rounded-full" />
+								</div>
+							</div>
+						</div>
+
+						<div className="w-full lg:w-[56%] flex justify-center lg:justify-end">
+							<div className="relative w-full max-w-[640px] h-[320px] sm:h-[380px] md:h-[460px] lg:h-[560px] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+								<div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/40 via-transparent to-transparent z-10" />
+								<Img
+									src={imageSrc}
+									alt={imageAlt}
+									title={imageTitle}
+									classname="w-full h-full object-cover object-right"
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

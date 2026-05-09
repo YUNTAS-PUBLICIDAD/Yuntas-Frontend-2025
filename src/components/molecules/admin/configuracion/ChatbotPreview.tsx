@@ -12,6 +12,7 @@ export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
   const primaryColor = config.primaryColor || "#6DE1E3";
   const secondaryColor = config.secondaryColor || primaryColor;
   const welcomeMessage = config.welcomeMessage || "Hola 👋 ¿En qué puedo ayudarte?";
+  const iconSrc = config.iconPreviewUrl ?? (config.iconPreview ? getImg(config.iconPreview) : "");
 
   return (
    
@@ -28,8 +29,8 @@ export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
               className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
               style={{ backgroundColor: `${primaryColor}33`, border: "2px solid rgba(255,255,255,0.3)" }}
             >
-              {config.iconPreview ? (
-                <img src={getImg(config.iconPreview)} alt="bot" className="w-5 h-5 object-contain rounded-full" />
+              {iconSrc ? (
+                <img src={iconSrc} alt="bot" className="w-7 h-7 object-contain rounded-full" />
               ) : (
                 <Bot className="w-4 h-4 text-white" />
               )}
@@ -61,8 +62,8 @@ export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
             className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
             style={{ backgroundColor: primaryColor }}
           >
-            {config.iconPreview ? (
-              <img src={getImg(config.iconPreview)} alt="bot" className="w-3 h-3 object-contain rounded-full" />
+            {iconSrc ? (
+              <img src={iconSrc} alt="bot" className="object-contain rounded-full" />
             ) : (
               <Bot className="w-3 h-3 text-white" />
             )}
