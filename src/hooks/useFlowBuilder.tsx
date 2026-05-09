@@ -13,7 +13,7 @@ export interface FlowNodeData {
   // "datatype" es el tipo de contenido del node: message | menu | action
   // Se llama dataType para NO confundirse con node.type ('custom'),
   // que es el tipo de componente React que ReactFlow usar para renderizar.
-  dataType: 'message' | 'menu' | 'action'
+  dataType: 'message' | 'menu' | 'action' | 'catalog'
   message: string
   metadata: Record<string, unknown>
   options: FlowOption[]
