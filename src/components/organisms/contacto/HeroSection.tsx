@@ -44,13 +44,10 @@ const HeroSection = () => {
         />
       </div>
 
-      <div
-        className="absolute inset-0 z-10"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
-        }}
-      />
+      <div className="absolute inset-0 z-10">
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a]/90 via-[#04061a]/70 to-transparent" />
+      </div>
 
       <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
         <div
