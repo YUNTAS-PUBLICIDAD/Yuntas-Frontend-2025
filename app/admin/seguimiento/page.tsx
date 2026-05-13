@@ -217,16 +217,16 @@ export default function SeguimientoPage() {
             </section>
 
             <section className="rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
-                <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="pt-1 lg:pt-2">
+                <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+                    <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de {currentMode.title.toLowerCase()}</p>
-                        <h3 className="mt-2 mb-1 text-xl font-black text-[#0D1030] dark:text-white">
+                        <h3 className="mt-1 mb-1 text-xl font-black text-[#0D1030] dark:text-white">
                             {currentMode.title}
                         </h3>
                     </div>
 
                     <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
-                        <label htmlFor="origin-filter" className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-white/50 lg:text-right">
+                        <label htmlFor="origin-filter" className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
                             Filtrar por origen
                         </label>
                         <select
