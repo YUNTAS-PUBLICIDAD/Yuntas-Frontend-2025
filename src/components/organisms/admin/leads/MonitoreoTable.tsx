@@ -48,7 +48,7 @@ export default function MonitoreoTable({
 
   if (!isLoading && isDataEmpty) {
       return (
-        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 dark:bg-[#1C2347] border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
+        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 dark:bg-[#151A3D] border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
               <SearchXIcon />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
           <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
@@ -93,7 +93,7 @@ export default function MonitoreoTable({
                   {columns.map((col) => (
                     <td
                       key={`${col.key}-${index}`}
-                      className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#1C2347] first:rounded-l-lg last:rounded-r-lg"
+                        className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#151A3D] first:rounded-l-lg last:rounded-r-lg"
                     >
                       <div className="h-4 w-full max-w-[7rem] mx-auto rounded bg-gray-200 dark:bg-white/10 animate-pulse" />
                     </td>
@@ -122,7 +122,7 @@ export default function MonitoreoTable({
                       key={col.key}
                       className={`flex justify-between items-center lg:table-cell
                                             py-2 lg:py-3 px-4 lg:px-3 text-center
-                                            bg-[#F4F4F2] dark:bg-[#1C2347]
+                                            bg-[#F4F4F2] dark:bg-[#151A3D]
                                             first:rounded-l-lg
                                             last:rounded-r-lg
                                             ${col.key === "id" ? "font-bold text-[#0D1030] dark:text-white" : "text-[#0D1030] dark:text-white"}
@@ -151,7 +151,7 @@ export default function MonitoreoTable({
           {Array.from({ length: Math.max(2, Math.min(minRows, 4)) }).map((_, index) => (
             <div
               key={`monitor-mobile-skeleton-${index}`}
-              className="bg-white dark:bg-[#1C2347] border-2 border-[#0D1030] dark:border-white/10 rounded-[1.5rem] p-6 shadow-sm transition-colors duration-300"
+              className="bg-white dark:bg-[#151A3D] border border-[#E5EEF6] dark:border-[#4A6FD8] rounded-[1.5rem] p-6 shadow-sm transition-colors duration-300"
             >
               <div className="space-y-3">
                 {Array.from({ length: 5 }).map((__, lineIndex) => (
