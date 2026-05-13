@@ -11,7 +11,7 @@ export default function NavMenuAdmin({scrolled}: {scrolled: boolean}){
   const activeColor = "text-black";
 
   return (
-    <nav className="flex gap-x-4 lg:gap-x-10 items-center uppercase text-sm tracking-[0.06em]">
+    <nav className="flex items-center gap-x-3 lg:gap-x-5 xl:gap-x-7 uppercase text-[13px] lg:text-sm tracking-[0.04em]">
       {
         items.map((item) => (
           <MenuItem key={item.href} href={item.href} active={item.active} baseColor={baseColor} activeColor={activeColor}>
