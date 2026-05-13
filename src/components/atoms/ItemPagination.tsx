@@ -25,9 +25,13 @@ const ItemPagination = ({ children, className, onClick, active = false, disabled
   };
 
   return (
-    <div className={`rounded-full size-8 font-bold text-black  flex justify-center items-center transition-colors duration-200
-                     ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-300 hover:text-black'
-      } ${active ? 'bg-[#0B0B1F] text-white hover:bg-[#0B0B1F]' : ''}${className || ''}`}
+    <div className={`rounded-full size-8 font-bold flex justify-center items-center transition-colors duration-200
+                     ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+      } 
+      ${active 
+        ? 'bg-[#0B0B1F] text-white hover:bg-[#0B0B1F] dark:bg-[#293296] dark:text-white dark:hover:bg-[#0D1030]' 
+        : 'text-black hover:bg-gray-300 dark:text-white dark:bg-[#151A3D] dark:hover:bg-[#203565]'
+      }${className || ''}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="button"
