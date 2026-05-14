@@ -216,36 +216,35 @@ export default function SeguimientoPage() {
                 </div>
             </section>
 
-            <section className="rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
-                <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
-                    <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de {currentMode.title.toLowerCase()}</p>
-                        <h3 className="mt-1 mb-1 text-xl font-black text-[#0D1030] dark:text-white">
-                            {currentMode.title}
-                        </h3>
-                    </div>
-
-                    <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
-                        <label htmlFor="origin-filter" className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
-                            Filtrar por origen
-                        </label>
-                        <select
-                            id="origin-filter"
-                            value={originFilter}
-                            onChange={(event) => setOriginFilter(event.target.value)}
-                            className="w-full rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white lg:min-w-[220px] lg:w-auto"
-                        >
-                            <option value="">Todos los orígenes</option>
-                            {originOptions.map((origin) => (
-                                <option key={origin} value={origin}>
-                                    {origin}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+            <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de {currentMode.title.toLowerCase()}</p>
+                    <h3 className="mt-1 mb-1 text-xl font-black text-[#0D1030] dark:text-white">
+                        {currentMode.title}
+                    </h3>
                 </div>
 
-                <div className="w-full overflow-x-auto">
+                <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
+                    <label htmlFor="origin-filter" className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
+                        Filtrar por origen
+                    </label>
+                    <select
+                        id="origin-filter"
+                        value={originFilter}
+                        onChange={(event) => setOriginFilter(event.target.value)}
+                        className="w-full rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white lg:min-w-[220px] lg:w-auto"
+                    >
+                        <option value="">Todos los orígenes</option>
+                        {originOptions.map((origin) => (
+                            <option key={origin} value={origin}>
+                                {origin}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            <div className="w-full overflow-x-auto">
                 {isMonitoreoMode ? (
                     <MonitoreoTable
                         data={datosPaginados}
@@ -273,7 +272,6 @@ export default function SeguimientoPage() {
                     />
                 )}
                 </div>
-            </section>
 
             <div className="mt-5 flex justify-center">
                 <Pagination

@@ -2,7 +2,8 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { BlogInput } from "@/types/admin/blog";
 import { Producto } from "@/types/admin/producto";
-type FieldType = "parrafos" | "beneficios";
+
+type FieldType = "description" | "testimonial" | "benefits";
 
 export const useTextSelection = (
   blog: BlogInput,
@@ -17,59 +18,47 @@ export const useTextSelection = (
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const getTextareaId = (field: FieldType, index: number) =>
-    field === "beneficios" ? `beneficio-${index}` : `parrafo-${index}`;
+    field === "benefits" ? `benefit-${index}` : `${field}-${index}`;
 
   const selectText = (field: FieldType, index: number): boolean => {
-  const textarea = document.getElementById(
-    getTextareaId(field, index)
-  ) as HTMLTextAreaElement | null;
+    const textarea = document.getElementById(
+      getTextareaId(field, index)
+    ) as HTMLTextAreaElement | null;
 
-  if (!textarea) return false;
+    if (!textarea) return false;
 
-  const { selectionStart, selectionEnd, value } = textarea;
+    const { selectionStart, selectionEnd, value } = textarea;
 
-  if (selectionStart === selectionEnd) {
-    Swal.fire(
-      "Selecciona texto",
-      "Selecciona una palabra o frase para insertar el enlace.",
-      "warning"
-    );
-    return false; 
-  }
+    if (selectionStart === selectionEnd) {
+      Swal.fire(
+        "Selecciona texto",
+        "Selecciona una palabra o frase para insertar el enlace.",
+        "warning"
+      );
+      return false;
+    }
 
-  setField(field);
-  setIndex(index);
-  setRange({ start: selectionStart, end: selectionEnd });
-  setSelectedText(value.substring(selectionStart, selectionEnd));
+    setField(field);
+    setIndex(index);
+    setRange({ start: selectionStart, end: selectionEnd });
+    setSelectedText(value.substring(selectionStart, selectionEnd));
 
-  return true;
-};
+    return true;
+  };
 
   const insertHtml = (html: string) => {
     if (!field || index === null || !range) return;
 
-    if (field === "parrafos") {
-      const parrafos = [...(blog.parrafos ?? [])];
-      const current = parrafos[index];
+    if (field === "benefits") {
+      const benefits = [...(blog.benefits ?? [])];
+      const current = benefits[index];
 
-      parrafos[index] =
+      benefits[index] =
         current.slice(0, range.start) +
         html +
         current.slice(range.end);
 
-      setBlog({ ...blog, parrafos });
-    }
-
-    if (field === "beneficios") {
-      const beneficios = [...(blog.beneficios ?? [])];
-      const current = beneficios[index];
-
-      beneficios[index] =
-        current.slice(0, range.start) +
-        html +
-        current.slice(range.end);
-
-      setBlog({ ...blog, beneficios });
+      setBlog({ ...blog, benefits });
     }
 
     reset();
@@ -79,10 +68,12 @@ export const useTextSelection = (
     const html = `<strong><a href="${url}" target="_blank" rel="noopener noreferrer">${selectedText}</a></strong>`;
     insertHtml(html);
   };
+
   const insertProduct = (producto: Producto) => {
     const html = `<strong><a href="/productos/${producto.slug}" title="${producto.name}">${selectedText}</a></strong>`;
     insertHtml(html);
   };
+
   const reset = () => {
     setField(null);
     setIndex(null);
@@ -93,7 +84,6 @@ export const useTextSelection = (
   };
 
   return {
-    // abrir modales
     openLink: (field: FieldType, index: number) => {
         if (!selectText(field, index)) return;
         setIsLinkModalOpen(true);
@@ -102,12 +92,8 @@ export const useTextSelection = (
        if (!selectText(field, index)) return;
        setIsProductModalOpen(true);
     },
-
-    // acciones
     insertLink,
     insertProduct,
-
-    // estado
     isLinkModalOpen,
     isProductModalOpen,
     close: reset,

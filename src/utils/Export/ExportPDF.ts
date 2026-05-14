@@ -47,7 +47,7 @@ export const exportToPDF = (data: Blog[] | Producto[]) => {
           blog.cover_subtitle || "-",
           blog.meta_title || "-",
           new Date(blog.created_at).toLocaleDateString("es-ES"),
-          blog.paragraphs?.length || 0,
+          0,
           blog.gallery?.length || 0,
         ]),
         styles: {
