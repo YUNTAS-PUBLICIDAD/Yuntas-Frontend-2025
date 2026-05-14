@@ -34,10 +34,11 @@ export default function ProductosPage() {
   const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
   const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
   
-  // Estados para búsqueda y paginación
+  // Estados para búsqueda, filtro y paginación
   const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
   const [productosFiltrados, setProductosFiltrados] = useState<Producto[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
+  const [selectedSection, setSelectedSection] = useState<string>("");
 
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
@@ -69,6 +70,21 @@ export default function ProductosPage() {
       router.replace('/admin/productos', { scroll: false });
     }
   }, [searchParams, router]);
+
+  // Obtener secciones únicas
+  const uniqueSections = Array.from(
+    new Set(productos.map((p) => p.category_name).filter(Boolean))
+  ).sort() as string[];
+
+  // Aplicar filtro de sección
+  const handleSectionFilter = (section: string) => {
+    setSelectedSection(section);
+    if (section === "") {
+      setProductosFiltrados(productos);
+    } else {
+      setProductosFiltrados(productos.filter((p) => p.category_name === section));
+    }
+  };
 
   const handleCreateProducto = async (formData: ProductoInput) => {
     const result = await createProducto(formData);
@@ -225,7 +241,7 @@ export default function ProductosPage() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <div className="w-full md:flex-1 md:max-w-3xl">
           <SearchBar
-            items={productos}
+            items={selectedSection === "" ? productos : productos.filter((p) => p.category_name === selectedSection)}
             onSearch={setProductosFiltrados}
             placeholder="Buscar por ID, nombre o sección..."
             searchKeys={['id', 'name', 'category_name']}
@@ -251,8 +267,16 @@ export default function ProductosPage() {
           onDelete={handleDeleteProducto}
           isLoading={isLoading && productos.length === 0}
           emptyMessage="No se encontraron productos"
-          onResetSearch={() => setProductosFiltrados(productos)}
+          onResetSearch={() => {
+            setSelectedSection("");
+            setProductosFiltrados(productos);
+          }}
           resetSearchText="Ver todos los productos"
+          sectionFilter={{
+            value: selectedSection,
+            onChange: handleSectionFilter,
+            options: uniqueSections
+          }}
         />
 
         {/* PAGINACIÓN */}
