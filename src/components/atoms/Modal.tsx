@@ -45,7 +45,7 @@ export default function Modal({
         lg: "max-w-4xl"
     };
 
-    const bgClass = className.includes("bg-") ? "" : "bg-white";
+    const bgClass = className.includes("bg-") ? "" : "bg-white text-[#203565]";
     const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#203565]";
     const closeBtnClass = className.includes("text-white")
         ? "text-white hover:text-gray-200"
