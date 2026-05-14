@@ -46,27 +46,30 @@ export default function MonitoreoTable({
 
   const isDataEmpty = data.length === 0;
 
-  if (!isLoading && isDataEmpty) {
+if (!isLoading && isDataEmpty) {
       return (
-        <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 dark:bg-[#151A3D] border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
-              <SearchXIcon />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
-          <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
-                  No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
+        <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
+            <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50/50 dark:bg-[#1C2347]/50 border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
+                  <SearchXIcon />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
+              <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
+                      No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
               </p>
               {onResetSearch && (
                   <button
                       onClick={onResetSearch}
-              className="mt-4 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
+                  className="mt-4 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
                   >
                       {resetSearchText}
                   </button>
               )}
-          </div>
+            </div>
+        </div>
       );
   }
 
   return (
+    <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
     <div className="w-full px-2 md:px-0">
       <table className="w-full block lg:table border-separate border-spacing-y-4 lg:border-spacing-y-2">
         {/* HEADER solo desktop */}
@@ -165,6 +168,7 @@ export default function MonitoreoTable({
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }
