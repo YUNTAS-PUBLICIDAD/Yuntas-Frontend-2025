@@ -16,7 +16,7 @@ export async function generateStaticParams(){
   }));
 }
 
-export async function getBlogBySlug(slug: string): Promise<Blog|null>{
+async function getBlogBySlug(slug: string): Promise<Blog|null>{
   const response = await getBlogBySlugService(slug);
 
   if(!response.success || !response.data) return null;

@@ -126,6 +126,23 @@ export default function AdminTable({
     });
 
     const role = getRole();
+    const primaryColumn =
+        columns.find((col) =>
+            ![
+                "id",
+                "created_at",
+                "fecha",
+                "gallery",
+                "estado_visual",
+                "status",
+                "image",
+                "icon",
+            ].includes(col.key)
+        ) ?? columns.find((col) => col.key !== "id") ?? columns[0];
+
+    const mobileColumns = columns.filter(
+        (col) => col.key !== primaryColumn?.key && col.key !== "id"
+    );
 
     /* El componente Admin Table ahora se encarga de saber si tiene datos o no y en base a eso mostrar el mensaje
        de que no hay resultados .
@@ -134,26 +151,29 @@ export default function AdminTable({
 
     if (!isLoading && isDataEmpty) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 dark:bg-[#1C2347] border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
-                <SearchXIcon />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
-                <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
-                    No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
-                </p>
-                {onResetSearch && (
-                    <button
-                        onClick={onResetSearch}
-                        className="mt-4 inline-flex items-center gap-2 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
-                    >
-                        <RotateCcw className="h-4 w-4" />
-                        {resetSearchText}
-                    </button>
-                )}
+            <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
+                <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50/50 dark:bg-[#1C2347]/50 border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg mt-4 w-full transition-colors duration-300">
+                    <SearchXIcon />
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">{emptyMessage}</h3>
+                    <p className="text-gray-500 dark:text-gray-300 text-sm mt-1 text-center max-w-sm">
+                        No hay resultados para tu búsqueda. Intenta con otro término o revisa la ortografía.
+                    </p>
+                    {onResetSearch && (
+                        <button
+                            onClick={onResetSearch}
+                            className="mt-4 inline-flex items-center gap-2 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
+                        >
+                            <RotateCcw className="h-4 w-4" />
+                            {resetSearchText}
+                        </button>
+                    )}
+                </div>
             </div>
         );
     }
 
     return (
+        <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
         <div className="w-full px-2 md:px-0">
             {/* DESKTOP: Tabla normal */}
             <table className="w-full hidden lg:table border-separate border-spacing-y-2">
@@ -229,58 +249,56 @@ export default function AdminTable({
 
                     if (isEmpty) return null;
 
+                    const primaryValue = primaryColumn
+                        ? primaryColumn.render
+                            ? primaryColumn.render(row[primaryColumn.key], row)
+                            : row[primaryColumn.key]
+                        : null;
+
                     return (
                         <div
                             key={row.id || index}
                             className="bg-white dark:bg-[#151A3D] border border-[#E5EEF6] dark:border-[#4A6FD8] rounded-2xl p-4 shadow-sm transition-colors duration-300"
                         >
-                            {/* Header: name with attached meta */}
+                            {/* Header: primary field with ID */}
                             <div className="flex items-start justify-between gap-4">
                                 <div className="min-w-0 flex-1">
-                                    <h4 className="text-lg font-black text-[#0D1030] dark:text-white truncate">
-                                        {row.name ?? `ID ${row.id}`}
-                                    </h4>
-                                    <div className="mt-1 flex items-start justify-between gap-4 text-sm text-slate-500 dark:text-[#B0C4DE]">
-                                        <div className="min-w-0 flex-1">
+                                    {primaryColumn && (
+                                        <>
                                             <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
-                                                Producto
+                                                {primaryColumn.label}
                                             </span>
-                                            <span className="block truncate font-medium text-[#203565] dark:text-[#E0E7FF]">
-                                                {row.product_name || "Sin producto"}
-                                            </span>
-                                        </div>
-                                    </div>
+                                            <h4 className="text-lg font-black text-[#0D1030] dark:text-white truncate">
+                                                {primaryValue ?? "-"}
+                                            </h4>
+                                        </>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col items-end text-right text-xs text-slate-500 dark:text-[#B0C4DE]">
                                     <span className="font-mono text-[#203565] dark:text-[#E0E7FF]">#{row.id}</span>
-                                    <div className="mt-1">
-                                        <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
-                                            Fecha de inicio
-                                        </span>
-                                        <span className="block whitespace-nowrap font-medium text-[#203565] dark:text-[#E0E7FF]">
-                                            {row.created_at || "Sin fecha"}
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
 
-                            {/* Body: key-value grid */}
-                            <div className="mt-3 grid grid-cols-2 gap-3 text-sm text-[#203565] dark:text-[#E0E7FF]">
-                                <div className="min-w-0">
-                                    <div className="text-xs uppercase text-slate-500 dark:text-[#B0C4DE]">Email</div>
-                                    <div className="break-words">{row.email}</div>
-                                </div>
+                            {/* Body: generic field grid */}
+                            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm text-[#203565] dark:text-[#E0E7FF]">
+                                {mobileColumns.map((col) => {
+                                    const value = col.render ? col.render(row[col.key], row) : row[col.key];
 
-                                <div>
-                                    <div className="text-xs uppercase text-slate-500 dark:text-[#B0C4DE]">Teléfono</div>
-                                    <div>{row.phone}</div>
-                                </div>
-
-                                <div className="col-span-2">
-                                    <div className="text-xs uppercase text-slate-500 dark:text-[#B0C4DE]">Origen</div>
-                                    <div className="break-words">{row.source_name}</div>
-                                </div>
+                                    return (
+                                        <div
+                                            key={col.key}
+                                            className="min-w-0 rounded-xl border border-[#E5EEF6] bg-[#F8FBFE] px-3 py-2 dark:border-white/10 dark:bg-white/5"
+                                        >
+                                            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
+                                                {col.label}
+                                            </div>
+                                            <div className="mt-1 break-words font-medium text-[#203565] dark:text-[#E0E7FF]">
+                                                {isEmpty ? "" : value}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
 
                             {/* Actions aligned to the right */}
@@ -301,6 +319,7 @@ export default function AdminTable({
                 })
             )}
             </div>
+        </div>
         </div>
     );
 }
