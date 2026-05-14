@@ -40,7 +40,7 @@ export default function InputAdmin({
                 required={required}
                 maxLength={maxLength}
                 disabled={disabled}
-                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all disabled:opacity-50 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus: border-transparent"}`}
+                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all disabled:opacity-50 text-[#203565] ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus: border-transparent"}`}
             
             />
             {/* {helperText && (
