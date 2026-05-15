@@ -601,6 +601,8 @@ export function VariantEditor({
 
         {variant.channel === "email" ? (
 
+          <div>
+
           <ReactQuill
             value={content}
             onChange={(value) => {
@@ -623,6 +625,8 @@ export function VariantEditor({
             }}
             modules={QUILL_MODULES}
           />
+          </div>
+
 
         ) : (
 

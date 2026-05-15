@@ -841,7 +841,12 @@ export function VariantsPanel({
                   onChange(
                     step,
                     active,
-                    {}
+                    {
+                      content: "",
+                      subject: "",
+                      ctaText: "",
+                      ctaUrl: ""
+                    }
                   )
                 }
                 className="
@@ -865,6 +870,7 @@ export function VariantsPanel({
           ) : (
 
             <VariantEditor
+            key={`${step}-${active}-${selectedProductId || "default"}`}
 
               templateContext={
                 templateContext

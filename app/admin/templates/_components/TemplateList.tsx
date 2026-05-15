@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const CHANNEL_LABELS: Record<string, string> = {
   email: "Email",
-  sms: "SMS",
+  // sms: "SMS",
   whatsapp: "WhatsApp",
 };
 
@@ -26,14 +26,14 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
       {/* HEADER */}
       <div className="flex flex-col gap-4 sm:flex-row  sm:justify-between sm:items-start">
         <div>
-          <p className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-1">
+          {/*<p className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-1">
             Comunicaciones
-          </p>
-          <h1 className="text-xl font-medium text-gray-900 dark:text-white leading-tight">
+          </p>*/}
+          {/*<h1 className="text-xl font-medium text-gray-900 dark:text-white leading-tight">
             Templates
-          </h1>
+          </h1>*/}
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Gestiona las plantillas de mensajes para tus canales
+            Configura mensajes automáticos para popups, WhatsApp y correos según cada página
           </p>
         </div>
         <button
@@ -49,16 +49,37 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          Nuevo template
+          Nueva plantilla
         </button>
       </div>
 
       {/* STATS */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
-          { label: "Total", value: list.length },
-          { label: "Activos", value: list.filter((t: any) => t.active).length },
-          { label: "Variantes", value: list.reduce((acc: number, t: any) => acc + (t.variants?.length ?? 0), 0) },
+          // { label: "Total", value: list.length },
+          // { label: "Activos", value: list.filter((t: any) => t.active).length },
+          // { label: "Canales", value: list.reduce((acc: number, t: any) => acc + (t.variants?.length ?? 0), 0) },
+
+          {
+             label: "Plantillas",
+             value: list.length
+           },
+
+           {
+             label: "Automatizaciones activas",
+             value: list.filter(
+               (t:any) => t.active
+             ).length
+           },
+
+           {
+             label: "Mensajes programados",
+             value: list.reduce(
+               (acc:number, t:any) =>
+                 acc + (t.steps?.length ?? 0),
+               0
+             )
+           }
         ].map(({ label, value }) => (
           <div key={label} className="bg-gray-50 dark:bg-white/5 rounded-lg px-4 py-3">
             <p className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-1.5">
@@ -117,7 +138,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
           bg-gray-50 dark:bg-white/5
           border-b border-gray-200 dark:border-white/10
         ">
-          {["Nombre", "Estado", "Variantes", ""].map((h) => (
+          {["Nombre", "Estado", "Canales", ""].map((h) => (
             <span key={h} className="text-[11px] font-medium tracking-widest uppercase text-gray-400 dark:text-gray-500">
               {h}
             </span>
@@ -138,13 +159,27 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
                 <path d="M7 3l-2 2M13 3l2 2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
               </svg>
             </div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">No hay templates aún</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Crea el primero para comenzar a enviar comunicaciones</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">No hay plantillas configuradas</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Crea una plantilla para automatizar mensajes en tus campañas y popups.</p>
           </div>
         )}
 
         {/* ROWS */}
-        {list.map((t: any) => (
+        {list.map((t: any) => {
+
+
+         const channels = [
+           ...new Set(
+             t.steps?.flatMap(
+               (step:any) => step.variants?.map(
+                 (v:any) => CHANNEL_LABELS[v.channel]
+               ) ?? []
+             ) ?? []
+           )
+         ]
+
+         return (
+
           <div
             key={t.id}
             className="
@@ -182,7 +217,19 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
 
             {/* VARIANTS */}
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t.variants?.length ?? 0} {(t.variants?.length ?? 0) === 1 ? 'variante' : 'variantes'}
+              {/*{t.variants?.length ?? 0} {(t.variants?.length ?? 0) === 1 ? 'variante' : 'variantes'}*/}
+              {/*{(t.variants?.length ?? 0) === 0
+                  ? "Sin canales"
+                  : `${t.variants?.length} canal${
+                      (t.variants?.length ?? 0) > 1
+                        ? "es"
+                        : ""
+                    }`
+                }*/}
+
+              {
+                channels.length === 0 ? "Sin canales" : channels.join(" . ")
+              }
             </p>
 
             {/* ACTIONS */}
@@ -239,7 +286,9 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
               </button>
             </div>
           </div>
-        ))}
+         )
+        }
+        )}
 
         {/* FOOTER */}
         {list.length > 0 && (
@@ -250,7 +299,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
             bg-gray-50 dark:bg-white/[0.02]
           ">
             <span className="text-xs text-gray-400 dark:text-gray-500">
-              {list.length} {list.length === 1 ? 'template' : 'templates'}
+              {list.length} {list.length === 1 ? 'plantilla' : 'plantillas'}
             </span>
             <div className="flex gap-1">
               {[
@@ -273,7 +322,19 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
         </div>
         {/* MOBILE */}
         <div className="md:hidden divide-y divide-gray-100 dark:divide-white/5">
-          {list.map((t: any) => (
+          {list.map((t: any) => {
+
+            const channels = [
+              ...new Set(
+                t.steps?.flatMap(
+                  (step:any) => step.variants?.map(
+                    (v:any) => CHANNEL_LABELS[v.channel]
+                  ) ?? []
+                ) ?? []
+              )
+            ]
+
+            return (
             <div
               key={t.id}
               className="p-4 flex flex-col gap-3"
@@ -285,7 +346,11 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
                   </p>
 
                   <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                    {CHANNEL_LABELS[t.channel] ?? t.channel ?? "—"}
+                    {/*{CHANNEL_LABELS[t.channel] ?? t.channel ?? "—"}*/}
+
+                    {
+                      channels.join(". ") || "Sin canales"
+                    }
                   </p>
                 </div>
 
@@ -299,14 +364,14 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
                     }
                   `}
                 >
-                  {t.active ? "Activo" : "Borrador"}
+                  {t.active ? "Activo" : "Desactivado"}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {t.variants?.length ?? 0}{" "}
-                  {(t.variants?.length ?? 0) === 1 ? "variante" : "variantes"}
+                  {(t.variants?.length ?? 0) === 1 ? "canal" : "canales"}
                 </p>
 
                 <div className="flex items-center gap-1">
@@ -345,7 +410,9 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
                 </div>
               </div>
             </div>
-          ))}
+            )
+          }
+          )}
         </div>
 
       </div>
