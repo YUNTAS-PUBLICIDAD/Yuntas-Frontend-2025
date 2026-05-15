@@ -13,6 +13,7 @@ import { showToast } from "@/utils/showToast";
 import { usePathname } from "next/navigation";
 import { PopupView } from "./producto/PopUp/PopupView";
 import { PopupImageData } from "@/types/admin/popup";
+import { useLeadCapture } from "@/hooks/useLeadCapture";
 // import { PopupImage } from "@/types/admin/popup";
 
 // interface PopupImageData {
@@ -52,8 +53,9 @@ const Popup = ({
     sourceId = 1,
     isMobile
 }: PopupProps) => {
-    const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
-    const { sendEmail, isActivating: isEmailSending } = useEmail();
+    // const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
+    // const { sendEmail, isActivating: isEmailSending } = useEmail();
+    const {captureLead, isSubmitting} = useLeadCapture();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -111,18 +113,28 @@ const Popup = ({
             ...(productId && { product_id: productId }),
         };
 
-        const whatsappResult = await sendWhatsapp(leadData);
-        if (!whatsappResult.success) {
-            setErrors({ general: whatsappResult.message || "Error al enviar el WhatsApp" });
-            showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
-            return;
-        }
+        // const whatsappResult = await sendWhatsapp(leadData);
+        // if (!whatsappResult.success) {
+        //     setErrors({ general: whatsappResult.message || "Error al enviar el WhatsApp" });
+        //     showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
+        //     return;
+        // }
 
-        const emailResult = await sendEmail(leadData);
-        if (!emailResult.success) {
-            setErrors({ general: emailResult.message || "Error al enviar el email" });
-            showToast.error(emailResult.message || "Error al enviar el email");
-            return;
+        // const emailResult = await sendEmail(leadData);
+        // if (!emailResult.success) {
+        //     setErrors({ general: emailResult.message || "Error al enviar el email" });
+        //     showToast.error(emailResult.message || "Error al enviar el email");
+        //     return;
+        // }
+
+        const result = await captureLead(
+          leadData
+        );
+
+        if(!result.success){
+          setErrors({
+            general: result.message || 'Error enviando formulario'
+          });
         }
 
         closeModal();
@@ -157,9 +169,21 @@ const Popup = ({
                     className="absolute top-4 right-4 z-50"
                 />
 
-                <PopupView isMobile={isMobile} leftImage={leftImage} rightImage={rightImage} mobileImage={mobileImage} formData={formData} errors={errors} handleChange={handleChange} handleSubmit={handleSubmit} buttonText={buttonText} buttonColor={buttonColor} isSubmitting={isWhatsappSending || isEmailSending}/>
+                <PopupView
+                isMobile={isMobile}
+                leftImage={leftImage}
+                rightImage={rightImage}
+                mobileImage={mobileImage}
+                formData={formData}
+                errors={errors}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                buttonText={buttonText}
+                buttonColor={buttonColor}
+                isSubmitting={isSubmitting}/>
 
             </PopupContainer>
+                {/*isSubmitting={isWhatsappSending || isEmailSending}/>*/}
         </div>
     );
 };
