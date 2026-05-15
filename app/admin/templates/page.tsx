@@ -17,7 +17,7 @@ export default function TemplatesPage() {
         {loading ? (
           <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 py-12 justify-center">
             <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            Cargando templates…
+            Cargando plantillas…
           </div>
         ) : (
           <TemplatesList
@@ -45,7 +45,7 @@ export default function TemplatesPage() {
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
           <path d="M10 3L6 8l4 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-        Volver a templates
+        Volver a plantillas
       </button>
       <TemplateEditor editor={editor} />
     </div>
