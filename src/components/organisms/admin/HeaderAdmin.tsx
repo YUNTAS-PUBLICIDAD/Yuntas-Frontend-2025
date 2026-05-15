@@ -14,8 +14,8 @@ export default function HeaderAdmin({ className = "" }: HeaderProps) {
 
   return (
     <header
-      className={`hidden md:flex sticky top-0 w-full z-50 items-center px-8 xl:px-10 2xl:px-16 h-24
-        transition-all duration-500 ${className} bg-white/95 backdrop-blur-md shadow-md dark:bg-[#141A3F]/95 dark:shadow-none`}
+      className={`hidden lg:flex sticky top-0 w-full z-50 items-center px-8 xl:px-10 2xl:px-16 h-24
+        transition-all duration-500 ${className} bg-white/95 backdrop-blur-lg shadow-lg dark:bg-[#141A3F]/95 dark:shadow-none`}
     >
       {/* Nav links  */}
       <div className="flex min-w-0 flex-1 items-center justify-start pr-3 xl:pr-6">
