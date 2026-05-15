@@ -16,34 +16,51 @@ import {
   TemplateVariant,
 } from "@/types/admin/template";
 
-const EMPTY_TEMPLATE: Template = {
+// const EMPTY_TEMPLATE: Template = {
+//   id: 0,
+//   name: "",
+//   context: "INICIO",
+//   active: true,
+
+//   steps: [
+//     {
+//       step: 1,
+//       delayValue: 0,
+//       delayUnit: "minutes",
+//       active: true,
+//       variants: [],
+//     },
+//   ],
+// };
+
+const createEmptyTemplate = (): Template => ({
   id: 0,
   name: "",
   context: "INICIO",
   active: true,
-
   steps: [
     {
       step: 1,
       delayValue: 0,
       delayUnit: "minutes",
       active: true,
-      variants: [],
-    },
-  ],
-};
+      variants: []
+    }
+  ]
+});
 
 export const useTemplateEditor = (
   templateId?: number
 ) => {
 
-  const isCreate = !templateId;
+  // const isCreate = !templateId;
 
-  const [template, setTemplate] =
-    useState<Template>(EMPTY_TEMPLATE);
+  const [template, setTemplate] = useState<Template>(createEmptyTemplate())
+    // useState<Template>(EMPTY_TEMPLATE);
+  const isCreate = !template?.id
 
   const [loading, setLoading] =
-    useState(!isCreate);
+    useState(!!templateId);
 
   const [saving, setSaving] =
     useState(false);
@@ -55,7 +72,10 @@ export const useTemplateEditor = (
   useEffect(() => {
 
     if (!templateId) {
-      setTemplate(EMPTY_TEMPLATE);
+      // setTemplate(EMPTY_TEMPLATE);
+      setTemplate(
+        createEmptyTemplate()
+      );
       return;
     }
 
