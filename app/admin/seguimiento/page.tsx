@@ -25,9 +25,9 @@ export default function SeguimientoPage() {
     const [leadsFiltered, setLeadsFiltered] = useState<Lead[]>([]);
     const [originFilter, setOriginFilter] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
+    const [isMonitoreoMode, setIsMonitoreoMode] = useState(false);
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-    
+
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
     const { confirm, ConfirmDialog } = useConfirm();
@@ -135,7 +135,7 @@ export default function SeguimientoPage() {
     const topButtons = [
         {
             label: "MENSAJES",
-            onClick: () => { 
+            onClick: () => {
                 router.push('/admin/productos?modal=whatsapp&tab=plantilla');
             },
             variant: "secondary" as const,
@@ -157,7 +157,7 @@ export default function SeguimientoPage() {
         { key: "email", label: "EMAIL" },
         { key: "phone", label: "TELÉFONO" },
         { key: "product_name", label: "PRODUCTO" },
-        { key: "source_name", label: "ORIGEN" }, 
+        { key: "source_name", label: "ORIGEN" },
         { key: "created_at", label: "FECHA DE INICIO" }
     ];
 
@@ -219,7 +219,7 @@ export default function SeguimientoPage() {
             <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
                 <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de {currentMode.title.toLowerCase()}</p>
-                    <h3 className="mt-1 mb-1 text-xl font-black text-[#0D1030] dark:text-white">
+                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
                         {currentMode.title}
                     </h3>
                 </div>
@@ -271,7 +271,7 @@ export default function SeguimientoPage() {
                         }}
                     />
                 )}
-                </div>
+            </div>
 
             <div className="mt-5 flex justify-center">
                 <Pagination

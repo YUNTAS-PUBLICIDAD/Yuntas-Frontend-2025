@@ -139,6 +139,12 @@ export default function UsuariosPage() {
                     {error}
                 </div>
             )}
+            <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de Usuarios</p>
+                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">Usuarios</h3>
+                </div>
+            </div>
 
             <AdminTable
                 columns={columns}
