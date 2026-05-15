@@ -78,3 +78,20 @@ export const getTemplateVariablesService = async () => {
   );
   return data;
 }
+
+export const uploadProductOverrideImageService = async(file: File) => {
+  const formData = new FormData();
+
+  formData.append('file', file);
+
+  const {data} = await api.post(
+    API_ENDPOINTS.ADMIN.TEMPLATES.PRODUCT_OVERRIDES.UPLOAD,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  );
+  return data;
+}
