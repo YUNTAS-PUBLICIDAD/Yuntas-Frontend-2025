@@ -9,6 +9,7 @@ export default function TemplatesPage() {
   const [mode, setMode] = useState<'list' | 'editor'>('list');
   const [templateId, setTemplateId] = useState<number | undefined>();
   const { templates, loading, reload, remove } = useTemplates();
+  const [editorKey, setEditorKey] = useState(0);
   const editor = useTemplateEditor(templateId);
 
   if (mode === 'list') {
@@ -22,8 +23,9 @@ export default function TemplatesPage() {
         ) : (
           <TemplatesList
             templates={templates}
-            onCreate={() => { setTemplateId(undefined); setMode('editor'); }}
-            onEdit={(id: number) => { setTemplateId(id); setMode('editor'); }}
+            onCreate={() => { setTemplateId(undefined); setEditorKey(prev => prev + 1);
+            setMode('editor'); }}
+            onEdit={(id: number) => { setTemplateId(id); setEditorKey(prev => prev + 1); setMode('editor'); }}
             onDelete={remove}
           />
         )}
