@@ -77,6 +77,114 @@
   color: #e5e7eb;
 }
 
+/* =====================================================
+   REACT QUILL PREMIUM
+===================================================== */
+
+/* WRAPPER */
+.editor-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* TOOLBAR */
+.editor-wrapper .ql-toolbar {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+
+  padding: 10px 12px;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(229,231,235,1);
+}
+
+/* CONTENEDOR */
+.editor-wrapper .ql-container {
+  min-height: 320px;
+
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(229,231,235,1);
+  border-top: none;
+}
+
+/* AREA EDITABLE */
+.editor-wrapper .ql-editor {
+  min-height: 320px;
+
+  padding: 18px;
+
+  font-size: 14px;
+  line-height: 1.8;
+
+  color: #111827;
+}
+
+/* PLACEHOLDER */
+.editor-wrapper .ql-editor.ql-blank::before {
+  color: #9ca3af;
+  font-style: normal;
+}
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+.dark .editor-wrapper .ql-toolbar {
+  background: rgba(255,255,255,0.03);
+
+  border-color: rgba(255,255,255,0.08);
+}
+
+.dark .editor-wrapper .ql-container {
+  background: rgba(255,255,255,0.03);
+
+  border-color: rgba(255,255,255,0.08);
+}
+
+.dark .editor-wrapper .ql-editor {
+  color: #f3f4f6;
+}
+
+.dark .editor-wrapper .ql-editor.ql-blank::before {
+  color: #6b7280;
+}
+
+/* ICONOS */
+.dark .editor-wrapper .ql-stroke {
+  stroke: #f3f4f6;
+}
+
+.dark .editor-wrapper .ql-fill {
+  fill: #f3f4f6;
+}
+
+/* HOVER */
+.dark .editor-wrapper button:hover .ql-stroke,
+.dark .editor-wrapper button.ql-active .ql-stroke {
+  stroke: #ffffff;
+}
+
+.dark .editor-wrapper button:hover .ql-fill,
+.dark .editor-wrapper button.ql-active .ql-fill {
+  fill: #ffffff;
+}
+
+/* SELECTS */
+.dark .editor-wrapper .ql-picker {
+  color: #f3f4f6;
+}
+
+.dark .editor-wrapper .ql-picker-options {
+  background: #111827;
+
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
 /* estilo para popup inicio-desktop */
 @media (min-width: 640px) {
   .clip-vase {
