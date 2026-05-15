@@ -32,7 +32,7 @@ export default function TemplatesPage() {
   }
 
   return (
-    <div className="px-0 sm:px-8 py-8 mx-auto flex flex-col gap-6">
+    <div className="px-0 py-8 mx-auto flex flex-col gap-6">
       <button
         onClick={() => { setMode('list'); reload(); }}
         className="
