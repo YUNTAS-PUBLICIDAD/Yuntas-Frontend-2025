@@ -4,6 +4,7 @@ import { useTemplateEditor } from '@/hooks/useTemplateEditor';
 import { useTemplates } from '@/hooks/useTemplates';
 import { TemplateEditor } from './_components/TemplateEditor';
 import { TemplatesList } from './_components/TemplateList';
+import { ArrowLeft, LayoutTemplate } from 'lucide-react';
 
 export default function TemplatesPage() {
   const [mode, setMode] = useState<'list' | 'editor'>('list');
@@ -39,15 +40,23 @@ export default function TemplatesPage() {
         onClick={() => { setMode('list'); reload(); }}
         className="
           self-start inline-flex items-center gap-1.5
-          text-sm text-gray-500 dark:text-gray-400
-          hover:text-gray-900 dark:hover:text-white
-          transition-colors
+          px-4 py-3  rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.03]
+          hover:bg-gray-50 dark:hover:bg-white/[0.06] transition-all
         "
       >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <path d="M10 3L6 8l4 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        <div className='w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center'>
+        <ArrowLeft size={18} className='text-gray-700 dark:text-gray-200'/>
+        </div>
+        <div className='text-left'>
+         <p className='text-sm font-semibold text-gray-900 dark:text-white'>
+
         Volver a plantillas
+         </p>
+         <p className='text-xs text-gray-500 dark:text-gray-400'>
+           Regresar a la lista de automatizaciones
+         </p>
+        </div>
+        <LayoutTemplate size={16} className='ml-2 text-gray-300 dark:text-gray-600'/>
       </button>
       <TemplateEditor editor={editor} />
     </div>
