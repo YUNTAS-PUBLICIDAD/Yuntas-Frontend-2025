@@ -2,14 +2,34 @@
 
 import "react-quill/dist/quill.snow.css";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 import { getImageUrl } from "@/utils/getImageUrl";
+import toast from "react-hot-toast";
+import { Trash2 } from "lucide-react";
+
+// const ReactQuill = dynamic(
+//   () => import("react-quill"),
+//   { ssr: false }
+// );
 
 const ReactQuill = dynamic(
-  () => import("react-quill"),
-  { ssr: false }
+  async () => {
+
+    const { default: RQ } =
+      await import("react-quill");
+
+    return ({ forwardedRef, ...props }: any) => (
+      <RQ
+        ref={forwardedRef}
+        {...props}
+      />
+    );
+  },
+  {
+    ssr: false,
+  }
 );
 
 // =====================================================
@@ -58,6 +78,7 @@ function UploadZone({
 
   return (
     <label className="
+      group
       flex flex-col items-center
       gap-2
 
@@ -82,7 +103,8 @@ function UploadZone({
     ">
 
       <div className="
-        w-8 h-8 rounded-lg
+
+        w-12 h-12 rounded-2xl
 
         bg-white
         dark:bg-white/10
@@ -91,6 +113,8 @@ function UploadZone({
         dark:border-white/10
 
         flex items-center justify-center
+        group-hover:scale-105
+        transition-transform
       ">
 
         <svg
@@ -125,16 +149,51 @@ function UploadZone({
 
       {hint && (
         <span className="
-          text-xs text-gray-400
-          dark:text-gray-500
+          text-xs leading-relaxed text-gray-500
+          dark:text-gray-400
         ">
           {hint}
         </span>
       )}
+      <div
+              className="
+                inline-flex items-center gap-2
 
+                px-3 py-1.5
+
+                rounded-full
+
+                bg-blue-50
+                dark:bg-blue-500/10
+
+                border border-blue-100
+                dark:border-blue-500/20
+              "
+            >
+
+              <div
+                className="
+                  w-2 h-2 rounded-full
+                  bg-blue-500
+                "
+              />
+
+              <span
+                className="
+                  text-[11px]
+                  font-medium
+
+                  text-blue-700
+                  dark:text-blue-300
+                "
+              >
+                Solo imágenes WEBP • Máximo 2MB
+              </span>
+
+            </div>
       <input
         type="file"
-        accept="image/*"
+        accept=".webp,image/webp"
         onChange={onChange}
         className="hidden"
       />
@@ -197,7 +256,7 @@ function ImagePreview({
 
           <input
             type="file"
-            accept="image/*"
+            accept=".webp,image/webp"
             onChange={onReplace}
             className="hidden"
           />
@@ -262,6 +321,8 @@ export function VariantEditor({
   const isProductContext =
     templateContext === "PRODUCTO";
 
+  const quillRef = useRef<any>(null);
+
 
   // =====================================================
   // OVERRIDE
@@ -312,10 +373,57 @@ export function VariantEditor({
     const tag =
       `{{${variable}}}`;
 
+    // =====================================================
+     // QUILL EMAIL
+     // =====================================================
+
+     if(variant.channel === "email" && quillRef.current){
+       const editor =
+            quillRef.current.getEditor();
+
+          const range =
+            editor.getSelection(true);
+
+          const position =
+            range ? range.index : editor.getLength();
+
+          editor.insertText(position, tag);
+
+          editor.setSelection(
+            position + tag.length
+          );
+
+          const html =
+            editor.root.innerHTML;
+
+          if (
+            isProductContext &&
+            selectedProductId
+          ) {
+
+            updateOverride({
+              content: html,
+            });
+
+            return;
+          }
+
+          onChange({
+            content: html,
+          });
+
+          return;
+
+     }
+
+
+    // =====================================================
+    // TEXTAREA NORMAL
+    // =====================================================
+
     const current = isProductContext ? (override?.content ?? "") : (variant.content ?? "")
-      // override?.content ||
-      // variant.content ||
-      // "";
+
+    const next = current + tag;
 
     if (
       isProductContext &&
@@ -324,15 +432,14 @@ export function VariantEditor({
 
       updateOverride({
         content:
-          current + tag,
+          next
       });
 
       return;
     }
 
     onChange({
-      content:
-        current + tag,
+      content: next
     });
   };
 
@@ -409,6 +516,17 @@ export function VariantEditor({
         return;
       }
 
+      if(file.type !== "image/webp"){
+       toast.error("Solo se permiten imágenes WEPB")
+        return;
+      }
+
+      if(file.size > 2 * 1024 * 1024){
+        toast.error("La imagen no puede superar 2MB")
+
+        return;
+      }
+
       await onUpload(file);
     };
 
@@ -422,27 +540,18 @@ export function VariantEditor({
         return;
       }
 
-      // const path =
-      //   await onUpload(file);
+      if(file.type !== "image/webp"){
+        toast.error(
+          "Solo se permiten imágenes WEBP"
+        )
+        return;
+      }
 
-      // const currentAssets =
-      //   override?.assets || [];
+      if (file.size > 2 * 1024 * 1024){
+        toast.error("La imagen no puede superar 2MB")
+        return;
+      }
 
-      // const filtered =
-      //   currentAssets.filter(
-      //     (a: any) =>
-      //       a.key !== "image"
-      //   );
-
-      // updateOverride({
-      //   assets: [
-      //     ...filtered,
-      //     {
-      //       key: "image",
-      //       path,
-      //     },
-      //   ],
-      // });
 
       await onUploadProductOverride(
         selectedProductId,
@@ -558,11 +667,9 @@ export function VariantEditor({
                 subject: value,
               });
             }}
-            placeholder="
-              Asunto del correo...
-            "
+            placeholder="Asunto del correo..."
             className="
-              w-full h-10 px-3
+              w-full h-10 px-2
 
               text-sm rounded-lg
 
@@ -601,9 +708,10 @@ export function VariantEditor({
 
         {variant.channel === "email" ? (
 
-          <div>
+          <div className="editor-wrapper">
 
           <ReactQuill
+            forwardedRef={quillRef}
             value={content}
             onChange={(value) => {
 
@@ -683,65 +791,111 @@ export function VariantEditor({
           PERSONALIZACIÓN
       ===================================================== */}
 
-      <div className="space-y-2">
+      <div className="space-y-3">
 
-        <FieldLabel>
-          Personalización
-        </FieldLabel>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="
+              text-sm font-semibold
+              text-gray-900 dark:text-white
+            ">
+              Variables dinámicas
+            </p>
 
-        <div className="flex items-center gap-2 flex-wrap">
+            <p className="
+              mt-1 text-xs
+              text-gray-500 dark:text-gray-400
+            ">
+              Personaliza automáticamente el mensaje con datos del cliente
+            </p>
+          </div>
+        </div>
+
+        <div className="
+          rounded-2xl
+
+          border border-gray-200
+          dark:border-white/10
+
+          bg-gray-50
+          dark:bg-white/[0.03]
+
+          p-4
+        ">
 
           <div className="
-            px-2.5 py-1
-            rounded-full
-
-            bg-blue-50
-            dark:bg-blue-500/10
-
-            border border-blue-100
-            dark:border-blue-500/20
+            flex flex-wrap gap-2
           ">
 
-            <span className="
-              text-[11px]
-              font-medium
+            <button
+              type="button"
+              onClick={() =>
+                insertVariable("nombre")
+              }
+              className="
+                inline-flex items-center gap-2
 
-              text-blue-700
-              dark:text-blue-300
-            ">
-              {"{{nombre}}"}
-            </span>
+                h-10 px-4
+
+                rounded-xl
+
+                border border-blue-200
+                dark:border-blue-500/20
+
+                bg-blue-50
+                dark:bg-blue-500/10
+
+                hover:bg-blue-100
+                dark:hover:bg-blue-500/20
+
+                transition-colors
+              "
+            >
+
+              <div className="
+                px-2 py-0.5 rounded-md
+
+                bg-white
+                dark:bg-blue-950/40
+
+                text-[11px]
+                font-semibold
+
+                text-blue-700
+                dark:text-blue-300
+              ">
+                {"{{nombre}}"}
+              </div>
+
+              <span className="
+                text-xs font-medium
+
+                text-blue-700
+                dark:text-blue-300
+              ">
+                Insertar nombre
+              </span>
+            </button>
 
           </div>
 
-          <p className="
-            text-xs
+          <div className="
+            mt-3
+
+            text-xs leading-relaxed
+
             text-gray-500
             dark:text-gray-400
           ">
-            Se reemplazará automáticamente por el nombre del cliente
-          </p>
+            Cuando se envíe el mensaje,
+            el sistema reemplazará automáticamente
+            la variable por el nombre real del cliente.
+          </div>
 
         </div>
 
-        <button
-          type="button"
-          onClick={() =>
-            insertVariable("nombre")
-          }
-          className="
-            text-xs font-medium
-
-            text-blue-600
-            dark:text-blue-400
-
-            hover:underline
-          "
-        >
-          Insertar nombre
-        </button>
-
       </div>
+
 
       {/* =====================================================
           CTA
@@ -860,7 +1014,7 @@ export function VariantEditor({
             <UploadZone
               label="Subir imagen"
               hint="
-                PNG, JPG o WEBP
+                WEBP
               "
               onChange={handleBaseFile}
             />
@@ -898,17 +1052,17 @@ export function VariantEditor({
             <div>
 
               <FieldLabel>
-                Imagen override
+                Imagen personalizada
               </FieldLabel>
 
               {!overrideImage ? (
 
                 <UploadZone
                   label="
-                    Subir imagen override
+                    Subir imagen personalizada
                   "
                   hint="
-                    Sobreescribe imagen base
+                    Reemplaza la imagen general para este producto
                   "
                   onChange={
                     handleOverrideFile
@@ -971,30 +1125,63 @@ export function VariantEditor({
           onClick={onDelete}
           className="
             inline-flex items-center
-            gap-1.5
+            gap-2
 
-            px-3 h-8
+            px-4 h-9
 
             text-xs font-medium
 
-            rounded-lg
+            rounded-xl
 
-            border border-gray-200
-            dark:border-white/10
+            border border-red-200
+            dark:border-red-500/20
 
-            text-gray-500
-            dark:text-gray-400
+            bg-red-50
+            dark:bg-red-500/10
+
+            text-red-600
+            dark:text-red-400
+
+            hover:bg-red-100
+            dark:hover:bg-red-500/20
+            transition-colors
+
           "
         >
-          Eliminar variante
+          <Trash2 size={14}/>
+          Eliminar canal
         </button>
 
-        <span className="
-          text-[11px]
-          text-gray-400
+        <div className="
+          inline-flex items-center gap-2
+
+          px-3 py-1.5
+
+          rounded-full
+
+          bg-gray-100
+          dark:bg-white/5
         ">
-          Canal: {variant.channel}
-        </span>
+
+          <div className="
+            w-2 h-2 rounded-full
+
+            bg-green-500
+          " />
+
+          <span className="
+            text-[11px]
+            font-medium
+
+            text-gray-700
+            dark:text-gray-300
+          ">
+            {variant.channel === "email"
+              ? "Correo electrónico"
+              : "WhatsApp"}
+          </span>
+
+        </div>
       </div>
     </div>
   );

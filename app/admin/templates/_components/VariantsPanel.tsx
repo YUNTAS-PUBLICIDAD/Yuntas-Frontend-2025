@@ -94,17 +94,17 @@ function WhatsAppPreview({
       preview
     );
 
-  const cta =
-    templateContext === "PRODUCTO"
-      ? (
-          override?.ctaText ||
-          variant?.ctaText ||
-          "Ver más"
-        )
-      : (
-          variant?.ctaText ||
-          "Ver más"
-        );
+  // const cta =
+  //   templateContext === "PRODUCTO"
+  //     ? (
+  //         override?.ctaText ||
+  //         variant?.ctaText ||
+  //         "Ver más"
+  //       )
+  //     : (
+  //         variant?.ctaText ||
+  //         "Ver más"
+  //       );
 
   const image =
     templateContext === "PRODUCTO"
@@ -267,7 +267,7 @@ function WhatsAppPreview({
 
           {/* CTA */}
 
-          {cta && (
+          {/*{cta && (
 
             <div className="mt-3">
 
@@ -283,7 +283,7 @@ function WhatsAppPreview({
                 {cta}
               </button>
             </div>
-          )}
+          )}*/}
 
           <p className="
             text-[9px]
@@ -688,23 +688,22 @@ export function VariantsPanel({
       ===================================================== */}
 
       <div className="
-        border-r border-gray-100
-        dark:border-white/10
+
       ">
 
         {/* HEADER */}
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-white/10">
+        <div className="px-0 py-4 border-b border-gray-100 dark:border-white/10">
         <p className="text-sm font-semibold text-gray-900 dark:text-white">
           Canales de envío
         </p>
 
         <p className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-          Configura el cotenido que se enviará automáticamente por cada canal
+          Configura el contenido que se enviará automáticamente por cada canal
         </p>
         </div>
         {/* CHANNEL TABS */}
         <div className="
-          flex px-1
+          flex flex-col sm:flex-row px-1
           border-b border-gray-100
           dark:border-white/10
         ">
@@ -725,7 +724,7 @@ export function VariantsPanel({
             //       v.channel === id
             //   );
 
-            const configured = variants.some((v:any) => v.channel === id);
+            const enabled = variants.some((v:any) => v.channel === id);
 
             return (
 
@@ -764,11 +763,11 @@ export function VariantsPanel({
                              {label}
                              </span>
 
-                             {configured && (
+                             {enabled && (
 
                                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/10 text-[10px] font-medium text-green-700 dark:text-green-400">
                                 <CheckCircle size={12}/>
-                                Configurado
+                                Activo
                                </div>
                              )}
 
@@ -780,7 +779,7 @@ export function VariantsPanel({
         {/* CONTENT */}
 
         <div className="
-          p-5
+          px-0 sm:px-5 py-5
         ">
 
           {!current ? (
