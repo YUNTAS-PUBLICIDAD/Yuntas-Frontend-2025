@@ -9,6 +9,7 @@ export default function TemplatesPage() {
   const [mode, setMode] = useState<'list' | 'editor'>('list');
   const [templateId, setTemplateId] = useState<number | undefined>();
   const { templates, loading, reload, remove } = useTemplates();
+  const [editorKey, setEditorKey] = useState(0);
   const editor = useTemplateEditor(templateId);
 
   if (mode === 'list') {
@@ -17,13 +18,14 @@ export default function TemplatesPage() {
         {loading ? (
           <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 py-12 justify-center">
             <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            Cargando templates…
+            Cargando plantillas…
           </div>
         ) : (
           <TemplatesList
             templates={templates}
-            onCreate={() => { setTemplateId(undefined); setMode('editor'); }}
-            onEdit={(id: number) => { setTemplateId(id); setMode('editor'); }}
+            onCreate={() => { setTemplateId(undefined); setEditorKey(prev => prev + 1);
+            setMode('editor'); }}
+            onEdit={(id: number) => { setTemplateId(id); setEditorKey(prev => prev + 1); setMode('editor'); }}
             onDelete={remove}
           />
         )}
@@ -32,7 +34,7 @@ export default function TemplatesPage() {
   }
 
   return (
-    <div className="px-0 sm:px-8 py-8 mx-auto flex flex-col gap-6">
+    <div className="px-0 py-8 mx-auto flex flex-col gap-6">
       <button
         onClick={() => { setMode('list'); reload(); }}
         className="
@@ -45,7 +47,7 @@ export default function TemplatesPage() {
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
           <path d="M10 3L6 8l4 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-        Volver a templates
+        Volver a plantillas
       </button>
       <TemplateEditor editor={editor} />
     </div>
