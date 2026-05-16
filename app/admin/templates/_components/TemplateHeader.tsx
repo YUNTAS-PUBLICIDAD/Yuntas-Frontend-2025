@@ -1,11 +1,17 @@
 "use client";
 
-type Props = { name: string; active: boolean; onChange: (patch: any) => void };
+type Props = { name: string; context: string; active: boolean; productos: any[]; selectedProductId?: number | null; onSelectProduct: (productId: number | null) => void; onChange: (patch: any) => void };
 
-export function TemplateHeader({ name, active, onChange }: Props) {
+export function TemplateHeader({ name, active, productos, context, selectedProductId, onSelectProduct,onChange }: Props) {
+
+  const isProductContext = context === "PRODUCTO";
+
   return (
     <div className="flex flex-col gap-5">
 
+      {/* =====================================================
+                NAME
+            ===================================================== */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest">
           Nombre
@@ -26,25 +32,155 @@ export function TemplateHeader({ name, active, onChange }: Props) {
         />
       </div>
 
-      {/*<div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-          Descripción interna
-        </label>
-        <input
-          placeholder="Uso, contexto, audiencia…"
-          className="
-            h-9 px-3 text-sm rounded-lg w-full
-            border border-gray-200 dark:border-white/10
-            bg-white dark:bg-transparent
-            text-gray-900 dark:text-white
-            placeholder:text-gray-400 dark:placeholder:text-gray-600
-            focus:outline-none focus:border-gray-400 dark:focus:border-white/30
-            transition-colors
-          "
-        />
-        <span className="text-[11px] text-gray-400 dark:text-gray-500">Solo visible para tu equipo</span>
-      </div>*/}
+      {/* =====================================================
+               CONTEXT
+           ===================================================== */}
+      <div className="
+             flex flex-col gap-1.5
+           ">
 
+             <label className="
+               text-xs font-medium
+               text-gray-500 dark:text-gray-400
+               uppercase tracking-widest
+             ">
+               Página
+             </label>
+
+             <select
+               value={context}
+               onChange={(e) =>
+                 onChange({
+                   context: e.target.value,
+                 })
+               }
+               className="
+                 h-10 px-3 text-sm rounded-lg w-full
+
+                 border border-gray-200
+                 dark:border-white/10
+
+                 bg-white dark:bg-transparent
+
+                 text-gray-900 dark:text-white
+
+                 focus:outline-none
+                 focus:border-gray-400
+                 dark:focus:border-white/30
+
+                 transition-colors
+                 cursor-pointer
+               "
+             >
+
+               <option
+                 value="INICIO"
+                 className="
+                   bg-white dark:bg-[#071024]
+                 "
+               >
+                 Inicio
+               </option>
+
+               <option
+                 value="PRODUCTO"
+                 className="
+                   bg-white dark:bg-[#071024]
+                 "
+               >
+                 Producto
+               </option>
+
+             </select>
+
+             <span className="
+               text-[11px]
+               text-gray-400 dark:text-gray-500
+             ">
+               Esta plantilla se mostrará según la página donde aparesca el popup
+             </span>
+           </div>
+
+           {/* =====================================================
+                  PRODUCT SELECTOR
+            ===================================================== */}
+
+            {isProductContext && (
+
+              <div className="
+                flex flex-col gap-1.5
+              ">
+
+                <label className="
+                  text-xs font-medium
+                  text-gray-500 dark:text-gray-400
+                  uppercase tracking-widest
+                ">
+                  Producto
+                </label>
+
+                <select
+                  value={selectedProductId ?? ""}
+                  onChange={(e) =>
+                    onSelectProduct(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                  className="
+                    h-10 px-3 text-sm rounded-lg w-full
+
+                    border border-gray-200
+                    dark:border-white/10
+
+                    bg-white
+                    dark:bg-transparent
+
+                    text-gray-900
+                    dark:text-white
+
+                    focus:outline-none
+                    focus:border-gray-400
+                    dark:focus:border-white/30
+
+                    transition-colors
+                    cursor-pointer
+                  "
+                >
+
+                  <option value="">
+                    Seleccionar producto
+                  </option>
+
+                  {productos.map((product) => (
+
+                    <option
+                      key={product.id}
+                      value={product.id}
+                      className="
+                        bg-white dark:bg-[#071024]
+                      "
+                    >
+                      {product.name}
+                    </option>
+                  ))}
+
+                </select>
+
+                <span className="
+                  text-[11px]
+                  text-gray-400 dark:text-gray-500
+                ">
+                  Personaliza mensajes e imágenes para este producto
+                </span>
+              </div>
+            )}
+
+
+           {/* =====================================================
+                     ACTIVE
+                 ===================================================== */}
       <div className="
         flex items-center justify-between
         px-3.5 py-3 rounded-lg

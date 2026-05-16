@@ -7,6 +7,7 @@ import PopupRenderer from "@/components/molecules/PopupRenderer";
 import { LeadInput } from "@/types/admin/lead";
 import { showToast } from "@/utils/showToast";
 import { usePathname } from "next/navigation";
+import { useLeadCapture } from "@/hooks/useLeadCapture";
 
 interface DynamicPopupProps {
     delay?: number;
@@ -33,8 +34,10 @@ const DynamicPopup = ({
     productId,
     sourceId = 1,
 }: DynamicPopupProps) => {
-    const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
-    const { sendEmail, isActivating: isEmailSending } = useEmail();
+    // const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
+    // const { sendEmail, isActivating: isEmailSending } = useEmail();
+
+    const {captureLead, isSubmitting} = useLeadCapture();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
     const popupTriggered = useRef(false);
@@ -63,7 +66,7 @@ const DynamicPopup = ({
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         // Se limpia los errores
         setErrors({});
 
@@ -86,18 +89,29 @@ const DynamicPopup = ({
             ...(productId && { product_id: productId }),
         };
 
-        const whatsappResult = await sendWhatsapp(leadData);
-        if (!whatsappResult.success) {
-            showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
-            return;
+        const result = await captureLead(
+          leadData
+        );
+
+        if(!result.success){
+         showToast.error(
+           result.message || "Error enviando formulario"
+         );
+         return;
         }
 
-        const emailResult = await sendEmail(leadData);
-        if (!emailResult.success) {
-            showToast.error(emailResult.message || "Error al enviar el email");
-            return;
-        }
-        
+        // const whatsappResult = await sendWhatsapp(leadData);
+        // if (!whatsappResult.success) {
+        //     showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
+        //     return;
+        // }
+
+        // const emailResult = await sendEmail(leadData);
+        // if (!emailResult.success) {
+        //     showToast.error(emailResult.message || "Error al enviar el email");
+        //     return;
+        // }
+
         closeModal();
         showToast.success("¡Gracias! Nos pondremos en contacto contigo pronto.");
     };
@@ -112,7 +126,7 @@ const DynamicPopup = ({
        popupTriggered.current = true;
        setShow(true);
       }, delay);
- 
+
         return () => clearTimeout(timer);
     }, [delay, pathname]);
 
@@ -134,7 +148,8 @@ const DynamicPopup = ({
             handleSubmit={handleSubmit}
             buttonText={buttonText}
             buttonColor={buttonColor}
-            isSubmitting={isWhatsappSending || isEmailSending}
+            // isSubmitting={isWhatsappSending || isEmailSending}
+            isSubmitting={isSubmitting}
         />
     );
 };

@@ -35,7 +35,7 @@ export const exportCSV = (
         Subtítulo: blog.cover_subtitle || "Sin subtítulo",
         "Meta Título": blog.meta_title || "N/A",
         Fecha: new Date(blog.created_at).toLocaleDateString(), // Corregido: 'fecha' no existía
-        "Cant. Párrafos": blog.paragraphs?.length || 0,
+        "Cant. Párrafos": 0,
         "Cant. Imágenes": blog.gallery?.length || 0,// Nota: es 'gallery', no 'galeria'
     }));
   } else if (isUser(data[0])) {

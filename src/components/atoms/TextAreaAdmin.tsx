@@ -47,7 +47,7 @@ export default function TextareaAdmin({
                 rows={rows}
                 disabled={disabled}
                 ref={textareaRef}
-                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all resize-none disabled:opacity-50 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus:border-transparent"}`}
+                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all resize-none disabled:opacity-50 text-[#203565] ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus:border-transparent"}`}
             />
             {/* {helperText && (
                 <span className="text-gray-500 text-sm">{helperText}</span>

@@ -45,6 +45,10 @@ export const API_ENDPOINTS = {
     GET: '/settings',
   },
 
+  LEADS: {
+   CAPTURE: '/leads/capture'
+  },
+
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     CHATBOT: {
@@ -113,6 +117,9 @@ export const API_ENDPOINTS = {
       PRODUCT_ASSETS: {
         UPLOAD: '/admin/templates/product-assets/upload',
         DELETE: '/admin/templates/product-assets',
+      },
+      PRODUCT_OVERRIDES: {
+        UPLOAD: '/admin/templates/product-overrides/upload'
       },
 
       GET_VARIABLES: '/admin/templates/variables',

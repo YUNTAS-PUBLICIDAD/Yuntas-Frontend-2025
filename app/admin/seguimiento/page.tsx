@@ -23,13 +23,35 @@ export default function SeguimientoPage() {
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [leadsFiltered, setLeadsFiltered] = useState<Lead[]>([]);
+    const [originFilter, setOriginFilter] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isMonitoreoMode, setIsMonitoreoMode] = useState(false); 
+    const [isMonitoreoMode, setIsMonitoreoMode] = useState(false);
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-    
+
 
     const { getLeads, leads, createLead, updateLead, deleteLead, error, isLoading } = useLeads();
     const { confirm, ConfirmDialog } = useConfirm();
+    const currentMode = useMemo(
+        () => ({
+            title: isMonitoreoMode ? "Monitoreo" : "Vista principal",
+            description: isMonitoreoMode
+                ? "Visualiza actividad por canal y último movimiento registrado."
+                : "Administra clientes, edita datos y filtra seguimientos con rapidez.",
+            searchPlaceholder: isMonitoreoMode
+                ? "Buscar por ID o nombre..."
+                : "Buscar por nombre, email, teléfono, producto...",
+            searchKeys: isMonitoreoMode
+                ? (['id', 'name'] as const)
+                : (['id', 'name', 'email', 'phone', 'product_name', 'source_name', 'created_at'] as const),
+            emptyMessage: isMonitoreoMode
+                ? "No se encontraron registros de monitoreo"
+                : "No se encontraron seguimientos",
+            resetText: isMonitoreoMode
+                ? "Ver todos los registros"
+                : "Ver todos los seguimientos",
+        }),
+        [isMonitoreoMode]
+    );
 
     useEffect(() => {
         getLeads(200);
@@ -38,6 +60,24 @@ export default function SeguimientoPage() {
     useEffect(() => {
         setLeadsFiltered(leads);
     }, [leads]);
+
+    const originOptions = useMemo(() => {
+        return Array.from(
+            new Set(
+                leads
+                    .map((lead) => lead.source_name?.trim())
+                    .filter((source): source is string => Boolean(source))
+            )
+        ).sort((a, b) => a.localeCompare(b));
+    }, [leads]);
+
+    const leadsByOrigin = useMemo(() => {
+        if (!originFilter) return leadsFiltered;
+
+        return leadsFiltered.filter((lead) => (lead.source_name ?? "").trim() === originFilter);
+    }, [leadsFiltered, originFilter]);
+
+    const totalRecords = leadsByOrigin.length;
 
     // Filtrar leads por término de búsqueda
 
@@ -95,7 +135,7 @@ export default function SeguimientoPage() {
     const topButtons = [
         {
             label: "MENSAJES",
-            onClick: () => { 
+            onClick: () => {
                 router.push('/admin/productos?modal=whatsapp&tab=plantilla');
             },
             variant: "secondary" as const,
@@ -117,17 +157,29 @@ export default function SeguimientoPage() {
         { key: "email", label: "EMAIL" },
         { key: "phone", label: "TELÉFONO" },
         { key: "product_name", label: "PRODUCTO" },
-        { key: "source_name", label: "ORIGEN" }, 
+        { key: "source_name", label: "ORIGEN" },
         { key: "created_at", label: "FECHA DE INICIO" }
     ];
 
     return (
-        <div className="p-2 md:p-4 text-[#0D1030] dark:text-white transition-colors duration-300">
+        <div className="relative p-2 md:p-4 text-[#0D1030] dark:text-white transition-colors duration-300">
+            <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-56 rounded-[2rem] bg-[radial-gradient(circle_at_top_left,_rgba(35,193,222,0.18),_transparent_42%),radial-gradient(circle_at_top_right,_rgba(32,53,101,0.16),_transparent_36%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(109,225,227,0.18),_transparent_42%),radial-gradient(circle_at_top_right,_rgba(41,50,150,0.18),_transparent_36%)]" />
 
-            {/* BOTONES SUPERIORES */}
-            <div className="mb-4 flex flex-row flex-wrap gap-2">
-                <ActionButtonGroup buttons={topButtons} className="w-full" />
-            </div>
+            {/* CABECERA */}
+            <section className="mb-5 overflow-hidden rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
+                <div className="flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center">
+                    <div className="space-y-1 flex-1">
+                        <h2 className="text-3xl font-black tracking-tight text-[#0D1030] dark:text-white md:text-4xl">
+                            {currentMode.title}
+                        </h2>
+                        <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/60 md:text-base">
+                            {currentMode.description}
+                        </p>
+                    </div>
+
+                    <ActionButtonGroup buttons={topButtons} className="w-full lg:w-auto" position="center" />
+                </div>
+            </section>
 
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 dark:bg-red-950/30 dark:border-red-800 dark:text-red-200 px-4 py-3 rounded-lg mb-4 text-sm">
@@ -135,70 +187,74 @@ export default function SeguimientoPage() {
                 </div>
             )}
 
-            {/* BUSCADOR */}
-
-            {!isMonitoreoMode && (
-                <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
-                    
-                   
-                    <div className="w-full md:flex-1">
+            <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-4 shadow-[0_14px_32px_rgba(13,16,48,0.05)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
+                <div className="flex flex-col gap-4 2xl:flex-row 2xl:items-center 2xl:justify-between">
+                    <div className="w-full min-w-0 2xl:flex-1">
                         <SearchBar
                             items={leads}
                             onSearch={setLeadsFiltered}
-                            placeholder="Buscar por nombre, email, teléfono, producto..."
-                            searchKeys={[
-                                'id',
-                                'name',
-                                'email',
-                                'phone',
-                                'product_name',
-                                'source_name',
-                                'created_at'
-                            ]}
+                            placeholder={currentMode.searchPlaceholder}
+                            searchKeys={currentMode.searchKeys as any}
                             getDisplayValue={(item) => `${item.id} - ${item.name}`}
                         />
                     </div>
 
-                   
-                    <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center transition-colors duration-300">
-                        <span className="text-[#203565] dark:text-white font-semibold text-sm md:text-base">
-                            {leadsFiltered.length} REGISTROS ENCONTRADOS
-                        </span>
-                    </div>
-
-                </div>
-            )}
-            {/* BUSCADOR MONITOREO */}
-            {isMonitoreoMode && (
-                <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
-
-                    <div className="w-full md:flex-1">
-                        <SearchBar
-                        items={leads}
-                        onSearch={setLeadsFiltered}
-                        placeholder="Buscar por ID o Nombre..."
-                        searchKeys={['id', 'name']}
-                        getDisplayValue={(item) => `${item.id} - ${item.name}`}
-                        />
-                   </div>
-                   {/*Contador para Monitoreo */}
-                   <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center transition-colors duration-300">
-                        <span className="text-[#203565] dark:text-white font-semibold text-sm md:text-base">
-                            {leadsFiltered.length} REGISTROS ENCONTRADOS
-                        </span>
+                    <div className="grid w-full gap-3 sm:grid-cols-2 2xl:w-[360px] 2xl:flex-none">
+                        <div className="w-full min-w-0 rounded-2xl border border-[#E5EEF6] bg-[#F8FBFE] px-3 py-3 text-center dark:border-white/10 dark:bg-white/5 sm:px-4">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">Resultados</p>
+                            <p className="mt-1 text-xl font-black leading-none text-[#203565] dark:text-white sm:text-2xl">
+                                {totalRecords}
+                            </p>
+                        </div>
+                        <div className="w-full min-w-0 rounded-2xl border border-[#E5EEF6] bg-[#F8FBFE] px-3 py-3 text-center dark:border-white/10 dark:bg-white/5 sm:px-4">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">Modo</p>
+                            <p className="mt-1 text-sm font-semibold text-[#203565] dark:text-white">
+                                {isMonitoreoMode ? "Monitoreo" : "Vista principal"}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            )}
+            </section>
 
-            {/* TABLAS */}
+            <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de {currentMode.title.toLowerCase()}</p>
+                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
+                        {currentMode.title}
+                    </h3>
+                </div>
+
+                <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
+                    <label htmlFor="origin-filter" className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
+                        Filtrar por origen
+                    </label>
+                    <select
+                        id="origin-filter"
+                        value={originFilter}
+                        onChange={(event) => setOriginFilter(event.target.value)}
+                        className="w-full rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white lg:min-w-[220px] lg:w-auto"
+                    >
+                        <option value="">Todos los orígenes</option>
+                        {originOptions.map((origin) => (
+                            <option key={origin} value={origin}>
+                                {origin}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             <div className="w-full overflow-x-auto">
                 {isMonitoreoMode ? (
                     <MonitoreoTable
                         data={datosPaginados}
                         isLoading={isLoading}
-                        emptyMessage="No se encontraron registros de monitoreo"
-                        resetSearchText="Ver todos los registros"
-                        onResetSearch={() => setLeadsFiltered(leads)}
+                        emptyMessage={currentMode.emptyMessage}
+                        resetSearchText={currentMode.resetText}
+                        onResetSearch={() => {
+                            setLeadsFiltered(leads);
+                            setOriginFilter("");
+                        }}
                     />
                 ) : (
                     <AdminTable
@@ -207,35 +263,48 @@ export default function SeguimientoPage() {
                         onEdit={handleEditClick}
                         onDelete={handleDeleteLead}
                         isLoading={isLoading}
-                        emptyMessage="No se encontraron seguimientos"
-                        resetSearchText="Ver todos los seguimientos"
-                        onResetSearch={() => setLeadsFiltered(leads)}
+                        emptyMessage={currentMode.emptyMessage}
+                        resetSearchText={currentMode.resetText}
+                        onResetSearch={() => {
+                            setLeadsFiltered(leads);
+                            setOriginFilter("");
+                        }}
                     />
                 )}
             </div>
 
-            {/* PAGINACIÓN */}
-            <div className="flex justify-center mt-4 w-full overflow-x-hidden">
+            <div className="mt-5 flex justify-center">
                 <Pagination
                     pageSize={5}
-                    items={leadsFiltered}
+                    items={leadsByOrigin}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>
 
-            {/* BOTÓN AÑADIR */}
-            <div className="mt-6 flex justify-start">
-                <ActionButtonGroup
-                    buttons={[
-                        {
-                            label: "Añadir Cliente",
-                            onClick: () => setIsModalOpen(true),
-                            variant: "tertiary",
-                            icon: <UserPlus className="h-4 w-4" />
-                        }
-                    ]}
-                />
-            </div>
+            <section className="mt-5 rounded-[1.5rem] border border-[#D8E7F3] bg-white/95 p-4 shadow-[0_12px_28px_rgba(13,16,48,0.05)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Nuevo registro</p>
+                        <h3 className="mt-1 text-lg font-black text-[#0D1030] dark:text-white">
+                            Añade un cliente desde aquí
+                        </h3>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-white/60">
+                            Mantén actualizado el seguimiento sin salir de la vista actual.
+                        </p>
+                    </div>
+
+                    <ActionButtonGroup
+                        buttons={[
+                            {
+                                label: "Añadir Cliente",
+                                onClick: () => setIsModalOpen(true),
+                                variant: "tertiary",
+                                icon: <UserPlus className="h-4 w-4" />
+                            }
+                        ]}
+                    />
+                </div>
+            </section>
 
             {/* MODAL */}
             <Modal

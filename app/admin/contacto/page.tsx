@@ -10,9 +10,9 @@ import SearchBar from "@/components/molecules/admin/SearchBar";
 
 const columns = [
   { key: "id", label: "ID" },
-  { 
-    key: "full_name", 
-    label: "CLIENTE", 
+  {
+    key: "full_name",
+    label: "CLIENTE",
     render: (_: unknown, row: Contacto) => (
       <div className="flex flex-col">
         <span className="font-semibold text-[#203565] dark:text-[#E8F4F8]">
@@ -20,41 +20,41 @@ const columns = [
         </span>
         <span className="text-xs text-gray-500 dark:text-gray-300">{row.phone}</span>
       </div>
-    ) 
+    )
   },
   { key: "district", label: "DISTRITO" },
   { key: "request_detail", label: "ASUNTO" },
-  { 
-    key: "created_at", 
-    label: "FECHA", 
-    render: (_: unknown, row: Contacto) => new Date(row.created_at).toLocaleDateString() 
+  {
+    key: "created_at",
+    label: "FECHA",
+    render: (_: unknown, row: Contacto) => new Date(row.created_at).toLocaleDateString()
   },
 ];
 
 export default function ContactoPage() {
-  
-  const { 
-    contactos, 
-    error, 
-    isLoading, 
-    getContactos 
+
+  const {
+    contactos,
+    error,
+    isLoading,
+    getContactos
   } = useContactos();
 
- 
+
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedContacto, setSelectedContacto] = useState<Contacto | null>(null);
   const [tableData, setTableData] = useState<Contacto[]>([]);
   const [paginatedData, setPaginatedData] = useState<Contacto[]>([]);
 
   useEffect(() => {
-    getContactos(20); 
+    getContactos(20);
   }, [getContactos]);
 
   useEffect(() => {
-  setTableData(contactos);
-  setPaginatedData(contactos);
-}, [contactos]);
-  
+    setTableData(contactos);
+    setPaginatedData(contactos);
+  }, [contactos]);
+
 
   const handleView = (contacto: Contacto) => {
     setSelectedContacto(contacto);
@@ -67,29 +67,29 @@ export default function ContactoPage() {
 
   return (
     <div>
-      
-{/* Filtro de búsqueda */}
-<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
 
-  {/* Buscador */}
-  <div className="w-full md:flex-1">
-    <SearchBar
-      items={tableData}
-      onSearch={setPaginatedData}
-      placeholder="Buscar por nombre, distrito o asunto..."
-      searchKeys={['first_name', 'last_name', 'district', 'request_detail', 'phone']}
-      getDisplayValue={(item) => `${item.first_name} ${item.last_name}`}
-    />
-  </div>
+      {/* Filtro de búsqueda */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
 
-  {/* Registros encontrados */}
-  <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-    <span className="text-[#203565] font-semibold">
-      {paginatedData.length} REGISTROS ENCONTRADOS
-    </span>
-  </div>
+        {/* Buscador */}
+        <div className="w-full md:flex-1">
+          <SearchBar
+            items={tableData}
+            onSearch={setPaginatedData}
+            placeholder="Buscar por nombre, distrito o asunto..."
+            searchKeys={['first_name', 'last_name', 'district', 'request_detail', 'phone']}
+            getDisplayValue={(item) => `${item.first_name} ${item.last_name}`}
+          />
+        </div>
 
-</div>
+        {/* Registros encontrados */}
+        <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
+          <span className="text-[#203565] font-semibold">
+            {paginatedData.length} REGISTROS ENCONTRADOS
+          </span>
+        </div>
+
+      </div>
       {selectedContacto && (
         <ViewContactoModal
           contacto={selectedContacto}
@@ -98,14 +98,22 @@ export default function ContactoPage() {
         />
       )}
 
-      
+
       {error && (
         <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
           <span className="font-medium">Error:</span> {error}
         </div>
       )}
 
-     
+      <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de contacto</p>
+          <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
+            Contacto
+          </h3>
+        </div>
+      </div>
+
       <AdminTable
         minRows={10}
         columns={columns}
@@ -116,7 +124,7 @@ export default function ContactoPage() {
         onResetSearch={handleResetSearch}
         resetSearchText="Ver todos los contactos"
       />
-      
+
     </div>
   );
 }

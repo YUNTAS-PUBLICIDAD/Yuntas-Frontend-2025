@@ -7,6 +7,7 @@ import NavMenu from "@/components/molecules/header/NavMenu";
 import MenuItem from "../atoms/MenuItem";
 import NavMenuFooter from "../molecules/footer/NavMenuFooter";
 
+// HOLA
 export default function Footer() {
   return (
     <footer className="bg-[#04041C] text-white pt-16 pb-20 px-6">

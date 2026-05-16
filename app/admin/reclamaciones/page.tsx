@@ -47,8 +47,8 @@ export default function ReclamacionesPage() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const [searchTerm, setSearchTerm] = useState(""); 
-    
+    const [searchTerm, setSearchTerm] = useState("");
+
     const [reclamos, setReclamos] = useState<any[]>([]);
     const [tableData, setTableData] = useState<any[]>([]);
     const [paginatedData, setPaginatedData] = useState<any[]>([]);
@@ -105,8 +105,8 @@ export default function ReclamacionesPage() {
                             {isCompleto ? 'Completo' : 'Pendiente'}
                         </span>
                     ),
-                    
-                    claim_status_id: item.claim_status_id 
+
+                    claim_status_id: item.claim_status_id
                 };
             });
             setTableData(formatted);
@@ -226,18 +226,18 @@ export default function ReclamacionesPage() {
             ) : (
                 <>
                     <div className="flex flex-col md:flex-row gap-3 mb-4 w-full">
-                        
+
                         {/* 1. BUSCADOR */}
                         <div className="w-full md:flex-1">
                             <SearchBar
                                 items={tableData}
-                               
+
                                 onSearch={(filteredItems) => {
-                                    
+
                                     if (estadoFiltro !== "todos") {
-                                         const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
-                                         const combined = filteredItems.filter((item: any) => item.claim_status_id === estadoId);
-                                         setPaginatedData(combined);
+                                        const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
+                                        const combined = filteredItems.filter((item: any) => item.claim_status_id === estadoId);
+                                        setPaginatedData(combined);
                                     } else {
                                         setPaginatedData(filteredItems);
                                     }
@@ -290,6 +290,15 @@ export default function ReclamacionesPage() {
                                     ))}
                                 </ul>
                             )}
+                        </div>
+                    </div>
+
+                    <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de recomendaciones</p>
+                            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
+                                Recomendaciones
+                            </h3>
                         </div>
                     </div>
 

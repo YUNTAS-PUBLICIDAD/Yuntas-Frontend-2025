@@ -33,11 +33,13 @@ export default function ProductosPage() {
 
   const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
   const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
-  
+
   // Estados para búsqueda y paginación
   const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
   const [productosFiltrados, setProductosFiltrados] = useState<Producto[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [categories, setCategories] = useState<string[]>([]);
 
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
@@ -53,6 +55,11 @@ export default function ProductosPage() {
 
   useEffect(() => {
     setProductosFiltrados(productos);
+    // Extraer categorías únicas
+    const uniqueCategories = Array.from(
+      new Set(productos.map(p => p.category_name).filter(Boolean))
+    ).sort() as string[];
+    setCategories(uniqueCategories);
   }, [productos]);
 
   useEffect(() => {
@@ -135,6 +142,20 @@ export default function ProductosPage() {
     setSelectedProduct(null);
     setIsAddEditModalOpen(false);
     setFormCloseHandler(null);
+  };
+
+  const handleCategoryFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const category = e.target.value;
+    setSelectedCategory(category);
+
+    if (category) {
+      // Filtrar los productos actuales por categoría
+      const filtered = productos.filter(p => p.category_name === category);
+      setProductosFiltrados(filtered);
+    } else {
+      // Mostrar todos los productos
+      setProductosFiltrados(productos);
+    }
   };
 
   return (
@@ -242,6 +263,30 @@ export default function ProductosPage() {
 
       {/* ───────── CONTENIDO PRINCIPAL (TABLA O VACÍO) ───────── */}
       <>
+        <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de Productos</p>
+            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">Productos</h3>
+          </div>
+          <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
+            <label className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
+              Filtrar por sección
+            </label>
+            <select
+              className="w-full rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white lg:min-w-[220px] lg:w-auto"
+              value={selectedCategory}
+              onChange={handleCategoryFilter}
+            >
+              <option value="">Todas las secciones</option>
+              {categories.map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         {/* TABLA DE DATOS */}
         <AdminTable
           columns={columns}
