@@ -1,4 +1,5 @@
 import { formatDelay } from "@/utils/formatDelay";
+import { Clock3, MessageSquareText, Plus, Trash2 } from "lucide-react";
 
 type Props = {
   steps: any[];
@@ -22,29 +23,22 @@ export function StepsSidebar({
 
   return (
     <div className="
-      w-full lg:w-[260px]
+      w-full lg:w-[300px]
       border-r border-gray-200 dark:border-white/10
       flex flex-col
     ">
 
       <div className="p-4 border-b border-gray-100 dark:border-white/10">
-        {/*<div className="mb-4">
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">
-            Secuencia de mensajes
-          </p>
-          <p className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-            Define el orden y tiempo de envío de cada mensaje automático
-          </p>
-        </div>*/}
         <button
           onClick={onAdd}
           className="
-            w-full h-10 rounded-lg
+            w-full h-10 rounded-2xl
             bg-gray-900 text-white
             dark:bg-white dark:text-gray-900
-            text-sm font-medium hover:opacity-90 transition-opacity
+            text-sm font-semibold inline-flex items-center justify-center gap-2 hover:scale-[0.99] transition-transform
           "
         >
+          <Plus size={16}/>
           Agregar mensaje
         </button>
       </div>
@@ -56,103 +50,195 @@ export function StepsSidebar({
           const active =
             step.step === activeStep;
 
+          const isImmediate = step.delayValue === 0;
+
           return (
             <button
-                          key={step.step}
-                          onClick={() =>
-                            onSelect(step.step)
-                          }
-                          className={`
-                            group
+                         key={step.step}
+                         onClick={() =>
+                           onSelect(step.step)
+                         }
+                         className={`
+                           group
+                           relative
 
-                            text-left
+                           text-left
 
-                            rounded-2xl
-                            border
-                            p-4
+                           rounded-3xl
+                           border
 
-                            transition-all
+                           p-4
 
-                            ${active
-                              ? `
-                                border-blue-500
-                                bg-blue-50
+                           transition-all
 
-                                dark:bg-blue-500/10
-                                dark:border-blue-400
-                              `
-                              : `
-                                border-gray-200
-                                dark:border-white/10
+                           ${active
+                             ? `
+                               border-blue-500
+                               bg-blue-50
 
-                                hover:bg-gray-50
-                                dark:hover:bg-white/5
-                              `
-                            }
-                          `}
-                        >
+                               dark:bg-blue-500/10
+                               dark:border-blue-400
 
-                          <div
-                            className="
-                              flex items-start
-                              justify-between
-                              gap-3
-                            "
-                          >
+                               shadow-sm
+                             `
+                             : `
+                               border-gray-200
+                               dark:border-white/10
 
-                            <div className="min-w-0">
+                               bg-white
+                               dark:bg-white/[0.02]
 
-                              <p
-                                className="
-                                  text-sm font-semibold
-                                  text-gray-900 dark:text-white
-                                "
-                              >
-                                Mensaje {index + 1}
-                              </p>
+                               hover:bg-gray-50
+                               dark:hover:bg-white/[0.04]
+                             `
+                           }
+                         `}
+                       >
 
-                              <p
-                                className="
-                                  mt-1
+                         {/* TOP */}
 
-                                  text-xs leading-relaxed
+                         <div className="
+                           flex items-start
+                           justify-between
+                           gap-3
+                         ">
 
-                                  text-gray-500
-                                  dark:text-gray-400
-                                "
-                              >
-                                {step.delayValue === 0
-                                  ? "Se enviará inmediatamente"
-                                  : `Se enviará después de ${formatDelay(
-                                      step.delayValue,
-                                      step.delayUnit
-                                    )}`
-                                }
-                              </p>
+                           <div className="min-w-0">
 
-                            </div>
+                             <div className="
+                               flex items-center gap-2
+                             ">
 
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onRemove(step.step);
-                              }}
-                              className="
-                                opacity-0
-                                group-hover:opacity-100
+                               <div className="
+                                 w-9 h-9
 
-                                text-xs font-medium
-                                text-red-500
+                                 rounded-2xl
 
-                                transition-opacity
-                              "
-                            >
-                              Eliminar
-                            </button>
+                                 bg-white
+                                 dark:bg-white/10
 
-                          </div>
+                                 border border-gray-200
+                                 dark:border-white/10
 
-                        </button>
+                                 flex items-center
+                                 justify-center
+                               ">
+
+                                 <MessageSquareText
+                                   size={16}
+                                   className="
+                                     text-gray-700
+                                     dark:text-gray-200
+                                   "
+                                 />
+
+                               </div>
+
+                               <div>
+
+                                 <p className="
+                                   text-sm font-semibold
+
+                                   text-gray-900
+                                   dark:text-white
+                                 ">
+                                   Mensaje {index + 1}
+                                 </p>
+
+                                 <p className="
+                                   text-xs
+
+                                   text-gray-400
+                                   dark:text-gray-500
+                                 ">
+                                   Automatización
+                                 </p>
+
+                               </div>
+
+                             </div>
+
+                             {/* DELAY */}
+
+                             <div className="
+                               mt-4
+
+                               inline-flex items-center
+                               gap-2
+
+                               px-3 py-2
+
+                               rounded-2xl
+
+                               bg-gray-100
+                               dark:bg-white/5
+                             ">
+
+                               <Clock3
+                                 size={14}
+                                 className="
+                                   text-gray-500
+                                   dark:text-gray-400
+                                 "
+                               />
+
+                               <span className="
+                                 text-xs font-medium
+
+                                 text-gray-700
+                                 dark:text-gray-300
+                               ">
+
+                                 {isImmediate
+                                   ? "Envío inmediato"
+                                   : `Después de ${formatDelay(
+                                       step.delayValue,
+                                       step.delayUnit
+                                     )}`
+                                 }
+
+                               </span>
+
+                             </div>
+
+                           </div>
+
+                           {/* DELETE */}
+
+                           <button
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               onRemove(step.step);
+                             }}
+                             className="
+                               opacity-100 lg:opacity-0 lg:group-hover:opacity-100
+
+                               w-9 h-9
+
+                               rounded-xl
+
+                               border border-red-100
+                               dark:border-red-500/20
+
+                               bg-red-50
+                               dark:bg-red-500/10
+
+                               flex items-center
+                               justify-center
+
+                               text-red-500
+
+                               transition-all
+                             "
+                           >
+
+                             <Trash2 size={14} />
+
+                           </button>
+
+                         </div>
+
+                       </button>
           );
         })}
       </div>
