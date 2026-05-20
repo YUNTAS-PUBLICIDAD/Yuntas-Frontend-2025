@@ -17,7 +17,8 @@ import Modal from "@/components/atoms/Modal";
 import BlogForm from "@/components/molecules/blog/BlogForm";
 import { useProductos } from "@/hooks/useProductos";
 import SearchBar from "@/components/molecules/admin/SearchBar";
-import { Download, FileDown, FileSpreadsheet, FileText, Plus } from "lucide-react";
+import { Download, FileDown, FileSpreadsheet, FileText, Plus, Rocket } from "lucide-react";
+import { useDeploy } from "@/hooks/useDeploy";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -43,6 +44,8 @@ export default function Blogspage() {
     const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
     const { confirm, ConfirmDialog } = useConfirm();
+    // DEPLOY
+    const {isLoading: isDeploying, triggerDeploy} = useDeploy();
 
     useEffect(() => {
         getBlogs(200);
@@ -70,6 +73,14 @@ export default function Blogspage() {
             handleCloseModal();
             await getBlogs(200);
             showToast.success("Blog creado");
+            setTimeout(() => {
+              showToast.info(
+                  "Recuerda publicar los cambios para que se reflejen en la web",
+                  {
+                    duration: 3000
+                  }
+              );
+            }, 100)
         } else {
             showToast.error(result.message || "Error al crear el blog");
         }
@@ -88,6 +99,14 @@ export default function Blogspage() {
             handleCloseModal();
             await getBlogs(200);
             showToast.success("Blog actualizado");
+            setTimeout(() => {
+              showToast.info(
+                "Recuerda publicar los cambios para que se reflejen en la web",
+                {
+                  duration: 3000
+                }
+              );
+            }, 100);
         } else {
             showToast.error(result.message || "Error al actualizar el blog");
         }
@@ -100,10 +119,34 @@ export default function Blogspage() {
         if (result.success) {
             await getBlogs(200);
             showToast.success("Blog eliminado");
+            setTimeout(() => {
+              showToast.info(
+                "Recuerda publicar los cambios para que se reflejen en la web",
+                {
+                  duration: 3000
+                }
+              );
+            }, 100);
         } else {
             showToast.error(result.message || "Error al eliminar el blog");
         }
     };
+
+    const handleTriggerDeploy = async () => {
+      const confirmDeploy = await confirm({
+        message: "¿Estás seguro de que deseas publicar los cambios?"
+      });
+
+      if(!confirmDeploy) return;
+
+      const result = await triggerDeploy();
+
+      if(result.success){
+        showToast.success(result.message || "Despliegue iniciado");
+      }else {
+        showToast.error(result.message || "Error al iniciar el despliegue");
+      }
+    }
 
     const handleCloseModal = () => {
         setSelectedBlog(null);
@@ -136,6 +179,15 @@ export default function Blogspage() {
                                 className: "w-full sm:w-auto"
                             }]}
                         />
+
+                        <ActionButtonGroup buttons={[{
+                          label: "Publicar Cambios",
+                          onClick: handleTriggerDeploy,
+                          icon: <Rocket className="h-4 w-4"/>,
+                          variant: "info",
+                          className: "w-full sm:w-auto",
+                          isLoading: isDeploying
+                        }]}/>
                         <ExportDropdown
                             label="Exportar"
                             icon={<Download className="h-4 w-4" />}
