@@ -17,13 +17,11 @@ export default function LoginPage() {
     }, [router]);
 
     return (
-        <main className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center gap-3 py-10">
-            {/* Fondo full screen */}
-            <HeroSection />
-
-        
-            {/* Form flotante */}
-            <div className="relative z-10 w-full px-5 md:px-0 md:w-[520px] lg:w-[580px]">
+        <main className="min-h-screen w-full bg-transparent">
+            <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 items-stretch">
+                <div className="hidden md:block">
+                    <HeroSection />
+                </div>
                 <FormSection />
             </div>
         </main>
