@@ -3,18 +3,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/atoms/Logo';
+import { HiUser } from 'react-icons/hi';
 import InputText from '@/components/atoms/InputText';
 import Button from '@/components/atoms/Button';
 import Loader from '@/components/atoms/Loader';
 import { useAuth } from '@/hooks/useAuth';
-import { HiEye, HiEyeOff, HiArrowLeft } from "react-icons/hi";
-import { useBrandLogo } from '@/hooks/useBrandLogo';
+import { HiEye, HiEyeOff, HiArrowLeft, HiInformationCircle } from "react-icons/hi";
 
 export default function FormSection() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const { logoDark, companyName } = useBrandLogo();
 
     const { login, isLoading, error } = useAuth();
 
@@ -24,100 +23,94 @@ export default function FormSection() {
     };
 
     return (
-        <section className="
-            relative z-10
-            bg-white/10 backdrop-blur-lg
-            border border-white/15
-            rounded-3xl
-            px-8 py-10 md:px-12 md:py-12
-            w-full max-w-sm md:max-w-none
-            flex flex-col items-center gap-6
-            shadow-[0_8px_60px_rgba(0,0,0,0.4)]
-            mx-auto
-        ">
-            {/* Logo */}
-            <div className="flex flex-col items-center w-44">
-                <Logo src={logoDark} size="xl" alt={companyName} />
-            </div>
+        <section className="min-h-[40vh] lg:min-h-screen flex items-start justify-center bg-white pt-6 md:items-center md:pt-0">
+            <div className="w-full px-5 py-8 sm:px-8 sm:py-10 md:px-10 lg:px-12 xl:px-16 lg:py-14">
+                <div className="mx-auto w-full max-w-lg md:max-w-xl lg:max-w-2xl">
+                    <div className="mb-6 flex w-full justify-center md:hidden">
+                        <Logo size="mobile" src="/logo.svg" alt="Yuntas Publicidad" />
+                    </div>
 
-            {/* Título */}
-             <div className="relative z-10 flex flex-col items-center text-center px-6">
-                <span className="text-white/50 md:text-s tracking-[0.3em] uppercase mb-1">Bienvenido a</span>
-                <h1 className="text-white font-bold text-2xl md:text-2xl leading-tight drop-shadow-[0_0_12px_rgba(0,0,0,0.9)]">
-                    Yuntas{" "}
-                    <span className="text-[#6DE1E3]">Producciones</span>
-                </h1>
-                {/* Línea decorativa */}
-                <div className="mt-2 flex items-center gap-2">
-                    <div className="w-6 h-[1.5px] bg-cyan-400/60 rounded-full" />
-                    <div className="w-6 h-[1.5px] bg-white/80 rounded-full" />
-                </div>
-            </div>
+                    <div className="mb-6 flex items-center gap-4">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 md:h-12 md:w-12">
+                            <HiUser size={24} className="text-slate-700" />
+                        </div>
+                        <h2 className="text-xl font-semibold text-slate-900">Bienvenido de nuevo</h2>
+                    </div>
 
-            {/* Error */}
-            {error && (
-                <div className="w-full bg-red-500/20 border border-red-400/40 text-red-100 px-4 py-3 rounded-xl text-sm text-center">
-                    ⚠️ {error}
-                </div>
-            )}
+                    <div className="w-full rounded-lg border border-blue-100 bg-blue-50/40 p-4 mb-6">
+                        <div className="flex items-start gap-3">
+                            <div className="shrink-0 rounded-full bg-blue-100 p-2 text-blue-700">
+                                <HiInformationCircle size={18} />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-slate-800">Solo puedes ingresar si perteneces a una de las siguientes áreas:</p>
+                                <div className="mt-3 flex flex-wrap items-center gap-2">
+                                    <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Administración</span>
+                                    <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Marketing</span>
+                                    <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Ventas</span>
+                                </div>
+                                <p className="mt-2 text-xs text-slate-500">Si no perteneces a estas áreas, no tendrás acceso al sistema.</p>
+                            </div>
+                        </div>
+                    </div>
 
-            {/* Formulario */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full items-center">
-                <InputText
-                    placeholder="Usuario"
-                    className="rounded-xl bg-white/90 border-0 w-full md:py-3 md:text-base"
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={isLoading}
-                />
-
-                <div className="relative w-full">
-                    <InputText
-                        placeholder="Contraseña"
-                        className="rounded-xl bg-white/90 border-0 pr-12 w-full md:py-3 md:text-base"
-                        type={showPassword ? 'text' : 'password'}
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={isLoading}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors z-10"
-                    >
-                        {showPassword ? <HiEyeOff size={22} /> : <HiEye size={22} />}
-                    </button>
-                </div>
-
-                <Button
-                    type="submit"
-                    className="uppercase flex items-center justify-center gap-2 rounded-xl font-semibold tracking-wider px-20 mt-2 bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] hover:scale-105 hover:shadow-[0_15px_40px_rgba(109,225,227,0.5)] active:scale-95 transition-all duration-300"
-                    disabled={isLoading}
-                >
-                    {isLoading ? (
-                        <>
-                            <Loader size="sm" color="border-white" />
-                            <span>Ingresando...</span>
-                        </>
-                    ) : (
-                        "Ingresar"
+                    {error && (
+                        <div className="w-full rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 mb-4">
+                            {error}
+                        </div>
                     )}
-                </Button>
-            </form>
 
-            {/* Regresar */}
-            <Link
-                href="/"
-                className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm md:text-sm transition-colors"
-            >
-                <HiArrowLeft size={14} />
-                Regresar a la página de inicio
-            </Link>
+                    <form onSubmit={handleSubmit} className="w-full space-y-4">
+                        <InputText
+                            placeholder="Usuario"
+                            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 h-14"
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            disabled={isLoading}
+                        />
+
+                        <div className="relative w-full">
+                            <InputText
+                                placeholder="Contraseña"
+                                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-slate-900 placeholder:text-slate-400 h-14"
+                                type={showPassword ? 'text' : 'password'}
+                                name="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                disabled={isLoading}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-700"
+                            >
+                                {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
+                            </button>
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="w-full rounded-xl px-6 py-3 text-lg font-semibold uppercase tracking-[0.04em] text-white bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 active:scale-95 h-14"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <span>Ingresando...</span> : 'Ingresar'}
+                        </Button>
+                    </form>
+
+                    <div className="mt-8 border-t pt-6 text-center">
+                        <Link href="/" className="group relative inline-flex rounded-xl p-[1.5px] overflow-hidden">
+                            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#22c55e] to-[#0ea5b7] opacity-90 group-hover:opacity-100 transition" />
+                            <span className="relative px-6 py-3 rounded-[10px] bg-white text-[#0a1a3a] font-semibold flex items-center gap-2 h-14">
+                                <HiArrowLeft />Volver a Inicio
+                            </span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
         </section>
     );
 }

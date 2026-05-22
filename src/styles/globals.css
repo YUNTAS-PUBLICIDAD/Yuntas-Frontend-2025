@@ -10,7 +10,23 @@
     outline: 3px solid blue;
 }
 
-#root, div {
+/* Hide native password reveal/clear controls injected by some browsers */
+input[type="password"]::-ms-clear,
+input[type="password"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-clear-button,
+input[type="password"]::-webkit-password-reveal-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+}
+
+
+/*#root, div {
     outline: 1px solid red;
 }*/
 
