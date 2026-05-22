@@ -1,5 +1,5 @@
 type LogoProps = {
-  size?: "sm" | "md" | "lg" | "xl" | "2xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "mobile";
   src?: string;
   darkSrc?: string;
   alt?: string;
@@ -16,6 +16,7 @@ export default function Logo({
     : size === "lg" ? "h-16"
     : size === "xl" ? "h-20"
     : size === "2xl" ? "h-32"
+    : size === "mobile" ? "h-28"
     : "h-12";
 
   if (darkSrc) {
