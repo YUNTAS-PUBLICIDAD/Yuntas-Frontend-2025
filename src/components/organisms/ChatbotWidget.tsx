@@ -459,7 +459,7 @@ export default function ChatbotWidget() {
                             <p className="text-sm font-semibold text-gray-800 leading-tight line-clamp-2">{p.name}</p>
                             <span className="text-base font-bold" style={{ color: primaryColor }}>S/ {p.price}</span>
                             <a
-                              href={getWhatsappUrl(p.name)}
+                              href={m.whatsapp_url || getWhatsappUrl(p.name)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="mt-2 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
