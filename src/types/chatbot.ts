@@ -68,6 +68,8 @@ export interface ProductsMessage extends BaseChatMessage {
   type: "products";
 
   products: ChatbotProduct[];
+
+  whatsapp_url?: string;
 }
 
 export interface BlogsMessage extends BaseChatMessage {

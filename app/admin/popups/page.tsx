@@ -35,43 +35,39 @@ export default function PopupsPage(){
 
   return (
     <div className="flex flex-col gap-4">
-      {/*HEADER + TABS*/}
       {/* HEADER + TABS */}
-            <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 dark:border-white/10 pb-3 gap-3">
+        <h1 className="text-lg font-bold text-gray-800 dark:text-white">
+          Configuración de Popups
+        </h1>
 
-              <h1 className="text-lg font-bold text-gray-800 dark:text-white">
-                Configuración de Popups
-              </h1>
+        <div className="flex gap-2 bg-gray-100 dark:bg-[#141A3F] p-1 rounded-lg self-start sm:self-auto overflow-x-auto max-w-full">
+          <button
+            onClick={() => setTab("inicio")}
+            className={`inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-md transition-all font-semibold shrink-0 ${
+              tab === "inicio"
+                ? "bg-white dark:bg-[#293296] text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white"
+            }`}
+          >
+            <House className="h-4 w-4" />
+            Inicio
+          </button>
 
-              <div className="flex gap-2 bg-gray-100 dark:bg-[#141A3F] p-1 rounded-lg">
-
-                <button
-                  onClick={() => setTab("inicio")}
-                  className={`inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-md transition-all font-semibold ${
-                    tab === "inicio"
-                      ? "bg-white dark:bg-[#293296] text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white"
-                  }`}
-                >
-                  <House className="h-4 w-4" />
-                  Inicio
-                </button>
-
-                <button
-                  onClick={() => setTab("product-detail")}
-                  className={`inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-md transition-all font-semibold ${
-                    tab === "product-detail"
-                      ? "bg-white dark:bg-[#293296] text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white"
-                  }`}
-                >
-                  <Package2 className="h-4 w-4" />
-                  Producto
-                </button>
-
-              </div>
-            </div>
-    <PopupConfigForm onCancel={() => {}} key={tab} pageTarget={tab} initialData={currentPopup} onSubmit={handleSave} isSaving={isSaving}/>
+          <button
+            onClick={() => setTab("product-detail")}
+            className={`inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-md transition-all font-semibold shrink-0 ${
+              tab === "product-detail"
+                ? "bg-white dark:bg-[#293296] text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white"
+            }`}
+          >
+            <Package2 className="h-4 w-4" />
+            Producto
+          </button>
+        </div>
+      </div>
+      <PopupConfigForm onCancel={() => {}} key={tab} pageTarget={tab} initialData={currentPopup} onSubmit={handleSave} isSaving={isSaving}/>
     </div>
   )
 }
