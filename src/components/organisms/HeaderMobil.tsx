@@ -81,7 +81,7 @@ const HeaderMobil = () => {
       <header
         className={`
           md:hidden fixed top-0 left-0 right-0 z-50
-          px-6 h-16 flex justify-between items-center
+          px-4 h-16 flex justify-between items-center
           transition-all duration-300
           ${open ? "opacity-0 pointer-events-none" : "opacity-100"}
           ${headerBg}
