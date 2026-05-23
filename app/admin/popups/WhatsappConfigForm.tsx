@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { showToast } from '@/utils/showToast';
-import { RotateCcw, Save, Trash2, Upload } from 'lucide-react';
+import { RotateCcw, Save, Trash2, Upload, MessageSquare, Image as ImageIcon, X, ChevronDown } from 'lucide-react';
 import {
   FaArrowLeft,
   FaUser,
@@ -25,7 +25,101 @@ interface MessageVariables {
   [key: string]: string;
 }
 
-// La funcionalidad de localStorage es temporal, solo es para pruebas locales. En el futuro debe implementarse un endpoint en Laravel para guardar esta configuración en la base de datos y que se refleje en el sitio público. Por eso se deja la estructura preparada para que el cambio sea lo más sencillo posible.
+// ─── Componentes de UI Locales (Estilo Configuración) ────────────────────────
+function BlockTitle({
+  icon,
+  title,
+  subtitle,
+  className = "mb-5",
+}: {
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+  className?: string;
+}) {
+  return (
+    <div className={`flex items-start gap-3 ${className}`}>
+      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5 shrink-0 mt-0.5">
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <h3 className="text-base font-bold text-[#0D1030] dark:text-white truncate">{title}</h3>
+        <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5 truncate">{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
+function Input({
+  value,
+  onChange,
+  label,
+  name,
+  placeholder,
+  hint,
+  disabled
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+  name?: string;
+  placeholder: string;
+  hint?: React.ReactNode;
+  disabled?: boolean;
+}) {
+  return (
+    <div className={`flex flex-col gap-1.5 w-full ${disabled ? 'opacity-50' : ''}`}>
+      <label className="text-sm font-semibold text-[#0D1030] dark:text-white">{label}</label>
+      <input
+        type="text"
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        disabled={disabled}
+        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 disabled:cursor-not-allowed"
+      />
+      {hint && <p className="text-xs text-gray-400 dark:text-white/40">{hint}</p>}
+    </div>
+  );
+}
+
+function TextArea({
+  value,
+  onChange,
+  label,
+  name,
+  placeholder,
+  rows = 5,
+  disabled,
+  hint
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  label: string;
+  name?: string;
+  placeholder: string;
+  rows?: number;
+  disabled?: boolean;
+  hint?: React.ReactNode;
+}) {
+  return (
+    <div className={`flex flex-col gap-1.5 w-full ${disabled ? 'opacity-50' : ''}`}>
+      <label className="text-sm font-semibold text-[#0D1030] dark:text-white">{label}</label>
+      <textarea
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        rows={rows}
+        disabled={disabled}
+        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 disabled:cursor-not-allowed resize-none"
+      />
+      {hint && <p className="text-xs text-gray-400 dark:text-white/40">{hint}</p>}
+    </div>
+  );
+}
+
 const STORAGE_KEY = 'admin_popups_whatsapp_config';
 
 const defaultConfig: WhatsappConfigData = {
@@ -134,123 +228,132 @@ export default function WhatsappConfigForm() {
 
   return (
     <div className="flex flex-col md:flex-row gap-8 mt-6">
-      <div className="w-full md:w-1/2 space-y-6">
-        <div>
-          <h2 className="text-xl font-bold text-[#203565] dark:text-white mb-1">
-            Configuración de WhatsApp
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-            Personaliza el mensaje de bienvenida enviada a los usuarios por WhatsApp.
-          </p>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Imagen Adjunta
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              name="imageUrl"
-              value={imageFile ? imageFile.name : formData.imageUrl}
-              onChange={handleTextChange}
-              disabled={!!imageFile}
-              className={`w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#203565] focus:border-[#203565] dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition-colors ${imageFile ? 'bg-gray-100 text-gray-500' : ''}`}
-              placeholder="Pega una URL o sube una imagen..."
+      {/* Formulario Rediseñado */}
+      <div className="w-full md:w-1/2 bg-white dark:bg-[#1C2347] rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm overflow-hidden">
+        
+        <div className="divide-y divide-gray-100 dark:divide-white/5">
+          
+          {/* SECCIÓN: IMAGEN */}
+          <div className="px-4 sm:px-6 py-6">
+            <BlockTitle
+              icon={<ImageIcon className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              title="Imagen Adjunta"
+              subtitle="Personaliza la imagen que acompaña al mensaje de WhatsApp"
             />
             
-            <input 
-              type="file" 
-              accept="image/*" 
-              className="hidden" 
-              ref={fileInputRef}
-              onChange={handleFileChange}
-            />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row items-center gap-2">
+                <div className="w-full flex-1">
+                  <input
+                    type="text"
+                    name="imageUrl"
+                    value={imageFile ? imageFile.name : formData.imageUrl}
+                    onChange={handleTextChange}
+                    disabled={!!imageFile}
+                    placeholder="Pega una URL o sube una imagen..."
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  />
+                </div>
+                
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                />
 
-            <button 
-              type="button" 
-              onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap"
-            >
-              <Upload className="h-4 w-4" />
-              Subir Imagen
-            </button>
+                <div className="flex w-full sm:w-auto gap-2">
+                  <button 
+                    type="button" 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#203565]/10 dark:bg-white/10 rounded-xl hover:bg-[#203565]/20 dark:hover:bg-white/20 transition-all text-sm font-semibold text-[#203565] dark:text-white whitespace-nowrap"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Subir
+                  </button>
 
-            {imageFile && (
-              <button
-                type="button"
-                onClick={clearUploadedImage}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors text-sm font-medium whitespace-nowrap"
-              >
-                <Trash2 className="h-4 w-4" />
-                Quitar
-              </button>
-            )}
+                  {imageFile && (
+                    <button
+                      type="button"
+                      onClick={clearUploadedImage}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-500/20 transition-all text-sm font-semibold whitespace-nowrap"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Quitar
+                    </button>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">Formatos recomendados: JPG, PNG, WEBP</p>
+            </div>
           </div>
-          <p className="text-xs text-gray-400 mt-1">Formatos recomendados: JPG, PNG, WEBP.</p>
-        </div>
 
+          {/* SECCIÓN: MENSAJE */}
+          <div className="px-4 sm:px-6 py-6">
+            <BlockTitle
+              icon={<MessageSquare className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              title="Mensaje de Bienvenida"
+              subtitle="Define el texto que se enviará automáticamente"
+            />
+            
+            <TextArea
+              name="message"
+              value={formData.message}
+              onChange={handleTextChange}
+              placeholder="Escribe el mensaje de WhatsApp aquí..."
+              hint={
+                <>Usa <code className="bg-[#203565]/10 dark:bg-white/10 px-1 rounded text-[#203565] dark:text-white font-bold">{'{nombre}'}</code> para insertar el nombre del cliente. Puedes usar *texto* para negrita.</>
+              }
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Mensaje
-          </label>
-          <textarea
-            name="message"
-            value={formData.message}
-            onChange={handleTextChange}
-            rows={5}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#203565] focus:border-[#203565] dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition-colors resize-none"
-          />
-          <p className="text-xs text-gray-400 mt-1">
-            Usa <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded text-[#203565] dark:text-white font-bold">{'{nombre}'}</code> para insertar el nombre del cliente.
-          </p>
-        </div>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleSave}
-            className="inline-flex items-center gap-2 px-6 py-2 bg-[#203565] text-white font-medium rounded-md hover:bg-[#1a2b52] transition-colors"
-          >
-            <Save className="h-4 w-4" />
-            Guardar configuracion
-          </button>
-
-          <button
-            type="button"
-            onClick={handleReset}
-            className="inline-flex items-center gap-2 px-6 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
-            <RotateCcw className="h-4 w-4" />
-            Restaurar
-          </button>
+          {/* BOTONES ACCIÓN */}
+          <div className="px-4 sm:px-6 py-4 bg-gray-50 dark:bg-white/5 flex flex-col sm:flex-row justify-end gap-3">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 text-[#0D1030] dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors text-sm font-semibold"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Restaurar
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white dark:bg-white dark:text-[#203565] dark:hover:bg-white/90 rounded-xl font-semibold transition-all shadow-sm text-sm"
+            >
+              <Save className="h-4 w-4" />
+              Guardar Configuración
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Vista previa (Intacta) */}
       <div className="w-full md:w-1/2">
         <div className="sticky top-6">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full uppercase tracking-wider">
-              Vista Previa del mensaje (WhatsApp)
+            <span className="text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full uppercase tracking-wider border border-green-200">
+              Vista Previa (WhatsApp)
             </span>
           </div>
 
           <div className="mx-auto w-full max-w-[400px] h-[800px] rounded-[20px] overflow-hidden shadow-[0_10px_20px_rgba(0,0,0,0.2)] bg-[#efeae2] flex flex-col border border-gray-200">
             <div className="bg-white flex items-center px-4 py-2 gap-3 shadow-sm z-10">
-              <FaArrowLeft className="text-[#54656f] text-base" />
+              <FaArrowLeft className="text-[#54656f] text-base shrink-0" />
 
-              <div className="w-10 h-10 rounded-full bg-[#dfe5e7] flex items-center justify-center text-white text-lg overflow-hidden">
+              <div className="w-10 h-10 rounded-full bg-[#dfe5e7] flex items-center justify-center text-white text-lg overflow-hidden shrink-0">
                 <FaUser />
               </div>
 
-              <div className="flex-1 flex flex-col">
-                <span className="text-[1.05rem] font-medium text-[#111b21]">Yuntas Publicidad</span>
-                <span className="text-xs text-[#667781]">en línea</span>
+              <div className="flex-1 flex flex-col min-w-0">
+                <span className="text-[1.05rem] font-medium text-[#111b21] truncate">Yuntas Publicidad</span>
+                <span className="text-xs text-[#667781] truncate">en línea</span>
               </div>
 
-              <div className="flex items-center gap-4 text-[#54656f]">
-                <FaStore className="text-sm" />
+              <div className="flex items-center gap-4 text-[#54656f] shrink-0">
+                <FaStore className="text-sm hidden sm:block" />
                 <FaPhone className="text-sm" />
                 <FaEllipsisVertical className="text-sm" />
               </div>
@@ -289,7 +392,7 @@ export default function WhatsappConfigForm() {
                     </div>
                   )}
 
-                  <div className="px-2 pb-1 text-[0.92rem] text-[#111b21] leading-relaxed">
+                  <div className="px-2 pb-1 text-[0.92rem] text-[#111b21] leading-relaxed break-words">
                     {renderWhatsappMessage(formData.message, previewVariables)}
                     {!formData.message.trim() && <p>Sin mensaje configurado.</p>}
                   </div>
@@ -301,22 +404,22 @@ export default function WhatsappConfigForm() {
             </div>
 
             <div className="p-2 flex items-end gap-2 bg-transparent border-t border-black/5">
-              <div className="flex-1 bg-white rounded-full flex items-center px-4 py-2 min-h-12 shadow-sm">
-                <FaRegFaceSmile className="text-[#8696a0] text-xl" />
-                <div className="w-[2px] h-5 bg-[#00a884] ml-2 animate-pulse" />
+              <div className="flex-1 bg-white rounded-full flex items-center px-4 py-2 min-h-12 shadow-sm min-w-0">
+                <FaRegFaceSmile className="text-[#8696a0] text-xl shrink-0" />
+                <div className="w-[2px] h-5 bg-[#00a884] ml-2 animate-pulse shrink-0" />
                 <input
                   type="text"
-                  className="flex-1 bg-transparent border-none outline-none text-sm px-2 text-[#111b21]"
+                  className="flex-1 bg-transparent border-none outline-none text-sm px-2 text-[#111b21] min-w-0"
                   placeholder="Mensaje"
                   disabled
                 />
-                <div className="flex items-center gap-3 text-[#8696a0] text-lg">
-                  <FaPaperclip />
+                <div className="flex items-center gap-3 text-[#8696a0] text-lg shrink-0">
+                  <FaPaperclip className="hidden sm:block" />
                   <FaCamera />
                 </div>
               </div>
 
-              <div className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow bg-[#00a884] hover:bg-[#019272] transition-colors">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow bg-[#00a884] hover:bg-[#019272] transition-colors shrink-0">
                 <FaMicrophone className="text-lg" />
               </div>
             </div>
