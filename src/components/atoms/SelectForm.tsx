@@ -36,7 +36,7 @@ export default function SelectForm({
         <div className="flex flex-col gap-1">
             <label
                 htmlFor={name}
-                className="text-[#203565] font-medium"
+                className="text-[#203565] font-medium dark:text-[#ECECEC]/80"
             >
                 {label}
             </label>
@@ -46,7 +46,7 @@ export default function SelectForm({
                 value={value}
                 onChange={onChange}
                 required={required}
-                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all overflow-y-auto max-h-50 text-[#203565] ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23CIDE] focus:border-transparent"}`}
+                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all overflow-y-auto max-h-50 text-[#203565] dark:bg-[#1C2347] dark:text-[#ECECEC]/80 dark:border-[#ECECEC]/20 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23CIDE] focus:border-transparent"}`}
                 size={1}
             >
                 <option value="">
