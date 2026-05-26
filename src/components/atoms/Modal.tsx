@@ -61,8 +61,8 @@ export default function Modal({
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
-                        <h2 className={`text-xl font-bold ${textTitleClass}`}>
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20 dark:bg-[#141A3F]">
+                        <h2 className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
                             {title}
                         </h2>
                         <button
@@ -74,7 +74,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-6 pt-0 overflow-y-auto">
+                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#141A3F]">
                     {children}
                 </div>
             </div>

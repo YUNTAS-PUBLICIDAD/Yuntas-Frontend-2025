@@ -51,7 +51,7 @@ const Confirm: React.FC<ConfirmProps> = ({
           </div>
         )}
 
-        <p className="text-center text-gray-700 font-medium">{message}</p>
+        <p className="text-center text-gray-700 font-medium dark:text-[#ECECEC]/80">{message}</p>
         <div className="flex justify-center items-center gap-4">
           <Button onClick={onConfirm} variant="danger">
             {confirmText}

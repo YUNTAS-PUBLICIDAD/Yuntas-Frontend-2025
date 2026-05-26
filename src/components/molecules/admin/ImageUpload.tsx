@@ -95,7 +95,7 @@ export default function ImageUpload({
 
     return (
         <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded-lg">
-            <label className="text-[#203565] font-medium">
+            <label className="text-[#203565] font-medium dark:text-[#ECECEC]/80">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
 
@@ -121,7 +121,7 @@ export default function ImageUpload({
                         </button>
                     </div>
                 ) : (
-                    <label className="flex flex-col items-center justify-center w-full h-40 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <label className="flex flex-col items-center justify-center w-full h-40 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors dark:bg-[#191F44] dark:hover:bg-[#1C2347]">
                         <IoCloudUpload className="text-4xl text-gray-400 mb-2" />
                         <span className="text-gray-500 text-sm">Click para subir imagen</span>
                         <input
@@ -153,7 +153,7 @@ export default function ImageUpload({
                     value={titleValue}
                     onChange={(e) => onTitleChange(e.target.value)}
                     placeholder="Título para SEO"
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565]"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565] dark:text-[#ECECEC]/80 dark:bg-[#1C2347]"
                     maxLength={50}
                 />
             )}
@@ -164,7 +164,7 @@ export default function ImageUpload({
                     value={altValue}
                     onChange={(e) => onAltChange(e.target.value)}
                     placeholder="Texto ALT para SEO"
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565]"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565] dark:text-[#ECECEC]/80 dark:bg-[#1C2347]"
                     maxLength={80}
                 />
             )}

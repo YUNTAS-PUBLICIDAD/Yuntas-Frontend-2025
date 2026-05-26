@@ -162,7 +162,7 @@ export default function LinkableTextarea({
     return (
         <div className="flex flex-col gap-2">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-gray-200 pb-2">
-                <label htmlFor={name} className="text-[#203565] font-medium">
+                <label htmlFor={name} className="text-[#203565] font-medium dark:text-[#ECECEC]/80">
                     {label} {required && <span className="text-red-500">*</span>}
                 </label>
                 <LinkToolbar
