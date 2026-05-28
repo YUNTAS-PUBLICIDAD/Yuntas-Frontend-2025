@@ -37,7 +37,11 @@ export default function SeguimientoPage() {
             description: isMonitoreoMode
                 ? "Visualiza actividad por canal y último movimiento registrado."
                 : "Administra clientes, edita datos y filtra seguimientos con rapidez.",
-            searchPlaceholder: isMonitoreoMode
+            titleTable: isMonitoreoMode ? "Monitoreo" : "seguimiento de clientes",
+            descriptionTable: isMonitoreoMode 
+            ? "Monitoreo" 
+            : "Consulta y administra los clientes",
+                searchPlaceholder: isMonitoreoMode
                 ? "Buscar por ID o nombre..."
                 : "Buscar por nombre, email, teléfono, producto...",
             searchKeys: isMonitoreoMode
@@ -169,10 +173,10 @@ export default function SeguimientoPage() {
             <section className="mb-5 overflow-hidden rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
                 <div className="flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center">
                     <div className="space-y-1 flex-1">
-                        <h2 className="text-3xl font-black tracking-tight text-[#0D1030] dark:text-white md:text-4xl">
+                        <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white md:text-4xl">
                             {currentMode.title}
                         </h2>
-                        <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/60 md:text-base">
+                        <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">
                             {currentMode.description}
                         </p>
                     </div>
@@ -216,12 +220,12 @@ export default function SeguimientoPage() {
                 </div>
             </section>
 
-            <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+            <div className="mb-4 flex flex-col gap-4 border-b border-[#E5EEF6] pb-4 px-5 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de {currentMode.title.toLowerCase()}</p>
-                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
-                        {currentMode.title}
+                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">
+                        {currentMode.titleTable.toUpperCase()}
                     </h3>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">{currentMode.descriptionTable}</p>
                 </div>
 
                 <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
