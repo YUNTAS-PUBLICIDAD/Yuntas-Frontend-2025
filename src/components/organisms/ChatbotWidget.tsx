@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { FaWhatsapp } from 'react-icons/fa';
-import { ChatMessage } from '@/types/chatbot';
+import { useSettingsContext } from '@/providers/SettingsProvider';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
 import { ChatbotSettings } from '@/types/admin/settings';
+import { ChatMessage } from '@/types/chatbot';
+import Image from 'next/image';
 import { usePathname } from "next/navigation";
-import { useSettingsContext } from '@/providers/SettingsProvider';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 
 const BASE_URL = process.env.NEXT_PUBLIC_URL || "";
 
@@ -21,6 +21,14 @@ const DEFAULT_SETTINGS: ChatbotSettings = {
   show_delay_seconds: 3,
   auto_close_seconds: null,
 };
+
+const tooltips = [
+  "Cotiza en segundos",
+  "Explora nuestro catálogo",
+  "Letreros luminosos",
+  "Pantallas LED",
+  "Habla con un asesor",
+]
 
 function renderCTA(message: ChatMessage) {
   switch (message.type) {
@@ -86,6 +94,7 @@ export default function ChatbotWidget() {
   const [showBubble, setShowBubble] = useState(false);
   const [bubbleState, setBubbleState] = useState<'typing' | 'text'>('typing');
   const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
+  const [tooltipIndex, setTooltipIndex] = useState(0);
 
   // Ref para el timer de cierre automático
   const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -151,6 +160,17 @@ export default function ChatbotWidget() {
 
     return () => clearTimeout(initialTimer);
   }, [settingsLoaded, chatbotSettings.enabled, chatbotSettings.show_delay_seconds, hasOpenedOnce, open]);
+
+  useEffect(() => {
+    if (open) return;
+    if (!showBubble) return;
+
+    const interval = setInterval(() => {
+      setTooltipIndex((prev) => prev === tooltips.length - 1 ? 0 : prev + 1);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [open, showBubble]);
 
   // ── Cierre automático por inactividad ─────────────────────────────────────
   const resetAutoCloseTimer = () => {
@@ -236,8 +256,8 @@ export default function ChatbotWidget() {
 
           setMessages((prev) => {
             const updated = [
-                ...prev,
-                ...mappedMessages
+              ...prev,
+              ...mappedMessages
             ];
             sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
             return updated;
@@ -283,11 +303,10 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className={`absolute bottom-full mb-1 bg-white border border-gray-200 px-4 py-2.5 shadow-xl z-10 animate-fade-in transition-all cursor-pointer ${
-                chatbotSettings.position === "bottom-left"
-                  ? "left-16 rounded-2xl rounded-bl-sm origin-bottom-left"
-                  : "right-16 rounded-2xl rounded-br-sm origin-bottom-right"
-              }`}
+              className={`absolute bottom-full mb-4 backdrop-blur-xl bg-[#07111f]/90 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(0,0,0,0.45)] px-4 py-2.5 min-w-[280px] max-w-[320px]  text-white rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
+                ? "left-20 origin-bottom-left"
+                : "right-16  origin-bottom-right"
+                }`}
               onClick={handleOpenChat}
             >
               {bubbleState === 'typing' ? (
@@ -297,9 +316,34 @@ export default function ChatbotWidget() {
                   <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
                 </div>
               ) : (
-                <p className="text-sm font-bold text-gray-700 whitespace-nowrap drop-shadow-sm">
-                  ¡Hola! ¿Cotizamos tu proyecto? 👋
-                </p>
+                <>
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-[#6DE1E3]" />
+
+                    <span className="
+                      text-[10px]
+                      uppercase
+                      tracking-[0.15em]
+                      text-[#6DE1E3]
+                      font-semibold
+                    ">
+                      Asistente Yuntas
+                    </span>
+                  </div>
+
+                  <p
+                    key={tooltipIndex}
+                    className="
+                      text-sm
+                      font-medium
+                      text-white
+                      leading-relaxed
+                      animate-fade-in
+                    "
+                  >
+                    {tooltips[tooltipIndex]}
+                  </p>
+                </>
               )}
             </div>
           )}
@@ -312,12 +356,12 @@ export default function ChatbotWidget() {
             {iconUrl ? (
               // Ícono personalizado
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg animate-bot-life group-hover:scale-105 transition-transform duration-200"
+                className="w-24 h-24 flex items-center justify-center shadow-lg animate-bot-life group-hover:scale-105 transition-transform duration-200"
               >
                 <img
                   src={iconUrl}
                   alt="Abrir chat"
-                  className="object-contain rounded-full"
+                  className="object-contain drop-shadow-[0_10px_30px_rgba(0,0,0.35)] transition-all duration-300 group-hover:scale-105 rounded-full"
                 />
               </div>
             ) : (
@@ -411,10 +455,10 @@ export default function ChatbotWidget() {
                         m.role === "user"
                           ? { backgroundColor: primaryColor }
                           : {
-                              backgroundColor: secondaryColor + "20",
-                              borderColor: secondaryColor + "40",
-                              color: "#374151",
-                            }
+                            backgroundColor: secondaryColor + "20",
+                            borderColor: secondaryColor + "40",
+                            color: "#374151",
+                          }
                       }
                     >
                       {m.text}
@@ -425,15 +469,15 @@ export default function ChatbotWidget() {
                   {
                     m.type === "options" && m.options && (
                       <div className='flex flex-wrap gap-2 mt-2'>
-                       {
-                         m.options.map((opt) => (
-                           <button key={opt.id} onClick={() => sendMessage(`__option__:${opt.id}`, opt.label)} className='px-3 py-2 rounded-xl text-xs font-semibold border border-gray-200 bg-white hover:bg-gray-50 transition'>
-                            {
-                              opt.label
-                            }
-                           </button>
-                         ))
-                       }
+                        {
+                          m.options.map((opt) => (
+                            <button key={opt.id} onClick={() => sendMessage(`__option__:${opt.id}`, opt.label)} className='px-3 py-2 rounded-xl text-xs font-semibold border border-gray-200 bg-white hover:bg-gray-50 transition'>
+                              {
+                                opt.label
+                              }
+                            </button>
+                          ))
+                        }
                       </div>
                     )
                   }
