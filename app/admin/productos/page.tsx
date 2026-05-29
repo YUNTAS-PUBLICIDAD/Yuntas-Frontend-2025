@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -17,7 +17,13 @@ import WhatsappFormWithTabs from "@/components/molecules/admin/products/Whatsapp
 import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/admin/SearchBar";
-import { PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
+import {
+  PlusIcon,
+  MailIcon,
+  WhatsappIcon,
+  RocketIcon,
+  PrinterIcon,
+} from "@/components/atoms/icons";
 import { Download, FileDown, FileSpreadsheet, FileText } from "lucide-react";
 
 const columns = [
@@ -32,7 +38,15 @@ export default function ProductosPage() {
   const router = useRouter();
 
   const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
-  const { productos, getProductos, createProducto, updateProducto, deleteProducto, isLoading, error } = useProductos();
+  const {
+    productos,
+    getProductos,
+    createProducto,
+    updateProducto,
+    deleteProducto,
+    isLoading,
+    error,
+  } = useProductos();
 
   // Estados para búsqueda y paginación
   const [datosPaginados, setDatosPaginados] = useState<Producto[]>([]);
@@ -42,12 +56,16 @@ export default function ProductosPage() {
   const [categories, setCategories] = useState<string[]>([]);
 
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-  const { exportToExcel, exportToCSV, exportToPDF, printTable } = useProductExporter();
+  const { exportToExcel, exportToCSV, exportToPDF, printTable } =
+    useProductExporter();
   const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
-  const [whatsappInitialTab, setWhatsappInitialTab] = useState<string>("conexion");
+  const [whatsappInitialTab, setWhatsappInitialTab] =
+    useState<string>("conexion");
   const { confirm, ConfirmDialog } = useConfirm();
   const { isLoading: isDeploying, triggerDeploy } = useDeploy();
-  const [formCloseHandler, setFormCloseHandler] = useState<null | (() => Promise<void>)>(null)
+  const [formCloseHandler, setFormCloseHandler] = useState<
+    null | (() => Promise<void>)
+  >(null);
 
   useEffect(() => {
     getProductos(200);
@@ -57,23 +75,23 @@ export default function ProductosPage() {
     setProductosFiltrados(productos);
     // Extraer categorías únicas
     const uniqueCategories = Array.from(
-      new Set(productos.map(p => p.category_name).filter(Boolean))
+      new Set(productos.map((p) => p.category_name).filter(Boolean)),
     ).sort() as string[];
     setCategories(uniqueCategories);
   }, [productos]);
 
   useEffect(() => {
-    const modalParam = searchParams.get('modal');
-    const tabParam = searchParams.get('tab');
+    const modalParam = searchParams.get("modal");
+    const tabParam = searchParams.get("tab");
 
-    if (modalParam === 'whatsapp') {
+    if (modalParam === "whatsapp") {
       if (tabParam) {
         setWhatsappInitialTab(tabParam);
       } else {
         setWhatsappInitialTab("conexion");
       }
       setIsWhatsappModalOpen(true);
-      router.replace('/admin/productos', { scroll: false });
+      router.replace("/admin/productos", { scroll: false });
     }
   }, [searchParams, router]);
 
@@ -84,12 +102,15 @@ export default function ProductosPage() {
       await getProductos(200);
       showToast.success("Producto creado");
       setTimeout(() => {
-        showToast.info("Recuerda publicar los cambios para que se reflejen en la web", { duration: 3000 });
+        showToast.info(
+          "Recuerda publicar los cambios para que se reflejen en la web",
+          { duration: 3000 },
+        );
       }, 100);
     } else {
       showToast.error(result.message || "Error al crear el producto");
     }
-  }
+  };
 
   const handleEditClick = (producto: Producto) => {
     setSelectedProduct(producto);
@@ -105,22 +126,30 @@ export default function ProductosPage() {
       await getProductos(200);
       showToast.success("Producto actualizado");
       setTimeout(() => {
-        showToast.info("Recuerda publicar los cambios para que se reflejen en la web", { duration: 3000 });
+        showToast.info(
+          "Recuerda publicar los cambios para que se reflejen en la web",
+          { duration: 3000 },
+        );
       }, 100);
     } else {
       showToast.error(result.message || "Error al actualizar el producto");
     }
-  }
+  };
 
   const handleDeleteProducto = async (producto: Producto) => {
-    const confirmDelete = await confirm({ message: "¿Estás seguro de que deseas eliminar este producto?" });
+    const confirmDelete = await confirm({
+      message: "¿Estás seguro de que deseas eliminar este producto?",
+    });
     if (!confirmDelete) return;
     const result = await deleteProducto(producto.id!);
     if (result.success) {
       await getProductos(200);
       showToast.success("Producto eliminado");
       setTimeout(() => {
-        showToast.info("Recuerda publicar los cambios para que se reflejen en la web", { duration: 3000 });
+        showToast.info(
+          "Recuerda publicar los cambios para que se reflejen en la web",
+          { duration: 3000 },
+        );
       }, 100);
     } else {
       showToast.error(result.message || "Error al eliminar el producto");
@@ -128,7 +157,9 @@ export default function ProductosPage() {
   };
 
   const handleTriggerDeploy = async () => {
-    const confirmDeploy = await confirm({ message: "¿Estás seguro de que deseas publicar los cambios?" });
+    const confirmDeploy = await confirm({
+      message: "¿Estás seguro de que deseas publicar los cambios?",
+    });
     if (!confirmDeploy) return;
     const result = await triggerDeploy();
     if (result.success) {
@@ -150,7 +181,7 @@ export default function ProductosPage() {
 
     if (category) {
       // Filtrar los productos actuales por categoría
-      const filtered = productos.filter(p => p.category_name === category);
+      const filtered = productos.filter((p) => p.category_name === category);
       setProductosFiltrados(filtered);
     } else {
       // Mostrar todos los productos
@@ -160,81 +191,102 @@ export default function ProductosPage() {
 
   return (
     <div className="p-2 md:p-4">
-
       {/* ───────── BLOQUE DE BOTONES DE ACCIÓN ───────── */}
-      <div className="flex flex-col md:flex-row gap-2 mb-4">
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Añadir Producto",
-              onClick: () => setIsAddEditModalOpen(true),
-              variant: "tertiary",
-              className: "w-full",
-              icon: <PlusIcon />,
-            }]}
-          />
-        </div>
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Envio de Email",
-              onClick: () => setIsEmailModalOpen(true),
-              variant: "danger",
-              className: "w-full",
-              icon: <MailIcon />,
-            }]}
-          />
-        </div>
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Envio de Whatsapp",
-              onClick: () => setIsWhatsappModalOpen(true),
-              variant: "success",
-              className: "w-full",
-              icon: <WhatsappIcon />,
-            }]}
-          />
-        </div>
-      </div>
 
-      <div className="flex flex-col md:flex-row gap-2 mb-6">
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Publicar Cambios",
-              onClick: () => handleTriggerDeploy(),
-              variant: "info",
-              className: "w-full",
-              isLoading: isDeploying,
-              icon: <RocketIcon />,
-            }]}
-          />
+      <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-4 shadow-[0_14px_32px_rgba(13,16,48,0.05)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
+        <div className="flex flex-col gap-5">
+          <div>
+            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">
+              Gestión de productos
+            </h3>
+            <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">
+              Agrega productos, envía por email o Whatsapp, genera e imprime
+              reportes rápidamente
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <ActionButtonGroup
+              buttons={[
+                {
+                  label: "Añadir Producto",
+                  onClick: () => setIsAddEditModalOpen(true),
+                  variant: "tertiary",
+                  className: "w-full",
+                  icon: <PlusIcon />,
+                },
+              ]}
+            />
+            <ActionButtonGroup
+              buttons={[
+                {
+                  label: "Envio de Email",
+                  onClick: () => setIsEmailModalOpen(true),
+                  variant: "danger",
+                  className: "w-full",
+                  icon: <MailIcon />,
+                },
+              ]}
+            />
+            <ActionButtonGroup
+              buttons={[
+                {
+                  label: "Envio de Whatsapp",
+                  onClick: () => setIsWhatsappModalOpen(true),
+                  variant: "success",
+                  className: "w-full",
+                  icon: <WhatsappIcon />,
+                },
+              ]}
+            />
+            <ActionButtonGroup
+              buttons={[
+                {
+                  label: "Publicar Cambios",
+                  onClick: () => handleTriggerDeploy(),
+                  variant: "info",
+                  className: "w-full",
+                  isLoading: isDeploying,
+                  icon: <RocketIcon />,
+                },
+              ]}
+            />
+            <ActionButtonGroup
+              buttons={[
+                {
+                  label: "IMPRIMIR",
+                  onClick: () => printTable(productos),
+                  variant: "primary",
+                  className: "w-full",
+                  icon: <PrinterIcon />,
+                },
+              ]}
+            />
+            <ExportDropdown
+              className="w-full"
+              label="EXPORTAR"
+              icon={<Download className="h-4 w-4" />}
+              options={[
+                {
+                  label: "Exportar a CSV",
+                  onClick: () => exportToCSV(productos),
+                  icon: <FileText className="h-4 w-4" />,
+                },
+                {
+                  label: "Exportar a Excel",
+                  onClick: () => exportToExcel(productos),
+                  icon: <FileSpreadsheet className="h-4 w-4" />,
+                },
+                {
+                  label: "Exportar a PDF",
+                  onClick: () => exportToPDF(productos),
+                  icon: <FileDown className="h-4 w-4" />,
+                },
+              ]}
+            />
+          </div>
         </div>
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "IMPRIMIR",
-              onClick: () => printTable(productos),
-              variant: "primary",
-              className: "w-full",
-              icon: <PrinterIcon />,
-            }]}
-          />
-        </div>
-        <div className="flex-1">
-          <ExportDropdown
-            className="w-full"
-            label="EXPORTAR"
-            icon={<Download className="h-4 w-4" />}
-            options={[
-              { label: "Exportar a CSV", onClick: () => exportToCSV(productos), icon: <FileText className="h-4 w-4" /> },
-              { label: "Exportar a Excel", onClick: () => exportToExcel(productos), icon: <FileSpreadsheet className="h-4 w-4" /> },
-              { label: "Exportar a PDF", onClick: () => exportToPDF(productos), icon: <FileDown className="h-4 w-4" /> },
-            ]}
-          />
-        </div>
-      </div>
+      </section>
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
@@ -243,30 +295,37 @@ export default function ProductosPage() {
       )}
 
       {/* ───────── BUSCADOR Y CONTADOR ───────── */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <div className="w-full md:flex-1 md:max-w-3xl">
-          <SearchBar
-            items={productos}
-            onSearch={setProductosFiltrados}
-            placeholder="Buscar por ID, nombre o sección..."
-            searchKeys={['id', 'name', 'category_name']}
-            getDisplayValue={(item) => `${item.id} - ${item.name}`}
-          />
-        </div>
 
-        <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center">
-          <span className="text-[#203565] dark:text-white font-semibold text-sm whitespace-nowrap uppercase">
-            {productosFiltrados.length} REGISTROS ENCONTRADOS
-          </span>
+      <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-4 shadow-[0_14px_32px_rgba(13,16,48,0.05)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="w-full md:flex-1 md:max-w-3xl">
+            <SearchBar
+              items={productos}
+              onSearch={setProductosFiltrados}
+              placeholder="Buscar por ID, nombre o sección..."
+              searchKeys={["id", "name", "category_name"]}
+              getDisplayValue={(item) => `${item.id} - ${item.name}`}
+            />
+          </div>
+
+          <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center">
+            <span className="text-[#203565] dark:text-white font-semibold text-sm whitespace-nowrap uppercase">
+              {productosFiltrados.length} REGISTROS ENCONTRADOS
+            </span>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* ───────── CONTENIDO PRINCIPAL (TABLA O VACÍO) ───────── */}
       <>
-        <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+        <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de Productos</p>
-            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">Productos</h3>
+            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">
+              LISTA DE PRODUCTOS
+            </h3>
+            <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">
+              Visualiza y actualiza los productos registrados
+            </p>
           </div>
           <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
             <label className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
@@ -278,7 +337,7 @@ export default function ProductosPage() {
               onChange={handleCategoryFilter}
             >
               <option value="">Todas las secciones</option>
-              {categories.map(category => (
+              {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -326,7 +385,9 @@ export default function ProductosPage() {
         size="lg"
       >
         <ProductForm
-          onSubmit={!selectedProduct ? handleCreateProducto : handleEditProducto}
+          onSubmit={
+            !selectedProduct ? handleCreateProducto : handleEditProducto
+          }
           onCancel={handleCloseModal}
           confirm={confirm}
           initialData={selectedProduct}
@@ -362,5 +423,5 @@ export default function ProductosPage() {
 
       <ConfirmDialog />
     </div>
-  )
+  );
 }
