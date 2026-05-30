@@ -92,7 +92,13 @@ export default function UsuariosPage() {
     return (
         <div className="p-2 md:p-4">
             {/* BOTONES */}
-            <div className="flex flex-wrap gap-3 mb-4 no-print">
+            <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
+            <div className="space-y-1 flex-1 my-2">
+                <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Acciones de usuarios</h2>
+                <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega usuarios, genera e imprime reportes rápidamente.</p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 no-print">
                 {/* EXPORTAR */}
                 <div className="flex-1 min-w-[140px]">
                     <ExportDropdown
@@ -133,17 +139,17 @@ export default function UsuariosPage() {
                     />
                 </div>
             </div>
+            </section>
+
 
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
                     {error}
                 </div>
             )}
-            <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
-                <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de Usuarios</p>
-                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">Usuarios</h3>
-                </div>
+            <div className="mb-4 flex flex-col border-b border-[#E5EEF6] pb-4 px-5 dark:border-white/10 lg:flex-col lg:items-baseline lg:justify-between">
+              <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">GESTIÓN DE USUARIOS</h3>
+              <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Administra usuarios del sistema y controla roles.</p>
             </div>
 
             <AdminTable

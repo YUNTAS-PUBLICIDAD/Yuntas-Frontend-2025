@@ -5,8 +5,9 @@ import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSecti
 
 import DynamicPopup from "@/components/molecules/DynamicPopup";
 
-import { sourceData } from "@/data/popup/sourceData";
+import RecentProductsSection from "@/components/organisms/inicio/RecentProductsSection";
 import { imagenes } from "@/data/imagenes";
+import { sourceData } from "@/data/popup/sourceData";
 import { getPublicPopupService } from "@/services/popupService";
 import { Popup as PopupType } from "@/types/admin/popup";
 
@@ -71,6 +72,7 @@ export default async function HomePage() {
   return (
     <main>
       <HeroSection />
+      <RecentProductsSection />
       <InnovacionSection />
       <ProjectsCarousel />
       <TestimonialsSection />

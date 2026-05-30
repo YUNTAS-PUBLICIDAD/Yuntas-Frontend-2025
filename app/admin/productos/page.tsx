@@ -160,9 +160,13 @@ export default function ProductosPage() {
 
   return (
     <div className="p-2 md:p-4">
-
+      <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
+      <div className="space-y-1 flex-1 my-2">
+                <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Gestión de productos</h2>
+                <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega productos, envía por email o Whatsapp, genera e imprime reportes rápidamente.</p>
+            </div>
       {/* ───────── BLOQUE DE BOTONES DE ACCIÓN ───────── */}
-      <div className="flex flex-col md:flex-row gap-2 mb-4">
+      <div className="flex flex-col md:flex-row gap-2 mb-2">
         <div className="flex-1">
           <ActionButtonGroup
             buttons={[{
@@ -172,7 +176,7 @@ export default function ProductosPage() {
               className: "w-full",
               icon: <PlusIcon />,
             }]}
-          />
+            />
         </div>
         <div className="flex-1">
           <ActionButtonGroup
@@ -183,7 +187,7 @@ export default function ProductosPage() {
               className: "w-full",
               icon: <MailIcon />,
             }]}
-          />
+            />
         </div>
         <div className="flex-1">
           <ActionButtonGroup
@@ -194,11 +198,11 @@ export default function ProductosPage() {
               className: "w-full",
               icon: <WhatsappIcon />,
             }]}
-          />
+            />
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-2 mb-6">
+      <div className="flex flex-col md:flex-row gap-2">
         <div className="flex-1">
           <ActionButtonGroup
             buttons={[{
@@ -235,6 +239,7 @@ export default function ProductosPage() {
           />
         </div>
       </div>
+      </section>
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
@@ -263,11 +268,13 @@ export default function ProductosPage() {
 
       {/* ───────── CONTENIDO PRINCIPAL (TABLA O VACÍO) ───────── */}
       <>
-        <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
+        <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de Productos</p>
-            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">Productos</h3>
-          </div>
+                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">
+                        LISTA DE PRODUCTOS
+                    </h3>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Visualiza y actualiza los productos registrados.</p>
+                </div>
           <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
             <label className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
               Filtrar por sección

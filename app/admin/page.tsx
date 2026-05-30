@@ -9,6 +9,7 @@ import { Users, Package, FileText, TrendingUp } from "lucide-react";
 import { useLeads } from "@/hooks/useLeads";
 import { useBlogs } from "@/hooks/useBlog";
 import { useProductos } from "@/hooks/useProductos";
+import { getMostViewedPages } from "@/services/trackingService";
 
 
 interface StatCardProps {
@@ -90,14 +91,41 @@ export default function AdminDashboardPage() {
   const getInitials = (name: string) =>
     name.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase();
 
-  // Data mock de páginas vistas
-  const pageViewData = [
-    { page: "Inicio",    views: 1200 },
-    { page: "Productos", views: 980  },
-    { page: "Blog",      views: 750  },
-    { page: "Nosotros",  views: 530  },
-    { page: "Contacto",  views: 420  },
-  ];
+  const [pageViewData, setPageViewData] = useState<{ page: string; views: number }[]>([]);
+  const [loadingViews, setLoadingViews] = useState(true);
+
+  useEffect(() => {
+    const fetchPageViews = async () => {
+      try {
+        const data = await getMostViewedPages();
+        const mappedData = (data || []).map((item: any) => ({
+          page: item.name,
+          views: item.total_views,
+        }));
+
+        const defaultPages = [
+          { page: "Inicio", views: 0 },
+          { page: "Nosotros", views: 0 },
+          { page: "Productos", views: 0 },
+          { page: "Blog", views: 0 },
+          { page: "Contacto", views: 0 }
+        ];
+
+        const merged = defaultPages.map(def => {
+          const found = mappedData.find((m: any) => m.page === def.page);
+          return found ? found : def;
+        });
+
+        setPageViewData(merged);
+      } catch (error) {
+        console.error("Error loading page view stats:", error);
+      } finally {
+        setLoadingViews(false);
+      }
+    };
+
+    fetchPageViews();
+  }, []);
 
   const stats: StatCardProps[] = [
     {
@@ -140,18 +168,24 @@ export default function AdminDashboardPage() {
             <TrendingUp className="w-4 h-4 text-[#203565] dark:text-white" />
             <h2 className="text-sm font-semibold text-[#203565] dark:text-white">Páginas más vistas</h2>
           </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={pageViewData}>
-              <XAxis dataKey="page" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={38} />
-              <Tooltip content={<CustomTooltip />} />
-              <Line
-                type="monotone" dataKey="views" stroke="#a855f7" strokeWidth={2.5}
-                dot={{ fill: "#a855f7", r: 4, strokeWidth: 0 }}
-                activeDot={{ r: 6, fill: "#c084fc" }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          {loadingViews ? (
+            <div className="h-[220px] w-full flex items-center justify-center bg-gray-50 dark:bg-white/5 rounded-xl animate-pulse">
+              <span className="text-xs text-gray-400 dark:text-white/30">Cargando estadísticas...</span>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={pageViewData}>
+                <XAxis dataKey="page" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={38} />
+                <Tooltip content={<CustomTooltip />} />
+                <Line
+                  type="monotone" dataKey="views" stroke="#a855f7" strokeWidth={2.5}
+                  dot={{ fill: "#a855f7", r: 4, strokeWidth: 0 }}
+                  activeDot={{ r: 6, fill: "#c084fc" }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         {/* Recent Clients */}

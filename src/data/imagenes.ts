@@ -8,7 +8,8 @@ import opinion2 from "@/assets/inicio/opinion02.webp";
 import opinion3 from "@/assets/inicio/opinion03.webp";
 
 // import inicioHero from "@/assets/inicio/heroBackground.jpg";
-import inicioHero from "@/assets/inicio/heroBackground0.webp";
+// import inicioHero from "@/assets/inicio/heroBackground0.webp";
+import inicioHero from "@/assets/inicio/hero_home.webp";
 
 import inicioPopup from "@/assets/inicio/Popup/yuleLove.webp";
 
@@ -16,8 +17,8 @@ import inicioPopup from "@/assets/inicio/Popup/yuleLove.webp";
 import inicioDetalle1 from "@/assets/inicio/innovation001.webp";
 
 // import inicioDetalle2 from "@/assets/inicio/innovation02.jpg";
-import inicioDetalle2 from "@/assets/inicio/innovation002.webp";
 import inicioDetalle3 from "@/assets/inicio/burguerP.webp";
+import inicioDetalle2 from "@/assets/inicio/innovation002.webp";
 
 // import inicioTestimonio from "@/assets/inicio/fondodepantalla.png";
 import inicioTestimonio from "@/assets/inicio/fondodepantalla01.png";
@@ -54,130 +55,130 @@ import reclamacionesHero from "@/assets/Reclamaciones/herobackground.png";
 
 
 export const imagenes = {
-    inicio: {
-        user: {
-            src: inicioUser.src,
-            alt: "Icono de usuario",
-            title: "Icono de usuario"
-        },
-        hero: {
-            src: inicioHero.src,
-            alt: "Fondo de inicio",
-            title: "Fondo de inicio"
-        },
-        popup: {
-            src: inicioPopup.src,
-            alt: "Luces moradas estilo neon",
-            title: "Luces moradas estilo neon"
-        },
-        detalle1: {
-            src: inicioDetalle1.src,
-            alt: "Espacio arquitectónico innovador",
-            title: "Espacio arquitectónico innovador"
-        },
-        detalle2: {
-            src: inicioDetalle2.src,
-            alt: "Pantalla LED de gran formato",
-            title: "Pantalla LED de gran formato"
-        },
-        detalle3: {
-            src: inicioDetalle3.src,
-            alt: "Letrero luminoso de burguer",
-            title: "Letrero luminoso de burguer"
-        },
-        testimonio: {
-            src: inicioTestimonio.src,
-            alt: "Sala espaciosa con diseño moderno",
-            title: "Sala espaciosa con diseño moderno"
-        },
-        proyecto1Antes: {
-            src: proyectoAntes1.src,
-            alt: "Proyecto 1 - Antes",
-            title: "Proyecto 1 - Antes"
-        },
-        proyecto1Despues: {
-            src: proyectoDespues1.src,
-            alt: "Proyecto 1 - Después",
-            title: "Proyecto 1 - Después"
-        },
-        proyecto2Antes: {
-            src: proyectoAntes2.src,
-            alt: "Proyecto 2 - Antes",
-            title: "Proyecto 2 - Antes"
-        },
-        proyecto2Despues: {
-            src: proyectoDespues2.src,
-            alt: "Proyecto 2 - Después",
-            title: "Proyecto 2 - Después"
-        },
-        opiniones: {
-            persona1: {
-                src: opinion1.src,
-                alt: "Opinión de Carlos Mendoza",
-                title: "Opinión de Carlos Mendoza"
-            },
-            persona2: {
-                src: opinion2.src,
-                alt: "Opinión de Andrea Ramos",
-                title: "Opinión de Andrea Ramos"
-            },
-            persona3: {
-                src: opinion3.src,
-                alt: "Opinión de Luis Palacios",
-                title: "Opinión de Luis Palacios"
-            }
-        }
+  inicio: {
+    user: {
+      src: inicioUser.src,
+      alt: "Icono de usuario",
+      title: "Icono de usuario"
     },
-    nosotros: {
-        hero: {
-            src: nosotrosHero.src,
-            alt: "Personas de un equipo colaborando en un proyecto",
-            title: "Personas de un equipo colaborando en un proyecto"
-        },
-        detalle: {
-            src: nosotrosDetalle.src,
-            alt: "Equipo de trabajo en Yuntas Publicidad",
-            title: "Equipo de trabajo en Yuntas Publicidad"
-        },
+    hero: {
+      src: inicioHero.src,
+      alt: "Fondo de inicio",
+      title: "Fondo de inicio"
     },
-    productos: {
-        hero: {
-            src: productosHero.src,
-            alt: "Catálogo de productos publicitarios Yuntas",
-            title: "Catálogo de productos publicitarios Yuntas"
-        },
-        popup: {
-            src: productosPopup.src,
-            alt: "Luces bar estilo neon",
-            title: "Luces bar estilo neon"
-        },
+    popup: {
+      src: inicioPopup.src,
+      alt: "Luces moradas estilo neon",
+      title: "Luces moradas estilo neon"
     },
-    blogs: {
-        hero: {
-            src: blogsHero.src,
-            alt: "Personas en una reunión de trabajo",
-            title: "Personas en una reunión de trabajo"
-        },
+    detalle1: {
+      src: inicioDetalle1.src,
+      alt: "Espacio arquitectónico innovador",
+      title: "Espacio arquitectónico innovador"
     },
-    contacto: {
-        hero: {
-            src: contactoHero.src,
-            alt: "Fondo de contacto",
-            title: "Fondo de contacto"
-        }
+    detalle2: {
+      src: inicioDetalle2.src,
+      alt: "Pantalla LED de gran formato",
+      title: "Pantalla LED de gran formato"
     },
-    login: {
-        hero: {
-            src: inicioHero.src,
-            alt: "Fondo de inicio",
-            title: "Fondo de inicio"
-        }
+    detalle3: {
+      src: inicioDetalle3.src,
+      alt: "Letrero luminoso de burguer",
+      title: "Letrero luminoso de burguer"
     },
-    reclamaciones: {
-        hero: {
-            src: reclamacionesHero.src,
-            alt: "Persona trabajando en una oficina con una laptop",
-            title: "Persona trabajando en una oficina con una laptop"
-        }
+    testimonio: {
+      src: inicioTestimonio.src,
+      alt: "Sala espaciosa con diseño moderno",
+      title: "Sala espaciosa con diseño moderno"
+    },
+    proyecto1Antes: {
+      src: proyectoAntes1.src,
+      alt: "Proyecto 1 - Antes",
+      title: "Proyecto 1 - Antes"
+    },
+    proyecto1Despues: {
+      src: proyectoDespues1.src,
+      alt: "Proyecto 1 - Después",
+      title: "Proyecto 1 - Después"
+    },
+    proyecto2Antes: {
+      src: proyectoAntes2.src,
+      alt: "Proyecto 2 - Antes",
+      title: "Proyecto 2 - Antes"
+    },
+    proyecto2Despues: {
+      src: proyectoDespues2.src,
+      alt: "Proyecto 2 - Después",
+      title: "Proyecto 2 - Después"
+    },
+    opiniones: {
+      persona1: {
+        src: opinion1.src,
+        alt: "Opinión de Carlos Mendoza",
+        title: "Opinión de Carlos Mendoza"
+      },
+      persona2: {
+        src: opinion2.src,
+        alt: "Opinión de Andrea Ramos",
+        title: "Opinión de Andrea Ramos"
+      },
+      persona3: {
+        src: opinion3.src,
+        alt: "Opinión de Luis Palacios",
+        title: "Opinión de Luis Palacios"
+      }
     }
+  },
+  nosotros: {
+    hero: {
+      src: nosotrosHero.src,
+      alt: "Personas de un equipo colaborando en un proyecto",
+      title: "Personas de un equipo colaborando en un proyecto"
+    },
+    detalle: {
+      src: nosotrosDetalle.src,
+      alt: "Equipo de trabajo en Yuntas Publicidad",
+      title: "Equipo de trabajo en Yuntas Publicidad"
+    },
+  },
+  productos: {
+    hero: {
+      src: productosHero.src,
+      alt: "Catálogo de productos publicitarios Yuntas",
+      title: "Catálogo de productos publicitarios Yuntas"
+    },
+    popup: {
+      src: productosPopup.src,
+      alt: "Luces bar estilo neon",
+      title: "Luces bar estilo neon"
+    },
+  },
+  blogs: {
+    hero: {
+      src: blogsHero.src,
+      alt: "Personas en una reunión de trabajo",
+      title: "Personas en una reunión de trabajo"
+    },
+  },
+  contacto: {
+    hero: {
+      src: contactoHero.src,
+      alt: "Fondo de contacto",
+      title: "Fondo de contacto"
+    }
+  },
+  login: {
+    hero: {
+      src: inicioHero.src,
+      alt: "Fondo de inicio",
+      title: "Fondo de inicio"
+    }
+  },
+  reclamaciones: {
+    hero: {
+      src: reclamacionesHero.src,
+      alt: "Persona trabajando en una oficina con una laptop",
+      title: "Persona trabajando en una oficina con una laptop"
+    }
+  }
 } as const;

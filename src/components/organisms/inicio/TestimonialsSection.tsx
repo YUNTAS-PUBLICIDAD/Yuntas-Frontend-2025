@@ -1,17 +1,17 @@
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import TestimonialCard from "@/components/molecules/inicio/TestimonialCard";
 import Button from "@/components/atoms/Button";
-import { testimonialsData } from "@/data/inicio/testimonialsData";
+import TestimonialCard from "@/components/molecules/inicio/TestimonialCard";
 import { imagenes } from "@/data/imagenes";
+import { testimonialsData } from "@/data/inicio/testimonialsData";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { Autoplay, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
-import './TestimonialsSection.css';
+import TestimonialsSwiper from "./TestimonialsSwiper";
 
 const TestimonialsSection: React.FC = () => {
   const router = useRouter();
@@ -23,28 +23,28 @@ const TestimonialsSection: React.FC = () => {
       {/*<div className="w-full bg-[#20838f] flex flex-col items-start justify-center px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b-2 border-white">*/}
 
       {/* HEADER */}
-        <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden">
 
-          {/* Fondo SOLO del header */}
-          <div className="absolute inset-0 bg-[#0a1a3a]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
+        {/* Fondo SOLO del header */}
+        <div className="absolute inset-0 bg-[#0a1a3a]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
 
-          <div className="relative flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/5 backdrop-blur-sm">
+        <div className="relative flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/5 backdrop-blur-sm">
 
-        <div className="text-left mb-2 sm:mb-0">
-          {/* Contenido */}
-        <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase">
-          TU OPINIÓN
-        </h2>
-        <p className="text-white text-sm md:text-base font-bold italic uppercase tracking-wide">
-          GUÍA NUESTRAS DECISIONES !
-        </p>
-      </div>
+          <div className="text-left mb-2 sm:mb-0">
+            {/* Contenido */}
+            <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase">
+              TU OPINIÓN
+            </h2>
+            <p className="text-white text-sm md:text-base font-bold italic uppercase tracking-wide">
+              GUÍA NUESTRAS DECISIONES !
+            </p>
           </div>
         </div>
+      </div>
 
-{/*
+      {/*
       <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#6DE1E3]/70 to-transparent my-6"></div>*/}
 
       {/*SECTION*/}
@@ -54,49 +54,30 @@ const TestimonialsSection: React.FC = () => {
 
         <div className="relative w-full max-w-[1400px]">
 
-         {/*CONTENEDOR CON BLUR */}
-         <div className="relative rounded-[2.5rem] md:rounded-[4rem] overflow-hidden">
-           {/*Fondo blur*/}
-          <div className="absolute inset-0 scale-110 blur-xl" style={
-            {
-              backgroundImage: `url(${imagenes.inicio.testimonio.src})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }
-          }/>
+          {/*CONTENEDOR CON BLUR */}
+          <div className="relative rounded-[2.5rem] md:rounded-[4rem] overflow-hidden">
+            {/*Fondo blur*/}
+            <div className="absolute inset-0" style={
+              {
+                backgroundImage: `url(${imagenes.inicio.testimonio.src})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }
+            } />
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/40" />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/50" />
 
-          {/*Contenido*/}
-          <div className="relative py-16 z-10 px-4">
-            <Swiper
-              modules={[Pagination, Autoplay]}
-              spaceBetween={30}
-              slidesPerView={1}
-              pagination={{ clickable: true, dynamicBullets: true }}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
-              loop={true}
-              breakpoints={{
-                640: { slidesPerView: 1, spaceBetween: 20 },
-                768: { slidesPerView: 2, spaceBetween: 30 },
-                1024: { slidesPerView: 3, spaceBetween: 40 },
-              }}
-              className="testimonials-swiper !pb-20"
-            >
-              {testimonialsData.map((t, idx) => (
-                <SwiperSlide key={idx} className="!h-auto flex pt-12 px-2 pb-4">
-                  <div className="flex justify-center w-full h-full">
-                    <TestimonialCard {...t} image={t.image} className="h-full" />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            {/*Contenido*/}
+            <div className="relative py-16 z-10 px-4">
+
+              {/* SWIPER AISLADO */}
+              <TestimonialsSwiper />
+            </div>
           </div>
-        </div>
 
-        {/*BOTON FLOTANTE*/}
+          {/*BOTON FLOTANTE*/}
           <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 flex justify-center z-20 w-full px-4">
             <Button
               variant="primary"
@@ -107,7 +88,7 @@ const TestimonialsSection: React.FC = () => {
               COTIZAR AHORA
             </Button>
           </div>
-          </div>
+        </div>
       </div>
     </section>
   );

@@ -333,37 +333,37 @@ export default function ReclamacionesPage() {
                     >
                         {selectedReclamo && (
                             <div className="flex flex-col gap-6 p-1 w-full">
-                                <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                                    <h3 className="text-xs font-bold text-gray-400 uppercase mb-3 pb-1 border-b">Información del Cliente</h3>
+                                <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm dark:bg-[#191F44] dark:border-[#ECECEC]/20">
+                                    <h3 className="text-xs font-bold text-gray-400 uppercase mb-3 pb-1 border-b dark:border-[#ECECEC]/20">Información del Cliente</h3>
                                     <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
                                         <div>
-                                            <p className="text-gray-500 text-xs">Cliente</p>
-                                            <p className="font-bold text-[#203565] text-base">{selectedReclamo.first_name} {selectedReclamo.last_name}</p>
+                                            <p className="text-gray-500 text-xs dark:text-[#ECECEC]">Cliente</p>
+                                            <p className="font-bold text-[#203565] text-base dark:text-[#ECECEC]/80">{selectedReclamo.first_name} {selectedReclamo.last_name}</p>
                                         </div>
                                         <div>
-                                            <p className="text-gray-500 text-xs">Documento</p>
-                                            <p className="font-medium">{selectedReclamo.document_number}</p>
+                                            <p className="text-gray-500 text-xs dark:text-[#ECECEC]">Documento</p>
+                                            <p className="font-medium dark:text-[#ECECEC]/80">{selectedReclamo.document_number}</p>
                                         </div>
                                         <div>
-                                            <p className="text-gray-500 text-xs">Email</p>
-                                            <p className="text-gray-700 break-all">{selectedReclamo.email}</p>
+                                            <p className="text-gray-500 text-xs dark:text-[#ECECEC]">Email</p>
+                                            <p className="text-gray-700 break-all dark:text-[#ECECEC]/80">{selectedReclamo.email}</p>
                                         </div>
                                         <div>
-                                            <p className="text-gray-500 text-xs">Teléfono</p>
-                                            <p className="text-gray-700">{selectedReclamo.phone || '-'}</p>
+                                            <p className="text-gray-500 text-xs dark:text-[#ECECEC]">Teléfono</p>
+                                            <p className="text-gray-700 dark:text-[#ECECEC]/80">{selectedReclamo.phone || '-'}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="bg-[#F3F6F9] border border-blue-100 rounded-lg p-5">
+                                <div className="bg-[#F3F6F9] border border-blue-100 rounded-lg p-5 dark:bg-[#191F44] dark:border-[#ECECEC]/20">
                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                         <div className="flex-1">
                                             <p className="text-xs font-bold text-[#23C1DE] uppercase mb-1">Producto Reclamado</p>
-                                            <p className="font-bold text-xl text-[#203565] leading-tight">{getProductName(selectedReclamo.product_id)}</p>
+                                            <p className="font-bold text-xl text-[#203565] leading-tight dark:text-[#ECECEC]/80">{getProductName(selectedReclamo.product_id)}</p>
                                             <p className="text-xs text-gray-400 mt-1">ID interno: {selectedReclamo.product_id || 'N/A'}</p>
                                         </div>
-                                        <div className="bg-white px-4 py-2 rounded border border-gray-200 shadow-sm whitespace-nowrap">
-                                            <p className="text-gray-500 text-xs text-right">Monto</p>
+                                        <div className="bg-white px-4 py-2 rounded border border-gray-200 shadow-sm whitespace-nowrap dark:bg-[#141A3F] dark:border-[#141A2F]">
+                                            <p className="text-gray-500 text-xs text-right dark:text-[#ECECEC]">Monto</p>
                                             <p className="font-bold text-lg text-red-500">{selectedReclamo.claimed_amount ? `S/. ${selectedReclamo.claimed_amount}` : '-'}</p>
                                         </div>
                                     </div>
@@ -371,22 +371,22 @@ export default function ReclamacionesPage() {
 
                                 <div>
                                     <p className="text-xs font-bold text-gray-400 uppercase mb-2">Descripción del Problema</p>
-                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm h-32 overflow-y-auto text-gray-700 italic">
+                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm h-32 overflow-y-auto text-gray-700 italic dark:bg-[#191F44] dark:text-[#ECECEC]/80 dark:border-[#ECECEC]/20">
                                         &quot;{selectedReclamo.detail}&quot;
                                     </div>
                                 </div>
 
-                                <div className="border-t pt-5 mt-2">
+                                <div className="border-t pt-5 mt-2 dark:border-[#ECECEC]/20">
                                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-3">
                                         <div className="text-xs text-gray-400">
                                             Registrado el: <span className="font-medium text-gray-600">{formatDate(selectedReclamo.created_at)}</span>
                                         </div>
-                                        <div className="flex gap-3 items-center w-full sm:w-auto bg-gray-50 p-2 rounded-lg">
-                                            <span className="text-sm font-bold text-gray-700 hidden sm:block px-2">Estado:</span>
+                                        <div className="flex gap-3 items-center w-full sm:w-auto bg-gray-50 p-2 rounded-lg dark:bg-[#191F44] dark:border border-[#ECECEC]/20">
+                                            <span className="text-sm font-bold text-gray-700 hidden sm:block px-2 dark:text-[#ECECEC]">Estado:</span>
                                             <select
                                                 value={newStatusId}
                                                 onChange={(e) => setNewStatusId(Number(e.target.value))}
-                                                className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px]"
+                                                className="border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#23C1DE] outline-none bg-white min-w-[140px] dark:bg-[#1B2247] dark:text-[#ECECEC] dark:border-[#ECECEC]/20"
                                             >
                                                 <option value={1}>🟡 Pendiente</option>
                                                 <option value={2}>🟢 Completo</option>
