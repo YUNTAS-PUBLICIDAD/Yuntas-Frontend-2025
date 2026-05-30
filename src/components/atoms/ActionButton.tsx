@@ -28,10 +28,10 @@ export default function ActionButton({
             size="sm"
             variant={variant}
             onClick={onClick}
-            className={`py-1 !px-3 sm:!px-4 !rounded-[10px] ${className ?? "w-full sm:w-auto"} ${finalClasses}`}
+            className={`py-1 !px-2 sm:!px-3 !rounded-[10px] ${className ?? "w-full sm:w-auto"} ${finalClasses}`}
             disabled={isLoading}
         >
-            <span className="flex items-center justify-center gap-2">
+            <span className="flex items-center justify-center gap-1">
                 {icon && <span className="flex-shrink-0">{icon}</span>}
                 <p className="font-semibold text-xs sm:text-sm md:text-base">
                     {children}

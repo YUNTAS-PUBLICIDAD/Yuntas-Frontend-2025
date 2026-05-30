@@ -61,7 +61,9 @@ export default function ExportDropdown({
               dark:bg-[#293296]
               text-white
               font-semibold
-              text-sm
+              text-xs
+              md:text-sm
+              lg:text-base
               rounded-[10px]
               hover:opacity-90
               transition-all
