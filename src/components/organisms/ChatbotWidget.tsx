@@ -23,11 +23,12 @@ const DEFAULT_SETTINGS: ChatbotSettings = {
 };
 
 const tooltips = [
-  "Cotiza en segundos",
-  "Explora nuestro catálogo",
-  "Letreros luminosos",
-  "Pantallas LED",
-  "Habla con un asesor",
+  "Hola, ¿en qué puedo ayudarte?",
+  "¿Qué deseas cotizar hoy?",
+  "Te ayudo a encontrar el producto ideal.",
+  "¿Buscas letreros luminosos o pantallas LED?",
+  "Puedo mostrarte opciones para tu negocio.",
+  "Solicita un asesor en pocos segundos.",
 ]
 
 function renderCTA(message: ChatMessage) {
@@ -303,9 +304,9 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className={`absolute bottom-full mb-4 backdrop-blur-xl bg-[#07111f]/90 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(0,0,0,0.45)] px-4 py-2.5 min-w-[280px] max-w-[320px]  text-white rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
+              className={`absolute bottom-20 backdrop-blur-xl bg-[#07111f]/90 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(0,0,0,0.45)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-white rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
                 ? "left-20 origin-bottom-left"
-                : "right-16  origin-bottom-right"
+                : "right-10  origin-bottom-right"
                 }`}
               onClick={handleOpenChat}
             >
@@ -380,7 +381,7 @@ export default function ChatbotWidget() {
       )}
 
       {open && (
-        <div className="w-[380px] h-[600px] sm:w-[420px] sm:h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
+        <div className="w-full max-w-[320px] sm:max-w-[360px] h-[75vh] sm:h-[82vh] max-h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
 
           {/* Header con color primario */}
           <div
