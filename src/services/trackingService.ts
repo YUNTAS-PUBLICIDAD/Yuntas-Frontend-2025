@@ -19,9 +19,12 @@ export const registerPageView = async (payload: PageViewPayload) => {
 /**
  * Obtener las páginas más vistas del dashboard de administración.
  */
-export const getMostViewedPages = async () => {
+export const getMostViewedPages = async (month?: string) => {
   const response = await api.get(
-    API_ENDPOINTS.ADMIN.DASHBOARD.MOST_VIEWED_PAGES
+    API_ENDPOINTS.ADMIN.DASHBOARD.MOST_VIEWED_PAGES,
+    {
+      params: month ? { month } : undefined,
+    }
   );
   return response.data;
 };
