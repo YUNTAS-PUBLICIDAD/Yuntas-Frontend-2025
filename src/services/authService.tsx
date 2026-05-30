@@ -5,7 +5,12 @@ import { removeRole, setRole } from "@/utils/role";
 
 export async function loginService(credentials: LoginCredentials): Promise<LoginActionResponse> {
     try {
-        const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
+        const sessionId = typeof window !== 'undefined' ? localStorage.getItem('visitor_session_id') : null;
+        const payload = {
+            ...credentials,
+            session_id: sessionId || undefined
+        };
+        const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, payload);
 
         const data = response.data;
        

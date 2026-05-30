@@ -49,6 +49,10 @@ export const API_ENDPOINTS = {
    CAPTURE: '/leads/capture'
   },
 
+  TRACKING: {
+    PAGE_VIEW: '/page-view',
+  },
+
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
     CHATBOT: {
@@ -159,6 +163,10 @@ export const API_ENDPOINTS = {
       GENERAL_UPDATE: '/admin/settings/general',
       CHATBOT_UPDATE: '/admin/settings/chatbot',
       CONTACT_UPDATE: '/admin/settings/contact',
+    },
+    DASHBOARD: {
+      MOST_VIEWED_PAGES: '/dashboard/most-viewed-pages',
+      USER_TYPE_STATS: '/dashboard/user-type-stats',
     }
   }
 };
