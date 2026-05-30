@@ -21,13 +21,13 @@ export default function LoginPage() {
     setCheckingAuth(false);
   }, [router]);
 
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#141A3F]">
-        <Loader size="lg" />
-      </div>
-    );
-  }
+  // if (checkingAuth) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#141A3F]">
+  //       <Loader size="lg" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <main className="min-h-screen w-full bg-transparent">
