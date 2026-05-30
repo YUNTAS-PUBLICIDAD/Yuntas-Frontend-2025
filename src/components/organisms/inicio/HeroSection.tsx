@@ -59,7 +59,7 @@ const HeroSection = () => {
           {/*Diseñamos espacios que{" "}
                   <span className="text-[#6DE1E3]">impactan</span>
                 </Heading>*/}
-          <h1 className="text-white font-bold leading-[1.02] tracking-[-0.04em] text-[2.8rem] md:text-[clamp(3.5rem, 5vw, 5.5rem)] reveal delay-2">
+          <h1 className="text-white font-bold leading-[1] tracking-[-0.04em] text-[2.5rem] sm:text-[3rem]  md:text-[clamp(4.rem, 5vw, 5.5rem)] reveal delay-2">
             {/*Convierte tu espacio en una*/}
             Impulsamos tu marca.
             <br />
