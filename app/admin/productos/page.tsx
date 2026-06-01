@@ -161,8 +161,8 @@ export default function ProductosPage() {
   return (
     <div className="p-2 md:p-4">
       <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
-      <div className="space-y-1 flex-1 my-2">
-                <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Gestión de productos</h2>
+      <div className="space-y-1 flex-1 my-2 mb-5">
+                <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl mb-2">Gestión de productos</h2>
                 <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega productos, envía por email o Whatsapp, genera e imprime reportes rápidamente.</p>
             </div>
       {/* ───────── BLOQUE DE BOTONES DE ACCIÓN ───────── */}
