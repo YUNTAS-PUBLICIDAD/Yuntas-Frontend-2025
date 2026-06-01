@@ -304,7 +304,7 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className={`absolute bottom-20 backdrop-blur-xl bg-[#07111f]/90 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(0,0,0,0.45)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-white rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
+              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
                 ? "left-20 origin-bottom-left"
                 : "right-10  origin-bottom-right"
                 }`}
@@ -325,7 +325,7 @@ export default function ChatbotWidget() {
                       text-[10px]
                       uppercase
                       tracking-[0.15em]
-                      text-[#6DE1E3]
+                      text-[#23C1DE]
                       font-semibold
                     ">
                       Asistente Yuntas
@@ -337,7 +337,7 @@ export default function ChatbotWidget() {
                     className="
                       text-sm
                       font-medium
-                      text-white
+                      text-slate-800
                       leading-relaxed
                       animate-fade-in
                     "
