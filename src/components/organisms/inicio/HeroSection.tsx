@@ -6,13 +6,34 @@ import { ArrowRight, FileText, Headset, Mail, MapPinned, MessageCircle, Paintbru
 import Image from "next/image";
 import Link from "next/link";
 
+const features = [
+  {
+    icon: Paintbrush,
+    title: "Diseño personalizado",
+    description:
+      "Creamos soluciones visuales adaptadas a la identidad de tu negocio."
+  },
+  {
+    icon: ShieldCheck,
+    title: "Materiales premium",
+    description:
+      "Tecnología y acabados de alta calidad para máxima durabilidad."
+  },
+  {
+    icon: Wrench,
+    title: "Instalación profesional",
+    description:
+      "Equipos especializados para resultados impecables."
+  }
+];
+
 const HeroSection = () => {
   const whatsappMsg = encodeURIComponent(
     "Hola, me gustaría cotizar con Yuntas Publicidad. ¿Me podrían brindar más información?"
   );
   return (
     <section
-      className="relative w-full min-h-[100vh] flex items-center justify-start overflow-hidden md:h-screen"
+      className="relative h-auto xl:min-h-screen overflow-hidden"
     >
       {/* Fondo */}
       <div className="absolute inset-0 animate-zoom-out-bg">
@@ -37,10 +58,10 @@ const HeroSection = () => {
       </div>
 
       {/* Contenido */}
-      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 pt-20 md:pt-32 flex flex-col justify-start h-full">
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 pt-24 md:pt-32 pb-16 md:pb-24 flex flex-col justify-start lg:pb-0">
 
         {/* Bloque texto */}
-        <div className="max-w-2xl flex flex-col gap-4 md:gap-5">
+        <div className="max-w-3xl flex flex-col gap-4 md:gap-5">
 
           {/* Eyebrow */}
           <span className="text-[#6DE1E3] text-sm md:text-base font-semibold tracking-[0.08em] uppercase opacity-80 reveal delay-1">
@@ -59,7 +80,7 @@ const HeroSection = () => {
           {/*Diseñamos espacios que{" "}
                   <span className="text-[#6DE1E3]">impactan</span>
                 </Heading>*/}
-          <h1 className="text-white font-bold leading-[1] tracking-[-0.04em] text-[2.5rem] sm:text-[3rem]  md:text-[clamp(4.rem, 5vw, 5.5rem)] reveal delay-2">
+          <h1 className="text-white font-bold leading-[1] tracking-[-0.04em] text-[2.8rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.5rem]  reveal delay-2">
             {/*Convierte tu espacio en una*/}
             Impulsamos tu marca.
             <br />
@@ -99,7 +120,6 @@ const HeroSection = () => {
                 inline-flex items-center justify-center gap-2.5
 
                 px-6 md:px-8
-                py-3
 
                 rounded-xl
 
@@ -109,6 +129,7 @@ const HeroSection = () => {
                 text-white
                 text-sm md:text-[15px]
                 font-medium
+                h-12
 
                 backdrop-blur-xl
 
@@ -136,16 +157,17 @@ const HeroSection = () => {
                 inline-flex items-center justify-center gap-2.5
 
                 px-6 md:px-8
-                py-3
+                h-12
 
                 rounded-xl
 
                 bg-gradient-to-r
-                from-[#6DE1E3]
-                via-[#59D7E6]
-                to-[#3FB8FF]
+                from-[#4ED8E7]
+                via-[#38CDE2]
+                to-[#2BA9FF]
 
-                text-[#04111d]
+                text-white
+
                 text-sm md:text-[15px]
                 font-semibold
 
@@ -173,134 +195,46 @@ const HeroSection = () => {
             </Link>
           </div>
 
-          {/* Indicadores */}
+          {/* METRICAS CUALITATIVAS */}
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+          <div className="mt-10 flex flex-wrap gap-3">
 
-            <div className="
-              flex items-start gap-3
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.03]
-              backdrop-blur-md
-              p-3
-              transition-all duration-300
-              hover:border-[#6DE1E3]/30
-              hover:bg-white/[0.05]
-            ">
-              <div className="
-                flex h-10 w-10 shrink-0
-                items-center justify-center
-                rounded-xl
-                bg-[#6DE1E3]/10
-              ">
-                <PencilRuler className="h-5 w-5 text-[#6DE1E3]" />
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="
+                  inline-flex
+                  items-center
+                  gap-3
+
+                  rounded-full
+
+                  border border-white/10
+                  bg-black/25
+                  backdrop-blur-xl
+
+                  px-5
+                  py-3
+                "
+              >
+                <feature.icon
+                  className="
+                    h-4 w-4
+                    text-[#6DE1E3]
+                  "
+                />
+
+                <span
+                  className="
+                    text-sm
+                    text-white/90
+                    font-medium
+                  "
+                >
+                  {feature.title}
+                </span>
               </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-white">
-                  Diseño a medida
-                </h3>
-
-                <p className="mt-1 text-xs leading-relaxed text-white/60">
-                  Soluciones creativas adaptadas a la identidad de tu marca.
-                </p>
-              </div>
-            </div>
-
-            <div className="
-              flex items-start gap-3
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.03]
-              backdrop-blur-md
-              p-3
-              transition-all duration-300
-              hover:border-[#6DE1E3]/30
-              hover:bg-white/[0.05]
-            ">
-              <div className="
-                flex h-10 w-10 shrink-0
-                items-center justify-center
-                rounded-xl
-                bg-[#6DE1E3]/10
-              ">
-                <ShieldCheck className="h-5 w-5 text-[#6DE1E3]" />
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-white">
-                  Materiales premium
-                </h3>
-
-                <p className="mt-1 text-xs leading-relaxed text-white/60">
-                  Tecnología y acabados de alta calidad para máxima durabilidad.
-                </p>
-              </div>
-            </div>
-
-            <div className="
-              flex items-start gap-3
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.03]
-              backdrop-blur-md
-              p-3
-              transition-all duration-300
-              hover:border-[#6DE1E3]/30
-              hover:bg-white/[0.05]
-            ">
-              <div className="
-                flex h-10 w-10 shrink-0
-                items-center justify-center
-                rounded-xl
-                bg-[#6DE1E3]/10
-              ">
-                <Wrench className="h-5 w-5 text-[#6DE1E3]" />
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-white">
-                  Instalación profesional
-                </h3>
-
-                <p className="mt-1 text-xs leading-relaxed text-white/60">
-                  Equipos especializados para resultados impecables.
-                </p>
-              </div>
-            </div>
-
-            <div className="
-              flex items-start gap-3
-              rounded-2xl
-              border border-white/10
-              bg-white/[0.03]
-              backdrop-blur-md
-              p-3
-              transition-all duration-300
-              hover:border-[#6DE1E3]/30
-              hover:bg-white/[0.05]
-            ">
-              <div className="
-                flex h-10 w-10 shrink-0
-                items-center justify-center
-                rounded-xl
-                bg-[#6DE1E3]/10
-              ">
-                <Headset className="h-5 w-5 text-[#6DE1E3]" />
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-white">
-                  Soporte continuo
-                </h3>
-
-                <p className="mt-1 text-xs leading-relaxed text-white/60">
-                  Acompañamiento antes, durante y después de cada proyecto.
-                </p>
-              </div>
-            </div>
-
+            ))}
           </div>
 
         </div>

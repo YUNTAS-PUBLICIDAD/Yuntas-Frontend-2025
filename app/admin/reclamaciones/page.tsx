@@ -295,9 +295,9 @@ export default function ReclamacionesPage() {
 
                     <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de recomendaciones</p>
+                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de reclamaciones</p>
                             <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
-                                Recomendaciones
+                                Reclamaciones
                             </h3>
                         </div>
                     </div>

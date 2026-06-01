@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  ComposedChart, Line, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import { Users, Package, FileText, TrendingUp } from "lucide-react";
 import { useLeads } from "@/hooks/useLeads";
@@ -65,13 +65,65 @@ function CustomTooltip({ active, payload, label }: any) {
   );
 }
 
+const getMonthValue = (date = new Date()) => {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+};
+
+const getMonthLabel = (date = new Date()) => {
+  return new Intl.DateTimeFormat("es-ES", {
+    month: "long",
+    year: "numeric",
+  }).format(date).replace(/^./, (char) => char.toUpperCase());
+};
+
 // Dashboard Page 
 export default function AdminDashboardPage() {
   const router = useRouter();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [currentMonthValue, setCurrentMonthValue] = useState(() => getMonthValue());
+  const [selectedMonth, setSelectedMonth] = useState(() => getMonthValue());
 
   const { leads, getLeads, isLoading: loadingLeads } = useLeads();
   const { blogs, getBlogs, isLoading: loadingBlogs } = useBlogs();
   const { productos, getProductos, isLoading: loadingProductos } = useProductos();
+
+  useEffect(() => {
+    const syncTheme = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+
+    syncTheme();
+    window.addEventListener("themechange", syncTheme);
+
+    return () => window.removeEventListener("themechange", syncTheme);
+  }, []);
+
+  useEffect(() => {
+    const syncCurrentMonth = () => {
+      const nextMonthValue = getMonthValue();
+      setCurrentMonthValue(nextMonthValue);
+      setSelectedMonth((previous) => (previous === "all" ? previous : nextMonthValue));
+    };
+
+    let timeoutId: any;
+
+    const scheduleNextMonthUpdate = () => {
+      const now = new Date();
+      const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      timeoutId = window.setTimeout(() => {
+        syncCurrentMonth();
+        scheduleNextMonthUpdate();
+      }, nextMonthStart.getTime() - now.getTime());
+    };
+
+    scheduleNextMonthUpdate();
+
+    return () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     getLeads(200);
@@ -93,14 +145,34 @@ export default function AdminDashboardPage() {
 
   const [pageViewData, setPageViewData] = useState<{ page: string; views: number }[]>([]);
   const [loadingViews, setLoadingViews] = useState(true);
+  const chartTickColor = isDarkMode ? "#cbd5e1" : "#64748b";
+  const chartAccentColor = isDarkMode ? "#c4b5fd" : "#a855f7";
+  const chartFillColor = isDarkMode ? "#c4b5fd" : "#a855f7";
+  const chartGridColor = isDarkMode ? "rgba(255, 255, 255, 0.12)" : "rgba(15, 23, 42, 0.18)";
+  const chartAxisLineColor = isDarkMode ? "rgba(255, 255, 255, 0.25)" : "rgba(15, 23, 42, 0.35)";
+  const totalMonthViews = pageViewData.reduce((total, item) => total + item.views, 0);
+
+  const monthOptions = [
+    {
+      value: "all",
+      label: "Vista general",
+    },
+    {
+      value: currentMonthValue,
+      label: getMonthLabel(),
+    },
+  ];
 
   useEffect(() => {
+    let isCancelled = false;
+    setLoadingViews(true);
+
     const fetchPageViews = async () => {
       try {
-        const data = await getMostViewedPages();
+        const data = await getMostViewedPages(selectedMonth === "all" ? undefined : selectedMonth);
         const mappedData = (data || []).map((item: any) => ({
           page: item.name,
-          views: item.total_views,
+          views: Math.round(Number(item.total_views) || 0),
         }));
 
         const defaultPages = [
@@ -116,16 +188,32 @@ export default function AdminDashboardPage() {
           return found ? found : def;
         });
 
-        setPageViewData(merged);
+        if (!isCancelled) {
+          setPageViewData(merged);
+        }
       } catch (error) {
         console.error("Error loading page view stats:", error);
       } finally {
-        setLoadingViews(false);
+        if (!isCancelled) {
+          setLoadingViews(false);
+        }
       }
     };
 
     fetchPageViews();
-  }, []);
+
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    if (selectedMonth === currentMonthValue) {
+      intervalId = setInterval(fetchPageViews, 30000);
+    }
+
+    return () => {
+      isCancelled = true;
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [selectedMonth, currentMonthValue]);
 
   const stats: StatCardProps[] = [
     {
@@ -164,27 +252,87 @@ export default function AdminDashboardPage() {
 
         {/* Line Chart */}
         <div className="lg:col-span-3 rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] p-6 shadow-sm">
-          <div className="flex items-center gap-2 mb-5">
-            <TrendingUp className="w-4 h-4 text-[#203565] dark:text-white" />
-            <h2 className="text-sm font-semibold text-[#203565] dark:text-white">Páginas más vistas</h2>
+          <div className="flex items-center justify-between gap-3 mb-5">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#203565] dark:text-white" />
+              <h2 className="text-sm font-semibold text-[#203565] dark:text-white">Páginas más vistas</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-gray-500 dark:text-white/60">Mes</span>
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="h-9 rounded-lg border border-gray-200 bg-white px-3 text-xs text-[#203565] shadow-sm outline-none transition-colors focus:border-[#a855f7] dark:border-white/10 dark:bg-[#141A3F] dark:text-white disabled:cursor-default disabled:opacity-90"
+              >
+                {monthOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           {loadingViews ? (
             <div className="h-[220px] w-full flex items-center justify-center bg-gray-50 dark:bg-white/5 rounded-xl animate-pulse">
               <span className="text-xs text-gray-400 dark:text-white/30">Cargando estadísticas...</span>
             </div>
           ) : (
+            <>
             <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={pageViewData}>
-                <XAxis dataKey="page" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={38} />
-                <Tooltip content={<CustomTooltip />} />
-                <Line
-                  type="monotone" dataKey="views" stroke="#a855f7" strokeWidth={2.5}
-                  dot={{ fill: "#a855f7", r: 4, strokeWidth: 0 }}
-                  activeDot={{ r: 6, fill: "#c084fc" }}
+              <ComposedChart data={pageViewData} margin={{ top: 10, right: 60, left: 12, bottom: 28 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartGridColor} />
+                <XAxis
+                  dataKey="page"
+                  tick={{ fontSize: 12, fill: chartTickColor }}
+                  axisLine={{ stroke: chartAxisLineColor, strokeWidth: 1 }}
+                  tickLine={false}
+                  interval={0}
+                  height={34}
+                  tickMargin={12}
+                  textAnchor="middle"
+                  padding={{ left: 24, right: 24 }}
                 />
-              </LineChart>
+                <YAxis
+                  tick={{ fontSize: 12, fill: chartTickColor }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={48}
+                  allowDecimals={false}
+                  domain={[0, (dataMax) => (!dataMax || isNaN(dataMax)) ? 10 : dataMax + (Math.ceil(dataMax / 4) || 1)]}
+                  tickFormatter={(value) => Math.round(Number(value)).toString()}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="views"
+                  stroke="none"
+                  fill={chartFillColor}
+                  fillOpacity={isDarkMode ? 0.18 : 0.16}
+                  isAnimationActive={false}
+                />
+                <Line
+                  type="monotone" dataKey="views" stroke={chartAccentColor} strokeWidth={2.5}
+                  dot={{ fill: chartAccentColor, r: 4, strokeWidth: 0 }}
+                  activeDot={{ r: 6, fill: chartAccentColor }}
+                />
+              </ComposedChart>
             </ResponsiveContainer>
+              <div className="mt-4 flex items-end justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium text-gray-500 dark:text-white/50">
+                    {selectedMonth === "all" ? "Vistas totales" : "Vistas totales del mes"}
+                  </p>
+                  <p className="text-lg font-semibold text-[#0D1030] dark:text-white">{totalMonthViews.toLocaleString()}</p>
+                </div>
+                <p className="text-xs text-gray-400 dark:text-white/40 text-right">
+                  {selectedMonth === "all"
+                    ? "Vista general"
+                    : selectedMonth === currentMonthValue
+                      ? "Se actualiza en tiempo real"
+                      : "Mes cerrado"}
+                </p>
+              </div>
+            </>
           )}
         </div>
 
