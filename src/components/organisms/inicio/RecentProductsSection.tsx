@@ -29,7 +29,7 @@ export default function RecentProductsSection() {
   }
 
   return (
-    <section className="bg-[#F8FAFC] py-24">
+    <section className="bg-[#F8FAFC] py-16 lg:py-20">
       <div className="container mx-auto px-6">
 
         <div
@@ -66,8 +66,7 @@ export default function RecentProductsSection() {
                 md:text-5xl
               "
             >
-              Descubre las últimas soluciones
-              para potenciar tu negocio.
+              Productos para destacar tu marca
             </h2>
 
             <p
@@ -78,9 +77,7 @@ export default function RecentProductsSection() {
                 text-slate-600
               "
             >
-              Letreros luminosos, pantallas LED,
-              impresión gran formato y productos
-              publicitarios diseñados para destacar tu marca.
+              Explora nuestros proyectos y productos más recientes.
             </p>
           </div>
 
