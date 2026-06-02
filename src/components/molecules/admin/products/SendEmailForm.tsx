@@ -381,7 +381,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
                 </FormSection>
             ))}
 
-            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200">
+            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200 dark:bg-[#141A3F]">
                 <Button
                     type="submit"
                     variant="primary"

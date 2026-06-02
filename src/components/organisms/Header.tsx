@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`hidden md:flex fixed  top-0 lef-0 w-full z-50 items-center justify-between px-16 h-24
+        className={`hidden lg:flex fixed  top-0 lef-0 w-full z-50 items-center justify-between px-16 h-24
           transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-md shadow-md": "bg-transparent"}`}
       >
         {/*<div className="flex flex-col items-center shrink-0">*/}
