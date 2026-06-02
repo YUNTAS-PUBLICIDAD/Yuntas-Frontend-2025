@@ -1,10 +1,10 @@
-import React from 'react'; // Asegúrate de tener React si es necesario
+import React from 'react';
 import Header from "@/components/organisms/Header";
 import Footer from "@/components/organisms/Footer";
 import HeaderMobil from "../organisms/HeaderMobil";
+import dynamic from 'next/dynamic';
 
-import { FloatingSocialBar } from "@/components/atoms/FloatingSocialBar";
-import ChatbotWidget from "@/components/organisms/ChatbotWidget";
+const ChatbotWidget = dynamic(() => import("@/components/organisms/ChatbotWidget"), { ssr: false });
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,8 +15,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <main className="flex-1">
         {children}
       </main>
-
-      <FloatingSocialBar />
 
       <ChatbotWidget />
 
