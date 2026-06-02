@@ -56,7 +56,7 @@ export default function AdminLayout({
         <HeaderMobil />
 
         {/* CONTENIDO */}
-        <main className="flex-1 py-6 px-4 md:py-8 md:px-8 pt-20 md:pt-6 bg-white dark:bg-[#141A3F] transition-colors duration-300">
+        <main className="flex-1 py-6 px-4 lg:py-8 lg:px-8 pt-20 lg:pt-6 bg-white dark:bg-[#141A3F] transition-colors duration-300">
           <AdminBreadcrumbs />
           <h1 className="mb-6 text-2xl font-bold text-[#0D1030] dark:text-white md:text-3xl">
             {title}
