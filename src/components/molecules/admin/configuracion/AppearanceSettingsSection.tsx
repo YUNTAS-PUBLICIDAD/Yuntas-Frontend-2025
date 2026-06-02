@@ -279,7 +279,7 @@ export default function AppearanceSettingsSection({
             </div>
           </div>
 
-          <div className="px-6 py-6">
+          {/* <div className="px-6 py-6">
             <BlockTitle
               icon={<Brush className="h-4 w-4 text-[#203565] dark:text-white/60" />}
               title="Información de la empresa"
@@ -295,9 +295,9 @@ export default function AppearanceSettingsSection({
                 className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="px-6 py-6">
+          {/* <div className="px-6 py-6">
             <BlockTitle
               icon={<Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />}
               title="Tema"
@@ -315,7 +315,7 @@ export default function AppearanceSettingsSection({
                 hint="El backend guardará el tema predeterminado"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="bg-gray-50 px-6 py-4 dark:bg-white/5 flex justify-end">
             <button
