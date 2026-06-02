@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogs = blogsResult.success && blogsResult.data ? blogsResult.data : [];
 
+
   // Rutas estáticas
   const routes: MetadataRoute.Sitemap = [
     {
@@ -50,19 +51,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Rutas dinámicas de productos
   // Productos
-  const productosRoutes: MetadataRoute.Sitemap = productos.map((producto) => ({
-    url: `${baseUrl}/productos/${producto.slug}`,
-    lastModified: new Date(producto.created_at),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
+  const productosRoutes: MetadataRoute.Sitemap = productos.map((producto) => {
+    const date = new Date(producto.created_at);
+
+    return {
+      url: `${baseUrl}/productos/${producto.slug}`,
+      lastModified: isNaN(date.getTime()) ? new Date() : date,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }
+  })
 
   // Blogs
-  const blogsRoutes: MetadataRoute.Sitemap = blogs.map((blog) => ({
-    url: `${baseUrl}/blog/${blog.slug}`,
-    lastModified: new Date(blog.created_at),
-    changeFrequency: 'monthly',
-    priority: 0.7
-  }))
+  const blogsRoutes: MetadataRoute.Sitemap = blogs.map((blog) => {
+    const date = new Date(blog.created_at);
+
+    return {
+      url: `${baseUrl}/blog/${blog.slug}`,
+      lastModified: isNaN(date.getTime()) ? new Date() : date,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }
+  });
+
+
   return [...routes, ...productosRoutes, ...blogsRoutes]
 }
