@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   ComposedChart, Line, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
@@ -101,27 +101,21 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const syncCurrentMonth = () => {
       const nextMonthValue = getMonthValue();
-      setCurrentMonthValue(nextMonthValue);
-      setSelectedMonth((previous) => (previous === "all" ? previous : nextMonthValue));
+      setCurrentMonthValue((prevCurrent) => {
+        if (prevCurrent !== nextMonthValue) {
+          // If the month rolled over, transition the selection if it was set to the previous current month
+          setSelectedMonth((prevSelected) => (prevSelected === prevCurrent ? nextMonthValue : prevSelected));
+          return nextMonthValue;
+        }
+        return prevCurrent;
+      });
     };
 
-    let timeoutId: any;
-
-    const scheduleNextMonthUpdate = () => {
-      const now = new Date();
-      const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      timeoutId = window.setTimeout(() => {
-        syncCurrentMonth();
-        scheduleNextMonthUpdate();
-      }, nextMonthStart.getTime() - now.getTime());
-    };
-
-    scheduleNextMonthUpdate();
+    // Check hourly for month roll-over (safely within 32-bit delay limits)
+    const intervalId = setInterval(syncCurrentMonth, 3600000);
 
     return () => {
-      if (timeoutId) {
-        window.clearTimeout(timeoutId);
-      }
+      clearInterval(intervalId);
     };
   }, []);
 
@@ -152,16 +146,45 @@ export default function AdminDashboardPage() {
   const chartAxisLineColor = isDarkMode ? "rgba(255, 255, 255, 0.25)" : "rgba(15, 23, 42, 0.35)";
   const totalMonthViews = pageViewData.reduce((total, item) => total + item.views, 0);
 
-  const monthOptions = [
-    {
-      value: "all",
-      label: "Vista general",
-    },
-    {
-      value: currentMonthValue,
-      label: getMonthLabel(),
-    },
-  ];
+  const monthOptions = useMemo(() => {
+    const options = [
+      {
+        value: "all",
+        label: "Vista general",
+      },
+    ];
+
+    const now = new Date();
+    const startYear = 2026;
+    const startMonth = 4; // May (0-indexed)
+
+    const endYear = now.getFullYear();
+    const endMonth = now.getMonth();
+
+    const tempOptions = [];
+    let y = startYear;
+    let m = startMonth;
+
+    while (y < endYear || (y === endYear && m <= endMonth)) {
+      const d = new Date(y, m, 1);
+      tempOptions.push({
+        value: getMonthValue(d),
+        label: getMonthLabel(d),
+      });
+
+      m++;
+      if (m > 11) {
+        m = 0;
+        y++;
+      }
+    }
+
+    // Sort options to show newest month first
+    tempOptions.reverse();
+    options.push(...tempOptions);
+
+    return options;
+  }, [currentMonthValue]);
 
   useEffect(() => {
     let isCancelled = false;
