@@ -506,13 +506,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 {/* Desktop Images */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold text-[#0D1030] dark:text-white">1. Foto Principal (PC - Izquierda)</label>
+                    <label className="text-sm font-semibold text-[#0D1030] dark:text-white">1. Imagen Principal (PC - Izquierda)</label>
                     <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
                     <p className="text-[10px] text-gray-400">336x535 px · WEBP</p>
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold text-[#0D1030] dark:text-white">2. Diseño Texto (PC - Derecha)</label>
+                    <label className="text-sm font-semibold text-[#0D1030] dark:text-white">2. Imagen Secundaria (PC - Derecha)</label>
                     <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
                     <p className="text-[10px] text-gray-400">336x535 px · WEBP</p>
                   </div>
@@ -537,7 +537,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
                 {/* Mobile Image */}
                 <div className="flex flex-col gap-2 pt-4 border-t border-gray-100 dark:border-white/5">
-                  <label className="text-sm font-semibold text-[#0D1030] dark:text-white">3. Flyer Unificado (Móvil)</label>
+                  <label className="text-sm font-semibold text-[#0D1030] dark:text-white">3. Imagen Mobile (Vista móvil)</label>
                   <input type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
                   <p className="text-[10px] text-gray-400">260x520 px · WEBP</p>
                 </div>
