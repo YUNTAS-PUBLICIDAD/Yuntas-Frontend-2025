@@ -21,6 +21,22 @@ interface PopupLayoutProps {
 
 }
 
+import { FiImage } from 'react-icons/fi';
+
+const hasImageSrc = (src?: string) => Boolean(src && src.trim().length > 0);
+
+const ImageFallback = ({ className, title }: { className?: string; title?: string }) => (
+  <div className={`${className || ''} flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 text-slate-400`}> 
+    <div className="rounded-full bg-white/80 p-4 shadow-sm">
+      <FiImage className="text-4xl" aria-hidden="true" />
+    </div>
+    <div className="text-center px-4">
+      <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Imagen no disponible</p>
+      {title && <p className="mt-1 text-xs text-slate-400 truncate">{title}</p>}
+    </div>
+  </div>
+);
+
 interface PopupRendererProps extends Omit<PopupLayoutProps, "forceVisible"> {
   isOpen: boolean;
   closing?: boolean;
@@ -53,12 +69,15 @@ const DesktopPopupComposition = ({
     <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-2 w-[672px] aspect-[672/535] rounded-2xl overflow-hidden`}>
       {/* LEFT IMAGE */}
       <div className="relative w-full h-full">
-        <img
-          src={desktopImgSrc || '/images/placeholder.png'}
-          alt={imgAlt || "Imagen de muestra"}
-          className="w-full h-full object-cover"
-          // className={`w-full h-full ${desktopImgSrc ? 'object-cover' : 'object-contain p-4 opacity-40'}`}
-        />
+        {hasImageSrc(desktopImgSrc) ? (
+          <img
+            src={desktopImgSrc}
+            alt={imgAlt || "Imagen de muestra"}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <ImageFallback className="w-full h-full" title={title} />
+        )}
         {/*overlay sutil marca*/}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
       </div>
@@ -66,16 +85,21 @@ const DesktopPopupComposition = ({
       {/* RIGHT CONTENT*/}
       <div className="relative w-full h-full">
         {/*Imagen de fondo*/}
-        <img
-          src={textImgSrc || '/images/placeholder.png'}
-          alt="Banner promocional"
-          // className={`absolute inset-0 w-full h-full ${textImgSrc ? 'object-cover' : 'object-contain p-6 opacity-20'}`}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {hasImageSrc(textImgSrc) ? (
+          <img
+            src={textImgSrc}
+            alt="Banner promocional"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 z-30">
+            <ImageFallback className="h-full w-full" title={title} />
+          </div>
+        )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
         {/*Capa profesional*/}
-        <div className="relative w-full h-full flex flex-col justify-end p-6">
+        <div className="relative z-20 w-full h-full flex flex-col justify-end p-6">
 
         {/*{!textImgSrc && (
           <div className="absolute inset-0 flex items-start justify-center pt-10 px-6 z-10">
@@ -127,17 +151,21 @@ const MobilePopupComposition = ({
   forceVisible = false,
 }: PopupLayoutProps) => {
 
-  const finalMobileImg = mobileImgSrc || desktopImgSrc || '/images/placeholder.png';
-  const isPlaceholder = !mobileImgSrc && !desktopImgSrc;
+  const finalMobileImg = mobileImgSrc || desktopImgSrc;
+  const isPlaceholder = !hasImageSrc(mobileImgSrc) && !hasImageSrc(desktopImgSrc);
 
   return (
     <div className={`${forceVisible ? "" : "md:hidden"} w-[90vw] max-w-[320px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]`}>
 
-      <img
-        src={finalMobileImg}
-        alt={imgAlt || "Imagen móvil"}
-        className={`absolute inset-0 w-full h-full object-cover`}
-      />
+      {hasImageSrc(finalMobileImg) ? (
+        <img
+          src={finalMobileImg}
+          alt={imgAlt || "Imagen móvil"}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      ) : (
+        <ImageFallback className="absolute inset-0 w-full h-full" title={title} />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
 
       {isPlaceholder && (
