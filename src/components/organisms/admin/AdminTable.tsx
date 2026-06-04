@@ -174,7 +174,7 @@ export default function AdminTable({
 
     return (
         <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
-        <div className="w-full px-2 md:px-0">
+        <div className="w-full px-2 md:px-0 overflow-x-auto">
             {/* DESKTOP: Tabla normal */}
             <table className="w-full hidden lg:table border-separate border-spacing-y-2">
                 <thead>
