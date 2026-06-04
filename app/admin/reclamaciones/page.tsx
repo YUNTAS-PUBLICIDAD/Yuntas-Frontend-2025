@@ -225,15 +225,20 @@ export default function ReclamacionesPage() {
                 </div>
             ) : (
                 <>
-                    <div className="flex flex-col md:flex-row gap-3 mb-4 w-full">
+                <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
+                    <div className="space-y-1 flex-1 my-2 mb-5">
+                        <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl mb-2">Buscar reclamaciones</h2>
+                        <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Encuentra reclamaciones por cliente, documento o filtros de estado.</p>
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-3 w-full">
 
                         {/* 1. BUSCADOR */}
                         <div className="w-full md:flex-1">
                             <SearchBar
                                 items={tableData}
-
+                                
                                 onSearch={(filteredItems) => {
-
+                                    
                                     if (estadoFiltro !== "todos") {
                                         const estadoId = estadoFiltro === "pendiente" ? 1 : 2;
                                         const combined = filteredItems.filter((item: any) => item.claim_status_id === estadoId);
@@ -245,7 +250,7 @@ export default function ReclamacionesPage() {
                                 placeholder="Buscar cliente, documento..."
                                 searchKeys={['id', 'cliente', 'documento', 'producto']}
                                 getDisplayValue={(item) => `${item.id} - ${item.cliente}`}
-                            />
+                                />
                         </div>
 
                         {/* 2. DROPDOWN DE FILTRO */}
@@ -254,9 +259,9 @@ export default function ReclamacionesPage() {
                                 type="button"
                                 onClick={() => setDropdownOpen(prev => !prev)}
                                 className="w-full h-[42px] px-4 rounded-full border border-[#23C1DE] bg-white dark:bg-[#1C2347] dark:text-white
-                                           text-gray-700 text-sm font-medium flex items-center justify-between
-                                           focus:ring-2 focus:ring-[#23C1DE] outline-none cursor-pointer shadow-sm"
-                            >
+                                text-gray-700 text-sm font-medium flex items-center justify-between
+                                focus:ring-2 focus:ring-[#23C1DE] outline-none cursor-pointer shadow-sm"
+                                >
                                 <span className="inline-flex items-center gap-2">
                                     <Filter className="h-4 w-4 text-[#23C1DE]" />
                                     {selectedLabel}
@@ -264,7 +269,7 @@ export default function ReclamacionesPage() {
                                 <svg
                                     className={`w-4 h-4 text-[#23C1DE] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
                                     fill="none" viewBox="0 0 20 20"
-                                >
+                                    >
                                     <path stroke="currentColor" strokeLinecap="round"
                                         strokeLinejoin="round" strokeWidth="2" d="M6 8l4 4 4-4" />
                                 </svg>
@@ -274,17 +279,17 @@ export default function ReclamacionesPage() {
                                 <ul className="absolute z-50 mt-1 left-0 right-0 bg-white border border-[#23C1DE] dark:bg-[#1C2347] dark:border-[#6DE1E3] rounded-2xl shadow-lg overflow-hidden">
                                     {ESTADO_OPTIONS.map(opt => (
                                         <li
-                                            key={opt.value}
-                                            onClick={() => {
-                                                setEstadoFiltro(opt.value);
-                                                setDropdownOpen(false);
+                                        key={opt.value}
+                                        onClick={() => {
+                                            setEstadoFiltro(opt.value);
+                                            setDropdownOpen(false);
                                             }}
                                             className={`px-4 py-2.5 text-sm cursor-pointer transition-colors
                                                 ${estadoFiltro === opt.value
                                                     ? 'bg-[#d0f3fa] font-bold text-[#23C1DE]'
                                                     : 'text-gray-700 dark:text-white hover:bg-[#e8f9fc]'
                                                 }`}
-                                        >
+                                                >
                                             {opt.label}
                                         </li>
                                     ))}
@@ -292,15 +297,12 @@ export default function ReclamacionesPage() {
                             )}
                         </div>
                     </div>
-
-                    <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de reclamaciones</p>
-                            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
-                                Reclamaciones
-                            </h3>
-                        </div>
-                    </div>
+                </section>
+                
+                <div className="mb-4 flex flex-col border-b border-[#E5EEF6] pb-4 px-5 dark:border-white/10 lg:flex-col lg:items-baseline lg:justify-between">
+                    <h3 className="mt-1 mb-2 text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Lista de reclamaciones</h3>
+                    <p className="text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Visualiza las reclamaciones a detalle y actualiza su estado.</p>
+                </div>
 
                     <div className="w-full overflow-x-auto text-sm">
                         <AdminTable
