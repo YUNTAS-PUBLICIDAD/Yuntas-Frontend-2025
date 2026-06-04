@@ -153,6 +153,15 @@ function Input({
   );
 }
 
+function getFileNameFromPath(path?: string) {
+  if (!path) return '';
+
+  const cleanPath = path.split('?')[0].split('#')[0];
+  const parts = cleanPath.split(/[\\/]/).filter(Boolean);
+
+  return parts[parts.length - 1] || '';
+}
+
 function ImagePreview({
   src,
   alt,
@@ -198,16 +207,19 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [desktopImageId, setDesktopImageId] = useState<number | undefined>(undefined);
   const [desktopImgSrc, setDesktopImgSrc] = useState('');
   const [desktopImageFile, setDesktopImageFile] = useState<File | null>(null);
+  const [desktopImageName, setDesktopImageName] = useState('');
   const [imageAlt, setImageAlt] = useState('');
   const [imageTitle, setImageTitle] = useState('');
 
   const [textImageId, setTextImageId] = useState<number | undefined>(undefined);
   const [textImgSrc, setTextImgSrc] = useState('');
   const [textImageFile, setTextImageFile] = useState<File | null>(null);
+  const [textImageName, setTextImageName] = useState('');
 
   const [mobileImageId, setMobileImageId] = useState<number | undefined>(undefined);
   const [mobileImgSrc, setMobileImgSrc] = useState('');
   const [mobileImageFile, setMobileImageFile] = useState<File | null>(null);
+  const [mobileImageName, setMobileImageName] = useState('');
   const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
 
   const [products, setProducts] = useState<{id: number; name:string}[]>([]);
@@ -221,6 +233,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     source_id: 1,
   });
   const previewCanvasRef = useRef<HTMLDivElement>(null);
+  const desktopFileInputRef = useRef<HTMLInputElement>(null);
+  const textFileInputRef = useRef<HTMLInputElement>(null);
+  const mobileFileInputRef = useRef<HTMLInputElement>(null);
 
   const popupBaseSize = previewMode === 'desktop'
     ? { width: 672, height: 535 }
@@ -264,6 +279,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setButtonTextColor(initialData.button_text_color || '#FFFFFF');
       setDelaySeconds(initialData.delay_seconds?.toString() || '5');
       setButtonColor(initialData.button_color || '#6DE1E3');
+      setDesktopImageName('');
+      setTextImageName('');
+      setMobileImageName('');
 
       if (initialData.images && initialData.images.length > 0) {
         const dLeft = initialData.images.find(i => i.device === 'desktop' && i.slot === 'left');
@@ -273,16 +291,19 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         if (dLeft) {
           setDesktopImageId(dLeft.id);
           if (dLeft.image) setDesktopImgSrc(`${BACKEND_URL}${dLeft.image.startsWith('/') ? '' : '/'}${dLeft.image}`);
+          setDesktopImageName(getFileNameFromPath(dLeft.image));
           setImageAlt(dLeft.alt || '');
           setImageTitle(dLeft.title || '');
         }
         if (dText) {
           setTextImageId(dText.id);
           if (dText.image) setTextImgSrc(`${BACKEND_URL}${dText.image.startsWith('/') ? '' : '/'}${dText.image}`);
+          setTextImageName(getFileNameFromPath(dText.image));
         }
         if (mCenter) {
           setMobileImageId(mCenter.id);
           if (mCenter.image) setMobileImgSrc(`${BACKEND_URL}${mCenter.image.startsWith('/') ? '' : '/'}${mCenter.image}`);
+          setMobileImageName(getFileNameFromPath(mCenter.image));
         }
       }
   }, [initialData]);
@@ -296,6 +317,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       return;
     }
     setDesktopImageFile(file);
+    setDesktopImageName(file.name);
     setDesktopImgSrc(URL.createObjectURL(file));
   };
   const handleTextImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -307,6 +329,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     return;
     }
     setTextImageFile(file);
+    setTextImageName(file.name);
     setTextImgSrc(URL.createObjectURL(file));
 
   };
@@ -321,6 +344,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
    }
 
     setMobileImageFile(file);
+    setMobileImageName(file.name);
     setMobileImgSrc(URL.createObjectURL(file));
   };
 
@@ -534,7 +558,15 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-semibold text-[#0D1030] dark:text-white">1. Imagen Principal (PC - Izquierda)</label>
-                    <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
+                    <div className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-2.5">
+                      <button type="button" onClick={() => desktopFileInputRef.current?.click()} disabled={!active} className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-[#0D1030] transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 disabled:cursor-not-allowed">
+                        Seleccionar archivo
+                      </button>
+                      <input ref={desktopFileInputRef} type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="hidden" />
+                      <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-gray-500 dark:text-white/50" title={desktopImageFile?.name || desktopImageName || 'Sin archivo seleccionado'}>
+                        {desktopImageFile?.name || desktopImageName || 'Sin archivo seleccionado'}
+                      </span>
+                    </div>
                     <p className="text-[10px] text-gray-400">336x535 px · WEBP</p>
                     <ImagePreview
                       src={desktopImgSrc}
@@ -545,7 +577,15 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-semibold text-[#0D1030] dark:text-white">2. Imagen Secundaria (PC - Derecha)</label>
-                    <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
+                    <div className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-2.5">
+                      <button type="button" onClick={() => textFileInputRef.current?.click()} disabled={!active} className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-[#0D1030] transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 disabled:cursor-not-allowed">
+                        Seleccionar archivo
+                      </button>
+                      <input ref={textFileInputRef} type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="hidden" />
+                      <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-gray-500 dark:text-white/50" title={textImageFile?.name || textImageName || 'Sin archivo seleccionado'}>
+                        {textImageFile?.name || textImageName || 'Sin archivo seleccionado'}
+                      </span>
+                    </div>
                     <p className="text-[10px] text-gray-400">336x535 px · WEBP</p>
                     <ImagePreview
                       src={textImgSrc}
@@ -575,7 +615,15 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 {/* Mobile Image */}
                 <div className="flex flex-col gap-2 pt-4 border-t border-gray-100 dark:border-white/5">
                   <label className="text-sm font-semibold text-[#0D1030] dark:text-white">3. Imagen Mobile (Vista móvil)</label>
-                  <input type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
+                  <div className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-2.5">
+                    <button type="button" onClick={() => mobileFileInputRef.current?.click()} disabled={!active} className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-[#0D1030] transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 disabled:cursor-not-allowed">
+                      Seleccionar archivo
+                    </button>
+                    <input ref={mobileFileInputRef} type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="hidden" />
+                    <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-gray-500 dark:text-white/50" title={mobileImageFile?.name || mobileImageName || 'Sin archivo seleccionado'}>
+                      {mobileImageFile?.name || mobileImageName || 'Sin archivo seleccionado'}
+                    </span>
+                  </div>
                   <p className="text-[10px] text-gray-400">260x520 px · WEBP</p>
                   <ImagePreview
                     src={mobileImgSrc}
