@@ -67,9 +67,14 @@ export default function ContactoPage() {
 
   return (
     <div>
+      <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] dark:border-white/10 dark:bg-[#1C2347]/90">
 
       {/* Filtro de búsqueda */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+        <div className="space-y-1 flex-1 my-2 mb-5">
+          <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl mb-2">Buscar contactos</h2>
+          <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Busca contactos por nombre, distrito o asunto.</p>
+        </div>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
         {/* Buscador */}
         <div className="w-full md:flex-1">
@@ -83,8 +88,8 @@ export default function ContactoPage() {
         </div>
 
         {/* Registros encontrados */}
-        <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] border-2 border-[#203565] rounded-full text-center">
-          <span className="text-[#203565] font-semibold">
+        <div className="w-full md:w-auto px-4 py-2 bg-[#E8F4F8] dark:bg-[#1C2347] border-2 border-[#203565] dark:border-white/10 rounded-full text-center">
+          <span className="text-[#203565] dark:text-white font-semibold text-sm whitespace-nowrap">
             {paginatedData.length} REGISTROS ENCONTRADOS
           </span>
         </div>
@@ -92,9 +97,9 @@ export default function ContactoPage() {
       </div>
       {selectedContacto && (
         <ViewContactoModal
-          contacto={selectedContacto}
-          isOpen={openViewModal}
-          onClose={() => setOpenViewModal(false)}
+        contacto={selectedContacto}
+        isOpen={openViewModal}
+        onClose={() => setOpenViewModal(false)}
         />
       )}
 
@@ -104,14 +109,11 @@ export default function ContactoPage() {
           <span className="font-medium">Error:</span> {error}
         </div>
       )}
+      </section>
 
-      <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-baseline lg:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50">Tabla de contacto</p>
-          <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-black text-[#0D1030] dark:text-white">
-            Contacto
-          </h3>
-        </div>
+      <div className="mb-4 flex flex-col border-b border-[#E5EEF6] pb-4 px-5 dark:border-white/10 lg:flex-col lg:items-baseline lg:justify-between">
+        <h3 className="mt-1 mb-2 text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Lista de contacto</h3>
+        <p className="text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Visualiza a detalle los contactos de los clientes</p>
       </div>
 
       <AdminTable
