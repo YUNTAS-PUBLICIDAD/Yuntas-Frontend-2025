@@ -153,6 +153,33 @@ function Input({
   );
 }
 
+function ImagePreview({
+  src,
+  alt,
+  title,
+}: {
+  src: string;
+  alt: string;
+  title: string;
+}) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
+      {src ? (
+        <img src={src} alt={alt} className="h-32 w-full object-cover" />
+      ) : (
+        <div className="flex h-32 w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 text-slate-400 dark:from-white/10 dark:via-white/5 dark:to-white/10">
+          <ImageIcon className="h-8 w-8" aria-hidden="true" />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">Sin imagen</span>
+        </div>
+      )}
+      <div className="border-t border-gray-200 px-3 py-2 text-xs text-gray-500 dark:border-white/10 dark:text-white/50">
+        <p className="font-semibold text-[#0D1030] dark:text-white">{title}</p>
+        <p className="truncate">{alt}</p>
+      </div>
+    </div>
+  );
+}
+
 interface PopupConfigFormProps {
   initialData?: Popup | null;
   onSubmit: (data: Popup) => Promise<void>;
@@ -509,12 +536,22 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                     <label className="text-sm font-semibold text-[#0D1030] dark:text-white">1. Imagen Principal (PC - Izquierda)</label>
                     <input type="file" accept="image/webp" onChange={handleDesktopImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
                     <p className="text-[10px] text-gray-400">336x535 px · WEBP</p>
+                    <ImagePreview
+                      src={desktopImgSrc}
+                      alt={imageAlt || "Imagen principal del popup"}
+                      title="Vista previa principal"
+                    />
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-semibold text-[#0D1030] dark:text-white">2. Imagen Secundaria (PC - Derecha)</label>
                     <input type="file" accept="image/webp" onChange={handleTextImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
                     <p className="text-[10px] text-gray-400">336x535 px · WEBP</p>
+                    <ImagePreview
+                      src={textImgSrc}
+                      alt="Imagen secundaria del popup"
+                      title="Vista previa secundaria"
+                    />
                   </div>
                 </div>
 
@@ -540,6 +577,11 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                   <label className="text-sm font-semibold text-[#0D1030] dark:text-white">3. Imagen Mobile (Vista móvil)</label>
                   <input type="file" accept="image/webp" onChange={handleMobileImageChange} disabled={!active} className="text-xs dark:text-blue-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#203565]/10 file:text-[#203565] dark:file:bg-white/10 dark:file:text-white hover:file:bg-[#203565]/20 dark:hover:file:bg-white/20 transition-all cursor-pointer w-full" />
                   <p className="text-[10px] text-gray-400">260x520 px · WEBP</p>
+                  <ImagePreview
+                    src={mobileImgSrc}
+                    alt="Imagen móvil del popup"
+                    title="Vista previa móvil"
+                  />
                 </div>
               </div>
             </div>
