@@ -17,6 +17,7 @@ type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
   colorLabel?: string;
   rounded?: string;
   borderColor?:string;
+  inputClassName?: string;
 };
 
 const Input = ({
@@ -25,9 +26,10 @@ const Input = ({
   type = "text",
   bgColor = "bg-white",
   textLabel,
-  borderColor="border-[#222222]",
+  borderColor="border-[#203565]",
   colorLabel = "text-black",
   rounded = "rounded-[15px]",
+  inputClassName = "",
   ...props
 }: InputProps) => {
 
@@ -40,7 +42,7 @@ const Input = ({
         {...props}
         type={type}
         placeholder={placeholder}
-        className={`border ${borderColor}  ${rounded} px-3 ${sizeClass} ${bgColor}`}
+        className={`border ${borderColor}  ${rounded} px-3 ${sizeClass} ${bgColor} ${inputClassName}`}
       />
     </div>
   );
