@@ -29,7 +29,7 @@ const HeroSection = () => {
       <section
         className="
           relative w-full
-          h-[40vh] md:h-[60vh]
+          h-screen
           flex items-center justify-center
           overflow-hidden
         "
@@ -67,7 +67,7 @@ const HeroSection = () => {
 
         {/* Blog Title & Phrases */}
         <div className="relative z-20 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-white text-6xl md:text-8xl font-black tracking-widest drop-shadow-2xl mb-2">
+          <h1 className="drop-shadow-[0_2px_2px_#28BEDA] text-white text-4xl sm:text-4xl md:text-[56px] font-bold tracking-widest drop-shadow-2xl mb-2">
             BLOG
           </h1>
 
@@ -94,7 +94,7 @@ const HeroSection = () => {
             </AnimatePresence>*/}
             {
               frases.map((frase, i) => (
-               <p key={i} className={`absolute text-white text-base sm:text-xl md:text-2xl  font-light tracking-wide drop-shadown-lg transition-all duration-500 ease-in-out ${
+               <p key={i} className={`absolute whitespace-nowrap text-center text-white text-lg sm:text-2x1 md:text-4xl font-medium tracking-wide drop-shadow-lg transition-all duration-500 ease-in-out ${
                i === index ? "opacity-100 translate-y-0": "opacity-0 translate-y-4" }`}>{frase}</p>
               ))
             }
