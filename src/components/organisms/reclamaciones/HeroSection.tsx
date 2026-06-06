@@ -11,8 +11,7 @@ const HeroSection = () => {
       className="
         relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
         flex items-center justify-start 
-        overflow-hidden 
-        border-b-8 border-[#98D8DF]
+        overflow-hidden
       "
       aria-label="Sección Reclamaciones"
     >
@@ -57,12 +56,10 @@ const HeroSection = () => {
           "
           >
             <Heading
-              level="h1"
-              size="2xl"
               className="
                 mb-4 leading-tight 
                 drop-shadow-[0_2px_2px_#28BEDA] 
-                text-5xl sm:text-6xl md:text-7xl
+                text-2xl sm:text-4xl md:text-7xl
               "
             >
               RECLAMACIONES

@@ -5,7 +5,7 @@ type circleNumberProps={
 }
 const CircleNumber = ({number}:circleNumberProps) => {
   return (
-    <div className='w-10 h-10 rounded-full border-2 flex justify-center items-center border-black'>
+    <div className='w-8 h-8 rounded-full border-4 flex justify-center items-center border-[#203565] flex-shrink-0'>
       <p>{number}</p>
       {/* <Icon>
         <svg></svg>

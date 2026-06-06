@@ -16,6 +16,7 @@ type SelectProps = {
   required?: boolean;
   multiple?: boolean;
   className?: string;
+  selectClassName?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void; // ¡Agregado!
 };
 
@@ -28,6 +29,7 @@ const Select = ({
   required = false,
   multiple = false,
   className = "bg-[#CFD2D2] rounded-xl w-full px-4 py-2",
+  selectClassName = "",
   onChange, // ¡Agregado aquí también!
 }: SelectProps) => {
 
@@ -56,7 +58,7 @@ const Select = ({
       )}
       <select
         name={name}
-        className={`${className} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        className={`${className} ${selectClassName} focus:outline-none focus:ring-2 focus:ring-blue-500`}
         value={value}
         onChange={onChange}
         required={required}
