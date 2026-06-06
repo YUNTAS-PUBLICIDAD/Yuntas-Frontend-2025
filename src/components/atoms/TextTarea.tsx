@@ -33,7 +33,7 @@ const TextTarea = ({ size = "xxl", placeHolder, bgColor="bg-white",textLabel,col
         name={name}
         value={value}
         onChange={onChange}
-        className={`border border-[#222222] rounded-[15px] p-3 resize-none align-top ${sizeClass} ${bgColor}`}
+        className={`border-2 border-[#203565] rounded-[15px] p-3 resize-none align-top ${sizeClass} ${bgColor}`}
       />
     </div>
   );
