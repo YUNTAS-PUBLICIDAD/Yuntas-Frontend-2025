@@ -25,7 +25,7 @@ const HeroSection = () => {
   return (
     <section
       className="
-        relative w-full h-[40vh] md:h-[60vh]
+        relative w-full h-screen
         flex items-center justify-start
         overflow-hidden
       "
@@ -72,7 +72,7 @@ const HeroSection = () => {
               className="
                 mb-4 leading-tight
                 drop-shadow-[0_2px_2px_#28BEDA]
-                text-5xl sm:text-6xl md:text-7xl
+                text-4xl sm:text-4xl md:text-[56px]
               "
             >
               CONTACTO
@@ -82,7 +82,7 @@ const HeroSection = () => {
               {subtitulos.map((subtitulo, i) => (
                 <p
                   key={subtitulo}
-                  className={`absolute text-white/90 text-base sm:text-xl md:text-2xl font-light tracking-wide max-w-2xl text-center transition-all duration-500 ease-in-out ${
+                  className={`absolute text-white/90 text-lg sm:text-2x1 md:text-4xl font-medium tracking-wide max-w-2xl text-center transition-all duration-500 ease-in-out ${
                     i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
