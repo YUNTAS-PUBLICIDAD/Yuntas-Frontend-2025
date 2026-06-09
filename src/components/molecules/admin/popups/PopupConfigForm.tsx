@@ -172,15 +172,17 @@ function ImagePreview({
   title: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
-      {src ? (
-        <img src={src} alt={alt} className="h-32 w-full object-cover" />
-      ) : (
-        <div className="flex h-32 w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 text-slate-400 dark:from-white/10 dark:via-white/5 dark:to-white/10">
-          <ImageIcon className="h-8 w-8" aria-hidden="true" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">Sin imagen</span>
-        </div>
-      )}
+    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
+      <div className="max-h-60 overflow-auto">
+        {src ? (
+          <img src={src} alt={alt} className="block w-full max-w-none h-auto" />
+        ) : (
+          <div className="flex h-32 w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 text-slate-400 dark:from-white/10 dark:via-white/5 dark:to-white/10">
+            <ImageIcon className="h-8 w-8" aria-hidden="true" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">Sin imagen</span>
+          </div>
+        )}
+      </div>
       <div className="border-t border-gray-200 px-3 py-2 text-xs text-gray-500 dark:border-white/10 dark:text-white/50">
         <p className="font-semibold text-[#0D1030] dark:text-white">{title}</p>
         <p className="truncate">{alt}</p>
