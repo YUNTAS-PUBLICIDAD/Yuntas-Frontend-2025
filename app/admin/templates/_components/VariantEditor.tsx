@@ -675,6 +675,7 @@ export function VariantEditor({
 
               border border-gray-200
               dark:border-white/10
+              dark:text-white/80
 
               bg-white
               dark:bg-transparent
@@ -773,6 +774,7 @@ export function VariantEditor({
 
               border border-gray-200
               dark:border-white/10
+              dark:text-white/80
 
               bg-white
               dark:bg-transparent
@@ -948,6 +950,8 @@ export function VariantEditor({
 
                 border border-gray-200
                 dark:border-white/10
+                dark:text-white/80
+                dark:bg-transparent
               "
             />
           </div>
@@ -991,6 +995,8 @@ export function VariantEditor({
 
                 border border-gray-200
                 dark:border-white/10
+                dark:text-white/80
+                dark:bg-transparent
               "
             />
           </div>

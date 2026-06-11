@@ -217,6 +217,7 @@ export function StepEditor({
 
                             hover:bg-gray-50
                             dark:hover:bg-white/5
+                            dark:text-white/80
 
                             transition-colors
                           "
@@ -224,20 +225,34 @@ export function StepEditor({
                           −
                         </button>
 
-                        <div
+                        <input
+                          type="number"
+                          value={step.delayValue}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value) || 1;
+                            onUpdateStep(step.step, {
+                              delayValue: Math.max(1, value),
+                            });
+                          }}
+                          min="1"
                           className="
+                            w-12 h-full
                             flex-1
 
                             text-center
 
-                            text-lg font-semibold
+                            text-base md:text-lg
+                            font-semibold
 
+                            bg-transparent
                             text-gray-900
                             dark:text-white
+
+                            border-0 outline-none
+
+                            [&::-webkit-inner-spin-button]:appearance-none
                           "
-                        >
-                          {step.delayValue}
-                        </div>
+                        />
 
                         <button
                           type="button"
@@ -257,6 +272,7 @@ export function StepEditor({
 
                             hover:bg-gray-50
                             dark:hover:bg-white/5
+                            dark:text-white/80
 
                             transition-colors
                           "
@@ -299,10 +315,11 @@ export function StepEditor({
                           rounded-2xl
 
                           border border-gray-200
-                          dark:border-white/10
-
                           bg-white
-                          dark:bg-white/[0.03]
+                          
+                          dark:border-gray-600
+                          dark:bg-[#2E3455]
+                          dark:text-white
 
                           px-4
 
