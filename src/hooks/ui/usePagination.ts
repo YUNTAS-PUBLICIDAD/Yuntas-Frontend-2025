@@ -1,3 +1,4 @@
+import { usePathname, useSearchParams, useRouter  } from "next/navigation";
 import { useState, useEffect, useMemo, useCallback } from "react";
 
 interface PaginationOptions<T = any> {
@@ -29,19 +30,36 @@ export const usePagination = <T,>({
   initialPage = 1,
   maxVisiblePages = 5
 }: PaginationOptions<T>): PaginationReturn<T> => {
-  const [page, setPage] = useState(initialPage);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const pageFromUrl = Number(searchParams.get("page")) || initialPage;
+  const [page, setPageState] = useState(initialPage);
+
   const totalItems = items.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
   useEffect(() => {
-    setPage(1);
-  }, [items.length, pageSize]);
+    setPage(pageFromUrl);
+  }, []);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (page > totalPages) {
       setPage(totalPages);
     }
   }, [page, totalPages]);
+
+  const setPage = useCallback((num: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (num === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", String(num));
+    }
+    router.replace(`${pathname}?${params.toString()}`); 
+    setPageState(num);
+  }, [searchParams, router, pathname]);
 
   const currentItems = useMemo(() => {
     const start = (page - 1) * pageSize;
@@ -68,16 +86,16 @@ export const usePagination = <T,>({
   const hasPrevPage = page > 1;
 
   const handlePageNext = useCallback(() => {
-    setPage((p) => Math.min(p + 1, totalPages));
-  }, [totalPages]);
+    setPage(Math.min(page + 1, totalPages));
+  }, [page, totalPages, setPage]);
 
   const handlePagePrev = useCallback(() => {
-    setPage((p) => Math.max(p - 1, 1));
-  }, []);
+    setPage(Math.max(page - 1, 1));
+  }, [page, setPage]);
 
   const handleSelectPage = useCallback((num: number) => {
     setPage(Math.max(1, Math.min(num, totalPages)));
-  }, [totalPages]);
+  }, [totalPages, setPage]);
 
   const goToFirstPage = useCallback(() => {
     setPage(1);
