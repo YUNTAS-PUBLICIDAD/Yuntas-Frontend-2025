@@ -43,7 +43,7 @@ const DescripcionSection = ({ title, imageSrc, imageTitle, imageAlt, description
     }, [description, isExpanded]);
 
     return (
-        <section className="w-full py-16 md:py-24 bg-[#E2F6F6] relative overflow-hidden">
+        <section className="w-full py-12 md:py-14 bg-[#E2F6F6] relative overflow-hidden">
             {/* Elementos decorativos de fondo */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-[#23C1DE]/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#203565]/5 rounded-full blur-3xl pointer-events-none translate-y-1/2" />
