@@ -15,7 +15,7 @@ type BeneficiosSectionProps = {
 
 const BeneficiosSection = ({ subtitle, imageSrc, imageTitle, imageAlt, benefits, productSlug }: BeneficiosSectionProps) => {
 	return (
-		<section className="w-full py-20 md:py-32 bg-gradient-to-b from-[#F8FBFC] to-white relative overflow-hidden">
+		<section className="w-full py-12 md:py-14 relative overflow-hidden">
 			<div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#23C1DE]/8 rounded-full blur-3xl pointer-events-none" />
 			<div className="absolute bottom-40 left-0 w-[400px] h-[400px] bg-[#203565]/6 rounded-full blur-3xl pointer-events-none" />
 

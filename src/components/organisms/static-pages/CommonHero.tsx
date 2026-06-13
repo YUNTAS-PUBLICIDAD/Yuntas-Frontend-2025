@@ -15,8 +15,7 @@ const CommonHero: React.FC<CommonHeroProps> = ({ title }) => {
             className="
                 relative w-full h-[35vh] sm:h-[40vh] md:h-screen 
                 flex items-center justify-start 
-                overflow-hidden 
-                border-b-8 border-[#98D8DF]
+                overflow-hidden
             "
             aria-label={`Sección ${title}`}
         >
