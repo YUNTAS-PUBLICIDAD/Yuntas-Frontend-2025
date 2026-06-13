@@ -304,7 +304,40 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
             <FormSection title="Datos para Dashboard (Gestión Interna)">
                 <div className="flex gap-4 flex-col md:flex-row">
                     <InputAdmin
-                        label="Nombre del Producto"
+                        label="Link/URL"
+                        name="slug"
+                        value={formData.slug || ""}
+                        onChange={handleInputChange}
+                        placeholder="ej: letreros-neon-led"
+                        helperText="Solo palabras en minúscula separadas por guiones. Sin espacios ni tildes. Máx. 160 caracteres."
+                        maxLength={160}
+                        required
+                    />
+                    <InputAdmin
+                        label="Precio (Aparece en tabla)"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleInputChange}
+                        placeholder="Ej: 500.00"
+                        helperText="Coloca el precio en números (máx. 100 000)."
+                        required
+                    />
+                </div>
+
+                <InputAdmin
+                    label="Título"
+                    name="hero_title"
+                    value={formData.hero_title || ""}
+                    onChange={handleInputChange}
+                    placeholder="Ej: Letreros Neón LED"
+                    helperText="Máx. 255 caracteres (letras, números y espacios)."
+                    maxLength={255}
+                    required
+                />
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                    <InputAdmin
+                        label="Nombre del Producto (Subtítulo)"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
@@ -331,39 +364,6 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                         required
                     />
                 </div>
-
-                <div className="flex gap-4 flex-col md:flex-row">
-                    <InputAdmin
-                        label="Link/URL"
-                        name="slug"
-                        value={formData.slug || ""}
-                        onChange={handleInputChange}
-                        placeholder="ej: letreros-neon-led"
-                        helperText="Solo palabras en minúscula separadas por guiones. Sin espacios ni tildes. Máx. 160 caracteres."
-                        maxLength={160}
-                        required
-                    />
-                    <InputAdmin
-                        label="Precio (Aparece en tabla)"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        placeholder="Ej: 500.00"
-                        helperText="Coloca el precio en números (máx. 100 000)."
-                        required
-                    />
-                </div>
-
-                <InputAdmin
-                    label="Título Hero (Aparece sobre la imagen hero)"
-                    name="hero_title"
-                    value={formData.hero_title || ""}
-                    onChange={handleInputChange}
-                    placeholder="Ej: Letreros Neón LED"
-                    helperText="Máx. 255 caracteres (letras, números y espacios)."
-                    maxLength={255}
-                    required
-                />
 
                 <TextareaAdmin
                     label="Descripción (Aparece en 'Información' del producto)"
