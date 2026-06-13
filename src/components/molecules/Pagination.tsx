@@ -9,9 +9,10 @@ type PaginationProps = {
   setProductosPaginados: (items: any[]) => void;
   maxVisiblePages?: number;
   onPageChange?: () => void;
+  historyMode?: 'push' | 'replace';
 }
 
-const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 5, onPageChange }: PaginationProps) => {
+const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 5, onPageChange, historyMode = 'replace' }: PaginationProps) => {
   const {
     page,
     currentItems,
@@ -25,7 +26,8 @@ const Pagination = ({ pageSize, items, setProductosPaginados, maxVisiblePages = 
   } = usePagination({
     pageSize,
     items,
-    maxVisiblePages
+    maxVisiblePages,
+    historyMode
   });
 
   useEffect(() => {
