@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Banner from '@/components/atoms/Banner'
 import Text from '@/components/atoms/Text'
@@ -8,10 +8,21 @@ import SearchBar from '@/components/molecules/blog/SearchBar'
 import BlogCard from '@/components/molecules/blog/BlogCard'
 import Pagination from '@/components/molecules/Pagination'
 import { Blog } from '@/types/admin/blog'
+import { useAutocompletado } from '@/hooks/ui/useAutocompletado'
 
 const BlogSection = ({ blogs }: { blogs: Blog[] }) => {
 	const [query, setQuery] = useState('')
 	const [blogPaginado, setBlogPaginado] = useState<Blog[]>(blogs)
+	const wrapperRef = useRef<HTMLDivElement>(null)
+
+	const { lista, handleKeyDown, activeIndex, setActiveIndex } = useAutocompletado({
+    palabras: query,
+    items: blogs,
+    onSelect: (blog) => {
+      setQuery(blog.title)  // llena el input
+      // el useMemo ya filtra automáticamente con el nuevo query
+    },
+  	})
 
 	const blogsFiltrados = useMemo(() => {
 		if (!query.trim()) return blogs
@@ -31,11 +42,33 @@ const BlogSection = ({ blogs }: { blogs: Blog[] }) => {
 					nuestros Productos
 				</Text>
 
-				<div className="relative w-full md:max-w-md md:w-[340px] lg:w-[380px] md:justify-self-center md:-translate-x-8 lg:-translate-x-10 z-50">
+				<div ref={wrapperRef} className="relative w-full md:max-w-md md:w-[340px] lg:w-[380px] md:justify-self-center md:-translate-x-8 lg:-translate-x-10 z-50">
 					<SearchBar
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
+						onKeyDown={handleKeyDown}
 					/>
+					
+					{lista.length > 0 && (
+						<ul className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg z-50 overflow-hidden">
+							{lista.map((blog, i) => (
+								<li
+									key={blog.id}
+									onMouseDown={() => {
+										setQuery(blog.title)
+										setActiveIndex(-1)
+									}}
+									onMouseEnter={() => setActiveIndex(i)}
+									className={`px-4 py-3 cursor-pointer text-sm text-gray-800 transition-colors ${
+										i === activeIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
+									}`}
+								>
+									{blog.title}
+								</li>
+							))}
+						</ul>
+					)}
+
 					{query.trim() && blogsFiltrados.length === 0 && (
 						<div className="absolute top-full left-0 w-full px-4 py-2 mt-1 text-sm text-red-500 font-medium animate-fade-in bg-white/10 rounded-lg">
 							No se encuentra ese blog

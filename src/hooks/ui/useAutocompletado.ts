@@ -42,7 +42,7 @@ export function useAutocompletado<T>({palabras,fetcher, items, onSelect, debounc
       try {
         if (items) {
           const q = palabras.toLowerCase();
-          const filtered = items.filter((it: any) => ((it.name || it.nombre || '') as string).toLowerCase().includes(q));
+          const filtered = items.filter((it: any) => ((it.name || it.nombre || it.title || '') as string).toLowerCase().includes(q));
           setLista(filtered as T[]);
         } else if (fetcher) {
           const res = await fetcher(palabras);
