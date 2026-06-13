@@ -1,5 +1,6 @@
 // 'use client'
 
+import { Suspense } from "react";
 import BlogSection from "@/components/organisms/blog/BlogSection";
 import HeroSection from "@/components/organisms/blog/HeroSection";
 import { getBlogsService } from "@/services/blogService";
@@ -81,7 +82,14 @@ export default async function BlogPage() {
 		<>
 		<script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}/>
 			<HeroSection />
-			<BlogSection blogs={blogs}/>
+			<Suspense fallback={
+				<div className="w-full min-h-[40vh] flex flex-col items-center justify-center gap-4 py-20">
+					<div className="w-12 h-12 border-4 border-[#23C1DE] border-t-transparent rounded-full animate-spin"></div>
+					<p className="text-[#203565] font-semibold animate-pulse">Cargando inspiración...</p>
+				</div>
+			}>
+				<BlogSection blogs={blogs}/>
+			</Suspense>
 
 			{/*{isLoading ? (
 				<div className="w-full min-h-[40vh] flex flex-col items-center justify-center gap-4 py-20">
