@@ -338,32 +338,6 @@ if (formData.video_url) {
             <FormSection title="Información Principal">
                 <div className="flex gap-4 flex-col md:flex-row">
                     <InputAdmin
-                        label="Titulo del Blog"
-                        name="title"
-                        value={formData.title || ""}
-                        onChange={handleInputChange}
-                        placeholder="Ej. Letreros Neón LED: Guía Completa"
-                        helperText="Máx. 150 caracteres (letras, números y espacios)."
-                        maxLength={150}
-                        error={errors.title}
-                        required
-                    />
-
-                    <InputAdmin
-                        label="Subtitulo"
-                        name="cover_subtitle"
-                        value={formData.cover_subtitle || ""}
-                        onChange={handleInputChange}
-                        placeholder="Ej: Descubre cómo los letreros de neón LED pueden..."
-                        helperText="Máx. 150 caracteres (letras, números y espacios)."
-                        maxLength={150}
-                        error={errors.cover_subtitle}
-                        required
-                    />
-                </div>
-
-                <div className="flex gap-4 flex-col md:flex-row">
-                    <InputAdmin
                         label="Link/URL"
                         name="slug"
                         value={formData.slug || ""}
@@ -387,7 +361,7 @@ if (formData.video_url) {
                 </div>
 
                 <InputAdmin
-                    label="Título Hero (Aparece sobre la imagen hero)"
+                    label="Título"
                     name="hero_title"
                     value={formData.hero_title || ""}
                     onChange={handleInputChange}
@@ -396,6 +370,20 @@ if (formData.video_url) {
                     maxLength={150}
                     required
                 />
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                    <InputAdmin
+                        label="Subtitulo"
+                        name="title"
+                        value={formData.title || ""}
+                        onChange={handleInputChange}
+                        placeholder="Ej. Letreros Neón LED: Guía Completa"
+                        helperText="Máx. 150 caracteres (letras, números y espacios)."
+                        maxLength={150}
+                        error={errors.title}
+                        required
+                    />
+                </div>
 
                 <LinkableTextarea
                     label="Introducción del Blog"
@@ -466,6 +454,18 @@ if (formData.video_url) {
 
             {/* Seccion beneficios */}
             <FormSection title="Beneficios (3 beneficios obligatorios)">
+                <InputAdmin
+                        label="Subtitulo beneficios"
+                        name="cover_subtitle"
+                        value={formData.cover_subtitle || ""}
+                        onChange={handleInputChange}
+                        placeholder="Ej: Descubre cómo los letreros de neón LED pueden..."
+                        helperText="Máx. 150 caracteres (letras, números y espacios)."
+                        maxLength={150}
+                        error={errors.cover_subtitle}
+                        required
+                />
+
                 <InputListDinamica
                     label="Beneficios"
                     items={formData.benefits}
