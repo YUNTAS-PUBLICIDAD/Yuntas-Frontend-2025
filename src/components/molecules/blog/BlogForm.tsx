@@ -31,6 +31,7 @@ const defaultFormData: BlogInput = {
 
     meta_title: "",
     meta_description: "",
+    keywords: [],
 
     main_image: null,
     main_image_title: "",
@@ -165,6 +166,7 @@ if (formData.video_url) {
 
                 meta_title: initialData.meta_title,
                 meta_description: initialData.meta_description,
+                keywords: initialData.keywords || [],
 
                 main_image: initialData.main_image?.url || null,
                 main_image_title: initialData.main_image?.title || "",
@@ -449,6 +451,18 @@ if (formData.video_url) {
                     rows={2}
                     required
                     error={errors.meta_description}
+                />
+                <InputListDinamica
+                    label="Keywords"
+                    items={formData.keywords}
+                    onChange={
+                        (keywords) =>{
+                        //  markDirty();
+                        setFormData(prev => ({ ...prev, keywords }))}}
+                    placeholder="ej: letreros neón led"
+                    addButtonText="+ Agregar keyword"
+                    helperText="Palabras clave relevantes para que los buscadores encuentren el blog."
+                    required
                 />
             </FormSection>
 
