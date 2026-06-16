@@ -24,6 +24,7 @@ export interface Blog {
 	video_url: string;
 	meta_title: string;
 	meta_description: string;
+    keywords: string[];	
 	product: {
         id: number;
         name: string;
@@ -48,6 +49,7 @@ export interface BlogInput {
 
 	meta_title: string;
 	meta_description: string;
+    keywords: string[];
 
 	main_image: File | string | null;
     main_image_title: string;
