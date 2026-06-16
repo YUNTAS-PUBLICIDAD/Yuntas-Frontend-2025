@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CloseButton from "@/components/atoms/CloseButton";
 import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
 import { LeadInput } from "@/types/admin/lead";
@@ -215,6 +215,17 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
   buttonTextColor,
   isSubmitting,
 }) => {
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const id = requestAnimationFrame(() => setEntered(true));
+    return () => {
+      cancelAnimationFrame(id);
+      setEntered(false);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -229,12 +240,13 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
         // className={`relative bg-transparent shadow-lg overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.92,1,0.36,1)] transform ${closing ? "opacity-0 translate-y-6 scale-[0.96]" : "opacity-100 translate-y-0 scale-100"} ${muted ? "opacity-40 grayscale-[50%]" : "opacity-100"} rounded-xl ${popupClassName}`}
         className={`
           relative bg-transparent shadow-xl overflow-hidden rounded-xl will-change-transform
-          transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+          transform transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
 
           ${closing
-            ? "opacity-0 translate-y-8 scale-95"
-            : "opacity-100 translate-y-0 scale-100"}
-
+            ? "opacity-0 translate-y-6 scale-95 blur-[1px]"
+            : entered
+              ? "opacity-100 translate-y-0 scale-100 blur-0"
+              : "opacity-0 translate-y-6 scale-95 blur-[1px]"}
           ${muted ? "opacity-40 grayscale-[50%]" : ""}
           ${popupClassName}
         `}
