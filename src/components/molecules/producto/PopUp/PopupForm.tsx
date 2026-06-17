@@ -32,14 +32,14 @@ const PopupForm: React.FC<PopupFormProps> = ({
 }) => (
   <form
     onSubmit={handleSubmit}
-    className="w-full space-y-3"
+    className="w-full h-[204px] bg-[#d9d9d9]/60 px-[13px] flex flex-col gap-[13px] pt-5 rounded-2xl [box-shadow:4px_4px_6px_-2px_rgba(0,_0,_0,_0.15)]"
   >
     <div className="relative">
       <User className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
       <InputField
         placeholder="Nombre"
         value={formData.name}
-        className="text-xs w-full pl-11 px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
+        className="h-8 bg-white !text-[11px] w-full pl-10 py-2 rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
         error={errors.name}
         onChange={(e) => handleChange("name", e.target.value)}
       />
@@ -51,7 +51,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
         placeholder="Teléfono"
         maxLength={9}
         value={formData.phone}
-        className="text-xs w-full pl-11 px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
+        className="h-8 bg-white !text-[11px] w-full pl-10 py-2 rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
         error={errors.phone}
         onChange={(e) => handleChange("phone", e.target.value)}
       />
@@ -63,13 +63,12 @@ const PopupForm: React.FC<PopupFormProps> = ({
         placeholder="Correo"
         type="email"
         value={formData.email}
-        className="text-xs w-full pl-11 px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
+        className="h-8 bg-white !text-[11px] w-full pl-10 py-2 rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
         error={errors.email}
         onChange={(e) => handleChange("email", e.target.value)}
       />
     </div>
     {errors.general && (<div className="text-red-500 text-sm">{errors.general}</div>)}
-    <div className="flex justify-center ">
       {/*bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7]*/}
       <ButtonPrimary
 
@@ -77,14 +76,13 @@ const PopupForm: React.FC<PopupFormProps> = ({
         // style={{ backgroundColor: buttonColor }}
         style={{
             backgroundColor: buttonColor,
-            boxShadow: `0 10px 25px ${buttonColor}66`,
+            boxShadow: `2px 8px 12px ${buttonColor}66`,
             color: buttonTextColor
           }}
-        className="py-3 px-4 rounded-xl shadow-[0_10px_25px_rgba(109,225,227,0.4)] hover:scale-[1.02] active:scale-[1.02] font-bold text-sm tracking-wide transition-all disabled:opacity-50 mt-2 sm:mt-3"
+        className="flex m-auto items-center justify-center !p-0 w-[144px] h-[34px] !rounded-[10px] hover:scale-[1.02] active:scale-[1.02] !text-[11px] font-bold tracking-wide transition-all disabled:opacity-50 mt-[1px] mb-[14px]"
       >
         {isSubmitting ? "Enviando..." : buttonText}
       </ButtonPrimary>
-    </div>
   </form>
 );
 

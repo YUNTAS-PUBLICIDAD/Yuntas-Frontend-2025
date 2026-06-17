@@ -203,7 +203,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [active, setActive] = useState(false);
   const [title, setTitle] = useState('');
   const [buttonText, setButtonText] = useState('');
-  const [buttonColor, setButtonColor] = useState('#6DE1E3');
+  const [buttonColor, setButtonColor] = useState('#7C29E3');
   const [delaySeconds, setDelaySeconds] = useState('5');
 
   const [desktopImageId, setDesktopImageId] = useState<number | undefined>(undefined);
@@ -280,7 +280,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       setButtonText(initialData.button_text || '');
       setButtonTextColor(initialData.button_text_color || '#FFFFFF');
       setDelaySeconds(initialData.delay_seconds?.toString() || '5');
-      setButtonColor(initialData.button_color || '#6DE1E3');
+      setButtonColor(initialData.button_color || '#7C29E3');
       setDesktopImageName('');
       setTextImageName('');
       setMobileImageName('');
