@@ -22,6 +22,7 @@ export interface Producto {
     price: string;
     hero_title: string;
     description: string;
+    video_url: string;
     status: "active" | "inactive";
     meta_title: string | null;
     meta_description: string | null;
@@ -41,6 +42,7 @@ export interface ProductoInput {
     hero_title: string;
     description: string;
     status?: 'active' | 'inactive';
+    video_url?: string | null;
 
     meta_title: string;
     meta_description: string;

@@ -13,6 +13,7 @@ import { ImageProductoSlot, Producto } from '@/types/admin/producto';
 import { imageProductoSlots } from '@/types/admin/producto';
 import { getPopupsService, getPublicPopupService } from '@/services/popupService';
 import { Popup as PopupConfig } from '@/types/admin/popup';
+import VideoSection from '@/components/organisms/productos/detalle/VideoSection';
 
 interface ProductClientProps {
     initialProduct?: Producto | null;
@@ -125,6 +126,10 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             imageAlt={imgBene?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
+                        <VideoSection
+    videoUrl={displayProducto.video_url || "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+/>
+                        
                         <CotizaSection />
 
                         {

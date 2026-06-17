@@ -27,6 +27,7 @@ const defaultFormData: ProductoInput = {
     hero_title: "",
     description: "",
     status: "active",
+    video_url: "",
 
     meta_title: "",
     meta_description: "",
@@ -87,10 +88,33 @@ const GALLERY_SLOTS = [
     }
 ] as const;
 
+type FormErrors = Partial<Record<keyof ProductoInput, string>>;
+
 export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null, registerCloseHandler }: ProductFormProps) {
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
     const [initialFormState, setInitialFormState] = useState<ProductoInput>(defaultFormData);
+    const [errors, setErrors] = useState<FormErrors>({});
+    const validate = () => {
+    const newErrors: FormErrors = {};
+
+    if (formData.video_url) {
+        try {
+            const url = new URL(formData.video_url);
+
+            if (!["http:", "https:"].includes(url.protocol)) {
+                newErrors.video_url = "URL inválida";
+            }
+        } catch {
+            newErrors.video_url = "URL inválida";
+        }
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+};
+    
 
     const normalize = (obj:any) => JSON.stringify(obj);
 
@@ -148,6 +172,8 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                 description: initialData.description,
                 status: initialData.status,
 
+                video_url: initialData.video_url || "",
+
                 meta_title: initialData.meta_title || "",
                 meta_description: initialData.meta_description || "",
                 keywords: initialData.keywords || [],
@@ -187,6 +213,12 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
         }
 
         setFormData(prev => ({ ...prev, [name]: name === "price" ? Number(value) : value }));
+
+        setErrors(prev => {
+            const copy = { ...prev };
+            delete copy[name as keyof ProductoInput];
+            return copy;
+});
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
@@ -456,6 +488,17 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                     }
                     required
                 />
+                
+                <InputAdmin
+                    label="URL del Video (opcional)"
+                    name="video_url"
+                    value={formData.video_url || ""}
+                    onChange={handleInputChange}
+                    placeholder="Ej: https://www.youtube.com/watch?v=..."
+                    helperText="Máx. 150 caracteres (letras, números y espacios)."
+                    maxLength={150}
+                    error={errors.video_url}
+                /> 
             </FormSection>
 
             { /* Galeria */}
