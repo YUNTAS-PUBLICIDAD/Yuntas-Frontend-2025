@@ -66,9 +66,9 @@ const DesktopPopupComposition = ({
   forceVisible = false,
 }: PopupLayoutProps) => {
   return (
-    <div className={`${forceVisible ? "grid" : "hidden md:grid"} grid-cols-2 w-[672px] aspect-[672/535] rounded-2xl overflow-hidden`}>
+    <div className={`${forceVisible ? "grid" : "hidden md:grid"} relative grid-cols-2 w-[672px] aspect-[672/535] rounded-2xl overflow-hidden`}>
       {/* LEFT IMAGE */}
-      <div className="relative w-full h-full">
+      <div className="w-full h-full">
         {hasImageSrc(desktopImgSrc) ? (
           <img
             src={desktopImgSrc}
@@ -79,7 +79,7 @@ const DesktopPopupComposition = ({
           <ImageFallback className="w-full h-full" title={title} />
         )}
         {/*overlay sutil marca*/}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div> */}
       </div>
 
       {/* RIGHT CONTENT*/}
@@ -89,34 +89,15 @@ const DesktopPopupComposition = ({
           <img
             src={textImgSrc}
             alt="Banner promocional"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="w-full h-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 z-30">
             <ImageFallback className="h-full w-full" title={title} />
-          </div>
         )}
 
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div>
+        {/* <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div> */}
         {/*Capa profesional*/}
-        <div className="relative z-20 w-full h-full flex flex-col justify-end p-6">
-
-        {/*{!textImgSrc && (
-          <div className="absolute inset-0 flex items-start justify-center pt-10 px-6 z-10">
-            <h4 className="text-[26px] font-extrabold text-gray-700 uppercase leading-none tracking-tight text-center">
-              {title}
-            </h4>
-          </div>
-        )}*/}
-        {/*TITLE*/}
-        {/*<div>
-          <h4 className="text-xl md:text-2xl font-black text-gray-800 uppercase leading-tight">
-            {title}
-          </h4>
-           <div className="w-12 h-[3px] bg-[#6DE1E3] mt-2 rounded-full" />
-        </div>*/}
-
-        {/*<div className="absolute bottom-0 left-0 right-0 h-[40%] px-5 pb-5 pt-3 backdrop-blur-[1px] z-20">*/}
+        <div className="absolute bottom-0 h-[239px] w-full bg-white px-[31px] pb-16">
           <PopupForm
             formData={formData}
             errors={errors}
@@ -126,10 +107,8 @@ const DesktopPopupComposition = ({
             isSubmitting={isSubmitting}
             buttonColor={buttonColor}
             buttonTextColor={buttonTextColor}
-          />
-        {/*</div>*/}
+              />
         </div>
-        {/*Titulo opcional*/}
       </div>
     </div>
   );
