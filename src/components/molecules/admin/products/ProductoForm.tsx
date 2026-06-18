@@ -10,6 +10,7 @@ import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 import ImageUpload from "@/components/molecules/admin/ImageUpload";
 import { Producto, ProductoInput } from "@/types/admin/producto";
 import { showToast } from '@/utils/showToast'
+import LinkableTextarea from "@/components/molecules/blog/LinkableTextarea";
 
 interface ProductFormProps {
     onSubmit: (data: ProductoInput) => void;
@@ -18,6 +19,7 @@ interface ProductFormProps {
     isLoading?: boolean;
     initialData?: Producto | null;
     registerCloseHandler?: (fn: ()=> Promise<void>) => void;
+    productos?: Producto[];
 }
 
 const defaultFormData: ProductoInput = {
@@ -90,7 +92,7 @@ const GALLERY_SLOTS = [
 
 type FormErrors = Partial<Record<keyof ProductoInput, string>>;
 
-export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null, registerCloseHandler }: ProductFormProps) {
+export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = false, initialData = null, registerCloseHandler, productos = [] }: ProductFormProps) {
     const [formData, setFormData] = useState<ProductoInput>(defaultFormData);
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
     const [initialFormState, setInitialFormState] = useState<ProductoInput>(defaultFormData);
@@ -397,15 +399,18 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                     />
                 </div>
 
-                <TextareaAdmin
+                <LinkableTextarea
                     label="Descripción (Aparece en 'Información' del producto)"
                     name="description"
                     value={formData.description || ""}
-                    onChange={handleInputChange}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
                     placeholder="Describe el producto, sus usos y características principales…"
                     helperText="Descripción completa del producto."
                     rows={6}
                     required
+                    productos={productos}
+                    error={errors.description}
+                    hideProductLink={true}
                 />
             </FormSection>
 
