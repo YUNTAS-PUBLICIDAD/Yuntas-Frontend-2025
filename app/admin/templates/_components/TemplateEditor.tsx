@@ -82,12 +82,12 @@ export function TemplateEditor({ editor }: any) {
 
       router.push("/admin/templates");
 
-    } catch (e) {
+    } catch (e: any) {
 
       console.error(e);
 
       toast.error(
-        "Error al guardar plantilla"
+        e.message || "Error al guardar plantilla"
       );
     }
   };
