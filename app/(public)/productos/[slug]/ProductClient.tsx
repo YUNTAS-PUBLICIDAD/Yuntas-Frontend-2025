@@ -105,7 +105,7 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                 displayProducto && (
                     <>
                         <HeroSection
-                            productName={displayProducto?.name || ""}
+                            productName={displayProducto?.hero_title || displayProducto?.name || ""}
                             backgroundImage={imgHero?.url || ""}
                             imageTitle={imgHero?.title || `${displayProducto.name} - Yuntas Publicidad`}
                             imageAlt={imgHero?.alt || `${displayProducto.name} - Yuntas Publicidad`}
