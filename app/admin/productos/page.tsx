@@ -339,6 +339,7 @@ export default function ProductosPage() {
           initialData={selectedProduct}
           isLoading={isLoading}
           registerCloseHandler={(fn) => setFormCloseHandler(() => fn)}
+          productos={productos}
         />
       </Modal>
 

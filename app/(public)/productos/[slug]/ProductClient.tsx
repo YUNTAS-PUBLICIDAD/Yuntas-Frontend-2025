@@ -105,7 +105,7 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                 displayProducto && (
                     <>
                         <HeroSection
-                            productName={displayProducto?.name || ""}
+                            productName={displayProducto?.hero_title || displayProducto?.name || ""}
                             backgroundImage={imgHero?.url || ""}
                             imageTitle={imgHero?.title || `${displayProducto.name} - Yuntas Publicidad`}
                             imageAlt={imgHero?.alt || `${displayProducto.name} - Yuntas Publicidad`}
@@ -126,9 +126,11 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             imageAlt={imgBene?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
-                        <VideoSection
-    videoUrl={displayProducto.video_url || "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-/>
+                        {displayProducto.video_url && (
+                            <VideoSection
+                                videoUrl={displayProducto.video_url}
+                            />
+                        )}
                         
                         <CotizaSection />
 

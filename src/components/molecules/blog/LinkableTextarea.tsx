@@ -19,8 +19,9 @@ interface LinkableTextareaProps {
     helperText?: string;
     rows?: number;
     required?: boolean;
-    productos: Producto[];
+    productos?: Producto[];
     error?: string;
+    hideProductLink?: boolean;
 }
 
 type LinkModalType = "custom" | "product";
@@ -44,7 +45,7 @@ function sanitizeMarkerLabel(value: string): string {
     return value.replace(/[\]|]/g, " ").trim();
 }
 
-function LinkToolbar({ onCustomLink, onProductLink }: { onCustomLink: () => void; onProductLink: () => void }) {
+function LinkToolbar({ onCustomLink, onProductLink, hideProductLink }: { onCustomLink: () => void; onProductLink: () => void; hideProductLink?: boolean }) {
     return (
         <div className="flex flex-wrap gap-2 items-center">
             <Button
@@ -58,17 +59,19 @@ function LinkToolbar({ onCustomLink, onProductLink }: { onCustomLink: () => void
                     Enlace
                 </span>
             </Button>
-            <Button
-                type="button"
-                onClick={onProductLink}
-                size="sm"
-                variant="tertiary"
-            >
-                <span className="inline-flex items-center gap-2">
-                    <FiShoppingBag />
-                    Producto
-                </span>
-            </Button>
+            {!hideProductLink && (
+                <Button
+                    type="button"
+                    onClick={onProductLink}
+                    size="sm"
+                    variant="tertiary"
+                >
+                    <span className="inline-flex items-center gap-2">
+                        <FiShoppingBag />
+                        Producto
+                    </span>
+                </Button>
+            )}
         </div>
     );
 }
@@ -82,8 +85,9 @@ export default function LinkableTextarea({
     helperText,
     rows = 6,
     required = false,
-    productos,
-    error
+    productos = [],
+    error,
+    hideProductLink = false
 }: LinkableTextareaProps) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -168,6 +172,7 @@ export default function LinkableTextarea({
                 <LinkToolbar
                     onCustomLink={() => openLinkModal("custom")}
                     onProductLink={() => openLinkModal("product")}
+                    hideProductLink={hideProductLink}
                 />
             </div>
             <TextareaAdmin
