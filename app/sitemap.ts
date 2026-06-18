@@ -5,14 +5,35 @@ import { MetadataRoute } from 'next';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://yuntaspublicidad.com'
 
-  // const productosResult = await getProductosService(200)
-  const [productosResult, blogsResult] = await Promise.all([
-    getProductosService(200),
-    getBlogsService(200)
-  ]);
-  const productos = productosResult.success && productosResult.data ? productosResult.data : []
+  let productos: any[] = [];
+  let blogs: any[] = [];
 
-  const blogs = blogsResult.success && blogsResult.data ? blogsResult.data : [];
+  try {
+    const [productosResult, blogsResult] = await Promise.all([
+      getProductosService(200).catch((err) => {
+        console.warn('⚠️ [Sitemap] Error al conectar con la API de productos:', err.message || err);
+        return { success: false, data: [] };
+      }),
+      getBlogsService(200).catch((err) => {
+        console.warn('⚠️ [Sitemap] Error al conectar con la API de blogs:', err.message || err);
+        return { success: false, data: [] };
+      })
+    ]);
+
+    if (productosResult.success && productosResult.data) {
+      productos = productosResult.data;
+    } else {
+      console.warn('⚠️ [Sitemap] Petición de productos no exitosa:', productosResult.message || 'Sin mensaje');
+    }
+
+    if (blogsResult.success && blogsResult.data) {
+      blogs = blogsResult.data;
+    } else {
+      console.warn('⚠️ [Sitemap] Petición de blogs no exitosa:', blogsResult.message || 'Sin mensaje');
+    }
+  } catch (error: any) {
+    console.error('❌ [Sitemap] Error general al generar rutas dinámicas:', error.message || error);
+  }
 
 
   // Rutas estáticas
