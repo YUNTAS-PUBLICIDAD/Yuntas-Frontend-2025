@@ -47,5 +47,9 @@ export function buildBlogFormData(data: BlogInput): FormData {
 			formData.append(`benefits[${index}]`, benefit);
 		});
 
+	// keywords
+	const cleanKeywords = data.keywords.filter(k => k.trim() !== "").join(", ");
+	if (cleanKeywords) formData.append("keywords", cleanKeywords);
+
 	return formData;
 }
