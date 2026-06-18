@@ -126,9 +126,11 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             imageAlt={imgBene?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
-                        <VideoSection
-    videoUrl={displayProducto.video_url || "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-/>
+                        {displayProducto.video_url && (
+                            <VideoSection
+                                videoUrl={displayProducto.video_url}
+                            />
+                        )}
                         
                         <CotizaSection />
 
