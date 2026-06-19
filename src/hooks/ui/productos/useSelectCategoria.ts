@@ -1,25 +1,22 @@
-import { useEffect } from 'react'
-import { Producto } from '@/types/admin/producto'
+import { useEffect } from 'react';
+import { Producto } from '@/types/admin/producto';
 
 export const useSelectCategorias = (
-  categoria: string,
-  setLista: React.Dispatch<React.SetStateAction<Producto[]>>,
-  productos: Producto[] = []
+  categoriasActivas: string[],
+  setListaProductos: React.Dispatch<React.SetStateAction<Producto[]>>,
+  allProductos: Producto[]
 ) => {
-
   useEffect(() => {
-
-    if (categoria === "Todos los Productos") {
-      setLista(productos);
+    // Sin selección → mostrar todos
+    if (categoriasActivas.length === 0) {
+      setListaProductos(allProductos);
       return;
     }
 
-    const resultado = productos.filter(p =>
-      p.category_name?.includes(categoria)
+    // Filtrar por cualquiera de las categorías seleccionadas
+    const filtrados = allProductos.filter((p) =>
+      categoriasActivas.includes(p.category_name || '')
     );
-
-    setLista(resultado);
-
-  }, [categoria, setLista, productos]);
-
+    setListaProductos(filtrados);
+  }, [categoriasActivas, allProductos, setListaProductos]);
 };
