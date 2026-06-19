@@ -11,7 +11,7 @@ const InputField: React.FC<InputFieldProps> = ({ error, className = "", ...props
         ${error ? "ring-red-400" : "focus:ring-blue-500/20"} ${className}`}
     />
     {error && (
-      <p className="text-red-500 text-[9px] font-medium absolute top-[100%] mt-0.5 left-0 right-0 text-center pointer-events-none">
+      <p className="text-red-500 text-[9px] font-medium leading-none absolute top-[100%] mt-0.5 left-0 right-0 text-center pointer-events-none">
         {error}
       </p>
     )}
