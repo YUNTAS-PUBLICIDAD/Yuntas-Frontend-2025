@@ -1,124 +1,141 @@
-import React, { useState, useMemo } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+'use client';
+
+import React, { useMemo } from 'react';
+import { SlidersHorizontal, X } from 'lucide-react';
 import { Producto } from '@/types/admin/producto';
-import Link from 'next/link';
 
 interface SidebarProductosProps {
   allProductos: Producto[];
-  categoriaActiva: string;
-  onSelectCategoria: (nombre: string) => void;
+  categoriasActivas: string[];
+  onToggleCategoria: (nombre: string) => void;
+  onLimpiar: () => void;
 }
 
-const SidebarProductos = ({ 
-  allProductos, 
-  categoriaActiva, 
-  onSelectCategoria 
+const SidebarProductos = ({
+  allProductos,
+  categoriasActivas,
+  onToggleCategoria,
+  onLimpiar,
 }: SidebarProductosProps) => {
-  
-  const productosPorCategoria = useMemo(() => {
-    const grupos: Record<string, Producto[]> = {};
+
+  const listaCategorias = useMemo(() => {
+    const grupos: Record<string, number> = {};
     allProductos.forEach((prod) => {
-      const catName = prod.category_name || "Sin Categoría";
-      if (!grupos[catName]) grupos[catName] = [];
-      grupos[catName].push(prod);
+      const cat = prod.category_name || 'Sin Categoría';
+      grupos[cat] = (grupos[cat] || 0) + 1;
     });
-    return grupos;
+    return Object.entries(grupos).map(([nombre, count]) => ({ nombre, count }));
   }, [allProductos]);
 
-  const categoriasDisponibles = Object.keys(productosPorCategoria);
-  
-  // Estado del acordeón
-  const [openCategory, setOpenCategory] = useState<string | null>(null);
-
-  const toggleCategory = (catName: string) => {
-    onSelectCategoria(catName);
-    setOpenCategory(openCategory === catName ? null : catName);
-  };
+  const todosActivo = categoriasActivas.length === 0;
 
   return (
-    <div className="w-full md:w-64 flex flex-col pr-2 font-sans">
-      
-      {/* TÍTULO - Solo visible en desktop */}
-      <h2 className="hidden md:block text-xl font-bold text-[#0F172A] uppercase mb-4 tracking-wide">
-        CATEGORÍA
-      </h2>
+    <div className="w-full md:w-64 font-sans">
 
-      <div className="relative">
-        
-        <button
-          onClick={() => {
-             onSelectCategoria('Todos los Productos');
-             setOpenCategory(null);
-          }}
-          className={`
-            relative z-10 w-full text-left px-4 py-2.5 rounded-lg border 
-            transition-all duration-200 text-sm font-medium
-            ${categoriaActiva === 'Todos los Productos' 
-              ? 'bg-[#E0F7FA] border-[#22D3EE] text-gray-800 shadow-sm' // Activo (Estilo Figma)
-              : 'bg-white border-gray-200 text-gray-600 hover:border-[#22D3EE] hover:bg-[#E0F7FA]'}
-          `}
-        >
-          Todos los productos ({allProductos.length})
-        </button>
+      {/* Contenedor principal — card con borde celeste */}
+      <div className="border-2 border-[#44BFDB] rounded-[14px] overflow-hidden bg-white">
 
-       
-        <div className="relative mt-0 ml-5 pb-2">
-            
-            <div className="absolute left-0 top-0 h-full w-px bg-[#22D3EE]"></div>
-
-            
-            <div className="flex flex-col pt-4 gap-4">
-            
-              {categoriasDisponibles.map((catName) => {
-                const productosDeEstaCat = productosPorCategoria[catName];
-                const isActive = categoriaActiva === catName;
-                const isOpen = openCategory === catName || isActive;
-
-                return (
-                  <div key={catName} className="relative pl-6">
-                    
-                  
-                    <div className="absolute left-0 top-3 w-6 h-px bg-[#22D3EE]"></div>
-
-                    <div className="flex flex-col">
-                      
-                     
-                      <div 
-                        onClick={() => toggleCategory(catName)}
-                        className="flex items-center justify-between cursor-pointer group pr-2"
-                      >
-                        <span className={`text-sm transition-colors duration-200 ${isActive ? 'font-bold text-gray-900' : 'font-medium text-gray-600 group-hover:text-[#22D3EE]'}`}>
-                          {catName}
-                        </span>
-                        
-                        
-                        <span className="text-gray-400">
-                           {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                        </span>
-                      </div>
-
-                    
-                      {isOpen && (
-                        <div className="flex flex-col mt-2 gap-1 animate-in fade-in slide-in-from-top-1 duration-200">
-                          {productosDeEstaCat.map((producto) => (
-                            <Link
-                              key={producto.id}
-                              href={`/productos/${producto.slug}`}
-                              className="block py-1 px-2 text-sm text-gray-500 hover:text-[#22D3EE] hover:bg-gray-50 rounded transition-colors"
-                            >
-                               {producto.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+        {/* Header */}
+        <div className="flex items-center gap-2 px-4 py-3.5">
+          <SlidersHorizontal size={17} className="text-[#2BAFD6]" />
+          <span className="text-[14px] font-medium text-[#1a1a3a] tracking-wide">
+            Categoría
+          </span>
         </div>
 
+        {/* Divider */}
+        <div className="h-px bg-[#eef0f2]" />
+
+        {/* Lista de categorías */}
+        <div className="px-4 py-2">
+
+          {/* Todos */}
+          <div
+            onClick={() => onLimpiar()}
+            className={`flex items-center justify-between py-2 px-0 rounded-md cursor-pointer transition-colors duration-150 ${
+              todosActivo ? 'bg-[#F1FAFD]' : 'hover:bg-[#f3fbfd]'
+            }`}
+          >
+            <div className="flex items-center gap-2.5 px-1">
+              {/* Checkbox */}
+              <div
+                className={`w-4 h-4 rounded-[4px] border flex items-center justify-center flex-shrink-0 transition-colors ${
+                  todosActivo
+                    ? 'bg-[#2BAFD6] border-[#2BAFD6]'
+                    : 'border-[#c4c8ce]'
+                }`}
+              >
+                {todosActivo && (
+                  <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                    <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
+              <span
+                className={`text-[12px] transition-colors ${
+                  todosActivo ? 'text-[#0E6886] font-medium' : 'text-[#4a4a5a]'
+                }`}
+              >
+                Todos
+              </span>
+            </div>
+            <span
+              className={`text-[11px] rounded-full px-2 py-0.5 transition-colors ${
+                todosActivo
+                  ? 'bg-[#BDE7F2] text-[#0E6886]'
+                  : 'bg-[#f1f3f5] text-[#a8aeb8]'
+              }`}
+            >
+              {allProductos.length}
+            </span>
+          </div>
+
+          {/* Categorías dinámicas */}
+          {listaCategorias.map(({ nombre, count }) => {
+            const isActive = categoriasActivas.includes(nombre);
+            return (
+              <div
+                key={nombre}
+                onClick={() => onToggleCategoria(nombre)}
+                className={`flex items-center justify-between py-2 px-0 rounded-md cursor-pointer transition-colors duration-150 ${
+                  isActive ? 'bg-[#F1FAFD]' : 'hover:bg-[#f3fbfd]'
+                }`}
+              >
+                <div className="flex items-center gap-2.5 px-1">
+                  <div
+                    className={`w-4 h-4 rounded-[4px] border flex items-center justify-center flex-shrink-0 transition-colors ${
+                      isActive
+                        ? 'bg-[#2BAFD6] border-[#2BAFD6]'
+                        : 'border-[#c4c8ce]'
+                    }`}
+                  >
+                    {isActive && (
+                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                        <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                  <span
+                    className={`text-[12px] transition-colors ${
+                      isActive ? 'text-[#0E6886] font-medium' : 'text-[#4a4a5a]'
+                    }`}
+                  >
+                    {nombre}
+                  </span>
+                </div>
+                <span
+                  className={`text-[11px] rounded-full px-2 py-0.5 transition-colors ${
+                    isActive
+                      ? 'bg-[#BDE7F2] text-[#0E6886]'
+                      : 'bg-[#f1f3f5] text-[#a8aeb8]'
+                  }`}
+                >
+                  {count}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
