@@ -32,10 +32,10 @@ const PopupForm: React.FC<PopupFormProps> = ({
 }) => (
   <form
     onSubmit={handleSubmit}
-    className="w-full h-[204px] bg-[#d9d9d9]/60 px-[13px] flex flex-col gap-[13px] pt-5 rounded-2xl [box-shadow:4px_4px_6px_-2px_rgba(0,_0,_0,_0.15)]"
+    className="w-full h-[218px] bg-[#d9d9d9]/60 px-[13px] flex flex-col gap-[18px] pt-5 rounded-2xl [box-shadow:4px_4px_6px_-2px_rgba(0,_0,_0,_0.15)]"
   >
     <div className="relative">
-      <User className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <User className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 z-10" />
       <InputField
         placeholder="Nombre"
         value={formData.name}
@@ -46,7 +46,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
     </div>
 
     <div className="relative">
-      <Phone className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <Phone className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 z-10" />
       <InputField
         placeholder="Teléfono"
         maxLength={9}
@@ -58,7 +58,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
     </div>
 
     <div className="relative">
-      <Mail className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <Mail className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 z-10" />
       <InputField
         placeholder="Correo"
         type="email"
