@@ -42,6 +42,46 @@ export const savePopupService = async (
       const formData = buildBasePopupForm(popupData);
       formData.append("_method", "PATCH");
 
+      popupData.images?.forEach((img, index) => {
+
+  // Solo imágenes nuevas (sin id)
+  if (!img.id && img.file instanceof File) {
+
+    formData.append(
+      `images[${index}][device]`,
+      img.device
+    );
+
+    formData.append(
+      `images[${index}][slot]`,
+      img.slot
+    );
+
+    if (img.alt) {
+      formData.append(
+        `images[${index}][alt]`,
+        img.alt
+      );
+    }
+
+    if (img.title) {
+      formData.append(
+        `images[${index}][title]`,
+        img.title
+      );
+    }
+
+    formData.append(
+      `images[${index}][file]`,
+      img.file
+    );
+  }
+});
+
+for (const pair of formData.entries()) {
+  console.log(pair[0], pair[1]);
+}
+
       await api.post(
         API_ENDPOINTS.ADMIN.POPUPS.UPDATE(popupData.id),
         formData,

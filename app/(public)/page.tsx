@@ -87,7 +87,7 @@ export default async function HomePage() {
           imgAlt={desktopLeftImg?.alt || "Popup Yuntas"}
           title={dynamicPopup.title}
           buttonText={dynamicPopup.button_text}
-          buttonColor={dynamicPopup.button_color || "#6DE1E3"}
+          buttonColor={dynamicPopup.button_color || "#7C29E3"}
           sourceId={sourceData.INICIO}
           delay={(dynamicPopup.delay_seconds || 5) * 1000}
         />

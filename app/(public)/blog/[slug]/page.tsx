@@ -36,6 +36,7 @@ export async function generateMetadata({
   return {
     title: blog.meta_title || blog.title,
     description: blog.meta_description || blog.description?.substring(0, 160) || `Conoce más sobre ${blog.title}`,
+    keywords: blog.keywords || [],
 
     alternates: {
       canonical: canonicalUrl,

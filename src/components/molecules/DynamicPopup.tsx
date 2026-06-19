@@ -30,7 +30,7 @@ const DynamicPopup = ({
     imgAlt,
     title,
     buttonText,
-    buttonColor = "#6DE1E3",
+    buttonColor = "#7C29E3",
     productId,
     sourceId = 1,
 }: DynamicPopupProps) => {

@@ -1,5 +1,6 @@
 import Text from "@/components/atoms/Text";
 import { MdInfoOutline } from "react-icons/md";
+import { renderLinkMarkers } from "@/utils/renderLinkMarkers";
 
 export default function InformacionSection({ info }: { info: string }) {
 	return (
@@ -17,7 +18,7 @@ export default function InformacionSection({ info }: { info: string }) {
 
 				<div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-lg">
 					<Text variant="caption" color="text-[#00031E]" className="text-justify font-normal leading-relaxed">
-						<div dangerouslySetInnerHTML={{ __html: info }} />
+						{renderLinkMarkers(info)}
 					</Text>
 				</div>
 			</div>

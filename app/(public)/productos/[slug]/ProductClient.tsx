@@ -13,6 +13,7 @@ import { ImageProductoSlot, Producto } from '@/types/admin/producto';
 import { imageProductoSlots } from '@/types/admin/producto';
 import { getPopupsService, getPublicPopupService } from '@/services/popupService';
 import { Popup as PopupConfig } from '@/types/admin/popup';
+import VideoSection from '@/components/organisms/productos/detalle/VideoSection';
 
 interface ProductClientProps {
     initialProduct?: Producto | null;
@@ -104,7 +105,7 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                 displayProducto && (
                     <>
                         <HeroSection
-                            productName={displayProducto?.name || ""}
+                            productName={displayProducto?.hero_title || displayProducto?.name || ""}
                             backgroundImage={imgHero?.url || ""}
                             imageTitle={imgHero?.title || `${displayProducto.name} - Yuntas Publicidad`}
                             imageAlt={imgHero?.alt || `${displayProducto.name} - Yuntas Publicidad`}
@@ -125,6 +126,12 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                             imageAlt={imgBene?.alt || "Beneficios del producto"}
                             reverse={true}
                         />
+                        {displayProducto.video_url && (
+                            <VideoSection
+                                videoUrl={displayProducto.video_url}
+                            />
+                        )}
+                        
                         <CotizaSection />
 
                         {
