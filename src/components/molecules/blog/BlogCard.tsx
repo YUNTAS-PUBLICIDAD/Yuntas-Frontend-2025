@@ -21,14 +21,14 @@ const BlogCard = ({ imgUrl, imgAlt, imgTitle, productName, blogTitle }: BlogCard
 				/>*/}
 
 				<Image
-				quality={70}
-				src={imgUrl} alt={imgAlt} title={imgTitle} fill className='object-cover transition-transform duration-700 group-hover:scale-110' sizes="(max-with:768px) 100vw, (max-width:1200px) 50vw,33vw "/>
+					quality={70}
+					src={imgUrl} alt={imgAlt} title={imgTitle} fill className='object-cover transition-transform duration-700 group-hover:scale-110' sizes="(max-with:768px) 100vw, (max-width:1200px) 50vw,33vw " />
 				<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 			</div>
 
 			{/* Contenido */}
-			<div className='p-6 flex flex-col h-full'>
-				<div className="flex-grow">
+			<div className='p-6 flex flex-col'>
+				<div>
 					<Text variant='small' className='font-bold uppercase tracking-wider mb-2 text-gray-800'>{productName}</Text>
 					<Text variant='subtitle' className='font-extrabold text-[#203565] line-clamp-2 leading-tight mb-3 group-hover:text-[#18879B] transition-colors'>
 						{blogTitle}
