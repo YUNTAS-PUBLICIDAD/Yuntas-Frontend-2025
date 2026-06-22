@@ -20,13 +20,7 @@ export default function AdminLayout({
   const segment = useSelectedLayoutSegment();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted || isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#141A3F]">
         <Loader size="lg" />
