@@ -81,6 +81,12 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');document.documentElement.classList.toggle('dark',t==='dark')}catch(_){}`,
+          }}
+        />
+        
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8H8WESQK5W"
           strategy="beforeInteractive"
