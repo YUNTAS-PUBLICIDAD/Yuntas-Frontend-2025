@@ -37,7 +37,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, imageTi
 							) : (
 								<span className="text-sm uppercase tracking-[0.25em] text-[#23C1DE] font-bold">Características</span>
 							)}
-								<Text variant="h2" color="text-[#203565]" className="font-bold">{text}</Text>
+								<Text variant="banner" color="text-[#203565]" className="font-bold">{text}</Text>
 							</div>
 						</div>
 

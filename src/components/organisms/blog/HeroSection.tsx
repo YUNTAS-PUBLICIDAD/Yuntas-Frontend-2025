@@ -1,5 +1,6 @@
 "use client";
 
+import Heading from "@/components/atoms/Heading";
 import { imagenes } from "@/data/imagenes";
 // import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -67,9 +68,17 @@ const HeroSection = () => {
 
         {/* Blog Title & Phrases */}
         <div className="relative z-20 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="drop-shadow-[0_2px_2px_#28BEDA] text-white text-4xl sm:text-4xl md:text-[56px] font-bold tracking-widest drop-shadow-2xl mb-2">
-            BLOG
-          </h1>
+          <Heading
+              level="h1"
+              size="2xl"
+              className="
+                leading-tight 
+                drop-shadow-[0_2px_2px_#28BEDA]
+                reveal-delay-2
+              "
+            >
+              BLOG
+            </Heading>
 
           {/* Carrusel de Frases */}
           <div className="h-[60px] sm:h-[100px] mt-6 relative w-full flex justify-center items-center">
