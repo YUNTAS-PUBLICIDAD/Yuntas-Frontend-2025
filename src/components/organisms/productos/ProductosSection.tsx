@@ -113,9 +113,9 @@ const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: Pr
           {!isReady ? (
             <div className="h-7 w-48 bg-gray-200 rounded animate-pulse" />
           ) : (
-            <h1 className="text-2xl font-bold uppercase text-gray-800">
+            <h2 className="text-2xl font-bold uppercase text-gray-800">
               {tituloSeccion}
-            </h1>
+            </h2>
           )}
         </div>
 
