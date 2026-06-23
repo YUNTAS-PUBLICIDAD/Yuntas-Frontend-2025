@@ -8,7 +8,7 @@ export default function NavMenuFooter(){
 
   return (
     <div>
-      <h3 className="text-[#6DE1E3] font-bold mb-4">Enlaces</h3>
+      <span className="text-[#6DE1E3] font-bold text-xl mb-4 inline-block">Enlaces</span>
       <nav className="flex flex-col gap-y-4">
         {
           items.map((item) => (

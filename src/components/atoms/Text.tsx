@@ -30,6 +30,10 @@ const Text: React.FC<TextProps> = ({
       : color;
   const classes = `${colorClass} ${className} ${variantClasses[variant]}`;
   
+  if (variant === "h2") {
+    return <h2 className={classes}>{children}</h2>;
+  }
+
   return <div className={classes}>{children}</div>;
 };
 

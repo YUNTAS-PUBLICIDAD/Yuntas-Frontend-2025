@@ -4,9 +4,9 @@ import SocialLinks from "./SocialLinks";
 
 const ContactBlock = () => (
   <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start">
-    <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
+    <span className="font-bold text-[#6DE1E3] text-xl tracking-wide inline-block">
       Contacto
-    </h3>
+    </span>
 
     <div className="flex items-center gap-2">
       <FaWhatsapp className="text-2xl text-white" />

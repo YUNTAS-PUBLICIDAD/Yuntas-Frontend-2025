@@ -3,9 +3,9 @@ const AddressBlock = () => (
     
     {/* Sección Dirección */}
     <div className="flex flex-col gap-4 w-full">
-      <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
+      <span className="font-bold text-[#6DE1E3] text-xl tracking-wide inline-block">
         Dirección
-      </h3>
+      </span>
       <p className="text-base md:text-lg text-gray-200">
         Urb. Alameda La Rivera Mz F Lt 30
       </p>
@@ -13,9 +13,9 @@ const AddressBlock = () => (
 
     {/* Sección Horario */}
 <div className="flex flex-col gap-4">
-  <h3 className="font-bold text-[#6DE1E3] text-xl tracking-wide">
+  <span className="font-bold text-[#6DE1E3] text-xl tracking-wide inline-block">
     Horario
-  </h3>
+  </span>
 
   <div className="flex flex-col gap-4 text-base md:text-lg text-gray-200">
 

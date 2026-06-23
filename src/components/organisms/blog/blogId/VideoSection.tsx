@@ -31,9 +31,9 @@ const VideoSection = ({ videoUrl }: VideoSectionProps) => {
 				<div className='flex flex-col gap-6 mb-12 md:mb-16 text-center max-w-2xl mx-auto'>
 
 
-					<h2 className='text-3xl md:text-4xl lg:text-5xl font-black text-[#23C1DE] leading-tight'>
+					<span className='text-3xl md:text-4xl lg:text-5xl font-black text-[#23C1DE] leading-tight'>
 						Mira Nuestro Video
-					</h2>
+					</span>
 
 					<p className='text-[#203565] text-base md:text-lg leading-relaxed'>
 						Descubre más detalles sobre nuestros productos y servicios. Conoce cómo podemos ayudarte a alcanzar tus objetivos.

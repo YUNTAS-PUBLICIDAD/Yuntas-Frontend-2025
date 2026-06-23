@@ -134,7 +134,7 @@ const MobilePopupComposition = ({
   const isPlaceholder = !hasImageSrc(mobileImgSrc) && !hasImageSrc(desktopImgSrc);
 
   return (
-    <div className={`${forceVisible ? "" : "md:hidden"} w-[90vw] max-w-[320px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]`}>
+    <div className={`${forceVisible ? "" : "md:hidden"} w-[284px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]`}>
 
       {hasImageSrc(finalMobileImg) ? (
         <img
@@ -145,7 +145,6 @@ const MobilePopupComposition = ({
       ) : (
         <ImageFallback className="absolute inset-0 w-full h-full" title={title} />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
 
       {isPlaceholder && (
         <div className="absolute top-6 left-4 right-4 h-[65%] flex items-start justify-center text-center z-10">
@@ -153,7 +152,7 @@ const MobilePopupComposition = ({
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 px-8 pb-4 pt-3  z-20">
+      <div className="absolute bottom-0 left-0 right-0 px-[22px] md:px-8 pb-5 md:pb-4 md:pt-3  z-20">
         <PopupForm
           formData={formData}
           errors={errors}
@@ -231,7 +230,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
         `}
       >
         {showCloseButton && (
-          <CloseButton onClick={onClose} className="absolute top-2 right-2 md:top-3 md:right-3 z-50" />
+          <CloseButton onClick={onClose} className="absolute top-[9px] right-[13px] md:top-3 md:right-3 z-50" />
         )}
 
         {previewDevice !== "mobile" && (
