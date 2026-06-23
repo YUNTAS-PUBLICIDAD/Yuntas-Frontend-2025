@@ -73,6 +73,7 @@ const HeroSection = () => {
                 mb-4 leading-tight
                 drop-shadow-[0_2px_2px_#28BEDA]
                 text-4xl sm:text-4xl md:text-[56px]
+                reveal delay-2
               "
             >
               CONTACTO
