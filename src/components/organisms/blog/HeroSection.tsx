@@ -66,8 +66,8 @@ const HeroSection = () => {
         </div>
 
         {/* Blog Title & Phrases */}
-        <div className="relative z-20 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="drop-shadow-[0_2px_2px_#28BEDA] text-white text-4xl sm:text-4xl md:text-[56px] font-bold tracking-widest drop-shadow-2xl mb-2">
+        <div className="relative z-20 flex flex-col items-center justify-center text-center px-4" >
+          <h1 className="drop-shadow-[0_2px_2px_#28BEDA] text-white text-4xl sm:text-4xl md:text-[56px] font-bold tracking-widest drop-shadow-2xl mb-2 reveal delay-2">
             BLOG
           </h1>
 
