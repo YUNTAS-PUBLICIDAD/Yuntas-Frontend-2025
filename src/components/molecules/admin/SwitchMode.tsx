@@ -27,7 +27,10 @@ export default function SwitchMode({
   darkHandleColor = "#ffffff",
   showIcons = true,
 }: SwitchModeProps) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return document.documentElement.classList.contains("dark");
+  });
 
   useEffect(() => {
     const syncThemeState = () => {
