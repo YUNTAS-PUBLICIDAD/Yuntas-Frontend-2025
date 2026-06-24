@@ -1,6 +1,7 @@
 import HeroSection from "@/components/organisms/inicio/HeroSection";
 import InnovacionSection from "@/components/organisms/inicio/InnovacionSection";
 import ProjectsCarousel from "@/components/organisms/inicio/ProjectsCarousel";
+import ClientesSection from "@/components/organisms/inicio/ClientesSection";
 import TestimonialsSection from "@/components/organisms/inicio/TestimonialsSection";
 
 import DynamicPopup from "@/components/molecules/DynamicPopup";
@@ -75,6 +76,7 @@ export default async function HomePage() {
       <RecentProductsSection />
       <InnovacionSection />
       <ProjectsCarousel />
+      <ClientesSection />
       <TestimonialsSection />
 
       {/* Ya no se valida si está cargando (!isLoadingPopup) */}
