@@ -19,8 +19,8 @@ const HeroSearchSection = ({ setListaProductos, allProductos }: HeroSearchSectio
             variant='h2'
             className='text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase'
           >
-            Descubre la selección que 
-            <br/>
+            Descubre la selección que
+            <br />
             tenemos para ti
           </Text>
         </div>
@@ -34,6 +34,7 @@ const HeroSearchSection = ({ setListaProductos, allProductos }: HeroSearchSectio
             placeholder='Buscar Producto...'
             searchKeys={['name']}
             getDisplayValue={(item) => item.name}
+            getImageUrl={(item) => item.main_image?.url ?? null} // <- nueva línea
             noResultsMessage='No se encuentra ese producto'
           />
         </div>
