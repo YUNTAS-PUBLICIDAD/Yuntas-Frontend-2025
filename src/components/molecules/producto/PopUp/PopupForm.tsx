@@ -32,7 +32,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
 }) => (
   <form
     onSubmit={handleSubmit}
-    className="w-full h-[161px] md:h-[204px] bg-[#d9d9d9]/60 px-[15px] md:px-[13px] flex flex-col gap-[9px] md:gap-[13px] pt-4 md:pt-5 rounded-2xl [box-shadow:4px_4px_6px_-2px_rgba(0,_0,_0,_0.15)]"
+    className="w-full h-[161px] md:h-[204px] bg-[#F3F3F3] px-[15px] md:px-[13px] flex flex-col gap-[9px] md:gap-[13px] pt-4 md:pt-5 rounded-2xl [box-shadow:8px_4px_4px_-2px_rgba(0,_0,_0,_0.06)]"
   >
     <div className="relative">
       <User className="pointer-events-none absolute left-4 top-1/2 h-[13px] w-[13px] md:h-4 md:w-4 -translate-y-1/2 text-gray-400 z-10" />

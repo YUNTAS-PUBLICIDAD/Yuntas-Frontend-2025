@@ -27,9 +27,6 @@ const PopupImage: React.FC<PopupImageProps> = ({ src, title, alt, priority }) =>
           // height={400}
         />
 
-        {/*Overlay opcional*/}
-        <div className="absolute inset-0 bg-black/10 pointer-events-none"/>
-
   </div>
 );
 
