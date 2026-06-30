@@ -81,13 +81,21 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://apiyuntas.yuntaspublicidad.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');document.documentElement.classList.toggle('dark',t==='dark')}catch(_){}`,
+          }}
+        />
+        
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8H8WESQK5W"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <Script
           id="google-analytics"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];

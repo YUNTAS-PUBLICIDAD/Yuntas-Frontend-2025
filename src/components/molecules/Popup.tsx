@@ -58,6 +58,7 @@ const Popup = ({
     const {captureLead, isSubmitting} = useLeadCapture();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
+    const [entered, setEntered] = useState(false);
     const modalRef = useRef<HTMLDivElement | null>(null);
     const popupTriggered = useRef(false);
     const pathname = usePathname()
@@ -157,22 +158,35 @@ const Popup = ({
         return () => clearTimeout(timer);
     }, [delay, pathname]);
 
+    useEffect(() => {
+        if (!show) return;
+        let inner: number;
+        const outer = requestAnimationFrame(() => {
+            inner = requestAnimationFrame(() => setEntered(true));
+        });
+        return () => {
+            cancelAnimationFrame(outer);
+            cancelAnimationFrame(inner);
+            setEntered(false);
+        };
+    }, [show]);
+
     if (!show) return null;
 
     // const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
     return (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+        <div className={`fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${entered ? "opacity-100" : "opacity-0"}`}>
             <PopupContainer closing={closing} ref={modalRef}>
                 <CloseButton
                     onClick={closeModal}
-                    className="absolute top-4 right-4 z-50"
+                    className="absolute top-[9px] right-[13px] md:top-3 md:right-3 z-50"
                 />
 
                 <PopupView
                 isMobile={isMobile}
                 leftImage={leftImage}
-                rightImage={rightImage}
+                rightImage={rightImage} 
                 mobileImage={mobileImage}
                 formData={formData}
                 errors={errors}
