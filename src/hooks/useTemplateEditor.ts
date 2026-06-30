@@ -114,7 +114,7 @@ export const useTemplateEditor = (
                     (v.product_overrides || []).map(
                       (o:any) => ({
                         ...o,
-                        productId: o.product_id,
+                        productId: Number(o.product_id),
                         ctaText: o.cta_text,
                         ctaUrl: o.cta_url
                       })
@@ -623,7 +623,7 @@ export const useTemplateEditor = (
                   (v.product_overrides || []).map(
                     (o:any) => ({
                       ...o,
-                      productId: o.product_id,
+                      productId: Number(o.product_id),
                       ctaText: o.cta_text,
                       ctaUrl: o.cta_url
                     })
@@ -724,7 +724,7 @@ export const useTemplateEditor = (
                 const exists =
                   overrides.find(
                     (o: any) =>
-                      o.productId === productId
+                      o.productId == productId
                   );
 
                 let nextOverrides = [];
@@ -735,7 +735,7 @@ export const useTemplateEditor = (
                     overrides.map((override: any) => {
 
                       if (
-                        override.productId !== productId
+                        override.productId != productId
                       ) {
                         return override;
                       }
@@ -855,7 +855,7 @@ export const useTemplateEditor = (
                 ).map((override: any) => {
 
                   if (
-                    override.productId !== productId
+                    override.productId != productId
                   ) {
                     return override;
                   }

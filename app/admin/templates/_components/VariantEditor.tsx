@@ -337,7 +337,7 @@ export function VariantEditor({
     return (
       variant.productOverrides?.find(
         (o: any) =>
-          o.productId === selectedProductId
+          o.productId == selectedProductId
       ) || null
     );
 
@@ -461,7 +461,7 @@ export function VariantEditor({
     const exists =
       currentOverrides.find(
         (o: any) =>
-          o.productId === selectedProductId
+          o.productId == selectedProductId
       );
 
     let next = [];
@@ -473,7 +473,7 @@ export function VariantEditor({
           (o: any) => {
 
             if (
-              o.productId !== selectedProductId
+              o.productId != selectedProductId
             ) {
               return o;
             }

@@ -72,7 +72,7 @@ function WhatsAppPreview({
   const override =
     // variant?.productOverrides?.[0];
     variant?.productOverrides?.find(
-      (o: any) => o.productId === selectedProductId
+      (o: any) => o.productId == selectedProductId
     );
 
   const raw =
@@ -337,7 +337,7 @@ function EmailPreview({
   const override =
     // variant?.productOverrides?.[0];
     variant?.productOverrides?.find(
-      (o: any) => o.productId === selectedProductId
+      (o: any) => o.productId == selectedProductId
     )
 
   const subject =
