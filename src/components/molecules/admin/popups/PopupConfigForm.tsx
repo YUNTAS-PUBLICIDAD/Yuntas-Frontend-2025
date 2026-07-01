@@ -398,9 +398,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     try {
       await onSubmit(popupData);
       showToast.success?.('Popup guardado correctamente');
-    }catch(err){
+    }catch(err: any){
      console.error('SUBMIT FAIL:', err);
-     showToast.error('ERROR guardando popup')
+     showToast.error(err.message || 'ERROR guardando popup')
     }
   };
 
