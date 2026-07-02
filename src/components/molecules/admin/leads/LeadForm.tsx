@@ -82,7 +82,7 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
                 required
             />
             <InputForm
-                label="Gmail"
+                label="Correo"
                 name="email"
                 type="email"
                 value={formData.email || ""}
