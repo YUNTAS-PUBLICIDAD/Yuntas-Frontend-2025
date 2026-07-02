@@ -301,8 +301,10 @@ export default function AdminDashboardPage() {
             </div>
           ) : (
             <>
+              <div className="w-full overflow-x-auto custom-scrollbar pb-2">
+                <div style={{ minWidth: `${Math.max((pageViewData?.length || 0) * 80, 500)}px` }}>
             <ResponsiveContainer width="100%" height={220}>
-              <ComposedChart data={pageViewData} margin={{ top: 10, right: 60, left: 12, bottom: 28 }}>
+              <ComposedChart data={pageViewData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartGridColor} />
                 <XAxis
                   dataKey="page"
@@ -321,7 +323,7 @@ export default function AdminDashboardPage() {
                   tickLine={false}
                   width={48}
                   allowDecimals={false}
-                  domain={[0, (dataMax) => (!dataMax || isNaN(dataMax)) ? 10 : dataMax + (Math.ceil(dataMax / 4) || 1)]}
+                  domain={[0, (dataMax: number) => (!dataMax || isNaN(dataMax)) ? 10 : dataMax + (Math.ceil(dataMax / 4) || 1)]}
                   tickFormatter={(value) => Math.round(Number(value)).toString()}
                 />
                 <Tooltip content={<CustomTooltip />} />
@@ -340,6 +342,8 @@ export default function AdminDashboardPage() {
                 />
               </ComposedChart>
             </ResponsiveContainer>
+                </div>
+              </div>
               <div className="mt-4 flex items-end justify-between gap-3">
                 <div>
                   <p className="text-xs font-medium text-gray-500 dark:text-white/50">
