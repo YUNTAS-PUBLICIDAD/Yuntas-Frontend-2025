@@ -1,5 +1,6 @@
 "use client";
 
+import { useConfirm } from "@/hooks/useConfirm";
 import { useState } from "react";
 
 const CHANNEL_LABELS: Record<string, string> = {
@@ -9,6 +10,7 @@ const CHANNEL_LABELS: Record<string, string> = {
 };
 
 export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
+  const { confirm, ConfirmDialog } = useConfirm();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<"all" | "active" | "draft">("all");
 
@@ -268,7 +270,16 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
               </button>
               {/* Delete */}
               <button
-                onClick={() => onDelete(t.id)}
+                onClick={async (e) => {
+                e.stopPropagation();
+                const confirmado = await confirm({
+                  title: "Eliminar template",
+                  message: "¿Estás seguro de que quieres eliminar este template?",
+                });
+                if (confirmado) {
+                  onDelete(t.id);
+                }
+              }}
                 title="Eliminar"
                 className="
                   w-[30px] h-[30px] flex items-center justify-center rounded-md
@@ -414,7 +425,7 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
           }
           )}
         </div>
-
+        <ConfirmDialog /> 
       </div>
     </div>
   );
