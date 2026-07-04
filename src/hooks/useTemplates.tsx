@@ -40,9 +40,6 @@ export const useTemplates = () => {
   }, []);
 
 const remove = async (id: number) => {
-  const confirm = window.confirm("¿Eliminar este template?");
-    if (!confirm) return;
-
     setDeletingId(id);
     try {
 

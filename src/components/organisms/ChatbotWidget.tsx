@@ -295,8 +295,8 @@ export default function ChatbotWidget() {
   const primaryColor = chatbotSettings.primary_color || "#203565";
   const secondaryColor = chatbotSettings.secondary_color || primaryColor;
   const positionClass = chatbotSettings.position === "bottom-left"
-    ? "fixed bottom-7 left-4 z-[100]"
-    : "fixed bottom-7 right-4 z-[100]";
+    ? "fixed bottom-7 left-[20px] z-[100]"
+    : "fixed bottom-7 right-[20px] z-[100]";
 
   return (
     <div className={positionClass}>
