@@ -168,7 +168,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                 />
             </FormSection>
 
-            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200">
+            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white dark:bg-[#141A3F] pt-4 pb-2 px-4 border-t border-gray-200 dark:border-white/10">
                 <Button
                     type="submit"
                     variant="primary"

@@ -105,19 +105,19 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
                 onChange={() => { }}
             /> */}
 
-            <div className="flex gap-4 mt-4">
-                <Button type="submit" variant="primary" size="md" className="flex-1" disabled={isLoading}>
-                    {isLoading ? (initialData !== null ? "Guardando..." : "Añadiendo...") : (initialData !== null ? "Guardar" : "Añadir Cliente")}
-                </Button>
+            <div className="flex gap-2 mt-4 sm:gap-4">
                 <Button
                     type="button"
                     variant="tertiary"
                     size="md"
-                    className="flex-1"
+                    className="flex-1 w-full min-w-0 !px-2 sm:!px-6 sm:size-md"
                     onClick={onCancel}
                     disabled={isLoading}
                 >
                     Cancelar
+                </Button>
+                <Button type="submit" variant="primary" size="sm" className="flex-1 w-full min-w-0 !px-2 sm:!px-6" disabled={isLoading}>
+                    {isLoading ? (initialData !== null ? "Guardando..." : "Añadiendo...") : (initialData !== null ? "Guardar" : "Añadir Cliente")}
                 </Button>
             </div>
         </form>
