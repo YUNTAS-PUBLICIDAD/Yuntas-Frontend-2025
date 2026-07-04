@@ -53,6 +53,7 @@ const ProjectsCarousel: React.FC = () => {
       <div className="max-w-[1400px] mx-auto">
         <div className="flex justify-center items-center gap-4">
           <button 
+            type="button"
             onClick={() => goTo(activeIndex === 0 ? slides.length - 1 : activeIndex - 1)}
             className="bg-white/80 hover:bg-white text-[#20838f] w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 backdrop-blur-sm"
             aria-label="Proyecto anterior"
@@ -107,6 +108,7 @@ const ProjectsCarousel: React.FC = () => {
             max={100}
             value={line}
             onChange={(e) => lineState(Number(e.target.value))}
+            aria-label="Comparar antes y después del proyecto"
             className="absolute inset-0 z-20 w-full h-full opacity-0 cursor-ew-resize"
             />
 
@@ -124,6 +126,7 @@ const ProjectsCarousel: React.FC = () => {
             </div>
           </div>
           <button 
+            type="button"
             onClick={() => goTo(activeIndex === slides.length - 1 ? 0 : activeIndex + 1)}
             className="bg-white/80 hover:bg-white text-[#20838f] w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 backdrop-blur-sm"
             aria-label="Siguiente proyecto"
@@ -138,6 +141,7 @@ const ProjectsCarousel: React.FC = () => {
             key={idx}
             active={idx === activeIndex}
             onClick={() => goTo(idx)}
+            index={idx}
             />
           ))}
         </div>
