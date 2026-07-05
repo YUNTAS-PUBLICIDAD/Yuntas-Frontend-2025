@@ -38,6 +38,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       <User className="pointer-events-none absolute left-4 top-1/2 h-[13px] w-[13px] md:h-4 md:w-4 -translate-y-1/2 text-gray-400 z-10" />
       <InputField
         placeholder="Nombre"
+        aria-label="Nombre"
         value={formData.name}
         className="h-[27px] md:h-8 bg-white !text-[7.5px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-lg md:rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
         error={errors.name}
@@ -49,6 +50,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       <Phone className="pointer-events-none absolute left-4 top-1/2 h-[13px] w-[13px] md:h-4 md:w-4 -translate-y-1/2 text-gray-400 z-10" />
       <InputField
         placeholder="Teléfono"
+        aria-label="Teléfono"
         maxLength={9}
         value={formData.phone}
         className="h-[27px] md:h-8 bg-white !text-[7.5px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-lg md:rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
@@ -61,6 +63,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
       <Mail className="pointer-events-none absolute left-4 top-1/2 h-[13px] w-[13px] md:h-4 md:w-4 -translate-y-1/2 text-gray-400 z-10" />
       <InputField
         placeholder="Correo"
+        aria-label="Correo electrónico"
         type="email"
         value={formData.email}
         className="h-[27px] md:h-8 bg-white !text-[7.5px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-lg md:rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"

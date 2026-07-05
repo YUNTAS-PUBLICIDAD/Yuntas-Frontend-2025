@@ -18,9 +18,10 @@ const Button: React.FC<ButtonProps> = ({
   className = "",
   disabled = false,
   icon,
+  type = "button",
   ...props
 }) => {
-  const baseClasses = "font-bold rounded-3xl transition-all duration-300 inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100";
+  const baseClasses = "font-bold rounded-3xl transition-all duration-300 inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#23C1DE] focus-visible:ring-offset-2";
 
   const variantClasses = {
     primary: "bg-[#23C1DE] text-white hover:bg-[#5BC5C7]",
@@ -56,7 +57,7 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <button className={classes} disabled={disabled} {...props}>
+    <button type={type} className={classes} disabled={disabled} {...props}>
       {content}
     </button>
   );

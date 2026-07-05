@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useId, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 
 interface ModalProps {
@@ -20,6 +20,8 @@ export default function Modal({
     size = "md",
     className = ""
 }: ModalProps) {
+    const titleId = useId();
+    const dialogRef = useRef<HTMLDivElement>(null);    
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -29,6 +31,7 @@ export default function Modal({
         if (isOpen) {
             document.addEventListener("keydown", handleEsc);
             document.body.style.overflow = "hidden";
+            dialogRef.current?.focus();
         }
 
         return () => {
@@ -57,16 +60,23 @@ export default function Modal({
             onMouseDown={onClose}
         >
             <div
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={title ? titleId : undefined}
+                tabIndex={-1}            
                 className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
                     <div className="flex items-center justify-between px-6 py-4 border-b border-white/20 dark:bg-[#141A3F]">
-                        <h2 className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
+                        <h2 id={titleId} className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
                             {title}
                         </h2>
                         <button
+                            type="button"                        
                             onClick={onClose}
+                            aria-label="Cerrar"                            
                             className={closeBtnClass}
                         >
                             <IoClose size={24} />
