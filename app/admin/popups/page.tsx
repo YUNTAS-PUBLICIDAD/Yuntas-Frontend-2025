@@ -24,7 +24,10 @@ export default function PopupsPage(){
 
   const handleSave = async (data:any) => {
     const isUpdate = !!data.id;
-    await savePopup(data, isUpdate);
+    const res = await savePopup(data, isUpdate);
+    if (!res.success) {
+      throw new Error(res.message || "Error al guardar el popup");
+    }
     getPopups();
   };
 

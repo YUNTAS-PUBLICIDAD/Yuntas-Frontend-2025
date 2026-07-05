@@ -295,8 +295,8 @@ export default function ChatbotWidget() {
   const primaryColor = chatbotSettings.primary_color || "#203565";
   const secondaryColor = chatbotSettings.secondary_color || primaryColor;
   const positionClass = chatbotSettings.position === "bottom-left"
-    ? "fixed bottom-7 left-4 z-[100]"
-    : "fixed bottom-7 right-4 z-[100]";
+    ? "fixed bottom-7 left-[20px] z-[100]"
+    : "fixed bottom-7 right-[20px] z-[100]";
 
   return (
     <div className={positionClass}>
@@ -310,6 +310,20 @@ export default function ChatbotWidget() {
                 }`}
               onClick={handleOpenChat}
             >
+              <button
+                className="absolute top-2 right-2 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-100/50 transition-colors z-20"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowBubble(false);
+                }}
+                aria-label="Cerrar mensaje"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+
               {bubbleState === 'typing' ? (
                 <div className="flex gap-1.5 items-center h-5 px-2">
                   <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>

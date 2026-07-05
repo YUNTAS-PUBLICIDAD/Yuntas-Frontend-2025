@@ -66,14 +66,18 @@ export default function SeguimientoPage() {
     }, [leads]);
 
     const originOptions = useMemo(() => {
-        return Array.from(
-            new Set(
-                leads
-                    .map((lead) => lead.source_name?.trim())
-                    .filter((source): source is string => Boolean(source))
-            )
-        ).sort((a, b) => a.localeCompare(b));
-    }, [leads]);
+    const allowedOrigins = ["Inicio", "Producto detalle", "Administración"];
+
+    return Array.from(
+        new Set(
+            leads
+                .map((lead) => lead.source_name?.trim())
+                .filter((source): source is string => Boolean(source))
+        )
+    )
+    .filter((source) => allowedOrigins.includes(source))
+    .sort((a, b) => a.localeCompare(b));
+}, [leads]);
 
     const leadsByOrigin = useMemo(() => {
         if (!originFilter) return leadsFiltered;

@@ -1,3 +1,4 @@
+import { useConfirm } from "@/hooks/useConfirm";
 import { formatDelay } from "@/utils/formatDelay";
 import { Clock3, MessageSquareText, Plus, Trash2 } from "lucide-react";
 
@@ -20,6 +21,7 @@ export function StepsSidebar({
   onRemove,
 }: Props) {
 
+const {confirm, ConfirmDialog} = useConfirm() 
 
   return (
     <div className="
@@ -206,10 +208,16 @@ export function StepsSidebar({
                            {/* DELETE */}
 
                            <button
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               onRemove(step.step);
-                             }}
+                             onClick={async (e) => {
+                              e.stopPropagation();
+                              const confirmado = await confirm({
+                                title: "Eliminar mensaje",
+                                message: "¿Estás seguro de que quieres eliminar este mensaje?",
+                              });
+                              if (confirmado) {
+                                onRemove(step.step);
+                              }
+                            }}
                              className="
                                opacity-100 lg:opacity-0 lg:group-hover:opacity-100
 
@@ -242,6 +250,7 @@ export function StepsSidebar({
           );
         })}
       </div>
+      <ConfirmDialog />
     </div>
   );
 }

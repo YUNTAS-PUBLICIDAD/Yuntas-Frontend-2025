@@ -29,13 +29,32 @@ const api = axios.create({
 	}
 });
 
-// ─── Request Interceptor: Adjuntar token automáticamente ───
+// ─── Request Interceptor: Adjuntar token y emular métodos PUT/PATCH/DELETE ───
 api.interceptors.request.use(
 	(config) => {
 		const token = getToken();
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
+
+		// Emular métodos PUT, PATCH o DELETE usando POST para evitar bloqueos de Firewalls (WAF) en producción
+		const method = config.method?.toUpperCase();
+		if (method && ['PUT', 'PATCH', 'DELETE'].includes(method)) {
+			config.method = 'post';
+			config.headers['X-HTTP-Method-Override'] = method;
+
+			if (config.data instanceof FormData) {
+				config.data.append('_method', method);
+			} else if (typeof config.data === 'object' && config.data !== null) {
+				config.data = {
+					...config.data,
+					_method: method,
+				};
+			} else if (!config.data) {
+				config.data = { _method: method };
+			}
+		}
+
 		return config;
 	},
 	(error) => Promise.reject(error)
