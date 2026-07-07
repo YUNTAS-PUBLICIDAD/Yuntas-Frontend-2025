@@ -34,62 +34,46 @@ input[type="password"]::-webkit-password-reveal-button {
     overflow-x: auto;
 }*/
 
-.ql-editor {
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
-}
-
-.ql-editor p {
-    word-break: break-word;
-    overflow-wrap: anywhere;
-}
-
-/* TOOLBAR BASE */
-.ql-toolbar {
-  border-color: rgba(255,255,255,0.1);
-}
-
 /* ICONOS */
-.dark .ql-toolbar .ql-stroke {
+.dark  {
   stroke: #e5e7eb; /* gris claro visible */
 }
 
-.dark .ql-toolbar .ql-fill {
+.dark {
   fill: #e5e7eb;
 }
 
 /* HOVER / ACTIVE */
-.dark .ql-toolbar button:hover .ql-stroke,
-.dark .ql-toolbar button.ql-active .ql-stroke {
+.dark button:hover ,
+.dark  {
   stroke: #ffffff;
 }
 
-.dark .ql-toolbar button:hover .ql-fill,
-.dark .ql-toolbar button.ql-active .ql-fill {
+.dark button:hover ,
+.dark {
   fill: #ffffff;
 }
 
 /* SELECT (dropdown header, size, etc) */
-.dark .ql-toolbar .ql-picker {
+.dark {
   color: #e5e7eb;
 }
 
-.dark .ql-toolbar .ql-picker-options {
+.dark {
   background: #1f2937; /* dark bg */
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-.dark .ql-toolbar .ql-picker-item:hover {
+.dark {
   background: rgba(255,255,255,0.08);
 }
 
 /* EDITOR AREA */
-.dark .ql-container {
+.dark{
   border-color: rgba(255,255,255,0.1);
 }
 
-.dark .ql-editor {
+.dark {
   color: #e5e7eb;
 }
 
@@ -97,59 +81,32 @@ input[type="password"]::-webkit-password-reveal-button {
    REACT QUILL PREMIUM
 ===================================================== */
 
-/* WRAPPER */
-.editor-wrapper {
-  border-radius: 16px;
-  overflow: hidden;
-}
 
 /* TOOLBAR */
-.editor-wrapper .ql-toolbar {
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-
-  padding: 10px 12px;
-
-  background: #ffffff;
-
-  border: 1px solid rgba(229,231,235,1);
-}
-
-/* CONTENEDOR */
-.editor-wrapper .ql-container {
-
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-
-  background: #ffffff;
-
-  border: 1px solid rgba(229,231,235,1);
-  border-top: none;
-}
-
-/* AREA EDITABLE */
-.editor-wrapper .ql-editor {
+.editor-wrapper  {
   min-height: 120px;
   max-height: 320px;
-  overflow-y: auto;
-
   padding: 18px;
-
+  border-radius: 16px;
   font-size: 14px;
+  overflow: hidden;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid rgba(229,231,235,1);
   line-height: 1.8;
-
   color: #111827;
+  
 }
 
 @media (min-width: 768px){
 
-    .editor-wrapper .ql-editor {
+    .editor-wrapper {
         min-height: 180px;
     }
 }
 
 /* PLACEHOLDER */
-.editor-wrapper .ql-editor.ql-blank::before {
+.editor-wrapper {
   color: #9ca3af;
   font-style: normal;
 }
@@ -158,19 +115,19 @@ input[type="password"]::-webkit-password-reveal-button {
    DARK MODE
 ===================================================== */
 
-.dark .editor-wrapper .ql-toolbar {
+.dark .editor-wrapper  {
   background: rgba(255,255,255,0.03);
 
   border-color: rgba(255,255,255,0.08);
 }
 
-.dark .editor-wrapper .ql-container {
+.dark .editor-wrapper {
   background: rgba(255,255,255,0.03);
 
   border-color: rgba(255,255,255,0.08);
 }
 
-.dark .editor-wrapper .ql-editor {
+.dark .editor-wrapper {
   color: #f3f4f6;
 }
 
@@ -179,31 +136,31 @@ input[type="password"]::-webkit-password-reveal-button {
 }
 
 /* ICONOS */
-.dark .editor-wrapper .ql-stroke {
+.dark .editor-wrapper  {
   stroke: #f3f4f6;
 }
 
-.dark .editor-wrapper .ql-fill {
+.dark .editor-wrapper  {
   fill: #f3f4f6;
 }
 
 /* HOVER */
-.dark .editor-wrapper button:hover .ql-stroke,
-.dark .editor-wrapper button.ql-active .ql-stroke {
+.dark .editor-wrapper button:hover ,
+.dark .editor-wrapper {
   stroke: #ffffff;
 }
 
-.dark .editor-wrapper button:hover .ql-fill,
-.dark .editor-wrapper button.ql-active .ql-fill {
+.dark .editor-wrapper button:hover ,
+.dark .editor-wrapper {
   fill: #ffffff;
 }
 
 /* SELECTS */
-.dark .editor-wrapper .ql-picker {
+.dark .editor-wrapper  {
   color: #f3f4f6;
 }
 
-.dark .editor-wrapper .ql-picker-options {
+.dark .editor-wrapper -options {
   background: #111827;
 
   border: 1px solid rgba(255,255,255,0.08);
@@ -366,32 +323,6 @@ input[type="password"]::-webkit-password-reveal-button {
     animation: fadeInUpSmall 0.8s ease-out forwards;
     animation-delay: 400ms; /* El delay: 0.4 que tenías */
   }
-
-  .animate-fade-up-3 {
-    opacity: 0;
-    /* Usamos cubic-bezier para simular matemáticamente el type: "spring" */
-    animation: fadeInUpSmall 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    animation-delay: 600ms;
-  }
-
-  /*@keyframes botLife {
-    0% {
-      transform: scale(1) rotate(0deg);
-    }
-    25% {
-      transform: scale(1.03) rotate(-1deg);
-    }
-    50% {
-      transform: scale(1.05) rotate(1deg);
-    }
-    75% {
-      transform: scale(1.02) rotate(-0.5deg);
-    }
-    100% {
-      transform: scale(1) rotate(0deg);
-    }
-  }*/
-
 
   @keyframes botLifeOrganic {
     0%   { transform: scale(1) rotate(0deg); }
