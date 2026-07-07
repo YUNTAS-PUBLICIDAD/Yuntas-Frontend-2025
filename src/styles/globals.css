@@ -42,6 +42,22 @@ input[type="password"]::-webkit-password-reveal-button {
   border-color: rgba(255,255,255,0.1);
 }
 
+.ql-editor {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.ql-editor p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* TOOLBAR BASE */
+.ql-toolbar {
+  border-color: rgba(255,255,255,0.1);
+}
+
 /* ICONOS */
 .dark .ql-toolbar .ql-stroke {
   stroke: #e5e7eb; /* gris claro visible */
@@ -358,6 +374,32 @@ input[type="password"]::-webkit-password-reveal-button {
     animation: fadeInUpSmall 0.8s ease-out forwards;
     animation-delay: 400ms; /* El delay: 0.4 que tenías */
   }
+
+  .animate-fade-up-3 {
+    opacity: 0;
+    /* Usamos cubic-bezier para simular matemáticamente el type: "spring" */
+    animation: fadeInUpSmall 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: 600ms;
+  }
+
+  /*@keyframes botLife {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    25% {
+      transform: scale(1.03) rotate(-1deg);
+    }
+    50% {
+      transform: scale(1.05) rotate(1deg);
+    }
+    75% {
+      transform: scale(1.02) rotate(-0.5deg);
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+    }
+  }*/
+
 
   @keyframes botLifeOrganic {
     0%   { transform: scale(1) rotate(0deg); }
