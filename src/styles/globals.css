@@ -26,54 +26,62 @@ input[type="password"]::-webkit-password-reveal-button {
 }
 
 
-/*#root, div {
-    outline: 1px solid red;
-}*/
+.ql-editor {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
 
-/*html, body {
-    overflow-x: auto;
-}*/
+.ql-editor p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* TOOLBAR BASE */
+.ql-toolbar {
+  border-color: rgba(255,255,255,0.1);
+}
 
 /* ICONOS */
-.dark  {
+.dark .ql-toolbar .ql-stroke {
   stroke: #e5e7eb; /* gris claro visible */
 }
 
-.dark {
+.dark .ql-toolbar .ql-fill {
   fill: #e5e7eb;
 }
 
 /* HOVER / ACTIVE */
-.dark button:hover ,
-.dark  {
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-stroke {
   stroke: #ffffff;
 }
 
-.dark button:hover ,
-.dark {
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-fill {
   fill: #ffffff;
 }
 
 /* SELECT (dropdown header, size, etc) */
-.dark {
+.dark .ql-toolbar .ql-picker {
   color: #e5e7eb;
 }
 
-.dark {
+.dark .ql-toolbar .ql-picker-options {
   background: #1f2937; /* dark bg */
   border: 1px solid rgba(255,255,255,0.1);
 }
 
-.dark {
+.dark .ql-toolbar .ql-picker-item:hover {
   background: rgba(255,255,255,0.08);
 }
 
 /* EDITOR AREA */
-.dark{
+.dark .ql-container {
   border-color: rgba(255,255,255,0.1);
 }
 
-.dark {
+.dark .ql-editor {
   color: #e5e7eb;
 }
 
@@ -81,32 +89,59 @@ input[type="password"]::-webkit-password-reveal-button {
    REACT QUILL PREMIUM
 ===================================================== */
 
+/* WRAPPER */
+.editor-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+}
 
 /* TOOLBAR */
-.editor-wrapper  {
+.editor-wrapper .ql-toolbar {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+
+  padding: 10px 12px;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(229,231,235,1);
+}
+
+/* CONTENEDOR */
+.editor-wrapper .ql-container {
+
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(229,231,235,1);
+  border-top: none;
+}
+
+/* AREA EDITABLE */
+.editor-wrapper .ql-editor {
   min-height: 120px;
   max-height: 320px;
-  padding: 18px;
-  border-radius: 16px;
-  font-size: 14px;
-  overflow: hidden;
   overflow-y: auto;
-  background: #ffffff;
-  border: 1px solid rgba(229,231,235,1);
+
+  padding: 18px;
+
+  font-size: 14px;
   line-height: 1.8;
+
   color: #111827;
-  
 }
 
 @media (min-width: 768px){
 
-    .editor-wrapper {
+    .editor-wrapper .ql-editor {
         min-height: 180px;
     }
 }
 
 /* PLACEHOLDER */
-.editor-wrapper {
+.editor-wrapper .ql-editor.ql-blank::before {
   color: #9ca3af;
   font-style: normal;
 }
@@ -115,19 +150,19 @@ input[type="password"]::-webkit-password-reveal-button {
    DARK MODE
 ===================================================== */
 
-.dark .editor-wrapper  {
+.dark .editor-wrapper .ql-toolbar {
   background: rgba(255,255,255,0.03);
 
   border-color: rgba(255,255,255,0.08);
 }
 
-.dark .editor-wrapper {
+.dark .editor-wrapper .ql-container {
   background: rgba(255,255,255,0.03);
 
   border-color: rgba(255,255,255,0.08);
 }
 
-.dark .editor-wrapper {
+.dark .editor-wrapper .ql-editor {
   color: #f3f4f6;
 }
 
@@ -136,31 +171,31 @@ input[type="password"]::-webkit-password-reveal-button {
 }
 
 /* ICONOS */
-.dark .editor-wrapper  {
+.dark .editor-wrapper .ql-stroke {
   stroke: #f3f4f6;
 }
 
-.dark .editor-wrapper  {
+.dark .editor-wrapper .ql-fill {
   fill: #f3f4f6;
 }
 
 /* HOVER */
-.dark .editor-wrapper button:hover ,
-.dark .editor-wrapper {
+.dark .editor-wrapper button:hover .ql-stroke,
+.dark .editor-wrapper button.ql-active .ql-stroke {
   stroke: #ffffff;
 }
 
-.dark .editor-wrapper button:hover ,
-.dark .editor-wrapper {
+.dark .editor-wrapper button:hover .ql-fill,
+.dark .editor-wrapper button.ql-active .ql-fill {
   fill: #ffffff;
 }
 
 /* SELECTS */
-.dark .editor-wrapper  {
+.dark .editor-wrapper .ql-picker {
   color: #f3f4f6;
 }
 
-.dark .editor-wrapper -options {
+.dark .editor-wrapper .ql-picker-options {
   background: #111827;
 
   border: 1px solid rgba(255,255,255,0.08);
