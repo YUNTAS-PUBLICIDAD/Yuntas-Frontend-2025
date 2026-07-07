@@ -26,13 +26,21 @@ input[type="password"]::-webkit-password-reveal-button {
 }
 
 
-/*#root, div {
-    outline: 1px solid red;
-}*/
+.ql-editor {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
 
-/*html, body {
-    overflow-x: auto;
-}*/
+.ql-editor p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* TOOLBAR BASE */
+.ql-toolbar {
+  border-color: rgba(255,255,255,0.1);
+}
 
 .ql-editor {
     word-break: break-word;
