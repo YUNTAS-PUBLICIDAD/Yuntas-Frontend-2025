@@ -60,6 +60,23 @@ const encodeContent = (content: string | null | undefined): string => {
   }
 };
 
+const decodeContent = (content: string | null | undefined): string => {
+  if (!content) return "";
+  if (content.startsWith("base64:")) {
+    try {
+      const base64Str = content.substring(7);
+      const binaryString = window.atob(base64Str);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return new TextDecoder().decode(bytes);
+    } catch (e) {
+      return content;
+    }
+  }
+  return content;
+};
 export const useTemplateEditor = (
   templateId?: number
 ) => {
@@ -114,17 +131,15 @@ export const useTemplateEditor = (
 
               variants: (step.variants || []).map(
                 (v: any) => ({
-
                   ...v,
-
+                  content: decodeContent(v.content),
                   ctaText: v.cta_text,
-
                   ctaUrl: v.cta_url,
-
                   productOverrides:
                     (v.product_overrides || []).map(
                       (o:any) => ({
                         ...o,
+                        content: decodeContent(o.content),
                         productId: Number(o.product_id),
                         ctaText: o.cta_text,
                         ctaUrl: o.cta_url
@@ -623,17 +638,15 @@ export const useTemplateEditor = (
 
             variants: (step.variants || []).map(
               (v: any) => ({
-
                 ...v,
-
+                content: decodeContent(v.content),
                 ctaText: v.cta_text,
-
                 ctaUrl: v.cta_url,
-
                 productOverrides:
                   (v.product_overrides || []).map(
                     (o:any) => ({
                       ...o,
+                      content: decodeContent(o.content),
                       productId: Number(o.product_id),
                       ctaText: o.cta_text,
                       ctaUrl: o.cta_url
