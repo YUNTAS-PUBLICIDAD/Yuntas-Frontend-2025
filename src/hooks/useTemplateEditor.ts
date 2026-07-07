@@ -575,7 +575,7 @@ export const useTemplateEditor = (
           variants: step.variants.map(v => ({
             channel: v.channel,
             subject: v.subject ?? null,
-            content: v.content ?? null,
+            content: encodeContent(v.content),
             variables: v.variables ?? [],
             active: v.active ?? true,
             cta_text: v.ctaText ?? null,
@@ -588,7 +588,7 @@ export const useTemplateEditor = (
             product_overrides: (v.productOverrides || []).map((o: any) => ({
              product_id: o.productId,
              subject: o.subject ?? null,
-             content: o.content ?? null,
+             content: encodeContent(o.content),
              cta_text: o.ctaText ?? null,
              cta_url: o.ctaUrl ?? null,
              variables: o.variables ?? [],
