@@ -49,17 +49,6 @@ const createEmptyTemplate = (): Template => ({
   ]
 });
 
-const encodeContent = (content: string | null | undefined): string => {
-  if (!content) return "";
-  try {
-    const utf8Bytes = new TextEncoder().encode(content);
-    const binaryString = Array.from(utf8Bytes, byte => String.fromCharCode(byte)).join('');
-    return "base64:" + window.btoa(binaryString);
-  } catch (e) {
-    return content;
-  }
-};
-
 export const useTemplateEditor = (
   templateId?: number
 ) => {
@@ -560,7 +549,7 @@ export const useTemplateEditor = (
           variants: step.variants.map(v => ({
             channel: v.channel,
             subject: v.subject ?? null,
-            content: encodeContent(v.content),
+            content: v.content ?? null,
             variables: v.variables ?? [],
             active: v.active ?? true,
             cta_text: v.ctaText ?? null,
@@ -573,7 +562,7 @@ export const useTemplateEditor = (
             product_overrides: (v.productOverrides || []).map((o: any) => ({
              product_id: o.productId,
              subject: o.subject ?? null,
-             content: encodeContent(o.content),
+             content: o.content ?? null,
              cta_text: o.ctaText ?? null,
              cta_url: o.ctaUrl ?? null,
              variables: o.variables ?? [],
