@@ -22,7 +22,7 @@ export async function generateMetadata({
   const response = await getBlogBySlugService(params.slug);
   const blog = response.success ? response.data : null;
 
-  const canonicalUrl = `https://yuntaspublicidad.com/blog/${params.slug}`;
+  const canonicalUrl = `https://staging.yuntaspublicidad.com/blog/${params.slug}`;
 
   if (!blog) {
     return {
