@@ -2,15 +2,18 @@ name: Deploy Next.js to Hostinger
 
 on:
   push:
-    branches: [ "master" ]
-  workflow_dispatch:  # Botón manual
-  repository_dispatch:  # Webhook desde Laravel
+    branches:
+      - master
+      - pre-masterf
+  workflow_dispatch:
+  repository_dispatch:
     types: [rebuild-frontend]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 30
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -18,14 +21,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Cache Next.js build
         uses: actions/cache@v5
         with:
-          path: |
-            .next/cache
+          path: .next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
@@ -37,8 +39,8 @@ jobs:
       - name: Build Project
         run: npm run build
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+          NEXT_PUBLIC_API_URL: ${{ github.ref == 'refs/heads/pre-masterf' && secrets.NEXT_PUBLIC_API_URL_STAGING || secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_URL: ${{ github.ref == 'refs/heads/pre-masterf' && secrets.NEXT_PUBLIC_URL_STAGING || secrets.NEXT_PUBLIC_URL }}
           NEXT_PUBLIC_WHATSAPP_SERVICE_URL: ${{ secrets.NEXT_PUBLIC_WHATSAPP_SERVICE_URL }}
           NEXT_PUBLIC_WHATSAPP_NUMBER: ${{ secrets.NEXT_PUBLIC_WHATSAPP_NUMBER }}
 
@@ -48,34 +50,88 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: unnecessary
 
-      - name: Add known hosts
+      - name: Test SSH Connection
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.HOSTINGER_PORT }} ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+          for i in {1..3}; do
+            if ssh -p ${{ secrets.HOSTINGER_PORT }} \
+                -o ConnectTimeout=30 \
+                -o StrictHostKeyChecking=no \
+                ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} 'echo "SSH OK"'; then
+              echo "✅ Conexión SSH exitosa en intento $i"
+              exit 0
+            else
+              echo "⚠️ Intento $i/3 falló. Reintentando en 15 segundos..."
+              sleep 15
+            fi
+          done
+
+          echo "❌ No fue posible establecer conexión SSH."
+          exit 1
+
+      - name: Set Target Path
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/pre-masterf" ]]; then
+            echo "DEST_PATH=~/domains/staging.yuntaspublicidad.com/public_html/" >> $GITHUB_ENV
+          else
+            echo "DEST_PATH=~/domains/yuntaspublicidad.com/public_html/" >> $GITHUB_ENV
+          fi
 
       - name: Deploy with Rsync
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            echo "🚀 Desplegando a: ${{ env.DEST_PATH }}"
+
+            rsync -avz --delete \
+              --timeout=300 \
+              --exclude='back/' \
+              --exclude='api/' \
+              --exclude='.git/' \
+              --exclude='.htaccess' \
+              --exclude='*.log' \
+              --exclude='node_modules/' \
+              -e "ssh -p ${{ secrets.HOSTINGER_PORT }} \
+                  -o StrictHostKeyChecking=no \
+                  -o ConnectTimeout=60 \
+                  -o ServerAliveInterval=30 \
+                  -o ServerAliveCountMax=3" \
+              ./out/ \
+              ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:${{ env.DEST_PATH }}
+
+      - name: Verify deployment
         run: |
-          rsync -avz --delete \
-            --exclude='back/' \
-            --exclude='api/' \
-            --exclude='.htaccess' \
-            --exclude='.git/' \
-            --exclude='*.log' \
-            -e "ssh -p ${{ secrets.HOSTINGER_PORT }} -o StrictHostKeyChecking=no" \
-            ./out/ ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:~/domains/yuntaspublicidad.com/public_html/
-      
+          ssh -p ${{ secrets.HOSTINGER_PORT }} \
+            -o StrictHostKeyChecking=no \
+            ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} \
+            "ls -la ${{ env.DEST_PATH }} | head -10"
+
       - name: Notify Laravel on completion
         if: always()
         run: |
           STATUS="${{ job.status }}"
+
           curl -X POST https://apiyuntas.yuntaspublicidad.com/api/webhooks/deploy-frontend-complete \
             -H "Content-Type: application/json" \
             -H "X-GitHub-Token: ${{ secrets.WEBHOOK_TOKEN }}" \
-            -d "{\"status\": \"$STATUS\", \"timestamp\": \"$(date -Iseconds)\", \"workflow_run_id\": \"${{ github.run_id }}\"}" \
-            -v \
+            -d "{
+              \"status\":\"$STATUS\",
+              \"environment\":\"${{ github.ref_name }}\",
+              \"timestamp\":\"$(date -Iseconds)\",
+              \"workflow_run_id\":\"${{ github.run_id }}\"
+            }" \
             --max-time 10 \
             --retry 2 \
             || echo "No se pudo notificar a Laravel (no crítico)"
+
       - name: Final status
         if: success()
-        run: echo "✅ Deploy completado en $(date)"
+        run: echo "✅ Deploy completado para ${{ github.ref_name }} en $(date)"
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          echo "❌ Deploy falló. Revisa los logs para más detalles."
+          echo "Posibles causas: timeout SSH, problemas de red o límites del hosting."
