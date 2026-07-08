@@ -22,7 +22,12 @@ const BlogCard = ({ imgUrl, imgAlt, imgTitle, productName, blogTitle }: BlogCard
 
 				<Image
 					quality={70}
-					src={imgUrl} alt={imgAlt} title={imgTitle} fill className='object-cover transition-transform duration-700 group-hover:scale-110' sizes="(max-with:768px) 100vw, (max-width:1200px) 50vw,33vw " />
+					src={imgUrl}
+					alt={imgAlt}
+					title={imgTitle}
+					loading="lazy"
+					fill className='object-cover transition-transform duration-700 group-hover:scale-110'
+					sizes="(max-with:768px) 100vw, (max-width:1200px) 50vw,33vw" />
 				<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 			</div>
 
