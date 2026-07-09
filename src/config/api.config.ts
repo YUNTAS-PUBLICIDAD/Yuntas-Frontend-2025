@@ -3,7 +3,19 @@ import { getToken, setToken, removeToken } from '@/utils/token';
 import { removeRole } from '@/utils/role';
 import { API_ENDPOINTS } from './endpoints';
 
-export const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://apiyuntas.yuntaspublicidad.com/api';
+const getBaseUrl = (): string => {
+	const envUrl = process.env.NEXT_PUBLIC_API_URL;
+	if (!envUrl) {
+		return 'https://apiyuntas.yuntaspublicidad.com/api';
+	}
+	const cleanUrl = envUrl.trim();
+	if (!cleanUrl.endsWith('/api') && !cleanUrl.endsWith('/api/')) {
+		return cleanUrl.endsWith('/') ? `${cleanUrl}api` : `${cleanUrl}/api`;
+	}
+	return cleanUrl;
+};
+
+export const BASE_URL = getBaseUrl();
 export const WHATSAPP_SOCKET_URL = process.env.NEXT_PUBLIC_WHATSAPP_SERVICE_URL;
 
 interface BackendError {
