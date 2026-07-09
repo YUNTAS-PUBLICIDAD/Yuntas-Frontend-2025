@@ -8,6 +8,7 @@ import Pagination from "@/components/molecules/Pagination";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import { getToken } from "@/utils/token";
 import SearchBar from "@/components/molecules/admin/SearchBar";
+import { BASE_URL } from "@/config/api.config";
 import { Check, Filter, RotateCcw } from "lucide-react";
 
 // Icono para el estado de error
@@ -148,7 +149,7 @@ export default function ReclamacionesPage() {
         try {
             const token = getToken();
             if (!token) return;
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/claims`, {
+            const res = await fetch(`${BASE_URL}/admin/claims`, {
                 headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
             });
             if (!res.ok) throw new Error(`Error ${res.status}`);
@@ -182,7 +183,7 @@ export default function ReclamacionesPage() {
         setIsUpdating(true);
         const token = getToken();
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/claims/${selectedReclamo.id}/status`, {
+            const res = await fetch(`${BASE_URL}/admin/claims/${selectedReclamo.id}/status`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
