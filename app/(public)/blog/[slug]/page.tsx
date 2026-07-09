@@ -9,11 +9,17 @@ type PageProps = {
 }
 
 export async function generateStaticParams() {
-  const res = await getBlogsService(100);
-  if (!res.success || !res.data) return [];
-  return res.data.map((blog) => ({
-    slug: blog.slug
-  }));
+  try {
+    const res = await getBlogsService(100);
+    if (res.success && res.data && res.data.length > 0) {
+      return res.data.map((blog) => ({
+        slug: blog.slug
+      }));
+    }
+  } catch (error) {
+    console.error("Error generating static params for blog:", error);
+  }
+  return [{ slug: "default" }];
 }
 
 export async function generateMetadata({

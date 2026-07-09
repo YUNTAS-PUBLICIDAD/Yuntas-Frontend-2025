@@ -100,7 +100,7 @@ export async function generateStaticParams() {
     }
     
     console.warn('Todos los intentos fallaron.');
-    return [];
+    return [{ slug: "default" }];
 }
 
 export default async function Page({ params }: PageProps) {
