@@ -74,7 +74,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
     {errors.general && (<div className="text-red-500 text-sm">{errors.general}</div>)}
       {/*bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7]*/}
       <ButtonPrimary
-
+        type="submit"
         disabled={isSubmitting}
         // style={{ backgroundColor: buttonColor }}
         style={{
