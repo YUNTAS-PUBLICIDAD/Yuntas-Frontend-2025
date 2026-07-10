@@ -14,8 +14,8 @@ interface PopupLayoutProps {
   handleChange: (field: string, value: string) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
   buttonText: string;
-  buttonTextColor: string;
-  buttonColor: string;
+  buttonTextColor?: string;
+  buttonColor?: string;
   isSubmitting: boolean;
   forceVisible?: boolean;
 
