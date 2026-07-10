@@ -6,6 +6,7 @@ import CarouselDot from "@/components/atoms/CarouselDot";
 import { useCarousel } from "@/hooks/ui/useCarousel";
 import { projectsCarouselSlides as slides } from "@/data/inicio/projectsCarouselData";
 import Link from "next/link";
+import Image from "next/image";
 
 const ProjectsCarousel: React.FC = () => {
   const { activeIndex, goTo } = useCarousel({
@@ -52,7 +53,7 @@ const ProjectsCarousel: React.FC = () => {
       {/* Carousel Area - Altura ajustada */}
       <div className="max-w-[1400px] mx-auto">
         <div className="flex justify-center items-center gap-4">
-          <button 
+          <button
             type="button"
             onClick={() => goTo(activeIndex === 0 ? slides.length - 1 : activeIndex - 1)}
             className="bg-white/80 hover:bg-white text-[#20838f] w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 backdrop-blur-sm"
@@ -67,26 +68,50 @@ const ProjectsCarousel: React.FC = () => {
             {slides.map((slide, index) =>
               index === activeIndex ? (
                 <motion.div
-                key={index}
+                  key={index}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0 w-full h-full"
                 >
-                  <img
-                    src={slide.after.src}
-                    alt={slide.after.alt}
-                    className="absolute w-full h-full object-cover"
-                  />
+                  <div className="block md:hidden absolute inset-0">
 
-                  <img
+                    {/* PROYECTOS PARA MOBILE */}
+                    <Image
+                      src={slide.mobileAfter.src}
+                      alt={slide.mobileAfter.alt}
+                      fill
+                      className="absolute w-full h-full object-cover"
+                    />
+
+                    <Image
+                      src={slide.mobileBefore.src}
+                      alt={slide.mobileBefore.alt}
+                      fill
+                      className="absolute w-full h-full object-cover"
+                      style={{ clipPath: `polygon(0 0, ${line}% 0, ${line}% 100%, 0 100%)` }}
+                    />
+                  </div>
+
+                  {/* PROYECTOS PARA DESKTOP */}
+                  <div className="hidden md:block absolute inset-0">
+                    <Image
+                      src={slide.after.src}
+                      alt={slide.after.alt}
+                      fill
+                      className="absolute w-full h-full object-cover"
+                    />
+
+                  <Image
                     src={slide.before.src}
                     alt={slide.before.alt}
+                    fill
                     className="absolute w-full h-full object-cover"
                     style={{ clipPath: `polygon(0 0, ${line}% 0, ${line}% 100%, 0 100%)` }}
                   />
-                </motion.div>
+                </div>
+              </motion.div>
               ) : null
             )}
           </AnimatePresence>
@@ -125,7 +150,7 @@ const ProjectsCarousel: React.FC = () => {
             AHORA
             </div>
           </div>
-          <button 
+          <button
             type="button"
             onClick={() => goTo(activeIndex === slides.length - 1 ? 0 : activeIndex + 1)}
             className="bg-white/80 hover:bg-white text-[#20838f] w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 backdrop-blur-sm"
@@ -134,14 +159,14 @@ const ProjectsCarousel: React.FC = () => {
             <span className="text-2xl md:text-3xl font-black leading-none pb-1">›</span>
           </button>
         </div>
-        
+
         <div className="flex justify-center items-center pt-4 gap-2">
           {slides.map((_, idx) => (
             <CarouselDot
-            key={idx}
-            active={idx === activeIndex}
-            onClick={() => goTo(idx)}
-            index={idx}
+              key={idx}
+              active={idx === activeIndex}
+              onClick={() => goTo(idx)}
+              index={idx}
             />
           ))}
         </div>
