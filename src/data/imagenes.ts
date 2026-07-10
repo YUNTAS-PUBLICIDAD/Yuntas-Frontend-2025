@@ -33,6 +33,12 @@ import proyectoDespues1 from "@/assets/inicio/nuestroproyectosdespues01.webp";
 import proyectoAntes2 from "@/assets/inicio/nuestroproyectosantes02.webp";
 import proyectoDespues2 from "@/assets/inicio/nuestroproyectosdespues2.webp";
 
+// Mobile project images (smaller dimensions)
+import proyectoAntes1Mobile from "@/assets/inicio/projects-mobile/nuestroproyectosantes01.webp";
+import proyectoAntes2Mobile from "@/assets/inicio/projects-mobile/nuestroproyectosantes02.webp";
+import proyectoDespues1Mobile from "@/assets/inicio/projects-mobile/nuestroproyectosdespues1.webp";
+import proyectoDespues2Mobile from "@/assets/inicio/projects-mobile/nuestroproyectosdespues2.webp";
+
 
 // import nosotrosHero from "@/assets/nosotros/nosotrosBackground.webp";
 import nosotrosHero from "@/assets/nosotros/nosotrosBackground0.webp";
@@ -110,6 +116,26 @@ export const imagenes = {
       src: proyectoDespues2.src,
       alt: "Proyecto 2 - Después",
       title: "Proyecto 2 - Después"
+    },
+    proyecto1AntesMobile: {
+      src: proyectoAntes1Mobile.src,
+      alt: "Proyecto 1 - Antes (Mobile)",
+      title: "Proyecto 1 - Antes (Mobile)"
+    },
+    proyecto1DespuesMobile: {
+      src: proyectoDespues1Mobile.src,
+      alt: "Proyecto 1 - Después (Mobile)",
+      title: "Proyecto 1 - Después (Mobile)"
+    },
+    proyecto2AntesMobile: {
+      src: proyectoAntes2Mobile.src,
+      alt: "Proyecto 2 - Antes (Mobile)",
+      title: "Proyecto 2 - Antes (Mobile)"
+    },
+    proyecto2DespuesMobile: {
+      src: proyectoDespues2Mobile.src,
+      alt: "Proyecto 2 - Después (Mobile)",
+      title: "Proyecto 2 - Después (Mobile)"
     },
     opiniones: {
       persona1: {
