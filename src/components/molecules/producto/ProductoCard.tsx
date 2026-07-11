@@ -36,6 +36,7 @@ const ProductoCard = ({ imgUrl, imgTitle, imgAlt, nombre, href }: ProductoCardPr
             variant='productoCard'
             priority={false}
             quality={80}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 420px"
             onError={() => setHasImageError(true)}
           />
         ) : (
