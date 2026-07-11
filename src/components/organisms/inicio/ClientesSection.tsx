@@ -1,10 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+
+const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps/place/Yuntas+Producciones/@-12.0256654,-76.9420072,17z/data=!4m18!1m9!3m8!1s0x9105c97c8934a213:0x7f6ccb249e86b5e6!2sYuntas+Producciones!8m2!3d-12.0256654!4d-76.9420072!9m1!1b1!16s%2Fg%2F11gzs412yn!3m7!1s0x9105c97c8934a213:0x7f6ccb249e86b5e6!8m2!3d-12.0256654!4d-76.9420072!9m1!1b1!16s%2Fg%2F11gzs412yn?entry=ttu&g_ep=EgoyMDI2MDcwOC4wIKXMDSoASAFQAw%3D%3D";
 
 const clientesData = [
   {
@@ -13,7 +17,7 @@ const clientesData = [
     src: "/images/clientes/banco-nacion.png",
     bgColor: "bg-white",
     imgClass: "object-contain",
-    grayscaleCard: false, // grayscale solo en la imagen
+    grayscaleCard: false,
   },
   {
     id: 2,
@@ -43,27 +47,39 @@ const clientesData = [
     id: 5,
     nombre: "Crisol",
     src: "/images/clientes/crisol.png",
-    bgColor: "bg-[#ffbf03]",  // color de marca correcto
+    bgColor: "bg-[#ffbf03]",
     imgClass: "object-cover",
-    grayscaleCard: true,  // grayscale al card entero (fondo + imagen juntos)
+    grayscaleCard: true,
   },
 ];
 
 const reviewsData = [
   {
-    name: "Breitner Alcántara", initials: "BA", color: "#0ea5b7",
-    rating: 5, time: "Hace 2 meses",
-    text: 'Le compramos un diseño gamer a mi hermanito y quedó encantado. La iluminación es buena y los colores intensos. El envío fue rápido y coordinamos todo por WhatsApp.',
+    name: "Gabo Sánchez",
+    initials: "GS",
+    color: "#1a73e8",
+    rating: 5,
+    time: "Hace un año",
+    text: "Quedé realmente impresionado con la calidad y el impacto visual de las pantallas LED de Yuntas Producciones. Desde el primer contacto, el equipo mostró profesionalismo y atención al detalle, asegurándose de que el producto cumpliera con todas mis expectativas. La nitidez de la imagen y el brillo de la pantalla hicieron que mi evento destacara como nunca antes. Sin duda, volveré a confiar en ellos para futuros proyectos. ¡100% recomendados!",
+    url: "https://maps.app.goo.gl/GrNEvVoMdYw2Mv4V8",
   },
   {
-    name: "Hannah Bernal", initials: "HB", color: "#9333EA",
-    rating: 5, time: "Hace 2 meses",
-    text: 'Pedí un cartel de "Abierto" y otro con el logo de mi tienda. Llegó todo súper bien embalado y la instalación fue facilísima. Muy buen servicio, volvería a pedir.',
+    name: "Abigayl Figueroa",
+    initials: "AF",
+    color: "#0ea5b7",
+    rating: 5,
+    time: "Hace un año",
+    text: "Desde el primer contacto, su equipo fue súper amable y atento, resolviendo todas mis dudas y ayudándome a elegir el Panel PVC perfecto para mi espacio. La calidad del producto superó mis expectativas, con un acabado impecable y fácil instalación. ¡Definitivamente los recomiendo!",
+    url: "https://maps.app.goo.gl/hiCx36aBAqAAnhGM7",
   },
   {
-    name: "Francesco Cortez", initials: "FC", color: "#C8102E",
-    rating: 5, time: "Hace 3 meses",
-    text: 'El neón llegó exacto para el cumple y quedó bien chévere. Lo del control remoto para bajar la luz es un golazo. La caja vino con un golpe pero el neón estaba intacto.',
+    name: "Luis D Aguilar Saldarriaga",
+    initials: "HB",
+    color: "#9333EA",
+    rating: 5,
+    time: "Hace un año",
+    text: '¡Estoy muy contento con Yuntas! Tienen una gran variedad de productos LED de excelente calidad y a precios súper competitivos. Además, su atención al cliente es de 10, siempre dispuestos a ayudar y responder todas las dudas. Definitivamente seguiré confiando en ellos para mis compras. ¡Recomendadísimos!',
+    url: "https://maps.app.goo.gl/oscBifu3hxTfA1xT8",
   },
 ];
 
@@ -125,7 +141,6 @@ const ClientesSection: React.FC = () => {
           <p className="text-xs font-bold tracking-[0.28em] text-slate-400 uppercase">
             Empresas que confían en nosotros
           </p>
-
           <div
             className="w-full"
             style={{
@@ -149,18 +164,11 @@ const ClientesSection: React.FC = () => {
             >
               {[...clientesData, ...clientesData].map((cliente, idx) => (
                 <SwiperSlide key={`${cliente.id}-${idx}`}>
-                  {/*
-                    - Sin nombre debajo
-                    - La imagen llena toda la tarjeta (inset-0 + object-contain o object-cover según cliente)
-                    - grayscale por defecto, color en hover
-                    - Jockey: bg-[#1A1A1A] | Crisol: bg-[#F5C800] | resto: bg-white
-                  */}
                   <div className={[
                     "group relative overflow-hidden rounded-2xl border border-slate-200",
                     "shadow-sm hover:shadow-md hover:-translate-y-1",
                     "hover:border-[#6DE1E3]/40 transition-all duration-300 cursor-default aspect-[16/9]",
                     cliente.bgColor,
-                    // Crisol: grayscale en el card entero (fondo amarillo + imagen quedan grises juntos)
                     cliente.grayscaleCard ? "grayscale opacity-70 hover:grayscale-0 hover:opacity-100" : "",
                   ].join(" ")}>
                     <Image
@@ -170,7 +178,6 @@ const ClientesSection: React.FC = () => {
                       className={[
                         cliente.imgClass,
                         "p-4 transition-all duration-300",
-                        // Resto: grayscale solo en la imagen
                         !cliente.grayscaleCard
                           ? "grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100"
                           : "",
@@ -187,61 +194,120 @@ const ClientesSection: React.FC = () => {
 
         {/* RESEÑAS */}
         <div className="flex flex-col items-center gap-8">
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="flex items-baseline gap-2">
-              <span className="font-black text-5xl text-slate-900 leading-none">4.9</span>
-              <span className="text-slate-400 font-semibold text-lg">/5</span>
+
+          {/* Puntaje + botón "Ver en Google" */}
+          <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-baseline gap-2">
+                <span className="font-black text-5xl text-slate-900 leading-none">4.9</span>
+                <span className="text-slate-400 font-semibold text-lg">/5</span>
+              </div>
+              <div className="flex flex-col items-start gap-1">
+                <span className="text-[#F5A800] text-xl tracking-widest">★★★★★</span>
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                  +47 reseñas en Google
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col items-center sm:items-start gap-1">
-              <span className="text-[#F5A800] text-xl tracking-widest">★★★★★</span>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
-                +47 reseñas verificadas en Google
+
+            {/* CTA → abre el perfil de Google Maps en nueva pestaña */}
+            <Link
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                inline-flex items-center gap-2.5
+                border border-slate-200 rounded-full
+                px-5 py-2.5
+                text-sm font-semibold text-slate-700
+                hover:border-[#23C1DE] hover:text-[#23C1DE]
+                transition-all duration-200
+              "
+            >
+              {/* Google G */}
+              <span
+                className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-none"
+                style={{ background: "conic-gradient(from -45deg, #EA4335 25%, #FBBC05 25% 50%, #34A853 50% 75%, #4285F4 75%)" }}
+              >
+                G
               </span>
-            </div>
+              Ver todas las reseñas
+              <svg className="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            </Link>
           </div>
 
+          {/* Tarjetas — cada una es un enlace a Google Maps */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
             {reviewsData.map((review) => (
-              <article
+              <Link
                 key={review.name}
-                className="group bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm
-                  transition-all duration-300 hover:shadow-xl hover:-translate-y-1 p-6 flex flex-col gap-4"
+                href={review.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
               >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm flex-none"
-                    style={{ backgroundColor: review.color }}
-                  >
-                    {review.initials}
+                <article
+                  className="
+                    group bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm
+                    transition-all duration-300 hover:shadow-xl hover:-translate-y-1
+                    hover:border-[#23C1DE]/30
+                    p-6 flex flex-col gap-4 h-full cursor-pointer
+                  "
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm flex-none"
+                      style={{ backgroundColor: review.color }}
+                    >
+                      {review.initials}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-slate-900 text-sm leading-tight">{review.name}</p>
+                      <p className="text-slate-400 text-xs mt-0.5">{review.time}</p>
+                    </div>
+                    {/* Google G badge */}
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-none"
+                      style={{ background: "conic-gradient(from -45deg, #EA4335 25%, #FBBC05 25% 50%, #34A853 50% 75%, #4285F4 75%)" }}
+                    >
+                      G
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-900 text-sm leading-tight">{review.name}</p>
-                    <p className="text-slate-400 text-xs mt-0.5">{review.time}</p>
-                  </div>
-                  <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-none"
-                    style={{ background: "conic-gradient(from -45deg, #EA4335 25%, #FBBC05 25% 50%, #34A853 50% 75%, #4285F4 75%)" }}
-                  >
-                    G
-                  </div>
-                </div>
-                <span className="text-[#F5A800] text-base tracking-widest">
-                  {"★".repeat(review.rating)}
-                </span>
-                <p className="text-slate-600 text-sm leading-relaxed flex-1">"{review.text}"</p>
-                <div className="flex items-center gap-1.5 pt-3 border-t border-slate-100">
-                  <svg className="w-3.5 h-3.5 text-[#23C1DE]" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-[10px] font-semibold text-[#23C1DE] uppercase tracking-wider">
-                    Reseña verificada
+
+                  <span className="text-[#F5A800] text-base tracking-widest">
+                    {"★".repeat(review.rating)}
                   </span>
-                </div>
-              </article>
+
+                  <p className="text-slate-600 text-sm leading-relaxed flex-1">
+                    "{review.text}"
+                  </p>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-[#23C1DE]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-[10px] font-semibold text-[#23C1DE] uppercase tracking-wider">
+                        Reseña verificada
+                      </span>
+                    </div>
+                    {/* Icono "abrir" que aparece en hover */}
+                    <svg
+                      className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#23C1DE] transition-colors duration-200"
+                      fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
-        </div>
 
+        </div>
       </div>
     </section>
   );
