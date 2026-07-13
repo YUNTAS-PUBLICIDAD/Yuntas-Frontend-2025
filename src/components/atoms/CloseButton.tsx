@@ -1,4 +1,4 @@
-import { RiCloseLargeLine } from "react-icons/ri";
+import { RiCloseFill } from "react-icons/ri";
 
 interface CloseButtonProps {
   onClick?: () => void;
@@ -10,9 +10,9 @@ const CloseButton: React.FC<CloseButtonProps> = ({ onClick, className = "" }) =>
   <button
     onClick={onClick}
     aria-label="Cerrar"
-    className={`absolute bg-[#E9E9E9] text-[#aaaaaa] rounded-full w-6 h-6 flex items-center justify-center cursor-pointer ${className}`}
+    className={`absolute bg-[#F3F3F3] text-[#aaaaaa] rounded-full w-6 h-6 flex items-center justify-center cursor-pointer ${className}`}
   >
-    <RiCloseLargeLine size={16} />
+    <RiCloseFill size={22} />
   </button>
 );
 

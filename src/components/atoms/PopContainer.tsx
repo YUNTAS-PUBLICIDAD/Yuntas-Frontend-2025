@@ -11,7 +11,7 @@ const PopupContainer = React.forwardRef<HTMLDivElement, PopupContainerProps>(
     return (
       <div
         ref={ref}
-        className={`rounded-3xl shadow-xl w-[90vw] max-w-[284px] md:max-w-[672px] overflow-hidden relative
+        className={`rounded-3xl overflow-hidden relative
           ${closing ? "animate-slideOut" : "animate-slideIn"}`}
       >
         {children}

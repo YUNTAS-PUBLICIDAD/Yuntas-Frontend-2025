@@ -180,7 +180,7 @@ const Popup = ({
             <PopupContainer closing={closing} ref={modalRef}>
                 <CloseButton
                     onClick={closeModal}
-                    className="absolute top-[9px] right-[13px] md:top-3 md:right-3 z-50"
+                    className="absolute top-[10px] right-[15px] md:top-3 md:right-3 z-50"
                 />
 
                 <PopupView

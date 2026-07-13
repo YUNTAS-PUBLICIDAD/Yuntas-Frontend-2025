@@ -27,11 +27,10 @@ export const PopupView = ({ ...props }: PopupViewProps) => {
   return (
     <>
       {props.isMobile ? (
-        <div className="relative w-[85vw] max-w-[284px] aspect-[284/535] mx-auto rounded-[2rem] overflow-hidden">
+        <div className="relative w-[320px] aspect-[320/603] mx-auto rounded-[2rem] overflow-hidden">
           {props.mobileImage && <PopupImage src={props.mobileImage.url} alt={props.mobileImage.alt || ""} title={props.mobileImage.title || ""} />}
 
-          <div className="absolute inset-0 flex flex-col justify-end">
-            <div className="px-[22px] bg-white backdrop-blur-sm pb-[20px]">
+          <div className="absolute bottom-0 left-0 right-0 px-[25px] md:px-8 pb-[23px] md:pb-4 md:pt-3 z-20 bg-transparent">
               {/*<PopupForm {...props} />*/}
               <PopupForm
                 formData={props.formData}
@@ -42,7 +41,6 @@ export const PopupView = ({ ...props }: PopupViewProps) => {
                 buttonColor={props.buttonColor}
                 isSubmitting={props.isSubmitting ?? false}
               />
-            </div>
           </div>
         </div>
       ) : (
