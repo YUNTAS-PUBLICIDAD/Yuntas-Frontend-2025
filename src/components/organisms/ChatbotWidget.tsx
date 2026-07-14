@@ -461,7 +461,7 @@ export default function ChatbotWidget() {
                 <div className="flex flex-col gap-2 max-w-[75%]">
                   {m.text && (
                     <div
-                      className={`relative px-4 py-2.5 text-sm shadow-sm whitespace-pre-wrap leading-relaxed
+                      className={`relative px-4 py-2.5 text-sm shadow-sm break-words leading-relaxed
                         ${m.role === "user"
                           ? "text-white rounded-2xl rounded-tr-sm"
                           : "border rounded-2xl rounded-tl-sm"
