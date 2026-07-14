@@ -8,6 +8,7 @@ import Link from "next/link";
 import Logo from "@/components/atoms/Logo";
 import { LogOut } from "lucide-react";
 import { useBrandLogo } from "@/hooks/useBrandLogo";
+import { getRole } from "@/utils/role";
 import {
   BellRing,
   ClipboardList,
@@ -32,18 +33,42 @@ interface SidebarProps {
   onClose: () => void; 
 }
 
-const navItems: NavItem[] = [
-  { label: "General", href: "/admin", icon: LayoutDashboard },
-  { label: "Seguimiento", href: "/admin/seguimiento", icon: ClipboardList },
-  { label: "Blogs", href: "/admin/blogs", icon: FileText },
-  { label: "Productos", href: "/admin/productos", icon: Package },
-  { label: "Usuarios", href: "/admin/usuarios", icon: Users },
-  { label: "Reclamaciones", href: "/admin/reclamaciones", icon: BellRing },
-  { label: "Contacto", href: "/admin/contacto", icon: MessageSquare },
-  { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
-  { label: "Plantillas", href: "/admin/templates", icon: FileText },
-  { label: "Configuracion",       href: "/admin/configuracion",     icon: Settings   },
-];
+const getNavItems = (): NavItem[] => {
+  const role = getRole();
+
+  return [
+    { label: "General", href: "/admin", icon: LayoutDashboard },
+
+    ...(role === "admin"
+      ? [
+          {
+            label: "Seguimiento",
+            href: "/admin/seguimiento",
+            icon: ClipboardList,
+          },
+        ]
+      : []),
+
+    { label: "Blogs", href: "/admin/blogs", icon: FileText },
+    { label: "Productos", href: "/admin/productos", icon: Package },
+
+    ...(role === "admin"
+      ? [
+          {
+            label: "Usuarios",
+            href: "/admin/usuarios",
+            icon: Users,
+          },
+        ]
+      : []),
+
+    { label: "Reclamaciones", href: "/admin/reclamaciones", icon: BellRing },
+    { label: "Contacto", href: "/admin/contacto", icon: MessageSquare },
+    { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
+    { label: "Plantillas", href: "/admin/templates", icon: FileText },
+    { label: "Configuracion", href: "/admin/configuracion", icon: Settings },
+  ];
+};
 
 export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
   const { logout, isLoading } = useAuth();
@@ -96,7 +121,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
           onScroll={updateFadeState}
           className="h-full overflow-y-auto scrollbar-hidden text-[#203565] dark:text-white pt-5" 
         >
-          <NavList items={navItems} />
+          <NavList items={getNavItems()} />
         </nav>
 
           {showTopFade && (

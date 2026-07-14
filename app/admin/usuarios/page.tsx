@@ -16,6 +16,8 @@ import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import { PrinterIcon, PlusIcon } from "@/components/atoms/icons";
 import { Download, FileDown, FileSpreadsheet, FileText } from "lucide-react";
+import { getRole } from "@/utils/role";
+import { useRouter } from "next/navigation";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -26,6 +28,7 @@ const columns = [
 ];
 
 export default function UsuariosPage() {
+    const router = useRouter();
     const [datosPaginados, setDatosPaginados] = useState<User[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -33,9 +36,15 @@ export default function UsuariosPage() {
     const { users, getUsers, createUser, updateUser, deleteUser, isLoading, error } = useUsers();
 
     useEffect(() => {
+        const role = getRole();
+
+        if (role !== "admin") {
+            router.replace("/admin");
+            return;
+        }
+
         getUsers();
     }, []);
-
     const handleCreateUsuario = async (formData: UserInput) => {
         const result = await createUser(formData);
         if (result.success) {
@@ -89,56 +98,62 @@ export default function UsuariosPage() {
         { label: "Exportar a PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download"), icon: <FileDown className="h-4 w-4" /> },
     ];
 
+    const role = getRole();
+
+    if (role !== "admin") {
+        return null;
+    }
+
     return (
         <div className="p-2 md:p-4">
             {/* BOTONES */}
             <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
-            <div className="space-y-1 flex-1 my-2">
-                <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Acciones de usuarios</h2>
-                <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega usuarios, genera e imprime reportes rápidamente.</p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 no-print">
-                {/* EXPORTAR */}
-                <div className="flex-1 min-w-[140px]">
-                    <ExportDropdown
-                        className="w-full h-[40px]"
-                        icon={<Download className="h-4 w-4" />}
-                        options={exportOptions}
-                    />
+                <div className="space-y-1 flex-1 my-2">
+                    <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">Acciones de usuarios</h2>
+                    <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega usuarios, genera e imprime reportes rápidamente.</p>
                 </div>
 
-                {/* IMPRIMIR */}
-                <div className="flex-1 min-w-[140px]">
-                    <ActionButtonGroup
-                        buttons={[
-                            {
-                                label: "IMPRIMIR",
-                                onClick: () =>
-                                    exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
-                                variant: "primary",
-                                className: "w-full h-[40px]",
-                                icon: <PrinterIcon />,
-                            },
-                        ]}
-                    />
-                </div>
+                <div className="flex flex-wrap gap-3 no-print">
+                    {/* EXPORTAR */}
+                    <div className="flex-1 min-w-[140px]">
+                        <ExportDropdown
+                            className="w-full h-[40px]"
+                            icon={<Download className="h-4 w-4" />}
+                            options={exportOptions}
+                        />
+                    </div>
 
-                {/* AGREGAR */}
-                <div className="flex-1 min-w-[140px]">
-                    <ActionButtonGroup
-                        buttons={[
-                            {
-                                label: "AGREGAR USUARIO",
-                                onClick: () => setIsModalOpen(true),
-                                variant: "tertiary",
-                                className: "w-full h-[40px]",
-                                icon: <PlusIcon />,
-                            },
-                        ]}
-                    />
+                    {/* IMPRIMIR */}
+                    <div className="flex-1 min-w-[140px]">
+                        <ActionButtonGroup
+                            buttons={[
+                                {
+                                    label: "IMPRIMIR",
+                                    onClick: () =>
+                                        exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
+                                    variant: "primary",
+                                    className: "w-full h-[40px]",
+                                    icon: <PrinterIcon />,
+                                },
+                            ]}
+                        />
+                    </div>
+
+                    {/* AGREGAR */}
+                    <div className="flex-1 min-w-[140px]">
+                        <ActionButtonGroup
+                            buttons={[
+                                {
+                                    label: "AGREGAR USUARIO",
+                                    onClick: () => setIsModalOpen(true),
+                                    variant: "tertiary",
+                                    className: "w-full h-[40px]",
+                                    icon: <PlusIcon />,
+                                },
+                            ]}
+                        />
+                    </div>
                 </div>
-            </div>
             </section>
 
 
@@ -148,8 +163,8 @@ export default function UsuariosPage() {
                 </div>
             )}
             <div className="mb-4 flex flex-col border-b border-[#E5EEF6] pb-4 px-5 dark:border-white/10 lg:flex-col lg:items-baseline lg:justify-between">
-              <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">GESTIÓN DE USUARIOS</h3>
-              <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Administra usuarios del sistema y controla roles.</p>
+                <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">GESTIÓN DE USUARIOS</h3>
+                <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Administra usuarios del sistema y controla roles.</p>
             </div>
 
             <AdminTable

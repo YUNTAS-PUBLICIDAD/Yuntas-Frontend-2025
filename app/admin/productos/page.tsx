@@ -19,6 +19,7 @@ import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/admin/SearchBar";
 import { PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
 import { Download, FileDown, FileSpreadsheet, FileText } from "lucide-react";
+import { getPermissions } from "@/utils/permission";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -158,87 +159,101 @@ export default function ProductosPage() {
     }
   };
 
+  const permissions = getPermissions();
+
+  const canCreate = permissions.includes("productos.crear");
+
   return (
     <div className="p-2 md:p-4">
       <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
-      <div className="space-y-1 flex-1 my-2 mb-5">
-                <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl mb-2">Gestión de productos</h2>
-                <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega productos, envía por email o Whatsapp, genera e imprime reportes rápidamente.</p>
-            </div>
-      {/* ───────── BLOQUE DE BOTONES DE ACCIÓN ───────── */}
-      <div className="flex flex-col md:flex-row gap-2 mb-2">
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Añadir Producto",
-              onClick: () => setIsAddEditModalOpen(true),
-              variant: "tertiary",
-              className: "w-full",
-              icon: <PlusIcon />,
-            }]}
-            />
+        <div className="space-y-1 flex-1 my-2 mb-5">
+          <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl mb-2">Gestión de productos</h2>
+          <p className="max-w-2xl text-sm leading-6 text-slate-500 dark:text-white/80 md:text-base">Agrega productos, envía por email o Whatsapp, genera e imprime reportes rápidamente.</p>
         </div>
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Envio de Email",
-              onClick: () => setIsEmailModalOpen(true),
-              variant: "danger",
-              className: "w-full",
-              icon: <MailIcon />,
-            }]}
-            />
-        </div>
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Envio de Whatsapp",
-              onClick: () => setIsWhatsappModalOpen(true),
-              variant: "success",
-              className: "w-full",
-              icon: <WhatsappIcon />,
-            }]}
-            />
-        </div>
-      </div>
+        {/* ───────── BLOQUE DE BOTONES DE ACCIÓN ───────── */}
+        <div className="flex flex-col md:flex-row gap-2 mb-2">
+          <div className="flex-1">
+            <ActionButtonGroup
+              buttons={[
+                {
+                  label: "Añadir Producto",
+                  onClick: () => {
+                    if (!canCreate) {
+                      showToast.error("No tienes permisos para realizar esta acción.");
+                      return;
+                    }
 
-      <div className="flex flex-col md:flex-row gap-2">
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "Publicar Cambios",
-              onClick: () => handleTriggerDeploy(),
-              variant: "info",
-              className: "w-full",
-              isLoading: isDeploying,
-              icon: <RocketIcon />,
-            }]}
-          />
+                    setSelectedProduct(null); // o el valor que usen para indicar "crear"
+                    setIsAddEditModalOpen(true);
+                  },
+                  variant: "tertiary",
+                  className: "w-full",
+                  icon: <PlusIcon />,
+                },
+              ]}
+            />
+          </div>
+          <div className="flex-1">
+            <ActionButtonGroup
+              buttons={[{
+                label: "Envio de Email",
+                onClick: () => setIsEmailModalOpen(true),
+                variant: "danger",
+                className: "w-full",
+                icon: <MailIcon />,
+              }]}
+            />
+          </div>
+          <div className="flex-1">
+            <ActionButtonGroup
+              buttons={[{
+                label: "Envio de Whatsapp",
+                onClick: () => setIsWhatsappModalOpen(true),
+                variant: "success",
+                className: "w-full",
+                icon: <WhatsappIcon />,
+              }]}
+            />
+          </div>
         </div>
-        <div className="flex-1">
-          <ActionButtonGroup
-            buttons={[{
-              label: "IMPRIMIR",
-              onClick: () => printTable(productos),
-              variant: "primary",
-              className: "w-full",
-              icon: <PrinterIcon />,
-            }]}
-          />
+
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex-1">
+            <ActionButtonGroup
+              buttons={[{
+                label: "Publicar Cambios",
+                onClick: () => handleTriggerDeploy(),
+                variant: "info",
+                className: "w-full",
+                isLoading: isDeploying,
+                icon: <RocketIcon />,
+              }]}
+            />
+          </div>
+          <div className="flex-1">
+            <ActionButtonGroup
+              buttons={[{
+                label: "IMPRIMIR",
+                onClick: () => printTable(productos),
+                variant: "primary",
+                className: "w-full",
+                icon: <PrinterIcon />,
+              }]}
+            />
+          </div>
+          <div className="flex-1">
+            <ExportDropdown
+              className="w-full"
+              label="EXPORTAR"
+              icon={<Download className="h-4 w-4" />}
+              options={[
+                { label: "Exportar a CSV", onClick: () => exportToCSV(productos), icon: <FileText className="h-4 w-4" /> },
+                { label: "Exportar a Excel", onClick: () => exportToExcel(productos), icon: <FileSpreadsheet className="h-4 w-4" /> },
+                { label: "Exportar a PDF", onClick: () => exportToPDF(productos), icon: <FileDown className="h-4 w-4" /> },
+              ]}
+            />
+          </div>
         </div>
-        <div className="flex-1">
-          <ExportDropdown
-            className="w-full"
-            label="EXPORTAR"
-            icon={<Download className="h-4 w-4" />}
-            options={[
-              { label: "Exportar a CSV", onClick: () => exportToCSV(productos), icon: <FileText className="h-4 w-4" /> },
-              { label: "Exportar a Excel", onClick: () => exportToExcel(productos), icon: <FileSpreadsheet className="h-4 w-4" /> },
-              { label: "Exportar a PDF", onClick: () => exportToPDF(productos), icon: <FileDown className="h-4 w-4" /> },
-            ]}
-          />
-        </div>
-      </div>
       </section>
 
       {error && (
@@ -270,11 +285,11 @@ export default function ProductosPage() {
       <>
         <div className="mb-4 flex flex-col gap-2 border-b border-[#E5EEF6] pb-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between">
           <div>
-                    <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">
-                        LISTA DE PRODUCTOS
-                    </h3>
-                    <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Visualiza y actualiza los productos registrados.</p>
-                </div>
+            <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">
+              LISTA DE PRODUCTOS
+            </h3>
+            <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Visualiza y actualiza los productos registrados.</p>
+          </div>
           <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
             <label className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">
               Filtrar por sección
@@ -300,7 +315,9 @@ export default function ProductosPage() {
           data={datosPaginados}
           minRows={5}
           onEdit={handleEditClick}
+          editPermission="productos.editar"
           onDelete={handleDeleteProducto}
+          deletePermission="productos.eliminar"
           isLoading={isLoading && productos.length === 0}
           emptyMessage="No se encontraron productos"
           onResetSearch={() => setProductosFiltrados(productos)}

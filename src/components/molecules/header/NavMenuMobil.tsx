@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from 'react';
 import AdminMenuMobil from "@/components/organisms/admin/AdminMenuMobil";
 import { useAdmin } from "@/hooks/useAdmin";
-import { ADMIN_ITEMS, NAV_ITEMS } from "@/data/header/navItems";
+import { getAdminItems, NAV_ITEMS } from "@/data/header/navItems";
 
 export default function NavMenuMobil({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
@@ -60,7 +60,7 @@ export default function NavMenuMobil({ onClose }: { onClose?: () => void }) {
         {/* Submenu admin */}
       {isAdmin && adminOpen && (
         <div className="pl-12 mt-2 space-y-1">
-          {ADMIN_ITEMS.map((item) => (
+          {getAdminItems().map((item) => (
             <div key={item.href} className="py-1">
               <MenuItem
                 href={item.href}
