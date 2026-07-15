@@ -33,7 +33,7 @@ const HeroSection = () => {
   );
   return (
     <section
-      className="relative h-auto xl:min-h-screen overflow-hidden"
+      className="relative h-auto md:min-h-[650px] lg:min-h-screen overflow-hidden"
     >
       {/* Fondo */}
       <div className="absolute inset-0 animate-zoom-out-bg">
