@@ -9,6 +9,7 @@ import { showToast } from '@/utils/showToast';
 import { api, API_ENDPOINTS } from '@/config';
 import { sourceData } from '@/data/popup/sourceData';
 import { Monitor, Save, Smartphone, X, ChevronDown, Layout, Type, Image as ImageIcon, Timer, Power, Palette } from 'lucide-react';
+import { getPermissions } from "@/utils/permission";
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
@@ -41,14 +42,12 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   return (
     <button
       onClick={onChange}
-      className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none shrink-0 ${
-        checked ? "bg-[#6DE1E3]" : "bg-gray-300 dark:bg-white/20"
-      }`}
+      className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none shrink-0 ${checked ? "bg-[#6DE1E3]" : "bg-gray-300 dark:bg-white/20"
+        }`}
     >
       <span
-        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
-          checked ? "translate-x-8" : "translate-x-1"
-        }`}
+        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${checked ? "translate-x-8" : "translate-x-1"
+          }`}
       />
     </button>
   );
@@ -224,7 +223,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageName, setMobileImageName] = useState('');
   const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
 
-  const [products, setProducts] = useState<{id: number; name:string}[]>([]);
+  const [products, setProducts] = useState<{ id: number; name: string }[]>([]);
 
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
@@ -246,14 +245,14 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-       const res = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL) ;
-       const fetched = res.data?.data?.data;
-       if(Array.isArray(fetched)){
-         setProducts(fetched);
-       }else {
-         setProducts([]);
-       }
-      }catch(err){
+        const res = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
+        const fetched = res.data?.data?.data;
+        if (Array.isArray(fetched)) {
+          setProducts(fetched);
+        } else {
+          setProducts([]);
+        }
+      } catch (err) {
         console.error('Error cargando productos', err);
       }
     };
@@ -264,7 +263,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     const isWebpMime = file.type === "image/webp";
     const isWebpExt = file.name.toLowerCase().endsWith(".webp");
 
-    if(!isWebpMime || !isWebpExt){
+    if (!isWebpMime || !isWebpExt) {
       showToast.error("Solo se permiten imágenes en formato WEBP.");
       return false;
     }
@@ -274,47 +273,47 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const initializedRef = useRef(false);
 
   useEffect(() => {
-    if (!initialData || initializedRef.current)  return;
-      setActive(initialData.active !== undefined ? initialData.active : false);
-      setTitle(initialData.title || '');
-      setButtonText(initialData.button_text || '');
-      setButtonTextColor(initialData.button_text_color || '#FFFFFF');
-      setDelaySeconds(initialData.delay_seconds?.toString() || '5');
-      setButtonColor(initialData.button_color || '#7C29E3');
-      setDesktopImageName('');
-      setTextImageName('');
-      setMobileImageName('');
+    if (!initialData || initializedRef.current) return;
+    setActive(initialData.active !== undefined ? initialData.active : false);
+    setTitle(initialData.title || '');
+    setButtonText(initialData.button_text || '');
+    setButtonTextColor(initialData.button_text_color || '#FFFFFF');
+    setDelaySeconds(initialData.delay_seconds?.toString() || '5');
+    setButtonColor(initialData.button_color || '#7C29E3');
+    setDesktopImageName('');
+    setTextImageName('');
+    setMobileImageName('');
 
-      if (initialData.images && initialData.images.length > 0) {
-        const dLeft = initialData.images.find(i => i.device === 'desktop' && i.slot === 'left');
-        const dText = initialData.images.find(i => i.device === 'desktop' && i.slot === 'right');
-        const mCenter = initialData.images.find(i => i.device === 'mobile' && i.slot === 'center');
+    if (initialData.images && initialData.images.length > 0) {
+      const dLeft = initialData.images.find(i => i.device === 'desktop' && i.slot === 'left');
+      const dText = initialData.images.find(i => i.device === 'desktop' && i.slot === 'right');
+      const mCenter = initialData.images.find(i => i.device === 'mobile' && i.slot === 'center');
 
-        if (dLeft) {
-          setDesktopImageId(dLeft.id);
-          if (dLeft.image) setDesktopImgSrc(`${BACKEND_URL}${dLeft.image.startsWith('/') ? '' : '/'}${dLeft.image}`);
-          setDesktopImageName(getFileNameFromPath(dLeft.image));
-          setImageAlt(dLeft.alt || '');
-          setImageTitle(dLeft.title || '');
-        }
-        if (dText) {
-          setTextImageId(dText.id);
-          if (dText.image) setTextImgSrc(`${BACKEND_URL}${dText.image.startsWith('/') ? '' : '/'}${dText.image}`);
-          setTextImageName(getFileNameFromPath(dText.image));
-        }
-        if (mCenter) {
-          setMobileImageId(mCenter.id);
-          if (mCenter.image) setMobileImgSrc(`${BACKEND_URL}${mCenter.image.startsWith('/') ? '' : '/'}${mCenter.image}`);
-          setMobileImageName(getFileNameFromPath(mCenter.image));
-        }
+      if (dLeft) {
+        setDesktopImageId(dLeft.id);
+        if (dLeft.image) setDesktopImgSrc(`${BACKEND_URL}${dLeft.image.startsWith('/') ? '' : '/'}${dLeft.image}`);
+        setDesktopImageName(getFileNameFromPath(dLeft.image));
+        setImageAlt(dLeft.alt || '');
+        setImageTitle(dLeft.title || '');
       }
+      if (dText) {
+        setTextImageId(dText.id);
+        if (dText.image) setTextImgSrc(`${BACKEND_URL}${dText.image.startsWith('/') ? '' : '/'}${dText.image}`);
+        setTextImageName(getFileNameFromPath(dText.image));
+      }
+      if (mCenter) {
+        setMobileImageId(mCenter.id);
+        if (mCenter.image) setMobileImgSrc(`${BACKEND_URL}${mCenter.image.startsWith('/') ? '' : '/'}${mCenter.image}`);
+        setMobileImageName(getFileNameFromPath(mCenter.image));
+      }
+    }
   }, [initialData]);
 
   const handleDesktopImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if(!validateWebp(file)){
+    if (!validateWebp(file)) {
       e.target.value = "";
       return;
     }
@@ -324,11 +323,11 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   };
   const handleTextImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if(!file) return;
+    if (!file) return;
 
-    if(!validateWebp(file)){
+    if (!validateWebp(file)) {
       e.target.value = "";
-    return;
+      return;
     }
     setTextImageFile(file);
     setTextImageName(file.name);
@@ -338,12 +337,12 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const handleMobileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-   if(!file)  return;
+    if (!file) return;
 
-   if(!validateWebp(file)){
-     e.target.value = "";
-     return;
-   }
+    if (!validateWebp(file)) {
+      e.target.value = "";
+      return;
+    }
 
     setMobileImageFile(file);
     setMobileImageName(file.name);
@@ -353,8 +352,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const handleSave = async () => {
     const allFiles = [desktopImageFile, textImageFile, mobileImageFile];
 
-    for(const file of allFiles){
-      if(file && !validateWebp(file)){
+    for (const file of allFiles) {
+      if (file && !validateWebp(file)) {
         return;
       }
     }
@@ -371,13 +370,13 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     ];
 
     const getSourceId = (pageTarget: string) => {
-      switch(pageTarget){
+      switch (pageTarget) {
         case "inicio":
           return sourceData.INICIO;
         case "product-detail":
           return sourceData.PRODUCTO_DETALLE;
         default:
-         return sourceData.INICIO;
+          return sourceData.INICIO;
       }
     }
 
@@ -392,15 +391,15 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       delay_seconds: parseInt(delaySeconds) || 0,
       priority: 1,
       active,
-      images:  pageTarget === "product-detail" ? [] : imagesArray
+      images: pageTarget === "product-detail" ? [] : imagesArray
     };
 
     try {
       await onSubmit(popupData);
       showToast.success?.('Popup guardado correctamente');
-    }catch(err: any){
-     console.error('SUBMIT FAIL:', err);
-     showToast.error(err.message || 'ERROR guardando popup')
+    } catch (err: any) {
+      console.error('SUBMIT FAIL:', err);
+      showToast.error(err.message || 'ERROR guardando popup')
     }
   };
 
@@ -453,14 +452,23 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     { value: "60", label: "60s - Usuario muy activo" },
   ];
 
+  const permissions = getPermissions();
+
+  const canCreate = permissions.includes("popups.crear");
+  const canEdit = permissions.includes("popups.editar");
+
+  const canSave = initialData
+    ? canEdit
+    : canCreate;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* COLUMNA IZQUIERDA: EL FORMULARIO (REDISEÑADO) */}
       <div className="lg:col-span-7 bg-white dark:bg-[#1C2347] rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm overflow-hidden max-h-[75vh] overflow-y-auto">
-        
+
         {/* Divide-y para separar las secciones como en configuración */}
         <div className="divide-y divide-gray-100 dark:divide-white/5">
-          
+
           {/* SECCIÓN: ESTADO */}
           <div className="px-4 sm:px-6 py-6">
             <BlockTitle
@@ -508,7 +516,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               title="Contenido y Diseño"
               subtitle="Personaliza los mensajes y el estilo del botón"
             />
-            
+
             <div className="space-y-6">
               <Input
                 label="Mensaje Principal"
@@ -647,21 +655,27 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <X className="h-4 w-4" />
               Cancelar
             </button>
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white dark:bg-white dark:text-[#203565] dark:hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
-            >
-              <Save className="h-4 w-4" />
-              {isSaving ? 'Guardando...' : (initialData ? 'Actualizar Anuncio' : 'Crear Anuncio')}
-            </button>
+            {canSave && (
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white dark:bg-white dark:text-[#203565] dark:hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
+              >
+                <Save className="h-4 w-4" />
+                {isSaving
+                  ? "Guardando..."
+                  : (initialData
+                    ? "Actualizar Anuncio"
+                    : "Crear Anuncio")}
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       {/* COLUMNA DERECHA: VISTA PREVIA (REDISEÑADA) */}
       <div className="lg:col-span-5 bg-gray-50 dark:bg-[#0D1030]/30 rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col min-h-[600px] relative overflow-hidden">
-        
+
         {/* Header de la Vista Previa */}
         <div className="w-full px-5 py-4 border-b border-gray-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 bg-white/50 dark:bg-[#1C2347]/50 backdrop-blur-sm">
           <div className="flex items-center gap-2">
@@ -669,9 +683,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               {pageTarget} ({delaySeconds}s)
             </span>
             {active ? (
-               <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border border-emerald-500/20">ACTIVO</span>
+              <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border border-emerald-500/20">ACTIVO</span>
             ) : (
-               <span className="bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border border-rose-500/20">INACTIVO</span>
+              <span className="bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border border-rose-500/20">INACTIVO</span>
             )}
           </div>
 
@@ -679,11 +693,10 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <button
               type="button"
               onClick={() => setPreviewMode('desktop')}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
-                previewMode === 'desktop'
-                  ? 'bg-white dark:bg-[#1C2347] text-[#203565] dark:text-[#6DE1E3] shadow-sm'
-                  : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/60'
-              }`}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${previewMode === 'desktop'
+                ? 'bg-white dark:bg-[#1C2347] text-[#203565] dark:text-[#6DE1E3] shadow-sm'
+                : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/60'
+                }`}
             >
               <Monitor className="h-3.5 w-3.5" />
               PC
@@ -691,11 +704,10 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             <button
               type="button"
               onClick={() => setPreviewMode('mobile')}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
-                previewMode === 'mobile'
-                  ? 'bg-white dark:bg-[#1C2347] text-[#203565] dark:text-[#6DE1E3] shadow-sm'
-                  : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/60'
-              }`}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${previewMode === 'mobile'
+                ? 'bg-white dark:bg-[#1C2347] text-[#203565] dark:text-[#6DE1E3] shadow-sm'
+                : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/60'
+                }`}
             >
               <Smartphone className="h-3.5 w-3.5" />
               Celular
@@ -721,7 +733,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 wrapperClassName="!p-0 !w-auto !h-auto"
                 previewDevice={previewMode}
                 muted={!active}
-                onClose={() => {}}
+                onClose={() => { }}
                 desktopImgSrc={desktopImgSrc}
                 textImgSrc={textImgSrc}
                 mobileImgSrc={mobileImgSrc}

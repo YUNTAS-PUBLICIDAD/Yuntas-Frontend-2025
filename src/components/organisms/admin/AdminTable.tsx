@@ -2,10 +2,10 @@
 
 import TableActions from "@/components/molecules/admin/TableActions";
 import { useAdminTable } from "@/hooks/ui/admin/useAdminTable";
-import { getRole } from "@/utils/role";
+import { getPermissions } from "@/utils/permission";
 import { RotateCcw } from "lucide-react";
 
- // icono directamente para poder reusarlo
+// icono directamente para poder reusarlo
 const SearchXIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 mb-2">
         <circle cx="11" cy="11" r="8"></circle>
@@ -30,8 +30,12 @@ interface AdminTableProps<T = any> {
     onEdit?: (item: T) => void;
     isLoading?: boolean;
     emptyMessage?: string;
-    onResetSearch?: () => void;   // Función para limpiar búsqueda
-    resetSearchText?: string;     // Texto del botón ("Ver todos los...")
+    onResetSearch?: () => void;
+    resetSearchText?: string;
+
+    // NUEVO
+    editPermission?: string;
+    deletePermission?: string;
 }
 
 function DesktopTableSkeleton({
@@ -114,7 +118,11 @@ export default function AdminTable({
     isLoading = false,
     emptyMessage = "No se encontraron registros",
     onResetSearch,
-    resetSearchText = "Ver todos"
+    resetSearchText = "Ver todos",
+
+    editPermission,
+    deletePermission,
+
 }: AdminTableProps) {
 
     const { enabledActions, rows } = useAdminTable({
@@ -125,7 +133,18 @@ export default function AdminTable({
         onEdit
     });
 
-    const role = getRole();
+    const permissions = getPermissions();
+
+const canEdit = editPermission
+    ? permissions.includes(editPermission)
+    : !!onEdit;
+
+const canDelete = deletePermission
+    ? permissions.includes(deletePermission)
+    : !!onDelete;
+
+const showActions = canEdit || canDelete || !!onApprove;
+
     const primaryColumn =
         columns.find((col) =>
             ![
@@ -174,152 +193,152 @@ export default function AdminTable({
 
     return (
         <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
-        <div className="w-full px-2 md:px-0 overflow-x-auto">
-            {/* DESKTOP: Tabla normal */}
-            <table className="w-full hidden lg:table border-separate border-spacing-y-2">
-                <thead>
-                    <tr className="bg-[#0D1030] dark:bg-[#293296]">
-                        {columns.map((col) => (
-                            <th key={col.key} className={`text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg ${role !== "admin" ? "last:rounded-r-lg" : ""}`}>
-                                {col.label}
-                            </th>
-                        ))}
-                        { role === "admin" && <th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
-                            ACCIÓN
-                        </th>}
-                    </tr>
-                </thead>
+            <div className="w-full px-2 md:px-0 overflow-x-auto">
+                {/* DESKTOP: Tabla normal */}
+                <table className="w-full hidden lg:table border-separate border-spacing-y-2">
+                    <thead>
+                        <tr className="bg-[#0D1030] dark:bg-[#293296]">
+                            {columns.map((col) => (
+                                <th key={col.key} className={`text-white font-semibold text-lg py-3 px-4 text-center first:rounded-l-lg ${!showActions ? "last:rounded-r-lg" : ""}`}>
+                                    {col.label}
+                                </th>
+                            ))}
+                            {showActions && <th className="text-white font-semibold text-lg py-3 px-4 rounded-r-lg text-center w-40">
+                                ACCIÓN
+                            </th>}
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    { /* Lógica de Carga */}
-                    { isLoading ? (
-                        <DesktopTableSkeleton
-                            columnsCount={columns.length}
-                            includeActions={role === "admin"}
-                            rows={minRows}
-                        />
-                    ) : (
-                    rows.map((row, index) => { 
-                        const isEmpty = row._empty === true;
+                    <tbody>
+                        { /* Lógica de Carga */}
+                        {isLoading ? (
+                            <DesktopTableSkeleton
+                                columnsCount={columns.length}
+                                includeActions={showActions}
+                                rows={minRows}
+                            />
+                        ) : (
+                            rows.map((row, index) => {
+                                const isEmpty = row._empty === true;
 
-                        return (
-                            <tr key={row.id || index}>
-                                {columns.map((col) => (
-                                    <td
-                                        key={col.key}
-                                        className={`
+                                return (
+                                    <tr key={row.id || index}>
+                                        {columns.map((col) => (
+                                            <td
+                                                key={col.key}
+                                                className={`
                                             py-3 px-4 text-center
                                             bg-[#F4F4F2] dark:bg-[#151A3D]
                                             first:rounded-l-lg
-                                            ${role !== "admin" ? "last:rounded-r-lg" : ""}
+                                            ${!showActions ? "last:rounded-r-lg" : ""}
                                             ${col.key === "id" ? "font-bold text-[#0D1030] dark:text-white" : "text-[#0D1030] dark:text-white"}
                                         `}
-                                    >
-                                        {isEmpty ? <>&nbsp;</> : col.render ? col.render(row[col.key], row) : row[col.key]}
-                                    </td>
-                                ))}
+                                            >
+                                                {isEmpty ? <>&nbsp;</> : col.render ? col.render(row[col.key], row) : row[col.key]}
+                                            </td>
+                                        ))}
 
-                                { role === "admin" && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#151A3D] rounded-r-lg">
-                                    <TableActions
-                                        item={row}
-                                        isEmpty={isEmpty}
-                                        onDelete={onDelete}
-                                        onApprove={onApprove}
-                                        onEdit={onEdit}
-                                        actions={enabledActions}
-                                    />
-                                </td>}
-                            </tr>
-                        );
-                        })
-                    )}
-                </tbody>
-            </table>
+                                        {showActions && <td className="py-3 px-4 bg-[#F4F4F2] dark:bg-[#151A3D] rounded-r-lg">
+                                            <TableActions
+                                                item={row}
+                                                isEmpty={isEmpty}
+                                                onDelete={onDelete}
+                                                onApprove={onApprove}
+                                                onEdit={onEdit}
+                                                actions={enabledActions}
+                                            />
+                                        </td>}
+                                    </tr>
+                                );
+                            })
+                        )}
+                    </tbody>
+                </table>
 
-            {/* MÓVIL: Tarjetas responsive */}
-            <div className="lg:hidden flex flex-col gap-6">
-                {isLoading ? (
-                    <MobileCardSkeleton
-                        rows={Math.max(2, Math.min(minRows, 4))}
-                        includeActions={role === "admin"}
-                    />
-                ) : (
-                rows.map((row, index) => {
-                    const isEmpty = row._empty === true;
+                {/* MÓVIL: Tarjetas responsive */}
+                <div className="lg:hidden flex flex-col gap-6">
+                    {isLoading ? (
+                        <MobileCardSkeleton
+                            rows={Math.max(2, Math.min(minRows, 4))}
+                            includeActions={showActions}
+                        />
+                    ) : (
+                        rows.map((row, index) => {
+                            const isEmpty = row._empty === true;
 
-                    if (isEmpty) return null;
+                            if (isEmpty) return null;
 
-                    const primaryValue = primaryColumn
-                        ? primaryColumn.render
-                            ? primaryColumn.render(row[primaryColumn.key], row)
-                            : row[primaryColumn.key]
-                        : null;
+                            const primaryValue = primaryColumn
+                                ? primaryColumn.render
+                                    ? primaryColumn.render(row[primaryColumn.key], row)
+                                    : row[primaryColumn.key]
+                                : null;
 
-                    return (
-                        <div
-                            key={row.id || index}
-                            className="bg-white dark:bg-[#151A3D] border border-[#E5EEF6] dark:border-[#4A6FD8] rounded-2xl p-4 shadow-sm transition-colors duration-300"
-                        >
-                            {/* Header: primary field with ID */}
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="min-w-0 flex-1">
-                                    {primaryColumn && (
-                                        <>
-                                            <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
-                                                {primaryColumn.label}
-                                            </span>
-                                            <h4 className="text-lg font-black text-[#0D1030] dark:text-white truncate">
-                                                {primaryValue ?? "-"}
-                                            </h4>
-                                        </>
+                            return (
+                                <div
+                                    key={row.id || index}
+                                    className="bg-white dark:bg-[#151A3D] border border-[#E5EEF6] dark:border-[#4A6FD8] rounded-2xl p-4 shadow-sm transition-colors duration-300"
+                                >
+                                    {/* Header: primary field with ID */}
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="min-w-0 flex-1">
+                                            {primaryColumn && (
+                                                <>
+                                                    <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
+                                                        {primaryColumn.label}
+                                                    </span>
+                                                    <h4 className="text-lg font-black text-[#0D1030] dark:text-white truncate">
+                                                        {primaryValue ?? "-"}
+                                                    </h4>
+                                                </>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-col items-end text-right text-xs text-slate-500 dark:text-[#B0C4DE]">
+                                            <span className="font-mono text-[#203565] dark:text-[#E0E7FF]">#{row.id}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Body: generic field grid */}
+                                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm text-[#203565] dark:text-[#E0E7FF]">
+                                        {mobileColumns.map((col) => {
+                                            const value = col.render ? col.render(row[col.key], row) : row[col.key];
+
+                                            return (
+                                                <div
+                                                    key={col.key}
+                                                    className="min-w-0 rounded-xl border border-[#E5EEF6] bg-[#F8FBFE] px-3 py-2 dark:border-white/10 dark:bg-white/5"
+                                                >
+                                                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
+                                                        {col.label}
+                                                    </div>
+                                                    <div className="mt-1 break-words font-medium text-[#203565] dark:text-[#E0E7FF]">
+                                                        {isEmpty ? "" : value}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Actions aligned to the right */}
+                                    {showActions && (
+                                        <div className="flex justify-end mt-4 pt-3 border-t border-gray-100 dark:border-[#4A6FD8]">
+                                            <TableActions
+                                                item={row}
+                                                isEmpty={isEmpty}
+                                                onDelete={onDelete}
+                                                onApprove={onApprove}
+                                                onEdit={onEdit}
+                                                actions={enabledActions}
+                                            />
+                                        </div>
                                     )}
                                 </div>
-
-                                <div className="flex flex-col items-end text-right text-xs text-slate-500 dark:text-[#B0C4DE]">
-                                    <span className="font-mono text-[#203565] dark:text-[#E0E7FF]">#{row.id}</span>
-                                </div>
-                            </div>
-
-                            {/* Body: generic field grid */}
-                            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm text-[#203565] dark:text-[#E0E7FF]">
-                                {mobileColumns.map((col) => {
-                                    const value = col.render ? col.render(row[col.key], row) : row[col.key];
-
-                                    return (
-                                        <div
-                                            key={col.key}
-                                            className="min-w-0 rounded-xl border border-[#E5EEF6] bg-[#F8FBFE] px-3 py-2 dark:border-white/10 dark:bg-white/5"
-                                        >
-                                            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
-                                                {col.label}
-                                            </div>
-                                            <div className="mt-1 break-words font-medium text-[#203565] dark:text-[#E0E7FF]">
-                                                {isEmpty ? "" : value}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Actions aligned to the right */}
-                            {role === "admin" && (
-                                <div className="flex justify-end mt-4 pt-3 border-t border-gray-100 dark:border-[#4A6FD8]">
-                                    <TableActions
-                                        item={row}
-                                        isEmpty={isEmpty}
-                                        onDelete={onDelete}
-                                        onApprove={onApprove}
-                                        onEdit={onEdit}
-                                        actions={enabledActions}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    );
-                })
-            )}
+                            );
+                        })
+                    )}
+                </div>
             </div>
-        </div>
         </div>
     );
 }
