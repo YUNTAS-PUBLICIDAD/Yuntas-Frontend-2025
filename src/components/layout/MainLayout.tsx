@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Header from "@/components/organisms/Header";
 import Footer from "@/components/organisms/Footer";
@@ -8,6 +10,15 @@ const ChatbotWidget = dynamic(() => import("@/components/organisms/ChatbotWidget
 const FloatingWhatsApp = dynamic(() => import("@/components/atoms/FloatingWhatsApp").then(mod => mod.FloatingWhatsApp), { ssr: false });
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen relative">
       <Header />
@@ -17,8 +28,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
 
-      <FloatingWhatsApp />
-      <ChatbotWidget />
+      {mounted && (
+        <>
+          <FloatingWhatsApp />
+          <ChatbotWidget />
+        </>
+      )}
 
       <Footer />
     </div>
