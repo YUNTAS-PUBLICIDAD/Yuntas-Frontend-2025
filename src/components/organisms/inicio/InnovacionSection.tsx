@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import SectionImage from "@/components/atoms/SectionImage";
 import { imagenes } from "@/data/imagenes";
 
@@ -32,8 +33,8 @@ const ChevronLeftCircle = () => (
   </div>
 );
 
-const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: React.ComponentType }) => {
-  return (
+const CustomInfoCard = ({ text, icon: Icon, href, }: { text: string; icon: React.ComponentType; href?: string; }) => {
+  const content = (
     <div className="group relative flex w-full max-w-3xl flex-row items-center gap-0">
       <div className="absolute -inset-1 rounded-3xl sm:rounded-full bg-gradient-to-r from-[#6DE1E3]/20 via-transparent to-[#0ea5b7]/20 blur-md opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -50,7 +51,9 @@ const CustomInfoCard = ({ text, icon: Icon }: { text: string; icon: React.Compon
         </p>
       </div>
     </div>
-  );
+  );  
+
+  return href ? <Link href={href}>{content}</Link> : content;
 };
 
 const InnovacionSection: React.FC = () => {
@@ -60,7 +63,10 @@ const InnovacionSection: React.FC = () => {
 
         {/* ── COLUMNA IZQUIERDA ── */}
         <div className="flex flex-col items-center gap-6 w-full lg:w-1/2">
-          <div className="relative w-full rounded-3xl overflow-hidden shadow-lg group">
+          <Link
+            href="/productos/barra-pixel-led/"
+            className="relative w-full rounded-3xl overflow-hidden shadow-lg group block"
+          >
             <div className="absolute top-8 left-0 z-10 bg-black text-white py-2 px-5 rounded-r-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
               <ChevronRightCircle />
               <span className="mt-0.5">BARRAS DE PIXCEL</span>
@@ -72,17 +78,21 @@ const InnovacionSection: React.FC = () => {
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-          </div>
+          </Link>
 
           <CustomInfoCard
             icon={EyeIcon}
             text="Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos"
+            href="/productos/barra-pixel-led/"
           />
         </div>
 
         {/* ── COLUMNA DERECHA ── */}
         <div className="flex flex-col items-center gap-6 w-full lg:w-1/2">
-          <div className="relative w-full rounded-3xl overflow-hidden shadow-lg group">
+          <Link
+            href="/productos/letrero-neon-led/"
+            className="relative w-full rounded-3xl overflow-hidden shadow-lg group block"
+          >
             <div className="absolute top-8 right-0 z-10 bg-black text-white py-2 px-5 rounded-l-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
               <span className="mt-0.5">LETREROS NEÓN</span>
               <ChevronLeftCircle />
@@ -94,11 +104,12 @@ const InnovacionSection: React.FC = () => {
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-          </div>
+          </Link>
 
           <CustomInfoCard
             icon={SearchIcon}
             text="Aprende cómo esta tecnología transforma el ambiente y optimiza el consumo energético"
+            href="/productos/letrero-neon-led/"
           />
         </div>
 
