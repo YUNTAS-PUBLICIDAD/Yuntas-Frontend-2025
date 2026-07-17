@@ -27,36 +27,16 @@ const Confirm: React.FC<ConfirmProps> = ({
   onCancel,
   variant = 'danger',
 }) => {
-  const isDanger = variant === 'danger';
   return (
     <Modal size="md" title={title} isOpen={isOpen} onClose={onCancel}>
       <div className='flex flex-col gap-5'>
-        {isDanger && (
-          <div className="flex items-center justify-center gap-3 bg-red-50 border-2 border-red-500 rounded-lg p-2">
-            <MdDangerous className="text-red-600" size={32} />
-            <div>
-              <p className="text-red-900 font-bold text-sm">ACCIÓN CRÍTICA</p>
-              <p className="text-red-700 text-xs">Esta acción no se puede deshacer</p>
-            </div>
-          </div>
-        )}
 
-        {!isDanger && (
-          <div className="flex items-center justify-center gap-3 bg-yellow-50 border-2 border-yellow-500 rounded-lg p-2">
-            <IoWarningOutline className="text-yellow-600" size={32} />
-            <div>
-              <p className="text-yellow-900 font-bold text-sm">ACCIÓN IMPORTANTE</p>
-              <p className="text-yellow-700 text-xs">Esta acción requiere tu atención</p>
-            </div>
-          </div>
-        )}
-
-        <p className="text-center text-gray-700 font-medium dark:text-[#ECECEC]/80">{message}</p>
+        <p className="text-center text-[#203565] font-semibold text-xl dark:text-[#ECECEC]/80">{message}</p>
         <div className="flex justify-center items-center gap-4">
-          <Button onClick={onConfirm} variant="danger">
+          <Button onClick={onConfirm} variant="danger" className='!rounded-lg'>
             {confirmText}
           </Button>
-          <Button onClick={onCancel} variant="tertiary">
+          <Button onClick={onCancel} variant="tertiary" className='!rounded-lg'>
             {cancelText}
           </Button>
         </div>
