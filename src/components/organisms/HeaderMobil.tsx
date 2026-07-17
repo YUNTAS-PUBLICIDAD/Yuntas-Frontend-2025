@@ -16,6 +16,8 @@ const HeaderMobil = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { logout } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith('/admin');
 
@@ -23,6 +25,7 @@ const HeaderMobil = () => {
     const checkAuth = () => {
       // Verifica si hay token y rol para determinar si es admin
       setIsAdmin(Boolean(getToken() && getRole()));
+      setRole(getRole());
     };
 
     const handleScroll = () => {
@@ -31,6 +34,7 @@ const HeaderMobil = () => {
 
     checkAuth();
     handleScroll();
+    setIsMounted(true);
 
     window.addEventListener('auth-change', checkAuth);
     window.addEventListener('scroll', handleScroll);
@@ -174,9 +178,11 @@ const HeaderMobil = () => {
           <div className="flex items-center gap-3">
             <div>
               <p className="text-sm font-bold">BIENVENIDO</p>
-              <p className="text-xs opacity-60">
-                {isAdmin ? "Administrador" : "Cliente"}
-              </p>
+              {isMounted && (
+                <p className="text-xs opacity-60 capitalize">
+                  {role || 'invitado'}
+                </p>
+              )}
             </div>
           </div>
 
