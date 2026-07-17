@@ -23,6 +23,9 @@ export interface Producto {
     hero_title: string;
     description: string;
     video_url: string;
+    video_subtitle: string;
+    video_description: string;
+    
     status: "active" | "inactive";
     meta_title: string | null;
     meta_description: string | null;
@@ -44,6 +47,7 @@ export interface ProductoInput {
     status?: 'active' | 'inactive';
     video_url?: string | null;
 
+
     meta_title: string;
     meta_description: string;
     keywords: string[];
@@ -61,6 +65,9 @@ export interface ProductoInput {
     categories: string[];
     specifications: string[];
     benefits: string[];
+
+    video_subtitle?: string;
+    video_description?: string;
 }
 
 // respuesta de service
