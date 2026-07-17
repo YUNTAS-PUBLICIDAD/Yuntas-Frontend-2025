@@ -29,7 +29,10 @@ const defaultFormData: ProductoInput = {
     hero_title: "",
     description: "",
     status: "active",
+
     video_url: "",
+    video_subtitle: "",
+    video_description: "",
 
     meta_title: "",
     meta_description: "",
@@ -97,18 +100,29 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
     const [galleryPreviews, setGalleryPreviews] = useState<Map<string, string>>(new Map());
     const [initialFormState, setInitialFormState] = useState<ProductoInput>(defaultFormData);
     const [errors, setErrors] = useState<FormErrors>({});
-    const validate = () => {
-    const newErrors: FormErrors = {};
 
-    if (formData.video_url) {
+    const validate = () => {
+    const newErrors: FormErrors = {};   
+
+    const videoUrl = formData.video_url?.trim() || "";
+    const hasVideo = !!videoUrl;
+
+    if (hasVideo) {
         try {
-            const url = new URL(formData.video_url);
+            const url = new URL(videoUrl);
 
             if (!["http:", "https:"].includes(url.protocol)) {
                 newErrors.video_url = "URL inválida";
             }
         } catch {
             newErrors.video_url = "URL inválida";
+        }
+    } else {
+        if (formData.video_subtitle?.trim()) {
+            newErrors.video_subtitle = "No se puede registrar un subtítulo sin URL de video";
+        }
+        if (formData.video_description?.trim()) {
+            newErrors.video_description = "No se puede registrar una descripción sin URL de video";
         }
     }
 
@@ -175,6 +189,8 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                 status: initialData.status,
 
                 video_url: initialData.video_url || "",
+                video_subtitle: initialData.video_subtitle || "",
+                video_description: initialData.video_description || "",
 
                 meta_title: initialData.meta_title || "",
                 meta_description: initialData.meta_description || "",
@@ -213,6 +229,23 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
             const regex = /^[a-z0-9-]*$/;
             if (!regex.test(value)) return;
         }
+        if (name === "video_url" && value.trim() === "") {
+            setFormData(prev => ({
+                 ...prev,
+                    video_url: "",
+                    video_subtitle: "",
+                    video_description: "",
+             }));
+
+            setErrors(prev => {
+                const copy = { ...prev };
+                delete copy.video_url;
+                delete copy.video_subtitle;
+                delete copy.video_description;
+                return copy;
+             });
+    return;
+}
 
         setFormData(prev => ({ ...prev, [name]: name === "price" ? Number(value) : value }));
 
@@ -290,6 +323,10 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+         if (!validate()) {
+             return;
+        }
 
         // imagen principal obligatoria
         if (!formData.main_image) {
@@ -494,6 +531,29 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                     required
                 />
                 
+                <InputAdmin
+                    label="Subtítulo video (opcional)"
+                    name="video_subtitle"
+                    value={formData.video_subtitle || ""}
+                    onChange={handleInputChange}
+                    disabled={!formData.video_url?.trim()}
+                    placeholder="Ej: Descubre cómo nuestros letreros transforman tu negocio"
+                    helperText="Máx. 70 caracteres (letras, números y espacios)."
+                    maxLength={70}
+                    error={errors.video_subtitle}
+                />
+
+                <InputAdmin
+                    label="Descripción video (opcional)"
+                    name="video_description"
+                    value={formData.video_description || ""}
+                    onChange={handleInputChange}
+                    disabled={!formData.video_url?.trim()}
+                    placeholder="Ej: Conoce las ventajas, aplicaciones y beneficios de este producto."
+                    helperText="Máx. 255 caracteres (letras, números y espacios)."
+                    maxLength={255}
+                    error={errors.video_description}
+                />                
                 <InputAdmin
                     label="URL del Video (opcional)"
                     name="video_url"
