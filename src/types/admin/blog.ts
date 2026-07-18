@@ -22,6 +22,8 @@ export interface Blog {
 	hero_title: string;
 	cover_subtitle: string;
 	video_url: string;
+	video_subtitle?: string | null;
+	video_description?: string | null;
 	meta_title: string;
 	meta_description: string;
     keywords: string[];	
@@ -46,6 +48,8 @@ export interface BlogInput {
 	hero_title: string;
 	cover_subtitle: string;
 	video_url?: string | null;
+	video_subtitle?: string | null;
+	video_description?: string | null;
 
 	meta_title: string;
 	meta_description: string;

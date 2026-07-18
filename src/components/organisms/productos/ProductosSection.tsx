@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import ProductoCard from '@/components/molecules/producto/ProductoCard'
 import Text from '@/components/atoms/Text'
 import { useCategorias } from '@/hooks/ui/productos/useCategorias'
@@ -47,6 +47,12 @@ const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: Pr
 
   // Filtra la lista cada vez que cambian las categorías activas
   useSelectCategorias(categoriasActivas, setListaProductos, allProductos);
+
+  // Sincronizar productos paginados cuando la lista cambia y desmarcar skeleton
+  useEffect(() => {
+    setProductosPaginados(ListaBusqueda.slice(0, PAGE_SIZE));
+    setIsReady(true);
+  }, [ListaBusqueda]);
 
   const handleSetProductosPaginados = (items: Producto[]) => {
     setProductosPaginados(items);
@@ -160,15 +166,6 @@ const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: Pr
               onPageChange={scrollToProductosSection}
             />
           )}
-        </div>
-
-        <div className="hidden">
-          <Pagination
-            pageSize={PAGE_SIZE}
-            items={ListaBusqueda}
-            setProductosPaginados={handleSetProductosPaginados}
-            onPageChange={scrollToProductosSection}
-          />
         </div>
       </div>
     </section>
