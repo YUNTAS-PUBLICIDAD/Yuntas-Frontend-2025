@@ -161,15 +161,6 @@ const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: Pr
             />
           )}
         </div>
-
-        <div className="hidden">
-          <Pagination
-            pageSize={PAGE_SIZE}
-            items={ListaBusqueda}
-            setProductosPaginados={handleSetProductosPaginados}
-            onPageChange={scrollToProductosSection}
-          />
-        </div>
       </div>
     </section>
   );
