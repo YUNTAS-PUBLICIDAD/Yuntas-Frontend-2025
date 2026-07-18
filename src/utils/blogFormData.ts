@@ -13,8 +13,9 @@ export function buildBlogFormData(data: BlogInput): FormData {
 	formData.append("description", data.description);
 	formData.append("testimonial", data.testimonial);
 	formData.append("product_id", data.product_id);
-	
 	if (data.video_url) formData.append("video_url", data.video_url);
+	if (data.video_subtitle) formData.append("video_subtitle", data.video_subtitle);
+	if (data.video_description) formData.append("video_description", data.video_description);
 	
 	// imagen principal
 	if (data.main_image instanceof File) {

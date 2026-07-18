@@ -9,8 +9,9 @@ export function buildProductoFormData(data: ProductoInput): FormData {
     formData.append("hero_title", data.hero_title);
     formData.append("description", data.description);
     formData.append("status", data.status || "active");
-    
     if (data.video_url) formData.append("video_url", data.video_url);
+    if (data.video_subtitle) formData.append("video_subtitle", data.video_subtitle);
+    if (data.video_description) formData.append("video_description", data.video_description);
 
     // SEO opcionales
     if (data.meta_title) formData.append("meta_title", data.meta_title);
