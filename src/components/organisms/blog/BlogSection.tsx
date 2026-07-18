@@ -9,6 +9,7 @@ import BlogCard from '@/components/molecules/blog/BlogCard'
 import Pagination from '@/components/molecules/Pagination'
 import { Blog } from '@/types/admin/blog'
 import { useAutocompletado } from '@/hooks/ui/useAutocompletado'
+import { FaSearch } from "react-icons/fa";
 
 const BlogSection = ({ blogs }: { blogs: Blog[] }) => {
 	const PAGE_SIZE = 6
@@ -70,25 +71,37 @@ const BlogSection = ({ blogs }: { blogs: Blog[] }) => {
 						onKeyDown={handleKeyDown}
 					/>
 
-					{lista.length > 0 && (
-						<ul className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg z-50 overflow-hidden">
-							{lista.map((blog, i) => (
-								<li
-									key={blog.id}
-									onMouseDown={() => {
-										setQuery(blog.title)
-										setActiveIndex(-1)
-									}}
-									onMouseEnter={() => setActiveIndex(i)}
-									className={`px-4 py-3 cursor-pointer text-sm text-gray-800 transition-colors ${i === activeIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
-										}`}
-								>
-									{blog.title}
-								</li>
-							))}
-						</ul>
-					)}
-
+				{lista.length > 0 && (
+					<ul className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg z-50 max-h-72 overflow-y-auto">
+						{lista.map((blog, i) => (
+							<li
+								key={blog.id}
+								onMouseDown={() => {
+									setQuery(blog.title)
+									setActiveIndex(-1)
+								}}
+								onMouseEnter={() => setActiveIndex(i)}
+								className={`flex items-center gap-3 px-4 py-3 cursor-pointer text-sm text-gray-800 transition-colors border-b border-gray-100 last:border-0 ${
+									i === activeIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
+								}`}
+							>
+								{blog.main_image?.url ? (
+									<img
+										src={blog.main_image.url}
+										alt={blog.main_image?.alt || blog.title}
+										title={blog.main_image?.title || blog.title}
+										className="w-9 h-9 rounded-md object-cover flex-shrink-0"
+									/>
+								) : (
+									<div className="w-9 h-9 rounded-md bg-gray-100 flex items-center justify-center flex-shrink-0">
+										<FaSearch className="text-gray-400 text-xs" />
+									</div>
+								)}
+								<span className="line-clamp-2 leading-snug">{blog.title}</span>
+							</li>
+						))}
+					</ul>
+				)}
 					{query.trim() && blogsFiltrados.length === 0 && (
 						<div className="absolute top-full left-0 w-full px-4 py-2 mt-1 text-sm text-red-500 font-medium animate-fade-in bg-white/10 rounded-lg">
 							No se encuentra ese blog
