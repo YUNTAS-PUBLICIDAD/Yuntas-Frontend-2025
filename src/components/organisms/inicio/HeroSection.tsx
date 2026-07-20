@@ -33,7 +33,7 @@ const HeroSection = () => {
   );
   return (
     <section
-      className="relative h-auto xl:min-h-screen overflow-hidden"
+      className="relative h-auto md:min-h-[650px] lg:min-h-screen overflow-hidden"
     >
       {/* Fondo */}
       <div className="absolute inset-0 animate-zoom-out-bg">
@@ -44,6 +44,7 @@ const HeroSection = () => {
           title={imagenes.inicio.hero.title}
           fill
           priority
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 100vw"
           className="object-cover scale-105"
         />
       </div>

@@ -134,7 +134,7 @@ const MobilePopupComposition = ({
   const isPlaceholder = !hasImageSrc(mobileImgSrc) && !hasImageSrc(desktopImgSrc);
 
   return (
-    <div className={`${forceVisible ? "" : "md:hidden"} w-[284px] aspect-[284/535]  relative overflow-hidden rounded-[2rem]`}>
+    <div className={`${forceVisible ? "" : "md:hidden"} w-[320px] aspect-[320/603]  relative overflow-hidden rounded-[2rem]`}>
 
       {hasImageSrc(finalMobileImg) ? (
         <img
@@ -152,7 +152,7 @@ const MobilePopupComposition = ({
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 right-0 px-[22px] md:px-8 pb-5 md:pb-4 md:pt-3  z-20">
+      <div className="absolute bottom-0 left-0 right-0 px-[25px] md:px-8 pb-[23px] md:pb-4 md:pt-3 z-20 bg-transparent">
         <PopupForm
           formData={formData}
           errors={errors}
@@ -209,7 +209,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
   return (
     <div
       className={withBackdrop
-        ? `fixed inset-0  flex items-center justify-center z-50 p-4  backdrop-blur-sm transition-opacity duration-300 ease-out ${closing ? "opacity-0" : "opacity-100"} bg-black/50`
+        ? `fixed inset-0  flex items-center justify-center z-50 backdrop-blur-sm transition-opacity duration-300 ease-out ${closing ? "opacity-0" : "opacity-100"} bg-black/50`
         : `w-full h-full flex items-center justify-center p-4 ${wrapperClassName}`
       }
     >
@@ -217,7 +217,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
         style={popupStyle}
         // className={`relative bg-transparent shadow-lg overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.92,1,0.36,1)] transform ${closing ? "opacity-0 translate-y-6 scale-[0.96]" : "opacity-100 translate-y-0 scale-100"} ${muted ? "opacity-40 grayscale-[50%]" : "opacity-100"} rounded-xl ${popupClassName}`}
         className={`
-          relative bg-transparent shadow-xl overflow-hidden rounded-xl will-change-transform
+          relative bg-transparent overflow-hidden will-change-transform
           transform transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
 
           ${closing
@@ -230,7 +230,7 @@ const PopupRenderer: React.FC<PopupRendererProps> = ({
         `}
       >
         {showCloseButton && (
-          <CloseButton onClick={onClose} className="absolute top-[9px] right-[13px] md:top-3 md:right-3 z-50" />
+          <CloseButton onClick={onClose} className="absolute top-[10px] right-[15px] md:top-3 md:right-3 z-50" />
         )}
 
         {previewDevice !== "mobile" && (

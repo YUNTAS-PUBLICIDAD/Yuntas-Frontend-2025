@@ -19,6 +19,7 @@ import { useProductos } from "@/hooks/useProductos";
 import SearchBar from "@/components/molecules/admin/SearchBar";
 import { Download, FileDown, FileSpreadsheet, FileText, Plus, Rocket } from "lucide-react";
 import { useDeploy } from "@/hooks/useDeploy";
+import { getPermissions } from "@/utils/permission";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -45,7 +46,7 @@ export default function Blogspage() {
 
     const { confirm, ConfirmDialog } = useConfirm();
     // DEPLOY
-    const {isLoading: isDeploying, triggerDeploy} = useDeploy();
+    const { isLoading: isDeploying, triggerDeploy } = useDeploy();
 
     useEffect(() => {
         getBlogs(200);
@@ -74,12 +75,12 @@ export default function Blogspage() {
             await getBlogs(200);
             showToast.success("Blog creado");
             setTimeout(() => {
-              showToast.info(
-                  "Recuerda publicar los cambios para que se reflejen en la web",
-                  {
-                    duration: 3000
-                  }
-              );
+                showToast.info(
+                    "Recuerda publicar los cambios para que se reflejen en la web",
+                    {
+                        duration: 3000
+                    }
+                );
             }, 100)
         } else {
             showToast.error(result.message || "Error al crear el blog");
@@ -100,12 +101,12 @@ export default function Blogspage() {
             await getBlogs(200);
             showToast.success("Blog actualizado");
             setTimeout(() => {
-              showToast.info(
-                "Recuerda publicar los cambios para que se reflejen en la web",
-                {
-                  duration: 3000
-                }
-              );
+                showToast.info(
+                    "Recuerda publicar los cambios para que se reflejen en la web",
+                    {
+                        duration: 3000
+                    }
+                );
             }, 100);
         } else {
             showToast.error(result.message || "Error al actualizar el blog");
@@ -120,12 +121,12 @@ export default function Blogspage() {
             await getBlogs(200);
             showToast.success("Blog eliminado");
             setTimeout(() => {
-              showToast.info(
-                "Recuerda publicar los cambios para que se reflejen en la web",
-                {
-                  duration: 3000
-                }
-              );
+                showToast.info(
+                    "Recuerda publicar los cambios para que se reflejen en la web",
+                    {
+                        duration: 3000
+                    }
+                );
             }, 100);
         } else {
             showToast.error(result.message || "Error al eliminar el blog");
@@ -133,25 +134,29 @@ export default function Blogspage() {
     };
 
     const handleTriggerDeploy = async () => {
-      const confirmDeploy = await confirm({
-        message: "¿Estás seguro de que deseas publicar los cambios?"
-      });
+        const confirmDeploy = await confirm({
+            message: "¿Estás seguro de que deseas publicar los cambios?"
+        });
 
-      if(!confirmDeploy) return;
+        if (!confirmDeploy) return;
 
-      const result = await triggerDeploy();
+        const result = await triggerDeploy();
 
-      if(result.success){
-        showToast.success(result.message || "Despliegue iniciado");
-      }else {
-        showToast.error(result.message || "Error al iniciar el despliegue");
-      }
+        if (result.success) {
+            showToast.success(result.message || "Despliegue iniciado");
+        } else {
+            showToast.error(result.message || "Error al iniciar el despliegue");
+        }
     }
 
     const handleCloseModal = () => {
         setSelectedBlog(null);
         setIsAddEditModalOpen(false);
     };
+
+    const permissions = getPermissions();
+
+    const canCreate = permissions.includes("blogs.crear");
 
     return (
         <div className="relative p-2 md:p-4 text-[#0D1030] dark:text-white transition-colors duration-300">
@@ -170,24 +175,25 @@ export default function Blogspage() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                        <ActionButtonGroup
-                            buttons={[{
-                                label: "Añadir Blog",
-                                onClick: () => setIsAddEditModalOpen(true),
-                                icon: <Plus className="h-4 w-4" />,
-                                variant: "primary",
-                                className: "w-full sm:w-auto"
-                            }]}
-                        />
+                        {canCreate && (
+                            <ActionButtonGroup
+                                buttons={[{
+                                    label: "Añadir Blog",
+                                    onClick: () => setIsAddEditModalOpen(true),
+                                    icon: <Plus className="h-4 w-4" />,
+                                    variant: "primary",
+                                    className: "w-full sm:w-auto"
+                                }]}
+                            />)}
 
                         <ActionButtonGroup buttons={[{
-                          label: "Publicar Cambios",
-                          onClick: handleTriggerDeploy,
-                          icon: <Rocket className="h-4 w-4"/>,
-                          variant: "info",
-                          className: "w-full sm:w-auto",
-                          isLoading: isDeploying
-                        }]}/>
+                            label: "Publicar Cambios",
+                            onClick: handleTriggerDeploy,
+                            icon: <Rocket className="h-4 w-4" />,
+                            variant: "info",
+                            className: "w-full sm:w-auto",
+                            isLoading: isDeploying
+                        }]} />
                         <ExportDropdown
                             label="Exportar"
                             icon={<Download className="h-4 w-4" />}
@@ -228,8 +234,8 @@ export default function Blogspage() {
                 </div>
             </section>
             <div className="mb-4 flex flex-col border-b border-[#E5EEF6] pb-4 px-5 dark:border-white/10 lg:flex-col lg:items-baseline lg:justify-between">
-              <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">GESTIÓN DE BLOGS</h3>
-              <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Administra publicaciones y actualiza contenido.</p>
+                <h3 className="mt-1 mb-1 text-xl lg:text-3xl font-bold text-[#0D1030] dark:text-white/90">GESTIÓN DE BLOGS</h3>
+                <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Administra publicaciones y actualiza contenido.</p>
             </div>
 
             <AdminTable
@@ -237,7 +243,9 @@ export default function Blogspage() {
                 columns={columns}
                 data={datosPaginados}
                 onEdit={handleEditClick}
+                editPermission="blogs.editar"
                 onDelete={handleDeleteBlog}
+                deletePermission="blogs.eliminar"
                 isLoading={isLoading && blogs.length === 0}
                 emptyMessage="No se encontraron blogs"
                 onResetSearch={() => setBlogsFiltrados(blogs)}

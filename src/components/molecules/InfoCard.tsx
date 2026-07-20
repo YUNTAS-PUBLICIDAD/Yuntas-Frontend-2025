@@ -23,7 +23,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ text, className = "", index, varian
 					<MdCheck className="text-xl md:text-2xl" />
 				)}
 			</div>
-			<div className="flex-1 pt-1">
+			<div className="flex-1 min-w-0 pt-1">
 				<div
 					className="text-[#00031E] text-base md:text-lg font-medium break-words whitespace-pre-line leading-relaxed"
 					dangerouslySetInnerHTML={{

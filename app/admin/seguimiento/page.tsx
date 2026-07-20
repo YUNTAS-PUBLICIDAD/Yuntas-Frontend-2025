@@ -15,11 +15,18 @@ import { useLeads } from "@/hooks/useLeads";
 import LeadForm from "@/components/molecules/admin/leads/LeadForm";
 import SearchBar from "@/components/molecules/admin/SearchBar";
 import { Eye, MessageCircle, UserPlus } from "lucide-react";
-
+import { getRole } from "@/utils/role";
 
 
 export default function SeguimientoPage() {
     const router = useRouter();
+    const role = getRole();
+
+    useEffect(() => {
+        if (role !== "admin") {
+            router.replace("/admin");
+        }
+    }, [role, router]);
 
     const [datosPaginados, setDatosPaginados] = useState<Lead[]>([]);
     const [leadsFiltered, setLeadsFiltered] = useState<Lead[]>([]);
@@ -38,10 +45,10 @@ export default function SeguimientoPage() {
                 ? "Visualiza actividad por canal y último movimiento registrado."
                 : "Administra clientes, edita datos y filtra seguimientos con rapidez.",
             titleTable: isMonitoreoMode ? "Monitoreo" : "seguimiento de clientes",
-            descriptionTable: isMonitoreoMode 
-            ? "Monitoreo" 
-            : "Consulta y administra los clientes",
-                searchPlaceholder: isMonitoreoMode
+            descriptionTable: isMonitoreoMode
+                ? "Monitoreo"
+                : "Consulta y administra los clientes",
+            searchPlaceholder: isMonitoreoMode
                 ? "Buscar por ID o nombre..."
                 : "Buscar por nombre, email, teléfono, producto...",
             searchKeys: isMonitoreoMode
@@ -66,18 +73,18 @@ export default function SeguimientoPage() {
     }, [leads]);
 
     const originOptions = useMemo(() => {
-    const allowedOrigins = ["Inicio", "Producto detalle", "Administración"];
+        const allowedOrigins = ["Inicio", "Producto detalle", "Administración"];
 
-    return Array.from(
-        new Set(
-            leads
-                .map((lead) => lead.source_name?.trim())
-                .filter((source): source is string => Boolean(source))
+        return Array.from(
+            new Set(
+                leads
+                    .map((lead) => lead.source_name?.trim())
+                    .filter((source): source is string => Boolean(source))
+            )
         )
-    )
-    .filter((source) => allowedOrigins.includes(source))
-    .sort((a, b) => a.localeCompare(b));
-}, [leads]);
+            .filter((source) => allowedOrigins.includes(source))
+            .sort((a, b) => a.localeCompare(b));
+    }, [leads]);
 
     const leadsByOrigin = useMemo(() => {
         if (!originFilter) return leadsFiltered;

@@ -47,7 +47,7 @@ export default function FormSection() {
                                 <div className="mt-3 flex flex-wrap items-center gap-2">
                                     <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Administración</span>
                                     <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Marketing</span>
-                                    <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Ventas</span>
+                                    <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-blue-700">Diseño</span>
                                 </div>
                                 <p className="mt-2 text-xs text-slate-500">Si no perteneces a estas áreas, no tendrás acceso al sistema.</p>
                             </div>

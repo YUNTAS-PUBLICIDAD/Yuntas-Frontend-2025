@@ -129,6 +129,8 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                         {displayProducto.video_url && (
                             <VideoSection
                                 videoUrl={displayProducto.video_url}
+                                subtitleVideo={displayProducto.video_subtitle}
+                                descriptionVideo={displayProducto.video_description}
                             />
                         )}
                         

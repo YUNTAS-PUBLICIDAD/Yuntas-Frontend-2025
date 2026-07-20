@@ -48,7 +48,7 @@ export default function Modal({
         lg: "max-w-4xl"
     };
 
-    const bgClass = className.includes("bg-") ? "" : "bg-white text-[#203565]";
+    const bgClass = className.includes("bg-") ? "" : "bg-white text-[#203565] dark:bg-[#141A3F]";
     const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#203565]";
     const closeBtnClass = className.includes("text-white")
         ? "text-white hover:text-gray-200"
@@ -69,7 +69,7 @@ export default function Modal({
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/20 dark:bg-[#141A3F]">
+                    <div className="flex items-center justify-between px-6 py-4">
                         <h2 id={titleId} className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
                             {title}
                         </h2>

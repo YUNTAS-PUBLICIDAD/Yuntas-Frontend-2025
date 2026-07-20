@@ -3,6 +3,7 @@
 import UserSection from "@/components/molecules/header/UserSection";
 import { useScroll } from "@/hooks/useScroll";
 import NavMenuAdmin from "./NavMenuAdmin";
+import { getRole } from "@/utils/role";
 import SwitchMode from "@/components/molecules/admin/SwitchMode";
 
 type HeaderProps = {
@@ -11,6 +12,7 @@ type HeaderProps = {
 
 export default function HeaderAdmin({ className = "" }: HeaderProps) {
   const scrolled = useScroll(80);
+  const role = getRole();
 
   return (
     <header
@@ -36,8 +38,8 @@ export default function HeaderAdmin({ className = "" }: HeaderProps) {
             <p className="text-xs text-[#5A6B93] dark:text-white/60 leading-none">
               Bienvenido
             </p>
-            <p className="text-sm font-semibold text-[#203565] dark:text-white">
-              Administrador
+            <p className="text-sm font-semibold text-[#203565] dark:text-white capitalize">
+              {role}
             </p>
           </div>
           <UserSection size="lg" />
