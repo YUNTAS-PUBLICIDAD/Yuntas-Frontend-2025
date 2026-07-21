@@ -55,22 +55,6 @@ export const API_ENDPOINTS = {
 
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
-    CHATBOT: {
-        FLOWS: {
-          GET_ALL: '/admin/chatbot/flows',
-          GET_ONE: (id: number) => `/admin/chatbot/flows/${id}`,
-          CREATE: '/admin/chatbot/flows',
-          UPDATE: (id: number) => `/admin/chatbot/flows/${id}`,
-          DELETE: (id: number) => `/admin/chatbot/flows/${id}`,
-
-        },
-
-        // 🧠 GRAPH EDITOR (NUEVO - IMPORTANTE)
-          GRAPH: {
-            GET: (id: number) => `/admin/chatbot/flows/${id}/graph`,
-            SAVE: (id: number) => `/admin/chatbot/flows/${id}/graph`,
-          }
-      },
 
     USERS: {
       GET_ALL: '/admin/users',
