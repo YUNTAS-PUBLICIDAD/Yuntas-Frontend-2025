@@ -4,11 +4,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import Button from "@/components/atoms/Button";
 import PopupRenderer from '@/components/molecules/PopupRenderer';
 import { Popup, PopupImage } from '@/types/admin/popup';
+import { Producto } from '@/types/admin/producto';
+import { getProductosService } from '@/services/productosService';
 import { LeadInput } from '@/types/admin/lead';
 import { showToast } from '@/utils/showToast';
 import { api, API_ENDPOINTS } from '@/config';
 import { sourceData } from '@/data/popup/sourceData';
-import { Monitor, Save, Smartphone, X, ChevronDown, Layout, Type, Image as ImageIcon, Timer, Power, Palette } from 'lucide-react';
+import { Monitor, Save, Smartphone, X, ChevronDown, Layout, Type, Image as ImageIcon, Timer, Power, Palette, ShoppingBag } from 'lucide-react';
 import { getPermissions } from "@/utils/permission";
 
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
@@ -223,7 +225,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   const [mobileImageName, setMobileImageName] = useState('');
   const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
 
-  const [products, setProducts] = useState<{ id: number; name: string }[]>([]);
+  const [products, setProducts] = useState<Producto[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
@@ -245,10 +248,9 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL);
-        const fetched = res.data?.data?.data;
-        if (Array.isArray(fetched)) {
-          setProducts(fetched);
+        const res = await getProductosService(100);
+        if (res.success && res.data) {
+          setProducts(res.data);
         } else {
           setProducts([]);
         }
@@ -280,6 +282,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     setButtonTextColor(initialData.button_text_color || '#FFFFFF');
     setDelaySeconds(initialData.delay_seconds?.toString() || '5');
     setButtonColor(initialData.button_color || '#7C29E3');
+    setSelectedProductId(initialData.product_id ? Number(initialData.product_id) : null);
     setDesktopImageName('');
     setTextImageName('');
     setMobileImageName('');
@@ -358,6 +361,11 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       }
     }
 
+    if (pageTarget === "product-detail" && !selectedProductId) {
+      showToast.warning("Debes seleccionar un producto para el anuncio.");
+      return;
+    }
+
     if (pageTarget !== "product-detail" && !initialData && (!desktopImageFile || !textImageFile || !mobileImageFile)) {
       showToast.warning("Debes subir las 3 imágenes (Desktop, Texto y Móvil) para crear el popup.");
       return;
@@ -384,6 +392,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
       id: initialData?.id,
       title,
       lead_source_id: getSourceId(pageTarget),
+      product_id: pageTarget === "product-detail" && selectedProductId ? Number(selectedProductId) : null,
       button_text: buttonText,
       button_color: buttonColor,
       button_text_color: buttonTextColor,
@@ -441,6 +450,26 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
     return () => observer.disconnect();
   }, [popupBaseSize.height, popupBaseSize.width, previewMode]);
+
+  const selectedProduct = products.find((p) => p.id === Number(selectedProductId));
+
+  const formatImgUrl = (url?: string | null) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+    return `${BACKEND_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
+  const effectiveDesktopImgSrc = pageTarget === "product-detail"
+    ? (desktopImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupLeft')?.url || selectedProduct?.main_image?.url))
+    : desktopImgSrc;
+
+  const effectiveTextImgSrc = pageTarget === "product-detail"
+    ? (textImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupRight')?.url))
+    : textImgSrc;
+
+  const effectiveMobileImgSrc = pageTarget === "product-detail"
+    ? (mobileImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupMobile')?.url || selectedProduct?.main_image?.url))
+    : mobileImgSrc;
 
   const delayOptions = [
     { value: "3", label: "3s - Muy inmediato" },
@@ -508,6 +537,33 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               />
             </div>
           </div>
+
+          {/* SECCIÓN: PRODUCTO ASOCIADO */}
+          {pageTarget === "product-detail" && (
+            <div className="px-4 sm:px-6 py-6">
+              <BlockTitle
+                icon={<ShoppingBag className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                title="Producto Asociado"
+                subtitle="Selecciona el producto donde se mostrará este anuncio"
+              />
+              <div className="max-w-sm">
+                <Select
+                  label="Producto de la tienda"
+                  value={selectedProductId ? String(selectedProductId) : ""}
+                  onChange={(val) => setSelectedProductId(val ? Number(val) : null)}
+                  options={[
+                    { value: "", label: "-- Seleccionar producto --" },
+                    ...products.map((p) => ({
+                      value: String(p.id),
+                      label: p.name,
+                    })),
+                  ]}
+                  disabled={!active}
+                  hint="Las imágenes del anuncio se poblarán automáticamente desde este producto"
+                />
+              </div>
+            </div>
+          )}
 
           {/* SECCIÓN: TEXTOS Y LLAMADOS A LA ACCIÓN */}
           <div className="px-4 sm:px-6 py-6">
@@ -726,29 +782,27 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
             }}
             className="transition-transform duration-300 ease-out"
           >
-            {pageTarget !== "product-detail" && (
-              <PopupRenderer
-                isOpen
-                withBackdrop={false}
-                wrapperClassName="!p-0 !w-auto !h-auto"
-                previewDevice={previewMode}
-                muted={!active}
-                onClose={() => { }}
-                desktopImgSrc={desktopImgSrc}
-                textImgSrc={textImgSrc}
-                mobileImgSrc={mobileImgSrc}
-                imgAlt={imageAlt || "Vista previa popup"}
-                title={title || "¡Tu inversión en maquinaria!"}
-                formData={previewFormData}
-                errors={{}}
-                handleChange={handlePreviewChange}
-                handleSubmit={handlePreviewSubmit}
-                buttonText={buttonText || "CONOCER MÁS"}
-                buttonColor={buttonColor}
-                isSubmitting={false}
-                buttonTextColor={buttonTextColor}
-              />
-            )}
+            <PopupRenderer
+              isOpen
+              withBackdrop={false}
+              wrapperClassName="!p-0 !w-auto !h-auto"
+              previewDevice={previewMode}
+              muted={!active}
+              onClose={() => { }}
+              desktopImgSrc={effectiveDesktopImgSrc}
+              textImgSrc={effectiveTextImgSrc}
+              mobileImgSrc={effectiveMobileImgSrc}
+              imgAlt={imageAlt || selectedProduct?.name || "Vista previa popup"}
+              title={title || selectedProduct?.hero_title || "¡Tu inversión en maquinaria!"}
+              formData={previewFormData}
+              errors={{}}
+              handleChange={handlePreviewChange}
+              handleSubmit={handlePreviewSubmit}
+              buttonText={buttonText || "CONOCER MÁS"}
+              buttonColor={buttonColor}
+              isSubmitting={false}
+              buttonTextColor={buttonTextColor}
+            />
           </div>
         </div>
       </div>
