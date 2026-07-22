@@ -98,7 +98,14 @@ export default function PopupsPage(){
           </div>
         </div>
       </div>
-      <PopupConfigForm onCancel={() => {}} key={tab} pageTarget={tab} initialData={currentPopup} onSubmit={handleSave} isSaving={isSaving}/>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-2">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#203565] dark:border-white"></div>
+          <span className="text-xs text-gray-500 dark:text-white/40">Cargando configuración...</span>
+        </div>
+      ) : (
+        <PopupConfigForm onCancel={() => {}} key={tab} pageTarget={tab} initialData={currentPopup} onSubmit={handleSave} isSaving={isSaving}/>
+      )}
     </div>
   )
 }

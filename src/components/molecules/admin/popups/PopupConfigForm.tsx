@@ -227,6 +227,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
   const [products, setProducts] = useState<Producto[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [previewScale, setPreviewScale] = useState(1);
@@ -247,6 +248,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoadingProducts(true);
       try {
         const res = await getProductosService(100);
         if (res.success && res.data) {
@@ -256,6 +258,8 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         }
       } catch (err) {
         console.error('Error cargando productos', err);
+      } finally {
+        setLoadingProducts(false);
       }
     };
     fetchProducts();
@@ -451,25 +455,30 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
     return () => observer.disconnect();
   }, [popupBaseSize.height, popupBaseSize.width, previewMode]);
 
-  const selectedProduct = products.find((p) => p.id === Number(selectedProductId));
+  const selectedProduct = React.useMemo(() => {
+    return products.find((p) => p.id === Number(selectedProductId));
+  }, [products, selectedProductId]);
 
-  const formatImgUrl = (url?: string | null) => {
+  const formatImgUrl = React.useCallback((url?: string | null) => {
     if (!url) return '';
     if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
     return `${BACKEND_URL}${url.startsWith('/') ? '' : '/'}${url}`;
-  };
+  }, []);
 
-  const effectiveDesktopImgSrc = pageTarget === "product-detail"
-    ? (desktopImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupLeft')?.url || selectedProduct?.main_image?.url))
-    : desktopImgSrc;
+  const effectiveDesktopImgSrc = React.useMemo(() => {
+    if (pageTarget !== "product-detail") return desktopImgSrc;
+    return desktopImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupLeft')?.url || selectedProduct?.main_image?.url);
+  }, [pageTarget, desktopImgSrc, selectedProduct, formatImgUrl]);
 
-  const effectiveTextImgSrc = pageTarget === "product-detail"
-    ? (textImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupRight')?.url))
-    : textImgSrc;
+  const effectiveTextImgSrc = React.useMemo(() => {
+    if (pageTarget !== "product-detail") return textImgSrc;
+    return textImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupRight')?.url);
+  }, [pageTarget, textImgSrc, selectedProduct, formatImgUrl]);
 
-  const effectiveMobileImgSrc = pageTarget === "product-detail"
-    ? (mobileImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupMobile')?.url || selectedProduct?.main_image?.url))
-    : mobileImgSrc;
+  const effectiveMobileImgSrc = React.useMemo(() => {
+    if (pageTarget !== "product-detail") return mobileImgSrc;
+    return mobileImgSrc || formatImgUrl(selectedProduct?.gallery?.find((g: any) => g.slot === 'PopupMobile')?.url || selectedProduct?.main_image?.url);
+  }, [pageTarget, mobileImgSrc, selectedProduct, formatImgUrl]);
 
   const delayOptions = [
     { value: "3", label: "3s - Muy inmediato" },
@@ -547,20 +556,27 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
                 subtitle="Selecciona el producto donde se mostrará este anuncio"
               />
               <div className="max-w-sm">
-                <Select
-                  label="Producto de la tienda"
-                  value={selectedProductId ? String(selectedProductId) : ""}
-                  onChange={(val) => setSelectedProductId(val ? Number(val) : null)}
-                  options={[
-                    { value: "", label: "-- Seleccionar producto --" },
-                    ...products.map((p) => ({
-                      value: String(p.id),
-                      label: p.name,
-                    })),
-                  ]}
-                  disabled={!active}
-                  hint="Las imágenes del anuncio se poblarán automáticamente desde este producto"
-                />
+                {loadingProducts ? (
+                  <div className="flex items-center gap-2 py-2.5 px-3 border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-sm text-gray-500">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500 dark:border-white"></div>
+                    <span>Cargando productos de la tienda...</span>
+                  </div>
+                ) : (
+                  <Select
+                    label="Producto de la tienda"
+                    value={selectedProductId ? String(selectedProductId) : ""}
+                    onChange={(val) => setSelectedProductId(val ? Number(val) : null)}
+                    options={[
+                      { value: "", label: "-- Seleccionar producto --" },
+                      ...products.map((p) => ({
+                        value: String(p.id),
+                        label: p.name,
+                      })),
+                    ]}
+                    disabled={!active}
+                    hint="Las imágenes del anuncio se poblarán automáticamente desde este producto"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -773,37 +789,47 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
 
         {/* Contenedor del Canvas de Vista Previa */}
         <div ref={previewCanvasRef} className="w-full flex-1 flex items-center justify-center p-6 overflow-visible relative">
-          <div
-            style={{
-              width: popupBaseSize.width,
-              height: popupBaseSize.height,
-              transform: `scale(${previewScale})`,
-              transformOrigin: 'center center',
-            }}
-            className="transition-transform duration-300 ease-out"
-          >
-            <PopupRenderer
-              isOpen
-              withBackdrop={false}
-              wrapperClassName="!p-0 !w-auto !h-auto"
-              previewDevice={previewMode}
-              muted={!active}
-              onClose={() => { }}
-              desktopImgSrc={effectiveDesktopImgSrc}
-              textImgSrc={effectiveTextImgSrc}
-              mobileImgSrc={effectiveMobileImgSrc}
-              imgAlt={imageAlt || selectedProduct?.name || "Vista previa popup"}
-              title={title || selectedProduct?.hero_title || "¡Tu inversión en maquinaria!"}
-              formData={previewFormData}
-              errors={{}}
-              handleChange={handlePreviewChange}
-              handleSubmit={handlePreviewSubmit}
-              buttonText={buttonText || "CONOCER MÁS"}
-              buttonColor={buttonColor}
-              isSubmitting={false}
-              buttonTextColor={buttonTextColor}
-            />
-          </div>
+          {pageTarget === "product-detail" && !selectedProductId ? (
+            <div className="flex flex-col items-center justify-center p-8 bg-white dark:bg-[#1C2347] border border-dashed border-gray-300 dark:border-white/10 rounded-2xl text-center max-w-[280px] shadow-sm">
+              <ShoppingBag className="h-10 w-10 text-gray-400 mb-3" />
+              <p className="text-sm font-semibold text-[#0D1030] dark:text-white">Seleccione un producto</p>
+              <p className="text-xs text-gray-400 dark:text-white/40 mt-1">
+                Elige un producto en el formulario para cargar su diseño y fotos
+              </p>
+            </div>
+          ) : (
+            <div
+              style={{
+                width: popupBaseSize.width,
+                height: popupBaseSize.height,
+                transform: `scale(${previewScale})`,
+                transformOrigin: 'center center',
+              }}
+              className="transition-transform duration-300 ease-out"
+            >
+              <PopupRenderer
+                isOpen
+                withBackdrop={false}
+                wrapperClassName="!p-0 !w-auto !h-auto"
+                previewDevice={previewMode}
+                muted={!active}
+                onClose={() => { }}
+                desktopImgSrc={effectiveDesktopImgSrc}
+                textImgSrc={effectiveTextImgSrc}
+                mobileImgSrc={effectiveMobileImgSrc}
+                imgAlt={imageAlt || selectedProduct?.name || "Vista previa popup"}
+                title={title || selectedProduct?.hero_title || "¡Tu inversión en maquinaria!"}
+                formData={previewFormData}
+                errors={{}}
+                handleChange={handlePreviewChange}
+                handleSubmit={handlePreviewSubmit}
+                buttonText={buttonText || "CONOCER MÁS"}
+                buttonColor={buttonColor}
+                isSubmitting={false}
+                buttonTextColor={buttonTextColor}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
