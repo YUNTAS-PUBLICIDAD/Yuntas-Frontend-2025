@@ -82,6 +82,8 @@ export function BlogClient({ initialBlog }: BlogClientProps) {
             {displayBlog.video_url &&
                 <VideoSection
                     videoUrl={displayBlog.video_url}
+                    videoSubtitle={displayBlog.video_subtitle}
+                    videoDescription={displayBlog.video_description}
                 />
             }
             <OpinionSection
