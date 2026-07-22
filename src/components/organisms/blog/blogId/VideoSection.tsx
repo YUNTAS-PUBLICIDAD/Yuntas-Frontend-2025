@@ -6,13 +6,15 @@ import { MdPlayArrow, MdArrowForward, MdInfoOutline } from 'react-icons/md'
 
 type VideoSectionProps = {
 	videoUrl: string;
+	subtitleVideo?: string;
+	descriptionVideo?: string;
 };
 
-const VideoSection = ({ videoUrl }: VideoSectionProps) => {
+const VideoSection = ({ videoUrl, subtitleVideo, descriptionVideo }: VideoSectionProps) => {
 	const videoSrc = getYoutubeEmbed(videoUrl)
 	
 	return (
-		<section className='relative w-full py-12 md:py-14 bg-[#E2F6F6] overflow-hidden'>
+		<section className='relative w-full py-6 md:py-10 bg-[#E2F6F6] overflow-hidden'>
 			{/* Elementos decorativos */}
 			<div className="absolute top-10 left-0 w-96 h-96 bg-[#23C1DE]/8 rounded-full blur-3xl pointer-events-none -translate-x-1/2" />
 			<div className="absolute bottom-20 right-0 w-96 h-96 bg-[#203565]/6 rounded-full blur-3xl pointer-events-none translate-x-1/2" />
@@ -23,26 +25,25 @@ const VideoSection = ({ videoUrl }: VideoSectionProps) => {
 						<MdPlayArrow className="text-3xl text-[#23C1DE]" />
 					</div>
 					<div>
-						<span className="text-sm md:text-base uppercase tracking-[0.2em] text-[#23C1DE] font-bold">Contenido Multimedia</span>
 						<Text variant="h2" color="text-[#203565]" className="font-bold">VIDEO DESTACADO</Text>
 					</div>
 				</div>
 				{/* HEADER */}
-				<div className='flex flex-col gap-6 mb-12 md:mb-16 text-center max-w-2xl mx-auto'>
+				{(subtitleVideo || descriptionVideo) && (
+					<div className='flex flex-col gap-4 mb-8 md:mb-12 text-center max-w-4xl mx-auto'>
+						<span className='text-3xl md:text-4xl lg:text-5xl font-black text-[#23C1DE] leading-tight'>
+							{subtitleVideo}
+						</span>
 
-
-					<span className='text-3xl md:text-4xl lg:text-5xl font-black text-[#23C1DE] leading-tight'>
-						Mira Nuestro Video
-					</span>
-
-					<p className='text-[#203565] text-base md:text-lg leading-relaxed'>
-						Descubre más detalles sobre nuestros productos y servicios. Conoce cómo podemos ayudarte a alcanzar tus objetivos.
-					</p>
+						<p className='text-[#203565] text-base md:text-lg leading-relaxed'>
+							{descriptionVideo}
+						</p>
 				</div>
+				)}
 
 				{/* VIDEO CONTAINER */}
 				<div className='flex flex-col gap-8 items-center'>
-					<div className='w-full max-w-5xl group'>
+					<div className='w-full max-w-7xl group'>
 						{/* Glow effect */}
 							<iframe
 								className="w-full aspect-video rounded-3xl"
