@@ -10,7 +10,8 @@ import { useLeads } from "@/hooks/useLeads";
 import { useBlogs } from "@/hooks/useBlog";
 import { useProductos } from "@/hooks/useProductos";
 import { getMostViewedPages } from "@/services/trackingService";
-
+import { showWelcomeAlert } from "@/utils/welcomeAlert";
+import { getRole } from "@/utils/role";
 
 interface StatCardProps {
   label: string;
@@ -96,6 +97,15 @@ export default function AdminDashboardPage() {
     window.addEventListener("themechange", syncTheme);
 
     return () => window.removeEventListener("themechange", syncTheme);
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem('justLoggedIn')) {
+      const darkNow = document.documentElement.classList.contains("dark");
+      const role = getRole();
+      showWelcomeAlert(darkNow, role);
+      localStorage.removeItem('justLoggedIn');
+    }
   }, []);
 
   useEffect(() => {

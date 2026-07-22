@@ -24,6 +24,8 @@ export function useAuth(): UseAuthReturn {
         const result = await loginService(credentials);
 
         if (result.success) {
+            localStorage.setItem('justLoggedIn', 'true');
+            
             router.replace("/admin");
 
         } else {
