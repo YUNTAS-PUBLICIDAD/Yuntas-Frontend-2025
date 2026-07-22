@@ -6,9 +6,11 @@ import { MdPlayArrow, MdArrowForward, MdInfoOutline } from 'react-icons/md'
 
 type VideoSectionProps = {
 	videoUrl: string;
+    videoSubtitle?: string | null;
+    videoDescription?: string | null;
 };
 
-const VideoSection = ({ videoUrl }: VideoSectionProps) => {
+const VideoSection = ({ videoUrl, videoSubtitle, videoDescription }: VideoSectionProps) => {
 	const videoSrc = getYoutubeEmbed(videoUrl)
 	
 	return (
@@ -32,11 +34,11 @@ const VideoSection = ({ videoUrl }: VideoSectionProps) => {
 
 
 					<span className='text-3xl md:text-4xl lg:text-5xl font-black text-[#23C1DE] leading-tight'>
-						Mira Nuestro Video
+						{videoSubtitle}
 					</span>
 
 					<p className='text-[#203565] text-base md:text-lg leading-relaxed'>
-						Descubre más detalles sobre nuestros productos y servicios. Conoce cómo podemos ayudarte a alcanzar tus objetivos.
+						{videoDescription}
 					</p>
 				</div>
 
