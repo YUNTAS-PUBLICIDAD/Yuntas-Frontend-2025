@@ -6,6 +6,7 @@ export const NAV_ITEMS = [
   { label: "PRODUCTOS", href: "/productos" },
   { label: "BLOG", href: "/blog" },
   { label: "CONTACTO", href: "/contacto" },
+  { label: "HISTORIAL", href: "/historial" },
 ];
 
 export const getAdminItems = () => {
@@ -30,5 +31,9 @@ export const getAdminItems = () => {
     { label: "POP-UPS", href: "/admin/popups" },
     { label: "PLANTILLAS", href: "/admin/templates" },
     { label: "CONFIGURACION", href: "/admin/configuracion" },
+
+    ...(role === "admin"
+      ? [{ label: "HISTORIAL", href: "/admin/historial" }]
+      : []),
   ];
 };
