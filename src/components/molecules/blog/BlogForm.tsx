@@ -28,9 +28,11 @@ const defaultFormData: BlogInput = {
     hero_title: "",
     cover_subtitle: "",
     video_url: "",
+    video_subtitle: "",
+    video_description: "",
 
     meta_title: "",
-    meta_description: "",
+    meta_description: "",   
     keywords: [],
 
     main_image: null,
@@ -131,8 +133,8 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
       if (missingSlots.length > 0) {
        newErrors.gallery = "Todas las imágenes de la galería son obligatorias";
       }
-const emptyImages = formData.gallery.filter(
- item => !item.image || (typeof item.image === "string" && item.image.trim() === "")
+    const emptyImages = formData.gallery.filter(
+    item => !item.image || (typeof item.image === "string" && item.image.trim() === "")
 );
 
 if (emptyImages.length > 0) {
@@ -148,6 +150,7 @@ if (formData.video_url) {
   } catch (error) {
    newErrors.video_url = "URL inválida" 
   }
+
 }
       setErrors(newErrors);
 
@@ -163,6 +166,8 @@ if (formData.video_url) {
                 hero_title: initialData.hero_title,
                 cover_subtitle: initialData.cover_subtitle,
                 video_url: initialData.video_url || "",
+                video_subtitle: initialData.video_subtitle || "",
+                video_description: initialData.video_description || "",
 
                 meta_title: initialData.meta_title,
                 meta_description: initialData.meta_description,
@@ -416,6 +421,31 @@ if (formData.video_url) {
                 />
 
                 <InputAdmin
+                    label="Subtítulo del Video"
+                    name="video_subtitle"
+                    value={formData.video_subtitle || ""}
+                    onChange={handleInputChange}
+                    placeholder="Ej: Mira Nuestro Video"
+                    helperText="Texto destacado que aparece sobre el video. Máx. 100 caracteres."
+                    maxLength={100}
+                    error={errors.video_subtitle}
+                    disabled={!formData.video_url}
+                />
+
+                <TextareaAdmin
+                label="Descripción del Video"
+                name="video_description"
+                value={formData.video_description || ""}
+                onChange={handleInputChange}
+                placeholder="Descubre más detalles sobre nuestros productos y servicios..."
+                helperText="Texto que acompaña al video. Máx. 300 caracteres."
+                maxLength={300}
+                rows={3}
+                error={errors.video_description}
+                disabled={!formData.video_url}  
+                />     
+
+                                <InputAdmin
                     label="URL del Video (opcional)"
                     name="video_url"
                     value={formData.video_url || ""}
@@ -424,7 +454,7 @@ if (formData.video_url) {
                     helperText="Máx. 150 caracteres (letras, números y espacios)."
                     maxLength={150}
                     error={errors.video_url}
-                />
+                /> 
             </FormSection>
 
             <FormSection title="SEO (Optimización para Buscadores)">
