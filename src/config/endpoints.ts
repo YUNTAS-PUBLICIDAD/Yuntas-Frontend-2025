@@ -46,7 +46,7 @@ export const API_ENDPOINTS = {
   },
 
   LEADS: {
-   CAPTURE: '/leads/capture'
+    CAPTURE: '/leads/capture'
   },
 
   TRACKING: {
@@ -61,6 +61,9 @@ export const API_ENDPOINTS = {
       CREATE: '/admin/users',
       UPDATE: (id: number) => `/admin/users/${id}`,
       DELETE: (id: number) => `/admin/users/${id}`,
+    },
+    HISTORIAL: {
+      GET_ALL: '/admin/historial',
     },
     BLOG: {
       CREATE: '/admin/blogs',
