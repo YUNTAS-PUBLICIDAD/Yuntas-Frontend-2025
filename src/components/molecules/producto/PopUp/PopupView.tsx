@@ -51,7 +51,7 @@ export const PopupView = ({ ...props }: PopupViewProps) => {
             {props.rightImage && <PopupImage src={props.rightImage.url} alt={props.rightImage?.alt || ""} title={props.rightImage.title  || ""} />}
 
             <div className="absolute inset-0 flex flex-col justify-end">
-              <div className="h-[239px] bg-white backdrop-blur-md pb-[35px] px-[31px] w-full max-w-sm shadow-lg">
+              <div className="h-[239px] pb-[35px] px-[31px] w-full max-w-sm shadow-lg">
                 {/*<PopupForm {...props} />*/}
                 <PopupForm
                   formData={props.formData}
