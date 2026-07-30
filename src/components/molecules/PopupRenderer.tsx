@@ -97,7 +97,7 @@ const DesktopPopupComposition = ({
 
         {/* <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0a1a3a]/40 to-transparent"></div> */}
         {/*Capa profesional*/}
-        <div className="absolute bottom-0 h-[239px] w-full bg-white px-[31px] pb-16">
+        <div className="absolute bottom-0 h-[239px] w-full px-[31px] pb-16">
           <PopupForm
             formData={formData}
             errors={errors}
