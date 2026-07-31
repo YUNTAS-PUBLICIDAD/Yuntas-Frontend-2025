@@ -11,6 +11,8 @@ import { sourceData } from "@/data/popup/sourceData";
 import { getPublicPopupService } from "@/services/popupService";
 import { Popup as PopupType } from "@/types/admin/popup";
 
+export const revalidate = 0;
+
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
 export const metadata = {
