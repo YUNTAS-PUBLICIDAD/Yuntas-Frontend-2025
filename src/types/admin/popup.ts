@@ -8,6 +8,7 @@ export interface PopupImage {
   title?: string;
 }
 
+// VERIFICANDO DATOS DEL POPUP
 export interface Popup {
   id?: number;
   lead_source_id?: number;
