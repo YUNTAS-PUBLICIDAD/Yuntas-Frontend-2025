@@ -8,8 +8,7 @@ interface PageProps {
     params: { slug: string };
 }
 
-export const dynamicParams = true;
-export const revalidate = 0;
+export const revalidate = false;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const result = await getProductoBySlugService(params.slug);

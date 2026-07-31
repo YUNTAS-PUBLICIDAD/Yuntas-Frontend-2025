@@ -5,8 +5,6 @@ import BlogSection from "@/components/organisms/blog/BlogSection";
 import HeroSection from "@/components/organisms/blog/HeroSection";
 import { getBlogsService } from "@/services/blogService";
 import { Metadata } from "next";
-
-export const revalidate = 0;
 // import { useBlogs } from "@/hooks/useBlog";
 // import { useEffect } from "react";
 	export const metadata: Metadata = {

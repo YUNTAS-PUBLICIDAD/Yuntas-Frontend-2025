@@ -2,8 +2,6 @@ import { BlogClient } from "./BlogClient";
 import { getBlogBySlugService, getBlogsService } from "@/services/blogService";
 import { Metadata } from "next";
 
-export const revalidate = 0;
-
 type PageProps = {
   params: {
     slug: string

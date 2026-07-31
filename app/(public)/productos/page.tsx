@@ -5,8 +5,6 @@ import { getProductosService } from "@/services/productosService";
 import { sourceData } from "@/data/popup/sourceData";
 import { ProductList } from "./ProductList";
 import { imagenes } from "@/data/imagenes";
-
-export const revalidate = 0;
  
 export const metadata = {
     title: "Productos Publicitarios",
