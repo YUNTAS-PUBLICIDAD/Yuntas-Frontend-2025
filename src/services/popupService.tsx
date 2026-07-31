@@ -1,4 +1,4 @@
-import { api, API_ENDPOINTS } from "@/config";
+import { api, API_ENDPOINTS, BASE_URL } from "@/config";
 import { Popup, PopupServiceResponse } from "@/types/admin/popup";
 
 export const getPopupsService = async (): Promise<PopupServiceResponse<Popup[]>> => {
@@ -164,8 +164,19 @@ for (const pair of formData.entries()) {
 
 export const getPublicPopupService = async (page: string): Promise<PopupServiceResponse<Popup | null>> => {
   try {
-    const response = await api.get(API_ENDPOINTS.POPUP.PUBLIC(page));
-    return { success: true, data: response.data };
+    const response = await fetch(`${BASE_URL}${API_ENDPOINTS.POPUP.PUBLIC(page)}`, {
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al cargar popup público (${response.status})`);
+    }
+
+    const data = await response.json();
+    return { success: true, data: data };
   } catch (error: any) {
     return { success: false, message: error.message };
   }
