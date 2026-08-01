@@ -6,6 +6,7 @@ export interface PopupImage {
   slot: 'left' | 'right' | 'center';
   alt?: string;
   title?: string;
+  updated_at?: string; // Fecha de última actualización para cache busting
 }
 
 // VERIFICANDO DATOS DEL POPUP

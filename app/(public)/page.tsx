@@ -11,6 +11,10 @@ import { sourceData } from "@/data/popup/sourceData";
 import { getPublicPopupService } from "@/services/popupService";
 import { Popup as PopupType } from "@/types/admin/popup";
 
+// 1. CORRECCIÓN: Desactiva el Data Cache de Next.js para esta ruta.
+//    Garantiza que cada visita consulte datos frescos al backend (sin caché estático del servidor).
+export const revalidate = 0;
+
 const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
 export const metadata = {
@@ -62,7 +66,16 @@ export default async function HomePage() {
   }
 
   const getImgUrl = (imgObj: any) => {
-    return imgObj?.image ? `${BACKEND_URL}${imgObj.image.startsWith('/') ? '' : '/'}${imgObj.image}` : "";
+    if (!imgObj?.image) return "";
+    const path = imgObj.image.startsWith('/') ? imgObj.image : `/${imgObj.image}`;
+    const baseUrl = `${BACKEND_URL}${path}`;
+    // 2. CORRECCIÓN: Cache busting — agrega un timestamp basado en updated_at
+    //    El navegador trata cada URL con ?v=... diferente, forzando una nueva descarga
+    //    cuando la imagen cambia en el backend.
+    const version = imgObj.updated_at
+      ? new Date(imgObj.updated_at).getTime()
+      : Date.now();
+    return `${baseUrl}?v=${version}`;
   };
 
   const desktopLeftImg = dynamicPopup?.images?.find(img => img.device === 'desktop' && img.slot === 'left');
