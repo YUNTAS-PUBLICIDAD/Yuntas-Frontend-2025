@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
+ // ajusta la ruta según donde lo tengas
 import { useHistorial } from "@/hooks/useHistorial";
+import Pagination from "@/components/molecules/Pagination";
 
 const columns = [
     { key: "action", label: "ACCIÓN" },
@@ -20,9 +22,15 @@ export default function HistorialPage() {
         getHistorial,
     } = useHistorial();
 
+    const [historialPaginado, setHistorialPaginado] = useState<typeof historial>([]);
+
     useEffect(() => {
         getHistorial();
     }, [getHistorial]);
+
+    const handleSetPaginados = useCallback((items: typeof historial) => {
+        setHistorialPaginado(items);
+    }, []);
 
     return (
         <div className="relative p-2 md:p-4 text-[#0D1030] dark:text-white transition-colors duration-300">
@@ -55,10 +63,18 @@ export default function HistorialPage() {
             <AdminTable
                 minRows={5}
                 columns={columns}
-                data={historial}
+                data={historialPaginado}
                 isLoading={isLoading}
                 emptyMessage="No se encontró registro de cambios"
             />
+
+            <div className="flex justify-center mt-4">
+                <Pagination
+                    pageSize={10}
+                    items={historial}
+                    setProductosPaginados={handleSetPaginados}
+                />
+            </div>
 
         </div>
     );
