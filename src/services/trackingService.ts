@@ -38,3 +38,24 @@ export const getUserTypeStats = async () => {
   );
   return response.data;
 };
+
+export interface TopProductApiItem {
+  id: number;
+  views_count: number;
+  growth: number;
+  conversion_rate: number;
+}
+
+/**
+ * Obtener el ranking de productos más vistos.
+ * Pendiente en el backend: GET /dashboard/top-products?days=&category=
+ */
+export const getTopViewedProducts = async (days: number, category?: string) => {
+  const response = await api.get(
+    API_ENDPOINTS.ADMIN.DASHBOARD.TOP_PRODUCTS,
+    {
+      params: category ? { days, category } : { days },
+    }
+  );
+  return response.data;
+};
