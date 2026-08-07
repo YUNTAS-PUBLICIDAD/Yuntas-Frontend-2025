@@ -128,6 +128,11 @@ const DynamicPopup = ({
             try {
                 const result = await getPublicPopupService(page);
 
+                console.log('🔍 [DynamicPopup] page prop:', page);
+                console.log('🔍 [DynamicPopup] result completo:', JSON.stringify(result, null, 2));
+                console.log('🔍 [DynamicPopup] result.success:', result.success);
+                console.log('🔍 [DynamicPopup] result.data existe:', !!result.data);
+                console.log('🔍 [DynamicPopup] result.data.active:', result.data?.active);
                 if (!isMounted) return;
 
                 if (result.success && result.data && result.data.active === true) {
@@ -167,6 +172,7 @@ const DynamicPopup = ({
                     });
                 }
             } catch (error) {
+                console.log('🔍 [DynamicPopup] CAYÓ EN CATCH:', error);
                 console.error("Error al obtener el popup dinámico:", error);
                 if (!isMounted) return;
 
