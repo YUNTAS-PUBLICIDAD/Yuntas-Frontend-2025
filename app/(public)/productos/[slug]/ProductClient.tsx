@@ -68,13 +68,6 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
     const imgHero = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.HERO);
     const imgSpecs = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.SPECS);
     const imgBene = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.BENEFITS);
-    // const imgPopups = displayProducto?.gallery.find(e => e.slot === imageProductoSlots.POPUPS);
-    // const popupImages = displayProducto?.gallery.filter(e =>
-    //   [
-    //     imageProductoSlots.POPUP_LEFT,
-    //     imageProductoSlots.POPUP_RIGHT,
-    //     imageProductoSlots.POPUP_MOBILE
-    //     ].includes(e.slot as typeof popupSlots[number])) || [];
 
     const isPopupSlot = (slot: ImageProductoSlot): slot is typeof popupSlots[number] => {
      return popupSlots.includes(slot as any);
@@ -85,17 +78,6 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
    const popupLeft = popupImages.find(e => e.slot === imageProductoSlots.POPUP_LEFT);
    const popupRight = popupImages.find(e => e.slot === imageProductoSlots.POPUP_RIGHT);
    const popupMobile = popupImages.find(e => e.slot === imageProductoSlots.POPUP_MOBILE);
-
-    // const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
-    const isDesktopPopup = (slot: ImageProductoSlot): slot is "PopupLeft" | "PopupRight" => {
-      return [
-        imageProductoSlots.POPUP_LEFT,
-        imageProductoSlots.POPUP_RIGHT
-        ].includes(slot as any);
-    }
-
-    // const selectedPopup = popupImages.find(e => isMobile ? e.slot === imageProductoSlots.POPUP_MOBILE : isDesktopPopup(e.slot));
 
     return (
         <>
@@ -140,9 +122,6 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                           isMobile ? (
                         <Popup
                             isMobile={isMobile}
-                            // imgSrc={popupMobile?.url || ""}
-                            // imgTitle={popupMobile?.title || "Cotiza tu producto"}
-                            // imgAlt={popupMobile?.alt || "Cotiza tu producto"}
                             mobileImage={popupMobile}
                             title={popup?.title ??"¡Tu marca brillando como se merece!"}
                             buttonText={popup?.button_text ?? "Explorar opciones"}
@@ -154,9 +133,6 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                           ): (
                             (popupLeft || popupRight) && (
                               <Popup
-                              // imgSrc={popupMobile?.url || ""}
-                              // imgTitle={popupMobile?.title || "Cotiza tu producto"}
-                              // imgAlt={popupMobile?.alt || "Cotiza tu producto"}
                               leftImage={popupLeft}
                               rightImage={popupRight}
                               title={ popup?.title ?? "¡Tu marca brillando como se merece!"}
