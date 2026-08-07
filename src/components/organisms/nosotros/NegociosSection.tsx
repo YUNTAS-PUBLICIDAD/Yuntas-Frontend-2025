@@ -13,32 +13,31 @@ const NegocioSection: React.FC = () => {
 
       {/* CONTENIDO PRINCIPAL */}
       <div className="w-full bg-white py-12 md:py-20 px-6 md:px-16">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+  <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
           {/* IMAGEN */}
-          <div className="flex justify-center lg:justify-start">
+           <div className="relative flex justify-center">
+
             <img
               src={imagenes.nosotros.detalle.src}
               alt={imagenes.nosotros.detalle.alt}
               title={imagenes.nosotros.detalle.title}
-              className="w-full max-w-xl rounded-[2.5rem] shadow-lg object-cover h-[420px]"
+              className="relative w-full max-w-xl h-[320px] object-cover rounded-3xl "
             />
           </div>
 
           {/* TEXTO CON <Text> */}
-          <div className="flex flex-col justify-center items-center text-center px-4 lg:w-[90%] mx-auto">
-            <Text
-              variant="caption"
-              color="black"
-              className="text-lg md:text-xl leading-snug text-gray-900"
-            >
-              En Yuntas Producciones{" "}
+           <div className="bg-white border-2 border-[#203565] rounded-3xl p-10 text-center shadow-[8px_8px_4px_#203565] relative ">
+
+              <Text variant="caption" color="black" className="font-['Roboto'] text-base md:text-lg leading-8 text-[#203565]"
+      >            En Yuntas Producciones{" "}
               <span className="font-extrabold">transformamos</span>
               <br />
               <span className="font-extrabold">
                 espacios con soluciones tecnológicas
               </span>
               <br />
+              
               <span className="font-extrabold">innovadoras</span> en iluminación y diseño,
               <br />
               ofreciendo calidad y vanguardia{" "}
@@ -46,6 +45,10 @@ const NegocioSection: React.FC = () => {
               <br />
               <span className="font-extrabold">crear experiencias inolvidables</span>
             </Text>
+
+            <div className="absolute -bottom-10 -right-10 w-28 h-28 rounded-full bg-[#6DE1E3] opacity-30">
+      </div>
+
           </div>
 
         </div>
