@@ -1,4 +1,5 @@
 import Button from "@/components/atoms/Button";
+import { ROUTES } from "@/config/routes";
 import { imagenes } from "@/data/imagenes";
 import { ArrowRight, FileText, Headset, Mail, MapPinned, MessageCircle, Paintbrush, PencilRuler, ShieldCheck, Wrench } from "lucide-react";
 import Image from "next/image";
@@ -112,7 +113,7 @@ const HeroSection = () => {
             <Button
               variant="primary"
               size="lg"
-              href="/contacto"
+              href={ROUTES.CONTACTO}
               icon={<FileText className="h-4 w-4 opacity-80" />}
               className="
                 relative z-20
@@ -146,7 +147,7 @@ const HeroSection = () => {
             </Button>
 
             <Link
-              href={`https://wa.me/51912849782?text=${whatsappMsg}`}
+              href={`${ROUTES.WHATSAPP.YUNTAS}text=${whatsappMsg}`}
               target="_blank"
               rel="noopener noreferrer"
               className="

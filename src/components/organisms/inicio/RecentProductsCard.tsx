@@ -1,5 +1,6 @@
 'use client';
 
+import { ROUTES } from '@/config/routes';
 import { ArrowRight, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -94,7 +95,7 @@ export default function RecentProductsCard({
         </p>
 
         <Link
-          href={`/productos/${slug}`}
+          href={ROUTES.PRODUCTOS.DETAIL(slug)}
           className="
             mt-5
             inline-flex

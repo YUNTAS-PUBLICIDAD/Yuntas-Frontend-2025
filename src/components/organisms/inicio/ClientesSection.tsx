@@ -1,5 +1,6 @@
 "use client";
 
+import { ROUTES } from "@/config/routes";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -7,8 +8,7 @@ import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-const GOOGLE_MAPS_URL =
-  "https://www.google.com/maps/place/Yuntas+Producciones/@-12.0256654,-76.9420072,17z/data=!4m18!1m9!3m8!1s0x9105c97c8934a213:0x7f6ccb249e86b5e6!2sYuntas+Producciones!8m2!3d-12.0256654!4d-76.9420072!9m1!1b1!16s%2Fg%2F11gzs412yn!3m7!1s0x9105c97c8934a213:0x7f6ccb249e86b5e6!8m2!3d-12.0256654!4d-76.9420072!9m1!1b1!16s%2Fg%2F11gzs412yn?entry=ttu&g_ep=EgoyMDI2MDcwOC4wIKXMDSoASAFQAw%3D%3D";
+
 
 const clientesData = [
   {
@@ -61,7 +61,7 @@ const reviewsData = [
     rating: 5,
     time: "Hace un año",
     text: "Quedé realmente impresionado con la calidad y el impacto visual de las pantallas LED de Yuntas Producciones. Desde el primer contacto, el equipo mostró profesionalismo y atención al detalle, asegurándose de que el producto cumpliera con todas mis expectativas. La nitidez de la imagen y el brillo de la pantalla hicieron que mi evento destacara como nunca antes. Sin duda, volveré a confiar en ellos para futuros proyectos. ¡100% recomendados!",
-    url: "https://maps.app.goo.gl/GrNEvVoMdYw2Mv4V8",
+    url: ROUTES.GOOGLE_MAPS.REVIEWS.GABO,
   },
   {
     name: "Abigayl Figueroa",
@@ -70,7 +70,7 @@ const reviewsData = [
     rating: 5,
     time: "Hace un año",
     text: "Desde el primer contacto, su equipo fue súper amable y atento, resolviendo todas mis dudas y ayudándome a elegir el Panel PVC perfecto para mi espacio. La calidad del producto superó mis expectativas, con un acabado impecable y fácil instalación. ¡Definitivamente los recomiendo!",
-    url: "https://maps.app.goo.gl/hiCx36aBAqAAnhGM7",
+    url: ROUTES.GOOGLE_MAPS.REVIEWS.ABIGAYL,
   },
   {
     name: "Luis D Aguilar Saldarriaga",
@@ -79,7 +79,7 @@ const reviewsData = [
     rating: 5,
     time: "Hace un año",
     text: '¡Estoy muy contento con Yuntas! Tienen una gran variedad de productos LED de excelente calidad y a precios súper competitivos. Además, su atención al cliente es de 10, siempre dispuestos a ayudar y responder todas las dudas. Definitivamente seguiré confiando en ellos para mis compras. ¡Recomendadísimos!',
-    url: "https://maps.app.goo.gl/oscBifu3hxTfA1xT8",
+    url: ROUTES.GOOGLE_MAPS.REVIEWS.LUIS,
   },
 ];
 
@@ -212,7 +212,7 @@ const ClientesSection: React.FC = () => {
 
             {/* CTA → abre el perfil de Google Maps en nueva pestaña */}
             <Link
-              href={GOOGLE_MAPS_URL}
+              href={ROUTES.GOOGLE_MAPS.PROFILE}
               target="_blank"
               rel="noopener noreferrer"
               className="

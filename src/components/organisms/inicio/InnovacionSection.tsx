@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import SectionImage from "@/components/atoms/SectionImage";
 import { imagenes } from "@/data/imagenes";
+import { ROUTES } from "@/config/routes";
 
 const EyeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#006D77" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -64,7 +65,7 @@ const InnovacionSection: React.FC = () => {
         {/* ── COLUMNA IZQUIERDA ── */}
         <div className="flex flex-col items-center gap-6 w-full lg:w-1/2">
           <Link
-            href="/productos/barra-pixel-led/"
+            href={ROUTES.PRODUCTOS.BARRA_PIXEL_LED}
             className="relative w-full rounded-3xl overflow-hidden shadow-lg group block"
           >
             <div className="absolute top-8 left-0 z-10 bg-black text-white py-2 px-5 rounded-r-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
@@ -83,14 +84,14 @@ const InnovacionSection: React.FC = () => {
           <CustomInfoCard
             icon={EyeIcon}
             text="Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos"
-            href="/productos/barra-pixel-led/"
+            href={ROUTES.PRODUCTOS.LETRERO_NEON_LED}
           />
         </div>
 
         {/* ── COLUMNA DERECHA ── */}
         <div className="flex flex-col items-center gap-6 w-full lg:w-1/2">
           <Link
-            href="/productos/letrero-neon-led/"
+            href={ROUTES.PRODUCTOS.LETRERO_NEON_LED}
             className="relative w-full rounded-3xl overflow-hidden shadow-lg group block"
           >
             <div className="absolute top-8 right-0 z-10 bg-black text-white py-2 px-5 rounded-l-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
@@ -109,7 +110,7 @@ const InnovacionSection: React.FC = () => {
           <CustomInfoCard
             icon={SearchIcon}
             text="Aprende cómo esta tecnología transforma el ambiente y optimiza el consumo energético"
-            href="/productos/letrero-neon-led/"
+            href={ROUTES.PRODUCTOS.LETRERO_NEON_LED}
           />
         </div>
 

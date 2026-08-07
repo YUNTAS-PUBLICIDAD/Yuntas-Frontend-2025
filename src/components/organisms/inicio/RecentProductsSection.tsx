@@ -8,6 +8,7 @@ import { useProductos } from '@/hooks/useProductos';
 
 import RecentProductsCard from './RecentProductsCard';
 import RecentProductsSkeleton from './RecentProductSkeleton';
+import {ROUTES} from '@/config/routes';
 
 export default function RecentProductsSection() {
   const {
@@ -82,7 +83,7 @@ export default function RecentProductsSection() {
           </div>
 
           <Link
-            href="/productos"
+            href={ROUTES.PRODUCTOS.INDEX}
             className="
               inline-flex
               items-center
