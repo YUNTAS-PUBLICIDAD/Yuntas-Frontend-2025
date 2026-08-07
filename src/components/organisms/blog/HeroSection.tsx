@@ -1,10 +1,8 @@
 "use client";
 
 import { imagenes } from "@/data/imagenes";
-// import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-// import { FaSearch } from "react-icons/fa";
 
 const HeroSection = () => {
   const frases = [

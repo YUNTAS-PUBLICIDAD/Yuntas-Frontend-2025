@@ -13,12 +13,6 @@ export const useTemplates = () => {
     try {
        const res = await getTemplatesService();
 
-       console.log("👉 RAW RESPONSE:", res);
-         console.log("👉 TYPE:", typeof res);
-         console.log("👉 DATA:", res?.data);
-         console.log("👉 IS ARRAY:", Array.isArray(res?.data));
-
-       // 🔥 blindaje real
        if (!res || !Array.isArray(res.data)) {
          console.error("Respuesta inválida:", res);
          setTemplates([]);

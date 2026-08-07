@@ -9,11 +9,6 @@ import { getImageUrl } from "@/utils/getImageUrl";
 import toast from "react-hot-toast";
 import { Trash2 } from "lucide-react";
 
-// const ReactQuill = dynamic(
-//   () => import("react-quill"),
-//   { ssr: false }
-// );
-
 const ReactQuill = dynamic(
   async () => {
 
@@ -560,52 +555,12 @@ export function VariantEditor({
     };
 
   // =====================================================
-  // VARIABLES
-  // =====================================================
-
-  // const suggested =
-  //   isProductContext
-  //     ? [
-  //         "producto_nombre",
-  //         "descripcion",
-  //       ]
-  //     : [
-  //         "nombre",
-  //         "email",
-  //       ];
-
-  // const restVariables =
-  //   variables.filter(
-  //     (v: string) =>
-  //       !suggested.includes(v)
-  //   );
-
-  // =====================================================
   // VALUES
   // =====================================================
 
-  // const subject =
-  //   override?.subject ??
-  //   variant.subject ??
-  //   "";
   const subject = isProductContext ? (override?.subject ?? "") : (variant.subject ?? "")
-
-  // const content =
-  //   override?.content ??
-  //   variant.content ??
-  //   "";
   const content = isProductContext ? (override?.content ?? "") : (variant.content ?? "")
-
-  // const ctaText =
-  //   override?.ctaText ??
-  //   variant.ctaText ??
-  //   "";
   const ctaText = isProductContext ? (override?.ctaText ?? ""):(variant.ctaText ?? "");
-
-  // const ctaUrl =
-  //   override?.ctaUrl ??
-  //   variant.ctaUrl ??
-  //   "";
   const ctaUrl = isProductContext ? (override?.ctaUrl ?? "") : (variant.ctaUrl ?? "");
 
   // =====================================================
@@ -1085,19 +1040,6 @@ export function VariantEditor({
                     handleOverrideFile
                   }
                   onRemove={() => {
-
-                    // const filtered =
-                    //   (
-                    //     override?.assets ||
-                    //     []
-                    //   ).filter(
-                    //     (a: any) =>
-                    //       a.key !== "image"
-                    //   );
-
-                    // updateOverride({
-                    //   assets: filtered,
-                    // });
 
                     if(!selectedProductId){
                       return;

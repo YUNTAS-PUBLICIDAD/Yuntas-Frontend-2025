@@ -2,7 +2,7 @@
 
 import PopupConfigForm from "@/components/molecules/admin/popups/PopupConfigForm";
 import { usePopups } from "@/hooks/usePopups"
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { House, Package2, FileText } from "lucide-react";
 import Link from "next/link";
 import { getPermissions } from "@/utils/permission";
@@ -22,11 +22,6 @@ export default function PopupsPage(){
   useEffect(() => {
     getPopups();
   }, []);
-
-  useEffect(() => {
-    console.log("TAB:", tab);
-    console.log("POPUPS:", popups.map(p => p.page_target));
-  }, [tab, popups]);
 
   const handleSave = async (data: any) => {
     const isUpdate = !!data.id;
@@ -49,10 +44,6 @@ export default function PopupsPage(){
 };
 
   const currentPopup = popups.find((p) => p.page_target === tab) || null;
-  //
-  // const currentPopup = useMemo(() => {
-  //   return popups.find(p => p.page_target === tab) ?? null;
-  // }, [popups, tab]);
 
   return (
     <div className="flex flex-col gap-4">

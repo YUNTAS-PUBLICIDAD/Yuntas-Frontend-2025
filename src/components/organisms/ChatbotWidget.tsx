@@ -228,22 +228,6 @@ export default function ChatbotWidget() {
       if (latestMessages && latestMessages.length > 0) {
         const botMessages = latestMessages.filter((m: any) => m.sender === 'bot' || m.role === 'bot');
         if (botMessages.length > 0) {
-          // const backendBotMsg = botMessages[botMessages.length - 1];
-          // const botMessage: ChatMessage = {
-          //   role: "bot",
-          //   text: backendBotMsg.message_text || backendBotMsg.text,
-          //   type: backendBotMsg.metadata?.type || backendBotMsg.type,
-          //   products: backendBotMsg.metadata?.products || backendBotMsg.products,
-          //   blogs: backendBotMsg.metadata?.blogs || backendBotMsg.blogs,
-          //   url: backendBotMsg.metadata?.url || backendBotMsg.url,
-          //   whatsapp_url: backendBotMsg.metadata?.whatsapp_url || backendBotMsg.whatsapp_url,
-          // };
-          // setMessages((prev) => {
-          //   const updated = [...prev, botMessage];
-          //   sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
-          //   return updated;
-          // });
-
           const mappedMessages: ChatMessage[] = botMessages.map((msg: any) => ({
             role: "bot",
             text: msg.message_text || msg.text,

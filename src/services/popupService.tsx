@@ -82,10 +82,6 @@ export const savePopupService = async (
   }
 });
 
-for (const pair of formData.entries()) {
-  console.log(pair[0], pair[1]);
-}
-
       await api.post(
         API_ENDPOINTS.ADMIN.POPUPS.UPDATE(popupData.id),
         formData,
