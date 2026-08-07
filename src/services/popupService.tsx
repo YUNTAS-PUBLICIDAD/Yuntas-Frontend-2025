@@ -164,17 +164,7 @@ for (const pair of formData.entries()) {
 
 export const getPublicPopupService = async (page: string): Promise<PopupServiceResponse<Popup | null>> => {
   try {
-    const endpoint = `${API_ENDPOINTS.POPUP.PUBLIC(page)}?_t=${Date.now()}`;
-
-    const response = await api.get(endpoint, {
-      headers: {
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-        "Pragma": "no-cache",
-      },
-      skipAuth: true, // 👈 flag custom para el interceptor
-
-    }as any);
-
+    const response = await api.get(API_ENDPOINTS.POPUP.PUBLIC(page));
     return { success: true, data: response.data };
   } catch (error: any) {
     return { success: false, message: error.message };

@@ -8,6 +8,10 @@ import DynamicPopup from "@/components/molecules/DynamicPopup";
 import RecentProductsSection from "@/components/organisms/inicio/RecentProductsSection";
 import { imagenes } from "@/data/imagenes";
 import { sourceData } from "@/data/popup/sourceData";
+import { getPublicPopupService } from "@/services/popupService";
+import { Popup as PopupType } from "@/types/admin/popup";
+
+const BACKEND_URL = (process.env.NEXT_PUBLIC_URL || "http://localhost:8000").replace(/\/$/, "");
 
 export const metadata = {
   title: "Yuntas Publicidad | Especialistas en diseñar tu espacio",
@@ -41,7 +45,30 @@ export const metadata = {
   },
 };
 
-export default function HomePage() {
+// Se agregó  'async' a la función principal
+export default async function HomePage() {
+
+  //nueva variable para almacenar el popup, sin usar 'useState'
+  let dynamicPopup: PopupType | null = null;
+
+  // petición directa al servidor, sin usar 'useEffect'
+  try {
+    const result = await getPublicPopupService('inicio');
+    if (result.success && result.data && result.data.active === true) {
+      dynamicPopup = result.data;
+    }
+  } catch (error) {
+    console.error("Error al obtener el popup dinámico:", error);
+  }
+
+  const getImgUrl = (imgObj: any) => {
+    return imgObj?.image ? `${BACKEND_URL}${imgObj.image.startsWith('/') ? '' : '/'}${imgObj.image}` : "";
+  };
+
+  const desktopLeftImg = dynamicPopup?.images?.find(img => img.device === 'desktop' && img.slot === 'left');
+  const desktopRightImg = dynamicPopup?.images?.find(img => img.device === 'desktop' && img.slot === 'right');
+  const mobileCenterImg = dynamicPopup?.images?.find(img => img.device === 'mobile' && img.slot === 'center');
+
   return (
     <main>
       <HeroSection />
@@ -50,21 +77,31 @@ export default function HomePage() {
       <ProjectsCarousel />
       <ClientesSection />
 
-      {/* DynamicPopup ahora es autosuficiente: pide sus propios datos en el navegador */}
-      <DynamicPopup
-        page="inicio"
-        sourceId={sourceData.INICIO}
-        fallback={{
-          desktopImgSrc: imagenes.inicio.popup.src,
-          textImgSrc: "",
-          mobileImgSrc: imagenes.inicio.popup.src,
-          imgAlt: imagenes.inicio.popup.alt,
-          title: "¡Un detalle que cambia todo!",
-          buttonText: "Empieza a brillar",
-          buttonColor: "#7C29E3",
-          delay: 5000,
-        }}
-      />
+      {/* Ya no se valida si está cargando (!isLoadingPopup) */}
+      {dynamicPopup ? (
+        // EL NUEVO COMPONENTE DYNAMIC POPUP
+        <DynamicPopup
+          desktopImgSrc={getImgUrl(desktopLeftImg)}
+          textImgSrc={getImgUrl(desktopRightImg)}
+          mobileImgSrc={getImgUrl(mobileCenterImg)}
+          imgAlt={desktopLeftImg?.alt || "Popup Yuntas"}
+          title={dynamicPopup.title}
+          buttonText={dynamicPopup.button_text}
+          buttonColor={dynamicPopup.button_color || "#7C29E3"}
+          sourceId={sourceData.INICIO}
+          delay={(dynamicPopup.delay_seconds || 5) * 1000}
+        />
+      ) : (
+        <DynamicPopup
+          desktopImgSrc={imagenes.inicio.popup.src}
+          textImgSrc=""
+          mobileImgSrc={imagenes.inicio.popup.src}
+          imgAlt={imagenes.inicio.popup.alt}
+          title="¡Un detalle que cambia todo!"
+          buttonText="Empieza a brillar"
+          sourceId={sourceData.INICIO}
+        />
+      )}
     </main>
   );
 }
