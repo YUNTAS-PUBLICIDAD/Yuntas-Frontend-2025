@@ -28,12 +28,6 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
       {/* HEADER */}
       <div className="flex flex-col gap-4 sm:flex-row  sm:justify-between sm:items-start">
         <div>
-          {/*<p className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-1">
-            Comunicaciones
-          </p>*/}
-          {/*<h1 className="text-xl font-medium text-gray-900 dark:text-white leading-tight">
-            Templates
-          </h1>*/}
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Configura mensajes automáticos para popups, WhatsApp y correos según cada página
           </p>
@@ -218,7 +212,6 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
                       : 'bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-gray-400 border border-gray-200 dark:border-white/10'
                     }
               `}>
-                    {/*{t.status === 'active' ? 'Activo' : 'Borrador'}*/}
                     {
                       t.active ? 'Activo' : 'Borrador'
                     }
@@ -227,16 +220,6 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
 
                 {/* VARIANTS */}
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {/*{t.variants?.length ?? 0} {(t.variants?.length ?? 0) === 1 ? 'variante' : 'variantes'}*/}
-                  {/*{(t.variants?.length ?? 0) === 0
-                  ? "Sin canales"
-                  : `${t.variants?.length} canal${
-                      (t.variants?.length ?? 0) > 1
-                        ? "es"
-                        : ""
-                    }`
-                }*/}
-
                   {
                     channels.length === 0 ? "Sin canales" : channels.join(" . ")
                   }
@@ -367,8 +350,6 @@ export function TemplatesList({ templates, onEdit, onCreate, onDelete }: any) {
                     </p>
 
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                      {/*{CHANNEL_LABELS[t.channel] ?? t.channel ?? "—"}*/}
-
                       {
                         channels.join(". ") || "Sin canales"
                       }

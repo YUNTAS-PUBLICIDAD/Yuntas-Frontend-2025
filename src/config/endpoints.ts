@@ -46,7 +46,7 @@ export const API_ENDPOINTS = {
   },
 
   LEADS: {
-   CAPTURE: '/leads/capture'
+    CAPTURE: '/leads/capture'
   },
 
   TRACKING: {
@@ -55,28 +55,15 @@ export const API_ENDPOINTS = {
 
   // ADMINISTRACIÓN (Tablas y Gestión)
   ADMIN: {
-    CHATBOT: {
-        FLOWS: {
-          GET_ALL: '/admin/chatbot/flows',
-          GET_ONE: (id: number) => `/admin/chatbot/flows/${id}`,
-          CREATE: '/admin/chatbot/flows',
-          UPDATE: (id: number) => `/admin/chatbot/flows/${id}`,
-          DELETE: (id: number) => `/admin/chatbot/flows/${id}`,
-
-        },
-
-        // 🧠 GRAPH EDITOR (NUEVO - IMPORTANTE)
-          GRAPH: {
-            GET: (id: number) => `/admin/chatbot/flows/${id}/graph`,
-            SAVE: (id: number) => `/admin/chatbot/flows/${id}/graph`,
-          }
-      },
 
     USERS: {
       GET_ALL: '/admin/users',
       CREATE: '/admin/users',
       UPDATE: (id: number) => `/admin/users/${id}`,
       DELETE: (id: number) => `/admin/users/${id}`,
+    },
+    HISTORIAL: {
+      GET_ALL: '/admin/historial',
     },
     BLOG: {
       CREATE: '/admin/blogs',
@@ -167,6 +154,7 @@ export const API_ENDPOINTS = {
     DASHBOARD: {
       MOST_VIEWED_PAGES: '/dashboard/most-viewed-pages',
       USER_TYPE_STATS: '/dashboard/user-type-stats',
+      TOP_PRODUCTS: '/dashboard/top-products',
     }
   }
 };

@@ -6,7 +6,6 @@ interface MenuItemProps {
   active?: boolean;
   baseColor?: string;
   activeColor?: string;
-  // color?:string;
   className?: string;
   onClick?: () => void;
 }
@@ -15,7 +14,6 @@ export default function MenuItem({
   href,
   children,
   active,
-  // color = 'text-gray-800',
   activeColor,
   baseColor,
   className = "",

@@ -45,7 +45,7 @@ const api = axios.create({
 api.interceptors.request.use(
 	(config) => {
 		const token = getToken();
-		if (token) {
+		if (token && !(config as any).skipAuth) {   // 👈 respeta el flag
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 
@@ -187,7 +187,6 @@ api.interceptors.response.use(
 				}
 			}
 		} else if (error.request) {
-			console.log(error);
 			console.error('Network Error Details:', {
 				url: config?.url,
 				method: config?.method,

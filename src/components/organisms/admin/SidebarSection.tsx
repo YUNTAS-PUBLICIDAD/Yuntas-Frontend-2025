@@ -67,6 +67,16 @@ const getNavItems = (): NavItem[] => {
     { label: "Pop-ups", href: "/admin/popups", icon: Megaphone },
     { label: "Plantillas", href: "/admin/templates", icon: FileText },
     { label: "Configuracion", href: "/admin/configuracion", icon: Settings },
+
+        ...(role === "admin"
+      ? [
+          {
+            label: "Historial",
+            href: "/admin/historial",
+            icon: ClipboardList,
+          },
+        ]
+      : []),
   ];
 };
 
@@ -119,7 +129,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         <nav
           ref={navRef}
           onScroll={updateFadeState}
-          className="h-full overflow-y-auto scrollbar-hidden text-[#203565] dark:text-white pt-5" 
+          className="h-full overflow-y-auto scrollbar-hidden text-[#203565] dark:text-white pt-4" 
         >
           <NavList items={getNavItems()} />
         </nav>

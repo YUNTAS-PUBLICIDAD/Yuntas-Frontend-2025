@@ -17,6 +17,10 @@ const buildBasePopupForm = (popupData: Popup) => {
     formData.append("lead_source_id", String(popupData.lead_source_id));
   }
 
+  if (popupData.product_id) {
+    formData.append("product_id", String(popupData.product_id));
+  }
+
   formData.append("title", popupData.title);
   formData.append("button_text", popupData.button_text);
   formData.append("button_color", popupData.button_color || "#6DE1E3");
@@ -77,10 +81,6 @@ export const savePopupService = async (
     );
   }
 });
-
-for (const pair of formData.entries()) {
-  console.log(pair[0], pair[1]);
-}
 
       await api.post(
         API_ENDPOINTS.ADMIN.POPUPS.UPDATE(popupData.id),

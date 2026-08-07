@@ -21,20 +21,27 @@ const ValoresCorportativos: React.FC = () => {
           </p>
         </div>
       </div>
-      <div className="bg-white-50 py-24">
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:flex md:flex-row justify-between items-center text-white gap-8 text-center">
+      <div className="bg-white py-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 px-6">
           {
             valores.map((valor, index) => {
               return (
                 //  Tarjeta de valor con icono azul
-                <div key={`valores-${index}`} className="flex flex-col items-center gap-2 text-center text-lg font-bold text-[#203565]">
+                <div key={`valores-${index}`} className="group flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2">
                   {/* Icono en color azul */}
-                  <valor.icon className="size-24 md:size-30 text-[#203565]" />
+                  <div className="w-24 h-24 rounded-full bg-[#203565] flex items-center justify-center shadow-lg mb-5">
+          <valor.icon className="text-white text-5xl transition-transform duration-300 group-hover:scale-110" />
+        </div>
                   {/* Texto con descripción del valor en color azul  */}
-                  <p className="flex flex-col text-[#203565]">
-                    {valor.light}
-                    <span className="font-extrabold">{valor.bold}</span>
-                  </p>
+                   <p className="text-[#203565]">
+          <span className="block font-extrabold text-xl">
+            {valor.light}
+          </span>
+
+          <span className="block font-extrabold text-xl">
+            {valor.bold}
+          </span>
+        </p>
                 </div>
               );
             })

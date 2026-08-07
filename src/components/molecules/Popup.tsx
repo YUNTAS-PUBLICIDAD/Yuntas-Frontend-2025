@@ -1,12 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from "react";
-import { useWhatsapp } from "@/hooks/useWhatsapp";
-import { useEmail } from "@/hooks/useEmail";
 import PopupContainer from "@/components/atoms/PopContainer";
-// import PopupImage from "@/components/molecules/producto/PopUp/PopUpImage";
-// import PopupHeader from "@/components/molecules/producto/PopUp/PopUpHeader";
-// import PopupForm from "@/components/molecules/producto/PopUp/PopupForm";
 import CloseButton from "@/components/atoms/CloseButton";
 import { LeadInput } from "@/types/admin/lead";
 import { showToast } from "@/utils/showToast";
@@ -14,13 +9,6 @@ import { usePathname } from "next/navigation";
 import { PopupView } from "./producto/PopUp/PopupView";
 import { PopupImageData } from "@/types/admin/popup";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
-// import { PopupImage } from "@/types/admin/popup";
-
-// interface PopupImageData {
-//   url: string;
-//   title?: string | null;
-//   alt?: string | null;
-// }
 
 interface PopupProps {
     delay?: number;
@@ -28,9 +16,6 @@ interface PopupProps {
     leftImage?: PopupImageData;
     rightImage?: PopupImageData;
     mobileImage?: PopupImageData;
-    // imgSrc: string;
-    // imgTitle?: string;
-    // imgAlt: string;
     title: string;
     buttonText: string;
     buttonColor?: string;
@@ -40,9 +25,6 @@ interface PopupProps {
 
 const Popup = ({
     delay = 5000,
-    // imgSrc,
-    // imgTitle,
-    // imgAlt,
     leftImage,
     rightImage,
     mobileImage,
@@ -53,8 +35,6 @@ const Popup = ({
     sourceId = 1,
     isMobile
 }: PopupProps) => {
-    // const { sendWhatsapp, isActivating: isWhatsappSending } = useWhatsapp();
-    // const { sendEmail, isActivating: isEmailSending } = useEmail();
     const {captureLead, isSubmitting} = useLeadCapture();
     const [show, setShow] = useState(false);
     const [closing, setClosing] = useState(false);
@@ -78,12 +58,6 @@ const Popup = ({
     const closeModal = () => {
       popupTriggered.current = true;
       setClosing(true);
-      // sessionStorage.setItem('popup_seen', "true");
-      //   setClosing(true);
-      //   setTimeout(() => {
-      //       setShow(false);
-      //       setClosing(false);
-      //   }, 100);
 
       setTimeout(() => {
        setShow(false);
@@ -113,20 +87,6 @@ const Popup = ({
             source_id: sourceId,
             ...(productId && { product_id: productId }),
         };
-
-        // const whatsappResult = await sendWhatsapp(leadData);
-        // if (!whatsappResult.success) {
-        //     setErrors({ general: whatsappResult.message || "Error al enviar el WhatsApp" });
-        //     showToast.error(whatsappResult.message || "Error al enviar el WhatsApp");
-        //     return;
-        // }
-
-        // const emailResult = await sendEmail(leadData);
-        // if (!emailResult.success) {
-        //     setErrors({ general: emailResult.message || "Error al enviar el email" });
-        //     showToast.error(emailResult.message || "Error al enviar el email");
-        //     return;
-        // }
 
         const result = await captureLead(
           leadData
@@ -173,8 +133,6 @@ const Popup = ({
 
     if (!show) return null;
 
-    // const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
     return (
         <div className={`fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${entered ? "opacity-100" : "opacity-0"}`}>
             <PopupContainer closing={closing} ref={modalRef}>
@@ -197,7 +155,6 @@ const Popup = ({
                 isSubmitting={isSubmitting}/>
 
             </PopupContainer>
-                {/*isSubmitting={isWhatsappSending || isEmailSending}/>*/}
         </div>
     );
 };

@@ -7,6 +7,7 @@ import { useCarousel } from "@/hooks/ui/useCarousel";
 import { projectsCarouselSlides as slides } from "@/data/inicio/projectsCarouselData";
 import Link from "next/link";
 import Image from "next/image";
+import { ROUTES } from "@/config/routes";
 
 const ProjectsCarousel: React.FC = () => {
   const { activeIndex, goTo } = useCarousel({
@@ -39,7 +40,7 @@ const ProjectsCarousel: React.FC = () => {
             </p>
           </div>
           <Link
-            href="/contacto"
+            href={ROUTES.CONTACTO}
             className=" text-white font-bold text-sm md:text-base lg:text-lg px-6 py-2 rounded-full bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_8px_25px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 uppercase tracking-wide whitespace-nowrap"
           >
             CONTÁCTANOS

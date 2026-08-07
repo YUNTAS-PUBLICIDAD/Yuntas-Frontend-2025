@@ -92,11 +92,6 @@ export default function UsuariosPage() {
         setIsModalOpen(false);
     };
 
-    const exportOptions = [
-        { label: "Exportar a CSV", onClick: () => exportCSV(users, "usuarios"), icon: <FileText className="h-4 w-4" /> },
-        { label: "Exportar a Excel", onClick: () => exportExcel(users, "usuarios"), icon: <FileSpreadsheet className="h-4 w-4" /> },
-        { label: "Exportar a PDF", onClick: () => exportTablePDF(users, "Reporte de Usuarios", columns, "download"), icon: <FileDown className="h-4 w-4" /> },
-    ];
 
     const role = getRole();
 
@@ -114,15 +109,6 @@ export default function UsuariosPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-3 no-print">
-                    {/* EXPORTAR */}
-                    <div className="flex-1 min-w-[140px]">
-                        <ExportDropdown
-                            className="w-full h-[40px]"
-                            icon={<Download className="h-4 w-4" />}
-                            options={exportOptions}
-                        />
-                    </div>
-
                     {/* IMPRIMIR */}
                     <div className="flex-1 min-w-[140px]">
                         <ActionButtonGroup

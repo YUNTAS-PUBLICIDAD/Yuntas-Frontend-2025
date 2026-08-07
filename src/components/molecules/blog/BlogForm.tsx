@@ -28,9 +28,11 @@ const defaultFormData: BlogInput = {
     hero_title: "",
     cover_subtitle: "",
     video_url: "",
+    video_subtitle: "",
+    video_description: "",
 
     meta_title: "",
-    meta_description: "",
+    meta_description: "",   
     keywords: [],
 
     main_image: null,
@@ -81,7 +83,6 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
     const [errors, setErrors] = useState<FormErrors>({});
 
     const validate = () => {
-      // const newErrors: Record<string, string> = {};
       const newErrors: FormErrors = {};
 
       if (!formData.title.trim()) {
@@ -131,8 +132,8 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
       if (missingSlots.length > 0) {
        newErrors.gallery = "Todas las imágenes de la galería son obligatorias";
       }
-const emptyImages = formData.gallery.filter(
- item => !item.image || (typeof item.image === "string" && item.image.trim() === "")
+    const emptyImages = formData.gallery.filter(
+    item => !item.image || (typeof item.image === "string" && item.image.trim() === "")
 );
 
 if (emptyImages.length > 0) {
@@ -148,6 +149,7 @@ if (formData.video_url) {
   } catch (error) {
    newErrors.video_url = "URL inválida" 
   }
+
 }
       setErrors(newErrors);
 
@@ -163,6 +165,8 @@ if (formData.video_url) {
                 hero_title: initialData.hero_title,
                 cover_subtitle: initialData.cover_subtitle,
                 video_url: initialData.video_url || "",
+                video_subtitle: initialData.video_subtitle || "",
+                video_description: initialData.video_description || "",
 
                 meta_title: initialData.meta_title,
                 meta_description: initialData.meta_description,
@@ -289,34 +293,6 @@ if (formData.video_url) {
             return;
         }
 
-        // imagenes de galeria obligatorias
-        // const missingSlots = GALLERY_SLOTS.filter(
-        //     { value } => !formData.gallery.some(item => item.slot === value)
-        // );
-
-        // if (missingSlots.length > 0) {
-        //     showToast.warning(`Faltan imágenes para: ${missingSlots.map(s => s.label).join(", ")}`);
-        //     return;
-        // }
-
-        // const emptyImages = formData.gallery.filter(
-        //     item => !item.image || (typeof item.image === 'string' && item.image.trim() === '')
-        // );
-        // if (emptyImages.length > 0) {
-        //     showToast.warning("Todas las imágenes de galería son requeridas");
-        //     return;
-        // }
-
-        // beneficios obligatorios
-        // const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
-        // if (hasEmptyBenefits) {
-        //     showToast.warning("Los beneficios no pueden estar vacios");
-        //     return;
-        // }
-        // if (formData.benefits.length !== 3) {
-        //     showToast.warning("Debe haber exactamente 3 beneficios");
-        //     return;
-        // }
         onSubmit(formData);
     };
 
@@ -391,7 +367,6 @@ if (formData.video_url) {
                     label="Introducción del Blog"
                     name="description"
                     value={formData.description || ""}
-                    // onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
                     onValueChange={(value) => updateField("description", value)}
                     placeholder="Los pisos LED se han convertido en una herramienta ..."
                     helperText="Desarrollo completo del blog."
@@ -405,7 +380,6 @@ if (formData.video_url) {
                     label="Testimonio"
                     name="testimonial"
                     value={formData.testimonial || ""}
-                    // onValueChange={(value) => setFormData(prev => ({ ...prev, testimonial: value }))}
                     onValueChange={(value) => updateField("testimonial", value)}
                     placeholder="Ej: “Gracias a Yuntas, nuestro negocio ha ganado una visibilidad increíble...”"
                     helperText="Desarrollo completo del testimonio."
@@ -416,6 +390,31 @@ if (formData.video_url) {
                 />
 
                 <InputAdmin
+                    label="Subtítulo del Video"
+                    name="video_subtitle"
+                    value={formData.video_subtitle || ""}
+                    onChange={handleInputChange}
+                    placeholder="Ej: Mira Nuestro Video"
+                    helperText="Texto destacado que aparece sobre el video. Máx. 100 caracteres."
+                    maxLength={100}
+                    error={errors.video_subtitle}
+                    disabled={!formData.video_url}
+                />
+
+                <TextareaAdmin
+                label="Descripción del Video"
+                name="video_description"
+                value={formData.video_description || ""}
+                onChange={handleInputChange}
+                placeholder="Descubre más detalles sobre nuestros productos y servicios..."
+                helperText="Texto que acompaña al video. Máx. 300 caracteres."
+                maxLength={300}
+                rows={3}
+                error={errors.video_description}
+                disabled={!formData.video_url}  
+                />     
+
+                                <InputAdmin
                     label="URL del Video (opcional)"
                     name="video_url"
                     value={formData.video_url || ""}
@@ -424,7 +423,7 @@ if (formData.video_url) {
                     helperText="Máx. 150 caracteres (letras, números y espacios)."
                     maxLength={150}
                     error={errors.video_url}
-                />
+                /> 
             </FormSection>
 
             <FormSection title="SEO (Optimización para Buscadores)">
@@ -456,9 +455,8 @@ if (formData.video_url) {
                     label="Keywords"
                     items={formData.keywords}
                     onChange={
-                        (keywords) =>{
-                        //  markDirty();
-                        setFormData(prev => ({ ...prev, keywords }))}}
+                        (keywords) =>
+                        setFormData(prev => ({ ...prev, keywords }))}
                     placeholder="ej: letreros neón led"
                     addButtonText="+ Agregar keyword"
                     helperText="Palabras clave relevantes para que los buscadores encuentren el blog."
