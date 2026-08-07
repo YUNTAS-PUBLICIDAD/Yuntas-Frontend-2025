@@ -154,6 +154,7 @@ export const API_ENDPOINTS = {
     DASHBOARD: {
       MOST_VIEWED_PAGES: '/dashboard/most-viewed-pages',
       USER_TYPE_STATS: '/dashboard/user-type-stats',
+      TOP_PRODUCTS: '/dashboard/top-products',
     }
   }
 };

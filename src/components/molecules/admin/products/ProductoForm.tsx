@@ -67,12 +67,6 @@ const GALLERY_SLOTS = [
         size: '1000 x 1000 px',
         desc: 'Formato cuadrado o vertical (4:5).'
     },
-    // {
-    //     value: 'Popups',
-    //     label: 'Popup',
-    //     size: '800 x 800 px',
-    //     desc: 'Formato cuadrado.'
-    // },
     {
       value: 'PopupLeft',
       label: 'Popup Izquierda',
@@ -135,30 +129,20 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
     const normalize = (obj:any) => JSON.stringify(obj);
 
     const handleAttemptClose = useCallback( async () => {
-        // console.log("handleAttempClose START");
     const hasChanges = normalize(formData) !== normalize(initialFormState);
-    // console.log("hasChanges:", hasChanges);
     if (!hasChanges) {
-      // console.log("No changes -> closing");
      onCancel();
      return;
     }
-
-    // console.log("Calling confirm dialog");
 
     const confirmClose = await confirm({
       message: "Tienes cambios sin guardar. ¿Deseas cerrar y perder los datos?"
     }
     );
 
-    // console.log("confirm result:", confirmClose);
-
     if (confirmClose) {
-      // console.log("User confirmed close");
      onCancel()
     }
-
-      // console.log("User canceled close");
 
   }, [formData, initialFormState, confirm, onCancel])
 
@@ -170,7 +154,6 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
 
   useEffect(() => {
       if (registerCloseHandler) {
-      //  registerCloseHandler(handleAttemptClose)
       registerCloseHandler(() => closeHandlerRef.current());
       }
 }, [])
@@ -179,7 +162,6 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
     // Cargar datos iniciales para editar
     useEffect(() => {
         if (initialData) {
-            // setFormData({
             const mappedData = {
                 name: initialData.name,
                 slug: initialData.slug,
@@ -213,8 +195,6 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
               };
               setFormData(mappedData);
               setInitialFormState(mappedData);
-
-            // });
         }else {
           setFormData(defaultFormData);
           setInitialFormState(defaultFormData);
@@ -257,7 +237,6 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
     };
 
     const handleAddGalleryImage = (file: File, slot: string) => {
-      // setIsDirty(true);
         setFormData(prev => {
             const existing = prev.gallery.find(item => item.slot === slot); // buscar si ya hay una imagen en ese slot
             const filteredGallery = prev.gallery.filter(item => item.slot !== slot); // se elimna imagen existente de ese slot si hay
@@ -479,9 +458,8 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
                     label="Keywords"
                     items={formData.keywords}
                     onChange={
-                      (keywords) =>{
-                      //  markDirty();
-                        setFormData(prev => ({ ...prev, keywords }))}}
+                      (keywords) =>
+                        setFormData(prev => ({ ...prev, keywords }))}
                     placeholder="ej: letreros para negocio"
                     addButtonText="+ Agregar keyword"
                     helperText="Palabras clave relevantes para que los buscadores encuentren el producto."

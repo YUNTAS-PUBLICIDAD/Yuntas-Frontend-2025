@@ -18,8 +18,9 @@ import Pagination from "@/components/molecules/Pagination";
 import ExportDropdown from "@/components/molecules/admin/ExportDropdown";
 import SearchBar from "@/components/molecules/admin/SearchBar";
 import { PlusIcon, MailIcon, WhatsappIcon, RocketIcon, PrinterIcon } from "@/components/atoms/icons";
-import { Download, FileDown, FileSpreadsheet, FileText } from "lucide-react";
+import { Download, FileDown, FileSpreadsheet, FileText, TrendingUp } from "lucide-react";
 import { getPermissions } from "@/utils/permission";
+import Button from "@/components/atoms/Button";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -289,6 +290,15 @@ export default function ProductosPage() {
               LISTA DE PRODUCTOS
             </h3>
             <p className="text-xs font-semibold text-slate-500 dark:text-white/80 md:text-base">Visualiza y actualiza los productos registrados.</p>
+            <Button
+              href="/admin/productos/mas-vistos"
+              variant="info"
+              size="sm"
+              icon={<TrendingUp className="h-4 w-4" />}
+              className="!rounded-xl mt-3 !inline-flex"
+            >
+              Ver más vistos
+            </Button>
           </div>
           <div className="flex w-full flex-col gap-2 lg:w-auto lg:items-end">
             <label className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-white/50 lg:text-right">

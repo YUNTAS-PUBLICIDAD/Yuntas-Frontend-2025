@@ -70,18 +70,11 @@ function WhatsAppPreview({
 }: any) {
 
   const override =
-    // variant?.productOverrides?.[0];
     variant?.productOverrides?.find(
       (o: any) => o.productId == selectedProductId
     );
 
   const raw =
-    // templateContext === "PRODUCTO"
-    //   ? (
-    //       override?.content ||
-    //       variant?.content
-    //     )
-    //   : variant?.content;
     templateContext === "PRODUCTO" ?
     (override?.content || "")
     : (
@@ -93,18 +86,6 @@ function WhatsAppPreview({
       raw || "",
       preview
     );
-
-  // const cta =
-  //   templateContext === "PRODUCTO"
-  //     ? (
-  //         override?.ctaText ||
-  //         variant?.ctaText ||
-  //         "Ver más"
-  //       )
-  //     : (
-  //         variant?.ctaText ||
-  //         "Ver más"
-  //       );
 
   const image =
     templateContext === "PRODUCTO"
@@ -265,26 +246,6 @@ function WhatsAppPreview({
             )}
           </p>
 
-          {/* CTA */}
-
-          {/*{cta && (
-
-            <div className="mt-3">
-
-              <button className="
-                w-full h-9 rounded-lg
-
-                bg-[#25D366]
-                text-white
-
-                text-[12px]
-                font-medium
-              ">
-                {cta}
-              </button>
-            </div>
-          )}*/}
-
           <p className="
             text-[9px]
             text-gray-400
@@ -335,7 +296,6 @@ function EmailPreview({
 }: any) {
 
   const override =
-    // variant?.productOverrides?.[0];
     variant?.productOverrides?.find(
       (o: any) => o.productId == selectedProductId
     )
@@ -717,12 +677,6 @@ export function VariantsPanel({
 
             const isActive =
               active === id;
-
-            // const hasVariant =
-            //   variants.some(
-            //     (v: any) =>
-            //       v.channel === id
-            //   );
 
             const enabled = variants.some((v:any) => v.channel === id);
 

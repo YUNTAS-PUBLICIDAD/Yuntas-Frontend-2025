@@ -237,12 +237,6 @@ export function TemplateEditor({ editor }: any) {
             </p>
           </div>
 
-          {/*<div className="
-            text-xs text-gray-400
-          ">
-            {template.steps?.length ?? 0} pasos
-          </div>*/}
-
          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-white/5">
           <div className="w-2 h-2 rounded-full bg-blue-500"/>
           <span className="text-xs font-medium text-gray-600 dark:text-gray-300">

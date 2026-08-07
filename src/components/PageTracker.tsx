@@ -23,8 +23,6 @@ export default function PageTracker() {
         if (data?.session_id) {
           localStorage.setItem('visitor_session_id', data.session_id);
         }
- 
-        console.log('[PageTracker] Vista de página registrada:', pathname, data);
       } catch (error) {
         console.error('[PageTracker] Error al registrar vista:', error);
       }

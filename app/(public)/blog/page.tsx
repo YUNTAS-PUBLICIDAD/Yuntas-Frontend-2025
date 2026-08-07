@@ -1,12 +1,8 @@
-// 'use client'
-
 import { Suspense } from "react";
 import BlogSection from "@/components/organisms/blog/BlogSection";
 import HeroSection from "@/components/organisms/blog/HeroSection";
 import { getBlogsService } from "@/services/blogService";
 import { Metadata } from "next";
-// import { useBlogs } from "@/hooks/useBlog";
-// import { useEffect } from "react";
 	export const metadata: Metadata = {
 	title: "Blog de Letreros LED, Pantallas y Publicidad Visual en Lima | Yuntas",
   description:
@@ -34,11 +30,6 @@ import { Metadata } from "next";
 	}
 
 export default async function BlogPage() {
-	// const { blogs, getBlogs, isLoading, error } = useBlogs();
-
-	// useEffect(() => {
-	// 	getBlogs();
-	// }, [getBlogs]);
 	const result = await getBlogsService(10);
 
 	if(!result.success){
@@ -61,7 +52,6 @@ export default async function BlogPage() {
     headline: blog.title,
     url: `https://yuntaspublicidad.com/blog/${blog.slug}`,
     ...(blog.main_image?.url && { image: [blog.main_image.url] }),
-    // datePublished: blog.created_at ? new Date(blog.created_at).toISOString() : undefined,
     inLanguage: "es-PE",
     author: {
       "@type": "Organization",
@@ -90,17 +80,6 @@ export default async function BlogPage() {
 			}>
 				<BlogSection blogs={blogs}/>
 			</Suspense>
-
-			{/*{isLoading ? (
-				<div className="w-full min-h-[40vh] flex flex-col items-center justify-center gap-4 py-20">
-					<div className="w-12 h-12 border-4 border-[#23C1DE] border-t-transparent rounded-full animate-spin"></div>
-					<p className="text-[#203565] font-semibold animate-pulse">Cargando inspiración...</p>
-				</div>
-			) : error ? (
-				<div className="w-full py-20 text-center text-red-500">Error: {error}</div>
-			) : (
-				<BlogSection blogs={blogs} />
-			)}*/}
 		</>
 	);
 }

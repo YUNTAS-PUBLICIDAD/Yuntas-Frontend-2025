@@ -11,27 +11,9 @@ import {
 import {
   Channel,
   Template,
-  TemplateAsset,
   TemplateStep,
   TemplateVariant,
 } from "@/types/admin/template";
-
-// const EMPTY_TEMPLATE: Template = {
-//   id: 0,
-//   name: "",
-//   context: "INICIO",
-//   active: true,
-
-//   steps: [
-//     {
-//       step: 1,
-//       delayValue: 0,
-//       delayUnit: "minutes",
-//       active: true,
-//       variants: [],
-//     },
-//   ],
-// };
 
 const createEmptyTemplate = (): Template => ({
   id: 0,
@@ -81,10 +63,7 @@ export const useTemplateEditor = (
   templateId?: number
 ) => {
 
-  // const isCreate = !templateId;
-
-  const [template, setTemplate] = useState<Template>(createEmptyTemplate())
-    // useState<Template>(EMPTY_TEMPLATE);
+  const [template, setTemplate] = useState<Template>(createEmptyTemplate());
   const isCreate = !template?.id
 
   const [loading, setLoading] =
@@ -100,7 +79,6 @@ export const useTemplateEditor = (
   useEffect(() => {
 
     if (!templateId) {
-      // setTemplate(EMPTY_TEMPLATE);
       setTemplate(
         createEmptyTemplate()
       );
@@ -176,9 +154,6 @@ export const useTemplateEditor = (
     (patch: Partial<Template>) => {
 
       setTemplate(prev => {
-        // ...prev,
-        // ...patch,
-
         const nextContext = patch.context;
 
         const contextChanged = nextContext && nextContext !== prev.context;
@@ -252,12 +227,6 @@ export const useTemplateEditor = (
     (stepNumber: number) => {
 
       setTemplate(prev => {
-
-        // ...prev,
-
-        // steps: prev.steps.filter(
-        //   s => s.step !== stepNumber
-        // ),
 
         const filtered = prev.steps.filter(
           s => s.step !== stepNumber
@@ -560,18 +529,6 @@ export const useTemplateEditor = (
 
           delay_unit: step.delayUnit,
 
-          // variants: step.variants.map(v => ({
-
-          //   ...v,
-
-          //   cta_text: v.ctaText || null,
-
-          //   cta_url: v.ctaUrl || null,
-
-          //   product_overrides:
-          //     v.productOverrides || [],
-          // })),
-
           variants: step.variants.map(v => ({
             channel: v.channel,
             subject: v.subject ?? null,
@@ -605,16 +562,6 @@ export const useTemplateEditor = (
           }))
         })),
       };
-
-      // console.log(
-      //   "📦 TEMPLATE PAYLOAD:",
-      //   payload
-      // );
-
-      console.log(
-        "📦 TEMPLATE PAYLOAD JSON:\n",
-        JSON.stringify(payload, null, 2)
-      );
 
       const res = isCreate
         ? await createTemplateService(payload)
@@ -682,8 +629,6 @@ export const useTemplateEditor = (
         const res =
           await uploadProductOverrideImageService(file);
 
-        console.log("UPLOAD OVERRIDE RESPONSE", res);
-
         setTemplate(prev => ({
 
           ...prev,
@@ -703,44 +648,6 @@ export const useTemplateEditor = (
                 if (v.channel !== channel) {
                   return v;
                 }
-
-                // return {
-
-                //   ...v,
-
-                //   productOverrides: (
-                //     v.productOverrides || []
-                //   ).map((override: any) => {
-
-                //     if (
-                //       override.product_id !== productId
-                //     ) {
-                //       return override;
-                //     }
-
-                //     return {
-
-                //       ...override,
-
-                //       assets: [
-
-                //         ...(override.assets || []),
-
-                //         {
-                //           key: "image",
-
-                //           path: res.path,
-
-                //           meta: {
-                //             url:
-                //               res.meta?.url
-                //               ?? null,
-                //           },
-                //         },
-                //       ],
-                //     };
-                //   }),
-                // };
 
                 const overrides =
                   v.productOverrides || [];

@@ -20,9 +20,6 @@ export default function UserSection({
     md: "w-5 h-5",
     lg: "w-6 h-6"
   };
-  // const scaleClass =
-  //   size === "sm" ? "scale-100" : size === "lg" ? "scale-125" : "scale-110";
-
   return (
     <Link href="/login">
       <div className={`flex items-center justify-center ${sizeMap[size]}`}>

@@ -83,7 +83,6 @@ export default function BlogForm({ onSubmit, onCancel, isLoading = false, initia
     const [errors, setErrors] = useState<FormErrors>({});
 
     const validate = () => {
-      // const newErrors: Record<string, string> = {};
       const newErrors: FormErrors = {};
 
       if (!formData.title.trim()) {
@@ -294,34 +293,6 @@ if (formData.video_url) {
             return;
         }
 
-        // imagenes de galeria obligatorias
-        // const missingSlots = GALLERY_SLOTS.filter(
-        //     { value } => !formData.gallery.some(item => item.slot === value)
-        // );
-
-        // if (missingSlots.length > 0) {
-        //     showToast.warning(`Faltan imágenes para: ${missingSlots.map(s => s.label).join(", ")}`);
-        //     return;
-        // }
-
-        // const emptyImages = formData.gallery.filter(
-        //     item => !item.image || (typeof item.image === 'string' && item.image.trim() === '')
-        // );
-        // if (emptyImages.length > 0) {
-        //     showToast.warning("Todas las imágenes de galería son requeridas");
-        //     return;
-        // }
-
-        // beneficios obligatorios
-        // const hasEmptyBenefits = formData.benefits.some(benefit => benefit.trim() === "");
-        // if (hasEmptyBenefits) {
-        //     showToast.warning("Los beneficios no pueden estar vacios");
-        //     return;
-        // }
-        // if (formData.benefits.length !== 3) {
-        //     showToast.warning("Debe haber exactamente 3 beneficios");
-        //     return;
-        // }
         onSubmit(formData);
     };
 
@@ -396,7 +367,6 @@ if (formData.video_url) {
                     label="Introducción del Blog"
                     name="description"
                     value={formData.description || ""}
-                    // onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
                     onValueChange={(value) => updateField("description", value)}
                     placeholder="Los pisos LED se han convertido en una herramienta ..."
                     helperText="Desarrollo completo del blog."
@@ -410,7 +380,6 @@ if (formData.video_url) {
                     label="Testimonio"
                     name="testimonial"
                     value={formData.testimonial || ""}
-                    // onValueChange={(value) => setFormData(prev => ({ ...prev, testimonial: value }))}
                     onValueChange={(value) => updateField("testimonial", value)}
                     placeholder="Ej: “Gracias a Yuntas, nuestro negocio ha ganado una visibilidad increíble...”"
                     helperText="Desarrollo completo del testimonio."
@@ -486,9 +455,8 @@ if (formData.video_url) {
                     label="Keywords"
                     items={formData.keywords}
                     onChange={
-                        (keywords) =>{
-                        //  markDirty();
-                        setFormData(prev => ({ ...prev, keywords }))}}
+                        (keywords) =>
+                        setFormData(prev => ({ ...prev, keywords }))}
                     placeholder="ej: letreros neón led"
                     addButtonText="+ Agregar keyword"
                     helperText="Palabras clave relevantes para que los buscadores encuentren el blog."

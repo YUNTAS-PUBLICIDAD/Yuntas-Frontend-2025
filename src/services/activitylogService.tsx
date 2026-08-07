@@ -16,6 +16,9 @@ export async function getActivityLogsService() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            params: {
+                perPage: 1000,
+            },
         });
 
         return {

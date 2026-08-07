@@ -187,7 +187,6 @@ api.interceptors.response.use(
 				}
 			}
 		} else if (error.request) {
-			console.log(error);
 			console.error('Network Error Details:', {
 				url: config?.url,
 				method: config?.method,
