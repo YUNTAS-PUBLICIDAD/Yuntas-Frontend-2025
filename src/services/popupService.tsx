@@ -171,7 +171,9 @@ export const getPublicPopupService = async (page: string): Promise<PopupServiceR
         "Cache-Control": "no-cache, no-store, must-revalidate",
         "Pragma": "no-cache",
       },
-    });
+      skipAuth: true, // 👈 flag custom para el interceptor
+
+    }as any);
 
     return { success: true, data: response.data };
   } catch (error: any) {
