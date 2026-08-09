@@ -4,8 +4,8 @@ export const ROUTES = {
 
   PRODUCTOS: {
     INDEX: "/productos",
-    BARRA_PIXEL_LED: "/productos/barra-pixel-led",
-    LETRERO_NEON_LED: "/productos/letrero-neon-led",
+    BARRA_PIXEL_LED: "/productos/iluminacion-barras-pixel-led-discotecas",
+    LETRERO_NEON_LED: "/productos/letreros-neon-led-personalizados-para-locales-comerciales",
 
     DETAIL: (slug: string) => `/productos/${slug}`,
   },
