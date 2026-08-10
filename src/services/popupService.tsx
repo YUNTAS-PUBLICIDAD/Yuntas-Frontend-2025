@@ -160,7 +160,10 @@ export const savePopupService = async (
 
 export const getPublicPopupService = async (page: string): Promise<PopupServiceResponse<Popup | null>> => {
   try {
-    const response = await api.get(API_ENDPOINTS.POPUP.PUBLIC(page));
+    const response = await api.get(API_ENDPOINTS.POPUP.PUBLIC(page), {
+      params: { _t: Date.now() },
+      headers: { 'Cache-Control': 'no-cache' },
+    });
     return { success: true, data: response.data };
   } catch (error: any) {
     return { success: false, message: error.message };
