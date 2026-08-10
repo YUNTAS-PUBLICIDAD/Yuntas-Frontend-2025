@@ -9,6 +9,7 @@ import { Producto } from '@/types/admin/producto'
 import { useSelectCategorias } from '@/hooks/ui/productos/useSelectCategoria'
 import { FaChevronDown } from "react-icons/fa";
 import SidebarProductos from '@/components/organisms/SidebarProductos';
+import { ROUTES }from '@/config/routes'
 
 type ProductoSection = {
   ListaBusqueda: Producto[];
@@ -137,7 +138,7 @@ const ProductosSection = ({ ListaBusqueda, setListaProductos, allProductos }: Pr
                   imgTitle={e.main_image?.title || ''}
                   imgAlt={e.main_image?.alt || ''}
                   nombre={e.name}
-                  href={`/productos/${e.slug}`}
+                  href={ROUTES.PRODUCTOS.DETAIL(e.slug)}
                 />
               ))}
               {productosPaginados.length === 0 && (

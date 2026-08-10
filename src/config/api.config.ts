@@ -45,7 +45,7 @@ const api = axios.create({
 api.interceptors.request.use(
 	(config) => {
 		const token = getToken();
-		if (token && !(config as any).skipAuth) {   // 👈 respeta el flag
+		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 

@@ -9,6 +9,7 @@ interface PageProps {
 }
 
 export const revalidate = false;
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const result = await getProductoBySlugService(params.slug);
@@ -100,7 +101,7 @@ export async function generateStaticParams() {
     }
     
     console.warn('Todos los intentos fallaron.');
-    return [{ slug: "default" }];
+    return [];
 }
 
 export default async function Page({ params }: PageProps) {

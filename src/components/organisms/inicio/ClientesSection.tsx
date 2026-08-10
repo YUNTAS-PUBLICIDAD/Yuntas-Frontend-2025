@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
+//import "swiper/css";
 
 
 
@@ -85,8 +85,8 @@ const reviewsData = [
 
 const statsData = [
   { value: "+50",  label: "Marcas atendidas"     },
-  { value: "4.9★", label: "Satisfacción promedio" },
   { value: "100%", label: "Proyectos entregados"  },
+  { value: "16", label: "Productos Disponibles"  },
   { value: "+3",   label: "Años de experiencia"   },
 ];
 
@@ -117,22 +117,23 @@ const ClientesSection: React.FC = () => {
       <div className="w-full max-w-[1400px] mx-auto px-4 md:px-12 pb-16 flex flex-col gap-12">
 
         {/* STATS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {statsData.map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center justify-center gap-1 rounded-3xl py-7 px-4
-                bg-gradient-to-br from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]"
-            >
-              <span className="text-[#6DE1E3] font-black text-3xl md:text-4xl leading-none tracking-tight">
-                {stat.value}
-              </span>
-              <span className="text-white/70 text-xs font-semibold uppercase tracking-widest text-center mt-1">
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+       {statsData.map((stat) => (
+      <div
+         key={stat.label}
+         className="flex flex-col items-center justify-center gap-1 rounded-3xl py-7 px-4
+          bg-gradient-to-br from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]"
+        >
+       <span className="text-[#6DE1E3] font-black text-3xl md:text-4xl leading-none tracking-tight">
+        {stat.value}
+       </span>
+
+       <span className="text-white/70 text-xs font-semibold uppercase tracking-widest text-center mt-1">
+         {stat.label}
+       </span>
+     </div>
+   ))}
+ </div>
 
         <div className="w-full h-px bg-gradient-to-r from-transparent via-[#6DE1E3]/30 to-transparent" />
 

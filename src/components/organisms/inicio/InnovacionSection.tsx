@@ -84,7 +84,7 @@ const InnovacionSection: React.FC = () => {
           <CustomInfoCard
             icon={EyeIcon}
             text="Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos"
-            href={ROUTES.PRODUCTOS.LETRERO_NEON_LED}
+            href={ROUTES.PRODUCTOS.BARRA_PIXEL_LED}
           />
         </div>
 
