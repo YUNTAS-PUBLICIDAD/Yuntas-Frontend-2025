@@ -70,7 +70,7 @@ const InnovacionSection: React.FC = () => {
           >
             <div className="absolute top-8 left-0 z-10 bg-black text-white py-2 px-5 rounded-r-full flex items-center gap-3 font-bold text-sm tracking-wide shadow-xl">
               <ChevronRightCircle />
-              <span className="mt-0.5">BARRAS DE PIXCEL</span>
+              <span className="mt-0.5">BARRAS DE PIXEL</span>
             </div>
             <div className="relative w-full aspect-[3/2]">
               <SectionImage
