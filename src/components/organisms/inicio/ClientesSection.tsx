@@ -6,6 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+// @ts-expect-error: swiper css module has no type declarations
 import "swiper/css";
 
 
@@ -217,7 +218,7 @@ const ClientesSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                inline-flex items-center gap-2.5
+                w-full sm:w-fit inline-flex items-center gap-2.5
                 border border-slate-200 rounded-full
                 px-5 py-2.5
                 text-sm font-semibold text-slate-700
