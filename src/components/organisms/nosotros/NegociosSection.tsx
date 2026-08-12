@@ -29,7 +29,7 @@ const NegocioSection: React.FC = () => {
           {/* TEXTO CON <Text> */}
            <div className="bg-white border-2 border-[#203565] rounded-3xl p-10 text-center shadow-[8px_8px_4px_#203565] relative ">
 
-              <Text variant="caption" color="black" className="font-['Roboto'] text-base md:text-lg leading-8 text-[#203565]"
+              <Text variant="caption" color="black" className="text-base md:text-lg leading-8 text-[#203565]"
       >            En Yuntas Producciones{" "}
               <span className="font-extrabold">transformamos</span>
               <br />
