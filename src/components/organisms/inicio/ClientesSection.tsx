@@ -1,9 +1,10 @@
 "use client";
 
 import { ROUTES } from "@/config/routes";
+import { useProductos } from "@/hooks/useProductos";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-expect-error: swiper css module has no type declarations
@@ -84,14 +85,20 @@ const reviewsData = [
   },
 ];
 
-const statsData = [
-  { value: "+50",  label: "Marcas atendidas"     },
-  { value: "100%", label: "Proyectos entregados"  },
-  { value: "16", label: "Productos Disponibles"  },
-  { value: "+3",   label: "Años de experiencia"   },
-];
-
 const ClientesSection: React.FC = () => {
+  const { productos, getProductos } = useProductos();
+
+  useEffect(() => {
+    getProductos(200);
+  }, [getProductos]);
+
+  const statsData = [
+    { value: "+50",  label: "Marcas atendidas"     },
+    { value: "100%", label: "Proyectos entregados"  },
+    { value: productos.length ? `+${productos.length}` : "...", label: "Productos Disponibles"  },
+    { value: "+3",   label: "Años de experiencia"   },
+  ];
+
   return (
     <section className="w-full bg-white">
 
