@@ -572,7 +572,7 @@ export default function ContactoSettingsSection({
                       <Input
                         icon={<Phone className="h-4 w-4" />}
                         value={config.telefono}
-                        onChange={(value) => set("telefono", value)}
+                        onChange={(value) => set("telefono", value.replace(/\D/g, "").slice(0, 9))}
                         placeholder="Ej: 999 888 777"
                         type="tel"
                       />
