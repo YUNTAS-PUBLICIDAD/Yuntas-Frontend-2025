@@ -41,21 +41,32 @@ export const getUserTypeStats = async () => {
 
 export interface TopProductApiItem {
   id: number;
+  name: string;
+  slug: string;
   views_count: number;
-  growth: number;
-  conversion_rate: number;
+}
+
+export interface TopProductsResponse {
+  period: string;
+  total_views: number;
+  products: TopProductApiItem[];
 }
 
 /**
  * Obtener el ranking de productos más vistos.
- * Pendiente en el backend: GET /dashboard/top-products?days=&category=
+ * GET /dashboard/top-products?days=7|30|90
  */
-export const getTopViewedProducts = async (days: number, category?: string) => {
+export const getTopViewedProducts = async (days: number) => {
   const response = await api.get(
     API_ENDPOINTS.ADMIN.DASHBOARD.TOP_PRODUCTS,
-    {
-      params: category ? { days, category } : { days },
-    }
+    { params: { days } }
   );
-  return response.data;
+  return response.data.data as TopProductsResponse;
+};
+
+/**
+ * Registrar una vista de producto (para el ranking de más vistos).
+ */
+export const recordProductView = async (productId: number) => {
+  await api.post(API_ENDPOINTS.PRODUCTS.RECORD_VIEW(productId));
 };

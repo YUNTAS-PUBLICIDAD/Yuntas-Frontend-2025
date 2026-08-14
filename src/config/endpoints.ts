@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   PRODUCTS: {
     GET_ALL: '/productos',
     GET_ONE: (slug: string) => `/productos/${slug}`,
+    RECORD_VIEW: (id: number) => `/productos/${id}/view`,
   },
 
   // BLOG

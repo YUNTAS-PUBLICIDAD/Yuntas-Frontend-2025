@@ -14,6 +14,7 @@ import { imageProductoSlots } from '@/types/admin/producto';
 import { getPopupsService, getPublicPopupService } from '@/services/popupService';
 import { Popup as PopupConfig } from '@/types/admin/popup';
 import VideoSection from '@/components/organisms/productos/detalle/VideoSection';
+import { recordProductView } from '@/services/trackingService';
 
 interface ProductClientProps {
     initialProduct?: Producto | null;
@@ -60,6 +61,11 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
       };
       fetchPopup();
     }, []);
+
+    useEffect(() => {
+        if (!displayProducto?.id) return;
+        recordProductView(displayProducto.id).catch(() => {});
+    }, [displayProducto?.id]);
 
     if (!slug && !displayProducto) {
         return <div className="flex justify-center items-center h-screen">URL no válida</div>;

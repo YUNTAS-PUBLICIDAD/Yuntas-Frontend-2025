@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, Eye, Package, TrendingUp, Info, ChevronUp, ChevronDown,
+  ArrowLeft, Eye, Package, TrendingUp, ChevronUp, ChevronDown,
 } from "lucide-react";
 import { useProductos } from "@/hooks/useProductos";
 import { useTopProductos } from "@/hooks/useTopProductos";
@@ -57,7 +57,7 @@ export default function ProductosMasVistosPage() {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [paginated, setPaginated] = useState<Row[]>([]);
 
-  const { metricsById, isMock } = useTopProductos(productos, days);
+  const { metricsById } = useTopProductos(productos, days);
 
   useEffect(() => {
     getProductos(200);
@@ -134,19 +134,6 @@ export default function ProductosMasVistosPage() {
           Ranking de productos por número de vistas por periodo.
         </p>
       </section>
-
-      {isMock && (
-        <div className="flex items-center gap-2 rounded-xl border border-dashed border-[#D8E7F3] bg-[#F8FBFE] px-4 py-3 text-xs text-slate-500 dark:border-white/15 dark:bg-white/5 dark:text-white/60">
-          <Info className="h-4 w-4 flex-shrink-0" />
-          <span>
-            Mostrando datos de ejemplo — se conectará a{" "}
-            <code className="rounded bg-white px-1.5 py-0.5 font-mono text-[11px] text-[#203565] dark:bg-black/20 dark:text-white/80">
-              GET /dashboard/top-products
-            </code>{" "}
-            en cuanto el backend lo exponga.
-          </span>
-        </div>
-      )}
 
       {/* Filtros */}
       <div className="flex flex-col gap-3 rounded-2xl border border-[#D8E7F3] bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#1C2347] md:flex-row md:items-center">
