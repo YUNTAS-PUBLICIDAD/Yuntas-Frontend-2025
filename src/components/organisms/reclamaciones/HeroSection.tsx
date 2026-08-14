@@ -31,11 +31,7 @@ const HeroSection = () => {
       </motion.div>
 
       <div
-        className="absolute inset-0 z-10"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
-        }}
+        className="absolute inset-0 z-10 bg-gradient-to-r from-[#0a1a3a]/90 via-[#04061a]/70 to-transparent"
       />
 
       <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
@@ -59,7 +55,7 @@ const HeroSection = () => {
               className="
                 mb-4 leading-tight 
                 drop-shadow-[0_2px_2px_#28BEDA] 
-                text-2xl sm:text-4xl md:text-7xl
+                text-2xl sm:text-4xl md:text-6xl
               "
             >
               RECLAMACIONES
