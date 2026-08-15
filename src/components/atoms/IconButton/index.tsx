@@ -17,7 +17,7 @@ const IconButton = ({
     
     // Configuración de colores extraída de tu código original
     const variants = {
-        delete: "text-[#203565] hover:text-[#0D1030] disabled:text-[#203565]/30",
+        delete: "text-brand-blue hover:text-[#0D1030] disabled:text-brand-blue/30",
         approve: "text-[#23C1DE] hover:text-[#1a9bb8] disabled:text-[#23C1DE]/30",
         edit:    "text-[#23C1DE] hover:text-[#1a9bb8] disabled:text-[#23C1DE]/30"
     };
