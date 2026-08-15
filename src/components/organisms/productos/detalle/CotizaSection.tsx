@@ -6,7 +6,7 @@ import { MdArrowForward } from "react-icons/md";
 export default function CotizaSection() {
 	return (
 		<section className="w-full relative overflow-hidden">
-			<div className="relative bg-gradient-to-r from-[#203565] via-[#1a2d5a] to-[#0f2048] py-20 md:py-28 px-4 md:px-8">
+			<div className="relative bg-gradient-to-r from-brand-blue via-[#1a2d5a] to-[#0f2048] py-20 md:py-28 px-4 md:px-8">
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(35,193,222,0.2),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(35,193,222,0.15),transparent_30%)]" />
 				
 				<div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#23C1DE]/50 to-transparent" />
