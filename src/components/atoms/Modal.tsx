@@ -48,8 +48,8 @@ export default function Modal({
         lg: "max-w-4xl"
     };
 
-    const bgClass = className.includes("bg-") ? "" : "bg-white text-[#203565] dark:bg-[#141A3F]";
-    const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#203565]";
+    const bgClass = className.includes("bg-") ? "" : "bg-white text-brand-blue dark:bg-[#141A3F]";
+    const textTitleClass = className.includes("text-white") ? "text-white" : "text-brand-blue";
     const closeBtnClass = className.includes("text-white")
         ? "text-white hover:text-gray-200"
         : "text-gray-400 hover:text-gray-600";
