@@ -57,7 +57,7 @@ export default function ExportDropdown({
             onClick={() => setIsOpen(!isOpen)}
             className={`
                             inline-flex items-center justify-center gap-2
-              bg-[#203565]
+              bg-brand-blue
               dark:bg-[#293296]
               text-white
               font-semibold
