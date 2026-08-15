@@ -17,7 +17,7 @@ const ViewContactoModal: React.FC<Props> = ({ contacto, isOpen, onClose }) => {
       <div className="bg-white dark:bg-[#141A3F] rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="bg-[#203565] p-4 flex justify-between items-center">
+        <div className="bg-brand-blue p-4 flex justify-between items-center">
           <h2 className="text-xl font-bold text-white">
             Detalle de Solicitud #{contacto.id}
           </h2>
@@ -33,13 +33,13 @@ const ViewContactoModal: React.FC<Props> = ({ contacto, isOpen, onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg">
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold mb-1">Cliente</p>
-                <p className="text-lg font-semibold text-[#203565] dark:text-white">
+                <p className="text-lg font-semibold text-brand-blue dark:text-white">
                     {contacto.first_name} {contacto.last_name}
                 </p>
             </div>
             <div className="bg-gray-50 dark:bg-[#0D1030] p-4 rounded-lg">
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold mb-1">Fecha de Envío</p>
-                <p className="text-lg font-semibold text-[#203565] dark:text-white">
+                <p className="text-lg font-semibold text-brand-blue dark:text-white">
                     {new Date(contacto.created_at).toLocaleDateString()} <span className="text-sm font-normal">{new Date(contacto.created_at).toLocaleTimeString()}</span>
                 </p>
             </div>
@@ -64,7 +64,7 @@ const ViewContactoModal: React.FC<Props> = ({ contacto, isOpen, onClose }) => {
           {/* Asunto */}
           <div>
             <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold mb-1">Asunto / Detalle</p>
-            <p className="text-base font-medium text-[#203565] dark:text-blue-300">
+            <p className="text-base font-medium text-brand-blue dark:text-blue-300">
                 {contacto.request_detail}
             </p>
           </div>
