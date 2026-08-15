@@ -49,7 +49,7 @@ function renderCTA(message: ChatMessage) {
       return (
         <a
           href={message.url}
-          className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#203565] to-[#1e3a8a] text-white rounded-xl py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-blue to-[#1e3a8a] text-white rounded-xl py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
         >
           Ir a contacto
         </a>
@@ -288,7 +288,7 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
+              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-brand-cyan/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
                 ? "left-20 origin-bottom-left"
                 : "right-10  origin-bottom-right"
                 }`}
@@ -317,7 +317,7 @@ export default function ChatbotWidget() {
               ) : (
                 <>
                   <div className="mb-2 flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-[#6DE1E3]" />
+                    <div className="h-2 w-2 rounded-full bg-brand-cyan" />
 
                     <span className="
                       text-[10px]
