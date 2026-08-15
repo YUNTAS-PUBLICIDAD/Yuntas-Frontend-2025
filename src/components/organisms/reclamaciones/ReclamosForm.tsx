@@ -15,7 +15,7 @@ export default function ReclamosForm() {
 
             {/* seccion donde se pone los datos */}
             <div className="bg-[#F3F4F6] flex flex-col gap-4 p-4 rounded-3xl md:p-8">
-            <div className='flex items-center gap-2 text-[#203565] font-bold'>
+            <div className='flex items-center gap-2 text-brand-blue font-bold'>
                 <CircleNumber number="1" />
                 <Text color='black' variant='subtitle'>
                     Datos de la persona que presenta 
@@ -26,7 +26,7 @@ export default function ReclamosForm() {
 
             {/*seccion donde se detalla el reclamo */}
             <div className="bg-[#F3F4F6] flex flex-col gap-4 p-4 rounded-3xl md:p-8">
-            <div className='flex items-center gap-2 text-[#203565] font-bold'>
+            <div className='flex items-center gap-2 text-brand-blue font-bold'>
                 <CircleNumber number="2" />
                 <Text color='black' variant='subtitle'>
                     Información de reclamo
