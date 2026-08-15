@@ -26,7 +26,7 @@ const ProjectsCarousel: React.FC = () => {
         {/* Fondo SOLO del header */}
         <div className="absolute inset-0 bg-[#0a1a3a]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-[#22c55e]/10" />
 
         {/* Contenido */}
         <div className="relative flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/10">
@@ -41,7 +41,7 @@ const ProjectsCarousel: React.FC = () => {
           </div>
           <Link
             href={ROUTES.CONTACTO}
-            className=" text-white font-bold text-sm md:text-base lg:text-lg px-6 py-2 rounded-full bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_8px_25px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 uppercase tracking-wide whitespace-nowrap"
+            className=" text-white font-bold text-sm md:text-base lg:text-lg px-6 py-2 rounded-full bg-gradient-to-r from-brand-cyan via-[#3ECAD0] to-[#0ea5b7] shadow-[0_8px_25px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 uppercase tracking-wide whitespace-nowrap"
           >
             CONTÁCTANOS
           </Link>
@@ -49,7 +49,7 @@ const ProjectsCarousel: React.FC = () => {
       </div>
 
       {/* Light Teal Separator Bar - Más delgada */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent  via-[#6DE1E3]/60 to-transparent my-6"></div>
+      <div className="w-full h-px bg-gradient-to-r from-transparent  via-brand-cyan/60 to-transparent my-6"></div>
 
       {/* Carousel Area - Altura ajustada */}
       <div className="max-w-[1400px] mx-auto">
