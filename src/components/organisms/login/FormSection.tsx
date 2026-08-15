@@ -94,7 +94,7 @@ export default function FormSection() {
 
                         <Button
                             type="submit"
-                            className="w-full rounded-xl px-6 py-3 text-lg font-semibold uppercase tracking-[0.04em] text-white bg-gradient-to-r from-[#6DE1E3] via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 active:scale-95 h-14"
+                            className="w-full rounded-xl px-6 py-3 text-lg font-semibold uppercase tracking-[0.04em] text-white bg-gradient-to-r from-brand-cyan via-[#3ECAD0] to-[#0ea5b7] shadow-[0_10px_30px_rgba(109,225,227,0.3)] transition-all duration-300 hover:scale-105 active:scale-95 h-14"
                             disabled={isLoading}
                         >
                             {isLoading ? <span>Ingresando...</span> : 'Ingresar'}
@@ -103,7 +103,7 @@ export default function FormSection() {
 
                     <div className="mt-8 border-t pt-6 text-center">
                         <Link href="/" className="group relative inline-flex rounded-xl p-[1.5px] overflow-hidden">
-                            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#6DE1E3] via-[#22c55e] to-[#0ea5b7] opacity-90 group-hover:opacity-100 transition" />
+                            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-brand-cyan via-[#22c55e] to-[#0ea5b7] opacity-90 group-hover:opacity-100 transition" />
                             <span className="relative px-6 py-3 rounded-[10px] bg-white text-[#0a1a3a] font-semibold flex items-center gap-2 h-14">
                                 <HiArrowLeft />Volver a Inicio
                             </span>
