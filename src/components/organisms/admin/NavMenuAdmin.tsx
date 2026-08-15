@@ -6,7 +6,7 @@ import { useNavItems } from "@/hooks/useNavItems";
 export default function NavMenuAdmin({scrolled}: {scrolled: boolean}){
   const items = useNavItems();
 
-  const baseColor = "text-black dark:text-white/90 hover:text-[#6DE1E3]";
+  const baseColor = "text-black dark:text-white/90 hover:text-brand-cyan";
 
   const activeColor = "text-black";
 
