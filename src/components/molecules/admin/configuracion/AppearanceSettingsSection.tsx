@@ -30,7 +30,7 @@ function BlockTitle({
 }) {
   return (
     <div className="mb-5 flex items-start gap-3">
-      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
+      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 dark:bg-white/5">
         {icon}
       </div>
       <div>
@@ -132,7 +132,7 @@ function UploadZone({
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
-        className={`relative flex min-h-[140px] cursor-pointer select-none flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200 ${bgClass} ${dragging ? "border-[#203565]" : borderClass}`}
+        className={`relative flex min-h-[140px] cursor-pointer select-none flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-200 ${bgClass} ${dragging ? "border-brand-blue" : borderClass}`}
       >
         {preview ? (
           <img
@@ -228,8 +228,8 @@ export default function AppearanceSettingsSection({
         className="flex w-full items-start justify-between border-b border-gray-100 px-6 py-5 text-left transition-colors hover:bg-gray-50/70 dark:border-white/5 dark:hover:bg-white/5"
       >
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
-            <Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-blue/10 dark:bg-white/5">
+            <Palette className="h-4 w-4 text-brand-blue dark:text-white/60" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">General</h2>
@@ -251,7 +251,7 @@ export default function AppearanceSettingsSection({
 
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<ImageIcon className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+              icon={<ImageIcon className="h-4 w-4 text-brand-blue dark:text-white/60" />}
               title="Logos"
               subtitle="Sube el logo para cada tema del sitio"
             />
@@ -281,7 +281,7 @@ export default function AppearanceSettingsSection({
 
           {/* <div className="px-6 py-6">
             <BlockTitle
-              icon={<Brush className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+              icon={<Brush className="h-4 w-4 text-brand-blue dark:text-white/60" />}
               title="Información de la empresa"
               subtitle="Datos que aparecen en el sitio público"
             />
@@ -299,7 +299,7 @@ export default function AppearanceSettingsSection({
 
           {/* <div className="px-6 py-6">
             <BlockTitle
-              icon={<Palette className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+              icon={<Palette className="h-4 w-4 text-brand-blue dark:text-white/60" />}
               title="Tema"
               subtitle="Define el tema visual principal del sitio"
             />
@@ -322,8 +322,8 @@ export default function AppearanceSettingsSection({
               onClick={handleSave}
               disabled={isSaving || isLoading}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl 
-              bg-[#203565] hover:bg-[#162548] text-white 
-              dark:bg-white dark:text-[#203565] dark:hover:bg-white/90
+              bg-brand-blue hover:bg-[#162548] text-white 
+              dark:bg-white dark:text-brand-blue dark:hover:bg-white/90
               disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
             >
               <Save className="h-4 w-4" />
