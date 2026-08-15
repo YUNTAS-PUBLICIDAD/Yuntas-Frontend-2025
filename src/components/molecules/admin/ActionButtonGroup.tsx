@@ -33,7 +33,7 @@ export default function ActionButtonGroup({
       if (variant === "info") {
           return "!bg-[#23C1DE] hover:!bg-[#1fb2cc] focus:!bg-[#23C1DE] text-white active:!bg-[#1fb2cc]";
       }
-        const baseColor = "!bg-[#203565] hover:!bg-[#162E4D] focus:!bg-[#203565] text-white active:!bg-[#203565]";
+        const baseColor = "!bg-brand-blue hover:!bg-[#162E4D] focus:!bg-brand-blue text-white active:!bg-brand-blue";
         const darkColor = "dark:!bg-[#293296] dark:hover:!bg-[#1e2570] dark:focus:!bg-[#293296]";
 
         return `${baseColor} ${darkColor}`;
