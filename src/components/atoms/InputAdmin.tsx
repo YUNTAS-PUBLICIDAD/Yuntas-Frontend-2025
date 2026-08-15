@@ -27,7 +27,7 @@ export default function InputAdmin({
 }: InputAdminProps) {
     return (
         <div className="flex flex-col gap-1 flex-1">
-            <label htmlFor={name} className="text-[#203565] font-medium dark:text-[#ECECEC]/80">
+            <label htmlFor={name} className="text-brand-blue font-medium dark:text-[#ECECEC]/80">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
             <input
@@ -40,7 +40,7 @@ export default function InputAdmin({
                 required={required}
                 maxLength={maxLength}
                 disabled={disabled}
-                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all disabled:opacity-50 text-[#203565] dark:text-[#ECECEC] dark:border dark:border-gray-700 dark:bg-[#1C2347] ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus: border-transparent"}`}
+                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all disabled:opacity-50 text-brand-blue dark:text-[#ECECEC] dark:border dark:border-gray-700 dark:bg-[#1C2347] ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23C1DE] focus: border-transparent"}`}
             
             />
             {/* {helperText && (
