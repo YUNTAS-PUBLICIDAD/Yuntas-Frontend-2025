@@ -95,7 +95,7 @@ export default function ImageUpload({
 
     return (
         <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded-lg">
-            <label className="text-[#203565] font-medium dark:text-[#ECECEC]/80">
+            <label className="text-brand-blue font-medium dark:text-[#ECECEC]/80">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
 
@@ -153,7 +153,7 @@ export default function ImageUpload({
                     value={titleValue}
                     onChange={(e) => onTitleChange(e.target.value)}
                     placeholder="Título para SEO"
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565] dark:text-[#ECECEC]/80 dark:bg-[#1C2347]"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-brand-blue dark:text-[#ECECEC]/80 dark:bg-[#1C2347]"
                     maxLength={50}
                 />
             )}
@@ -164,7 +164,7 @@ export default function ImageUpload({
                     value={altValue}
                     onChange={(e) => onAltChange(e.target.value)}
                     placeholder="Texto ALT para SEO"
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565] dark:text-[#ECECEC]/80 dark:bg-[#1C2347]"
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-brand-blue dark:text-[#ECECEC]/80 dark:bg-[#1C2347]"
                     maxLength={80}
                 />
             )}
