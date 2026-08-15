@@ -12,7 +12,7 @@ const HeroSearchSection = ({ setListaProductos, allProductos }: HeroSearchSectio
       <div className='relative w-full overflow-hidden'>
         <div className='absolute inset-0 bg-[#0a1a3a]' />
         <div className='absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]' />
-        <div className='absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10' />
+        <div className='absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-[#22c55e]/10' />
 
         <div className='relative flex items-center justify-center px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/10 text-center'>
           <Text
