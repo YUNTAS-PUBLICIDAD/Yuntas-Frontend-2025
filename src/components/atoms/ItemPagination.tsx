@@ -30,7 +30,7 @@ const ItemPagination = ({ children, className, onClick, active = false, disabled
       } 
       ${active 
         ? 'bg-[#0B0B1F] text-white hover:bg-[#0B0B1F] dark:bg-[#293296] dark:text-white dark:hover:bg-[#0D1030]' 
-        : 'text-black hover:bg-gray-300 dark:text-white dark:bg-[#151A3D] dark:hover:bg-[#203565]'
+        : 'text-black hover:bg-gray-300 dark:text-white dark:bg-[#151A3D] dark:hover:bg-brand-blue'
       }${className || ''}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
