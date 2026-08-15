@@ -52,7 +52,7 @@ export default function InputListDinamica({
 
     return (
         <div className="flex flex-col gap-2">
-            <label className="text-[#203565] font-medium dark:text-[#ECECEC]/80">{label} {required && <span className="text-red-500">*</span>} </label>
+            <label className="text-brand-blue font-medium dark:text-[#ECECEC]/80">{label} {required && <span className="text-red-500">*</span>} </label>
 
             {items.map((item, index) => (
                 <div key={index} className="flex gap-2 items-center">
@@ -62,7 +62,7 @@ export default function InputListDinamica({
                         onChange={(e) => handleItemChange(index, e.target.value)}
                         placeholder={placeholder}
                         required={required && index === 0}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-[#203565] dark:text-[#ECECEC] dark:border dark:border-gray-700 dark:bg-[#1C2347]"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-brand-blue dark:text-[#ECECEC] dark:border dark:border-gray-700 dark:bg-[#1C2347]"
                     />
                     {(items.length > 1 || !required) && (
                         <button
