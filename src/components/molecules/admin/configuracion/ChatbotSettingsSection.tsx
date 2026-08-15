@@ -24,7 +24,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
       onClick={onChange}
       className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none ${
         
-        checked ? "bg-[#6DE1E3] dark:bg-[#6DE1E3]" : "bg-gray-300 dark:bg-white/20"
+        checked ? "bg-brand-cyan dark:bg-brand-cyan" : "bg-gray-300 dark:bg-white/20"
       }`}
     >
       <span
@@ -114,7 +114,7 @@ function BlockTitle({
 }) {
   return (
     <div className={`flex items-start gap-3 ${className}`}>
-      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5 shrink-0 mt-0.5">
+      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-brand-blue/10 dark:bg-white/5 shrink-0 mt-0.5">
         {icon}
       </div>
       <div>
@@ -161,7 +161,7 @@ export default function ChatbotSettingsSection({
 
   const PreviewIcon = (
     <svg
-      className="w-4 h-4 text-[#203565] dark:text-white/60"
+      className="w-4 h-4 text-brand-blue dark:text-white/60"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -183,8 +183,8 @@ export default function ChatbotSettingsSection({
         className="flex w-full items-start justify-between px-6 py-5 text-left border-b border-gray-100 dark:border-white/5 transition-colors hover:bg-gray-50/70 dark:hover:bg-white/5"
       >
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5">
-            <Bot className="w-4 h-4 text-[#203565] dark:text-white/60" />
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-brand-blue/10 dark:bg-white/5">
+            <Bot className="w-4 h-4 text-brand-blue dark:text-white/60" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Chatbot</h2>
@@ -223,7 +223,7 @@ export default function ChatbotSettingsSection({
           {/* Estado  */}
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<Power className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Power className="w-4 h-4 text-brand-blue dark:text-white/60" />}
               title="Estado"
               subtitle="Activa o desactiva la visibilidad del chatbot"
             />
@@ -247,7 +247,7 @@ export default function ChatbotSettingsSection({
  
               <div className="flex flex-col gap-6">
                 <BlockTitle
-                  icon={<Palette className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                  icon={<Palette className="w-4 h-4 text-brand-blue dark:text-white/60" />}
                   title="Apariencia"
                   subtitle="Personaliza el ícono, colores y posición del widget"
                   className="mb-0" 
@@ -361,7 +361,7 @@ export default function ChatbotSettingsSection({
           {/* Comportamiento */}
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<Settings2 className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Settings2 className="w-4 h-4 text-brand-blue dark:text-white/60" />}
               title="Comportamiento"
               subtitle="Cuándo mostrar y cuándo cerrar el chat automáticamente"
             />
@@ -390,8 +390,8 @@ export default function ChatbotSettingsSection({
               disabled={isSaving || isLoading}
           
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl 
-              bg-[#203565] hover:bg-[#162548] text-white 
-              dark:bg-white dark:text-[#203565] dark:hover:bg-white/90
+              bg-brand-blue hover:bg-[#162548] text-white 
+              dark:bg-white dark:text-brand-blue dark:hover:bg-white/90
               disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
             >
               <Save className="h-4 w-4" />
