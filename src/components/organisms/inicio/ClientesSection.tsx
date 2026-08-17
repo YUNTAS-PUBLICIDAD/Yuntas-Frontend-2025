@@ -130,7 +130,7 @@ const ClientesSection: React.FC = () => {
       <div
          key={stat.label}
          className="flex flex-col items-center justify-center gap-1 rounded-3xl py-7 px-4
-          bg-gradient-to-br from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]"
+          bg-gradient-to-br from-[#0a1a3a] via-[#0f2c5c] to-[#20838f] transition duration-300 hover:-translate-y-1 hover:scale-105"
         >
        <span className="text-[#6DE1E3] font-black text-3xl md:text-4xl leading-none tracking-tight">
         {stat.value}
