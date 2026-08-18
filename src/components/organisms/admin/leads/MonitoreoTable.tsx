@@ -58,7 +58,7 @@ if (!isLoading && isDataEmpty) {
               {onResetSearch && (
                   <button
                       onClick={onResetSearch}
-                  className="mt-4 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
+                  className="mt-4 text-sm text-brand-blue dark:text-brand-cyan font-semibold hover:underline"
                   >
                       {resetSearchText}
                   </button>

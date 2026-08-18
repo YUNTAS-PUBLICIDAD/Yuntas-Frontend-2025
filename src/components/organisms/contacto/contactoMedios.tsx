@@ -18,7 +18,7 @@ const ContactoMedios: React.FC = () => {
       </div>
 
       {/* Separador sutil */}
-      <div className="w-16 h-1 bg-[#203565] mx-auto my-12 rounded-full opacity-60"></div>
+      <div className="w-16 h-1 bg-brand-blue mx-auto my-12 rounded-full opacity-60"></div>
 
       <div className="container mx-auto px-4 pb-16">
         {/* Los 3 divs en fila para escritorio con mismo tamaño */}
@@ -30,12 +30,12 @@ const ContactoMedios: React.FC = () => {
                 className="group text-center bg-[#E2F6F6] rounded-[2.5rem] p-10 flex flex-col items-center justify-center min-h-[220px] transition-all duration-300 hover:bg-[#D5EFEF] hover:-translate-y-2 hover:shadow-xl"
               >
                 {/* Círculo azul con icono centrado */}
-                <div className="bg-[#203565] w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md transition-transform duration-300 group-hover:scale-110">
+                <div className="bg-brand-blue w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md transition-transform duration-300 group-hover:scale-110">
                   <valor.icon className="text-white size-10 md:size-12" />
                 </div>
 
                 {/* Texto */}
-                <p className="flex flex-col text-[#203565] text-center text-lg">
+                <p className="flex flex-col text-brand-blue text-center text-lg">
                   <span className="font-extrabold text-xl mb-1">{valor.bold}</span>
                   <span className="opacity-90">{valor.light}</span>
                 </p>
@@ -46,7 +46,7 @@ const ContactoMedios: React.FC = () => {
       </div>
 
       {/* Separador sutil final */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-[#203565] to-transparent opacity-20 my-4"></div>
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-blue to-transparent opacity-20 my-4"></div>
     </section>
   );
 };

@@ -19,7 +19,7 @@ interface TestimonialCardProps {
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, initial, text, date, stars = 5, image, className = "" }) => (
   <div className={`bg-white/95 backdrop-blur-md rounded-2xl shadow-xl  pt-16 pb-10 px-8 flex flex-col items-center w-full max-w-[340px] relative border border-gray-100 ${className}`}>
     {/* Avatar / Character Icon Container */}
-    <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[#203565] border-4 border-white shadow-[0_8px_20px_rgba(0,0,0,0.15)] flex items-center justify-center overflow-hidden z-20">
+    <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-brand-blue border-4 border-white shadow-[0_8px_20px_rgba(0,0,0,0.15)] flex items-center justify-center overflow-hidden z-20">
       {image ? (
         <Image
           src={image}

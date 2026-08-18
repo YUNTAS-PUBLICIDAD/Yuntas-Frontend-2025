@@ -129,7 +129,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         <nav
           ref={navRef}
           onScroll={updateFadeState}
-          className="h-full overflow-y-auto scrollbar-hidden text-[#203565] dark:text-white pt-4" 
+          className="h-full overflow-y-auto scrollbar-hidden text-brand-blue dark:text-white pt-4" 
         >
           <NavList items={getNavItems()} />
         </nav>

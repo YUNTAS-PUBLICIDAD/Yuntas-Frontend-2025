@@ -8,7 +8,7 @@ const NegocioSection: React.FC = () => {
       <div className="relative w-full overflow-hidden">
         <div className="absolute inset-0 bg-[#0a1a3a]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-[#22c55e]/10" />
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
@@ -27,9 +27,9 @@ const NegocioSection: React.FC = () => {
           </div>
 
           {/* TEXTO CON <Text> */}
-           <div className="bg-white border-2 border-[#203565] rounded-3xl p-10 text-center shadow-[8px_8px_4px_#203565] relative ">
+           <div className="bg-white border-2 border-brand-blue rounded-3xl p-10 text-center shadow-[8px_8px_4px_#203565] relative ">
 
-              <Text variant="caption" color="black" className="text-base md:text-lg leading-8 text-[#203565]"
+              <Text variant="caption" color="black" className="text-base md:text-lg leading-8 text-brand-blue"
       >            En Yuntas Producciones{" "}
               <span className="font-extrabold">transformamos</span>
               <br />
@@ -46,7 +46,7 @@ const NegocioSection: React.FC = () => {
               <span className="font-extrabold">crear experiencias inolvidables</span>
             </Text>
 
-            <div className="absolute -bottom-10 -right-10 w-28 h-28 rounded-full bg-[#6DE1E3] opacity-30">
+            <div className="absolute -bottom-10 -right-10 w-28 h-28 rounded-full bg-brand-cyan opacity-30">
       </div>
 
           </div>

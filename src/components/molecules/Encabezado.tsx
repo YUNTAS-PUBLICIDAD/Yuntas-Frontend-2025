@@ -16,10 +16,10 @@ const variantStyles: Record<EncabezadoVariant, { bg: string; text: string }> = {
     },
     blanco: {
         bg: "bg-white",
-        text: "text-[#203565]"
+        text: "text-brand-blue"
     },
     azul: {
-        bg: "bg-[#23C1DE] dark:bg-[#203565]",
+        bg: "bg-[#23C1DE] dark:bg-brand-blue",
         text: "text-white"
     }
 };

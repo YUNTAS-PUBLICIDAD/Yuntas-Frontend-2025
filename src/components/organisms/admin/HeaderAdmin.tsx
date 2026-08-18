@@ -38,7 +38,7 @@ export default function HeaderAdmin({ className = "" }: HeaderProps) {
             <p className="text-xs text-[#5A6B93] dark:text-white/60 leading-none">
               Bienvenido
             </p>
-            <p className="text-sm font-semibold text-[#203565] dark:text-white capitalize">
+            <p className="text-sm font-semibold text-brand-blue dark:text-white capitalize">
               {role}
             </p>
           </div>

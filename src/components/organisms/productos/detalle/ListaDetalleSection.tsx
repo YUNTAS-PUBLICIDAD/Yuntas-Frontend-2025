@@ -18,7 +18,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, imageTi
 	return (
 		<section className="w-full py-20 md:py-32 bg-gradient-to-b from-[#F8FBFC] to-white relative overflow-hidden">
 			<div className="absolute top-20 right-0 w-[500px] h-[500px] bg-[#23C1DE]/8 rounded-full blur-3xl pointer-events-none" />
-			<div className="absolute bottom-40 left-0 w-[400px] h-[400px] bg-[#203565]/6 rounded-full blur-3xl pointer-events-none" />
+			<div className="absolute bottom-40 left-0 w-[400px] h-[400px] bg-brand-blue/6 rounded-full blur-3xl pointer-events-none" />
 
 			<div className="container mx-auto px-4 md:px-8 relative z-10">
 				<div className={`flex flex-col ${reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-start gap-12 lg:gap-20`}>
@@ -37,7 +37,7 @@ export default function ListaDetalleSection({ text, listItems, imageSrc, imageTi
 							) : (
 								<span className="text-sm uppercase tracking-[0.25em] text-[#23C1DE] font-bold">Características</span>
 							)}
-								<Text variant="h2" color="text-[#203565]" className="font-bold">{text}</Text>
+								<Text variant="h2" color="text-brand-blue" className="font-bold">{text}</Text>
 							</div>
 						</div>
 

@@ -26,7 +26,7 @@ const Input = ({
   type = "text",
   bgColor = "bg-white",
   textLabel,
-  borderColor="border-[#203565]",
+  borderColor="border-brand-blue",
   colorLabel = "text-black",
   rounded = "rounded-[15px]",
   inputClassName = "",

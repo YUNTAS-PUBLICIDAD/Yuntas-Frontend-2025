@@ -25,7 +25,7 @@ export default function NavItem({
                 className={`group relative flex items-center gap-2.5 rounded-xl px-3 py-2 transition-all duration-200 ${
                     isActive
                         ? "bg-[#23C1DE]/15 text-[#0D1030] dark:bg-[#23C1DE]/20 dark:text-white ring-1 ring-[#23C1DE]/40 shadow-sm"
-                        : "text-[#203565] dark:text-white/85 hover:bg-[#23C1DE]/10 dark:hover:bg-[#293296]/40"
+                        : "text-brand-blue dark:text-white/85 hover:bg-[#23C1DE]/10 dark:hover:bg-[#293296]/40"
                 }`}
             >
                 <span

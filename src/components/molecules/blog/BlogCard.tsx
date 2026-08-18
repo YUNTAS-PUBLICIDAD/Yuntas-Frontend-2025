@@ -35,7 +35,7 @@ const BlogCard = ({ imgUrl, imgAlt, imgTitle, productName, blogTitle }: BlogCard
 			<div className='p-6 flex flex-col'>
 				<div>
 					<Text variant='small' className='font-bold uppercase tracking-wider mb-2 text-gray-800'>{productName}</Text>
-					<Text variant='subtitle' className='font-extrabold text-[#203565] line-clamp-2 leading-tight mb-3 group-hover:text-[#18879B] transition-colors'>
+					<Text variant='subtitle' className='font-extrabold text-brand-blue line-clamp-2 leading-tight mb-3 group-hover:text-[#18879B] transition-colors'>
 						{blogTitle}
 					</Text>
 				</div>

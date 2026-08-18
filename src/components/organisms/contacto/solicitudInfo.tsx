@@ -17,7 +17,7 @@ const SolicitudInfo: React.FC = () => {
         <FormContainer>
           <TextTitulo
             variant="caption"
-            className="text-[#203565] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center"
+            className="text-brand-blue font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center"
           >
             <span className="font-semibold">SOLICITA INFORMACIÓN</span>
           </TextTitulo>

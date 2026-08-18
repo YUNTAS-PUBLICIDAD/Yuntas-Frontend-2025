@@ -10,13 +10,13 @@ const VisionMision: React.FC = () => {
       <div className="w-full bg-white py-12 md:py-20 px-6 md:px-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* ===== TARJETA MISIÓN ===== */}
-          <div className="w-full bg-[#F3FBFD] border-2 border-[#203565] rounded-3xl shadow-[8px_8px_4px_#203565] p-8 flex flex-col items-center justify-center min-h-[380px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[12px_12px_6px_#203565]">
+          <div className="w-full bg-[#F3FBFD] border-2 border-brand-blue rounded-3xl shadow-[8px_8px_4px_#203565] p-8 flex flex-col items-center justify-center min-h-[380px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[12px_12px_6px_#203565]">
             {/* Ícono */}
-            <div className="bg-[#203565] rounded-full p-5 mb-6 shadow-lg">
+            <div className="bg-brand-blue rounded-full p-5 mb-6 shadow-lg">
             <TbTargetArrow className="text-white size-12 transition-transform duration-300 group-hover:scale-110" />
           </div>
 
-          <h3 className="text-3xl font-extrabold text-[#203565] mb-6">
+          <h3 className="text-3xl font-extrabold text-brand-blue mb-6">
             MISIÓN
           </h3>
 
@@ -36,13 +36,13 @@ const VisionMision: React.FC = () => {
           </div>
 
           {/* ===== TARJETA VISIÓN ===== */}
-          <div className="w-full bg-[#F3FBFD] border-2 border-[#203565] rounded-3xl shadow-[8px_8px_4px_#203565] p-8 flex flex-col items-center justify-center min-h-[380px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[12px_12px_6px_#203565]">
+          <div className="w-full bg-[#F3FBFD] border-2 border-brand-blue rounded-3xl shadow-[8px_8px_4px_#203565] p-8 flex flex-col items-center justify-center min-h-[380px] transition-all duration-300 hover:-translate-y-1 hover:shadow-[12px_12px_6px_#203565]">
             {/* Ícono */}
-           <div className="bg-[#203565] rounded-full p-5 mb-6 shadow-lg">
+           <div className="bg-brand-blue rounded-full p-5 mb-6 shadow-lg">
             <LuTelescope className="text-white size-12 transition-transform duration-300 group-hover:scale-110" />
           </div>
 
-          <h3 className="text-3xl font-extrabold text-[#203565] mb-6">
+          <h3 className="text-3xl font-extrabold text-brand-blue mb-6">
             VISIÓN
           </h3>
 

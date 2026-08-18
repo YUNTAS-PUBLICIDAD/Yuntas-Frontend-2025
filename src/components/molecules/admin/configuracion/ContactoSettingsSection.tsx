@@ -253,7 +253,7 @@ function BlockTitle({
 }) {
   return (
     <div className="mb-5 flex items-start gap-3">
-      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
+      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 dark:bg-white/5">
         {icon}
       </div>
       <div>
@@ -295,7 +295,7 @@ function Input({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20 ${icon ? "pl-9 pr-4" : "px-4"}`}
+        className={`w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20 ${icon ? "pl-9 pr-4" : "px-4"}`}
       />
     </div>
   );
@@ -334,14 +334,14 @@ function HorarioRow({
             type="time"
             value={value.desde}
             onChange={(e) => onChange({ ...value, desde: e.target.value })}
-            className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
+            className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
           />
           <span className="text-sm text-gray-400 dark:text-white/30">a</span>
           <input
             type="time"
             value={value.hasta}
             onChange={(e) => onChange({ ...value, hasta: e.target.value })}
-            className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
+            className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
           />
         </div>
       )}
@@ -529,8 +529,8 @@ export default function ContactoSettingsSection({
         className="flex w-full items-start justify-between border-b border-gray-100 px-6 py-5 text-left transition-colors hover:bg-gray-50/70 dark:border-white/5 dark:hover:bg-white/5"
       >
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#203565]/10 dark:bg-white/5">
-            <Phone className="h-4 w-4 text-[#203565] dark:text-white/60" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-blue/10 dark:bg-white/5">
+            <Phone className="h-4 w-4 text-brand-blue dark:text-white/60" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#0D1030] dark:text-white">Contacto</h2>
@@ -556,7 +556,7 @@ export default function ContactoSettingsSection({
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div>
                 <BlockTitle
-                  icon={<Phone className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+                  icon={<Phone className="h-4 w-4 text-brand-blue dark:text-white/60" />}
                   title="Información principal"
                   subtitle="Estos datos se mostrarán en tu sitio web"
                 />
@@ -567,7 +567,7 @@ export default function ContactoSettingsSection({
                         type="text"
                         value={config.codigoPais}
                         onChange={(e) => set("codigoPais", e.target.value)}
-                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
+                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
                       />
                       <Input
                         icon={<Phone className="h-4 w-4" />}
@@ -625,7 +625,7 @@ export default function ContactoSettingsSection({
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div>
                 <BlockTitle
-                  icon={<MessageCircle className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+                  icon={<MessageCircle className="h-4 w-4 text-brand-blue dark:text-white/60" />}
                   title="Mensaje por defecto para WhatsApp"
                   subtitle="Mensaje que se enviará automáticamente al hacer click en WhatsApp"
                 />
@@ -635,7 +635,7 @@ export default function ContactoSettingsSection({
                     onChange={(e) => set("mensajeWhatsapp", e.target.value)}
                     maxLength={200}
                     rows={4}
-                    className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-[#0D1030] transition-shadow focus:outline-none focus:ring-2 focus:ring-[#203565]/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20"
+                    className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-[#0D1030] transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20"
                   />
                   <span className="absolute bottom-3 right-3 text-xs text-gray-400 dark:text-white/30">
                     {config.mensajeWhatsapp.length}/200
@@ -645,7 +645,7 @@ export default function ContactoSettingsSection({
 
               <div>
                 <BlockTitle
-                  icon={<Settings2 className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+                  icon={<Settings2 className="h-4 w-4 text-brand-blue dark:text-white/60" />}
                   title="Opciones adicionales"
                   subtitle="Configuración extra de contacto"
                 />
@@ -683,7 +683,7 @@ export default function ContactoSettingsSection({
 
           <div className="px-6 py-6">
             <BlockTitle
-              icon={<Share2 className="h-4 w-4 text-[#203565] dark:text-white/60" />}
+              icon={<Share2 className="h-4 w-4 text-brand-blue dark:text-white/60" />}
               title="Redes sociales"
               subtitle="Enlaces a tus redes sociales (opcionales)"
             />
@@ -728,8 +728,8 @@ export default function ContactoSettingsSection({
               onClick={handleSave}
               disabled={isSaving || isLoading}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl 
-              bg-[#203565] hover:bg-[#162548] text-white 
-              dark:bg-white dark:text-[#203565] dark:hover:bg-white/90
+              bg-brand-blue hover:bg-[#162548] text-white 
+              dark:bg-white dark:text-brand-blue dark:hover:bg-white/90
               disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
             >
               <Save className="h-4 w-4" />

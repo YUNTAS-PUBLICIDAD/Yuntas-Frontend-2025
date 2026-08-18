@@ -64,7 +64,7 @@ const HeroSection = () => {
         <div className="max-w-3xl flex flex-col gap-4 md:gap-5">
 
           {/* Eyebrow */}
-          <span className="text-[#6DE1E3] text-sm md:text-base font-semibold tracking-[0.08em] uppercase opacity-80 reveal delay-1">
+          <span className="text-brand-cyan text-sm md:text-base font-semibold tracking-[0.08em] uppercase opacity-80 reveal delay-1">
             Publicidad visual para negocios
           </span>
 
@@ -78,14 +78,14 @@ const HeroSection = () => {
                   DISEÑAR TU <br />
                   ESPACIO*/}
           {/*Diseñamos espacios que{" "}
-                  <span className="text-[#6DE1E3]">impactan</span>
+                  <span className="text-brand-cyan">impactan</span>
                 </Heading>*/}
           <h1 className="text-white font-bold leading-[1] tracking-[-0.04em] text-[2.8rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.5rem]  reveal delay-2">
             {/*Convierte tu espacio en una*/}
             Impulsamos tu marca.
             <br />
             Transformamos{" "}
-            <span className="text-[#6DE1E3]">
+            <span className="text-brand-cyan">
               {/*experiencia visual*/}
               {/*Transformamos espacios.*/}
               espacios.
@@ -99,7 +99,7 @@ const HeroSection = () => {
                 color="white"
                 className="mb-8 text-lg sm:text-xl md:text-2xl"
               >*/}
-          {/*¡Somos <span className="text-[#6DE1E3] font-bold">YUNTAS</span> Publicidad!*/}
+          {/*¡Somos <span className="text-brand-cyan font-bold">YUNTAS</span> Publicidad!*/}
 
           {/*</Text>*/}
           <p className="text-gray-200 text-base md:text-lg leading-7 max-w-xl font-light tracking-[0.01em] reveal delay-3">
@@ -124,7 +124,7 @@ const HeroSection = () => {
                 rounded-xl
 
                 bg-[#081120]/95
-                border border-[#6DE1E3]/20
+                border border-brand-cyan/20
 
                 text-white
                 text-sm md:text-[15px]
@@ -135,7 +135,7 @@ const HeroSection = () => {
 
                 transition-all duration-300
 
-                hover:border-[#6DE1E3]/50
+                hover:border-brand-cyan/50
                 hover:bg-[#0b1730]
                 hover:-translate-y-0.5
 
@@ -220,7 +220,7 @@ const HeroSection = () => {
                 <feature.icon
                   className="
                     h-4 w-4
-                    text-[#6DE1E3]
+                    text-brand-cyan
                   "
                 />
 

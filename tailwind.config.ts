@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        "brand-blue": "#203565",
+        "brand-cyan": "#6DE1E3",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

@@ -31,7 +31,7 @@ const Confirm: React.FC<ConfirmProps> = ({
     <Modal size="md" title={title} isOpen={isOpen} onClose={onCancel}>
       <div className='flex flex-col gap-5'>
 
-        <p className="text-center text-[#203565] font-semibold text-xl dark:text-[#ECECEC]/80">{message}</p>
+        <p className="text-center text-brand-blue font-semibold text-xl dark:text-[#ECECEC]/80">{message}</p>
         <div className="flex justify-center items-center gap-4">
           <Button onClick={onConfirm} variant="danger" className='!rounded-lg'>
             {confirmText}

@@ -31,7 +31,7 @@ const HeroSection = ({ url, imageAlt, imageTitle, text }: HeroSectionProps) => {
         )}
 
         {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#00031E]/95 via-[#203565]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#00031E]/95 via-brand-blue/70 to-transparent" />
 
         {/* Elementos Decorativos - Círculos de fondo */}
         <div className="absolute top-10 left-10 w-32 h-32 bg-[#23C1DE]/20 rounded-full blur-3xl pointer-events-none" />
@@ -90,7 +90,7 @@ const HeroSection = ({ url, imageAlt, imageTitle, text }: HeroSectionProps) => {
       </div>
 
       {/* LÍNEA DIVISORIA CON PATRÓN */}
-      <div className="h-1 bg-gradient-to-r from-[#203565] via-[#23C1DE] to-[#203565]" />
+      <div className="h-1 bg-gradient-to-r from-brand-blue via-[#23C1DE] to-brand-blue" />
     </div>
   )
 }

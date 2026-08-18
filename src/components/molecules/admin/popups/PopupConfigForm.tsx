@@ -29,7 +29,7 @@ function BlockTitle({
 }) {
   return (
     <div className={`flex items-start gap-3 ${className}`}>
-      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#203565]/10 dark:bg-white/5 shrink-0 mt-0.5">
+      <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-brand-blue/10 dark:bg-white/5 shrink-0 mt-0.5">
         {icon}
       </div>
       <div className="min-w-0">
@@ -44,7 +44,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   return (
     <button
       onClick={onChange}
-      className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none shrink-0 ${checked ? "bg-[#6DE1E3]" : "bg-gray-300 dark:bg-white/20"
+      className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none shrink-0 ${checked ? "bg-brand-cyan" : "bg-gray-300 dark:bg-white/20"
         }`}
     >
       <span
@@ -501,7 +501,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* SECCIÓN: ESTADO */}
           <div className="px-4 sm:px-6 py-6">
             <BlockTitle
-              icon={<Power className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Power className="w-4 h-4 text-brand-blue dark:text-white/60" />}
               title="Estado del Anuncio"
               subtitle="Activa para que los clientes vean este anuncio en la web"
             />
@@ -522,7 +522,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* SECCIÓN: REGLAS DE VISUALIZACIÓN */}
           <div className="px-4 sm:px-6 py-6">
             <BlockTitle
-              icon={<Timer className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Timer className="w-4 h-4 text-brand-blue dark:text-white/60" />}
               title="Reglas de Visualización"
               subtitle="Define cuándo aparecerá el anuncio"
             />
@@ -542,7 +542,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {pageTarget === "product-detail" && (
             <div className="px-4 sm:px-6 py-6">
               <BlockTitle
-                icon={<ShoppingBag className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                icon={<ShoppingBag className="w-4 h-4 text-brand-blue dark:text-white/60" />}
                 title="Producto Asociado"
                 subtitle="Selecciona el producto donde se mostrará este anuncio"
               />
@@ -568,7 +568,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {/* SECCIÓN: TEXTOS Y LLAMADOS A LA ACCIÓN */}
           <div className="px-4 sm:px-6 py-6">
             <BlockTitle
-              icon={<Type className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+              icon={<Type className="w-4 h-4 text-brand-blue dark:text-white/60" />}
               title="Contenido y Diseño"
               subtitle="Personaliza los mensajes y el estilo del botón"
             />
@@ -614,7 +614,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
           {pageTarget !== "product-detail" && (
             <div className="px-4 sm:px-6 py-6">
               <BlockTitle
-                icon={<ImageIcon className="w-4 h-4 text-[#203565] dark:text-white/60" />}
+                icon={<ImageIcon className="w-4 h-4 text-brand-blue dark:text-white/60" />}
                 title="Imágenes y Recursos"
                 subtitle="Sube los flyers optimizados para web (WEBP)"
               />
@@ -715,7 +715,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#203565] hover:bg-[#162548] text-white dark:bg-white dark:text-[#203565] dark:hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-brand-blue hover:bg-[#162548] text-white dark:bg-white dark:text-brand-blue dark:hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold transition-colors shadow-sm"
               >
                 <Save className="h-4 w-4" />
                 {isSaving
@@ -735,7 +735,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
         {/* Header de la Vista Previa */}
         <div className="w-full px-5 py-4 border-b border-gray-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 bg-white/50 dark:bg-[#1C2347]/50 backdrop-blur-sm">
           <div className="flex items-center gap-2">
-            <span className="bg-[#203565]/5 dark:bg-white/5 text-[#203565] dark:text-white text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border border-[#203565]/10 dark:border-white/10">
+            <span className="bg-brand-blue/5 dark:bg-white/5 text-brand-blue dark:text-white text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border border-brand-blue/10 dark:border-white/10">
               {pageTarget} ({delaySeconds}s)
             </span>
             {active ? (
@@ -750,7 +750,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               type="button"
               onClick={() => setPreviewMode('desktop')}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${previewMode === 'desktop'
-                ? 'bg-white dark:bg-[#1C2347] text-[#203565] dark:text-[#6DE1E3] shadow-sm'
+                ? 'bg-white dark:bg-[#1C2347] text-brand-blue dark:text-brand-cyan shadow-sm'
                 : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/60'
                 }`}
             >
@@ -761,7 +761,7 @@ export default function PopupConfigForm({ initialData, onSubmit, onCancel, isSav
               type="button"
               onClick={() => setPreviewMode('mobile')}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${previewMode === 'mobile'
-                ? 'bg-white dark:bg-[#1C2347] text-[#203565] dark:text-[#6DE1E3] shadow-sm'
+                ? 'bg-white dark:bg-[#1C2347] text-brand-blue dark:text-brand-cyan shadow-sm'
                 : 'text-gray-400 hover:text-gray-600 dark:hover:text-white/60'
                 }`}
             >

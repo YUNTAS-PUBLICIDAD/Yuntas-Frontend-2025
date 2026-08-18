@@ -1,4 +1,3 @@
-import MainLayout from "@/components/layout/MainLayout";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
@@ -115,7 +114,6 @@ export default function RootLayout({
       <body>
         <PageTracker />
         <SettingsProvider>
-          {/*<MainLayout>{children}</MainLayout>*/}
           {children}
         </SettingsProvider>
         <Toaster containerStyle={{

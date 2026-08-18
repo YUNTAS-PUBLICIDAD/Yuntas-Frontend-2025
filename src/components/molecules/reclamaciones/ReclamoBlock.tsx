@@ -30,7 +30,7 @@ const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
                 name="purchase_date"
                 value={formData.purchase_date}
                 onChange={handleChange}
-                inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+                inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
 
             />
             <Select
@@ -39,7 +39,7 @@ const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
                 name="product_id"
                 value={formData.product_id || ""}
                 onChange={handleChange}
-                selectClassName="bg-white border-2 border-[#203565] focus:ring-0"
+                selectClassName="bg-white border-2 border-brand-blue focus:ring-0"
             />
             <TextTarea
                 textLabel="Detalle de la reclamacion"
@@ -58,7 +58,7 @@ const ReclamoBlock = ({ formData, handleChange }: ReclamoBlockProps) => {
                 name="claimed_amount"
                 value={formData.claimed_amount === 0 ? "" : formData.claimed_amount}
                 onChange={handleChange}
-                inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+                inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
             />
 
         </div>

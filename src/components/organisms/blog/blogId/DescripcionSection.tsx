@@ -46,16 +46,16 @@ const DescripcionSection = ({ title, imageSrc, imageTitle, imageAlt, description
         <section className="w-full py-12 md:py-14 bg-[#E2F6F6] relative overflow-hidden">
             {/* Elementos decorativos de fondo */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-[#23C1DE]/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#203565]/5 rounded-full blur-3xl pointer-events-none translate-y-1/2" />
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl pointer-events-none translate-y-1/2" />
 
             <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
                 <div className="flex items-center gap-4 mb-10 md:mb-14">
-                    <div className="w-14 h-14 rounded-2xl bg-[#203565] flex items-center justify-center shadow-md">
+                    <div className="w-14 h-14 rounded-2xl bg-brand-blue flex items-center justify-center shadow-md">
                         <MdInfoOutline className="text-3xl text-[#23C1DE]" />
                     </div>
                     <div>
-                        <span className="text-sm md:text-base uppercase tracking-[0.25em] text-[#203565] font-bold">Detalles</span>
-                        <Text variant="h2" color="text-[#203565]" className="font-bold">
+                        <span className="text-sm md:text-base uppercase tracking-[0.25em] text-brand-blue font-bold">Detalles</span>
+                        <Text variant="h2" color="text-brand-blue" className="font-bold">
                             INTRODUCCIÓN
                         </Text>
                     </div>
