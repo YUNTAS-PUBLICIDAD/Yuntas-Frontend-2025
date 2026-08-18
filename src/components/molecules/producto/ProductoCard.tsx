@@ -54,7 +54,7 @@ const ProductoCard = ({ imgUrl, imgTitle, imgAlt, nombre, href }: ProductoCardPr
       {/* textp a al izquierda*/}
       
       <div className="py-6 px-6 text-left">
-        <Text className='font-bold text-lg uppercase tracking-wide'>{nombre}</Text>
+        <Text className='font-bold !text-xl uppercase tracking-wide group-hover:text-[#18879B] transition-colors'>{nombre}</Text>
       </div>
     </Link>
   )
