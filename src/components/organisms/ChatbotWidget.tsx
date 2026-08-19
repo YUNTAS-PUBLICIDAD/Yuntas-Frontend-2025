@@ -42,7 +42,7 @@ function renderCTA(message: ChatMessage) {
           className="group flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97] rounded-lg py-2 text-xs font-bold"
         >
           <FaWhatsapp className='text-base group:scale-110 transition-transform' />
-          Hablar con asesor
+          Haz clic aquí
         </a>
       );
     case "contact_page":
@@ -70,6 +70,8 @@ function getAdviserWhatsappUrl() {
   const text = encodeURIComponent(`Hola Yuntas, quisiera conversar con un asesor comercial para que me brinde más información, por favor.`);
   return `http://wa.me/${phone}?text=${text}`;
 }
+
+const WHATSAPP_KEYWORDS_REGEX = /\bwsp\b|\bwasap\b|\bguasap\b|\bwatsap\b|whats\s*app/i;
 
 function getImageUrl(url?: string) {
   if (!url) return "";
@@ -212,6 +214,27 @@ export default function ChatbotWidget() {
     });
 
     setInput("");
+
+    if (WHATSAPP_KEYWORDS_REGEX.test(messageText)) {
+      setTyping(true);
+      setTimeout(() => {
+        setTyping(false);
+        const whatsappMessage: ChatMessage = {
+          role: "bot",
+          text: "Claro, puedes contactarnos directamente por WhatsApp:",
+          type: "whatsapp",
+          whatsapp_url: getAdviserWhatsappUrl(),
+        };
+        setMessages((prev) => {
+          const updated = [...prev, whatsappMessage];
+          sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
+          return updated;
+        });
+        resetAutoCloseTimer();
+      }, 500);
+      return;
+    }
+
     setTyping(true);
 
     const res = await sendChatMessageService(messageText, sessionId.current);
