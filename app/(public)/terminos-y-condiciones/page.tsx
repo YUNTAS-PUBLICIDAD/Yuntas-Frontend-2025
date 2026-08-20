@@ -6,7 +6,7 @@ import { ScrollText } from 'lucide-react';
 export default function TerminosCondicionesPage() {
     return (
         <main>
-            <CommonHero title="Términos y Condiciones" />
+            <CommonHero title="Términos y Condiciones" overlay/>
             <StaticContent bannerTitle="Términos y Condiciones">
                 <div className="flex items-center gap-3 mb-6">
                     <ScrollText className="text-[#203565]" size={32} />
