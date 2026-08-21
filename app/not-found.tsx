@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function GlobalNotFound() {
   return (
-    <MainLayout>
+    <MainLayout solidHeader>
       <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
         <SearchX className="w-16 h-16 text-[#28BEDA] mb-4" />
 
