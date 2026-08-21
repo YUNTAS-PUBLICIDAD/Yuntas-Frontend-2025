@@ -6,9 +6,12 @@ import UserSection from "@/components/molecules/header/UserSection";
 import { useScroll } from "@/hooks/useScroll";
 import NavMenuDesktop from "../molecules/header/NavMenuDesktop";
 import { useBrandLogo } from "@/hooks/useBrandLogo";
+import { useHeaderStyle } from "@/context/HeaderStyleContext";
 
 export default function Header() {
-  const scrolled = useScroll(80);
+  const isScrolled = useScroll(80);
+  const { forceSolid } = useHeaderStyle();
+  const scrolled = isScrolled || forceSolid;
   const { logoLight, logoDark, companyName } = useBrandLogo();
   return (
     <>
