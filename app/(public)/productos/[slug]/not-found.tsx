@@ -1,7 +1,12 @@
+"use client";
+
 import { PackageX } from "lucide-react";
 import Link from "next/link";
+import { useForceSolidHeader } from "@/context/HeaderStyleContext";
 
 export default function NotFound() {
+  useForceSolidHeader();
+
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
       <PackageX className="w-16 h-16 text-[#28BEDA] mb-4" />
