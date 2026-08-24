@@ -135,30 +135,84 @@ export default function ProductosMasVistosPage() {
         </p>
       </section>
 
+       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {/* Top 5 */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
+        <div className="mb-4 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-[#203565] dark:text-white" />
+          <h2 className="text-sm font-semibold text-[#203565] dark:text-white">Top 5 productos</h2>
+        </div>
+        <div className="flex flex-col gap-3">
+          {top5.map((r, i) => (
+            <div key={r.id} className="flex items-center gap-3">
+              <span className="w-4 text-right text-xs font-bold text-gray-400 dark:text-white/40">{i + 1}</span>
+              <span className="min-w-0 flex-1 sm:w-40 sm:flex-none truncate text-sm font-semibold text-[#0D1030] dark:text-white" title={r.name}>
+                {r.name}
+              </span>
+              <span className="h-2.5 w-16 flex-none sm:w-auto sm:flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-white/10">
+                <span
+                  className="block h-full rounded-full bg-purple-500 dark:bg-purple-400"
+                  style={{ width: `${(r.views / maxViews) * 100}%` }}
+                />
+              </span>
+              <span className="w-10 flex-none text-right text-sm font-bold text-[#203565] dark:text-white">{fmt(r.views)}</span>
+            </div>
+          ))}
+          {top5.length === 0 && (
+            <p className="py-6 text-center text-sm text-gray-400 dark:text-white/40">Sin resultados para este filtro.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Stat cards */}
+      <div className="flex flex-col gap-4 h-full">
+        <div className="flex-1 flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500">
+            <Eye className="h-6 w-6 text-white" />
+          </div>
+          <div className="min-w-0">
+            <p className="mb-0.5 text-xs text-gray-500 dark:text-white/50">Vistas totales</p>
+            <p className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white">{fmt(totalViews)}</p>
+          </div>
+        </div>
+
+        <div className="flex-1 flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#D6F695]">
+            <Package className="h-6 w-6 text-[#1a2e00]" />
+          </div>
+          <div className="min-w-0">
+            <p className="mb-0.5 text-xs text-gray-500 dark:text-white/50">Producto más visto</p>
+            <p className="truncate text-lg font-bold text-[#0D1030] dark:text-white">{topProduct?.name ?? "—"}</p>
+            <p className="text-xs text-gray-400 dark:text-white/40">{topProduct ? fmt(topProduct.views) + " vistas" : ""}</p>
+          </div>
+        </div>
+      </div>
+      </div>
+      
       {/* Filtros */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-[#D8E7F3] bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#1C2347] md:flex-row md:items-center">
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/50">
+      <div className=" w-full flex flex-col gap-3 rounded-2xl border border-[#D8E7F3] bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#1C2347] md:flex-row md:items-center">
+        <div className="flex w-full items-center gap-2 md:w-auto">
+          <label className=" whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/50">
             Periodo
           </label>
           <select
             value={days}
             onChange={(e) => setDays(Number(e.target.value))}
-            className="rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white"
+            className="min-w-0 flex-1 md:w-auto rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white"
           >
             {PERIODS.map((p) => (
               <option key={p.value} value={p.value}>{p.label}</option>
             ))}
           </select>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/50">
+        <div className="flex w-full items-center gap-2">
+          <label className="whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/50">
             Categoría
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white"
+            className="min-w-0 w-44 rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-xs lg:text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white"
           >
             <option value="">Todas las secciones</option>
             {categories.map((c) => (
@@ -171,61 +225,10 @@ export default function ProductosMasVistosPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar producto..."
-          className="rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white md:ml-auto md:w-56"
+          className="w-full rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white md:ml-auto md:w-56"
         />
       </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500">
-            <Eye className="h-6 w-6 text-white" />
-          </div>
-          <div className="min-w-0">
-            <p className="mb-0.5 text-xs text-gray-500 dark:text-white/50">Vistas totales</p>
-            <p className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white">{fmt(totalViews)}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#D6F695]">
-            <Package className="h-6 w-6 text-[#1a2e00]" />
-          </div>
-          <div className="min-w-0">
-            <p className="mb-0.5 text-xs text-gray-500 dark:text-white/50">Producto más visto</p>
-            <p className="truncate text-lg font-bold text-[#0D1030] dark:text-white">{topProduct?.name ?? "—"}</p>
-            <p className="text-xs text-gray-400 dark:text-white/40">{topProduct ? fmt(topProduct.views) + " vistas" : ""}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Top 5 */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-white/5 dark:bg-[#1C2347]">
-        <div className="mb-4 flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-[#203565] dark:text-white" />
-          <h2 className="text-sm font-semibold text-[#203565] dark:text-white">Top 5 productos</h2>
-        </div>
-        <div className="flex flex-col gap-3">
-          {top5.map((r, i) => (
-            <div key={r.id} className="flex items-center gap-3">
-              <span className="w-4 text-right text-xs font-bold text-gray-400 dark:text-white/40">{i + 1}</span>
-              <span className="w-36 flex-none truncate text-sm font-semibold text-[#0D1030] dark:text-white" title={r.name}>
-                {r.name}
-              </span>
-              <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-white/10">
-                <span
-                  className="block h-full rounded-full bg-purple-500 dark:bg-purple-400"
-                  style={{ width: `${(r.views / maxViews) * 100}%` }}
-                />
-              </span>
-              <span className="w-14 flex-none text-right text-sm font-bold text-[#203565] dark:text-white">{fmt(r.views)}</span>
-            </div>
-          ))}
-          {top5.length === 0 && (
-            <p className="py-6 text-center text-sm text-gray-400 dark:text-white/40">Sin resultados para este filtro.</p>
-          )}
-        </div>
-      </div>
 
       {/* Tabla completa */}
       <div className="w-full rounded-[1.75rem] border border-[#D8E7F3] bg-white/95 p-3 shadow-[0_18px_40px_rgba(13,16,48,0.07)] dark:border-white/10 dark:bg-[#1C2347]/95 md:p-5">
