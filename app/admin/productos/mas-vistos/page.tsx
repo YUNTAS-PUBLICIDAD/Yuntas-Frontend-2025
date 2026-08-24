@@ -9,6 +9,7 @@ import { useProductos } from "@/hooks/useProductos";
 import { useTopProductos } from "@/hooks/useTopProductos";
 import { Producto } from "@/types/admin/producto";
 import Pagination from "@/components/molecules/Pagination";
+import SearchBar from "@/components/molecules/SearchBar";
 
 const AVATAR_COLORS = [
   { bg: "bg-blue-500", text: "text-white" },
@@ -52,7 +53,7 @@ export default function ProductosMasVistosPage() {
   const { productos, getProductos, isLoading } = useProductos();
   const [days, setDays] = useState(30);
   const [category, setCategory] = useState("");
-  const [search, setSearch] = useState("");
+  const [productosFiltrados, setProductosFiltrados] = useState<Producto[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("views");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [paginated, setPaginated] = useState<Row[]>([]);
@@ -63,25 +64,31 @@ export default function ProductosMasVistosPage() {
     getProductos(200);
   }, [getProductos]);
 
+  useEffect(() => {
+  if (productos.length > 0) {
+    setProductosFiltrados(productos);
+  }
+}, [productos]);
+
   const categories = useMemo(
     () => Array.from(new Set(productos.map((p) => p.category_name).filter(Boolean))).sort() as string[],
     [productos]
   );
 
   const rows: Row[] = useMemo(() => {
-    return productos
-      .map((p: Producto): Row => {
-        const m = metricsById[p.id];
-        return {
-          id: p.id,
-          name: p.name,
-          category: p.category_name || "Sin categoría",
-          views: m?.views ?? 0,
-        };
-      })
-      .filter((r) => !category || r.category === category)
-      .filter((r) => r.name.toLowerCase().includes(search.toLowerCase()));
-  }, [productos, metricsById, category, search]);
+  return productosFiltrados
+    .map((p: Producto): Row => {
+      const m = metricsById[p.id];
+
+      return {
+        id: p.id,
+        name: p.name,
+        category: p.category_name || "Sin categoría",
+        views: m?.views ?? 0,
+      };
+    })
+    .filter((r) => !category || r.category === category);
+}, [productosFiltrados, metricsById, category]);
 
   const sortedRows = useMemo(() => {
     const dir = sortDir === "asc" ? 1 : -1;
@@ -205,7 +212,7 @@ export default function ProductosMasVistosPage() {
             ))}
           </select>
         </div>
-        <div className="flex w-full items-center gap-2">
+        <div className="flex w-full items-center gap-2 md:w-auto">
           <label className="whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/50">
             Categoría
           </label>
@@ -220,14 +227,18 @@ export default function ProductosMasVistosPage() {
             ))}
           </select>
         </div>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar producto..."
-          className="w-full rounded-xl border border-[#D8E7F3] bg-white px-3 py-2 text-sm font-medium text-[#0D1030] outline-none transition focus:border-[#23C1DE] dark:border-white/10 dark:bg-[#111936] dark:text-white md:ml-auto md:w-56"
-        />
-      </div>
+        
+      <div className="w-full md:w-[700px] md:ml-auto">
+       <SearchBar
+      items={productos}
+      onSearch={setProductosFiltrados}
+      placeholder="Buscar producto..."
+      searchKeys={["id", "name", "category_name"]}
+      getDisplayValue={(item) => `${item.id} - ${item.name}`}
+    />
+  
+</div>
+</div>
 
 
       {/* Tabla completa */}
