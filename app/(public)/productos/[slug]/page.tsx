@@ -111,5 +111,5 @@ export default async function Page({ params }: PageProps) {
         notFound();
     }
 
-    return <ProductClient initialProduct={result.data} />;
+    return <ProductClient initialProduct={result.success ? result.data || null : null} />;
 }
