@@ -15,6 +15,7 @@ import { getPopupsService, getPublicPopupService } from '@/services/popupService
 import { Popup as PopupConfig } from '@/types/admin/popup';
 import VideoSection from '@/components/organisms/productos/detalle/VideoSection';
 import { recordProductView } from '@/services/trackingService';
+import NotFound from './not-found';
 
 interface ProductClientProps {
     initialProduct?: Producto | null;
@@ -156,7 +157,7 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
                 )
             }
 
-            {error && !displayProducto && <div className="flex justify-center items-center h-screen">Producto no encontrado</div>}
+            {error && !displayProducto && <NotFound />}
         </>
     );
 }
