@@ -68,6 +68,12 @@ export function ProductClient({ initialProduct }: ProductClientProps) {
         recordProductView(displayProducto.id).catch(() => {});
     }, [displayProducto?.id]);
 
+    useEffect(() => {
+        if (!displayProducto) return;
+        const title = displayProducto.meta_title || displayProducto.name;
+        document.title = `${title} | Yuntas Publicidad`;
+      }, [displayProducto]);
+      
     if (!slug && !displayProducto) {
         return <div className="flex justify-center items-center h-screen">URL no válida</div>;
     }
