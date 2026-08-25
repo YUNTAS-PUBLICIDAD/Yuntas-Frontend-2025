@@ -11,7 +11,7 @@ interface ChatbotPreviewProps {
 export default function ChatbotPreview({ config }: ChatbotPreviewProps) {
   const primaryColor = config.primaryColor || "#6DE1E3";
   const secondaryColor = config.secondaryColor || primaryColor;
-  const welcomeMessage = config.welcomeMessage || "Hola 👋 ¿En qué puedo ayudarte?";
+  const welcomeMessage = config.welcomeMessages[0] || "Hola 👋 ¿En qué puedo ayudarte?";
   const iconSrc = config.iconPreviewUrl ?? (config.iconPreview ? getImg(config.iconPreview) : "");
 
   return (
