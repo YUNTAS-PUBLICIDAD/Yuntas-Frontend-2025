@@ -30,7 +30,7 @@ export default function ConfiguracionForm() {
     primaryColor: "#3D5BC9",
     secondaryColor: "#3D5BC9",
     position: "bottom-right",
-    welcomeMessage: "¡Hola! Soy el asistente virtual de Yuntas.\n¿En qué puedo ayudarte hoy?",
+    welcomeMessages: ["¡Hola! Soy el asistente virtual de Yuntas. ¿En qué puedo ayudarte hoy?"],
     showAfterSeconds: "3",
     closeAfterSeconds: "300",
     iconPreview: null,
@@ -51,7 +51,7 @@ export default function ConfiguracionForm() {
       primaryColor: chatbot.primary_color || "#3D5BC9",
       secondaryColor: chatbot.secondary_color || chatbot.primary_color || "#3D5BC9",
       position: chatbot.position === "bottom-left" ? "bottom-left" : "bottom-right",
-      welcomeMessage: chatbot.welcome_message || "",
+      welcomeMessages: Array.isArray(chatbot.welcome_message) ? chatbot.welcome_message : [],
       showAfterSeconds: String(chatbot.show_delay_seconds ?? 0),
       closeAfterSeconds:
         chatbot.auto_close_seconds === null || chatbot.auto_close_seconds === undefined
@@ -111,13 +111,19 @@ export default function ConfiguracionForm() {
       return;
     }
 
+    const welcomeMessages = config.welcomeMessages.map((m) => m.trim()).filter(Boolean);
+    if (welcomeMessages.length === 0) {
+      showToast.warning("Agrega al menos un saludo de bienvenida");
+      return;
+    }
+
     const result = await saveChatbotSettings({
       enabled: config.isActive,
       primary_color: config.primaryColor,
       secondary_color: config.secondaryColor,
       icon: config.iconFile,
       position: config.position,
-      welcome_message: config.welcomeMessage,
+      welcome_message: welcomeMessages,
       show_delay_seconds: showDelay,
       auto_close_seconds: autoClose,
     });
