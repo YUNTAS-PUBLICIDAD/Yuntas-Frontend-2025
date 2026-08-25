@@ -86,6 +86,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
   const { logoLight, logoDark, companyName } = useBrandLogo();
   const [showTopFade, setShowTopFade] = useState(false);
   const [showBottomFade, setShowBottomFade] = useState(true);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const updateFadeState = () => {
     const el = navRef.current;
@@ -145,7 +146,7 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
         {/* Cerrar Sesión */}
         <div className="px-6 pb-4 pt-1">
           <button
-            onClick={logout}
+            onClick={() => setShowLogoutModal(true)}
             disabled={isLoading}
             className="
               w-full flex items-center justify-center gap-3
@@ -164,6 +165,98 @@ export default function SidebarSection({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
       </aside>
+     {showLogoutModal && (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 px-4">
+        <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-[#141A3F]">
+
+          {/* Botón X */}
+          <button
+            type="button"
+            onClick={() => setShowLogoutModal(false)}
+            className="absolute right-4 top-4 text-2xl font-bold text-gray-500 hover:text-gray-800 dark:text-white/70 dark:hover:text-white"
+            aria-label="Cerrar"
+          >
+            ×
+          </button>
+
+          {/* Icono */}
+          <div className="flex justify-center pt-2">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/10">
+              <LogOut className="h-8 w-8 text-red-500" />
+            </div>
+          </div>
+
+          {/* Título */}
+          <h2 className="mt-5 text-center text-2xl font-bold text-[#0D1030] dark:text-white">
+            ¿Cerrar sesión?
+          </h2>
+
+          {/* Mensaje */}
+          <p className="mt-3 text-center text-sm leading-6 text-gray-600 dark:text-white/70">
+            ¿Estás seguro de que deseas salir? 
+          </p>
+
+          {/* Botones */}
+          <div className="mt-7 flex justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowLogoutModal(false)}
+              className="rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-white/10 dark:text-white dark:hover:bg-white/10"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              onClick={logout}
+              disabled={isLoading}
+              className="flex items-center gap-2 rounded-xl bg-[#EF4444] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-500 disabled:opacity-60"
+            >
+              {isLoading ? (
+                <>
+                  <Loader size="sm" color="border-white" />
+                  <span>Cerrando...</span>
+                </>
+              ) : (
+                <>
+                  <LogOut size={17} />
+                  <span>Cerrar sesión</span>
+                </>
+              )}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </>
   );
 }
