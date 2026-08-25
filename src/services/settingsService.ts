@@ -31,7 +31,12 @@ export const updateChatbotSettingsService = async (
     formData.append("primary_color", chatbotData.primary_color);
     formData.append("secondary_color", chatbotData.secondary_color || "");
     formData.append("position", chatbotData.position);
-    formData.append("welcome_message", chatbotData.welcome_message || "");
+
+    // Laravel espera array con notación de índices
+    (chatbotData.welcome_message || []).forEach((message, index) => {
+      formData.append(`welcome_message[${index}]`, message);
+    });
+
     formData.append("show_delay_seconds", String(chatbotData.show_delay_seconds));
 
     if (
