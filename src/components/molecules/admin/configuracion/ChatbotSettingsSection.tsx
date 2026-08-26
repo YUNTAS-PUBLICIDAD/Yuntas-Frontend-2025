@@ -5,6 +5,7 @@ import { ChatbotPosition } from "@/types/admin/settings";
 import { getImg } from "@/utils/getImg";
 import { ChatbotSettingsFormConfig } from "./configuracion.types";
 import ChatbotPreview from "./ChatbotPreview";
+import InputListDinamica from "@/components/molecules/admin/InputListDinamica";
 
 interface ChatbotSettingsSectionProps {
   isOpen: boolean;
@@ -317,29 +318,18 @@ export default function ChatbotSettingsSection({
                   />
                 </div>
 
-                {/* Mensaje de bienvenida */}
-                <div className="flex flex-col gap-3">
-                  <div>
-                    <label className="text-sm font-semibold text-[#0D1030] dark:text-white">
-                      Mensaje de bienvenida
-                    </label>
-                    <p className="text-xs text-gray-400 dark:text-white/40 mt-1">
-                      Mensaje que se mostrará cuando el usuario inicie una conversación.
-                    </p>
-                  </div>
-                  <textarea
-                    value={config.welcomeMessage}
-                    onChange={(e) =>
-                      setConfig((current) => ({ ...current, welcomeMessage: e.target.value }))
-                    }
-                    maxLength={200}
-                    rows={5}
-                    className="w-full border border-gray-200 dark:border-white/10 rounded-xl px-4 py-4 bg-gray-50 dark:bg-white/5 text-sm text-[#0D1030] dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
-                  />
-                  <p className="text-xs text-right text-gray-400 dark:text-white/40 -mt-1">
-                    {config.welcomeMessage.length}/200
-                  </p>
-                </div>
+                {/* Mensajes de bienvenida */}
+                <InputListDinamica
+                  label="Saludos de bienvenida"
+                  items={config.welcomeMessages}
+                  onChange={(welcomeMessages) =>
+                    setConfig((current) => ({ ...current, welcomeMessages }))
+                  }
+                  placeholder="ej: ¡Hola! ¿En qué puedo ayudarte hoy?"
+                  addButtonText="+ Agregar saludo"
+                  helperText="El chatbot elegirá uno al azar cada vez que un visitante inicie una conversación, para no repetir siempre el mismo."
+                  required
+                />
               </div>
 
               <div className="flex flex-col gap-6 lg:pl-4">

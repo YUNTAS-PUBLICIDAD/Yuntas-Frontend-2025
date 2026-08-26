@@ -4,6 +4,7 @@ import { useSettingsContext } from '@/providers/SettingsProvider';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
 import { ChatbotSettings } from '@/types/admin/settings';
 import { ChatMessage } from '@/types/chatbot';
+import { pickRandomWelcomeMessage } from '@/utils/chatbotWelcomeMessages';
 import Image from 'next/image';
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from 'react';
@@ -17,7 +18,7 @@ const DEFAULT_SETTINGS: ChatbotSettings = {
   secondary_color: "#203565",
   icon: null,
   position: "bottom-right",
-  welcome_message: "Hola 👋 ¿En qué puedo ayudarte?",
+  welcome_message: ["Hola 👋 ¿En qué puedo ayudarte?"],
   show_delay_seconds: 3,
   auto_close_seconds: null,
 };
@@ -86,6 +87,20 @@ function getChatbotIconUrl(icon?: string | null): string | null {
   return `${BASE_URL}${icon.startsWith("/") ? "" : "/"}${icon}`;
 }
 
+const LAST_WELCOME_INDEX_KEY = "chatbot_last_welcome_index";
+
+function getWelcomeMessage(rawWelcomeMessages?: string[] | null): string {
+  const messages = Array.isArray(rawWelcomeMessages) ? rawWelcomeMessages.filter(Boolean) : [];
+  if (messages.length === 0) return "Hola 👋 ¿En qué puedo ayudarte?";
+
+  const storedIndex = sessionStorage.getItem(LAST_WELCOME_INDEX_KEY);
+  const lastIndex = storedIndex !== null ? Number(storedIndex) : null;
+
+  const { message, index } = pickRandomWelcomeMessage(messages, lastIndex);
+  sessionStorage.setItem(LAST_WELCOME_INDEX_KEY, String(index));
+  return message;
+}
+
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -131,7 +146,7 @@ export default function ChatbotWidget() {
       setMessages(JSON.parse(saved));
       setHasOpenedOnce(true);
     } else {
-      const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
+      const welcomeText = getWelcomeMessage(chatbotSettings.welcome_message);
       setMessages([{ role: "bot", text: welcomeText, type: "text" }]);
     }
   }, [settingsLoaded, chatbotSettings.welcome_message]);
@@ -279,7 +294,7 @@ export default function ChatbotWidget() {
     sessionStorage.removeItem("chatbot_session");
     sessionStorage.removeItem("chatbot_messages");
     sessionId.current = "";
-    const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
+    const welcomeText = getWelcomeMessage(chatbotSettings.welcome_message);
     setMessages([{ role: "bot", text: welcomeText, type: "text" }]);
   };
 

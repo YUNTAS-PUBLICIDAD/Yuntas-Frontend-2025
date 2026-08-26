@@ -36,7 +36,7 @@ export interface ChatbotSettings {
   secondary_color?: string | null;
   icon?: string | null;
   position: ChatbotPosition;
-  welcome_message?: string | null;
+  welcome_message?: string[] | null;
   show_delay_seconds: number;
   auto_close_seconds?: number | null;
 }
@@ -72,7 +72,7 @@ export interface UpdateChatbotSettingsInput {
   secondary_color?: string;
   icon?: File | null;
   position: ChatbotPosition;
-  welcome_message?: string;
+  welcome_message?: string[];
   show_delay_seconds: number;
   auto_close_seconds?: number | null;
 }
