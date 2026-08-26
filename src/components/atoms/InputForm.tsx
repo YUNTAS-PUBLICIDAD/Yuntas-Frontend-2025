@@ -9,7 +9,7 @@ interface InputProps {
     min?: number;
 }
 
-export default function Input({
+export default function InputForm({
     label,
     name,
     type = "text",

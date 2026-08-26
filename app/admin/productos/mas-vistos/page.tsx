@@ -38,6 +38,7 @@ interface Row {
   name: string;
   category: string;
   views: number;
+  image: string | null;
 }
 
 const PAGE_SIZE = 5;
@@ -79,12 +80,13 @@ export default function ProductosMasVistosPage() {
   return productosFiltrados
     .map((p: Producto): Row => {
       const m = metricsById[p.id];
-
+      
       return {
         id: p.id,
         name: p.name,
         category: p.category_name || "Sin categoría",
         views: m?.views ?? 0,
+        image: p.main_image?.url ?? null,
       };
     })
     .filter((r) => !category || r.category === category);
@@ -153,6 +155,17 @@ export default function ProductosMasVistosPage() {
           {top5.map((r, i) => (
             <div key={r.id} className="flex items-center gap-3">
               <span className="w-4 text-right text-xs font-bold text-gray-400 dark:text-white/40">{i + 1}</span>
+              <div className="h-10 w-10 flex-none overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-white/10 dark:bg-white/5">
+                {r.image ? (
+                 <img
+                   src={r.image}
+                   alt={r.name}
+                   className="h-full w-full object-cover"
+                  />
+                ) : (
+                   <Package className="mx-auto mt-2 h-5 w-5 text-gray-400" />
+                 )}
+               </div>
               <span className="min-w-0 flex-1 sm:w-40 sm:flex-none truncate text-sm font-semibold text-[#0D1030] dark:text-white" title={r.name}>
                 {r.name}
               </span>
