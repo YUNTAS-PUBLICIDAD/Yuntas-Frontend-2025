@@ -127,7 +127,7 @@ function SearchBar<T>({
           placeholder={placeholder}
           onFocus={() => busqueda.length > 0 && setShowAutocomplete(true)}
           onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
-          className="bg-transparent text-white placeholder:text-gray-400"
+          className="bg-transparent text-[#0D1030] placeholder:text-gray-400"
         />
 
         <Button type="submit" size='sm' className='font-normal tracking-wider'>
@@ -137,7 +137,7 @@ function SearchBar<T>({
 
       {/* Dropdown de autocompletado */}
       {showAutocomplete && filteredItems.length > 0 && (
-        <ul className="absolute top-full left-0 w-full bg-[#141A3F] shadow-lg rounded-2xl p-2 mt-1 max-h-72 overflow-auto z-[9999]">
+        <ul className="absolute top-full left-0 w-full bg-white shadow-lg rounded-2xl p-2 mt-1 max-h-72 overflow-auto z-[9999]">
           {filteredItems.map((item, index) => {
             const isActive = index === activeIndex
 
@@ -148,11 +148,11 @@ function SearchBar<T>({
                 onMouseEnter={() => setActiveIndex(index)}
                 className={`
                   flex items-center gap-3 px-3 py-2 rounded-xl cursor-pointer transition-colors
-                  ${isActive ? 'bg-[#203565]' : 'hover:bg-[#203565]'}
+                  ${isActive ? 'bg-[#F3F4F6] text-[#0D1030]' : 'hover:bg-[#F3F4F6]'}
                 `}
               >
                 {/* Nombre del producto */}
-                <span className="text-sm text-white truncate">
+                <span className="text-sm text-[#0D1030] truncate">
                   {getDisplayValue(item)}
                 </span>
               </li>
