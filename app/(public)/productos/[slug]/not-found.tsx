@@ -15,11 +15,11 @@ export default function NotFound() {
         404
       </h1>
 
-      <h2 className="text-2xl font-bold text-black dark:text-gray-100 mb-3">
+      <h2 className="text-2xl font-bold text-[#0D1030] mb-3">
         Producto no encontrado
       </h2>
 
-      <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md">
+      <p className="text-gray-600 mb-8 max-w-md">
         El producto que buscas no existe o fue removido. Explora nuestro catálogo completo para encontrar lo que necesitas.
       </p>
 
