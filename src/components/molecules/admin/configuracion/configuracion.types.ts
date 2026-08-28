@@ -5,7 +5,7 @@ export interface ChatbotSettingsFormConfig {
   primaryColor: string;
   secondaryColor: string;
   position: ChatbotPosition;
-  welcomeMessage: string;
+  welcomeMessages: string[];
   showAfterSeconds: string;
   closeAfterSeconds: string;
   iconPreview: string | null;

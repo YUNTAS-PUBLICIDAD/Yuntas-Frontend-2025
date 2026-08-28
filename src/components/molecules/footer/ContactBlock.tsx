@@ -4,14 +4,20 @@ import SocialLinks from "./SocialLinks";
 
 const ContactBlock = () => (
   <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start">
-    <span className="font-bold text-[#6DE1E3] text-xl tracking-wide inline-block">
+    <span className="font-bold text-brand-cyan text-xl tracking-wide inline-block">
       Contacto
     </span>
 
-    <div className="flex items-center gap-2">
+    <a
+      href="https://wa.me/51912849782"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 hover:text-[#25D366] transition-colors"
+      aria-label="Chatear por WhatsApp"
+    >
       <FaWhatsapp className="text-2xl text-white" />
       <span className="text-lg">+51 912 849 782</span>
-    </div>
+    </a>
 
     <div className="flex items-center gap-2">
       <MdEmail className="text-2xl text-white" />

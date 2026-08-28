@@ -7,7 +7,7 @@ import { SecurityIcon } from '@/components/atoms/icons';
 export default function PoliticaPrivacidadPage() {
     return (
         <main>
-            <CommonHero title="Políticas" />
+            <CommonHero title="Políticas" overlay />
             <StaticContent bannerTitle="Políticas de Privacidad">
                 <div className="flex items-center gap-2">
                     <SecurityIcon size={28} className="text-[#203565] flex-shrink-0" />

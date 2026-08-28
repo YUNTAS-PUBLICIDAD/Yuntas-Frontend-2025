@@ -4,6 +4,7 @@ import { useSettingsContext } from '@/providers/SettingsProvider';
 import { getChatHistoryService, sendChatMessageService } from '@/services/chatbotService';
 import { ChatbotSettings } from '@/types/admin/settings';
 import { ChatMessage } from '@/types/chatbot';
+import { pickRandomWelcomeMessage } from '@/utils/chatbotWelcomeMessages';
 import Image from 'next/image';
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from 'react';
@@ -17,7 +18,7 @@ const DEFAULT_SETTINGS: ChatbotSettings = {
   secondary_color: "#203565",
   icon: null,
   position: "bottom-right",
-  welcome_message: "Hola 👋 ¿En qué puedo ayudarte?",
+  welcome_message: ["Hola 👋 ¿En qué puedo ayudarte?"],
   show_delay_seconds: 3,
   auto_close_seconds: null,
 };
@@ -42,14 +43,14 @@ function renderCTA(message: ChatMessage) {
           className="group flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97] rounded-lg py-2 text-xs font-bold"
         >
           <FaWhatsapp className='text-base group:scale-110 transition-transform' />
-          Hablar con asesor
+          Haz clic aquí
         </a>
       );
     case "contact_page":
       return (
         <a
           href={message.url}
-          className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#203565] to-[#1e3a8a] text-white rounded-xl py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-blue to-[#1e3a8a] text-white rounded-xl py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.97]"
         >
           Ir a contacto
         </a>
@@ -71,6 +72,8 @@ function getAdviserWhatsappUrl() {
   return `http://wa.me/${phone}?text=${text}`;
 }
 
+const WHATSAPP_KEYWORDS_REGEX = /\bwsp\b|\bwasap\b|\bguasap\b|\bwatsap\b|whats\s*app/i;
+
 function getImageUrl(url?: string) {
   if (!url) return "";
   if (url.startsWith("http")) return url;
@@ -82,6 +85,20 @@ function getChatbotIconUrl(icon?: string | null): string | null {
   if (!icon) return null;
   if (icon.startsWith("http")) return icon;
   return `${BASE_URL}${icon.startsWith("/") ? "" : "/"}${icon}`;
+}
+
+const LAST_WELCOME_INDEX_KEY = "chatbot_last_welcome_index";
+
+function getWelcomeMessage(rawWelcomeMessages?: string[] | null): string {
+  const messages = Array.isArray(rawWelcomeMessages) ? rawWelcomeMessages.filter(Boolean) : [];
+  if (messages.length === 0) return "Hola 👋 ¿En qué puedo ayudarte?";
+
+  const storedIndex = sessionStorage.getItem(LAST_WELCOME_INDEX_KEY);
+  const lastIndex = storedIndex !== null ? Number(storedIndex) : null;
+
+  const { message, index } = pickRandomWelcomeMessage(messages, lastIndex);
+  sessionStorage.setItem(LAST_WELCOME_INDEX_KEY, String(index));
+  return message;
 }
 
 export default function ChatbotWidget() {
@@ -129,7 +146,7 @@ export default function ChatbotWidget() {
       setMessages(JSON.parse(saved));
       setHasOpenedOnce(true);
     } else {
-      const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
+      const welcomeText = getWelcomeMessage(chatbotSettings.welcome_message);
       setMessages([{ role: "bot", text: welcomeText, type: "text" }]);
     }
   }, [settingsLoaded, chatbotSettings.welcome_message]);
@@ -212,6 +229,27 @@ export default function ChatbotWidget() {
     });
 
     setInput("");
+
+    if (WHATSAPP_KEYWORDS_REGEX.test(messageText)) {
+      setTyping(true);
+      setTimeout(() => {
+        setTyping(false);
+        const whatsappMessage: ChatMessage = {
+          role: "bot",
+          text: "Claro, puedes contactarnos directamente por WhatsApp:",
+          type: "whatsapp",
+          whatsapp_url: getAdviserWhatsappUrl(),
+        };
+        setMessages((prev) => {
+          const updated = [...prev, whatsappMessage];
+          sessionStorage.setItem("chatbot_messages", JSON.stringify(updated));
+          return updated;
+        });
+        resetAutoCloseTimer();
+      }, 500);
+      return;
+    }
+
     setTyping(true);
 
     const res = await sendChatMessageService(messageText, sessionId.current);
@@ -256,7 +294,7 @@ export default function ChatbotWidget() {
     sessionStorage.removeItem("chatbot_session");
     sessionStorage.removeItem("chatbot_messages");
     sessionId.current = "";
-    const welcomeText = chatbotSettings.welcome_message || "Hola 👋 ¿En qué puedo ayudarte?";
+    const welcomeText = getWelcomeMessage(chatbotSettings.welcome_message);
     setMessages([{ role: "bot", text: welcomeText, type: "text" }]);
   };
 
@@ -288,7 +326,7 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-[#6DE1E3]/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
+              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-brand-cyan/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
                 ? "left-20 origin-bottom-left"
                 : "right-10  origin-bottom-right"
                 }`}
@@ -317,7 +355,7 @@ export default function ChatbotWidget() {
               ) : (
                 <>
                   <div className="mb-2 flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-[#6DE1E3]" />
+                    <div className="h-2 w-2 rounded-full bg-brand-cyan" />
 
                     <span className="
                       text-[10px]

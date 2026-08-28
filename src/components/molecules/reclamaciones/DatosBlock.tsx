@@ -23,7 +23,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
         name="first_name"
         value={formData.first_name}
         onChange={handleChange}
-        inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+        inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
 
       />
       <Input
@@ -35,7 +35,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
         name="last_name"
         value={formData.last_name}
         onChange={handleChange}
-        inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+        inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
       />
       <div className='grid grid-row-1 md:grid-cols-2 gap-6'>
         {selectsGrid.map((sel, i) => (
@@ -47,7 +47,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
             name="document_type_id"
             value={formData.document_type_id || ""} 
             onChange={handleChange}
-            selectClassName="bg-white border-2 border-[#203565] focus:ring-0"
+            selectClassName="bg-white border-2 border-brand-blue focus:ring-0"
           />
         ))}
         <Input
@@ -59,7 +59,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
           name="document_number"
           value={formData.document_number}
           onChange={handleChange}
-          inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+          inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
 
         />
       </div>
@@ -73,7 +73,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
         name="email"
         value={formData.email}
         onChange={handleChange}
-        inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+        inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
         
       />
       <Input
@@ -84,7 +84,7 @@ const DatosBlock = ({ formData, handleChange }: DatosBlockProps) => {
         name="phone"
         value={formData.phone}
         onChange={handleChange}
-        inputClassName="border-0 border-b-2 border-[#203565] rounded-none "
+        inputClassName="border-0 border-b-2 border-brand-blue rounded-none "
       />
 
     </div>

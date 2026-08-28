@@ -2,7 +2,6 @@ import { ProductClient } from "./ProductClient";
 import { getProductoBySlugService, getProductosService } from "@/services/productosService";
 import { Metadata } from "next";
 import { Producto } from "@/types/admin/producto";
-import { notFound } from "next/navigation";
 
 interface PageProps {
     params: { slug: string };
@@ -107,9 +106,5 @@ export async function generateStaticParams() {
 export default async function Page({ params }: PageProps) {
     const result = await getProductoBySlugService(params.slug);
 
-    if (!result.success || !result.data) {
-        notFound();
-    }
-
-    return <ProductClient initialProduct={result.data} />;
+    return <ProductClient initialProduct={result.success ? result.data || null : null} />;
 }

@@ -40,7 +40,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
         placeholder="Nombre"
         aria-label="Nombre"
         value={formData.name}
-        className="h-[32px] md:h-8 bg-white !text-[12px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-[8px] md:rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
+        className="h-[32px] md:h-8 bg-white !text-[12px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-[8px] md:rounded-[10px] border border-gray-200 focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/30 transition"
         error={errors.name}
         onChange={(e) => handleChange("name", e.target.value)}
       />
@@ -53,7 +53,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
         aria-label="Teléfono"
         maxLength={9}
         value={formData.phone}
-        className="h-[32px] md:h-8 bg-white !text-[12px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-[8px] md:rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
+        className="h-[32px] md:h-8 bg-white !text-[12px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-[8px] md:rounded-[10px] border border-gray-200 focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/30 transition"
         error={errors.phone}
         onChange={(e) => handleChange("phone", e.target.value)}
       />
@@ -66,7 +66,7 @@ const PopupForm: React.FC<PopupFormProps> = ({
         aria-label="Correo electrónico"
         type="email"
         value={formData.email}
-        className="h-[32px] md:h-8 bg-white !text-[12px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-[8px] md:rounded-[10px] border border-gray-200 focus:border-[#6DE1E3] focus:ring-2 focus:ring-[#6DE1E3]/30 transition"
+        className="h-[32px] md:h-8 bg-white !text-[12px] md:!text-[11px] w-full pl-9 md:pl-10 py-2 rounded-[8px] md:rounded-[10px] border border-gray-200 focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/30 transition"
         error={errors.email}
         onChange={(e) => handleChange("email", e.target.value)}
       />

@@ -56,13 +56,17 @@ export async function logoutService(): Promise<LoginActionResponse> {
                 }
             });
         }
-    } catch (error: any) {
-        return { success: false, message: error.message };
-    } finally {
         removeToken();
         removeRole();
         removePermissions();
 
         return { success: true, message: "Sesión cerrada" };
+
+    } catch (error: any) {
+        removeToken();
+        removeRole();
+        removePermissions();
+
+        return { success: false, message: error?.message || "Error al cerrar sesión" };
     }
 }

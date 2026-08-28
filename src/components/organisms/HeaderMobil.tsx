@@ -10,10 +10,13 @@ import useAuth from '@/hooks/useAuth';
 import { getToken } from '@/utils/token';
 import { getRole } from '@/utils/role';
 import { LuLamp } from 'react-icons/lu';
+import { useHeaderStyle } from '@/context/HeaderStyleContext';
 
 const HeaderMobil = () => {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { forceSolid } = useHeaderStyle();
+  const scrolled = isScrolled || forceSolid;
   const { logout } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [role, setRole] = useState<string | null>(null);
@@ -73,11 +76,11 @@ const HeaderMobil = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const headerBg = isScrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#151A31]" : "bg-transparent text-white shadow-none";
+  const headerBg = scrolled ? "bg-white text-[#04061a] shadow-md dark:bg-[#151A31]" : "bg-transparent text-white shadow-none";
 
-  const adminBg = isAdminPath ? isScrolled ? "dark:bg-[#151A3D]" : "dark:bg-[#151A3D]" : "";
+  const adminBg = isAdminPath ? scrolled ? "dark:bg-[#151A3D]" : "dark:bg-[#151A3D]" : "";
 
-  const iconColor = isAdminPath ? "text-[#04061a]" : isScrolled ? "text-[#04061a]" : "text-white";
+  const iconColor = isAdminPath ? "text-[#04061a]" : scrolled ? "text-[#04061a]" : "text-white";
 
   return (
     <>

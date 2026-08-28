@@ -106,7 +106,7 @@ const ClientesSection: React.FC = () => {
       <div className="relative w-full overflow-hidden">
         <div className="absolute inset-0 bg-[#0a1a3a]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#6DE1E3]/10 via-transparent to-[#22c55e]/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-[#22c55e]/10" />
         <div className="relative flex flex-col sm:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-3 md:py-4 border-b border-white/10">
           <div className="text-left mb-2 sm:mb-0">
             <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-black tracking-tight uppercase">
@@ -120,7 +120,7 @@ const ClientesSection: React.FC = () => {
       </div>
 
       {/* DIVIDER */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-[#6DE1E3]/60 to-transparent my-6" />
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent my-6" />
 
       <div className="w-full max-w-[1400px] mx-auto px-4 md:px-12 pb-16 flex flex-col gap-12">
 
@@ -130,9 +130,9 @@ const ClientesSection: React.FC = () => {
       <div
          key={stat.label}
          className="flex flex-col items-center justify-center gap-1 rounded-3xl py-7 px-4
-          bg-gradient-to-br from-[#0a1a3a] via-[#0f2c5c] to-[#20838f]"
+          bg-gradient-to-br from-[#0a1a3a] via-[#0f2c5c] to-[#20838f] transition duration-300 hover:-translate-y-1 hover:scale-105"
         >
-       <span className="text-[#6DE1E3] font-black text-3xl md:text-4xl leading-none tracking-tight">
+       <span className="text-brand-cyan font-black text-3xl md:text-4xl leading-none tracking-tight">
         {stat.value}
        </span>
 
@@ -143,7 +143,7 @@ const ClientesSection: React.FC = () => {
    ))}
  </div>
 
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-[#6DE1E3]/30 to-transparent" />
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" />
 
         {/* CARRUSEL DE LOGOS */}
         <div className="flex flex-col items-center gap-5">
@@ -176,7 +176,7 @@ const ClientesSection: React.FC = () => {
                   <div className={[
                     "group relative overflow-hidden rounded-2xl border border-slate-200",
                     "shadow-sm hover:shadow-md hover:-translate-y-1",
-                    "hover:border-[#6DE1E3]/40 transition-all duration-300 cursor-default aspect-[16/9]",
+                    "hover:border-brand-cyan/40 transition-all duration-300 cursor-default aspect-[16/9]",
                     cliente.bgColor,
                     cliente.grayscaleCard ? "grayscale opacity-70 hover:grayscale-0 hover:opacity-100" : "",
                   ].join(" ")}>
@@ -199,7 +199,7 @@ const ClientesSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-[#6DE1E3]/30 to-transparent" />
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" />
 
         {/* RESEÑAS */}
         <div className="flex flex-col items-center gap-8">

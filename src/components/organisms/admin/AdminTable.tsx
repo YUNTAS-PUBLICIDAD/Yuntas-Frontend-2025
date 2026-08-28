@@ -180,7 +180,7 @@ const showActions = canEdit || canDelete || !!onApprove;
                     {onResetSearch && (
                         <button
                             onClick={onResetSearch}
-                            className="mt-4 inline-flex items-center gap-2 text-sm text-[#203565] dark:text-[#6DE1E3] font-semibold hover:underline"
+                            className="mt-4 inline-flex items-center gap-2 text-sm text-brand-blue dark:text-brand-cyan font-semibold hover:underline"
                         >
                             <RotateCcw className="h-4 w-4" />
                             {resetSearchText}
@@ -295,12 +295,12 @@ const showActions = canEdit || canDelete || !!onApprove;
                                         </div>
 
                                         <div className="flex flex-col items-end text-right text-xs text-slate-500 dark:text-[#B0C4DE]">
-                                            <span className="font-mono text-[#203565] dark:text-[#E0E7FF]">#{row.id}</span>
+                                            <span className="font-mono text-brand-blue dark:text-[#E0E7FF]">#{row.id}</span>
                                         </div>
                                     </div>
 
                                     {/* Body: generic field grid */}
-                                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm text-[#203565] dark:text-[#E0E7FF]">
+                                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm text-brand-blue dark:text-[#E0E7FF]">
                                         {mobileColumns.map((col) => {
                                             const value = col.render ? col.render(row[col.key], row) : row[col.key];
 
@@ -312,7 +312,7 @@ const showActions = canEdit || canDelete || !!onApprove;
                                                     <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-[#B0C4DE]">
                                                         {col.label}
                                                     </div>
-                                                    <div className="mt-1 break-words font-medium text-[#203565] dark:text-[#E0E7FF]">
+                                                    <div className="mt-1 break-words font-medium text-brand-blue dark:text-[#E0E7FF]">
                                                         {isEmpty ? "" : value}
                                                     </div>
                                                 </div>

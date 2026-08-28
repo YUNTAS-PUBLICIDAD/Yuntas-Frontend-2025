@@ -7,9 +7,11 @@ import { motion } from "framer-motion";
 
 interface CommonHeroProps {
     title: string;
+    overlay?: boolean;
 }
 
-const CommonHero: React.FC<CommonHeroProps> = ({ title }) => {
+
+const CommonHero: React.FC<CommonHeroProps> = ({  title, overlay = false}) => {
     return (
         <section
             className="
@@ -34,13 +36,11 @@ const CommonHero: React.FC<CommonHeroProps> = ({ title }) => {
                 />
             </motion.div>
 
-            <div
-                className="absolute inset-0 z-10"
-                style={{
-                    background:
-                        "linear-gradient(to bottom, rgba(0,3,30,0.2), rgba(0,3,30,0.5))",
-                }}
-            />
+            <div className={`absolute inset-0 z-10 ${
+             overlay
+              ? "bg-gradient-to-r from-[#0a1a3a]/90 via-[#04061a]/70 to-transparent"
+              : "bg-gradient-to-b from-[rgba(0,3,30,0.2)] to-[rgba(0,3,30,0.5)]"
+               }`} />
 
             <div className="absolute inset-0 z-20 w-full h-full flex items-center justify-center">
                 <div

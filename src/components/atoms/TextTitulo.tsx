@@ -3,14 +3,14 @@ import React from "react";
 interface TextProps {
   children: React.ReactNode;
   variant?: "banner"|"body" | "subtitle" | "caption" | "small";
-  color?: "[#203565]" | "white" | string;
+  color?: "brand-blue" | "white" | string;
   className?: string;
 }
 
 const Text: React.FC<TextProps> = ({
   children,
   variant = "body",
-  color = "[#203565]",
+  color = "brand-blue",
   className = "",
 }) => {
   const variantClasses = {
@@ -22,8 +22,8 @@ const Text: React.FC<TextProps> = ({
   };
   
   const colorClass =
-    color === "[#203565]"
-      ? "text-[#203565]-700"
+    color === "brand-blue"
+      ? "text-brand-blue-700"
       : color === "white"
       ? "text-white"
       : color;

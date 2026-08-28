@@ -37,7 +37,7 @@ const ChevronLeftCircle = () => (
 const CustomInfoCard = ({ text, icon: Icon, href, }: { text: string; icon: React.ComponentType; href?: string; }) => {
   const content = (
     <div className="group relative flex w-full max-w-3xl flex-row items-center gap-0">
-      <div className="absolute -inset-1 rounded-3xl sm:rounded-full bg-gradient-to-r from-[#6DE1E3]/20 via-transparent to-[#0ea5b7]/20 blur-md opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="absolute -inset-1 rounded-3xl sm:rounded-full bg-gradient-to-r from-brand-cyan/20 via-transparent to-[#0ea5b7]/20 blur-md opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       {/* Círculo del icono */}
       <div className="flex-shrink-0 relative z-10 w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-[#D8F8FB] via-[#BDEEF5] to-[#8DDBE6] border border-white/80 shadow-[0_12px_30px_rgba(13,110,119,0.18)] transition-transform duration-300 group-hover:-translate-y-0.5">

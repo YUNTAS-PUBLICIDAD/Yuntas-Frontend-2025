@@ -33,7 +33,7 @@ export default function MenuItem({
       {/* Underline solo desktop */}
       <span
         className={`
-          hidden md:block absolute left-0 -bottom-1 h-[2px] w-full bg-[#6DE1E3]
+          hidden md:block absolute left-0 -bottom-1 h-[2px] w-full bg-brand-cyan
           transition-transform duration-300
           ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}
         `}
