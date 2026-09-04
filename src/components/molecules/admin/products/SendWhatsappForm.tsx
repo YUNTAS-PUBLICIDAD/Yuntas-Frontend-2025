@@ -119,9 +119,9 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto [&_label]:dark:text-white/90 [&_p]:dark:text-white/60 [&_select]:dark:bg-[#111936] [&_select]:dark:border-white/10 [&_select]:dark:text-white [&_select]:dark:focus:border-[#23C1DE] [&_textarea]:dark:bg-[#111936] [&_textarea]:dark:border-white/10 [&_textarea]:dark:text-white [&_textarea]:dark:focus:border-[#23C1DE] [&_.border-dashed]:dark:border-white/20 [&_.border-dashed]:dark:bg-[#111936]/50 [&_.border-dashed]:dark:hover:border-[#23C1DE]">
             {!isConnected && (
-                <div className="text-yellow-800 text-sm text-center">
+                <div className="text-yellow-800 dark:text-yellow-200 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700/50 p-3 rounded-lg text-sm text-center">
                     WhatsApp no está conectado. Ve a la pestaña <strong>Conexión</strong> para escanear el código QR.
                 </div>
             )}
@@ -168,7 +168,7 @@ export default function SendWhatsappForm({ onClose, products, isConnected }: Sen
                 />
             </FormSection>
 
-            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white dark:bg-[#141A3F] pt-4 pb-2 px-4 border-t border-gray-200 dark:border-white/10">
+            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white dark:bg-[#1C2347] pt-4 pb-2 px-4 border-t border-gray-200 dark:border-white/10">
                 <Button
                     type="submit"
                     variant="primary"
