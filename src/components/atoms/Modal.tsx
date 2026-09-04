@@ -48,11 +48,11 @@ export default function Modal({
         lg: "max-w-4xl"
     };
 
-    const bgClass = className.includes("bg-") ? "" : "bg-white text-brand-blue dark:bg-[#141A3F]";
-    const textTitleClass = className.includes("text-white") ? "text-white" : "text-brand-blue";
+    const bgClass = className.includes("bg-") ? "" : "bg-white text-brand-blue dark:bg-[#1C2347] dark:text-white";
+    const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#0D1030] dark:text-white";
     const closeBtnClass = className.includes("text-white")
-        ? "text-white hover:text-gray-200"
-        : "text-gray-400 hover:text-gray-600";
+    ? "text-white hover:text-gray-200"
+    : "text-gray-400 hover:text-gray-600 dark:text-white/60 dark:hover:text-white";
 
     return (
         <div
@@ -84,7 +84,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#141A3F]">
+                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#1C2347]">
                     {children}
                 </div>
             </div>

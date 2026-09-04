@@ -417,11 +417,10 @@ export default function ChatbotWidget() {
       )}
 
       {open && (
-        <div className="w-full max-w-[320px] sm:max-w-[360px] h-[75vh] sm:h-[82vh] max-h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in">
-
+        <div className={`w-[360px] max-w-[92vw] h-[600px] max-h-[85vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in z-[120] fixed bottom-4 left-1/2 -translate-x-1/2 sm:absolute sm:bottom-[90px] sm:translate-x-0 ${chatbotSettings.position === "bottom-left" ? "sm:left-0" : "sm:left-auto sm:right-0"}`}>
           {/* Header con color primario */}
           <div
-            className="relative text-white p-4 flex justify-between items-center"
+            className="relative h-[68px] shrink-0 text-white px-4 flex justify-between items-center"
             style={{
               background: `linear-gradient(135deg, ${primaryColor}dd, ${primaryColor}bb, ${primaryColor}99)`
             }}
@@ -459,7 +458,7 @@ export default function ChatbotWidget() {
 
           {/* Mensajes */}
           <div
-            className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-100"
+            className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 bg-gray-100"
             onMouseMove={resetAutoCloseTimer}
             onKeyDown={resetAutoCloseTimer}
           >
@@ -585,7 +584,7 @@ export default function ChatbotWidget() {
           </div>
 
           {/* Input */}
-          <div className="p-3 bg-white border-t border-gray-100 flex gap-2 items-center">
+          <div className="h-[66px] shrink-0 p-3 bg-white border-t border-gray-100 flex gap-2 items-center">
             <input
               disabled={typing}
               className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 text-sm outline-none focus:border-blue-300 focus:bg-white transition-colors disabled:opacity-50"
