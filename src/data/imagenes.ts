@@ -36,6 +36,9 @@ import contactoHero from "@/assets/contacto/contactoBackground.webp";
 import reclamacionesHero from "@/assets/Reclamaciones/herobackground.webp";
 
 
+
+
+
 export const imagenes = {
   inicio: {
     user: {
@@ -113,6 +116,33 @@ export const imagenes = {
       alt: "Proyecto 2 - Después (Mobile)",
       title: "Proyecto 2 - Después (Mobile)"
     },
+    clientes: {
+  bancoNacion: {
+    src: "/images/clientes/banco-nacion.webp",
+    alt: "Banco de la Nación",
+    title: "Banco de la Nación",
+  },
+  jockeyPlaza: {
+    src: "/images/clientes/jockey-plaza.webp",
+    alt: "Jockey Plaza",
+    title: "Jockey Plaza",
+  },
+  mallDelSur: {
+    src: "/images/clientes/mall-del-sur.webp",
+    alt: "Mall del Sur",
+    title: "Mall del Sur",
+  },
+  lyk: {
+    src: "/images/clientes/lyk.webp",
+    alt: "LYK",
+    title: "LYK",
+  },
+  crisol: {
+    src: "/images/clientes/crisol.webp",
+    alt: "Crisol",
+    title: "Crisol",
+  },
+    },
   },
   nosotros: {
     hero: {
@@ -166,4 +196,5 @@ export const imagenes = {
       title: "Persona trabajando en una oficina con una laptop"
     }
   }
+
 } as const;

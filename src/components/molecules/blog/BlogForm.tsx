@@ -310,11 +310,37 @@ if (formData.video_url) {
 };
 
     return (
-        <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+        <form noValidate onSubmit={handleSubmit} className="
+        flex flex-col
+        gap-4 sm:gap-6
+        min-w-0
+        w-full
+        max-w-full
+        [&_label]:dark:text-white/90
+        [&_p]:dark:text-white/60
+        [&_select]:dark:bg-white/5
+        [&_select]:dark:border-white/10
+        [&_select]:dark:text-white
+        [&_select]:dark:focus:border-[#23C1DE]
+        [&_textarea]:dark:bg-white/5
+        [&_textarea]:dark:border-white/10
+        [&_textarea]:dark:text-white
+        [&_textarea]:dark:focus:border-[#23C1DE]
+        [&_input]:dark:bg-white/5
+        [&_input]:dark:border-white/10
+        [&_input]:dark:text-white
+        [&_input]:dark:focus:border-[#23C1DE]
+        [&_.border-dashed]:dark:border-white/10
+        [&_.border-dashed]:dark:bg-white/5
+        [&_.border-dashed]:dark:hover:border-[#23C1DE]
+        [&_input]:max-w-full
+        [&_textarea]:max-w-full
+        [&_select]:max-w-full
+    ">
 
             {/* Informacion */}
             <FormSection title="Información Principal">
-                <div className="flex gap-4 flex-col md:flex-row">
+                <div className="flex flex-col gap-3 sm:gap-4 md:flex-row min-w-0">
                     <InputAdmin
                         label="Link/URL"
                         name="slug"
@@ -349,7 +375,7 @@ if (formData.video_url) {
                     required
                 />
 
-                <div className="flex gap-4 flex-col md:flex-row">
+                <div className="flex flex-col gap-3 sm:gap-4 md:flex-row min-w-0">
                     <InputAdmin
                         label="Subtitulo"
                         name="title"
@@ -579,12 +605,38 @@ if (formData.video_url) {
             </FormSection>
 
             {/* Botones de acción */}
-            <div className="flex flex-col md:flex-row gap-4 sticky bottom-0 bg-white pt-4 pb-2 px-4 border-t border-gray-200 text-brand-blue dark:bg-[#141A3F]">
+            <div className="
+        sticky
+        bottom-[-1rem]
+        -mx-4
+        -mb-4
+        mt-4
+        p-3
+        px-4
+        sm:-mx-6
+        sm:-mb-6
+        sm:p-4
+        sm:px-6
+        flex
+        flex-col
+        sm:flex-row
+        gap-3
+        sm:gap-4
+        bg-white/95
+        dark:bg-[#1C2347]/95
+        backdrop-blur-md
+        border-t
+        border-gray-200
+        dark:border-white/10
+        z-10
+        rounded-b-xl
+        sm:rounded-b-2xl
+    ">
                 <Button
                     type="submit"
                     variant="primary"
                     size="md"
-                    className="flex-1"
+                    className="w-full sm:flex-1 max-w-[280px] sm:max-w-none mx-auto"
                     disabled={isLoading}
                 >
                     {isLoading ? (
