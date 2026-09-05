@@ -65,12 +65,12 @@ export default function Modal({
                 aria-modal="true"
                 aria-labelledby={title ? titleId : undefined}
                 tabIndex={-1}            
-                className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
+                className={`${sizeClasses[size]} w-full mx-2 sm:mx-4 max-h-[90vh] flex flex-col rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4">
-                        <h2 id={titleId} className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
+                    <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 flex-shrink-0">
+                        <h2 id={titleId} className={`text-lg sm:text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
                             {title}
                         </h2>
                         <button
@@ -84,7 +84,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#141A3F]">
+                <div className="p-4 sm:p-6 pt-0 overflow-y-auto flex-1 dark:bg-[#141A3F]">
                     {children}
                 </div>
             </div>
