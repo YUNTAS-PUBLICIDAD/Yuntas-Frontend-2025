@@ -9,6 +9,7 @@ import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-expect-error: swiper css module has no type declarations
 import "swiper/css";
+import { imagenes } from "@/data/imagenes";
 
 
 
@@ -16,7 +17,7 @@ const clientesData = [
   {
     id: 1,
     nombre: "Banco de la Nación",
-    src: "/images/clientes/banco-nacion.webp",
+    src: imagenes.inicio.clientes.bancoNacion.src,
     bgColor: "bg-white",
     imgClass: "object-contain",
     grayscaleCard: false,
@@ -24,7 +25,7 @@ const clientesData = [
   {
     id: 2,
     nombre: "Jockey Plaza",
-    src: "/images/clientes/jockey-plaza.webp",
+    src: imagenes.inicio.clientes.jockeyPlaza.src,
     bgColor: "bg-[#1A1A1A]",
     imgClass: "object-contain",
     grayscaleCard: false,
@@ -32,7 +33,7 @@ const clientesData = [
   {
     id: 3,
     nombre: "Mall del Sur",
-    src: "/images/clientes/mall-del-sur.webp",
+    src:imagenes.inicio.clientes.mallDelSur.src,
     bgColor: "bg-white",
     imgClass: "object-contain",
     grayscaleCard: false,
@@ -40,7 +41,7 @@ const clientesData = [
   {
     id: 4,
     nombre: "LYK",
-    src: "/images/clientes/lyk.webp",
+    src:imagenes.inicio.clientes.lyk.src,
     bgColor: "bg-white",
     imgClass: "object-contain",
     grayscaleCard: false,
@@ -48,7 +49,7 @@ const clientesData = [
   {
     id: 5,
     nombre: "Crisol",
-    src: "/images/clientes/crisol.webp",
+    src:imagenes.inicio.clientes.crisol.src,
     bgColor: "bg-[#ffbf03]",
     imgClass: "object-cover",
     grayscaleCard: true,
