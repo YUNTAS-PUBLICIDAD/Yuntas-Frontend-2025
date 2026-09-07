@@ -417,7 +417,7 @@ export default function ChatbotWidget() {
       )}
 
       {open && (
-        <div className={`w-[360px] max-w-[92vw] h-[600px] max-h-[85vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in z-[120] fixed bottom-4 left-1/2 -translate-x-1/2 sm:absolute sm:bottom-[90px] sm:translate-x-0 ${chatbotSettings.position === "bottom-left" ? "sm:left-0" : "sm:left-auto sm:right-0"}`}>
+        <div className={`w-[92vw] sm:w-[320px] h-[550px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in z-[120] fixed bottom-4 left-1/2 -translate-x-1/2 sm:fixed sm:bottom-[115px] sm:translate-x-0 ${chatbotSettings.position === "bottom-left" ? "sm:left-[20px]" : "sm:left-auto sm:right-[20px]"}`}>
           {/* Header con color primario */}
           <div
             className="relative h-[68px] shrink-0 text-white px-4 flex justify-between items-center"

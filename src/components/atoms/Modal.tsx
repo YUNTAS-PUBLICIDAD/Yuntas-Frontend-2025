@@ -65,7 +65,7 @@ export default function Modal({
                 aria-modal="true"
                 aria-labelledby={title ? titleId : undefined}
                 tabIndex={-1}            
-                className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
+                className={`${sizeClasses[size]} w-[calc(100vw-16px)] max-h-[90vh] rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
@@ -84,7 +84,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#1C2347]">
+                <div className="p-3 pt-0 sm:p-6 sm:pt-0 overflow-y-auto overflow-x-hidden max-h-[calc(90vh-80px)] dark:bg-[#1C2347]">
                     {children}
                 </div>
             </div>
