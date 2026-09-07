@@ -21,7 +21,7 @@ export default function Modal({
     className = ""
 }: ModalProps) {
     const titleId = useId();
-    const dialogRef = useRef<HTMLDivElement>(null);    
+    const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -51,8 +51,8 @@ export default function Modal({
     const bgClass = className.includes("bg-") ? "" : "bg-white text-brand-blue dark:bg-[#1C2347] dark:text-white";
     const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#0D1030] dark:text-white";
     const closeBtnClass = className.includes("text-white")
-    ? "text-white hover:text-gray-200"
-    : "text-gray-400 hover:text-gray-600 dark:text-white/60 dark:hover:text-white";
+        ? "text-white hover:text-gray-200"
+        : "text-gray-400 hover:text-gray-600 dark:text-white/60 dark:hover:text-white";
 
     return (
         <div
@@ -65,30 +65,18 @@ export default function Modal({
                 aria-modal="true"
                 aria-labelledby={title ? titleId : undefined}
                 tabIndex={-1}            
-                className={`
-        ${sizeClasses[size]}
-        w-full
-        mx-4
-        max-h-[95vh]
-        sm:max-h-[90vh]
-        flex flex-col
-        rounded-xl sm:rounded-2xl
-        shadow-xl
-        overflow-hidden
-        ${bgClass}
-        ${className}
-    `}
+                className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 shrink-0 border-b border-gray-100 dark:border-white/5 min-w-0">
-                        <h2 id={titleId} className={`text-lg sm:text-xl font-bold truncate dark:text-[#ECECEC]/80 ${textTitleClass}`}>
+                    <div className="flex items-center justify-between px-6 py-4">
+                        <h2 id={titleId} className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
                             {title}
                         </h2>
                         <button
-                            type="button"                        
+                            type="button"
                             onClick={onClose}
-                            aria-label="Cerrar"                            
+                            aria-label="Cerrar"
                             className={closeBtnClass}
                         >
                             <IoClose size={24} />
@@ -96,20 +84,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="
-        p-4 pt-3
-        sm:p-6 sm:pt-4
-        overflow-y-auto
-        overflow-x-hidden
-        flex-1
-        min-w-0
-        dark:bg-[#1C2347]
-        [&::-webkit-scrollbar]:w-1.5
-        [&::-webkit-scrollbar-track]:bg-transparent
-        [&::-webkit-scrollbar-thumb]:bg-gray-300
-        dark:[&::-webkit-scrollbar-thumb]:bg-white/20
-        [&::-webkit-scrollbar-thumb]:rounded-full
-    ">
+                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#1C2347]">
                     {children}
                 </div>
             </div>
