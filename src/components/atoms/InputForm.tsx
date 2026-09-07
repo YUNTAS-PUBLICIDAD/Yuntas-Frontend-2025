@@ -7,6 +7,9 @@ interface InputProps {
     placeholder?: string;
     required?: boolean;
     min?: number;
+    maxLength?: number;
+    inputMode?: "search" | "text" | "email" | "tel" | "url" | "numeric" | "decimal" | "none";
+    pattern?: string;
 }
 
 export default function InputForm({
@@ -17,7 +20,10 @@ export default function InputForm({
     onChange,
     placeholder,
     required = false,
-    min = 0 
+    min = 0,
+    maxLength,
+    inputMode,
+    pattern
 }: InputProps) {
     return (
         <div className="flex flex-col gap-1">
@@ -36,6 +42,9 @@ export default function InputForm({
                 placeholder={placeholder}
                 required={required}
                 min={min}
+                maxLength={maxLength}
+                inputMode={inputMode}
+                pattern={pattern}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all text-brand-blue dark:text-[#ECECEC]/80 dark:border dark:border-[#ECECEC]/20 dark:bg-[#1C2347]"
             />
         </div>
