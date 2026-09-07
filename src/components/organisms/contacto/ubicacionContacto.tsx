@@ -16,7 +16,10 @@ const UbicacionContacto: React.FC = () => {
   // Default map URL if not configured
   const defaultMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.255255812076!2d-76.94464365943126!3d-12.025940110892334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c97c8934a213%3A0x7f6ccb249e86b5e6!2sYuntas%20Producciones!5e0!3m2!1ses-419!2spe!4v1739596969950!5m2!1ses-419!2spe";
   
-  let mapUrl = contact?.map_url || defaultMapUrl;
+let mapUrl =
+  contact?.map_url?.startsWith("https://")
+    ? contact.map_url
+    : defaultMapUrl;
 
   // Normalizador de URL para Google Maps
   if (mapUrl.includes("<iframe") && mapUrl.includes("src=")) {
