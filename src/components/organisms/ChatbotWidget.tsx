@@ -317,8 +317,8 @@ export default function ChatbotWidget() {
   const primaryColor = chatbotSettings.primary_color || "#203565";
   const secondaryColor = chatbotSettings.secondary_color || primaryColor;
   const positionClass = chatbotSettings.position === "bottom-left"
-    ? "fixed bottom-7 left-[20px] z-[100]"
-    : "fixed bottom-7 right-[20px] z-[100]";
+    ? "fixed bottom-5 sm:bottom-7 left-4 sm:left-[20px] z-[100]"
+    : "fixed bottom-5 sm:bottom-7 right-4 sm:right-[20px] z-[100]";
 
   return (
     <div className={positionClass}>
@@ -326,9 +326,9 @@ export default function ChatbotWidget() {
         <div className="relative flex flex-col items-end">
           {showBubble && (
             <div
-              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-brand-cyan/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-4 py-2.5 w-[250px] sm:w-[280px] max-w-[320px]  text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
-                ? "left-20 origin-bottom-left"
-                : "right-10  origin-bottom-right"
+              className={`absolute bottom-20 backdrop-blur-xl bg-white/95 border border-brand-cyan/20 shadow-[0_10px_40px_rgba(15,23,42,0.12)] px-3 sm:px-4 py-2 sm:py-2.5 w-[210px] sm:w-[280px] max-w-[calc(100vw-32px)] text-slate-800 rounded-xl z-10 animate-fade-in transition-all cursor-pointer ${chatbotSettings.position === "bottom-left"
+                ? "left-16 sm:left-20 origin-bottom-left"
+                : "right-2 sm:right-10 origin-bottom-right"
                 }`}
               onClick={handleOpenChat}
             >
@@ -371,7 +371,7 @@ export default function ChatbotWidget() {
                   <p
                     key={tooltipIndex}
                     className="
-                      text-sm
+                      text-xs sm:text-sm
                       font-medium
                       text-slate-800
                       leading-relaxed
@@ -387,13 +387,13 @@ export default function ChatbotWidget() {
 
           <button
             onClick={handleOpenChat}
-            className="relative w-20 h-20 cursor-pointer block rounded-full focus:outline-none border-none group"
+            className="relative w-16 h-16 sm:w-20 sm:h-20 cursor-pointer block rounded-full focus:outline-none border-none group"
             aria-label="Abrir chat"
           >
             {iconUrl ? (
               // Ícono personalizado
               <div
-                className="w-24 h-24 flex items-center justify-center shadow-lg animate-bot-life group-hover:scale-105 transition-transform duration-200"
+                className="w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center shadow-lg animate-bot-life group-hover:scale-105 transition-transform duration-200"
               >
                 <img
                   src={iconUrl}
