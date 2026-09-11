@@ -5,6 +5,8 @@ import { ArrowRight, FileText, Headset, Mail, MapPinned, MessageCircle, Paintbru
 import Image from "next/image";
 import Link from "next/link";
 
+const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+
 const features = [
   {
     icon: Paintbrush,
@@ -27,9 +29,8 @@ const features = [
 ];
 
 const HeroSection = () => {
-  const whatsappMsg = encodeURIComponent(
-    "Hola, me gustaría cotizar con Yuntas Publicidad. ¿Me podrían brindar más información?"
-  );
+  const whatsappMsg =
+    "Hola, me gustaría cotizar con Yuntas Publicidad. ¿Me podrían brindar más información?";
   return (
     <section
       className="relative h-auto md:min-h-[650px] lg:min-h-screen overflow-hidden"
@@ -147,7 +148,7 @@ const HeroSection = () => {
             </Button>
 
             <Link
-              href={`${ROUTES.WHATSAPP.YUNTAS}text=${whatsappMsg}`}
+              href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMsg)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="
