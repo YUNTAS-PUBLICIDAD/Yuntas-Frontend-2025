@@ -21,7 +21,7 @@ export default function Modal({
     className = ""
 }: ModalProps) {
     const titleId = useId();
-    const dialogRef = useRef<HTMLDivElement>(null);    
+    const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -51,12 +51,12 @@ export default function Modal({
     const bgClass = className.includes("bg-") ? "" : "bg-white text-brand-blue dark:bg-[#1C2347] dark:text-white";
     const textTitleClass = className.includes("text-white") ? "text-white" : "text-[#0D1030] dark:text-white";
     const closeBtnClass = className.includes("text-white")
-    ? "text-white hover:text-gray-200"
-    : "text-gray-400 hover:text-gray-600 dark:text-white/60 dark:hover:text-white";
+        ? "text-white hover:text-gray-200"
+        : "text-gray-400 hover:text-gray-600 dark:text-white/60 dark:hover:text-white";
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 sm:p-4"
             onMouseDown={onClose}
         >
             <div
@@ -65,7 +65,7 @@ export default function Modal({
                 aria-modal="true"
                 aria-labelledby={title ? titleId : undefined}
                 tabIndex={-1}            
-                className={`${sizeClasses[size]} w-full mx-4 rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
+                className={`${sizeClasses[size]} w-[calc(100vw-16px)] max-h-[90vh] rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
                 onMouseDown={(e) => e.stopPropagation()}
             >
                 {title && (
@@ -74,9 +74,9 @@ export default function Modal({
                             {title}
                         </h2>
                         <button
-                            type="button"                        
+                            type="button"
                             onClick={onClose}
-                            aria-label="Cerrar"                            
+                            aria-label="Cerrar"
                             className={closeBtnClass}
                         >
                             <IoClose size={24} />
@@ -84,7 +84,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-6 pt-0 overflow-y-auto dark:bg-[#1C2347]">
+                <div className="p-3 pt-0 sm:p-6 sm:pt-0 overflow-y-auto overflow-x-hidden max-h-[calc(90vh-80px)] dark:bg-[#1C2347]">
                     {children}
                 </div>
             </div>

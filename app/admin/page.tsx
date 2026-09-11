@@ -285,7 +285,7 @@ export default function AdminDashboardPage() {
 
         {/* Line Chart */}
         <div className="lg:col-span-3 rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-[#1C2347] p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-3 mb-5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[#203565] dark:text-white" />
               <h2 className="text-sm font-semibold text-[#203565] dark:text-white">Páginas más vistas</h2>
@@ -313,45 +313,45 @@ export default function AdminDashboardPage() {
             <>
               <div className="w-full overflow-x-auto custom-scrollbar pb-2">
                 <div style={{ minWidth: `${Math.max((pageViewData?.length || 0) * 80, 500)}px` }}>
-            <ResponsiveContainer width="100%" height={220}>
-              <ComposedChart data={pageViewData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartGridColor} />
-                <XAxis
-                  dataKey="page"
-                  tick={{ fontSize: 12, fill: chartTickColor }}
-                  axisLine={{ stroke: chartAxisLineColor, strokeWidth: 1 }}
-                  tickLine={false}
-                  interval={0}
-                  height={34}
-                  tickMargin={12}
-                  textAnchor="middle"
-                  padding={{ left: 24, right: 24 }}
-                />
-                <YAxis
-                  tick={{ fontSize: 12, fill: chartTickColor }}
-                  axisLine={false}
-                  tickLine={false}
-                  width={48}
-                  allowDecimals={false}
-                  domain={[0, (dataMax: number) => (!dataMax || isNaN(dataMax)) ? 10 : dataMax + (Math.ceil(dataMax / 4) || 1)]}
-                  tickFormatter={(value) => Math.round(Number(value)).toString()}
-                />
-                <Tooltip content={<CustomTooltip />} />
-                <Area
-                  type="monotone"
-                  dataKey="views"
-                  stroke="none"
-                  fill={chartFillColor}
-                  fillOpacity={isDarkMode ? 0.18 : 0.16}
-                  isAnimationActive={false}
-                />
-                <Line
-                  type="monotone" dataKey="views" stroke={chartAccentColor} strokeWidth={2.5}
-                  dot={{ fill: chartAccentColor, r: 4, strokeWidth: 0 }}
-                  activeDot={{ r: 6, fill: chartAccentColor }}
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <ComposedChart data={pageViewData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartGridColor} />
+                      <XAxis
+                        dataKey="page"
+                        tick={{ fontSize: 12, fill: chartTickColor }}
+                        axisLine={{ stroke: chartAxisLineColor, strokeWidth: 1 }}
+                        tickLine={false}
+                        interval={0}
+                        height={34}
+                        tickMargin={12}
+                        textAnchor="middle"
+                        padding={{ left: 24, right: 24 }}
+                      />
+                      <YAxis
+                        tick={{ fontSize: 12, fill: chartTickColor }}
+                        axisLine={false}
+                        tickLine={false}
+                        width={48}
+                        allowDecimals={false}
+                        domain={[0, (dataMax: number) => (!dataMax || isNaN(dataMax)) ? 10 : dataMax + (Math.ceil(dataMax / 4) || 1)]}
+                        tickFormatter={(value) => Math.round(Number(value)).toString()}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Area
+                        type="monotone"
+                        dataKey="views"
+                        stroke="none"
+                        fill={chartFillColor}
+                        fillOpacity={isDarkMode ? 0.18 : 0.16}
+                        isAnimationActive={false}
+                      />
+                      <Line
+                        type="monotone" dataKey="views" stroke={chartAccentColor} strokeWidth={2.5}
+                        dot={{ fill: chartAccentColor, r: 4, strokeWidth: 0 }}
+                        activeDot={{ r: 6, fill: chartAccentColor }}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
               <div className="mt-4 flex items-end justify-between gap-3">

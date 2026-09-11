@@ -17,7 +17,7 @@ export const FloatingWhatsApp = () => {
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
-    <div className="fixed bottom-7 left-4 z-[100]">
+    <div className="fixed bottom-5 sm:bottom-7 left-4 z-[100]">
       <Link
         href={whatsappUrl}
         target="_blank"

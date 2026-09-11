@@ -46,7 +46,18 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        if (name === "phone" && (value.length > 9 || Number(value) < 0)) return;
+        if (name === "phone") {
+            let numericValue = value.replace(/\D/g, "");
+            if (numericValue.length === 11 && numericValue.startsWith("51")) {
+                numericValue = numericValue.slice(2);
+            }
+            numericValue = numericValue.slice(0, 9);
+            setFormData(prev => ({
+                ...prev,
+                phone: numericValue
+            }));
+            return;
+        }
 
         setFormData(prev => ({
             ...prev,
@@ -75,7 +86,8 @@ export default function LeadForm({ onSubmit, onCancel, isLoading = false, initia
             <InputForm
                 label="Teléfono"
                 name="phone"
-                type="number"
+                type="tel"
+                inputMode="numeric"
                 value={formData.phone || ""}
                 onChange={handleChange}
                 placeholder="987654321"
