@@ -3,12 +3,13 @@ import AddressBlock from "@/components/molecules/footer/AddressBlock";
 import LegalLinksBlock from "@/components/molecules/footer/LegalLinksBlock";
 import ContactBlock from "@/components/molecules/footer/ContactBlock";
 import SocialLinks from "@/components/molecules/footer/SocialLinks";
-import NavMenu from "@/components/molecules/header/NavMenu";
-import MenuItem from "../atoms/MenuItem";
 import NavMenuFooter from "../molecules/footer/NavMenuFooter";
 
+interface FooterProps {
+  phone?: string | null;
+}
 // HOLA
-export default function Footer() {
+export default function Footer({ phone }: FooterProps) {
   return (
     <footer className="bg-[#04041C] text-white pt-12 sm:pt-16 pb-32 sm:pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
@@ -21,6 +22,7 @@ export default function Footer() {
             <div className="max-w-[180px] md:max-w-[220px] lg:max-w-[240px] w-full">
               <LogoBlock />
             </div>
+
             <div className="md:hidden mt-8">
               <SocialLinks />
             </div>
@@ -36,9 +38,9 @@ export default function Footer() {
             <AddressBlock />
           </div>
 
-          {/* 4. Contacto (Ocupa 4 columnas) */}
-          <div className="flex flex-col gap-6 lg:col-span-4 w-full min-w-0">
-            <ContactBlock />
+          {/* 4. Contacto (Ocupa 2 columnas) */}
+          <div className="flex flex-col gap-6 lg:col-span-3 w-full min-w-0">
+            <ContactBlock phone={phone}  />
           </div>
 
         </div>

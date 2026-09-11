@@ -2,22 +2,36 @@ import { MdEmail } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
 import SocialLinks from "./SocialLinks";
 
-const ContactBlock = () => (
-  <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start w-full min-w-0">
-    <span className="font-bold text-brand-cyan text-xl tracking-wide inline-block">
-      Contacto
-    </span>
+interface ContactBlockProps {
+  phone?: string | null;
+}
 
-    <a
-      href="https://wa.me/51912849782"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-2 hover:text-[#25D366] transition-colors max-w-full"
-      aria-label="Chatear por WhatsApp"
-    >
-      <FaWhatsapp className="text-xl sm:text-2xl text-white shrink-0" />
-      <span className="text-sm sm:text-base md:text-lg">+51 912 849 782</span>
-    </a>
+const ContactBlock = ({ phone }: ContactBlockProps) => {
+  const cleanPhone = phone?.replace(/\D/g, "") || "";
+
+   const whatsappPhone = cleanPhone.startsWith("51")
+    ? cleanPhone
+    : `51${cleanPhone}`;
+
+  return (
+    <div className="flex flex-col gap-4 text-center md:text-left items-center md:items-start">
+      <span className="font-bold text-brand-cyan text-xl tracking-wide inline-block">
+        Contacto
+      </span>
+
+      {phone && (
+        <a
+          href={`https://wa.me/${whatsappPhone}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 hover:text-[#25D366] transition-colors"
+          aria-label="Chatear por WhatsApp"
+        >
+          <FaWhatsapp className="text-2xl text-white" />
+          <span className="text-lg">{phone}</span>
+        </a>
+      )}
+
 
     <a
       href="mailto:yuntasproducciones@gmail.com"
@@ -36,5 +50,5 @@ const ContactBlock = () => (
     </div>
   </div>
 );
-
+}
 export default ContactBlock;
