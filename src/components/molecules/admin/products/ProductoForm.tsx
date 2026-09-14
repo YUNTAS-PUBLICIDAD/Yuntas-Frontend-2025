@@ -344,11 +344,8 @@ export default function ProductForm({ onSubmit, onCancel, confirm, isLoading = f
         onSubmit(formData);
     };
 
-
-
-
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto" noValidate>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
 
             {/* Seccion datos para Dashboard */}
             <FormSection title="Datos para Dashboard (Gestión Interna)">
