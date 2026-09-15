@@ -35,7 +35,7 @@ export default function MainLayout({
 
   return (
     <HeaderStyleProvider initialForceSolid={solidHeader}>
-      <div className="flex flex-col min-h-screen relative overflow-x-clip">
+      <div className="flex flex-col min-h-screen relative">
         <Header />
         <HeaderMobil />
 

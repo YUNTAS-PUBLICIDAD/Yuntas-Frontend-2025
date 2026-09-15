@@ -1,54 +1,48 @@
 import React from "react";
 import Icon from "@/components/atoms/Icon";
 import { FaInstagram, FaFacebook, FaTiktok, FaYoutube } from "react-icons/fa";
+import {ROUTES} from "@/config/routes";
 
 const SocialLinks = () => {
+      const customSize = 40;
+  return (
+    <div className="flex gap-4 justify-center md:justify-start">
+      <a
+        href={ROUTES.SOCIAL.INSTAGRAM}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white"
+      >
+        <FaInstagram size={28} />
+      </a>
 
-    const customSize = 40;
+      <a
+        href={ROUTES.SOCIAL.FACEBOOK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white"
+      >
+        <FaFacebook size={28} />
+      </a>
 
-    return (
-        <div className="flex gap-4 justify-center md:justify-start flex-wrap">
-            <Icon
-                href="https://www.instagram.com/yuntaspublicidad/"
-                target="_blank"
-                label="Instagram"
-                size={customSize}
-                bgColor="bg-transparent"
-            >
-                <FaInstagram className="text-2xl text-white" />
-            </Icon>
+      <a
+        href={ROUTES.SOCIAL.TIKTOK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white"
+      >
+        <FaTiktok size={28} />
+      </a>
 
-            <Icon
-                href="https://www.facebook.com/YuntasProducciones/"
-                target="_blank"
-                label="Facebook"
-                size={customSize}
-                bgColor="bg-transparent"
-            >
-                <FaFacebook className="text-2xl text-white" />
-            </Icon>
-
-            <Icon
-                href="https://www.tiktok.com/@yuntaspublicidad"
-                target="_blank"
-                label="TikTok"
-                size={customSize}
-                bgColor="bg-transparent"
-            >
-                <FaTiktok className="text-2xl text-white" />
-            </Icon>
-
-            <Icon
-                href="https://www.youtube.com/@yuntaspublicidad"
-                target="_blank"
-                label="YouTube"
-                size={customSize}
-                bgColor="bg-transparent"
-            >
-                <FaYoutube className="text-2xl text-white" />
-            </Icon>
-        </div>
-    );
+      <a
+        href={ROUTES.SOCIAL.YOUTUBE}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white"
+      >
+        <FaYoutube size={28} />
+      </a>
+    </div>
+  );
 };
-
 export default SocialLinks;
