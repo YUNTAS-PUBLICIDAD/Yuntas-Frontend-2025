@@ -1,9 +1,17 @@
+"use client";
+
 import React from 'react';
 import CommonHero from '@/components/organisms/static-pages/CommonHero';
 import StaticContent from '@/components/organisms/static-pages/StaticContent';
 import { ScrollText } from 'lucide-react';
+import { useSettingsContext } from '@/providers/SettingsProvider';
 
 export default function TerminosCondicionesPage() {
+    const { contact } = useSettingsContext();
+
+    const email = contact?.email || '';
+    const address = contact?.address || '';
+
     return (
         <main>
             <CommonHero title="Términos y Condiciones" overlay/>
@@ -16,7 +24,7 @@ export default function TerminosCondicionesPage() {
                 <section className="mb-8">
                     <h4 className="text-xl font-bold text-[#203565] mb-2">1. Identificación del titular del sitio web</h4>
                     <p className="text-[#203565]">
-                        El presente sitio web es operado por <strong>Yuntas</strong>, con RUC <strong>[número de RUC]</strong>, con domicilio en <strong>Urb. Alameda La Rivera Mz F Lt 30, Lima, Perú</strong>, y correo electrónico de contacto <strong>yuntasproducciones@gmail.com</strong>.
+                        El presente sitio web es operado por <strong>Yuntas</strong>, con RUC <strong>[número de RUC]</strong>, con domicilio en <strong>{address}</strong>, y correo electrónico de contacto <strong>{email}</strong>.
                     </p>
                     <p className="text-[#203565] mt-2">
                         El acceso y uso de este sitio web se rige por los presentes Términos y Condiciones, así como por la Política de Privacidad.
@@ -65,7 +73,7 @@ export default function TerminosCondicionesPage() {
 
                     <h5 className="font-bold mt-4">4.4 Derechos del titular de los datos</h5>
                     <p className="text-[#203565]">
-                        El usuario puede ejercer sus derechos de acceso, rectificación, cancelación y oposición (derechos ARCO), enviando una solicitud al correo electrónico <strong>yuntasproducciones@gmail.com</strong>, conforme a la normativa vigente.
+                        El usuario puede ejercer sus derechos de acceso, rectificación, cancelación y oposición (derechos ARCO), enviando una solicitud al correo electrónico <strong>{email}</strong>, conforme a la normativa vigente.
                     </p>
 
                     <h5 className="font-bold mt-4">4.5 Seguridad y confidencialidad</h5>
@@ -103,7 +111,7 @@ export default function TerminosCondicionesPage() {
                 <section className="mb-8">
                     <h4 className="text-xl font-bold text-[#203565] mb-2">8. Contacto</h4>
                     <p className="text-[#203565]">
-                        Para cualquier consulta relacionada con estos Términos y Condiciones, el usuario puede comunicarse a través del correo electrónico <strong>yuntasproducciones@gmail.com</strong>.
+                        Para cualquier consulta relacionada con estos Términos y Condiciones, el usuario puede comunicarse a través del correo electrónico <strong>{email}</strong>.
                     </p>
                 </section>
             </StaticContent>
