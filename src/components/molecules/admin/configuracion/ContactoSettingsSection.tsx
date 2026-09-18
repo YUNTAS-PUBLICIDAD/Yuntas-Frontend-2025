@@ -279,12 +279,14 @@ function Input({
   value,
   onChange,
   placeholder,
+  minLength,
   type = "text",
 }: {
   icon?: ReactNode;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  minLength?: number;
   type?: string;
 }) {
   return (
@@ -295,6 +297,7 @@ function Input({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        minLength={minLength}
         className={`w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20 ${icon ? "pl-9 pr-4" : "px-4"}`}
       />
     </div>
@@ -565,15 +568,27 @@ export default function ContactoSettingsSection({
                     <div className="flex gap-2">
                       <input
                         type="text"
+                        inputMode="numeric"
                         value={config.codigoPais}
-                        onChange={(e) => set("codigoPais", e.target.value)}
-                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:ring-white/20"
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (!value.startsWith("+")) {
+                            value = "+" + value.replace(/[^\d+]/g, "");
+                          }
+
+                          value = "+" + value.slice(1).replace(/\D/g, "").slice(0, 4);
+
+                          set("codigoPais", value);
+                        }}
+                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030]"
                       />
+
                       <Input
                         icon={<Phone className="h-4 w-4" />}
                         value={config.telefono}
                         onChange={(value) => set("telefono", value.replace(/\D/g, "").slice(0, 9))}
                         placeholder="Ej: 999 888 777"
+                        minLength={9}
                         type="tel"
                       />
                     </div>

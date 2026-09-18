@@ -294,7 +294,7 @@ export default function SendEmailForm({ onClose, products }: SendEmailFormProps)
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <FormSection title="Selección de Producto">
                 <SelectForm
                     label="Selecciona un producto"

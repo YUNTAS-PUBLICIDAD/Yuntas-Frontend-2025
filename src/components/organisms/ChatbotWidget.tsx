@@ -317,8 +317,8 @@ export default function ChatbotWidget() {
   const primaryColor = chatbotSettings.primary_color || "#203565";
   const secondaryColor = chatbotSettings.secondary_color || primaryColor;
   const positionClass = chatbotSettings.position === "bottom-left"
-    ? "fixed bottom-5 sm:bottom-7 left-4 sm:left-[20px] z-[100]"
-    : "fixed bottom-5 sm:bottom-7 right-4 sm:right-[20px] z-[100]";
+    ? "fixed bottom-5 sm:bottom-[18px] left-4 sm:left-[20px] z-[100]"
+    : "fixed bottom-5 sm:bottom-[18px] right-4 sm:right-[20px] z-[100]";
 
   return (
     <div className={positionClass}>
@@ -417,7 +417,7 @@ export default function ChatbotWidget() {
       )}
 
       {open && (
-        <div className={`w-[92vw] sm:w-[320px] h-[550px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in z-[120] fixed bottom-4 left-1/2 -translate-x-1/2 sm:fixed sm:bottom-[115px] sm:translate-x-0 ${chatbotSettings.position === "bottom-left" ? "sm:left-[20px]" : "sm:left-auto sm:right-[20px]"}`}>
+        <div className={`w-[92vw] sm:w-[320px] h-[500px] max-h-[calc(100dvh-100px)] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden animate-fade-in z-[120] fixed bottom-4 left-1/2 -translate-x-1/2 sm:fixed sm:bottom-[18px] sm:translate-x-0 ${chatbotSettings.position === "bottom-left" ? "sm:left-[20px]" : "sm:left-auto sm:right-[20px]"}`}>
           {/* Header con color primario */}
           <div
             className="relative h-[68px] shrink-0 text-white px-4 flex justify-between items-center"

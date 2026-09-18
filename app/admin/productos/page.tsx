@@ -265,7 +265,7 @@ export default function ProductosPage() {
 
       {/* ───────── BUSCADOR Y CONTADOR ───────── */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <div className="w-full md:flex-1 md:max-w-3xl">
+        <div className="w-full md:w-[670px]">
           <SearchBar
             items={productos}
             onSearch={setProductosFiltrados}
