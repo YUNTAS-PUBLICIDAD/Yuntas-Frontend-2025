@@ -87,6 +87,10 @@ export const useSettings = (): UseSettingsReturn => {
           setSettings((current) =>
             current ? { ...current, general: updatedGeneral } : current
           );
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("settings-updated"));
+          }
         } else {
           setError(result.message || "Error al guardar configuracion");
         }
@@ -124,6 +128,10 @@ export const useSettings = (): UseSettingsReturn => {
           setSettings((current) =>
             current ? { ...current, contact: updatedContact } : current
           );
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("settings-updated"));
+          }
         } else {
           setError(result.message || "Error al guardar configuracion");
         }
@@ -161,6 +169,10 @@ export const useSettings = (): UseSettingsReturn => {
           setSettings((current) =>
             current ? { ...current, chatbot: updatedChatbot } : current
           );
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("settings-updated"));
+          }
         } else {
           setError(result.message || "Error al guardar configuracion");
         }

@@ -4,11 +4,21 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaWhatsapp } from 'react-icons/fa';
+import { useSettingsContext } from '@/providers/SettingsProvider';
 
 export const FloatingWhatsApp = () => {
   const pathname = usePathname();
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-  const message = "Hola Yuntas, quisiera más información sobre sus servicios.";
+  const { contact } = useSettingsContext();
+
+  const adminPhoneDigits = (contact?.phone || '').replace(/\D/g, '');
+  const phoneNumber =
+    adminPhoneDigits.length >= 8
+      ? adminPhoneDigits
+      : process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+
+  const message =
+    contact?.whatsapp_message?.trim() ||
+    "Hola Yuntas, quisiera más información sobre sus servicios.";
 
   if (!phoneNumber || pathname?.startsWith('/admin')) {
     return null;

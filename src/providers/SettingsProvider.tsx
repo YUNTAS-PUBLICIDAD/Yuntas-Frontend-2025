@@ -39,9 +39,17 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
   };
 
-  // Cargar settings al montar
   useEffect(() => {
     fetchSettings();
+
+    const handleSettingsUpdated = () => {
+      fetchSettings();
+    };
+
+    window.addEventListener('settings-updated', handleSettingsUpdated);
+    return () => {
+      window.removeEventListener('settings-updated', handleSettingsUpdated);
+    };
   }, []);
 
   const value: SettingsContextType = {
