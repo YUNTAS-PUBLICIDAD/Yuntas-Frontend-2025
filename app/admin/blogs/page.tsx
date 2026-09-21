@@ -164,7 +164,7 @@ export default function Blogspage() {
 
             {/* CABECERA */}
             <section className="mb-5 rounded-[1.75rem] border border-[#D8E7F3] bg-white/90 p-5 shadow-[0_18px_40px_rgba(13,16,48,0.06)] backdrop-blur dark:border-white/10 dark:bg-[#1C2347]/90">
-                <div className="flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center">
+                <div className="flex flex-col items-start justify-between gap-4 xl:flex-row xl:items-center">
                     <div className="space-y-1 flex-1">
                         <h2 className="text-3xl font-bold tracking-tight text-[#0D1030] dark:text-white/90 md:text-4xl">
                             Gestión de Contenido
