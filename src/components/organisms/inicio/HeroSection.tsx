@@ -59,7 +59,7 @@ const HeroSection = () => {
       </div>
 
       {/* Contenido */}
-      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 pt-24 md:pt-32 pb-16 md:pb-24 flex flex-col justify-start lg:pb-0">
+      <div className="relative z-20 w-full max-w-[1400px] mx-auto px-6 md:px-12 pt-24 md:pt-32 pb-14 md:pb-16 flex flex-col justify-start">
 
         {/* Bloque texto */}
         <div className="max-w-3xl flex flex-col gap-4 md:gap-5">
@@ -81,14 +81,12 @@ const HeroSection = () => {
           {/*Diseñamos espacios que{" "}
                   <span className="text-brand-cyan">impactan</span>
                 </Heading>*/}
-          <h1 className="text-white font-bold leading-[1] tracking-[-0.04em] text-[2.8rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.5rem]  reveal delay-2">
-            {/*Convierte tu espacio en una*/}
+          <h1 className="text-white font-bold leading-[1] tracking-[-0.04em] text-[2.8rem] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.5rem] reveal delay-2">
             Impulsamos tu marca.
             <br />
-            Transformamos{" "}
+            Transformamos
+            <br />
             <span className="text-brand-cyan">
-              {/*experiencia visual*/}
-              {/*Transformamos espacios.*/}
               espacios.
             </span>
           </h1>
@@ -109,7 +107,7 @@ const HeroSection = () => {
           </p>
 
           {/* CTA */}
-          <div className=" reveal delay-3 mt-4 flex flex-wrap items-center gap-x-3 gap-y-4">
+          <div className="reveal delay-3 mt-4 flex flex-wrap items-center gap-x-3 gap-y-4">
 
             <Button
               variant="primary"
@@ -198,7 +196,7 @@ const HeroSection = () => {
 
           {/* METRICAS CUALITATIVAS */}
 
-          <div className="mt-10 flex flex-wrap gap-3">
+          <div className="mt-8 lg:mt-10 flex flex-wrap gap-3">
 
             {features.map((feature) => (
               <div
