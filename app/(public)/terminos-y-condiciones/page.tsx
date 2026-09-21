@@ -7,7 +7,7 @@ import { ScrollText } from 'lucide-react';
 import { useSettingsContext } from '@/providers/SettingsProvider';
 
 export default function TerminosCondicionesPage() {
-    const { contact } = useSettingsContext();
+    const { general, contact } = useSettingsContext();
 
     const email = contact?.email || '';
     const address = contact?.address || '';
@@ -24,7 +24,7 @@ export default function TerminosCondicionesPage() {
                 <section className="mb-8">
                     <h4 className="text-xl font-bold text-[#203565] mb-2">1. Identificación del titular del sitio web</h4>
                     <p className="text-[#203565]">
-                        El presente sitio web es operado por <strong>Yuntas</strong>, con RUC <strong>[número de RUC]</strong>, con domicilio en <strong>{address}</strong>, y correo electrónico de contacto <strong>{email}</strong>.
+                        El presente sitio web es operado por <strong>Yuntas</strong>, con RUC <strong>{general?.company_ruc}</strong>, con domicilio en <strong>{address}</strong>, y correo electrónico de contacto <strong>{email}</strong>.
                     </p>
                     <p className="text-[#203565] mt-2">
                         El acceso y uso de este sitio web se rige por los presentes Términos y Condiciones, así como por la Política de Privacidad.

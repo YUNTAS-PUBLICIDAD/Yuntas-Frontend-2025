@@ -75,6 +75,7 @@ export const updateGeneralSettingsService = async (
     formData.append("_method", "PATCH");
 
     formData.append("company_name", generalData.company_name || "");
+    formData.append("company_ruc", generalData.company_ruc || "");
     formData.append("theme", generalData.theme || "light");
 
     if (generalData.logo_light instanceof File) {
