@@ -150,8 +150,8 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
 
                 {/** Cuando se muestra el QR por socket*/}
                 {!isConnected && qrCode && socketStatus !== 'disconnected' && (
-                    <div className="p-4 bg-white border-2 border-dashed border-gray-300 rounded-lg text-center">
-                        <p className="text-sm text-gray-600 mb-4">
+                    <div className="p-4 bg-[#141A3F] border-2 border-dashed border-gray-300 rounded-lg text-center">
+                        <p className="text-sm text-gray-600 dark:text-white mb-4">
                             Escanea este código QR con WhatsApp:
                         </p>
                         <div className="flex justify-center">
@@ -161,7 +161,7 @@ export default function WhatsappConnection({ onConnectionChange }: WhatsappConne
                                 className="w-64 h-64 border border-gray-200 rounded"
                             />
                         </div>
-                        <p className="text-xs text-gray-500 mt-4">
+                        <p className="text-xs text-gray-600 dark:text-white mt-4">
                             Abre WhatsApp → Menú → Dispositivos vinculados → Vincular dispositivo
                         </p>
                     </div>
