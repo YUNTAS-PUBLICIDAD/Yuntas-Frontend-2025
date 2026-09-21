@@ -84,7 +84,7 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-3 pt-0 sm:p-6 sm:pt-0 overflow-y-auto overflow-x-hidden max-h-[calc(90vh-80px)] dark:bg-[#1C2347]">
+                <div className="p-3 pt-0 sm:p-6 sm:pb-0 sm:pt-0 overflow-y-auto overflow-x-hidden max-h-[calc(90vh-80px)] dark:bg-[#1C2347]">
                     {children}
                 </div>
             </div>
