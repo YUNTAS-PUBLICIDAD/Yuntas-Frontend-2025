@@ -13,6 +13,7 @@ export interface BusinessHours {
 
 export interface GeneralSettings {
   company_name: string;
+  company_ruc : string | null;
   logo_light: string | null;
   logo_dark: string | null;
   theme: 'light' | 'dark';
@@ -49,6 +50,7 @@ export interface SettingsPayload {
 
 export interface UpdateGeneralSettingsInput {
   company_name?: string;
+  company_ruc?: string | null;
   logo_light?: File | null;
   logo_dark?: File | null;
   theme?: 'light' | 'dark';
