@@ -201,6 +201,10 @@ input[type="password"]::-webkit-password-reveal-button {
   border: 1px solid rgba(255,255,255,0.08);
 }
 
+.dark input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.5);
+}
+
 /* estilo para popup inicio-desktop */
 @media (min-width: 640px) {
   .clip-vase {
@@ -424,4 +428,7 @@ input[type="password"]::-webkit-password-reveal-button {
   .delay-1 {animation-delay: 0.1s;}
   .delay-2 {animation-delay: 0.2s;}
   .delay-3 {animation-delay: 0.3s;}
+
+  
 }
+
