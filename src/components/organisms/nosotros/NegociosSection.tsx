@@ -13,10 +13,10 @@ const NegocioSection: React.FC = () => {
 
       {/* CONTENIDO PRINCIPAL */}
       <div className="w-full bg-white py-12 md:py-20 px-6 md:px-16">
-  <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
           {/* IMAGEN */}
-           <div className="relative flex justify-center">
+          <div className="relative flex justify-center">
 
             <img
               src={imagenes.nosotros.detalle.src}
@@ -27,17 +27,17 @@ const NegocioSection: React.FC = () => {
           </div>
 
           {/* TEXTO CON <Text> */}
-           <div className="bg-white border-2 border-brand-blue rounded-3xl p-10 text-center shadow-[8px_8px_4px_#203565] relative ">
+          <div className="bg-white border-2 border-brand-blue rounded-3xl p-10 text-center shadow-[8px_8px_4px_#203565] relative overflow-hidden">
 
-              <Text variant="caption" color="black" className="text-base md:text-lg leading-8 text-brand-blue"
-      >            En Yuntas Producciones{" "}
+            <Text variant="caption" color="black" className="text-base md:text-lg leading-8 text-brand-blue"
+            >            En Yuntas Producciones{" "}
               <span className="font-extrabold">transformamos</span>
               <br />
               <span className="font-extrabold">
                 espacios con soluciones tecnológicas
               </span>
               <br />
-              
+
               <span className="font-extrabold">innovadoras</span> en iluminación y diseño,
               <br />
               ofreciendo calidad y vanguardia{" "}
@@ -47,7 +47,7 @@ const NegocioSection: React.FC = () => {
             </Text>
 
             <div className="absolute -bottom-10 -right-10 w-28 h-28 rounded-full bg-brand-cyan opacity-30">
-      </div>
+            </div>
 
           </div>
 
