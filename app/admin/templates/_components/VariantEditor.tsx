@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { getImageUrl } from "@/utils/getImageUrl";
 import toast from "react-hot-toast";
 import { Trash2 } from "lucide-react";
+import { useConfirm } from "@/hooks/useConfirm";
 
 const ReactQuill = dynamic(
   async () => {
@@ -151,7 +152,7 @@ function UploadZone({
         </span>
       )}
       <div
-              className="
+        className="
                 inline-flex items-center gap-2
 
                 px-3 py-1.5
@@ -164,28 +165,28 @@ function UploadZone({
                 border border-blue-100
                 dark:border-blue-500/20
               "
-            >
+      >
 
-              <div
-                className="
+        <div
+          className="
                   w-2 h-2 rounded-full
                   bg-blue-500
                 "
-              />
+        />
 
-              <span
-                className="
+        <span
+          className="
                   text-[11px]
                   font-medium
 
                   text-blue-700
                   dark:text-blue-300
                 "
-              >
-                Solo imágenes WEBP • Máximo 2MB
-              </span>
+        >
+          Solo imágenes WEBP • Máximo 2MB
+        </span>
 
-            </div>
+      </div>
       <input
         type="file"
         accept=".webp,image/webp"
@@ -307,6 +308,7 @@ export function VariantEditor({
 
 }: any) {
 
+  const { confirm, ConfirmDialog } = useConfirm();
 
   // =====================================================
   // STATE
@@ -369,47 +371,47 @@ export function VariantEditor({
       `{{${variable}}}`;
 
     // =====================================================
-     // QUILL EMAIL
-     // =====================================================
+    // QUILL EMAIL
+    // =====================================================
 
-     if(variant.channel === "email" && quillRef.current){
-       const editor =
-            quillRef.current.getEditor();
+    if (variant.channel === "email" && quillRef.current) {
+      const editor =
+        quillRef.current.getEditor();
 
-          const range =
-            editor.getSelection(true);
+      const range =
+        editor.getSelection(true);
 
-          const position =
-            range ? range.index : editor.getLength();
+      const position =
+        range ? range.index : editor.getLength();
 
-          editor.insertText(position, tag);
+      editor.insertText(position, tag);
 
-          editor.setSelection(
-            position + tag.length
-          );
+      editor.setSelection(
+        position + tag.length
+      );
 
-          const html =
-            editor.root.innerHTML;
+      const html =
+        editor.root.innerHTML;
 
-          if (
-            isProductContext &&
-            selectedProductId
-          ) {
+      if (
+        isProductContext &&
+        selectedProductId
+      ) {
 
-            updateOverride({
-              content: html,
-            });
+        updateOverride({
+          content: html,
+        });
 
-            return;
-          }
+        return;
+      }
 
-          onChange({
-            content: html,
-          });
+      onChange({
+        content: html,
+      });
 
-          return;
+      return;
 
-     }
+    }
 
 
     // =====================================================
@@ -511,12 +513,12 @@ export function VariantEditor({
         return;
       }
 
-      if(file.type !== "image/webp"){
-       toast.error("Solo se permiten imágenes WEPB")
+      if (file.type !== "image/webp") {
+        toast.error("Solo se permiten imágenes WEPB")
         return;
       }
 
-      if(file.size > 2 * 1024 * 1024){
+      if (file.size > 2 * 1024 * 1024) {
         toast.error("La imagen no puede superar 2MB")
 
         return;
@@ -535,14 +537,14 @@ export function VariantEditor({
         return;
       }
 
-      if(file.type !== "image/webp"){
+      if (file.type !== "image/webp") {
         toast.error(
           "Solo se permiten imágenes WEBP"
         )
         return;
       }
 
-      if (file.size > 2 * 1024 * 1024){
+      if (file.size > 2 * 1024 * 1024) {
         toast.error("La imagen no puede superar 2MB")
         return;
       }
@@ -560,7 +562,7 @@ export function VariantEditor({
 
   const subject = isProductContext ? (override?.subject ?? "") : (variant.subject ?? "")
   const content = isProductContext ? (override?.content ?? "") : (variant.content ?? "")
-  const ctaText = isProductContext ? (override?.ctaText ?? ""):(variant.ctaText ?? "");
+  const ctaText = isProductContext ? (override?.ctaText ?? "") : (variant.ctaText ?? "");
   const ctaUrl = isProductContext ? (override?.ctaUrl ?? "") : (variant.ctaUrl ?? "");
 
   // =====================================================
@@ -666,29 +668,29 @@ export function VariantEditor({
 
           <div className="editor-wrapper">
 
-          <ReactQuill
-            forwardedRef={quillRef}
-            value={content}
-            onChange={(value) => {
+            <ReactQuill
+              forwardedRef={quillRef}
+              value={content}
+              onChange={(value) => {
 
-              if (
-                isProductContext &&
-                selectedProductId
-              ) {
+                if (
+                  isProductContext &&
+                  selectedProductId
+                ) {
 
-                updateOverride({
+                  updateOverride({
+                    content: value,
+                  });
+
+                  return;
+                }
+
+                onChange({
                   content: value,
                 });
-
-                return;
-              }
-
-              onChange({
-                content: value,
-              });
-            }}
-            modules={QUILL_MODULES}
-          />
+              }}
+              modules={QUILL_MODULES}
+            />
           </div>
 
 
@@ -1041,7 +1043,7 @@ export function VariantEditor({
                   }
                   onRemove={() => {
 
-                    if(!selectedProductId){
+                    if (!selectedProductId) {
                       return;
                     }
                     onRemoveProductOverrideAsset(
@@ -1070,7 +1072,19 @@ export function VariantEditor({
       ">
 
         <button
-          onClick={onDelete}
+          onClick={async () => {
+            const canal = variant.channel === "email" ? "Email" : "WhatsApp";
+            const confirmado = await confirm({
+              title: `Eliminar canal de ${canal}`,
+              message: `¿Estás seguro de que quieres eliminar el contenido del canal ${canal}?`,
+              variant: "danger",
+              confirmText: "Eliminar",
+              cancelText: "Cancelar",
+            });
+            if (confirmado) {
+              onDelete();
+            }
+          }}
           className="
             inline-flex items-center
             gap-2
@@ -1096,7 +1110,7 @@ export function VariantEditor({
 
           "
         >
-          <Trash2 size={14}/>
+          <Trash2 size={14} />
           Eliminar canal
         </button>
 
@@ -1131,6 +1145,7 @@ export function VariantEditor({
 
         </div>
       </div>
+      <ConfirmDialog />
     </div>
   );
 }
