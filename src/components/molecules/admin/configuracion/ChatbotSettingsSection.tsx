@@ -228,13 +228,15 @@ export default function ChatbotSettingsSection({
               title="Estado"
               subtitle="Activa o desactiva la visibilidad del chatbot"
             />
-            <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 px-4 py-3.5">
-              <div>
+            <div className="flex items-center justify-between gap-4 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 px-4 py-3.5">
+              
+              <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-[#0D1030] dark:text-white">Chatbot activo</p>
                 <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                   Visible para todos los usuarios del sitio
                 </p>
               </div>
+              
               <Toggle
                 checked={config.isActive}
                 onChange={() => setConfig((current) => ({ ...current, isActive: !current.isActive }))}
@@ -244,7 +246,7 @@ export default function ChatbotSettingsSection({
 
           {/* Apariencia */}
           <div className="px-6 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-x-8 gap-y-10 items-start">
+            <div className="flex flex-col gap-10">
  
               <div className="flex flex-col gap-6">
                 <BlockTitle
@@ -332,7 +334,7 @@ export default function ChatbotSettingsSection({
                 />
               </div>
 
-              <div className="flex flex-col gap-6 lg:pl-4">
+              <div className="flex flex-col gap-6 w-full">
                 <BlockTitle
                   icon={PreviewIcon}
                   title="Vista previa"
@@ -340,7 +342,7 @@ export default function ChatbotSettingsSection({
                   className="mb-0"
                 />
 
-                <div className="flex justify-center lg:justify-start w-full">
+                <div className="flex justify-center w-full overflow-hidden">
                   <ChatbotPreview config={config} />
                 </div>
               </div>
@@ -389,6 +391,7 @@ export default function ChatbotSettingsSection({
             </button>
           </div>
         </div>
+        
       )}
     </div>
   );
