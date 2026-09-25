@@ -54,7 +54,8 @@ export default function Blogspage() {
     }, [getBlogs, getProductos]);
 
     useEffect(() => {
-        setBlogsFiltrados(blogs);
+        const blogsOrdenados = [...blogs].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+        setBlogsFiltrados(blogsOrdenados);
     }, [blogs]);
 
     const totalRecords = blogsFiltrados.length;

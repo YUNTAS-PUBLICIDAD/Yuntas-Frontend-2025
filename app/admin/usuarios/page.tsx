@@ -166,7 +166,7 @@ export default function UsuariosPage() {
             <div className="flex justify-center mt-4">
                 <Pagination
                     pageSize={10}
-                    items={users}
+                    items={[...users].sort((a, b) => (a.id ?? 0) - (b.id ?? 0))}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>
