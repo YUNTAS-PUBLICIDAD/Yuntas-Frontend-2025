@@ -7,19 +7,17 @@ import { ChevronDown, Download } from 'lucide-react';
 interface ExportOption {
     label: string;
     onClick: () => void;
-        icon?: ReactNode;
+    icon?: ReactNode;
 }
 
 interface ExportDropdownProps {
-  options: {
-    label: string;
-    onClick: () => void;
-        icon?: ReactNode;
-  }[];
+  options: ExportOption[];
   label?: string;
   className?: string;
-  buttonClassName?: string; // 👈 NUEVO
-    icon?: ReactNode;
+  buttonClassName?: string;
+  icon?: ReactNode;
+  align?: 'left' | 'right';
+  direction?: 'down' | 'up';
 }
 
 
@@ -29,6 +27,8 @@ export default function ExportDropdown({
     className,
     buttonClassName, 
     icon = <Download className="h-4 w-4" />,
+    align = 'right',
+    direction = 'down',
 }: ExportDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,25 +50,30 @@ export default function ExportDropdown({
         setIsOpen(false);
     };
 
+    const positionClasses = [
+        direction === 'up' ? 'bottom-full mb-2' : 'top-full mt-2',
+        align === 'right' ? 'right-0' : 'left-0',
+    ].join(' ');
+
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className={`relative ${isOpen ? 'z-50' : 'z-10'}`} ref={dropdownRef}>
             {/* Botón principal */}
             <button
             onClick={() => setIsOpen(!isOpen)}
             className={`
-                            inline-flex items-center justify-center gap-2
-              bg-brand-blue
-              dark:bg-[#293296]
-              text-white
-              font-semibold
-              text-xs
-              md:text-sm
-              lg:text-base
-              rounded-[10px]
-              hover:opacity-90
-              transition-all
-              ${buttonClassName ?? "px-4 h-[40px]"}
-              ${className ?? "w-auto"}
+                inline-flex items-center justify-center gap-2
+                bg-brand-blue
+                dark:bg-[#293296]
+                text-white
+                font-semibold
+                text-xs
+                md:text-sm
+                lg:text-base
+                rounded-[10px]
+                hover:opacity-90
+                transition-all
+                ${buttonClassName ?? "px-4 h-[40px]"}
+                ${className ?? "w-auto"}
             `}
           >
 
@@ -83,12 +88,12 @@ export default function ExportDropdown({
 
             {/* Menú desplegable */}
             {isOpen && (
-                <div className="absolute top-full left-0 mt-2 min-w-[160px] bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className={`absolute ${positionClasses} min-w-[170px] bg-white dark:bg-[#1C2347] border border-gray-200 dark:border-white/10 rounded-xl shadow-xl z-50 overflow-hidden`}>
                     {options.map((option, index) => (
                         <button
                             key={index}
                             onClick={() => handleOptionClick(option.onClick)}
-                            className="w-full px-4 py-3 text-left text-sm text-[#0D1030] hover:bg-[#23C1DE] hover:text-white transition-colors border-b border-gray-100 last:border-b-0 flex items-center gap-2"
+                            className="w-full px-4 py-3 text-left text-sm text-[#0D1030] dark:text-white hover:bg-[#23C1DE] hover:text-white dark:hover:bg-[#23C1DE] dark:hover:text-white transition-colors border-b border-gray-100 dark:border-white/10 last:border-b-0 flex items-center gap-2"
                         >
                             {option.icon && <span className="shrink-0">{option.icon}</span>}
                             {option.label}

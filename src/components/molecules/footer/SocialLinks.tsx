@@ -1,48 +1,55 @@
 import React from "react";
 import Icon from "@/components/atoms/Icon";
 import { FaInstagram, FaFacebook, FaTiktok, FaYoutube } from "react-icons/fa";
-import {ROUTES} from "@/config/routes";
+import { useSettingsContext } from "@/providers/SettingsProvider";
 
-const SocialLinks = () => {
-      const customSize = 40;
-  return (
-    <div className="flex gap-4 justify-center md:justify-start">
-      <a
-        href={ROUTES.SOCIAL.INSTAGRAM}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-white"
-      >
-        <FaInstagram size={28} />
-      </a>
+const SocialLinks: React.FC = () => {
+   
+    const { settings } = useSettingsContext();
+    
+    const customSize = 40;
 
-      <a
-        href={ROUTES.SOCIAL.FACEBOOK}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-white"
-      >
-        <FaFacebook size={28} />
-      </a>
+    
+    const iconMap: Record<string, React.ReactNode> = {
+        instagram: <FaInstagram className="text-2xl text-white" />,
+        facebook: <FaFacebook className="text-2xl text-white" />,
+        tiktok: <FaTiktok className="text-2xl text-white" />,
+        youtube: <FaYoutube className="text-2xl text-white" />,
+    };
 
-      <a
-        href={ROUTES.SOCIAL.TIKTOK}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-white"
-      >
-        <FaTiktok size={28} />
-      </a>
+    const apiLinks: Array<{ platform: string; url: string }> | null | undefined = settings?.contact?.social_links;
+    
+    const links = (apiLinks && apiLinks.length > 0) ? apiLinks : [
+        { platform: "instagram", url: "https://www.instagram.com/yuntaspublicidad/" },
+        { platform: "facebook", url: "https://www.facebook.com/YuntasProducciones/" },
+        { platform: "tiktok", url: "https://www.tiktok.com/@yuntaspublicidad" },
+        { platform: "youtube", url: "https://www.youtube.com/@yuntaspublicidad" },
+    ];
 
-      <a
-        href={ROUTES.SOCIAL.YOUTUBE}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-white"
-      >
-        <FaYoutube size={28} />
-      </a>
-    </div>
-  );
+    return (
+        <div className="flex gap-4 justify-center md:justify-start flex-wrap">
+            {links.map((item: { platform: string; url: string }) => {
+                const normalizedPlatform = item.platform.toLowerCase();
+                const IconComponent = iconMap[normalizedPlatform];
+
+                
+                if (!item.url || !IconComponent) return null;
+
+                return (
+                    <Icon
+                        key={normalizedPlatform}
+                        href={item.url}
+                        target="_blank"
+                        label={item.platform}
+                        size={customSize}
+                        bgColor="bg-transparent"
+                    >
+                        {IconComponent}
+                    </Icon>
+                );
+            })}
+        </div>
+    );
 };
+
 export default SocialLinks;

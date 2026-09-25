@@ -188,6 +188,7 @@ export default function AppearanceSettingsSection({
 }: AppearanceSettingsSectionProps) {
   const [open, setOpen] = useState(true);
   const [companyName, setCompanyName] = useState("");
+  const [companyRuc, setCompanyRuc] = useState("");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [logoLight, setLogoLight] = useState<File | null>(null);
   const [logoDark, setLogoDark] = useState<File | null>(null);
@@ -195,6 +196,7 @@ export default function AppearanceSettingsSection({
   useEffect(() => {
     if (!general) return;
     setCompanyName(general.company_name || "");
+    setCompanyRuc(general.company_ruc || "");
     setTheme(general.theme || "light");
     setLogoLight(null);
     setLogoDark(null);
@@ -208,6 +210,7 @@ export default function AppearanceSettingsSection({
 
     const result = await onSave({
       company_name: companyName.trim(),
+      company_ruc: companyRuc.trim() || null,
       theme,
       logo_light: logoLight,
       logo_dark: logoDark,
@@ -279,7 +282,7 @@ export default function AppearanceSettingsSection({
             </div>
           </div>
 
-          {/* <div className="px-6 py-6">
+          <div className="px-6 py-6">
             <BlockTitle
               icon={<Brush className="h-4 w-4 text-brand-blue dark:text-white/60" />}
               title="Información de la empresa"
@@ -295,7 +298,27 @@ export default function AppearanceSettingsSection({
                 className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20"
               />
             </div>
-          </div> */}
+
+          <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-semibold text-[#0D1030] dark:text-white">
+             RUC
+          </label>
+
+          <input
+          type="text"
+          value={companyRuc}
+          onChange={(e) => setCompanyRuc(e.target.value.replace(/\D/g, "").slice(0, 11))}
+          placeholder="Ej. 20123456789"
+          maxLength={11}
+          inputMode="numeric"
+          className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-[#0D1030] placeholder-gray-300 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20"
+           />
+
+           <p className="text-xs text-gray-400 dark:text-white/40">
+             El RUC debe tener 11 dígitos
+           </p>
+        </div>
+     </div> 
 
           {/* <div className="px-6 py-6">
             <BlockTitle
