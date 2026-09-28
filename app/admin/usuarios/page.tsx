@@ -116,7 +116,7 @@ export default function UsuariosPage() {
                                 {
                                     label: "IMPRIMIR",
                                     onClick: () =>
-                                        exportTablePDF(users, "Reporte de Usuarios", columns, "print"),
+                                        exportTablePDF([...users].sort((a, b) => (a.id ?? 0) - (b.id ?? 0)), "Reporte de Usuarios", columns, "print"),
                                     variant: "primary",
                                     className: "w-full h-[40px]",
                                     icon: <PrinterIcon />,
