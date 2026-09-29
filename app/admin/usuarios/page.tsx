@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import AdminTable from "@/components/organisms/admin/AdminTable";
 import ActionButtonGroup from "@/components/molecules/admin/ActionButtonGroup";
 import Modal from "@/components/atoms/Modal";
@@ -45,6 +45,7 @@ export default function UsuariosPage() {
 
         getUsers();
     }, []);
+
     const handleCreateUsuario = async (formData: UserInput) => {
         const result = await createUser(formData);
         if (result.success) {
@@ -55,6 +56,10 @@ export default function UsuariosPage() {
             showToast.error(result.message || "Error al crear el usuario");
         }
     };
+
+    const sortedUsers = useMemo(() => {
+        return [...users].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+    }, [users]);
 
     const handleEditClick = (usuario: User) => {
         setSelectedUser(usuario);
@@ -166,7 +171,7 @@ export default function UsuariosPage() {
             <div className="flex justify-center mt-4">
                 <Pagination
                     pageSize={10}
-                    items={[...users].sort((a, b) => (a.id ?? 0) - (b.id ?? 0))}
+                    items={sortedUsers}
                     setProductosPaginados={setDatosPaginados}
                 />
             </div>
