@@ -73,7 +73,7 @@ export default function UserForm({ onSubmit, onCancel, isLoading = false, initia
             <InputForm
                 label="Email"
                 name="email"
-                type="email"
+                type="text"
                 value={formData.email || ""}
                 onChange={handleChange}
                 placeholder="ejemplo@gmail.com"
@@ -82,7 +82,7 @@ export default function UserForm({ onSubmit, onCancel, isLoading = false, initia
             <InputForm
                 label={initialData !== null ? "Nueva Contraseña" : "Contraseña"}
                 name="password"
-                type="password"
+                type="text"
                 value={formData.password || ""}
                 onChange={handleChange}
                 placeholder={initialData !== null ? "Ingrese una nueva contraseña" : "Ingrese una contraseña"}
@@ -97,7 +97,7 @@ export default function UserForm({ onSubmit, onCancel, isLoading = false, initia
                 required
             />
 
-            <div className="flex gap-4 mt-4">
+            <div className="flex gap-4 mt-8 mb-6 pt-2">
                 <Button type="submit" variant="primary" size="md" className="flex-1" disabled={isLoading}>
                     {isLoading ? (initialData !== null ? "Guardando..." : "Añadiendo...") : (initialData !== null ? "Guardar" : "Añadir Cliente")}
                 </Button>
