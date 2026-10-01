@@ -501,6 +501,22 @@ export default function ContactoSettingsSection({
     setConfig((current) => ({ ...current, [key]: value }));
 
   const handleSave = async () => {
+    const rawMapUrl = config.mapaUrl.trim();
+
+    if (rawMapUrl) {
+      const isGoogleMaps =
+        rawMapUrl.includes("google.com/maps") ||
+        rawMapUrl.includes("maps.google.com") ||
+        rawMapUrl.includes("maps.app.goo.gl") ||
+        rawMapUrl.includes("goo.gl/maps") ||
+        rawMapUrl.includes("<iframe");
+
+      if (!isGoogleMaps) {
+        showToast.error("El mapa debe ser un enlace de Google Maps o un iframe válido");
+        return;
+      }
+    }
+
     const phone = `${config.codigoPais.trim()} ${config.telefono.trim()}`.trim();
 
     const payload: UpdateContactSettingsInput = {
