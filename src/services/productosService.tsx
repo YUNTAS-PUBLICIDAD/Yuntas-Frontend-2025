@@ -60,18 +60,87 @@ export async function getProductosService(perPage: number = 10, url?: string): P
 
 export async function getProductoBySlugService(slug: string): Promise<ProductoServiceResponse<Producto>> {
     try {
-        const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ONE(slug));
+
+        let currentPage = 1;
+        let foundProduct: Producto | null = null;
+        let hasMorePages = true;
+
+        // Función para limpiar y normalizar cualquier texto 
+        const normalizeText = (text: string) => {
+            if (!text) return "";
+            let clean = text
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "") // Quita tildes
+                .replace(/[^a-z0-9]/g, ""); // Quita guiones, espacios y caracteres especiales
+            
+            // Quita la 's' final para unificar plurales y singulares
+            if (clean.endsWith('s')) {
+                clean = clean.slice(0, -1);
+            }
+            return clean;
+        };
+
+        const targetNormalized = normalizeText(slug);
+
+        while (hasMorePages && currentPage <= 10) {
+            const response = await api.get(API_ENDPOINTS.PRODUCTS.GET_ALL, {
+                params: {
+                    per_page: 50,
+                    page: currentPage,
+                },
+            });
+
+            const rawData = response.data.data;
+            const items = Array.isArray(rawData) ? rawData : (rawData?.data || []);
+            const formattedItems = items.map(formatProduct);
+
+            // Búsqueda inteligente en cada página
+            foundProduct = formattedItems.find((product: Producto) => {
+                const productSlugNorm = normalizeText(product.slug || "");
+                const productNameNorm = normalizeText(product.name || "");
+
+                // Compara si coincide el slug normalizado o el nombre normalizado
+                return (
+                    productSlugNorm === targetNormalized ||
+                    productNameNorm === targetNormalized ||
+                    productSlugNorm.includes(targetNormalized) ||
+                    targetNormalized.includes(productSlugNorm)
+                );
+            }) || null;
+
+            if (foundProduct) {
+                break; // ¡Encontrado!
+            }
+
+            const lastPage = rawData?.last_page || 1;
+            if (currentPage >= lastPage || items.length === 0) {
+                hasMorePages = false;
+            } else {
+                currentPage++;
+            }
+        }
+
+        if (!foundProduct) {
+            return {
+                success: false,
+                message: `Producto con slug "${slug}" no encontrado`,
+            };
+        }
 
         return {
             success: true,
-            message: response.data.message,
-            data: formatProduct(response.data.data)
+            message: "Producto encontrado",
+            data: foundProduct,
         };
+
     } catch (error: any) {
-        return { success: false, message: error.message };
+        return {
+            success: false,
+            message: error.message || "Error obteniendo producto",
+        };
     }
 }
-
 export async function createProductoService(formData: ProductoInput): Promise<ProductoServiceResponse<Producto>> {
     try {
         const token = getToken();

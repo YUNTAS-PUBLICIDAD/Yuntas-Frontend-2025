@@ -42,19 +42,21 @@ export function BlogClient({ initialBlog }: BlogClientProps) {
         return <div className="flex justify-center items-center h-screen">Artículo no encontrado</div>;
     }
 
-    const calculatedSlug = displayBlog.product?.slug || displayBlog.product?.name
+    const productSlug =
+    displayBlog.product?.slug ||
+    displayBlog.product?.name
         ?.toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9\s-]/g, "")
         .trim()
-        .replace(/\s+/g, '-');
+        .replace(/\s+/g, "-");
 
     const imgHero = displayBlog.gallery.find(e => e.slot === imageBlogSlots.HERO);
     const imgDesc = displayBlog.gallery.find(e => e.slot === imageBlogSlots.DESC);
     const imgBene = displayBlog.gallery.find(e => e.slot === imageBlogSlots.BENEFITS);
     const imgTestimonial = displayBlog.gallery.find(e => e.slot === imageBlogSlots.TESTIMONIAL);
-
+    
     return (
         <>
             <HeroSection
@@ -77,7 +79,7 @@ export function BlogClient({ initialBlog }: BlogClientProps) {
                 imageAlt={imgBene?.alt || displayBlog.title}
                 imageTitle={imgBene?.title || displayBlog.title}
                 benefits={displayBlog.benefits || []}
-                productSlug={calculatedSlug}
+                productSlug={productSlug}
             />
             {displayBlog.video_url &&
                 <VideoSection
