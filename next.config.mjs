@@ -3,6 +3,8 @@ import next from 'next';
 /**@type {import('next').NextConfig} */
 const nextConfig = {
 
+    output: 'export',
+
 /** holaaaa */
 
     trailingSlash: true,
