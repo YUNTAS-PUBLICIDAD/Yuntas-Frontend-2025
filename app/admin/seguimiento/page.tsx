@@ -210,7 +210,7 @@ export default function SeguimientoPage() {
                             onSearch={setLeadsFiltered}
                             placeholder={currentMode.searchPlaceholder}
                             searchKeys={currentMode.searchKeys as any}
-                            getDisplayValue={(item) => `${item.id} - ${item.name}`}
+                            getDisplayValue={(item) => `${item.name}`}
                         />
                     </div>
 

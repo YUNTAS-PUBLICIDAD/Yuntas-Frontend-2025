@@ -58,19 +58,23 @@ const Select = ({
       )}
       <select
         name={name}
-        className={`${className} ${selectClassName} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        className={`${className} ${selectClassName} [color-scheme:light] dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-blue-500`}
         value={value}
         onChange={onChange}
         required={required}
         multiple={multiple}
       >
         {!multiple && (
-          <option value="" disabled>
+          <option value="" disabled className="bg-white text-gray-500 dark:bg-[#1C2347] dark:text-[#ECECEC]/60">
             --- Selecciona una opción ---
           </option>
         )}
         {normalizedOptions.map((option, index) => (
-          <option key={`${option.value}-${index}`} value={option.value}>
+          <option
+            key={`${option.value}-${index}`}
+            value={option.value}
+            className="bg-white text-gray-900 dark:bg-[#1C2347] dark:text-[#ECECEC]"
+          >
             {option.label}
           </option>
         ))}

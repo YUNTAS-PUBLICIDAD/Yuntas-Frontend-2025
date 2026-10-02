@@ -6,7 +6,7 @@ import Footer from "@/components/organisms/Footer";
 import HeaderMobil from "../organisms/HeaderMobil";
 import dynamic from 'next/dynamic';
 import { HeaderStyleProvider } from "@/context/HeaderStyleContext";
-import { useSettings } from "@/hooks/useSettings";
+import { useSettingsContext } from "@/providers/SettingsProvider";
 
 const ChatbotWidget = dynamic(() => import("@/components/organisms/ChatbotWidget"), { ssr: false });
 const FloatingWhatsApp = dynamic(() => import("@/components/atoms/FloatingWhatsApp").then(mod => mod.FloatingWhatsApp), { ssr: false });
@@ -20,12 +20,8 @@ export default function MainLayout({
   solidHeader?: boolean;
 }) {
   const [mounted, setMounted] = React.useState(false);
-   const { contact, getSettings } = useSettings();
+  const { contact } = useSettingsContext();
 
-    React.useEffect(() => {
-    getSettings();
-  }, [getSettings]);
-  
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setMounted(true);

@@ -318,10 +318,15 @@ if (formData.video_url) {
         max-w-full
         [&_label]:dark:text-white/90
         [&_p]:dark:text-white/60
-        [&_select]:dark:bg-white/5
+        [&_select]:dark:bg-[#1C2347]
         [&_select]:dark:border-white/10
         [&_select]:dark:text-white
+        [&_select]:dark:[color-scheme:dark]
         [&_select]:dark:focus:border-[#23C1DE]
+        [&_option]:bg-white
+        [&_option]:text-gray-900
+        [&_option]:dark:bg-[#1C2347]
+        [&_option]:dark:text-[#ECECEC]
         [&_textarea]:dark:bg-white/5
         [&_textarea]:dark:border-white/10
         [&_textarea]:dark:text-white

@@ -3,6 +3,7 @@ import autoTable from "jspdf-autotable";
 import { Blog } from "@/types/admin/blog";
 import { Producto } from "@/types/admin/producto";
 import { showToast } from "@/utils/showToast";
+import { formatDate } from "@/utils/formatDate";
 
 export const exportToPDF = (data: Blog[] | Producto[]) => {
   try {
@@ -46,8 +47,8 @@ export const exportToPDF = (data: Blog[] | Producto[]) => {
           blog.title,
           blog.cover_subtitle || "-",
           blog.meta_title || "-",
-          new Date(blog.created_at).toLocaleDateString("es-ES"),
-          0,
+          formatDate(blog.created_at),
+          blog.description ? blog.description.split(/\n+/).filter(p => p.trim().length > 0).length : 0,
           blog.gallery?.length || 0,
         ]),
         styles: {

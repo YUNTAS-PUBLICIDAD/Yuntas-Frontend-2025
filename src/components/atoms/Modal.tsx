@@ -21,7 +21,6 @@ export default function Modal({
     className = ""
 }: ModalProps) {
     const titleId = useId();
-    const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -31,7 +30,6 @@ export default function Modal({
         if (isOpen) {
             document.addEventListener("keydown", handleEsc);
             document.body.style.overflow = "hidden";
-            dialogRef.current?.focus();
         }
 
         return () => {
@@ -57,19 +55,17 @@ export default function Modal({
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 sm:p-4"
-            onMouseDown={onClose}
+            onClick={onClose}
         >
             <div
-                ref={dialogRef}
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby={title ? titleId : undefined}
-                tabIndex={-1}            
-                className={`${sizeClasses[size]} w-[calc(100vw-16px)] max-h-[90vh] rounded-2xl shadow-xl overflow-hidden ${bgClass} ${className}`}
-                onMouseDown={(e) => e.stopPropagation()}
+                className={`${sizeClasses[size]} w-[calc(100vw-16px)] max-h-[90vh] rounded-2xl shadow-xl overflow-hidden flex flex-col ${bgClass} ${className}`}
+                onClick={(e) => e.stopPropagation()}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4">
+                    <div className="flex items-center justify-between px-6 py-4 flex-shrink-0">
                         <h2 id={titleId} className={`text-xl font-bold dark:text-[#ECECEC]/80 ${textTitleClass}`}>
                             {title}
                         </h2>
@@ -84,7 +80,14 @@ export default function Modal({
                     </div>
                 )}
 
-                <div className="p-3 pt-0 sm:p-6 sm:pb-0 sm:pt-0 overflow-y-auto overflow-x-hidden max-h-[calc(90vh-80px)] dark:bg-[#1C2347]">
+                {/* Barra de desplazamiento corta, limpia y visible al instante */}
+                <div 
+                    className="px-6 py-2 overflow-y-auto overflow-x-hidden flex-1 dark:bg-[#1C2347]"
+                    style={{
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#94a3b8 transparent'
+                    }}
+                >
                     {children}
                 </div>
             </div>

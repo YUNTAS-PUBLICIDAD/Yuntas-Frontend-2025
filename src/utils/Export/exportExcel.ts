@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import { Blog, BlogExport } from "@/types/admin/blog";
 import { Producto, ProductoExport } from "@/types/admin/producto";
 import { User, UserExport } from "@/types/admin/user";
+import { formatDate } from "@/utils/formatDate";
 
 export const exportExcel = (
   data: Blog[] | Producto[] | User[],
@@ -32,12 +33,12 @@ export const exportExcel = (
       (blog): BlogExport => ({
         // Las keys aquí deben coincidir con la interfaz BlogExport
         ID: blog.id,
-        Título: blog.title, // Corregido: antes estaba vacío
+        Título: blog.title,
         Subtítulo: blog.cover_subtitle || "Sin subtítulo",
         "Meta Título": blog.meta_title || "N/A",
-        Fecha: new Date(blog.created_at).toLocaleDateString(), // Corregido: 'fecha' no existía
-        "Cant. Párrafos": 0,
-        "Cant. Imágenes": blog.gallery?.length || 0, // Corregido: es 'gallery', no 'galeria'
+        Fecha: formatDate(blog.created_at),
+        "Cant. Párrafos": blog.description ? blog.description.split(/\n+/).filter(p => p.trim().length > 0).length : 0,
+        "Cant. Imágenes": blog.gallery?.length || 0,
       })
     );
   } else if (isUser(data[0])) {
@@ -48,7 +49,7 @@ export const exportExcel = (
         Nombre: user.name,
         Email: user.email,
         Rol: user.role?.name || "Sin rol",
-        "Fecha de Creación": user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A",
+        "Fecha de Creación": formatDate(user.created_at),
       })
     );
   } else {

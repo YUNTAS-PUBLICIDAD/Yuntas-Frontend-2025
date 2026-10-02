@@ -16,19 +16,40 @@ interface SettingsContextType {
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
+const SETTINGS_CACHE_KEY = 'app_settings_cache_v1';
+
 export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<SettingsPayload | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Carga instantánea desde caché de sesión si existe (0 ms)
+  useEffect(() => {
+    try {
+      const cached = sessionStorage.getItem(SETTINGS_CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        setSettings(parsed);
+        setIsLoading(false);
+      }
+    } catch { }
+  }, []);
+
   const fetchSettings = async () => {
     try {
-      setIsLoading(true);
+      // Solo mostramos loading visual si no tenemos nada previamente cargado
+      const hasCached = typeof window !== 'undefined' && Boolean(sessionStorage.getItem(SETTINGS_CACHE_KEY));
+      if (!hasCached) {
+        setIsLoading(true);
+      }
       setError(null);
       const result = await getSettingsService();
 
       if (result.success && result.data) {
         setSettings(result.data);
+        try {
+          sessionStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(result.data));
+        } catch { }
       } else {
         setError(result.message || 'Error al cargar configuración');
       }
@@ -43,6 +64,9 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
     fetchSettings();
 
     const handleSettingsUpdated = () => {
+      try {
+        sessionStorage.removeItem(SETTINGS_CACHE_KEY);
+      } catch { }
       fetchSettings();
     };
 

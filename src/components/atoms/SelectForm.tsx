@@ -46,14 +46,18 @@ export default function SelectForm({
                 value={value}
                 onChange={onChange}
                 required={required}
-                className={`px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all overflow-y-auto max-h-50 text-brand-blue dark:bg-[#1C2347] dark:text-[#ECECEC]/80 dark:border-[#ECECEC]/20 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#23CIDE] focus:border-transparent"}`}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23C1DE] focus:border-transparent transition-all [color-scheme:light] dark:[color-scheme:dark] text-brand-blue bg-white dark:bg-[#1C2347] dark:text-[#ECECEC]/80 dark:border-[#ECECEC]/20 ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300"}`}
                 size={1}
             >
-                <option value="">
+                <option value="" className="bg-white text-gray-500 dark:bg-[#1C2347] dark:text-[#ECECEC]/60">
                     --- Selecciona una opción ---
                 </option>
                 {normalizedOptions.map((option, index) => (
-                    <option key={option?.value ?? index} value={option?.value}>
+                    <option
+                        key={option?.value ?? index}
+                        value={option?.value}
+                        className="bg-white text-gray-900 dark:bg-[#1C2347] dark:text-[#ECECEC]"
+                    >
                         {option.label}
                     </option>
                 ))}

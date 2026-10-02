@@ -82,12 +82,15 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://apiyuntas.yuntaspublicidad.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google.com" />
+        <link rel="preconnect" href="https://maps.google.com" />
+        <link rel="dns-prefetch" href="https://maps.google.com" />
         <script
           dangerouslySetInnerHTML={{
             __html: `try{var t=localStorage.getItem('theme');document.documentElement.classList.toggle('dark',t==='dark')}catch(_){}`,
           }}
         />
-        
+
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8H8WESQK5W"
           strategy="afterInteractive"
@@ -125,7 +128,7 @@ export default function RootLayout({
               marginRight: '16px'
             }
           }
-        }/>
+        } />
       </body>
     </html>
   );
