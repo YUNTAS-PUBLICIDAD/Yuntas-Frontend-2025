@@ -596,7 +596,7 @@ export default function ContactoSettingsSection({
 
                           set("codigoPais", value);
                         }}
-                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030]"
+                        className="w-20 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-center text-sm text-[#0D1030] focus:outline-none focus:ring-2 focus:ring-brand-blue/40 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-white/20 dark:focus:ring-white/20"
                       />
 
                       <Input

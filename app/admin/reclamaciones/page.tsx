@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Modal from "@/components/atoms/Modal";
 import { showToast } from "@/utils/showToast";
 import { useProductos } from "@/hooks/useProductos";
@@ -63,6 +63,9 @@ export default function ReclamacionesPage() {
     const [newStatusId, setNewStatusId] = useState<number>(1);
     const [isUpdating, setIsUpdating] = useState(false);
 
+    const sortedTableData = useMemo(() => {
+    return [...tableData].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+}, [tableData]);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -322,7 +325,7 @@ export default function ReclamacionesPage() {
                         <div className="flex justify-center mt-4">
                             <Pagination
                                 pageSize={10}
-                                items={tableData}
+                                items={sortedTableData}
                                 setProductosPaginados={setPaginatedData}
                             />
                         </div>
