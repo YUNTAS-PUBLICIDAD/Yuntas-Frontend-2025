@@ -30,10 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const producto: Producto = result.data;
 
-    const title = producto.meta_title || `${producto.name}`;
+    const title = producto.meta_title || producto.name;
+
     const description =
         producto.meta_description ||
-        producto.description.substring(0, 160);
+        producto.description?.substring(0, 160) ||"";
 
     return {
         title,
@@ -59,12 +60,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             description,
             url: canonicalUrl,
             siteName: "Yuntas Publicidad",
-            images: producto.gallery.map((img) => ({
+            images: producto.gallery?.map((img) => ({
                 url: img.url,
                 alt: img.alt || producto.name,
                 width: 1200,
                 height: 630,
-            })),
+            })) || [],
             type: "website",
             locale: "es_PE",
         },
@@ -72,39 +73,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-    const MAX_ATTEMPTS = 3;
-    const DELAY_MS = 5000;
-    
-    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-        try {
-            const products = await getProductosService(100);
+    try {
+        const products = await getProductosService(100);
 
-            if (products.success && products.data && products.data.length > 0) {
-                const params = products.data.map((product) => ({
-                    slug: product.slug,
-                }));
-
-                return params;
-            }
-
-            if (!products.success) {
-                console.warn(`Intento ${attempt} falló:`, products.message);
-            }
-        } catch (error) {
-            console.error(`Error en intento ${attempt}:`, error);
+        if (!products.success || !products.data) {
+            return [];
         }
-        
-        if (attempt < MAX_ATTEMPTS) {
-            await new Promise(resolve => setTimeout(resolve, DELAY_MS));
-        }
+
+        return products.data
+            .filter((product) => product.slug)
+            .map((product) => ({
+                slug: product.slug,
+            }));
+    } catch (error) {
+        console.error(
+            "Error generando parámetros estáticos:",
+            error
+        );
+
+        return [];
     }
-    
-    console.warn('Todos los intentos fallaron.');
-    return [];
 }
 
 export default async function Page({ params }: PageProps) {
     const result = await getProductoBySlugService(params.slug);
 
-    return <ProductClient initialProduct={result.success ? result.data || null : null} />;
+    return (<ProductClient initialProduct={result.success ? result.data || null: null }/>
+    );
 }
