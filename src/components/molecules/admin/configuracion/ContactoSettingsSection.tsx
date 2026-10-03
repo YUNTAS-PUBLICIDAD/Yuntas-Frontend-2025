@@ -501,8 +501,21 @@ export default function ContactoSettingsSection({
     setConfig((current) => ({ ...current, [key]: value }));
 
   const handleSave = async () => {
+    const rawDireccion = config.direccion.trim();
     const rawMapUrl = config.mapaUrl.trim();
 
+    // 1. Si pegaron un enlace en 'direccion', evitar que rompa el fallback del mapa
+    if (rawDireccion) {
+      const isLink = /^(https?:\/\/|www\.|maps\.|goo\.gl)/i.test(rawDireccion) || rawDireccion.includes("<iframe");
+      if (isLink) {
+        showToast.error(
+          "Has colocado un enlace en el campo 'Dirección'. Si es un link de Google Maps, colócalo en 'Mapa de ubicación' para mostrar el mapa con precisión."
+        );
+        return;
+      }
+    }
+
+    // 2. Si se proporciona mapaUrl (enlace preciso), validar formato de Google Maps / iframe
     if (rawMapUrl) {
       const isGoogleMaps =
         rawMapUrl.includes("google.com/maps") ||
@@ -522,13 +535,13 @@ export default function ContactoSettingsSection({
     const payload: UpdateContactSettingsInput = {
       phone: phone || null,
       email: config.correo.trim() || null,
-      address: config.direccion.trim() || null,
+      address: rawDireccion || null,
       business_hours: buildBusinessHoursPayload(config.horario),
       social_links: buildSocialLinksPayload(config.redes),
       whatsapp_message: config.mensajeWhatsapp.trim() || null,
       show_in_footer: config.mostrarFooter,
       show_contact_page: config.mostrarPaginaContacto,
-      map_url: config.mapaUrl.trim() || null,
+      map_url: rawMapUrl || null,
     };
 
     const result = await onSave(payload);
